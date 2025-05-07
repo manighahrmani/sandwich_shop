@@ -77,6 +77,12 @@ class _LandingPageState extends State<LandingPage> {
 
   /// Builds the list of account popup-menu entries.
   List<PopupMenuEntry<String>> _buildAccountMenu(BuildContext context) {
+    final PopupMenuItem<String> basketItem = PopupMenuItem<String>(
+      value: 'basket',
+      onTap: _handleAccountAction,
+      child: const Text('Basket'),
+    );
+
     final PopupMenuItem<String> accountItem = PopupMenuItem<String>(
       value: 'account',
       onTap: _handleAccountAction,
@@ -95,7 +101,12 @@ class _LandingPageState extends State<LandingPage> {
       child: const Text('Log out'),
     );
 
-    return <PopupMenuEntry<String>>[accountItem, ordersItem, logoutItem];
+    return <PopupMenuEntry<String>>[
+      basketItem,
+      accountItem,
+      ordersItem,
+      logoutItem,
+    ];
   }
 
   /// Builds the landing-page widget tree.
