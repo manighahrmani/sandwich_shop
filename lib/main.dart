@@ -110,7 +110,7 @@ class _LandingPageState extends State<LandingPage> {
     // Avatar icon displayed in the AppBar.
     final CircleAvatar avatarIcon = CircleAvatar(
       backgroundColor: Colors.green,
-      child: const Icon(Icons.fastfood, size: 24),
+      child: const Icon(Icons.shopping_basket, size: 24),
     );
 
     // Primary action buttons.
