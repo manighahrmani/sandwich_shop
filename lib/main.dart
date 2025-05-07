@@ -103,7 +103,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     // Title shown in the AppBar.
     const Text screenTitle = Text(
-      'Welcome to the Sandwich Shop',
+      'Sandwich Shop',
       style: TextStyle(fontSize: 24),
     );
 
