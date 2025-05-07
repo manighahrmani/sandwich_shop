@@ -140,6 +140,7 @@ class _LandingPageState extends State<LandingPage> {
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             selectMenuButton,
             const SizedBox(height: 16),
