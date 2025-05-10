@@ -50,7 +50,7 @@ cd sandwich_shop
 code .
 ```
 
-## Run the app in Chrome
+## Run the app
 
 Open the integrated terminal in Visual Studio Code by first opening the Command
 Palette with **⌘ + Shift + P** (macOS) or **Ctrl + Shift + P** (Windows) and
