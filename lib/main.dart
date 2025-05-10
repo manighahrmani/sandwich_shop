@@ -15,16 +15,16 @@ class SandwichShopApp extends StatelessWidget {
   /// home page is [LandingPage].
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = ThemeData(
+    ThemeData theme = ThemeData(
       useMaterial3: true,
       colorSchemeSeed: Colors.green,
       visualDensity: VisualDensity.adaptivePlatformDensity,
     );
 
-    final MaterialApp application = MaterialApp(
+    MaterialApp application = MaterialApp(
       title: 'Sandwich Shop',
       theme: theme,
-      home: const LandingPage(),
+      home: LandingPage(),
     );
 
     return application;
@@ -45,8 +45,8 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   /// Shows a generic *feature coming soon* [SnackBar].
   void _showNotImplemented() {
-    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-    final SnackBar bar = const SnackBar(content: Text('Feature coming soon…'));
+    ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    SnackBar bar = SnackBar(content: Text('Feature coming soon…'));
     messenger.showSnackBar(bar);
   }
 
@@ -77,28 +77,28 @@ class _LandingPageState extends State<LandingPage> {
 
   /// Builds the list of account popup-menu entries.
   List<PopupMenuEntry<String>> _buildAccountMenu(BuildContext context) {
-    final PopupMenuItem<String> basketItem = PopupMenuItem<String>(
+    PopupMenuItem<String> basketItem = PopupMenuItem<String>(
       value: 'basket',
       onTap: _handleAccountAction,
-      child: const Text('Basket'),
+      child: Text('Basket'),
     );
 
-    final PopupMenuItem<String> accountItem = PopupMenuItem<String>(
+    PopupMenuItem<String> accountItem = PopupMenuItem<String>(
       value: 'account',
       onTap: _handleAccountAction,
-      child: const Text('Account'),
+      child: Text('Account'),
     );
 
-    final PopupMenuItem<String> ordersItem = PopupMenuItem<String>(
+    PopupMenuItem<String> ordersItem = PopupMenuItem<String>(
       value: 'orders',
       onTap: _handleOrdersAction,
-      child: const Text('Orders'),
+      child: Text('Orders'),
     );
 
-    final PopupMenuItem<String> logoutItem = PopupMenuItem<String>(
+    PopupMenuItem<String> logoutItem = PopupMenuItem<String>(
       value: 'logout',
       onTap: _handleLogoutAction,
-      child: const Text('Log out'),
+      child: Text('Log out'),
     );
 
     return <PopupMenuEntry<String>>[
@@ -113,30 +113,27 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     // Title shown in the AppBar.
-    const Text screenTitle = Text(
-      'Sandwich Shop',
-      style: TextStyle(fontSize: 24),
-    );
+    Text screenTitle = Text('Sandwich Shop', style: TextStyle(fontSize: 24));
 
     // Avatar icon displayed in the AppBar.
-    final CircleAvatar avatarIcon = CircleAvatar(
+    CircleAvatar avatarIcon = CircleAvatar(
       backgroundColor: Colors.green,
-      child: const Icon(Icons.shopping_basket, size: 24),
+      child: Icon(Icons.shopping_basket, size: 24),
     );
 
     // Primary action buttons.
-    final ElevatedButton selectMenuButton = ElevatedButton(
+    ElevatedButton selectMenuButton = ElevatedButton(
       onPressed: _handleSelectMenuPressed,
-      child: const Text('Select from the menu'),
+      child: Text('Select from the menu'),
     );
 
-    final ElevatedButton buildOwnButton = ElevatedButton(
+    ElevatedButton buildOwnButton = ElevatedButton(
       onPressed: _handleBuildOwnPressed,
-      child: const Text('Build your own sandwich'),
+      child: Text('Build your own sandwich'),
     );
 
     // Page scaffold.
-    final Scaffold page = Scaffold(
+    Scaffold page = Scaffold(
       appBar: AppBar(
         title: screenTitle,
         actions: <Widget>[
@@ -148,7 +145,7 @@ class _LandingPageState extends State<LandingPage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.stretch,
