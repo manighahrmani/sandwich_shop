@@ -152,11 +152,7 @@ class _LandingPageState extends State<LandingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            selectMenuButton,
-            const SizedBox(height: 16),
-            buildOwnButton,
-          ],
+          children: <Widget>[selectMenuButton, buildOwnButton],
         ),
       ),
     );
