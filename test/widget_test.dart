@@ -4,7 +4,7 @@ import 'package:sandwich_shop/main.dart';
 void main() {
   group('SandwichCounter smoke tests', () {
     testWidgets('Counter text is visible', (WidgetTester tester) async {
-      await tester.pumpWidget(SandwichShopApp());
+      await tester.pumpWidget(const SandwichShopApp());
       final Finder counterText = find.text(
         '5 Footlong sandwich(es): 🥪🥪🥪🥪🥪',
       );
@@ -12,7 +12,7 @@ void main() {
     });
 
     testWidgets('App bar title is visible', (WidgetTester tester) async {
-      await tester.pumpWidget(SandwichShopApp());
+      await tester.pumpWidget(const SandwichShopApp());
       final Finder titleText = find.text('Sandwich Counter');
       expect(titleText, findsOneWidget);
     });
