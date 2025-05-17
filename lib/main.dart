@@ -21,8 +21,8 @@ class SandwichShopApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text('Sandwich Counter')),
-        body: Center(child: SandwichCounter(5, 'Footlong')),
+        appBar: AppBar(title: const Text('Sandwich Counter')),
+        body: const Center(child: SandwichCounter(5, 'Footlong')),
       ),
     );
   }
