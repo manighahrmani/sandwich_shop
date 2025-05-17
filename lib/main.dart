@@ -4,7 +4,7 @@ class SandwichCounter extends StatelessWidget {
   final String sandwichType;
   final int count;
 
-  const SandwichCounter(this.count, this.sandwichType);
+  const SandwichCounter(this.count, this.sandwichType, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +13,12 @@ class SandwichCounter extends StatelessWidget {
 }
 
 void main() {
-  runApp(SandwichShopApp());
+  runApp(const SandwichShopApp());
 }
 
 class SandwichShopApp extends StatelessWidget {
+  const SandwichShopApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
