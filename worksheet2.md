@@ -7,11 +7,11 @@ It covers the basic structure of a Flutter app and the creation of custom widget
 
 Ensure that you have already completed the following worksheets first:
 
-  - Introduction to Git and GitHub.
-  - Introduction to the Dart language.
-  - Installation of Flutter SDK.
-  - Installation of Git and Visual Studio Code.
-  - Creating and running your first Flutter app.
+- Introduction to Git and GitHub.
+- Introduction to the Dart language.
+- Installation of Flutter SDK.
+- Installation of Git and Visual Studio Code.
+- Creating and running your first Flutter app.
 
 ## Developing the Sandwich Counter Application
 
@@ -40,11 +40,11 @@ import 'package:flutter/material.dart';
 
     These widgets include fundamental building blocks for your app's UI, such as:
 
-      - Structural elements like `Scaffold` (for basic page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
-      - **Buttons** like `ElevatedButton`, `TextButton`, and `IconButton`.
-      - **Informational widgets** like `Text` (for displaying strings), `Icon` (for displaying icons), and `Image`.
-      - **Input widgets** like `TextField` (for text entry) and `Checkbox` (for boolean input).
-      - **Layout widgets** like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
+    - Structural elements like `Scaffold` (for basic page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
+    - **Buttons** like `ElevatedButton`, `TextButton`, and `IconButton`.
+    - **Informational widgets** like `Text` (for displaying strings), `Icon` (for displaying icons), and `Image`.
+    - **Input widgets** like `TextField` (for text entry) and `Checkbox` (for boolean input).
+    - **Layout widgets** like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
 
     By using these Material widgets, you can quickly build a user interface that looks and feels professional and consistent with platform conventions.
     The library also includes utilities like `ThemeData` to define styling (colours, fonts) across your app.
@@ -237,22 +237,22 @@ import 'package:flutter/material.dart';
     **`Scaffold`**: This widget implements the basic Material Design visual layout structure. Think of it as a blueprint for a typical app screen.
     It provides slots for common UI elements such as:
 
-      - `appBar`: For displaying an `AppBar`, which is a horizontal bar at the top of the screen.
-      - `body`: The primary content area of the screen.
-      - `drawer`: For a slide-out navigation menu.
-      - `bottomNavigationBar`: For a navigation bar at the bottom.
-      - `floatingActionButton`: For a prominent action button.
+    - `appBar`: For displaying an `AppBar`, which is a horizontal bar at the top of the screen.
+    - `body`: The primary content area of the screen.
+    - `drawer`: For a slide-out navigation menu.
+    - `bottomNavigationBar`: For a navigation bar at the bottom.
+    - `floatingActionButton`: For a prominent action button.
 
     Using `Scaffold` is not necessary but it makes it easy to arrange all these elements correctly according to Material Design guidelines.
     More details are in the [Scaffold documentation](https://api.flutter.dev/flutter/material/Scaffold-class.html).
 
     **`AppBar`**: This widget represents the application bar that typically appears at the top of the screen.
 
-      - The `title` property of `AppBar` is commonly used to display a `Text` widget showing the current screen's title.
-        Here, we use `const Text('Sandwich Counter')`.
-        Again, using `const` here is an optimisation if the text content doesn't change.
-        `AppBar` can also contain action buttons, a leading icon (like a menu button), and more.
-        See [AppBar documentation](https://api.flutter.dev/flutter/material/AppBar-class.html) for more details.
+    - The `title` property of `AppBar` is commonly used to display a `Text` widget showing the current screen's title.
+      Here, we use `const Text('Sandwich Counter')`.
+      Again, using `const` here is an optimisation if the text content doesn't change.
+      `AppBar` can also contain action buttons, a leading icon (like a menu button), and more.
+      See [AppBar documentation](https://api.flutter.dev/flutter/material/AppBar-class.html) for more details.
 
     **`Center`**: This is a layout widget. Its purpose is simple: it centres its child widget both horizontally and vertically within itself.
     The `body` property of our `Scaffold` is where we place the main content of this screen. We're using `Center` to position all the children of `Scaffold` in the middle of the available body space.
@@ -483,44 +483,49 @@ The exercises will guide you to explore layouts, aligning widgets, sizing, scrol
 
 ## Exercises
 
-These exercises are designed to help you explore Flutter's layout capabilities. You are encouraged to refer to the [Flutter layout documentation](https://docs.flutter.dev/get-started/fundamentals/layout#devtools-and-debugging-layout) and the additional resources listed there to complete these tasks. Remember to commit your changes after each exercise.
+Before you begin these exercises, please familiarise yourself with the **Flutter Inspector**, a powerful tool within Flutter DevTools that will help you visualise and explore your widget layouts. Watch this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and review its [official documentation](https://docs.flutter.dev/tools/devtools/inspector). Understanding how to use the inspector will be invaluable as you work through these layout challenges and debug any issues.
 
-1.  **Exploring `Row` and `Column` Widgets:**
+These exercises are designed to help you explore Flutter's layout capabilities. You're guide for these exercises is the [Flutter layout documentation](https://docs.flutter.dev/get-started/fundamentals/layout) and the additional resources listed there to complete these tasks. Remember to commit your changes after each exercise.
 
-      * Modify the `SandwichShopApp`'s `body` to display two `SandwichCounter` widgets.
-      * First, arrange them vertically using a `Column` widget. Ensure there's some visible space between them (Hint: look into the `SizedBox` widget or `Column`'s `mainAxisAlignment` property).
-      * Next, change the `Column` to a `Row` to arrange them horizontally. Observe how the layout changes.
-      * What happens if the content of the `Row` is too wide for the screen? (Consult the "Common layout widgets and concepts" section of the documentation).
-      * *Documentation Focus*: `Column`, `Row`, `MainAxisAlignment`, `CrossAxisAlignment`, `SizedBox`.
+1.  **Vertical and Horizontal Layouts:**
+
+    - Modify the `SandwichShopApp`'s `body` to display two `SandwichCounter` widgets.
+    - First, arrange them vertically using a `Column` widget. Consult the documentation on "Layout multiple widgets vertically or horizontally".
+    - To add space between them, you can either use a `SizedBox` widget or explore the `mainAxisAlignment` property of the `Column` (e.g., `MainAxisAlignment.spaceEvenly` as shown in "Align widgets within rows and columns").
+    - Next, change the `Column` to a `Row` to arrange them horizontally. Observe how the layout changes.
+    - What happens if the content of the `Row` is too wide for the screen (causes an overflow)? How does the concept of "Constraints go down. Sizes go up. Parent sets the position" apply here?
+    - _Documentation Focus_: `Column`, `Row`, `MainAxisAlignment`, `CrossAxisAlignment`, `SizedBox`, understanding constraints.
 
 2.  **Aligning Widgets:**
 
-      * Using a `Column` to display three `SandwichCounter` widgets with different sandwich types and counts.
-      * Experiment with the `crossAxisAlignment` property of the `Column` to align the `SandwichCounter` widgets to the start, end, and centre.
-      * Wrap one of the `SandwichCounter` widgets in an `Align` widget. Experiment with its `alignment` property (e.g., `Alignment.centerLeft`, `Alignment.topRight`). How does this differ from using `CrossAxisAlignment` on the `Column`?
-      * *Documentation Focus*: `Align` widget, `Alignment` class, `CrossAxisAlignment` in `Column`/`Row`.
+    - Using a `Column`, display three `SandwichCounter` widgets with different sandwich types and counts.
+    - Experiment with the `crossAxisAlignment` property of the `Column` to align the `SandwichCounter` widgets. Refer to the diagram showing main and cross axes in the "Align widgets within rows and columns" section.
+    - Wrap one of the `SandwichCounter` widgets in an `Align` widget. Experiment with its `alignment` property (e.g., `Alignment.centerLeft`, `Alignment.topRight`). How does this differ from using `CrossAxisAlignment` on the `Column`?
+    - _Documentation Focus_: `Align` widget, `Alignment` class, `mainAxisAlignment` and `crossAxisAlignment` in `Column`/`Row`.
 
 3.  **Sizing Widgets:**
 
-      * In your `SandwichShopApp`, place a `SandwichCounter` widget inside a `Container`.
-      * Give the `Container` a fixed `width` and `height` (e.g., `width: 200`, `height: 100`) and a `color` (e.g., `Colors.blue.shade100`) to make its bounds visible.
-      * What happens if the `SandwichCounter`'s text is too long for the `Container`'s width?
-      * Now, instead of a fixed width, make the `SandwichCounter` take up all available horizontal space within a `Row`. (Hint: explore the `Expanded` and `Flexible` widgets mentioned in "Sizing and positioning widgets" in the documentation). Try placing two `SandwichCounter` widgets in a `Row`, with one wrapped in `Expanded`.
-      * *Documentation Focus*: `Container` (width, height, color), `Expanded`, `Flexible`. Refer to "Sizing and positioning widgets" and the `Expanded` and `Flexible` Widget of the Week videos.
+    - In your `SandwichShopApp`, place a `SandwichCounter` widget inside a `Container`.
+    - Give the `Container` a fixed `width` and `height` and a `color` to make its bounds visible. (Refer to "Lay out a single widget" and the `Container` section for adding padding/margins and understanding how `Container` can try to be a particular size if dimensions are provided).
+    - What happens if the `SandwichCounter`'s text is too long for the `Container`'s width, leading to an overflow (yellow and black striped pattern)?
+    - Now, use the `Expanded` widget to make a `SandwichCounter` take up available horizontal space within a `Row`. Try placing two `SandwichCounter`s in a `Row`, with one wrapped in `Expanded`. Experiment with the `flex` property of the `Expanded` widget to make one child take up more space than the other, as shown in "Sizing widgets within rows and columns".
+    - _Documentation Focus_: `Container` (width, height, color, padding, margin), `Expanded` widget (and its `flex` property). Refer to "Sizing and positioning widgets" and the `Expanded` and `Flexible` Widget of the Week videos.
 
-4.  **Introducing Scrolling:**
+4.  **Scrolling:**
 
-      * Modify `SandwichShopApp` to display ten `SandwichCounter` widgets in a `Column`. You will likely see an overflow error because the content is taller than the screen.
-      * Wrap the `Column` with a `SingleChildScrollView` widget to make the content scrollable.
-      * Now, try to create a horizontal list of five `SandwichCounter` widgets that also requires scrolling. (Hint: `SingleChildScrollView` has a `scrollDirection` property).
-      * For a more advanced challenge, explore the `ListView` widget. How does it differ from `Column` + `SingleChildScrollView`? When might you prefer `ListView`? (See "Scrollable widgets" in the documentation, including the `ListView` Widget of the Week video and example code for lists).
-      * *Documentation Focus*: `SingleChildScrollView`, `ListView`, `scrollDirection`. Refer to "Scrollable widgets".
+    - Modify `SandwichShopApp` to display ten `SandwichCounter` widgets. If you use a `Column` directly, you will likely see an overflow error because the content is taller than the screen. This is a common "unbounded constraints" scenario mentioned in "DevTools and debugging layout".
+    - Instead of `Column` + `SingleChildScrollView`, use a `ListView` to display these ten `SandwichCounter` widgets. `ListView` automatically provides scrolling.
+    - For a more dynamic list, explore `ListView.builder`. Why is `ListView.builder` preferred for long or dynamic lists? (See "Scrolling widgets" and specifically the `ListView.builder` example in the documentation).
+    - Try creating a horizontal `ListView` of five `SandwichCounter` widgets. (Hint: `ListView` has a `scrollDirection` property).
+    - _Documentation Focus_: `ListView`, `ListView.builder`, `scrollDirection`, understanding how `ListView` handles scrolling and differs from `Column`. Refer to "Scrollable widgets" and the `ListView` Widget of the Week video.
 
-5.  **Basic Adaptive Layout (Conceptual):**
+5.  **Basic Adaptive Layouts:**
+    - Read the "Adaptive layouts" section of the Flutter layout documentation, paying close attention to the `LayoutBuilder` widget and the "builder pattern".
+    - In `SandwichShopApp`, wrap the part of your UI that displays `SandwichCounter`(s) with a `LayoutBuilder`.
+    - Inside the `builder` function of `LayoutBuilder`, you receive `BoxConstraints`. Use `constraints.maxWidth` to determine the available width.
+    - Implement logic: if `constraints.maxWidth` is less than a certain value (e.g., 600 pixels, as in the documentation example), display your `SandwichCounter`(s) in a `Column`. Otherwise (if it's wider), display them in a `Row` (or a more complex row-based layout if you're feeling adventurous).
+    - Observe how the layout changes when you resize your application window (if running on web or desktop).
+    - _Documentation Focus_: `LayoutBuilder`, `BoxConstraints` (specifically `constraints.maxWidth`), the builder pattern. Refer to "Adaptive Apps" and the `LayoutBuilder` Widget of the Week video.
 
-      * Read the "Adaptive Apps" section of the Flutter layout documentation, including the `MediaQuery` Widget of the Week video and the "Adaptive Apps codelab" tutorial.
-      * Think about how you might change the layout of the `SandwichShopApp` based on screen width. For example, on a narrow screen, you might show one `SandwichCounter` per row, but on a wider screen, you might show two or three in a `Row`.
-      * You don't need to implement a fully adaptive layout for this exercise, but try to use `MediaQuery.of(context).size.width` inside the `build` method of `SandwichShopApp` to print the screen width to the console. Then, write a simple `if` statement that would, conceptually, choose between a `Column` layout and a `Row` layout for two `SandwichCounter` widgets based on this width.
-      * *Documentation Focus*: `MediaQuery`, principles of adaptive layout.
-
-Remember to use the Flutter DevTools (especially the Flutter Inspector) to help you understand and debug your layouts. The documentation page "Layouts in Flutter" provides guidance on using these tools.
+Remember to use the Flutter Inspector to examine your widget tree, understand constraints, and debug layout issues.
+This will be particularly helpful for identifying and resolving common layout errors like "unbounded constraints".
