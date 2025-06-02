@@ -57,7 +57,7 @@ import 'package:flutter/material.dart';
     This is where your app starts.
     The default app has `runApp(const MyApp());`.
     Comment out or remove this line for now.
-    You can comment a line in VS Code by selecting it with your mouse and pressing `Ctrl + /` on Windows or `⌘ + /` on macOS.
+    You can comment a line in VS Code by selecting it with your mouse and pressing **Ctrl + /** on Windows or **⌘ + /** on macOS.
 
     Let's also clear out the default `MyApp` class and other related classes from the app.
     Delete everything aside from the import statement and the `main()` function.
@@ -75,7 +75,7 @@ import 'package:flutter/material.dart';
 
     Now is a good time to make your first commit for this stage.
     In VS Code, go to the Source Control panel (usually an icon on the left sidebar that looks like a branching path).
-    You can also use the Command Palette (`Ctrl + Shift + P` or `⌘ + Shift + P` on macOS) and enter "Source Control" which will open the Source Control panel.
+    You can also use the Command Palette **Ctrl + Shift + P** or **⌘ + Shift + P** on macOS and enter "Source Control" which will open the Source Control panel.
 
     You should see `main.dart` listed under changes.
     In the "Message" box at the top of the Source Control panel (above the Commit button), type a descriptive commit message.
@@ -84,7 +84,7 @@ import 'package:flutter/material.dart';
     Click the Commit button to commit the changes.
     After committing, click the "Sync Changes" button to upload your commit to GitHub.
 
-    Alternatively, open the integrated terminal within VS Code (you can use ` Ctrl + \``  or  `⌘ + \`\`  on macOS) and run the following commands:
+    Alternatively, open the integrated terminal within VS Code (you can use **Ctrl + \`** or **⌘ + \`** on macOS) and run the following commands:
 
     ```bash
     git add lib/main.dart
@@ -104,7 +104,7 @@ import 'package:flutter/material.dart';
     A `StatelessWidget` is a widget whose state cannot change once it's built.
     This means its appearance and behaviour are determined by the configuration information provided by its parent widget and stored in its `final` instance variables.
     It doesn't have any internal state that changes over its lifetime.
-    `StatelessWidget`s are good for UI parts that only depend on their initial configuration.
+    `StatelessWidget`s are suitable for UI parts that only depend on their initial configuration.
 
     Add the following class definition to your `lib/main.dart` file, below the `import` statement and before the `main()` function:
 
