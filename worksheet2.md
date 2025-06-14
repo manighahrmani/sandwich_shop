@@ -4,17 +4,17 @@
 
 Ensure that you have already completed the following:
 
-- Installation of Git and Visual Studio Code
-- Installation of Flutter SDK
-- Introduction to the Dart language
-- Introduction to Git and GitHub
-- Introduction to Flutter
+* Installation of Git and Visual Studio Code.
+* Installation of Flutter SDK.
+* Introduction to the Dart language.
+* Introduction to Git and GitHub.
+* Introduction to Flutter.
 
 ## Developing the Sandwich Counter Application
 
 We will incrementally build the "Sandwich Counter" application.
 
-### Setup the Project
+### Set Up the Project
 
 Open the Flutter folder containing the project you created in Worksheet 1 - "Introduction to Flutter" - in Visual Studio Code.
 This project should already be a repository in your GitHub account.
@@ -30,15 +30,15 @@ This project should already be a repository in your GitHub account.
 
     **Material Design** is a design system created by Google that provides guidelines for user experience.
     The `package:flutter/material.dart` library gives you access to a collection of pre-built UI components, called **widgets**, that implement these Material Design guidelines.
-    We will first use these widgets to build the user interface of our app and later, we will learn how to create our own custom widgets.
+    We will first use these widgets to build the user interface of our app, and later, we will learn how to create our own custom widgets.
 
     These widgets include fundamental building blocks, such as:
 
-    - **Structural elements** like `Scaffold` (for page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
-    - **Buttons** like `ElevatedButton`, `TextButton`, and `IconButton`.
-    - **Informational widgets** like `Text`, `Image` and `Icon` (for displaying icons).
-    - **Input widgets** like `TextField` (for text entry) and `Checkbox` (for boolean input).
-    - **Layout widgets** like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
+    * **Structural elements** like `Scaffold` (for page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
+    * **Buttons** like `ElevatedButton`, `TextButton`, and `IconButton`.
+    * **Informational widgets** like `Text`, `Image`, and `Icon` (for displaying icons).
+    * **Input widgets** like `TextField` (for text entry) and `Checkbox` (for boolean input).
+    * **Layout widgets** like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
 
     The library also includes utilities like `ThemeData` to define styling (colours, fonts) across your app.
 
@@ -51,12 +51,12 @@ This project should already be a repository in your GitHub account.
     You can comment a line in VS Code by selecting it with your mouse and pressing **Ctrl + /** on Windows or **⌘ + /** on macOS.
 
     Let's also clear out the default `MyApp` class and other related classes from the app.
-    Delete everything aside from the import statement and the `main()` function.
+    Delete everything except for the import statement and the `main()` function.
     Your `lib/main.dart` file should now look like this:
 
     ```dart
     import 'package:flutter/material.dart';
-
+    
     void main() {}
     ```
 
@@ -64,20 +64,19 @@ This project should already be a repository in your GitHub account.
 
     It is a good time to commit your changes.
     In VS Code, go to the Source Control panel from **View > Source Control**.
-    You can also use the Command Palette **Ctrl + Shift + P** or **⌘ + Shift + P** on macOS and enter "Source Control" which will open the Source Control panel.
+    You can also use the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P** on macOS) and enter "Source Control", which will open the Source Control panel.
 
-    You should see `main.dart` listed under changes.
-    In the "Message" box, above the "Commit" button, type a descriptive commit message, something like `Setup the Project`.
+    You should see `main.dart` listed under changes. In the "Message" box, above the "Commit" button, type a descriptive commit message, something like `Set Up the Project`.
 
     Click the Commit button to commit the changes.
     After committing, click the "Sync Changes" button to upload your commit to GitHub.
 
-    Note that you could also do all of this using integrated terminal within VS Code.
+    Note that you could also do all of this using the integrated terminal within VS Code.
     You can open the terminal with **Ctrl + \`** on Windows or **⌘ + \`** on macOS and run the following commands:
 
     ```bash
     git add lib/main.dart
-    git commit -m "Setup the Project"
+    git commit -m "Set Up the Project"
     git push
     ```
 
@@ -89,28 +88,28 @@ This project should already be a repository in your GitHub account.
 
     ```dart
     class SandwichShopApp extends StatelessWidget {
-      const SandwichShopApp({super.key});
-
-      @override
-      Widget build(BuildContext context) {
-        return Container();
-      }
+      const SandwichShopApp({super.key});
+    
+      @override
+      Widget build(BuildContext context) {
+        return Container();
+      }
     }
     ```
 
     Key points:
 
-    - `SandwichShopApp` is the main widget of our app
-      - `StatelessWidget` is a widget that does not not change in appearance and behaviour after being built
-      - `SandwichShopApp` extends (is a subclass of) `StatelessWidget`
-    - `const SandwichShopApp({super.key});` is the constructor for `SandwichShopApp`
-      - `const` is optional (for performance)
-      - `super.key` is used to pass an optional `key` (a unique identifier for the widget)
-    - `Widget build(BuildContext context)` is the `build()` method of `SandwichShopApp`
-      - Flutter calls `build` which returns a `Widget` used to render the UI
-      - `BuildContext context` is the context (e.g., the location) of the widget, it is needed to build the UI
-      - `@override` shows that we are reimplementing the `build` method of `StatelessWidget`, all widgets must do this
-      - For now, `build` returns a placeholder (`Container` is like a `div` in HTML)
+    * `SandwichShopApp` is the main widget of our app.
+    * `StatelessWidget` is a widget that does not change in appearance and behaviour after being built.
+    * `SandwichShopApp` extends (is a subclass of) `StatelessWidget`.
+    * `const SandwichShopApp({super.key});` is the constructor for `SandwichShopApp`.
+        * `const` is optional (for performance).
+        * `super.key` is used to pass an optional `key` (a unique identifier for the widget).
+    * `Widget build(BuildContext context)` is the `build()` method of `SandwichShopApp`.
+        * Flutter calls `build`, which returns a `Widget` used to render the UI.
+        * `BuildContext context` is the context (e.g., the location) of the widget; it is needed to build the UI.
+        * `@override` shows that we are reimplementing the `build` method of `StatelessWidget`; all widgets must do this.
+        * For now, `build` returns a placeholder (`Container` is like a `div` in HTML).
 
 2.  **Use the `SandwichShopApp` Widget**
 
@@ -118,7 +117,7 @@ This project should already be a repository in your GitHub account.
 
     ```dart
     void main() {
-      runApp(const SandwichShopApp());
+      runApp(const SandwichShopApp());
     }
     ```
 
@@ -128,16 +127,7 @@ This project should already be a repository in your GitHub account.
 
 3.  **Commit Your Changes**
 
-    Commit your changes.
-    Our suggested commit message: `Define the Main App Widget: SandwichShopApp`
-
-    The commands to do this in the terminal:
-
-    ```bash
-    git add lib/main.dart
-    git commit -m "Define the Main App Widget: SandwichShopApp"
-    git push
-    ```
+    Suggested commit message: `Define the Main App Widget: SandwichShopApp`
 
 ### Define the UI inside `SandwichShopApp`
 
@@ -146,34 +136,34 @@ This project should already be a repository in your GitHub account.
     Modify the `build` method within the `SandwichShopApp` class as follows:
 
     ```dart
-      @override
-      Widget build(BuildContext context) {
-        return MaterialApp(
-          home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Sandwich Counter'),
-            ),
-            body: const Center(
-              child: Text('Welcome to the Sandwich Shop!'),
-            ),
-          ),
-        );
-      }
+      @override
+      Widget build(BuildContext context) {
+        return MaterialApp(
+          home: Scaffold(
+            appBar: AppBar(
+              title: const Text('Sandwich Counter'),
+            ),
+            body: const Center(
+              child: Text('Welcome to the Sandwich Shop!'),
+            ),
+          ),
+        );
+      }
     ```
 
     Key points:
 
-    - **`MaterialApp`** is the root widget that provides theming, navigation, and Material Design
-      - Uses named parameters like `home:` to specify the main screen
-      - For more details, see the [MaterialApp documentation](https://api.flutter.dev/flutter/material/MaterialApp-class.html)
-    - **`Scaffold`** is the blueprint for a typical app screen layout
-      - Provides slots for `appBar`, `body`, `drawer`, `bottomNavigationBar`, `floatingActionButton`, etc.
-      - For more details, see the [Scaffold documentation](https://api.flutter.dev/flutter/material/Scaffold-class.html)
-    - **`AppBar`** is the top bar of the screen
-      - `title:` property shows the screen title
-      - For more details, see the [AppBar documentation](https://api.flutter.dev/flutter/material/AppBar-class.html)
-    - **`Center`** is a layout widget that centers
-      - It centres our placeholder `Text` widget both horizontally and vertically
+    * **`MaterialApp`** is the root widget that provides theming, navigation, and Material Design.
+        * Uses named parameters like `home:` to specify the main screen.
+        * For more details, see the [MaterialApp documentation](https://api.flutter.dev/flutter/material/MaterialApp-class.html).
+    * **`Scaffold`** is the blueprint for a typical app screen layout.
+        * Provides slots for `appBar`, `body`, `drawer`, `bottomNavigationBar`, `floatingActionButton`, etc.
+        * For more details, see the [Scaffold documentation](https://api.flutter.dev/flutter/material/Scaffold-class.html).
+    * **`AppBar`** is the top bar of the screen.
+        * `title` property shows the screen title.
+        * For more details, see the [AppBar documentation](https://api.flutter.dev/flutter/material/AppBar-class.html).
+    * **`Center`** is a layout widget that centres its child.
+        * It centres our placeholder `Text` widget both horizontally and vertically.
 
 2.  **Run the Application**
 
@@ -182,19 +172,11 @@ This project should already be a repository in your GitHub account.
 
     Once a web device is selected, run the app with `F5` or by clicking the "Run" button on top of the `main` function in `lib/main.dart`.
 
-    You should see an application with an app bar titled "Sandwich Counter" and the text "Welcome to the Sandwich Shop\!" centred in the body of the screen.
+    You should see an application with an app bar titled "Sandwich Counter" and the text "Welcome to the Sandwich Shop!" centred in the body of the screen.
 
 3.  **Commit Your Changes**
 
     Suggested commit message: `Define the UI inside SandwichShopApp`
-
-    Terminal commands:
-
-    ```bash
-    git add lib/main.dart
-    git commit -m "Define the UI inside SandwichShopApp"
-    git push
-    ```
 
 ### Create the Custom `SandwichCounter` Widget
 
@@ -206,119 +188,88 @@ This project should already be a repository in your GitHub account.
 
     Our `SandwichCounter` widget will be responsible for displaying a single line of text that describes the count and type of a sandwich, complete with a visual representation using emojis.
 
-2.  **Defining the `SandwichCounter` Widget**
+2.  **Define the `SandwichCounter` Widget**
 
-    We'll add the definition for `SandwichCounter` in `lib/main.dart` file although you can place it in a separate file for better organisation.
+    We'll add the definition for `SandwichCounter` in the `lib/main.dart` file, although you can place it in a separate file for better organisation.
     Place the `SandwichCounter` class above the `SandwichShopApp` class, but below the initial `import` statement:
 
     ```dart
     class SandwichCounter extends StatelessWidget {
-        final String sandwichType;
-        final int count;
-
-        const SandwichCounter(this.count, this.sandwichType, {super.key});
-
-        @override
-        Widget build(BuildContext context) {
-            return Text('This is a placeholder for SandwichCounter');
-        }
+        final String sandwichType;
+        final int count;
+    
+        const SandwichCounter(this.count, this.sandwichType, {super.key});
+    
+        @override
+        Widget build(BuildContext context) {
+            return Text('This is a placeholder for SandwichCounter');
+        }
     }
     ```
 
     Key points:
 
-    - `SandwichCounter` is our custom widget that extends `StatelessWidget`
-    - `final String sandwichType` and `final int count` are instance variables
-      - Marked `final` because data doesn't change in a `StatelessWidget` in run-time
-    - `const SandwichCounter(this.count, this.sandwichType, {super.key});` is the constructor
-      - `this.count` and `this.sandwichType` automatically assign constructor arguments to instance variables
+    * `SandwichCounter` is our custom widget that extends `StatelessWidget`.
+    * `final String sandwichType` and `final int count` are instance variables.
+        * Marked `final` because data in a `StatelessWidget` does not change after the widget is built.
+    * `const SandwichCounter(this.count, this.sandwichType, {super.key});` is the constructor.
+        * `this.count` and `this.sandwichType` automatically assign constructor arguments to instance variables.
 
     Running the app at this stage won't show any visual changes yet, as we haven't actually used the `SandwichCounter` widget in our `SandwichShopApp`.
 
 3.  **Commit Your Changes**
 
-    Go ahead and commit your changes to the `lib/main.dart` file.
-    We suggest a commit message like `Define SandwichCounter custom widget`.
-    Below are the commands to commit your changes in the terminal:
+    Suggested commit message: `Define SandwichCounter custom widget`
 
-    ```bash
-    git add lib/main.dart
-    git commit -m "Define SandwichCounter custom widget"
-    git push
-    ```
-
-4.  **Implementing the `build` Method of `SandwichCounter`**
+4.  **Implement the `build` Method of `SandwichCounter`**
 
     Now, let's modify the `build` method of `SandwichCounter` so it displays the sandwich type, count, and some emojis. We want the output to look something like: "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪".
 
     Update the `build` method inside your `SandwichCounter` so it looks like this:
 
     ```dart
-    class SandwichCounter extends StatelessWidget {
-        final String sandwichType;
-        final int count;
-
-        const SandwichCounter(this.count, this.sandwichType, {super.key});
-
-        @override
+      @override
         Widget build(BuildContext context) {
-            return Text('$count $sandwichType sandwich(es): ${'🥪' * count}');
+          return Text('$count $sandwichType sandwich(es): ${'🥪' * count}');
         }
-    }
+      }
     ```
 
 5.  **Commit Your Changes**
 
-    Suggested commit message: `Create the Custom SandwichCounter Widget`.
-
-    ```bash
-    git add lib/main.dart
-    git commit -m "Create the Custom SandwichCounter Widget"
-    git push
-    ```
+    Suggested commit message: `Implement dynamic text in SandwichCounter`
 
 ### Use `SandwichCounter` in `SandwichShopApp`
 
-1.  **Replacing the Placeholder in `SandwichShopApp`**
+1.  **Replace the Placeholder in `SandwichShopApp`**
 
     Find the `build` method of the `SandwichShopApp` class.
     Locate the `Center` widget within the `Scaffold`'s `body`.
-    We construct an instance of the `SandwichCounter` class as `child` property.
+    We will construct an instance of the `SandwichCounter` class and provide it to the `child` property.
     See below:
 
     ```dart
-    class SandwichShopApp extends StatelessWidget {
-        const SandwichShopApp({super.key});
-
-        @override
-        Widget build(BuildContext context) {
-            return MaterialApp(
-                home: Scaffold(
-                    appBar: AppBar(title: const Text('Sandwich Counter')),
-                    body: const Center(
-                        child: SandwichCounter(5, 'Footlong'),
-                    ),
-                ),
-            );
-        }
-    }
+      @override
+      Widget build(BuildContext context) {
+        return MaterialApp(
+          home: Scaffold(
+            appBar: AppBar(title: const Text('Sandwich Counter')),
+            body: const Center(
+              child: SandwichCounter(5, 'Footlong'),
+            ),
+          ),
+        );
+      }
     ```
 
 2.  **Run the Application**
 
     You should now see the application displaying an app bar with "Sandwich Counter" as the title.
     In the centre of the screen, the text "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" should be displayed, rendered by your `SandwichCounter` widget.
-    Try changing the number and type of sandwich in the `SandwichCounter` constructor to see how it updates.
 
 3.  **Commit Your Changes**
 
-    Suggested commit message: `Use SandwichCounter in SandwichShopApp`.
-
-    ```bash
-    git add lib/main.dart
-    git commit -m "Use SandwichCounter in SandwichShopApp"
-    git push
-    ```
+    Suggested commit message: `Use SandwichCounter in SandwichShopApp`
 
 At this stage, your code should look like our code as shown on [the GitHub repository](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart).
 
