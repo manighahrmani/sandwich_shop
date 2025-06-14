@@ -14,7 +14,7 @@ Ensure that you have already completed the following:
 
 We will incrementally build the "Sandwich Counter" application.
 
-### Project Setup and Initial Modifications
+### Setup the Project
 
 Open the Flutter folder containing the project you created in Worksheet 1 - "Introduction to Flutter" - in Visual Studio Code.
 This project should already be a repository in your GitHub account.
@@ -70,11 +70,12 @@ This project should already be a repository in your GitHub account.
 
     You should see `main.dart` listed under changes.
     In the "Message" box, above the "Commit" button, type a descriptive commit message, something like `Initial setup for SandwichShopApp structure`.
-    
+
     Click the Commit button to commit the changes.
     After committing, click the "Sync Changes" button to upload your commit to GitHub.
 
-    Alternatively, open the integrated terminal within VS Code (you can use **Ctrl + \`** or **⌘ + \`** on macOS) and run the following commands:
+    Note that you could also do all of this using integrated terminal within VS Code.
+    You can open the terminal with **Ctrl + \`** on Windows or **⌘ + \`** on macOS and run the following commands:
 
     ```bash
     git add lib/main.dart
@@ -82,32 +83,31 @@ This project should already be a repository in your GitHub account.
     git push
     ```
 
-### Creating the Main Application Widget: `SandwichShopApp`
+### Create the Main App Widget: `SandwichShopApp`
 
 1.  **Define the `SandwichShopApp` Widget**
 
     In Flutter, user interfaces are built from **widgets**.
-    Everything is a widget: a button is a widget, text is a widget, the screen layout is a widget, even the entire application is a widget.
-    We'll now define the main widget for our application, which we'll call `SandwichShopApp`.
+    Everything is a widget, even the entire app is a widget.
+    Let's define the main widget for our app, which we'll call `SandwichShopApp`.
 
     This widget will be a **`StatelessWidget`**.
     A `StatelessWidget` is a widget whose state cannot change once it's built.
-    This means its appearance and behaviour are determined by the configuration information provided by its parent widget and stored in its `final` instance variables.
-    It doesn't have any internal state that changes over its lifetime.
+    Its appearance and behaviour are determined by its initial configurations (which is stored in `final` instance variables).
     `StatelessWidget`s are suitable for UI parts that only depend on their initial configuration.
 
-    Add the following class definition to your `lib/main.dart` file, below the `import` statement and before the `main()` function:
+    Add the following class definition to `lib/main.dart`, below the `import` statement and before the `main()` function:
 
     ```dart
-    // Root widget of our application
+    // Root widget of the app
     class SandwichShopApp extends StatelessWidget {
       // Constructor
       const SandwichShopApp({super.key});
 
       @override
       Widget build(BuildContext context) {
-        // We will build the UI here in the next step
-        return Container(); // Placeholder: We'll replace this soon
+        // We'll build the UI here
+        return Container(); // We'll replace this soon
       }
     }
     ```
