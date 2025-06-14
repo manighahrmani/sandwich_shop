@@ -1,55 +1,46 @@
 # Worksheet 2 — Stateless Widgets
 
-In this worksheet, we create a simple Flutter application using Stateless Widgets to create a “Sandwich Counter”.
-It covers the basic structure of a Flutter app and the creation of custom widgets.
-
 ## Prerequisites
 
-Ensure that you have already completed the following worksheets first:
+Ensure that you have already completed the following:
 
-- Introduction to Git and GitHub.
-- Introduction to the Dart language.
-- Installation of Flutter SDK.
-- Installation of Git and Visual Studio Code.
-- Creating and running your first Flutter app.
+- Installation of Git and Visual Studio Code
+- Installation of Flutter SDK
+- Introduction to the Dart language
+- Introduction to Git and GitHub
+- Introduction to Flutter
 
 ## Developing the Sandwich Counter Application
 
 We will incrementally build the "Sandwich Counter" application.
-The goal for this first part is to set up the main application structure.
 
 ### Project Setup and Initial Modifications
 
-First, open the Flutter folder containing the project you created in Worksheet 1 in Visual Studio Code.
+Open the Flutter folder containing the project you created in Worksheet 1 - "Introduction to Flutter" - in Visual Studio Code.
 This project should already be a repository in your GitHub account.
-
-We will modify the `lib/main.dart` file. This file is the entry point for your Flutter application.
-
-Open `lib/main.dart`. At the top of the file, you'll usually find an `import` statement.
-We need to ensure we have the correct one for Material Design components:
-
-```dart
-import 'package:flutter/material.dart';
-```
 
 1.  **Import the Material Design Library**
 
-    This line imports the `material.dart` library from the Flutter framework.
-    **Material Design** is a comprehensive design system created by Google that provides guidelines for visual, motion, and interaction design to create user experiences.
+    Open `lib/main.dart`.
+    We need to ensure that we have the correct `import` statement for Material Design components:
+
+    ```dart
+    import 'package:flutter/material.dart';
+    ```
+
+    **Material Design** is a design system created by Google that provides guidelines for user experience.
     The `package:flutter/material.dart` library gives you access to a collection of pre-built UI components, called **widgets**, that implement these Material Design guidelines.
+    We will first use these widgets to build the user interface of our app and later, we will learn how to create our own custom widgets.
 
-    These widgets include fundamental building blocks for your app's UI, such as:
+    These widgets include fundamental building blocks, such as:
 
-    - Structural elements like `Scaffold` (for basic page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
+    - **Structural elements** like `Scaffold` (for page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
     - **Buttons** like `ElevatedButton`, `TextButton`, and `IconButton`.
-    - **Informational widgets** like `Text` (for displaying strings), `Icon` (for displaying icons), and `Image`.
+    - **Informational widgets** like `Text`, `Image` and `Icon` (for displaying icons).
     - **Input widgets** like `TextField` (for text entry) and `Checkbox` (for boolean input).
     - **Layout widgets** like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
 
-    By using these Material widgets, you can quickly build a user interface that looks and feels professional and consistent with platform conventions.
     The library also includes utilities like `ThemeData` to define styling (colours, fonts) across your app.
-
-    If your `lib/main.dart` file (from the default counter app) has other imports that are not `package:flutter/material.dart` at this stage, you can leave them for now, but we'll be removing most of the default counter app's code.
 
 2.  **Clean the Default Code**
 
@@ -73,14 +64,13 @@ import 'package:flutter/material.dart';
 
 3.  **Commit Your Changes**
 
-    Now is a good time to make your first commit for this stage.
-    In VS Code, go to the Source Control panel (usually an icon on the left sidebar that looks like a branching path).
+    It is a good time to commit your changes.
+    In VS Code, go to the Source Control panel from **View > Source Control**.
     You can also use the Command Palette **Ctrl + Shift + P** or **⌘ + Shift + P** on macOS and enter "Source Control" which will open the Source Control panel.
 
     You should see `main.dart` listed under changes.
-    In the "Message" box at the top of the Source Control panel (above the Commit button), type a descriptive commit message.
-    We suggest a message like `Initial setup for SandwichShopApp structure`.
-
+    In the "Message" box, above the "Commit" button, type a descriptive commit message, something like `Initial setup for SandwichShopApp structure`.
+    
     Click the Commit button to commit the changes.
     After committing, click the "Sync Changes" button to upload your commit to GitHub.
 
