@@ -174,6 +174,9 @@ This project should already be a repository in your GitHub account.
 
     You should see an application with an app bar titled "Sandwich Counter" and the text "Welcome to the Sandwich Shop!" centred in the body of the screen.
 
+    ![Welcome to the Sandwich Shop](images/screenshot-welcome-to-sandwich-shop.jpg)
+    _Figure: The Sandwich Counter app with a welcome message._
+
 3.  **Commit Your Changes**
 
     Suggested commit message: `Define the UI inside SandwichShopApp`
@@ -265,6 +268,9 @@ This project should already be a repository in your GitHub account.
 
     You should now see the application displaying an app bar with "Sandwich Counter" as the title.
     In the centre of the screen, the text "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" should be displayed, rendered by your `SandwichCounter` widget.
+
+    ![Sandwich Counter](images/screenshot-sandwich-counter.jpg)
+    _Figure: The Sandwich Counter app displaying the sandwich count and type._
 
 3.  **Commit Your Changes**
 
