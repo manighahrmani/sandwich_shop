@@ -173,8 +173,7 @@ This project should already be a repository in your GitHub account.
     Once a web device is selected, run the app with `F5` or by clicking the "Run" button on top of the `main` function in `lib/main.dart`.
 
     You should see an application with an app bar titled "Sandwich Counter" and the text "Welcome to the Sandwich Shop!" centred in the body of the screen.
-
-    ![Welcome to the Sandwich Shop](images/screenshot-welcome-to-sandwich-shop.jpg)
+    ![Welcome to the Sandwich Shop](images/screenshot_welcome_to_sandwich_shop.jpg)
     _Figure: The Sandwich Counter app with a welcome message._
 
 3.  **Commit Your Changes**
@@ -268,8 +267,7 @@ This project should already be a repository in your GitHub account.
 
     You should now see the application displaying an app bar with "Sandwich Counter" as the title.
     In the centre of the screen, the text "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" should be displayed, rendered by your `SandwichCounter` widget.
-
-    ![Sandwich Counter](images/screenshot-sandwich-counter.jpg)
+    ![Sandwich Counter](images/screenshot_sandwich_counter.jpg)
     _Figure: The Sandwich Counter app displaying the sandwich count and type._
 
 3.  **Commit Your Changes**
@@ -285,8 +283,7 @@ At this stage, your code should look like our code as shown on [the GitHub repos
 
     Familiarise yourself with this tool, by watching this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and review its [official documentation](https://docs.flutter.dev/tools/devtools/inspector).
     As a small exercise, observe the relationship between the widgets in your app and the properties (e.g., width and height) of each widget.
-
-    ![Flutter DevTools](images/screenshot-devtools.jpg)
+    ![Flutter DevTools](images/screenshot_devtools.jpg)
     _Figure: Flutter DevTools showing the widget tree and properties._
 
     Your main guide for the rest of the exercises is the [Flutter layout documentation](https://docs.flutter.dev/get-started/fundamentals/layout).
@@ -298,8 +295,7 @@ At this stage, your code should look like our code as shown on [the GitHub repos
     Give the `Container` a fixed `width` and `height` and a `color` to make it visible.
     Colours in Flutter can be specified using the `Colors` class, like `Colors.blue` or `Colors.red` (see the [Colors documentation](https://api.flutter.dev/flutter/material/Colors-class.html)).
     This is what it should look like:
-
-    ![Container](images/screenshot-container.jpg)
+    ![Container](images/screenshot_container.jpg)
     _Figure: The application with a blue Container holding the SandwichCounter._
 
     Update the `width` and `height` properties to see what happens if the `SandwichCounter`'s text is too big for the `Container`.
@@ -307,8 +303,7 @@ At this stage, your code should look like our code as shown on [the GitHub repos
 1.  Read about **layout widgets** by visiting the [Layout widgets documentation](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets).
     Next, use a `Column` or a `Row` widget to display three `SandwichCounter` widgets in the `SandwichShopApp`'s `body`.
     Make sure to read about [main and cross axes alignment in the documentation page](https://docs.flutter.dev/get-started/fundamentals/layout#align-widgets-within-rows-and-columns) to see how to align widgets within these layout widgets.
-
-    ![Layout](images/screenshot-layout.jpg)
+    ![Layout](images/screenshot_layout.jpg)
     _Figure: The application with three SandwichCounter widgets arranged in a Row._
 
     Resize the browser window.
@@ -319,7 +314,8 @@ At this stage, your code should look like our code as shown on [the GitHub repos
     You will most likely see an overflow error because the content is taller than the screen.
     (At this point, you may want to read the [Debugging layouts](https://docs.flutter.dev/get-started/fundamentals/layout#devtools-and-debugging-layout) section on the documentation page).
 
-    ![Overflow](images/screenshot-overflow.jpg)
+    ![Overflow](images/screenshot_overflow.jpg)
+    _Figure: The application with an overflow error due to too many SandwichCounter widgets in a Column._
 
     There are a couple of ways to fix this issue:
 
