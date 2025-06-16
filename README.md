@@ -45,7 +45,7 @@ Enter the following commands in your terminal to clone the repository and
 open it in Visual Studio Code:
 
 ```bash
-git clone --branch 1 https://github.com/manighahrmani/sandwich_shop
+git clone --branch 2 https://github.com/manighahrmani/sandwich_shop
 cd sandwich_shop
 code .
 ```
