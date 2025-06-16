@@ -4,11 +4,11 @@
 
 Ensure that you have already completed the following:
 
-* Installation of Git and Visual Studio Code.
-* Installation of Flutter SDK.
-* Introduction to the Dart language.
-* Introduction to Git and GitHub.
-* Introduction to Flutter.
+- Installation of Git and Visual Studio Code.
+- Installation of Flutter SDK.
+- Introduction to the Dart language.
+- Introduction to Git and GitHub.
+- Introduction to Flutter.
 
 ## Developing the Sandwich Counter Application
 
@@ -34,19 +34,18 @@ This project should already be a repository in your GitHub account.
 
     These widgets include fundamental building blocks, such as:
 
-    * **Structural elements** like `Scaffold` (for page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
-    * **Buttons** like `ElevatedButton`, `TextButton`, and `IconButton`.
-    * **Informational widgets** like `Text`, `Image`, and `Icon` (for displaying icons).
-    * **Input widgets** like `TextField` (for text entry) and `Checkbox` (for boolean input).
-    * **Layout widgets** like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
+    - **Structural elements** like `Scaffold` (for page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
+    - **Buttons** like `ElevatedButton`, `TextButton`, and `IconButton`.
+    - **Informational widgets** like `Text`, `Image`, and `Icon` (for displaying icons).
+    - **Input widgets** like `TextField` (for text entry) and `Checkbox` (for boolean input).
+    - **Layout widgets** like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
 
     The library also includes utilities like `ThemeData` to define styling (colours, fonts) across your app.
 
 2.  **Clean the Default Code**
 
     Locate the `main()` function in `lib/main.dart`.
-    This is where your app starts.
-    The default app has `runApp(const MyApp());`.
+    This is where your app starts. The default app has `runApp(const MyApp());`.
     Comment out or remove this line for now.
     You can comment a line in VS Code by selecting it with your mouse and pressing **Ctrl + /** on Windows or **⌘ + /** on macOS.
 
@@ -56,7 +55,7 @@ This project should already be a repository in your GitHub account.
 
     ```dart
     import 'package:flutter/material.dart';
-    
+
     void main() {}
     ```
 
@@ -89,7 +88,7 @@ This project should already be a repository in your GitHub account.
     ```dart
     class SandwichShopApp extends StatelessWidget {
       const SandwichShopApp({super.key});
-    
+
       @override
       Widget build(BuildContext context) {
         return Container();
@@ -99,17 +98,17 @@ This project should already be a repository in your GitHub account.
 
     Key points:
 
-    * `SandwichShopApp` is the main widget of our app.
-    * `StatelessWidget` is a widget that does not change in appearance and behaviour after being built.
-    * `SandwichShopApp` extends (is a subclass of) `StatelessWidget`.
-    * `const SandwichShopApp({super.key});` is the constructor for `SandwichShopApp`.
-        * `const` is optional (for performance).
-        * `super.key` is used to pass an optional `key` (a unique identifier for the widget).
-    * `Widget build(BuildContext context)` is the `build()` method of `SandwichShopApp`.
-        * Flutter calls `build`, which returns a `Widget` used to render the UI.
-        * `BuildContext context` is the context (e.g., the location) of the widget; it is needed to build the UI.
-        * `@override` shows that we are reimplementing the `build` method of `StatelessWidget`; all widgets must do this.
-        * For now, `build` returns a placeholder (`Container` is like a `div` in HTML).
+    - `SandwichShopApp` is the main widget of our app.
+    - `StatelessWidget` is a widget that does not change in appearance and behaviour after being built.
+    - `SandwichShopApp` extends (is a subclass of) `StatelessWidget`.
+    - `const SandwichShopApp({super.key});` is the constructor for `SandwichShopApp`.
+      - `const` is optional (for performance).
+      - `super.key` is used to pass an optional `key` (a unique identifier for the widget).
+    - `Widget build(BuildContext context)` is the `build()` method of `SandwichShopApp`.
+      - Flutter calls `build`, which returns a `Widget` used to render the UI.
+      - `BuildContext context` is the context (e.g., the location) of the widget; it is needed to build the UI.
+      - `@override` shows that we are reimplementing the `build` method of `StatelessWidget`; all widgets must do this.
+      - For now, `build` returns a placeholder (`Container` is like a `div` in HTML).
 
 2.  **Use the `SandwichShopApp` Widget**
 
@@ -136,34 +135,35 @@ This project should already be a repository in your GitHub account.
     Modify the `build` method within the `SandwichShopApp` class as follows:
 
     ```dart
-      @override
-      Widget build(BuildContext context) {
-        return MaterialApp(
-          home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Sandwich Counter'),
-            ),
-            body: const Center(
-              child: Text('Welcome to the Sandwich Shop!'),
-            ),
+    @override
+    Widget build(BuildContext context) {
+      return MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Sandwich Counter'),
           ),
-        );
-      }
+          body: const Center(
+            child: Text('Welcome to the Sandwich Shop!'),
+          ),
+        ),
+      );
+    }
     ```
 
     Key points:
 
-    * **`MaterialApp`** is the root widget that provides theming, navigation, and Material Design.
-        * Uses named parameters like `home:` to specify the main screen.
-        * For more details, see the [MaterialApp documentation](https://api.flutter.dev/flutter/material/MaterialApp-class.html).
-    * **`Scaffold`** is the blueprint for a typical app screen layout.
-        * Provides slots for `appBar`, `body`, `drawer`, `bottomNavigationBar`, `floatingActionButton`, etc.
-        * For more details, see the [Scaffold documentation](https://api.flutter.dev/flutter/material/Scaffold-class.html).
-    * **`AppBar`** is the top bar of the screen.
-        * `title` property shows the screen title.
-        * For more details, see the [AppBar documentation](https://api.flutter.dev/flutter/material/AppBar-class.html).
-    * **`Center`** is a layout widget that centres its child.
-        * It centres our placeholder `Text` widget both horizontally and vertically.
+    - **`MaterialApp`** is the root widget that provides theming, navigation, and Material Design.
+      - Uses named parameters like `home:` to specify the main screen.
+      - `Scaffold` is the child of `MaterialApp` while `AppBar` and `Center` are children of `Scaffold`. This structure is called **the widget tree**.
+      - For more details, see the [MaterialApp documentation](https://api.flutter.dev/flutter/material/MaterialApp-class.html).
+    - **`Scaffold`** is the blueprint for a typical app screen layout.
+      - Provides slots for `appBar`, `body`, `drawer`, `bottomNavigationBar`, `floatingActionButton`, etc.
+      - For more details, see the [Scaffold documentation](https://api.flutter.dev/flutter/material/Scaffold-class.html).
+    - **`AppBar`** is the top bar of the screen.
+      - `title` property shows the screen title.
+      - For more details, see the [AppBar documentation](https://api.flutter.dev/flutter/material/AppBar-class.html).
+    - **`Center`** is a layout widget that centres its child.
+      - It centres our placeholder `Text` widget both horizontally and vertically.
 
 2.  **Run the Application**
 
@@ -195,25 +195,25 @@ This project should already be a repository in your GitHub account.
 
     ```dart
     class SandwichCounter extends StatelessWidget {
-        final String sandwichType;
-        final int count;
-    
-        const SandwichCounter(this.count, this.sandwichType, {super.key});
-    
-        @override
-        Widget build(BuildContext context) {
-            return Text('This is a placeholder for SandwichCounter');
-        }
+      final String sandwichType;
+      final int count;
+
+      const SandwichCounter(this.count, this.sandwichType, {super.key});
+
+      @override
+      Widget build(BuildContext context) {
+        return Text('This is a placeholder for SandwichCounter');
+      }
     }
     ```
 
     Key points:
 
-    * `SandwichCounter` is our custom widget that extends `StatelessWidget`.
-    * `final String sandwichType` and `final int count` are instance variables.
-        * Marked `final` because data in a `StatelessWidget` does not change after the widget is built.
-    * `const SandwichCounter(this.count, this.sandwichType, {super.key});` is the constructor.
-        * `this.count` and `this.sandwichType` automatically assign constructor arguments to instance variables.
+    - `SandwichCounter` is our custom widget that extends `StatelessWidget`.
+    - `final String sandwichType` and `final int count` are instance variables.
+      - Marked `final` because data in a `StatelessWidget` does not change after the widget is built.
+    - `const SandwichCounter(this.count, this.sandwichType, {super.key});` is the constructor.
+      - `this.count` and `this.sandwichType` automatically assign constructor arguments to instance variables.
 
     Running the app at this stage won't show any visual changes yet, as we haven't actually used the `SandwichCounter` widget in our `SandwichShopApp`.
 
@@ -228,11 +228,10 @@ This project should already be a repository in your GitHub account.
     Update the `build` method inside your `SandwichCounter` so it looks like this:
 
     ```dart
-      @override
-        Widget build(BuildContext context) {
-          return Text('$count $sandwichType sandwich(es): ${'🥪' * count}');
-        }
-      }
+    @override
+    Widget build(BuildContext context) {
+      return Text('$count $sandwichType sandwich(es): ${'🥪' * count}');
+    }
     ```
 
 5.  **Commit Your Changes**
@@ -249,17 +248,17 @@ This project should already be a repository in your GitHub account.
     See below:
 
     ```dart
-      @override
-      Widget build(BuildContext context) {
-        return MaterialApp(
-          home: Scaffold(
-            appBar: AppBar(title: const Text('Sandwich Counter')),
-            body: const Center(
-              child: SandwichCounter(5, 'Footlong'),
-            ),
+    @override
+    Widget build(BuildContext context) {
+      return MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(title: const Text('Sandwich Counter')),
+          body: const Center(
+            child: SandwichCounter(5, 'Footlong'),
           ),
-        );
-      }
+        ),
+      );
+    }
     ```
 
 2.  **Run the Application**
@@ -275,50 +274,60 @@ At this stage, your code should look like our code as shown on [the GitHub repos
 
 ## Exercises
 
-Before you begin, familiarise yourself with the **Flutter Inspector**, by watching this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and review its [official documentation](https://docs.flutter.dev/tools/devtools/inspector).
+1.  The **Flutter Inspector** is a tool that allows you to visualize the widget tree, view properties of widgets, and debug layout issues.
+    You can access it via the browser or by using the DevTools in Visual Studio Code. Use `Ctrl + Shift + P` or `⌘ + Shift + P` on macOS to open the command palette and type "Flutter: Open Flutter DevTools" and select the "Widget Inspector" option).
 
- Your main guide for these exercises is the [Flutter layout documentation](https://docs.flutter.dev/get-started/fundamentals/layout).
- Remember to commit your changes after each exercise.
+    Familiarise yourself with this tool, by watching this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and review its [official documentation](https://docs.flutter.dev/tools/devtools/inspector).
+    As a small exercise, observe the relationship between the widgets in your app and the properties (e.g., width and height) of each widget.
 
-1.  **Vertical and Horizontal Layouts:**
+    ![Flutter DevTools](images/screenshot-devtools.jpg)
+    _Figure: Flutter DevTools showing the widget tree and properties._
 
-    - Modify the `SandwichShopApp`'s `body` to display two `SandwichCounter` widgets.
-    - First, arrange them vertically using a `Column` widget. Consult the documentation on "Layout multiple widgets vertically or horizontally".
-    - To add space between them, you can either use a `SizedBox` widget or explore the `mainAxisAlignment` property of the `Column` (e.g., `MainAxisAlignment.spaceEvenly` as shown in "Align widgets within rows and columns").
-    - Next, change the `Column` to a `Row` to arrange them horizontally. Observe how the layout changes.
-    - What happens if the content of the `Row` is too wide for the screen (causes an overflow)? How does the concept of "Constraints go down. Sizes go up. Parent sets the position" apply here?
-    - _Documentation Focus_: `Column`, `Row`, `MainAxisAlignment`, `CrossAxisAlignment`, `SizedBox`, understanding constraints.
+    Your main guide for the rest of the exercises is the [Flutter layout documentation](https://docs.flutter.dev/get-started/fundamentals/layout).
+    Remember to commit your changes after each exercise.
 
-2.  **Aligning Widgets:**
+1.  Place the `SandwichCounter` widgets inside a `Container` widget.
+    Check out the [Lay out a single widget](https://docs.flutter.dev/get-started/fundamentals/layout#lay-out-a-single-widget) section of the documentation page or the documentation for the [Container widget](https://api.flutter.dev/flutter/widgets/Container-class.html) to understand how to use it.
 
-    - Using a `Column`, display three `SandwichCounter` widgets with different sandwich types and counts.
-    - Experiment with the `crossAxisAlignment` property of the `Column` to align the `SandwichCounter` widgets. Refer to the diagram showing main and cross axes in the "Align widgets within rows and columns" section.
-    - Wrap one of the `SandwichCounter` widgets in an `Align` widget. Experiment with its `alignment` property (e.g., `Alignment.centerLeft`, `Alignment.topRight`). How does this differ from using `CrossAxisAlignment` on the `Column`?
-    - _Documentation Focus_: `Align` widget, `Alignment` class, `mainAxisAlignment` and `crossAxisAlignment` in `Column`/`Row`.
+    Give the `Container` a fixed `width` and `height` and a `color` to make it visible.
+    Colours in Flutter can be specified using the `Colors` class, like `Colors.blue` or `Colors.red` (see the [Colors documentation](https://api.flutter.dev/flutter/material/Colors-class.html)).
+    This is what it should look like:
 
-3.  **Sizing Widgets:**
+    ![Container](images/screenshot-container.jpg)
+    _Figure: The application with a blue Container holding the SandwichCounter._
 
-    - In your `SandwichShopApp`, place a `SandwichCounter` widget inside a `Container`.
-    - Give the `Container` a fixed `width` and `height` and a `color` to make its bounds visible. (Refer to "Lay out a single widget" and the `Container` section for adding padding/margins and understanding how `Container` can try to be a particular size if dimensions are provided).
-    - What happens if the `SandwichCounter`'s text is too long for the `Container`'s width, leading to an overflow (yellow and black striped pattern)?
-    - Now, use the `Expanded` widget to make a `SandwichCounter` take up available horizontal space within a `Row`. Try placing two `SandwichCounter`s in a `Row`, with one wrapped in `Expanded`. Experiment with the `flex` property of the `Expanded` widget to make one child take up more space than the other, as shown in "Sizing widgets within rows and columns".
-    - _Documentation Focus_: `Container` (width, height, color, padding, margin), `Expanded` widget (and its `flex` property). Refer to "Sizing and positioning widgets" and the `Expanded` and `Flexible` Widget of the Week videos.
+    Update the `width` and `height` properties to see what happens if the `SandwichCounter`'s text is too big for the `Container`.
 
-4.  **Scrolling:**
+1.  Read about **layout widgets** by visiting the [Layout widgets documentation](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets).
+    Next, use a `Column` or a `Row` widget to display three `SandwichCounter` widgets in the `SandwichShopApp`'s `body`.
+    Make sure to read about [main and cross axes alignment in the documentation page](https://docs.flutter.dev/get-started/fundamentals/layout#align-widgets-within-rows-and-columns) to see how to align widgets within these layout widgets.
 
-    - Modify `SandwichShopApp` to display ten `SandwichCounter` widgets. If you use a `Column` directly, you will likely see an overflow error because the content is taller than the screen. This is a common "unbounded constraints" scenario mentioned in "DevTools and debugging layout".
-    - Instead of `Column` + `SingleChildScrollView`, use a `ListView` to display these ten `SandwichCounter` widgets. `ListView` automatically provides scrolling.
-    - For a more dynamic list, explore `ListView.builder`. Why is `ListView.builder` preferred for long or dynamic lists? (See "Scrolling widgets" and specifically the `ListView.builder` example in the documentation).
-    - Try creating a horizontal `ListView` of five `SandwichCounter` widgets. (Hint: `ListView` has a `scrollDirection` property).
-    - _Documentation Focus_: `ListView`, `ListView.builder`, `scrollDirection`, understanding how `ListView` handles scrolling and differs from `Column`. Refer to "Scrollable widgets" and the `ListView` Widget of the Week video.
+    ![Layout](images/screenshot-layout.jpg)
+    _Figure: The application with three SandwichCounter widgets arranged in a Row._
 
-5.  **Basic Adaptive Layouts:**
-    - Read the "Adaptive layouts" section of the Flutter layout documentation, paying close attention to the `LayoutBuilder` widget and the "builder pattern".
-    - In `SandwichShopApp`, wrap the part of your UI that displays `SandwichCounter`(s) with a `LayoutBuilder`.
-    - Inside the `builder` function of `LayoutBuilder`, you receive `BoxConstraints`. Use `constraints.maxWidth` to determine the available width.
-    - Implement logic: if `constraints.maxWidth` is less than a certain value (e.g., 600 pixels, as in the documentation example), display your `SandwichCounter`(s) in a `Column`. Otherwise (if it's wider), display them in a `Row` (or a more complex row-based layout if you're feeling adventurous).
-    - Observe how the layout changes when you resize your application window (if running on web or desktop).
-    - _Documentation Focus_: `LayoutBuilder`, `BoxConstraints` (specifically `constraints.maxWidth`), the builder pattern. Refer to "Adaptive Apps" and the `LayoutBuilder` Widget of the Week video.
+    Resize the browser window.
+    What happens if the content of the `Row` is too wide for the screen?
+    Feel free to use an LLM or read the documentation page about the concept of "Constraints".
 
-Remember to use the Flutter Inspector to examine your widget tree, understand constraints, and debug layout issues.
-This will be particularly helpful for identifying and resolving common layout errors like "unbounded constraints".
+1.  Use a column and display 20 `SandwichCounter` widgets this time.
+    You will most likely see an overflow error because the content is taller than the screen.
+    (At this point, you may want to read the [Debugging layouts](https://docs.flutter.dev/get-started/fundamentals/layout#devtools-and-debugging-layout) section on the documentation page).
+
+    ![Overflow](images/screenshot-overflow.jpg)
+
+    There are a couple of ways to fix this issue:
+
+    - Wrap the `Column` in a `SingleChildScrollView` widget, which allows the content to scroll vertically.
+      Read about the [SingleChildScrollView documentation](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) for more details.
+    - Alternatively, you can use a `ListView` widget, which is also designed for displaying a scrollable list of widgets.
+      Read about the [ListView documentation](https://api.flutter.dev/flutter/widgets/ListView-class.html) to understand how it works and how it differs from `SingleChildScrollView`.
+
+1.  Read the [Adaptive layouts](https://docs.flutter.dev/get-started/fundamentals/layout#adaptive-layouts) section of the Flutter layout documentation.
+
+    Wrap the part of your UI that displays `SandwichCounter`(s) with a `LayoutBuilder`.  
+    Inside the `builder` function of `LayoutBuilder`, you receive `BoxConstraints`.
+    Use `constraints.maxWidth` to determine the available width and based on that, decide how to display your `SandwichCounter`(s).
+
+    Similar to the example in the documentation, make sure that if the available width is less than or equal to 600 pixels, you display the `SandwichCounter`(s) in a `Column`, otherwise, a `Row`.
+    Make sure to check out the final example in this page as it shows how you can define local variables inside the `builder` function.
+    Observe these changes by resizing the browser window.
