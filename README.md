@@ -6,28 +6,28 @@ browser.
 
 ## Install the essential tools
 
-1. **Terminal**:
+1.  **Terminal**:
 
-   - **macOS** – use the built-in Terminal app by pressing **⌘ + Space**, typing **Terminal**, and pressing **Return**.
-   - **Windows** – open the start menu using the **Windows** key. Then enter **cmd** to open the **Command Prompt**. Alternatively, you can use **Windows PowerShell** or **Windows Terminal**.
+    - **macOS** – use the built-in Terminal app by pressing **⌘ + Space**, typing **Terminal**, and pressing **Return**.
+    - **Windows** – open the start menu using the **Windows** key. Then enter **cmd** to open the **Command Prompt**. Alternatively, you can use **Windows PowerShell** or **Windows Terminal**.
 
-2. **Git** – verify that you have `git` installed by entering `git --version`, in the terminal.
-   If this is missing, download the installer from [Git's official site](https://git-scm.com/downloads?utm_source=chatgpt.com).
+2.  **Git** – verify that you have `git` installed by entering `git --version`, in the terminal.
+    If this is missing, download the installer from [Git's official site](https://git-scm.com/downloads?utm_source=chatgpt.com).
 
-3. **Package managers**:
+3.  **Package managers**:
 
-   - **Homebrew** (macOS) – verify that you have `brew` installed with `brew --version`; if missing, follow the instructions on the [Homebrew installation page](https://brew.sh/).
-   - **Chocolatey** (Windows) – verify that you have `choco` installed with `choco --version`; if missing, follow the instructions on the [Chocolatey installation page](https://chocolatey.org/install).
+    - **Homebrew** (macOS) – verify that you have `brew` installed with `brew --version`; if missing, follow the instructions on the [Homebrew installation page](https://brew.sh/).
+    - **Chocolatey** (Windows) – verify that you have `choco` installed with `choco --version`; if missing, follow the instructions on the [Chocolatey installation page](https://chocolatey.org/install).
 
-4. **Flutter SDK** – verify that you have `flutter` installed and it is working with `flutter doctor`; if missing, install it using your package manager:
+4.  **Flutter SDK** – verify that you have `flutter` installed and it is working with `flutter doctor`; if missing, install it using your package manager:
 
-   - **macOS**: `brew install --cask flutter`
-   - **Windows**: `choco install flutter`
+    - **macOS**: `brew install --cask flutter`
+    - **Windows**: `choco install flutter`
 
-5. **Visual Studio Code** – verify that you have `code` installed with `code --version`; if missing, use your package manager to install it:
+5.  **Visual Studio Code** – verify that you have `code` installed with `code --version`; if missing, use your package manager to install it:
 
-   - **macOS**: `brew install --cask visual-studio-code`
-   - **Windows**: `choco install vscode`
+    - **macOS**: `brew install --cask visual-studio-code`
+    - **Windows**: `choco install vscode`
 
 ## Get the code
 
