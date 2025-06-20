@@ -74,6 +74,10 @@ Skip to the section that matches your operating system.
 
 <!-- Complete this -->
 
+### Personal macOS Computer
+
+<!-- Complete this -->
+
 ## Your Flutter Application
 
 Now that our environment is set up, we can create our first Flutter project.
