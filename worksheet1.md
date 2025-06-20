@@ -1,335 +1,255 @@
-# Worksheet 2 — Stateless Widgets
+# Worksheet 1 — Introduction to Flutter
 
 ## Prerequisites
 
 Ensure that you have already completed the following:
 
-- Installation of Git and Visual Studio Code.
-- Installation of Flutter SDK.
 - Introduction to the Dart language.
 - Introduction to Git and GitHub.
-- Introduction to Flutter.
 
-## Developing the Sandwich Counter Application
+## Setting Up Your Development Environment
 
-We will incrementally build the "Sandwich Counter" application.
+We first need to ensure all the necessary tools are installed on your computer.
+You can use either the university computers or your personal Mac or Windows computer.
+Skip to the section that matches your operating system.
 
-### Set Up the Project
+### University Computers
 
-Open the Flutter folder containing the project you created in Worksheet 1 - "Introduction to Flutter" - in Visual Studio Code.
-This project should already be a repository in your GitHub account.
+1. **Log in to AppsAnywhere**
 
-1.  **Import the Material Design Library**
+   Use the shortcut on the desktop or head to AppsAnywhere using this link: [appsanywhere.port.ac.uk](https://appsanywhere.port.ac.uk/sso).
+   Once you have logged in, you will see a dialogue shown below which you need to first tick the box for "Always allow appsanywhere.port.ac.uk to open links of this type in the associated app" and then click on the "Open AppsAnywhere Launcher" button.
 
-    Open `lib/main.dart`.
-    We need to ensure that we have the correct `import` statement for Material Design components:
+   ![AppsAnywhere launcher](images/screenshot_appsanywhere_launcher.jpg)
+   _Figure: The AppsAnywhere launcher._
 
-    ```dart
-    import 'package:flutter/material.dart';
-    ```
+1. **Install Git**
 
-    **Material Design** is a design system created by Google that provides guidelines for user experience.
-    The `package:flutter/material.dart` library gives you access to a collection of pre-built UI components, called **widgets**, that implement these Material Design guidelines.
-    We will first use these widgets to build the user interface of our app, and later, we will learn how to create our own custom widgets.
+   In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **"Git"** and click on launch.
+   Do not select "GitHub Desktop" (see below).
 
-    These widgets include fundamental building blocks, such as:
+   ![Git in AppsAnywhere](images/screenshot_appsanywhere_git.jpg)
+   _Figure: The Git application in AppsAnywhere._
 
-    - **Structural elements** like `Scaffold` (for page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
-    - **Buttons** like `ElevatedButton`, `TextButton`, and `IconButton`.
-    - **Informational widgets** like `Text`, `Image`, and `Icon` (for displaying icons).
-    - **Input widgets** like `TextField` (for text entry) and `Checkbox` (for boolean input).
-    - **Layout widgets** like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
+   To verify the installation, search for **"Git Bash"** in the Start Menu and open it.
+   Use this as the terminal to run the following command and press Enter:
 
-    The library also includes utilities like `ThemeData` to define styling (colours, fonts) across your app.
+   ```bash
+   git --version
+   ```
 
-2.  **Clean the Default Code**
+   You should see a version number indicating that Git is installed successfully.
 
-    Locate the `main()` function in `lib/main.dart`.
-    This is where your app starts. The default app has `runApp(const MyApp());`.
-    Comment out or remove this line for now.
-    You can comment a line in VS Code by selecting it with your mouse and pressing **Ctrl + /** on Windows or **⌘ + /** on macOS.
+1. **Install the Flutter SDK**
 
-    Let's also clear out the default `MyApp` class and other related classes from the app.
-    Delete everything except for the import statement and the `main()` function.
-    Your `lib/main.dart` file should now look like this:
+   In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **"Flutter And Dart SDK"** and click on launch.
 
-    ```dart
-    import 'package:flutter/material.dart';
+   To verify the installation, search for **"Command Prompt"** or **"PowerShell"** in the Start Menu and open it.
+   Use this as the terminal to run the following command and press Enter:
 
-    void main() {}
-    ```
+   ```bash
+   flutter --doctor
+   ```
 
-3.  **Commit Your Changes**
+   This may take a while but it should return a report of your Flutter installation status similar to what is shown below:
 
-    It is a good time to commit your changes.
-    In VS Code, go to the Source Control panel from **View > Source Control**.
-    You can also use the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P** on macOS) and enter "Source Control", which will open the Source Control panel.
+   ![Flutter Doctor Report](images/screenshot_flutter_doctor.jpg)
+   _Figure: The Flutter Doctor report._
 
-    You should see `main.dart` listed under changes. In the "Message" box, above the "Commit" button, type a descriptive commit message, something like `Set Up the Project`.
+1. **Install and Set Up Visual Studio Code**
 
-    Click the Commit button to commit the changes.
-    After committing, click the "Sync Changes" button to upload your commit to GitHub.
+   In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **"Visual Studio Code"** and launch it.
 
-    Note that you could also do all of this using the integrated terminal within VS Code.
-    You can open the terminal with **Ctrl + \`** on Windows or **⌘ + \`** on macOS and run the following commands:
+   Next, open [GitHub](https://github.com/) in your web browser and log in to your account.
 
-    ```bash
-    git add lib/main.dart
-    git commit -m "Set Up the Project"
-    git push
-    ```
+   Back in Visual Studio Code, click on the Account icon in the bottom left corner and select **"Backup and Sync Settings"** (see below).
+   This should automatically sync your settings, themes, and extensions with your GitHub account.
 
-### Define the Main App Widget: `SandwichShopApp`
+   ![Visual Studio Code Account Icon](images/screenshot_vscode_account_icon.jpg)
+   _Figure: The Account icon in Visual Studio Code._
 
-1.  **Define the `SandwichShopApp` Widget**
+   If this is your first time using Visual Studio Code, you need to install the Flutter extension.
+   Open the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS).
+   In the search bar, type **"Flutter"** and install the extension shown below:
 
-    Add the following class definition to `lib/main.dart`, below the `import` statement and before the `main()` function:
+   ![Flutter Extension](images/screenshot_flutter_extension.jpg)
+   _Figure: The Flutter extension in Visual Studio Code._
 
-    ```dart
-    class SandwichShopApp extends StatelessWidget {
-      const SandwichShopApp({super.key});
+### Personal Windows Computer
 
-      @override
-      Widget build(BuildContext context) {
-        return Container();
-      }
-    }
-    ```
+<!-- Complete this -->
 
-    Key points:
+## Your Flutter Application
 
-    - `SandwichShopApp` is the main widget of our app.
-    - `StatelessWidget` is a widget that does not change in appearance and behaviour after being built.
-    - `SandwichShopApp` extends (is a subclass of) `StatelessWidget`.
-    - `const SandwichShopApp({super.key});` is the constructor for `SandwichShopApp`.
-      - `const` is optional (for performance).
-      - `super.key` is used to pass an optional `key` (a unique identifier for the widget).
-    - `Widget build(BuildContext context)` is the `build()` method of `SandwichShopApp`.
-      - Flutter calls `build`, which returns a `Widget` used to render the UI.
-      - `BuildContext context` is the context (e.g., the location) of the widget; it is needed to build the UI.
-      - `@override` shows that we are reimplementing the `build` method of `StatelessWidget`; all widgets must do this.
-      - For now, `build` returns a placeholder (`Container` is like a `div` in HTML).
+Now that our environment is set up, we can create our first Flutter project.
 
-2.  **Use the `SandwichShopApp` Widget**
+1.  **Create a New Flutter Project**
 
-    Next, update the `main()` function to look like this:
+    In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS).
+    In the palette, type "Flutter: New Project" and press Enter (see below).
 
-    ```dart
-    void main() {
-      runApp(const SandwichShopApp());
-    }
-    ```
+    ![VS Code Command Palette](images/screenshot_vscode_command_palette.jpg)
+    _Figure: The VS Code Command Palette with "Flutter: New Project" selected._
 
-    The `runApp()` function takes the given widget (`SandwichShopApp` in our case) and makes it the root of the widget tree, effectively displaying it on the screen.
+    Select **"Application"** when prompted to select a Flutter template and press Enter.
+    You will then be prompted to choose a project location and name.
+    We recommend your user folder in the C drive.
 
-    If you run your app now, it would show a blank screen because our `SandwichShopApp` returns an empty `Container`.
+    Choose a name for your project, such as `sandwich_shop`, and press Enter.
+    VS Code will now create a new Flutter project in the specified folder and open it for you.
 
-3.  **Commit Your Changes**
+1.  **Understand the Project Structure**
 
-    Suggested commit message: `Define the Main App Widget: SandwichShopApp`
+    You should see a new folder structure in the Explorer view on the left side of VS Code (see below).
+    You are encouraged to explore and find out what the other files and folders are for, but here are the most important ones:
 
-### Define the UI inside `SandwichShopApp`
+    - `lib/`: This folder contains the Dart code for your application. The main entry point is `lib/main.dart`.
+    - `pubspec.yaml`: This file manages your project's dependencies and assets. It is similar to `package.json` in a Node.js project or `requirements.txt` in a Python project.
 
-1.  **Redefine the `build` Method**
+    ![Project Structure](images/screenshot_flutter_project_structure.jpg)
+    _Figure: The folder structure of a Flutter project in VS Code._
 
-    Modify the `build` method within the `SandwichShopApp` class as follows:
+    The default application created by the Flutter template is a simple counter app.
+    `lib/main.dart` contains the following:
 
-    ```dart
-    @override
-    Widget build(BuildContext context) {
-      return MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Sandwich Counter'),
-          ),
-          body: const Center(
-            child: Text('Welcome to the Sandwich Shop!'),
-          ),
-        ),
-      );
-    }
-    ```
+    - `void main() => runApp(const MyApp());`: This is the entry point of the app. The `runApp` function takes a `Widget` (`MyApp` in this case) and makes it the top-level widget (the root widget) of the application.
+    - `class MyApp extends StatelessWidget`: This is the root widget and remains constant throughout the app's lifecycle. Its main job is to set up the `MaterialApp`, which defines the app's title, theme (colour scheme), and the home screen.
+    - `class MyHomePage extends StatefulWidget`: This is the home screen widget. In this app, the counter value is the state that changes.
+    - `_incrementCounter()`: This is a method that increments the `_counter` variable when the button is pressed. The call to `setState()` tells the Flutter framework that the state has changed, causing the UI to be updated.
+    - `build(BuildContext context)`: This method of `MyHomePage` builds the UI of the widget. It returns a `Scaffold` widget, which provides a basic structure for the app's visual layout, including an `AppBar`, a body with a `Text` widget displaying the counter value, and a `FloatingActionButton` to increment the counter.
 
-    Key points:
+    We will learn more about stateless and stateful widgets in later worksheets, this is just a brief overview to get you started.
 
-    - **`MaterialApp`** is the root widget that provides theming, navigation, and Material Design.
-      - Uses named parameters like `home:` to specify the main screen.
-      - `Scaffold` is the child of `MaterialApp` while `AppBar` and `Center` are children of `Scaffold`. This structure is called **the widget tree**.
-      - For more details, see the [MaterialApp documentation](https://api.flutter.dev/flutter/material/MaterialApp-class.html).
-    - **`Scaffold`** is the blueprint for a typical app screen layout.
-      - Provides slots for `appBar`, `body`, `drawer`, `bottomNavigationBar`, `floatingActionButton`, etc.
-      - For more details, see the [Scaffold documentation](https://api.flutter.dev/flutter/material/Scaffold-class.html).
-    - **`AppBar`** is the top bar of the screen.
-      - `title` property shows the screen title.
-      - For more details, see the [AppBar documentation](https://api.flutter.dev/flutter/material/AppBar-class.html).
-    - **`Center`** is a layout widget that centres its child.
-      - It centres our placeholder `Text` widget both horizontally and vertically.
+1.  **Select a Target Device**
 
-2.  **Run the Application**
+    At the bottom right of the VS Code window, you'll see a status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like **Edge** or **Chrome**.
+    You can alternatively set this by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing "Flutter: Select Device". Then select the browser from the list.
 
-    Make sure you have a device selected (e.g., Chrome from the bottom status bar).
-    You can also open the Command Palette (`Ctrl + Shift + P` or `⌘ + Shift + P` on macOS) and type "Flutter: Select Device" to choose a device.
+    ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
+    _Figure: The device selector in VS Code._
 
-    Once a web device is selected, run the app with `F5` or by clicking the "Run" button on top of the `main` function in `lib/main.dart`.
+1.  **Run the App**
 
-    You should see an application with an app bar titled "Sandwich Counter" and the text "Welcome to the Sandwich Shop!" centred in the body of the screen.
-    ![Welcome to the Sandwich Shop](images/screenshot_welcome_to_sandwich_shop.jpg)
-    _Figure: The Sandwich Counter app with a welcome message._
+    You can run the app in several ways:
 
-3.  **Commit Your Changes**
+    - Press the **F5** key (you may need to press **Fn + F5** on some keyboards).
+    - Open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type "Terminal: Create New Terminal" to open a terminal, then run the following command:
+      ```bash
+      flutter run
+      ```
+    - Click the "Run" button that appears above the `main` function in `lib/main.dart`.
 
-    Suggested commit message: `Define the UI inside SandwichShopApp`
+    VS Code will now build and run your application.
+    Once complete, a browser window should open displaying the counter app.
+    Click the `+` button to see the counter increase.
 
-### Create the Custom `SandwichCounter` Widget
+    ![Counter App](images/screenshot_flutter_counter_app.jpg)
+    _Figure: The running Flutter counter app in a web browser._
 
-1.  **Why Do We Need Custom Widgets?**
+1.  **Hot Reload**
 
-    In Flutter, you're not limited to using only the widgets provided by the framework.
-    You can create your own widgets by combining existing ones or by defining new behaviour.
-    Once a custom widget is defined, you can reuse it.
+    One of Flutter's most powerful features is **Hot Reload**.
+    You can enable it by clicking the lightning bolt icon in the top right corner of the VS Code window or by pressing **Ctrl + F5** (Windows) or **⌘ + F5** (macOS).
+    If you ran the app using the terminal, you can also type `r` in the terminal where the app is running to trigger a hot reload.
 
-    Our `SandwichCounter` widget will be responsible for displaying a single line of text that describes the count and type of a sandwich, complete with a visual representation using emojis.
+    ![Hot Reload Button](images/screenshot_vscode_hot_reload.jpg)
+    _Figure: The Hot Reload button in VS Code._
 
-2.  **Define the `SandwichCounter` Widget**
+    While the app is running, try changing the colour scheme from deep purple to orange.
+    You can find this in the `lib/main.dart` file, by searching for **"ColorScheme"** (you can use **Ctrl + F** or **⌘ + F** to search).
+    Then change `Colors.deepPurple` to `Colors.orange` in the `colorSchemeSeed` property of the `ThemeData` widget.
+    You'll see the UI update in the browser almost instantly without the app restarting. This makes development incredibly fast.
 
-    We'll add the definition for `SandwichCounter` in the `lib/main.dart` file, although you can place it in a separate file for better organisation.
-    Place the `SandwichCounter` class above the `SandwichShopApp` class, but below the initial `import` statement:
+## Setting Up a GitHub Repository
 
-    ```dart
-    class SandwichCounter extends StatelessWidget {
-      final String sandwichType;
-      final int count;
+Lastly, let's put our project under version control with Git and back it up on GitHub.
+This will allow us to track changes and back up our work online.
 
-      const SandwichCounter(this.count, this.sandwichType, {super.key});
+1. **Initialize the repository**
 
-      @override
-      Widget build(BuildContext context) {
-        return Text('This is a placeholder for SandwichCounter');
-      }
-    }
-    ```
+   In the Activity Bar on the left side of the VS Code window, click on the Source Control icon (it looks like a branch with a dot).
+   Click on **"Initialize Repository"** to set up Git for your project as shown below.
 
-    Key points:
+   ![Source Control Panel](images/screenshot_vscode_source_control.jpg)
+   _Figure: The Source Control panel in VS Code._
 
-    - `SandwichCounter` is our custom widget that extends `StatelessWidget`.
-    - `final String sandwichType` and `final int count` are instance variables.
-      - Marked `final` because data in a `StatelessWidget` does not change after the widget is built.
-    - `const SandwichCounter(this.count, this.sandwichType, {super.key});` is the constructor.
-      - `this.count` and `this.sandwichType` automatically assign constructor arguments to instance variables.
+   Alternatively, you can run the following command in the terminal to initialize Git:
 
-    Running the app at this stage won't show any visual changes yet, as we haven't actually used the `SandwichCounter` widget in our `SandwichShopApp`.
+   ```bash
+   git init
+   ```
 
-3.  **Commit Your Changes**
+1. **Make the First Commit**
 
-    Suggested commit message: `Define SandwichCounter custom widget`
+   Now you should see all your project files listed in the Source Control panel.
+   Hover your mouse over "Changes" and click the `+` icon to stage all files for commit.
+   Then, enter a commit message like "Initial commit" in the text box at the top and click the "Commit" button to commit your changes.
 
-4.  **Implement the `build` Method of `SandwichCounter`**
+   ![Commit Changes](images/screenshot_vscode_commit_changes.jpg)
+   _Figure: Committing changes in the Source Control panel._
 
-    Now, let's modify the `build` method of `SandwichCounter` so it displays the sandwich type, count, and some emojis. We want the output to look something like: "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪".
+   Alternatively, you can run the following commands in the terminal:
 
-    Update the `build` method inside your `SandwichCounter` so it looks like this:
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   ```
 
-    ```dart
-    @override
-    Widget build(BuildContext context) {
-      return Text('$count $sandwichType sandwich(es): ${'🥪' * count}');
-    }
-    ```
+   You may see a pop-up asking you if you would like to stage all changes and commit them directly. You can click "Always" to skip this step in the future.
 
-5.  **Commit Your Changes**
+   The Commit button will now say `Publish Branch` or `Sync Changes`, which means you have committed your changes locally but not yet pushed them to a remote repository (to GitHub).
+   Click on this button (or the cloud icon with an arrow on the bottom right corner) to push your changes to GitHub.
 
-    Suggested commit message: `Implement dynamic text in SandwichCounter`
+   You can do this from the terminal as well by running:
 
-### Use `SandwichCounter` in `SandwichShopApp`
+   ```bash
+   git push -u origin main
+   ```
 
-1.  **Replace the Placeholder in `SandwichShopApp`**
+   You may be asked to allow VS Code to log in to your GitHub account. If so, click on "Allow" and select "GitHub" in the next dialog. This should open your browser to log in to GitHub and authorize VS Code to access your account.
 
-    Find the `build` method of the `SandwichShopApp` class.
-    Locate the `Center` widget within the `Scaffold`'s `body`.
-    We will construct an instance of the `SandwichCounter` class and provide it to the `child` property.
-    See below:
+   Next you will be asked to set a name for your GitHub repository. Enter `sandwich_shop` as the name.
+   You can choose to make it public or private, for this exercise it doesn't matter but for your coursework you should make it **private**.
 
-    ```dart
-    @override
-    Widget build(BuildContext context) {
-      return MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(title: const Text('Sandwich Counter')),
-          body: const Center(
-            child: SandwichCounter(5, 'Footlong'),
-          ),
-        ),
-      );
-    }
-    ```
+   ![Create GitHub Repository](images/screenshot_vscode_create_github_repo.jpg)
+   _Figure: Creating a GitHub repository from VS Code._
 
-2.  **Run the Application**
+1. **Verify the Repository on GitHub**
 
-    You should now see the application displaying an app bar with "Sandwich Counter" as the title.
-    In the centre of the screen, the text "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" should be displayed, rendered by your `SandwichCounter` widget.
-    ![Sandwich Counter](images/screenshot_sandwich_counter.jpg)
-    _Figure: The Sandwich Counter app displaying the sandwich count and type._
+   You can verify this by opening your web browser and navigating to your GitHub account.
+   You should see the newly created repository named `sandwich_shop` with all your project files.
 
-3.  **Commit Your Changes**
+   ![GitHub Repository](images/screenshot_github_repository.jpg)
+   _Figure: The newly created GitHub repository._
 
-    Suggested commit message: `Use SandwichCounter in SandwichShopApp`
+   The link to the repository should look like this: `https://github.com/YOUR_USERNAME/sandwich_shop` where `YOUR_USERNAME` is your GitHub username.
 
-At this stage, your code should look like our code as shown on [the GitHub repository](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart).
+1. **Make Another Commit**
+
+   Now that you have set up your project and pushed it to GitHub, let's make another commit.
+   Open the `lib/main.dart` file and change the text in the `AppBar` widget from `'Flutter Demo Home Page'` to `'My Sandwich Shop'`.
+   Save the file (**Ctrl + S** or **⌘ + S**).
+
+   Go back to the Source Control panel, stage the changes, and commit them with a message like **"Change AppBar title"**.
+   Remember to always write meaningful commit messages that describe what changes you made.
+   The commit message should ideally be written in the imperative mood, like "Add new feature" or "Fix bug".
+
+   Before you click on commit, you can also click on the changed files below the "Changes" section to see the differences (diff) between the current version and the last committed version.
+
+   ![Second Commit](images/screenshot_vscode_second_commit.jpg)
+   _Figure: Committing changes in the Source Control panel after modifying the AppBar title._
+
+   Once you have clicked on commit and then sync changes, you should be able to see the changes to the file in your GitHub repository.
 
 ## Exercises
 
-1.  The **Flutter Inspector** is a tool that allows you to visualize the widget tree, view properties of widgets, and debug layout issues.
-    You can access it via the browser or by using the DevTools in Visual Studio Code. Use `Ctrl + Shift + P` or `⌘ + Shift + P` on macOS to open the command palette and type "Flutter: Open Flutter DevTools" and select the "Widget Inspector" option).
+Now it's your turn to experiment. Try to complete the following tasks. Remember to commit your changes after each one.
 
-    Familiarise yourself with this tool, by watching this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and review its [official documentation](https://docs.flutter.dev/tools/devtools/inspector).
-    As a small exercise, observe the relationship between the widgets in your app and the properties (e.g., width and height) of each widget.
-    ![Flutter DevTools](images/screenshot_devtools.jpg)
-    _Figure: Flutter DevTools showing the widget tree and properties._
-
-    Your main guide for the rest of the exercises is the [Flutter layout documentation](https://docs.flutter.dev/get-started/fundamentals/layout).
-    Remember to commit your changes after each exercise.
-
-1.  Place the `SandwichCounter` widgets inside a `Container` widget.
-    Check out the [Lay out a single widget](https://docs.flutter.dev/get-started/fundamentals/layout#lay-out-a-single-widget) section of the documentation page or the documentation for the [Container widget](https://api.flutter.dev/flutter/widgets/Container-class.html) to understand how to use it.
-
-    Give the `Container` a fixed `width` and `height` and a `color` to make it visible.
-    Colours in Flutter can be specified using the `Colors` class, like `Colors.blue` or `Colors.red` (see the [Colors documentation](https://api.flutter.dev/flutter/material/Colors-class.html)).
-    This is what it should look like:
-    ![Container](images/screenshot_container.jpg)
-    _Figure: The application with a blue Container holding the SandwichCounter._
-
-    Update the `width` and `height` properties to see what happens if the `SandwichCounter`'s text is too big for the `Container`.
-
-1.  Read about **layout widgets** by visiting the [Layout widgets documentation](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets).
-    Next, use a `Column` or a `Row` widget to display three `SandwichCounter` widgets in the `SandwichShopApp`'s `body`.
-    Make sure to read about [main and cross axes alignment in the documentation page](https://docs.flutter.dev/get-started/fundamentals/layout#align-widgets-within-rows-and-columns) to see how to align widgets within these layout widgets.
-    ![Layout](images/screenshot_layout.jpg)
-    _Figure: The application with three SandwichCounter widgets arranged in a Row._
-
-    Resize the browser window.
-    What happens if the content of the `Row` is too wide for the screen?
-    Feel free to use an LLM or read the documentation page about the concept of "Constraints".
-
-1.  Use a column and display 20 `SandwichCounter` widgets this time.
-    You will most likely see an overflow error because the content is taller than the screen.
-    (At this point, you may want to read the [Debugging layouts](https://docs.flutter.dev/get-started/fundamentals/layout#devtools-and-debugging-layout) section on the documentation page).
-
-    ![Overflow](images/screenshot_overflow.jpg)
-    _Figure: The application with an overflow error due to too many SandwichCounter widgets in a Column._
-
-    There are a couple of ways to fix this issue:
-
-    - Wrap the `Column` in a `SingleChildScrollView` widget, which allows the content to scroll vertically.
-      Read about the [SingleChildScrollView documentation](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) for more details.
-    - Alternatively, you can use a `ListView` widget, which is also designed for displaying a scrollable list of widgets.
-      Read about the [ListView documentation](https://api.flutter.dev/flutter/widgets/ListView-class.html) to understand how it works and how it differs from `SingleChildScrollView`.
-
-1.  Read the [Adaptive layouts](https://docs.flutter.dev/get-started/fundamentals/layout#adaptive-layouts) section of the Flutter layout documentation.
-
-    Wrap the part of your UI that displays `SandwichCounter`(s) with a `LayoutBuilder`.  
-    Inside the `builder` function of `LayoutBuilder`, you receive `BoxConstraints`.
-    Use `constraints.maxWidth` to determine the available width and based on that, decide how to display your `SandwichCounter`(s).
-
-    Similar to the example in the documentation, make sure that if the available width is less than or equal to 600 pixels, you display the `SandwichCounter`(s) in a `Column`, otherwise, a `Row`.
-    Make sure to check out the final example in this page as it shows how you can define local variables inside the `builder` function.
-    Observe these changes by resizing the browser window.
+1.  **Change the Title**: In `lib/main.dart`, find the `AppBar` widget and change its `title` to display "My First App".
+2.  **Change the Colour Scheme**: In the `MyApp` widget, find the `ThemeData`. The primary colour is set using `colorSchemeSeed`. Change `Colors.deepPurple` to another colour, like `Colors.teal` or `Colors.amber`. Save and see the app's colours update instantly.
+3.  **Add a Reset Button**: In the `MyHomePage` widget, add a new `FloatingActionButton` next to the existing one that resets the counter to `0`.
+    - **Hint**: You can wrap the existing `FloatingActionButton` in a `Row` widget to add another button next to it.
+    - **Hint**: You'll need to create a new method called `_resetCounter()` that sets the `_counter` to `0` inside a `setState()` call.
+4.  **(Advanced) Run on a Mobile Device**: Running on a web browser is great for quick development, but the ultimate goal is often a mobile app. Follow the official documentation to set up your physical phone for Flutter development and run the app on it.
+    - [Set up an Android device](https://www.google.com/search?q=https://docs.flutter.dev/get-started/install/windows%23android-setup) (works for Mac/Windows/Linux).
+    - [Set up an iOS device](https://www.google.com/search?q=https://docs.flutter.dev/get-started/install/macos%23deploy-to-ios-devices) (requires macOS).
