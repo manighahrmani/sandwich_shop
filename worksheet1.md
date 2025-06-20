@@ -21,7 +21,6 @@ Skip to the section that matches your operating system.
    Once you have logged in, you will see a dialogue shown below which you need to first tick the box for "Always allow appsanywhere.port.ac.uk to open links of this type in the associated app" and then click on the "Open AppsAnywhere Launcher" button.
 
    ![AppsAnywhere launcher](images/screenshot_appsanywhere_launcher.jpg)
-   _Figure: The AppsAnywhere launcher._
 
 1. **Install Git**
 
@@ -29,7 +28,6 @@ Skip to the section that matches your operating system.
    Do not select "GitHub Desktop" (see below).
 
    ![Git in AppsAnywhere](images/screenshot_appsanywhere_git.jpg)
-   _Figure: The Git application in AppsAnywhere._
 
    To verify the installation, search for **"Git Bash"** in the Start Menu and open it.
    Use this as the terminal to run the following command and press Enter:
@@ -54,7 +52,6 @@ Skip to the section that matches your operating system.
    This may take a while but it should return a report of your Flutter installation status similar to what is shown below:
 
    ![Flutter Doctor Report](images/screenshot_flutter_doctor.jpg)
-   _Figure: The Flutter Doctor report._
 
 1. **Install and Set Up Visual Studio Code**
 
@@ -66,14 +63,12 @@ Skip to the section that matches your operating system.
    This should automatically sync your settings, themes, and extensions with your GitHub account.
 
    ![Visual Studio Code Account Icon](images/screenshot_vscode_account_icon.jpg)
-   _Figure: The Account icon in Visual Studio Code._
 
    If this is your first time using Visual Studio Code, you need to install the Flutter extension.
    Open the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS).
    In the search bar, type **"Flutter"** and install the extension shown below:
 
    ![Flutter Extension](images/screenshot_flutter_extension.jpg)
-   _Figure: The Flutter extension in Visual Studio Code._
 
 ### Personal Windows Computer
 
@@ -89,7 +84,6 @@ Now that our environment is set up, we can create our first Flutter project.
    In the palette, type "Flutter: New Project" and press Enter (see below).
 
    ![VS Code Command Palette](images/screenshot_vscode_command_palette.jpg)
-   _Figure: The VS Code Command Palette with "Flutter: New Project" selected._
 
    Select **"Application"** when prompted to select a Flutter template and press Enter.
    You will then be prompted to choose a project location and name.
@@ -107,7 +101,6 @@ Now that our environment is set up, we can create our first Flutter project.
    - `pubspec.yaml`: This file manages your project's dependencies and assets. It is similar to `package.json` in a Node.js project or `requirements.txt` in a Python project.
 
    ![Project Structure](images/screenshot_flutter_project_structure.jpg)
-   _Figure: The folder structure of a Flutter project in VS Code._
 
    The default application created by the Flutter template is a simple counter app.
    `lib/main.dart` contains the following:
@@ -126,7 +119,6 @@ Now that our environment is set up, we can create our first Flutter project.
    You can alternatively set this by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing "Flutter: Select Device". Then select the browser from the list.
 
    ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
-   _Figure: The device selector in VS Code._
 
 1. **Run the App**
 
@@ -146,7 +138,6 @@ Now that our environment is set up, we can create our first Flutter project.
    Click the `+` button to see the counter increase.
 
    ![Counter App](images/screenshot_flutter_counter_app.jpg)
-   _Figure: The running Flutter counter app in a web browser._
 
 1. **Hot Reload**
 
@@ -155,7 +146,6 @@ Now that our environment is set up, we can create our first Flutter project.
    If you ran the app using the terminal, you can also type `r` in the terminal where the app is running to trigger a hot reload.
 
    ![Hot Reload Button](images/screenshot_vscode_hot_reload.jpg)
-   _Figure: The Hot Reload button in VS Code._
 
    While the app is running, try changing the colour scheme from deep purple to orange.
    You can find this in the `lib/main.dart` file, by searching for **"ColorScheme"** (you can use **Ctrl + F** or **⌘ + F** to search).
@@ -173,7 +163,6 @@ This will allow us to track changes and back up our work online.
    Click on **"Initialize Repository"** to set up Git for your project as shown below.
 
    ![Source Control Panel](images/screenshot_vscode_source_control.jpg)
-   _Figure: The Source Control panel in VS Code._
 
    Alternatively, you can run the following command in the terminal to initialize Git:
 
@@ -188,7 +177,6 @@ This will allow us to track changes and back up our work online.
    Then, enter a commit message like "Initial commit" in the text box at the top and click the "Commit" button to commit your changes.
 
    ![Commit Changes](images/screenshot_vscode_commit_changes.jpg)
-   _Figure: Committing changes in the Source Control panel._
 
    Alternatively, you can run the following commands in the terminal:
 
@@ -214,7 +202,6 @@ This will allow us to track changes and back up our work online.
    You can choose to make it public or private, for this exercise it doesn't matter but for your coursework you should make it **private**.
 
    ![Create GitHub Repository](images/screenshot_vscode_create_github_repo.jpg)
-   _Figure: Creating a GitHub repository from VS Code._
 
 1. **Verify the Repository on GitHub**
 
@@ -222,7 +209,6 @@ This will allow us to track changes and back up our work online.
    You should see the newly created repository named `sandwich_shop` with all your project files.
 
    ![GitHub Repository](images/screenshot_github_repository.jpg)
-   _Figure: The newly created GitHub repository._
 
    The link to the repository should look like this: `https://github.com/YOUR_USERNAME/sandwich_shop` where `YOUR_USERNAME` is your GitHub username.
 
@@ -239,7 +225,6 @@ This will allow us to track changes and back up our work online.
    Before you click on commit, you can also click on the changed files below the "Changes" section to see the differences (diff) between the current version and the last committed version.
 
    ![Second Commit](images/screenshot_vscode_second_commit.jpg)
-   _Figure: Committing changes in the Source Control panel after modifying the AppBar title._
 
    Once you have clicked on commit and then sync changes, you should be able to see the changes to the file in your GitHub repository.
 
