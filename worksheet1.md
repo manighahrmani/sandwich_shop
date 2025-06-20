@@ -83,82 +83,84 @@ Skip to the section that matches your operating system.
 
 Now that our environment is set up, we can create our first Flutter project.
 
-1.  **Create a New Flutter Project**
+1. **Create a New Flutter Project**
 
-    In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS).
-    In the palette, type "Flutter: New Project" and press Enter (see below).
+   In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS).
+   In the palette, type "Flutter: New Project" and press Enter (see below).
 
-    ![VS Code Command Palette](images/screenshot_vscode_command_palette.jpg)
-    _Figure: The VS Code Command Palette with "Flutter: New Project" selected._
+   ![VS Code Command Palette](images/screenshot_vscode_command_palette.jpg)
+   _Figure: The VS Code Command Palette with "Flutter: New Project" selected._
 
-    Select **"Application"** when prompted to select a Flutter template and press Enter.
-    You will then be prompted to choose a project location and name.
-    We recommend your user folder in the C drive.
+   Select **"Application"** when prompted to select a Flutter template and press Enter.
+   You will then be prompted to choose a project location and name.
+   We recommend your user folder in the C drive.
 
-    Choose a name for your project, such as `sandwich_shop`, and press Enter.
-    VS Code will now create a new Flutter project in the specified folder and open it for you.
+   Choose a name for your project, such as `sandwich_shop`, and press Enter.
+   VS Code will now create a new Flutter project in the specified folder and open it for you.
 
-1.  **Understand the Project Structure**
+1. **Understand the Project Structure**
 
-    You should see a new folder structure in the Explorer view on the left side of VS Code (see below).
-    You are encouraged to explore and find out what the other files and folders are for, but here are the most important ones:
+   You should see a new folder structure in the Explorer view on the left side of VS Code (see below).
+   You are encouraged to explore and find out what the other files and folders are for, but here are the most important ones:
 
-    - `lib/`: This folder contains the Dart code for your application. The main entry point is `lib/main.dart`.
-    - `pubspec.yaml`: This file manages your project's dependencies and assets. It is similar to `package.json` in a Node.js project or `requirements.txt` in a Python project.
+   - `lib/`: This folder contains the Dart code for your application. The main entry point is `lib/main.dart`.
+   - `pubspec.yaml`: This file manages your project's dependencies and assets. It is similar to `package.json` in a Node.js project or `requirements.txt` in a Python project.
 
-    ![Project Structure](images/screenshot_flutter_project_structure.jpg)
-    _Figure: The folder structure of a Flutter project in VS Code._
+   ![Project Structure](images/screenshot_flutter_project_structure.jpg)
+   _Figure: The folder structure of a Flutter project in VS Code._
 
-    The default application created by the Flutter template is a simple counter app.
-    `lib/main.dart` contains the following:
+   The default application created by the Flutter template is a simple counter app.
+   `lib/main.dart` contains the following:
 
-    - `void main() => runApp(const MyApp());`: This is the entry point of the app. The `runApp` function takes a `Widget` (`MyApp` in this case) and makes it the top-level widget (the root widget) of the application.
-    - `class MyApp extends StatelessWidget`: This is the root widget and remains constant throughout the app's lifecycle. Its main job is to set up the `MaterialApp`, which defines the app's title, theme (colour scheme), and the home screen.
-    - `class MyHomePage extends StatefulWidget`: This is the home screen widget. In this app, the counter value is the state that changes.
-    - `_incrementCounter()`: This is a method that increments the `_counter` variable when the button is pressed. The call to `setState()` tells the Flutter framework that the state has changed, causing the UI to be updated.
-    - `build(BuildContext context)`: This method of `MyHomePage` builds the UI of the widget. It returns a `Scaffold` widget, which provides a basic structure for the app's visual layout, including an `AppBar`, a body with a `Text` widget displaying the counter value, and a `FloatingActionButton` to increment the counter.
+   - `void main() => runApp(const MyApp());`: This is the entry point of the app. The `runApp` function takes a `Widget` (`MyApp` in this case) and makes it the top-level widget (the root widget) of the application.
+   - `class MyApp extends StatelessWidget`: This is the root widget and remains constant throughout the app's lifecycle. Its main job is to set up the `MaterialApp`, which defines the app's title, theme (colour scheme), and the home screen.
+   - `class MyHomePage extends StatefulWidget`: This is the home screen widget. In this app, the counter value is the state that changes.
+   - `_incrementCounter()`: This is a method that increments the `_counter` variable when the button is pressed. The call to `setState()` tells the Flutter framework that the state has changed, causing the UI to be updated.
+   - `build(BuildContext context)`: This method of `MyHomePage` builds the UI of the widget. It returns a `Scaffold` widget, which provides a basic structure for the app's visual layout, including an `AppBar`, a body with a `Text` widget displaying the counter value, and a `FloatingActionButton` to increment the counter.
 
-    We will learn more about stateless and stateful widgets in later worksheets, this is just a brief overview to get you started.
+   We will learn more about stateless and stateful widgets in later worksheets, this is just a brief overview to get you started.
 
-1.  **Select a Target Device**
+1. **Select a Target Device**
 
-    At the bottom right of the VS Code window, you'll see a status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like **Edge** or **Chrome**.
-    You can alternatively set this by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing "Flutter: Select Device". Then select the browser from the list.
+   At the bottom right of the VS Code window, you'll see a status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like **Edge** or **Chrome**.
+   You can alternatively set this by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing "Flutter: Select Device". Then select the browser from the list.
 
-    ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
-    _Figure: The device selector in VS Code._
+   ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
+   _Figure: The device selector in VS Code._
 
-1.  **Run the App**
+1. **Run the App**
 
-    You can run the app in several ways:
+   You can run the app in several ways:
 
-    - Press the **F5** key (you may need to press **Fn + F5** on some keyboards).
-    - Open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type "Terminal: Create New Terminal" to open a terminal, then run the following command:
-      ```bash
-      flutter run
-      ```
-    - Click the "Run" button that appears above the `main` function in `lib/main.dart`.
+   - Press the **F5** key (you may need to press **Fn + F5** on some keyboards).
+   - Open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type "Terminal: Create New Terminal" to open a terminal, then run the following command:
 
-    VS Code will now build and run your application.
-    Once complete, a browser window should open displaying the counter app.
-    Click the `+` button to see the counter increase.
+     ```bash
+     flutter run
+     ```
 
-    ![Counter App](images/screenshot_flutter_counter_app.jpg)
-    _Figure: The running Flutter counter app in a web browser._
+   - Click the "Run" button that appears above the `main` function in `lib/main.dart`.
 
-1.  **Hot Reload**
+   VS Code will now build and run your application.
+   Once complete, a browser window should open displaying the counter app.
+   Click the `+` button to see the counter increase.
 
-    One of Flutter's most powerful features is **Hot Reload**.
-    You can enable it by clicking the lightning bolt icon in the top right corner of the VS Code window or by pressing **Ctrl + F5** (Windows) or **⌘ + F5** (macOS).
-    If you ran the app using the terminal, you can also type `r` in the terminal where the app is running to trigger a hot reload.
+   ![Counter App](images/screenshot_flutter_counter_app.jpg)
+   _Figure: The running Flutter counter app in a web browser._
 
-    ![Hot Reload Button](images/screenshot_vscode_hot_reload.jpg)
-    _Figure: The Hot Reload button in VS Code._
+1. **Hot Reload**
 
-    While the app is running, try changing the colour scheme from deep purple to orange.
-    You can find this in the `lib/main.dart` file, by searching for **"ColorScheme"** (you can use **Ctrl + F** or **⌘ + F** to search).
-    Then change `Colors.deepPurple` to `Colors.orange` in the `colorSchemeSeed` property of the `ThemeData` widget.
-    You'll see the UI update in the browser almost instantly without the app restarting. This makes development incredibly fast.
+   One of Flutter's most powerful features is **Hot Reload**.
+   You can enable it by clicking the lightning bolt icon in the top right corner of the VS Code window or by pressing **Ctrl + F5** (Windows) or **⌘ + F5** (macOS).
+   If you ran the app using the terminal, you can also type `r` in the terminal where the app is running to trigger a hot reload.
+
+   ![Hot Reload Button](images/screenshot_vscode_hot_reload.jpg)
+   _Figure: The Hot Reload button in VS Code._
+
+   While the app is running, try changing the colour scheme from deep purple to orange.
+   You can find this in the `lib/main.dart` file, by searching for **"ColorScheme"** (you can use **Ctrl + F** or **⌘ + F** to search).
+   Then change `Colors.deepPurple` to `Colors.orange` in the `colorSchemeSeed` property of the `ThemeData` widget.
+   You'll see the UI update in the browser almost instantly without the app restarting. This makes development incredibly fast.
 
 ## Setting Up a GitHub Repository
 
