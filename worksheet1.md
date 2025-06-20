@@ -66,6 +66,7 @@ Skip to the section that matches your operating system.
    This should automatically sync your settings, themes, and extensions with your GitHub account.
 
    ![Visual Studio Code Account Icon](images/screenshot_vscode_account_icon.jpg)
+
    _Figure: The Account icon in Visual Studio Code._
 
    If this is your first time using Visual Studio Code, you need to install the Flutter extension.
