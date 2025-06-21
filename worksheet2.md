@@ -1,6 +1,6 @@
 # Worksheet 2 — Stateless Widgets
 
-## Prerequisites
+## What You Need To Know Beforehand
 
 Ensure that you have already completed the following:
 
@@ -8,15 +8,13 @@ Ensure that you have already completed the following:
 - Installation of Flutter SDK.
 - Introduction to the Dart language.
 - Introduction to Git and GitHub.
-- Introduction to Flutter.
+- [Introduction to Flutter](https://github.com/manighahrmani/sandwich_shop/blob/1/worksheet1.md).
 
-## Developing the Sandwich Counter Application
+## Set Up the Project
 
-We will incrementally build the "Sandwich Counter" application.
+We will start to incrementally build the "Sandwich Counter" application.
 
-### Set Up the Project
-
-Open the Flutter folder containing the project you created in Worksheet 1 - "Introduction to Flutter" - in Visual Studio Code.
+Open the Flutter folder containing the project you created in [Worksheet 1](https://github.com/manighahrmani/sandwich_shop/blob/1/worksheet1.md) in Visual Studio Code.
 This project should already be a repository in your GitHub account.
 
 1.  **Import the Material Design Library**
@@ -79,7 +77,7 @@ This project should already be a repository in your GitHub account.
     git push
     ```
 
-### Define the Main App Widget: `SandwichShopApp`
+## Define the Main App Widget: `SandwichShopApp`
 
 1.  **Define the `SandwichShopApp` Widget**
 
@@ -128,7 +126,7 @@ This project should already be a repository in your GitHub account.
 
     Suggested commit message: `Define the Main App Widget: SandwichShopApp`
 
-### Define the UI inside `SandwichShopApp`
+## Define the UI inside `SandwichShopApp`
 
 1.  **Redefine the `build` Method**
 
@@ -180,7 +178,7 @@ This project should already be a repository in your GitHub account.
 
     Suggested commit message: `Define the UI inside SandwichShopApp`
 
-### Create the Custom `SandwichCounter` Widget
+## Create the Custom `SandwichCounter` Widget
 
 1.  **Why Do We Need Custom Widgets?**
 
@@ -240,7 +238,7 @@ This project should already be a repository in your GitHub account.
 
     Suggested commit message: `Implement dynamic text in SandwichCounter`
 
-### Use `SandwichCounter` in `SandwichShopApp`
+## Use `SandwichCounter` in `SandwichShopApp`
 
 1.  **Replace the Placeholder in `SandwichShopApp`**
 
