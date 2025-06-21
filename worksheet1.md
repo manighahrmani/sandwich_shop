@@ -53,22 +53,12 @@ Skip to the section that matches your operating system.
 
    ![Flutter Doctor Report](images/screenshot_flutter_doctor.jpg)
 
-1. **Install and Set Up Visual Studio Code**
+1. **Install Visual Studio Code**
 
    In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **"Visual Studio Code"** and launch it.
 
-   Next, open [GitHub](https://github.com/) in your web browser and log in to your account.
-
-   Back in Visual Studio Code, click on the Account icon in the bottom left corner and select **"Backup and Sync Settings"** (see below).
-   This should automatically sync your settings, themes, and extensions with your GitHub account.
-
-   ![Visual Studio Code Account Icon](images/screenshot_vscode_account_icon.jpg)
-
-   If this is your first time using Visual Studio Code, you need to install the Flutter extension.
-   Open the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS).
-   In the search bar, type **"Flutter"** and install the extension shown below:
-
-   ![Flutter Extension](images/screenshot_flutter_extension.jpg)
+   There may be different versions available, either one is fine.
+   It can also take a while to launch, so be patient.
 
 ### Personal Windows Computer
 
@@ -81,6 +71,21 @@ Skip to the section that matches your operating system.
 ## Your Flutter Application
 
 Now that our environment is set up, we can create our first Flutter project.
+
+1. **Set Up Visual Studio Code**
+
+   To sync your VS Code settings, first open [GitHub](https://github.com/) in your browser and log in to your account.
+
+   Back in VS Code, click on the Account icon in the bottom left corner and select **"Backup and Sync Settings"** (see below).
+   This should automatically sync your settings including themes, and extensions with your GitHub account.
+
+   ![Visual Studio Code Account Icon](images/screenshot_vscode_account_icon.jpg)
+
+   If this is your first time using VS Code, you need to install the Flutter extension.
+   Open the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS).
+   In the search bar, type **"Flutter"** and install the extension shown below:
+
+   ![Flutter Extension](images/screenshot_flutter_extension.jpg)
 
 1. **Create a New Flutter Project**
 
@@ -192,7 +197,7 @@ This will allow us to track changes and back up our work online.
    You may see a pop-up asking you if you would like to stage all changes and commit them directly. You can click "Always" to skip this step in the future.
 
    The Commit button will now say `Publish Branch` or `Sync Changes`, which means you have committed your changes locally but not yet pushed them to a remote repository (to GitHub).
-   Click on this button (or the cloud icon with an arrow on the bottom right corner) to push your changes to GitHub.
+   Click on this button to push your changes to GitHub.
 
    You can do this from the terminal as well by running:
 
