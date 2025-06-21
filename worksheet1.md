@@ -1,13 +1,13 @@
 # Worksheet 1 — Introduction to Flutter
 
-## Prerequisites
+## What You Need To Know Beforehand
 
 Ensure that you have already completed the following:
 
 - Introduction to the Dart language.
 - Introduction to Git and GitHub.
 
-## Setting Up Your Development Environment
+## Setup Your Development Environment
 
 We first need to ensure all the necessary tools are installed on your computer.
 You can use either the university computers or your personal Mac or Windows computer.
@@ -62,11 +62,76 @@ Skip to the section that matches your operating system.
 
 ### Personal Windows Computer
 
-<!-- Complete this -->
+1.  **Open the Terminal**
+
+    Open the Start Menu by pressing the **Windows** key, type **PowerShell**, and select **"Run as Administrator"**. You need administrator rights to install the package manager in the next step.
+
+1.  **Install the Chocolatey Package Manager**
+
+    We will use a package manager called Chocolatey to easily install all the required tools from the command line. First, check if it's already installed by running `choco --version`. If you see a version number, you can skip to the next step.
+
+    If it's not installed, go to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions. You should find a command similar to the one below:
+
+    ```powershell
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+    ```
+
+1.  **Install Development Tools**
+
+    With Chocolatey installed, you can now install Git, Visual Studio Code, and the Flutter SDK with single commands. Run the following commands one by one in your PowerShell terminal:
+
+    ```powershell
+    choco install git -y
+    choco install vscode -y
+    choco install flutter -y
+    ```
+
+    Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
+
+1.  **Verify the Installation**
+
+    Close your current terminal and open a new one (it doesn't need to be as an administrator this time). Run the following to check your installations:
+
+    ```powershell
+    flutter doctor
+    ```
 
 ### Personal macOS Computer
 
-<!-- Complete this -->
+1.  **Open the Terminal**
+
+    You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing **Terminal**, and pressing **Return**.
+
+1.  **Install the Homebrew Package Manager**
+
+    Homebrew is a package manager for macOS that simplifies installing software. To check if you have it installed, run `brew --version` in the terminal. If you see a version number, you can skip to the next step.
+
+    If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the installation command provided on the homepage. It should look something like this:
+
+    ```bash
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+
+    Paste it into your terminal and press **Return** to install. You may be prompted to enter your password or install Xcode Command Line Tools.
+
+1.  **Install Development Tools**
+
+    Once Homebrew is ready, you can install the necessary tools. Run the following commands in your terminal:
+
+    ```bash
+    brew install --cask visual-studio-code
+    brew install --cask flutter
+    ```
+
+    Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
+
+1.  **Verify the Installation**
+
+    Close your current terminal and open a new one. Run the following command to check your installations:
+
+    ```bash
+    flutter doctor
+    ```
 
 ## Your Flutter Application
 
