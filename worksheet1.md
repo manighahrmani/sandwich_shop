@@ -172,7 +172,7 @@ Now that our environment is set up, we can create our first Flutter project.
    You are encouraged to explore and find out what the other files and folders are for, but here are the most important ones:
 
    - `lib/`: This folder contains the Dart code for your application. The main entry point is `lib/main.dart`.
-   - `pubspec.yaml`: This file manages your project's dependencies and assets. It is similar to `package.json` in a Node.js project or `requirements.txt` in a Python project.
+   - `pubspec.yaml`: YAML, which stands for ["YAML Ain't Markup Language"](https://www.redhat.com/en/topics/automation/what-is-yaml), is a human-readable data serialization language. In Flutter, this YAML file specifies the assets of the project (e.g., images), the configuration of the app, and the dependencies (packages) that the app uses. It is similar to `package.json` in a Node.js project or `requirements.txt` in a Python project.
 
    ![Project Structure](images/screenshot_flutter_project_structure.jpg)
 
