@@ -136,10 +136,9 @@ This project should already be a repository in your GitHub account.
     @override
     Widget build(BuildContext context) {
       return MaterialApp(
+        title: 'Sandwich Shop App',
         home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Sandwich Counter'),
-          ),
+          appBar: AppBar(title: const Text('Sandwich Counter')),
           body: const Center(
             child: Text('Welcome to the Sandwich Shop!'),
           ),
@@ -251,6 +250,7 @@ This project should already be a repository in your GitHub account.
     @override
     Widget build(BuildContext context) {
       return MaterialApp(
+        title: 'Sandwich Shop App',
         home: Scaffold(
           appBar: AppBar(title: const Text('Sandwich Counter')),
           body: const Center(
