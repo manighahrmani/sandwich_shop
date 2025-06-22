@@ -210,25 +210,25 @@ Now that our environment is set up, we can create our first Flutter project.
 
 1. **Hot Reload**
 
-   One of Flutter's most powerful features is **Hot Reload**.
-   You can enable it by clicking the lightning bolt icon in the top right corner of the VS Code window or by pressing **Ctrl + F5** (Windows) or **⌘ + F5** (macOS).
+   Hot reload is a feature that allows you to quickly see changes in your code without restarting the app.
+   Enable it by clicking the lightning bolt icon (⚡) on top of VS Code while the app is running (see below).
    If you ran the app using the terminal, you can also type `r` in the terminal where the app is running to trigger a hot reload.
 
    ![Hot Reload Button](images/screenshot_vscode_hot_reload.jpg)
 
-   While the app is running, try changing the colour scheme from deep purple to orange.
-   You can find this in the `lib/main.dart` file, by searching for **"ColorScheme"** (you can use **Ctrl + F** or **⌘ + F** to search).
-   Then change `Colors.deepPurple` to `Colors.orange` in the `colorSchemeSeed` property of the `ThemeData` widget.
-   You'll see the UI update in the browser almost instantly without the app restarting. This makes development incredibly fast.
+   While the app is running, change the colour scheme from deep purple to orange.
+   In `lib/main.dart` search for **"ColorScheme"** (use **Ctrl + F** or **⌘ + F** to search).
+   Change `Colors.deepPurple` to `Colors.orange` in the `colorSchemeSeed` property of the `ThemeData` widget.
+   You should see the UI update in the browser instantly.
 
 ## Setting Up a GitHub Repository
 
-Lastly, let's put our project under version control with Git and back it up on GitHub.
+Lastly, let's put our project on GitHub.
 This will allow us to track changes and back up our work online.
 
 1. **Initialize the repository**
 
-   In the Activity Bar on the left side of the VS Code window, click on the Source Control icon (it looks like a branch with a dot).
+   In the Activity Bar on the left side of the VS Code window, click on the Source Control icon (it looks like a branch, see below).
    Click on **"Initialize Repository"** to set up Git for your project as shown below.
 
    ![Source Control Panel](images/screenshot_vscode_source_control.jpg)
@@ -242,7 +242,7 @@ This will allow us to track changes and back up our work online.
 1. **Make the First Commit**
 
    Now you should see all your project files listed in the Source Control panel.
-   Hover your mouse over "Changes" and click the `+` icon to stage all files for commit.
+   Hover your mouse over "Changes" and click the `+` icon to stage the creation of all files as a single change to be committed.
    Then, enter a commit message like "Initial commit" in the text box at the top and click the "Commit" button to commit your changes.
 
    ![Commit Changes](images/screenshot_vscode_commit_changes.jpg)
@@ -254,7 +254,7 @@ This will allow us to track changes and back up our work online.
    git commit -m "Initial commit"
    ```
 
-   You may see a pop-up asking you if you would like to stage all changes and commit them directly. You can click "Always" to skip this step in the future.
+   You may see a pop-up asking you if you would like to stage all changes and commit them directly. Click "Always" to skip this step in the future.
 
    The Commit button will now say `Publish Branch` or `Sync Changes`, which means you have committed your changes locally but not yet pushed them to a remote repository (to GitHub).
    Click on this button to push your changes to GitHub.
