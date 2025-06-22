@@ -29,8 +29,8 @@ Skip to the section that matches your operating system.
 
    ![Git in AppsAnywhere](images/screenshot_appsanywhere_git.jpg)
 
-   To verify the installation, search for **"Git Bash"** in the Start Menu and open it.
-   Use this as the terminal to run the following command and press Enter:
+   To verify the installation, open the Start Menu by pressing the **Windows** key, type **"Git Bash"**, and select it.
+   Write the following command in the terminal and press Enter:
 
    ```bash
    git --version
@@ -43,7 +43,7 @@ Skip to the section that matches your operating system.
    In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **"Flutter And Dart SDK"** and click on launch.
 
    To verify the installation, search for **"Command Prompt"** or **"PowerShell"** in the Start Menu and open it.
-   Use this as the terminal to run the following command and press Enter:
+   Write the following command and press Enter:
 
    ```bash
    flutter --doctor
@@ -55,20 +55,17 @@ Skip to the section that matches your operating system.
 
 1. **Install Visual Studio Code**
 
-   In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **"Visual Studio Code"** and launch it.
-
-   There may be different versions available, either one is fine.
-   It can also take a while to launch, so be patient.
+   In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **"Visual Studio Code"** and launch it. It can take a while to load, so be patient.
 
 ### Personal Windows Computer
 
 1.  **Open the Terminal**
 
-    Open the Start Menu by pressing the **Windows** key, type **PowerShell**, and select **"Run as Administrator"**. You need administrator rights to install the package manager in the next step.
+    Open the Start Menu by pressing the **Windows** key, type **PowerShell**, and select **"Run as Administrator"**. You need administrator rights to install the package manager, if you don't have this permission, use the university computers instead.
 
 1.  **Install the Chocolatey Package Manager**
 
-    We will use a package manager called Chocolatey to easily install all the required tools from the command line. First, check if it's already installed by running `choco --version`. If you see a version number, you can skip to the next step.
+    We will use a package manager called Chocolatey to easily install all the required tools. First, check if it's already installed by running `choco --version`. If you see a version number, you can skip to the next step.
 
     If it's not installed, go to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions. You should find a command similar to the one below:
 
@@ -78,7 +75,7 @@ Skip to the section that matches your operating system.
 
 1.  **Install Development Tools**
 
-    With Chocolatey installed, you can now install Git, Visual Studio Code, and the Flutter SDK with single commands. Run the following commands one by one in your PowerShell terminal:
+    With Chocolatey installed, you can now install Git, Visual Studio Code, and the Flutter SDK with the following commands. Run the following commands one by one in your PowerShell terminal (with administrator rights):
 
     ```powershell
     choco install git -y
@@ -106,13 +103,11 @@ Skip to the section that matches your operating system.
 
     Homebrew is a package manager for macOS that simplifies installing software. To check if you have it installed, run `brew --version` in the terminal. If you see a version number, you can skip to the next step.
 
-    If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the installation command provided on the homepage. It should look something like this:
+    If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the installation command provided on the homepage. Paste it into your terminal and press **Return** to install Homebrew. The command will look similar to the one below:
 
     ```bash
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     ```
-
-    Paste it into your terminal and press **Return** to install. You may be prompted to enter your password or install Xcode Command Line Tools.
 
 1.  **Install Development Tools**
 
