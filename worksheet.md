@@ -55,72 +55,72 @@ We first need to ensure all the necessary tools are installed on your computer. 
 
 1.  **Open the Terminal**
 
-   Open the Start Menu by pressing the **Windows** key, type **PowerShell**, and select **Run as Administrator**. You need administrator rights to install the package manager. If you don't have this permission, use the university computers instead.
+Open the Start Menu by pressing the **Windows** key, type **PowerShell**, and select **Run as Administrator**. You need administrator rights to install the package manager. If you don't have this permission, use the university computers instead.
 
 1.  **Install the Chocolatey Package Manager**
 
-   We will use a package manager called Chocolatey to easily install all the required tools. First, check if it's already installed by running `choco --version`. If you see a version number, you can skip to the next step.
+We will use a package manager called Chocolatey to easily install all the required tools. First, check if it's already installed by running `choco --version`. If you see a version number, you can skip to the next step.
 
-   If it's not installed, go to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions. You should find a command similar to the one below:
+If it's not installed, go to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions. You should find a command similar to the one below:
 
-   ```powershell
-   Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-   ```
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+```
 
 1.  **Install Development Tools**
 
-   With Chocolatey installed, you can now install Git, Visual Studio Code, and the Flutter SDK with the following commands. Run the following commands one by one in your PowerShell terminal (with administrator rights):
+With Chocolatey installed, you can now install Git, Visual Studio Code, and the Flutter SDK with the following commands. Run the following commands one by one in your PowerShell terminal (with administrator rights):
 
-   ```powershell
-   choco install git -y
-   choco install vscode -y
-   choco install flutter -y
-   ```
+```powershell
+choco install git -y
+choco install vscode -y
+choco install flutter -y
+```
 
-   Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
+Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
 
 1.  **Verify the Installation**
 
-   Close your current terminal and open a new one (it doesn't need to be as an administrator this time). Run the following to check your installations:
+Close your current terminal and open a new one (it doesn't need to be as an administrator this time). Run the following to check your installations:
 
-   ```powershell
-   flutter doctor
-   ```
+```powershell
+flutter doctor
+```
 
 ### Personal macOS Computer
 
 1.  **Open the Terminal**
 
-   You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing **Terminal**, and pressing **Return**.
+You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing **Terminal**, and pressing **Return**.
 
 1.  **Install the Homebrew Package Manager**
 
-   Homebrew is a package manager for macOS that simplifies installing software. To check if you have it installed, run `brew --version` in the terminal. If you see a version number, you can skip to the next step.
+Homebrew is a package manager for macOS that simplifies installing software. To check if you have it installed, run `brew --version` in the terminal. If you see a version number, you can skip to the next step.
 
-   If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the installation command provided on the homepage. Paste it into your terminal and press **Return** to install Homebrew. The command will look similar to the one below:
+If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the installation command provided on the homepage. Paste it into your terminal and press **Return** to install Homebrew. The command will look similar to the one below:
 
-   ```bash
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
 1.  **Install Development Tools**
 
-   Once Homebrew is ready, you can install the necessary tools. Run the following commands in your terminal:
+Once Homebrew is ready, you can install the necessary tools. Run the following commands in your terminal:
 
-   ```bash
-   brew install --cask visual-studio-code
-   brew install --cask flutter
-   ```
+```bash
+brew install --cask visual-studio-code
+brew install --cask flutter
+```
 
-   Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
+Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
 
 1.  **Verify the Installation**
 
-   Close your current terminal and open a new one. Run the following command to check your installations:
+Close your current terminal and open a new one. Run the following command to check your installations:
 
-   ```bash
-   flutter doctor
-   ```
+```bash
+flutter doctor
+```
 
 ## Your Flutter Application
 
@@ -265,15 +265,69 @@ Lastly, let's put our project on GitHub. This will allow us to track changes and
 
    Once you have clicked on commit and then sync changes, you should be able to see the changes to the file in your GitHub repository.
 
+Of course. Here are the revised exercises for your worksheet.
+
 ## Exercises
 
-Now it's your turn to experiment. Try to complete the following tasks. Remember to commit your changes after each one.
+1. We've already modified the title of the `AppBar` widget. This is different to the title of the app itself which you can see in the browser tab. As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate like "Sandwich Shop App". Remember to view the changes live with hot reload and to commit your changes to GitHub.
 
-1. **Change the Title**: In `lib/main.dart`, find the `AppBar` widget and change its `title` to display **My First App**.
-2. **Change the Colour Scheme**: In the `MyApp` widget, find the `ThemeData`. The primary colour is set using `colorSchemeSeed`. Change `Colors.deepPurple` to another colour, like `Colors.teal` or `Colors.amber`. Save and see the app's colours update instantly.
-3. **Add a Reset Button**: In the `MyHomePage` widget, add a new `FloatingActionButton` next to the existing one that resets the counter to `0`.
+1. **Modify the UI Text and Style**
+
+   The default app displays a counter. Your task is to change this. In `lib/main.dart`, find the `Column` widget inside the `_MyHomePageState`. This `Column` contains two `Text` widgets.
+
+   - First, remove one of the `Text` widgets.
+   - Next, modify the remaining `Text` widget so that it displays a static welcome message, like "Welcome to my shop\!", instead of the counter variable.
+   - Finally, give your message some style. A `Text` widget has a `style` property that accepts a `TextStyle` widget. Use this to change the `fontSize`, `color`, and `fontWeight` of your text. For a full list of what you can change, have a look at the [official documentation for the TextStyle class](https://api.flutter.dev/flutter/painting/TextStyle-class.html).
+
+1. **Understand and Modify `pubspec.yaml`**
+
+   The `pubspec.yaml` file is the heart of your project's configuration. It manages dependencies, fonts, images, and project metadata. Open this file and take a moment to read through it. You can use an LLM or the [official documentation on the pubspec file](https://dart.dev/tools/pub/pubspec) to understand each section.
+
+   Your task is to modify the file to match the cleaned-up version below. This involves:
+
+   - Changing the project `name` and `description`.
+   - Changing the Dart SDK `environment` constraint. The default `^3.7.0` uses caret syntax, meaning it works for any version up to (but not including) `4.0.0`. The new constraint, `>=2.17.0 <4.0.0`, makes the project compatible with a wider range of older Dart SDK versions.
+   - Updating the version constraints for the `cupertino_icons` and `flutter_lints` packages.
+   - Removing all the comments to make the file more readable.
+
+   **Target `pubspec.yaml`:**
+
+   ```yaml
+   name: sandwich_shop
+   description: "A Flutter project for a sandwich shop."
+   publish_to: "none"
+
+   version: 1.0.0+1
+
+   environment:
+     sdk: ">=2.17.0 <4.0.0"
+
+   dependencies:
+     flutter:
+       sdk: flutter
+     cupertino_icons: ^1.0.0
+
+   dev_dependencies:
+     flutter_test:
+       sdk: flutter
+     flutter_lints: ^2.0.0
+
+   flutter:
+     uses-material-design: true
+   ```
+
+   After saving your changes, you must synchronise the dependencies. VS Code often does this automatically, but you can do it manually by running `flutter pub get` in the terminal.
+
+1. **Add a Reset Button**
+
+   In the `MyHomePage` widget, add a new `FloatingActionButton` next to the existing one that resets the counter to `0`.
+
    - **Hint**: You can wrap the existing `FloatingActionButton` in a `Row` widget to add another button next to it.
    - **Hint**: You'll need to create a new method called `_resetCounter()` that sets the `_counter` to `0` inside a `setState()` call.
-4. **(Advanced) Run on a Mobile Device**: Running on a web browser is great for quick development, but the ultimate goal is often a mobile app. Follow the official documentation to set up your physical phone for Flutter development and run the app on it.
+
+1. **(Advanced) Run on a Mobile Device**
+
+   Running on a web browser is great for quick development, but the ultimate goal is often a mobile app. Follow the official documentation to set up your physical phone for Flutter development and run the app on it.
+
    - [Set up an Android device](https://docs.flutter.dev/get-started/install/windows#android-setup) (works for Mac/Windows/Linux).
    - [Set up an iOS device](https://docs.flutter.dev/get-started/install/macos#deploy-to-ios-devices) (requires macOS).
