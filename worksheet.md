@@ -1,4 +1,31 @@
-# Worksheet 1 — Introduction to Flutter
+# Worksheet 1 — Prerequisites
+
+Links for GitHub:
+
+Introduction to GitHub: https://github.com/skills/introduction-to-github
+Introduction to GitHub Copilot: https://github.com/skills/getting-started-with-github-copilot
+
+Links to the Dart worksheets:
+
+Getting started with Dart:
+   Worksheet: https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ESkq3xBzVgpPh8U0zkb3WXQB49yLKZjjC9QxM-f3V-PTiQ?e=p5ckav
+   Lecture: https://portdotacdotuk-my.sharepoint.com/:p:/r/personal/mani_ghahremani_port_ac_uk/Documents/Programming%202/lectures/Lecture%2015/Lecture%2015%20-%20Getting%20Started_%20Data%20types%20(Dart).pptx?d=w17716206ff8a4b7690d00e8fef8cde9b&csf=1&web=1&e=9eF1aM
+   Repository: https://github.com/Programming-M30299/week-15-dart-code
+
+Functions and Control Flow in Dart:
+   Worksheet: https://portdotacdotuk-my.sharepoint.com/:w:/r/personal/mani_ghahremani_port_ac_uk/Documents/Programming%202/worksheets/worksheets_public/week-16/Dart%20Worksheet%2016%20-%20Functions%20and%20Control%20Flow.docx?d=w88b2c555813f4b2f94015b51350c5e3e&csf=1&web=1&e=ZPvrbN
+   Lecture: https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EbUO-PZOSWNPoA9TL1AqiSkBgURErCT0WE7I81dSu2OEQA?e=ZvHyB0
+   Repository: https://github.com/Programming-M30299/week-16-dart-code
+
+Strings and Collections (Dart):
+   Worksheet: https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EV6lZOGcgydPuoR65cCrVfcBXW1SaRNSRgjqv3hzjd-EOA?e=o6d2EM
+   Lecture: https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EbUO-PZOSWNPoA9TL1AqiSkBgURErCT0WE7I81dSu2OEQA?e=N2Xhcy
+   Repository: https://github.com/Programming-M30299/week-17-dart-code
+
+Object-Oriented Programming in Dart:
+   Worksheet: https://portdotacdotuk-my.sharepoint.com/:w:/r/personal/mani_ghahremani_port_ac_uk/Documents/Programming%202/worksheets/worksheets_public/week-18/Dart%20Worksheet%2018%20-%20Object-Oriented%20Programming.docx?d=w0255bb1109b344d5b17d2673eb3e9d3e&csf=1&web=1&e=0jFuVj
+   Lecture: https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EcpaP0-SOaJBqpDuSlcl4xwBTSzN9HgPhCOMnL74Zw54Zw
+   Repository: https://github.com/Programming-M30299/week-18-dart-code
 
 ## What You Need To Know Beforehand
 
