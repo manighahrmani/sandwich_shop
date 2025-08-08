@@ -7,6 +7,10 @@ Ensure that you have already completed the following:
 - Introduction to the Dart language.
 - Introduction to Git and GitHub.
 
+## Getting Help
+
+To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
+
 ## Set Up Your Development Environment
 
 We first need to ensure all the necessary tools are installed on your computer. You can use either the university computers or your personal Mac or Windows computer. Skip to the section that matches your operating system.
@@ -268,6 +272,8 @@ Lastly, let's put our project on GitHub. This will allow us to track changes and
 Of course. Here are the revised exercises for your worksheet.
 
 ## Exercises
+
+Complete the exercises below and show your work to a member of staff present at your next practical for **a sign-off**.
 
 1. We've already modified the title of the `AppBar` widget. This is different to the title of the app itself which you can see in the browser tab. As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate like "Sandwich Shop App". Remember to view the changes live with hot reload and to commit your changes to GitHub.
 
