@@ -4,7 +4,7 @@
 
 Ensure that you have already completed the following:
 
-- [Introduction to Dart, Git and GitHub](https://github.com/manighahrmani/sandwich_shop/blob/0/worksheet.md).
+- [Worksheet 0 — Introduction to Dart, Git and GitHub](https://github.com/manighahrmani/sandwich_shop/blob/0/worksheet.md).
 
 ## Getting Help
 
