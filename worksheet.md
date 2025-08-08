@@ -4,11 +4,12 @@
 
 Ensure that you have already completed the following:
 
-- Installation of Git and Visual Studio Code.
-- Installation of Flutter SDK.
-- Introduction to the Dart language.
-- Introduction to Git and GitHub.
+- [Introduction to Dart, Git and GitHub](https://github.com/manighahrmani/sandwich_shop/blob/0/worksheet.md).
 - [Introduction to Flutter](https://github.com/manighahrmani/sandwich_shop/blob/1/worksheet1.md).
+
+## Getting Help
+
+To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
 ## Set Up the Project
 
@@ -275,6 +276,8 @@ This project should already be a repository in your GitHub account.
 At this stage, your code should look like our code as shown on [the GitHub repository](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart).
 
 ## Exercises
+
+Complete the exercises below and show your work to a member of staff present at your next practical for **a sign-off**.
 
 1.  The **Flutter Inspector** is a tool that allows you to visualize the widget tree, view properties of widgets, and debug layout issues.
     You can access it via the browser or by using the DevTools in Visual Studio Code. Use `Ctrl + Shift + P` or `⌘ + Shift + P` on macOS to open the command palette and type "Flutter: Open Flutter DevTools" and select the "Widget Inspector" option).
