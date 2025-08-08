@@ -39,7 +39,7 @@ You may want to change directory (`cd`) to the directory where you want to clone
 repository first.
 
 ```bash
-git clone --branch 1 https://github.com/manighahrmani/sandwich_shop
+git clone --branch 0 https://github.com/manighahrmani/sandwich_shop
 cd sandwich_shop
 code .
 ```
@@ -51,21 +51,7 @@ Remember to `cd` to the directory where you cloned the repository first.
 
 ```bash
 git fetch origin
-git checkout 1
-```
-
-## Run the app
-
-Open the integrated terminal in Visual Studio Code by first opening the Command
-Palette with **⌘ + Shift + P** (macOS) or **Ctrl + Shift + P** (Windows) and
-typing **Terminal: Create New Terminal** then pressing **Enter**.
-
-In the terminal, run the following commands to install the dependencies and run
-the app in your web browser:
-
-```bash
-flutter pub get
-flutter run
+git checkout 0
 ```
 
 ## Get support
