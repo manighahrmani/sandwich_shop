@@ -1,4 +1,4 @@
-# Worksheet 0 — Prerequisites
+# Worksheet 0 — Introduction to Dart, Git and GitHub
 
 If you're new to the Dart programming language or haven't used Git and GitHub before, completing these materials is essential for you. If you're already comfortable with these topics, feel free to skip to the [Exercises](#exercises) section.
 
