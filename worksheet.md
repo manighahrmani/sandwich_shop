@@ -2,16 +2,27 @@
 
 If you're new to the Dart programming language or haven't used Git and GitHub before, completing these materials is essential for you. If you're already comfortable with these topics, feel free to skip to the [Exercises](#exercises) section.
 
+## Getting Help
+
+To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
+
 ## Introduction to Git and GitHub
 
 **Git** is the version control system we'll use to track changes in our code, while **GitHub** is the platform where we'll host our code repositories online. Since your coursework must be submitted via GitHub, a solid understanding of both is necessary for this module.
 
 The following free courses from GitHub will get you up to speed:
 
-  * **Introduction to GitHub**: This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
-      * [https://github.com/skills/introduction-to-github](https://github.com/skills/introduction-to-github)
-  * **Getting Started with GitHub Copilot**: Learn how to use GitHub's AI pair programmer to write code faster. As a student, you're eligible for a free Copilot subscription through the [**GitHub Student Developer Pack**](https://education.github.com/pack).
-      * [https://github.com/skills/getting-started-with-github-copilot](https://github.com/skills/getting-started-with-github-copilot)
+### Introduction to GitHub
+
+This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
+
+[Link to the introduction course](https://github.com/skills/introduction-to-github)
+
+### Getting Started with GitHub Copilot
+
+Learn how to use GitHub's AI pair programmer to write code faster. As a student, you're eligible for a free Copilot subscription through the [**GitHub Student Developer Pack**](https://education.github.com/pack).
+
+[Link to the getting started with Copilot course](https://github.com/skills/getting-started-with-github-copilot)
 
 ## Introduction to the Dart Language
 
@@ -43,38 +54,18 @@ The following free courses from GitHub will get you up to speed:
 
 ## Exercises
 
-To ensure you're ready for the upcoming work, please complete the following setup tasks. These will help verify that you have engaged with the material above.
+Complete the exercises below and show your work to a member of staff present at your next practical for **a sign-off**.
 
-1.  **Set Up Your GitHub Profile**
+1.  Your GitHub profile is your developer portfolio. As a small but important step, personalise your profile by adding a profile picture. Then write a short, one-line bio about yourself.
 
-    Your GitHub profile is your developer portfolio. If you don't already have an account, **sign up at [github.com](https://github.com)**. As a small but important step, personalise your profile:
+2.  Follow the instructions on [this document](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ERXv27njJSZBsmQd5zCrGAMBvuuicqakKSQAk47e0IKf5g) to install Dart SDK and Visual Studio Code on your computer.
 
-      - Add a profile picture.
-      - Write a short, one-line bio.
+    Next, get [the GitHub for student pack](https://education.github.com/pack) and install the **GitHub Copilot** extension in Visual Studio Code. For more information, check out [this section](#introduction-to-git-and-github) of this worksheet.
 
-2.  **Create a "Hello Dart" Repository**
+    Install the **GitHub Copilot** extension in VS Code. Finally, make a Dart file, e.g., `hello_dart.dart` and use Copilot. You can, for example, add a comment to ask Copilot to write a new function for you:
 
-    This task will confirm that you can create a project locally and publish it to GitHub using VS Code.
-
-      - On your computer, create a new folder named `hello_dart`.
-      - Open this `hello_dart` folder in **Visual Studio Code**.
-      - Create a new file inside it named `main.dart`.
-      - In `main.dart`, write a simple Dart program that prints a welcome message to the console.
-        ```dart
-        void main() {
-          print('Hello, Dart! My GitHub username is [YOUR_USERNAME]');
-        }
-        ```
-      - Using the **Source Control** panel in VS Code, initialise a Git repository, make your first commit, and publish the repository to your GitHub account. Make the repository **public** so it can be reviewed.
-
-3.  **Activate and Use GitHub Copilot**
-
-    Let's put your AI pair programmer to work. First, ensure you have access.
-
-      - Install the **GitHub Copilot** extension in VS Code.
-      - Sign in and authorise the extension. If you don't have access, apply for the **[GitHub Student Developer Pack](https://education.github.com/pack)**.
-      - In your `hello_dart` project, use a comment to ask Copilot to write a new function for you. For example:
-        ```dart
-        // a function that returns the sum of two integers
-        ```
-      - Commit this new, AI-generated code to your repository with the commit message: `feat: Add function with GitHub Copilot`.
+    ````text
+    ```dart
+    // a function that returns the sum of two integers
+    ```
+    ````
