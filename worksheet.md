@@ -5,7 +5,7 @@
 Ensure that you have already completed the following:
 
 - [Introduction to Dart, Git and GitHub](https://github.com/manighahrmani/sandwich_shop/blob/0/worksheet.md).
-- [Introduction to Flutter](https://github.com/manighahrmani/sandwich_shop/blob/1/worksheet1.md).
+- [Introduction to Flutter](https://github.com/manighahrmani/sandwich_shop/blob/1/worksheet.md).
 
 ## Getting Help
 
@@ -15,7 +15,7 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 We will start to incrementally build the "Sandwich Counter" application.
 
-Open the Flutter folder containing the project you created in [Worksheet 1](https://github.com/manighahrmani/sandwich_shop/blob/1/worksheet1.md) in Visual Studio Code.
+Open the Flutter folder containing the project you created in [Worksheet 1](https://github.com/manighahrmani/sandwich_shop/blob/1/worksheet.md) in Visual Studio Code.
 This project should already be a repository in your GitHub account.
 
 1.  **Import the Material Design Library**
