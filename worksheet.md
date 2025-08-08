@@ -12,10 +12,17 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 The following free courses from GitHub will get you up to speed:
 
-  * **Introduction to GitHub**: This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
-      * [https://github.com/skills/introduction-to-github](https://github.com/skills/introduction-to-github)
-  * **Getting Started with GitHub Copilot**: Learn how to use GitHub's AI pair programmer to write code faster. As a student, you're eligible for a free Copilot subscription through the [**GitHub Student Developer Pack**](https://education.github.com/pack).
-      * [https://github.com/skills/getting-started-with-github-copilot](https://github.com/skills/getting-started-with-github-copilot)
+### Introduction to GitHub
+
+This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
+
+[Link to the introduction course](https://github.com/skills/introduction-to-github)
+
+### Getting Started with GitHub Copilot
+
+Learn how to use GitHub's AI pair programmer to write code faster. As a student, you're eligible for a free Copilot subscription through the [**GitHub Student Developer Pack**](https://education.github.com/pack).
+
+[Link to the getting started with Copilot course](https://github.com/skills/getting-started-with-github-copilot)
 
 ## Introduction to the Dart Language
 
@@ -55,9 +62,10 @@ Complete the exercises below and show your work to a member of staff present at 
 
     Next, get [the GitHub for student pack](https://education.github.com/pack) and install the **GitHub Copilot** extension in Visual Studio Code. For more information, check out [this section](#introduction-to-git-and-github) of this worksheet.
 
-    Install the **GitHub Copilot** extension in VS Code. Finally, make a Dart file, e.g., `hello_dart.dart` and use the Copilot. You can for example add a comment to ask Copilot to write a new function for you:
-    ```
+    Install the **GitHub Copilot** extension in VS Code. Finally, make a Dart file, e.g., `hello_dart.dart` and use Copilot. You can, for example, add a comment to ask Copilot to write a new function for you:
+
+    ````text
     ```dart
     // a function that returns the sum of two integers
     ```
-    ```
+    ````
