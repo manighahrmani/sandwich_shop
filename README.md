@@ -70,7 +70,4 @@ flutter run
 
 ## Get support
 
-Use [the dedicated Discord channel](https://discord.com/channels/760155974467059762/1370633732779933806)
-to ask your questions and get help from the community.
-Please provide as much context as possible, including the error messages you are seeing and
-screenshots (you can open Discord in your web browser).
+To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
