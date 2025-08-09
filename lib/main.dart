@@ -1,34 +1,89 @@
 import 'package:flutter/material.dart';
 
-class SandwichCounter extends StatelessWidget {
-  final String sandwichType;
-  final int count;
+void main() {
+  runApp(const App());
+}
 
-  const SandwichCounter(this.count, this.sandwichType, {super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Text('$count $sandwichType sandwich(es): ${'🥪' * count}');
+    return const MaterialApp(
+      title: 'Sandwich Shop App',
+      home: OrderScreen(),
+    );
   }
 }
 
-void main() {
-  runApp(const SandwichShopApp());
+class OrderScreen extends StatefulWidget {
+  const OrderScreen({super.key});
+
+  @override
+  State<OrderScreen> createState() {
+    return _OrderScreenState();
+  }
 }
 
-class SandwichShopApp extends StatelessWidget {
-  const SandwichShopApp({super.key});
+class _OrderScreenState extends State<OrderScreen> {
+  int _quantity = 0;
+
+  void _increaseQuantity() {
+    setState(() {
+      _quantity = _quantity + 1;
+    });
+  }
+
+  void _decreaseQuantity() {
+    setState(() {
+      if (_quantity > 0) {
+        _quantity = _quantity - 1;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sandwich Shop App',
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Sandwich Counter')),
-        body: const Center(
-          child: SandwichCounter(5, 'Footlong'),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sandwich Counter'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            OrderItemDisplay(
+              _quantity,
+              'Footlong',
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _increaseQuantity,
+                  child: const Text('Add'),
+                ),
+                ElevatedButton(
+                  onPressed: _decreaseQuantity,
+                  child: const Text('Remove'),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
+  }
+}
+
+class OrderItemDisplay extends StatelessWidget {
+  final String itemType;
+  final int quantity;
+
+  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
   }
 }
