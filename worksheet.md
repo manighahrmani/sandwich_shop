@@ -61,7 +61,7 @@ This project should already be a repository in your GitHub account.
 3.  **Commit Your Changes**
 
     It is a good time to commit your changes.
-    In VS Code, go to the Source Control panel from **View > Source Control**.
+    In VS Code, go to the Source Control panel from **View \> Source Control**.
     You can also use the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P** on macOS) and enter "Source Control", which will open the Source Control panel.
 
     You should see `main.dart` listed under changes. In the "Message" box, above the "Commit" button, type a descriptive commit message, something like `Set Up the Project`.
@@ -78,15 +78,15 @@ This project should already be a repository in your GitHub account.
     git push
     ```
 
-## Define the Main App Widget: `SandwichShopApp`
+## Define the Main App Widget: `App`
 
-1.  **Define the `SandwichShopApp` Widget**
+1.  **Define the `App` Widget**
 
     Add the following class definition to `lib/main.dart`, below the `import` statement and before the `main()` function:
 
     ```dart
-    class SandwichShopApp extends StatelessWidget {
-      const SandwichShopApp({super.key});
+    class App extends StatelessWidget {
+      const App({super.key});
 
       @override
       Widget build(BuildContext context) {
@@ -97,41 +97,41 @@ This project should already be a repository in your GitHub account.
 
     Key points:
 
-    - `SandwichShopApp` is the main widget of our app.
+    - `App` is the main widget of our app.
     - `StatelessWidget` is a widget that does not change in appearance and behaviour after being built.
-    - `SandwichShopApp` extends (is a subclass of) `StatelessWidget`.
-    - `const SandwichShopApp({super.key});` is the constructor for `SandwichShopApp`.
+    - `App` extends (is a subclass of) `StatelessWidget`.
+    - `const App({super.key});` is the constructor for `App`.
       - `const` is optional (for performance).
       - `super.key` is used to pass an optional `key` (a unique identifier for the widget).
-    - `Widget build(BuildContext context)` is the `build()` method of `SandwichShopApp`.
+    - `Widget build(BuildContext context)` is the `build()` method of `App`.
       - Flutter calls `build`, which returns a `Widget` used to render the UI.
       - `BuildContext context` is the context (e.g., the location) of the widget; it is needed to build the UI.
       - `@override` shows that we are reimplementing the `build` method of `StatelessWidget`; all widgets must do this.
       - For now, `build` returns a placeholder (`Container` is like a `div` in HTML).
 
-2.  **Use the `SandwichShopApp` Widget**
+2.  **Use the `App` Widget**
 
     Next, update the `main()` function to look like this:
 
     ```dart
     void main() {
-      runApp(const SandwichShopApp());
+      runApp(const App());
     }
     ```
 
-    The `runApp()` function takes the given widget (`SandwichShopApp` in our case) and makes it the root of the widget tree, effectively displaying it on the screen.
+    The `runApp()` function takes the given widget (`App` in our case) and makes it the root of the widget tree, effectively displaying it on the screen.
 
-    If you run your app now, it would show a blank screen because our `SandwichShopApp` returns an empty `Container`.
+    If you run your app now, it would show a blank screen because our `App` returns an empty `Container`.
 
 3.  **Commit Your Changes**
 
-    Suggested commit message: `Define the Main App Widget: SandwichShopApp`
+    Suggested commit message: `Define the Main App Widget: App`
 
-## Define the UI inside `SandwichShopApp`
+## Define the UI inside `App`
 
 1.  **Redefine the `build` Method**
 
-    Modify the `build` method within the `SandwichShopApp` class as follows:
+    Modify the `build` method within the `App` class as follows:
 
     ```dart
     @override
@@ -170,15 +170,15 @@ This project should already be a repository in your GitHub account.
 
     Once a web device is selected, run the app with `F5` or by clicking the "Run" button on top of the `main` function in `lib/main.dart`.
 
-    You should see an application with an app bar titled "Sandwich Counter" and the text "Welcome to the Sandwich Shop!" centred in the body of the screen.
+    You should see an application with an app bar titled "Sandwich Counter" and the text "Welcome to the Sandwich Shop\!" centred in the body of the screen.
     ![Welcome to the Sandwich Shop](images/screenshot_welcome_to_sandwich_shop.jpg)
     _Figure: The Sandwich Counter app with a welcome message._
 
 3.  **Commit Your Changes**
 
-    Suggested commit message: `Define the UI inside SandwichShopApp`
+    Suggested commit message: `Define the UI inside App`
 
-## Create the Custom `SandwichCounter` Widget
+## Create the Custom `OrderItemDisplay` Widget
 
 1.  **Why Do We Need Custom Widgets?**
 
@@ -186,65 +186,65 @@ This project should already be a repository in your GitHub account.
     You can create your own widgets by combining existing ones or by defining new behaviour.
     Once a custom widget is defined, you can reuse it.
 
-    Our `SandwichCounter` widget will be responsible for displaying a single line of text that describes the count and type of a sandwich, complete with a visual representation using emojis.
+    Our `OrderItemDisplay` widget will be responsible for displaying a single line of text that describes the quantity and type of a sandwich, complete with a visual representation using emojis.
 
-2.  **Define the `SandwichCounter` Widget**
+2.  **Define the `OrderItemDisplay` Widget**
 
-    We'll add the definition for `SandwichCounter` in the `lib/main.dart` file, although you can place it in a separate file for better organisation.
-    Place the `SandwichCounter` class above the `SandwichShopApp` class, but below the initial `import` statement:
+    We'll add the definition for `OrderItemDisplay` in the `lib/main.dart` file, although you can place it in a separate file for better organisation.
+    Place the `OrderItemDisplay` class above the `App` class, but below the initial `import` statement:
 
     ```dart
-    class SandwichCounter extends StatelessWidget {
-      final String sandwichType;
-      final int count;
+    class OrderItemDisplay extends StatelessWidget {
+      final String itemType;
+      final int quantity;
 
-      const SandwichCounter(this.count, this.sandwichType, {super.key});
+      const OrderItemDisplay(this.quantity, this.itemType, {super.key});
 
       @override
       Widget build(BuildContext context) {
-        return Text('This is a placeholder for SandwichCounter');
+        return Text('This is a placeholder for OrderItemDisplay');
       }
     }
     ```
 
     Key points:
 
-    - `SandwichCounter` is our custom widget that extends `StatelessWidget`.
-    - `final String sandwichType` and `final int count` are instance variables.
+    - `OrderItemDisplay` is our custom widget that extends `StatelessWidget`.
+    - `final String itemType` and `final int quantity` are instance variables.
       - Marked `final` because data in a `StatelessWidget` does not change after the widget is built.
-    - `const SandwichCounter(this.count, this.sandwichType, {super.key});` is the constructor.
-      - `this.count` and `this.sandwichType` automatically assign constructor arguments to instance variables.
+    - `const OrderItemDisplay(this.quantity, this.itemType, {super.key});` is the constructor.
+      - `this.quantity` and `this.itemType` automatically assign constructor arguments to instance variables.
 
-    Running the app at this stage won't show any visual changes yet, as we haven't actually used the `SandwichCounter` widget in our `SandwichShopApp`.
+    Running the app at this stage won't show any visual changes yet, as we haven't actually used the `OrderItemDisplay` widget in our `App`.
 
 3.  **Commit Your Changes**
 
-    Suggested commit message: `Define SandwichCounter custom widget`
+    Suggested commit message: `Define OrderItemDisplay custom widget`
 
-4.  **Implement the `build` Method of `SandwichCounter`**
+4.  **Implement the `build` Method of `OrderItemDisplay`**
 
-    Now, let's modify the `build` method of `SandwichCounter` so it displays the sandwich type, count, and some emojis. We want the output to look something like: "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪".
+    Now, let's modify the `build` method of `OrderItemDisplay` so it displays the sandwich type, quantity, and some emojis. We want the output to look something like: "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪".
 
-    Update the `build` method inside your `SandwichCounter` so it looks like this:
+    Update the `build` method inside your `OrderItemDisplay` so it looks like this:
 
     ```dart
     @override
     Widget build(BuildContext context) {
-      return Text('$count $sandwichType sandwich(es): ${'🥪' * count}');
+      return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
     }
     ```
 
 5.  **Commit Your Changes**
 
-    Suggested commit message: `Implement dynamic text in SandwichCounter`
+    Suggested commit message: `Implement dynamic text in OrderItemDisplay`
 
-## Use `SandwichCounter` in `SandwichShopApp`
+## Use `OrderItemDisplay` in `App`
 
-1.  **Replace the Placeholder in `SandwichShopApp`**
+1.  **Replace the Placeholder in `App`**
 
-    Find the `build` method of the `SandwichShopApp` class.
+    Find the `build` method of the `App` class.
     Locate the `Center` widget within the `Scaffold`'s `body`.
-    We will construct an instance of the `SandwichCounter` class and provide it to the `child` property.
+    We will construct an instance of the `OrderItemDisplay` class and provide it to the `child` property.
     See below:
 
     ```dart
@@ -255,7 +255,7 @@ This project should already be a repository in your GitHub account.
         home: Scaffold(
           appBar: AppBar(title: const Text('Sandwich Counter')),
           body: const Center(
-            child: SandwichCounter(5, 'Footlong'),
+            child: OrderItemDisplay(5, 'Footlong'),
           ),
         ),
       );
@@ -265,13 +265,13 @@ This project should already be a repository in your GitHub account.
 2.  **Run the Application**
 
     You should now see the application displaying an app bar with "Sandwich Counter" as the title.
-    In the centre of the screen, the text "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" should be displayed, rendered by your `SandwichCounter` widget.
+    In the centre of the screen, the text "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" should be displayed, rendered by your `OrderItemDisplay` widget.
     ![Sandwich Counter](images/screenshot_sandwich_counter.jpg)
-    _Figure: The Sandwich Counter app displaying the sandwich count and type._
+    _Figure: The Sandwich Counter app displaying the sandwich quantity and type._
 
 3.  **Commit Your Changes**
 
-    Suggested commit message: `Use SandwichCounter in SandwichShopApp`
+    Suggested commit message: `Use OrderItemDisplay in App`
 
 At this stage, your code should look like our code as shown on [the GitHub repository](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart).
 
@@ -290,33 +290,33 @@ Complete the exercises below and show your work to a member of staff present at 
     Your main guide for the rest of the exercises is the [Flutter layout documentation](https://docs.flutter.dev/get-started/fundamentals/layout).
     Remember to commit your changes after each exercise.
 
-1.  Place the `SandwichCounter` widgets inside a `Container` widget.
+2.  Place the `OrderItemDisplay` widgets inside a `Container` widget.
     Check out the [Lay out a single widget](https://docs.flutter.dev/get-started/fundamentals/layout#lay-out-a-single-widget) section of the documentation page or the documentation for the [Container widget](https://api.flutter.dev/flutter/widgets/Container-class.html) to understand how to use it.
 
     Give the `Container` a fixed `width` and `height` and a `color` to make it visible.
     Colours in Flutter can be specified using the `Colors` class, like `Colors.blue` or `Colors.red` (see the [Colors documentation](https://api.flutter.dev/flutter/material/Colors-class.html)).
     This is what it should look like:
     ![Container](images/screenshot_container.jpg)
-    _Figure: The application with a blue Container holding the SandwichCounter._
+    _Figure: The application with a blue Container holding the OrderItemDisplay._
 
-    Update the `width` and `height` properties to see what happens if the `SandwichCounter`'s text is too big for the `Container`.
+    Update the `width` and `height` properties to see what happens if the `OrderItemDisplay`'s text is too big for the `Container`.
 
-1.  Read about **layout widgets** by visiting the [Layout widgets documentation](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets).
-    Next, use a `Column` or a `Row` widget to display three `SandwichCounter` widgets in the `SandwichShopApp`'s `body`.
+3.  Read about **layout widgets** by visiting the [Layout widgets documentation](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets).
+    Next, use a `Column` or a `Row` widget to display three `OrderItemDisplay` widgets in the `App`'s `body`.
     Make sure to read about [main and cross axes alignment in the documentation page](https://docs.flutter.dev/get-started/fundamentals/layout#align-widgets-within-rows-and-columns) to see how to align widgets within these layout widgets.
     ![Layout](images/screenshot_layout.jpg)
-    _Figure: The application with three SandwichCounter widgets arranged in a Row._
+    _Figure: The application with three OrderItemDisplay widgets arranged in a Row._
 
     Resize the browser window.
     What happens if the content of the `Row` is too wide for the screen?
     Feel free to use an LLM or read the documentation page about the concept of "Constraints".
 
-1.  Use a column and display 20 `SandwichCounter` widgets this time.
+4.  Use a column and display 20 `OrderItemDisplay` widgets this time.
     You will most likely see an overflow error because the content is taller than the screen.
     (At this point, you may want to read the [Debugging layouts](https://docs.flutter.dev/get-started/fundamentals/layout#devtools-and-debugging-layout) section on the documentation page).
 
     ![Overflow](images/screenshot_overflow.jpg)
-    _Figure: The application with an overflow error due to too many SandwichCounter widgets in a Column._
+    _Figure: The application with an overflow error due to too many OrderItemDisplay widgets in a Column._
 
     There are a couple of ways to fix this issue:
 
@@ -325,12 +325,12 @@ Complete the exercises below and show your work to a member of staff present at 
     - Alternatively, you can use a `ListView` widget, which is also designed for displaying a scrollable list of widgets.
       Read about the [ListView documentation](https://api.flutter.dev/flutter/widgets/ListView-class.html) to understand how it works and how it differs from `SingleChildScrollView`.
 
-1.  Read the [Adaptive layouts](https://docs.flutter.dev/get-started/fundamentals/layout#adaptive-layouts) section of the Flutter layout documentation.
+5.  Read the [Adaptive layouts](https://docs.flutter.dev/get-started/fundamentals/layout#adaptive-layouts) section of the Flutter layout documentation.
 
-    Wrap the part of your UI that displays `SandwichCounter`(s) with a `LayoutBuilder`.  
+    Wrap the part of your UI that displays `OrderItemDisplay`(s) with a `LayoutBuilder`.  
     Inside the `builder` function of `LayoutBuilder`, you receive `BoxConstraints`.
-    Use `constraints.maxWidth` to determine the available width and based on that, decide how to display your `SandwichCounter`(s).
+    Use `constraints.maxWidth` to determine the available width and based on that, decide how to display your `OrderItemDisplay`(s).
 
-    Similar to the example in the documentation, make sure that if the available width is less than or equal to 600 pixels, you display the `SandwichCounter`(s) in a `Column`, otherwise, a `Row`.
+    Similar to the example in the documentation, make sure that if the available width is less than or equal to 600 pixels, you display the `OrderItemDisplay`(s) in a `Column`, otherwise, a `Row`.
     Make sure to check out the final example in this page as it shows how you can define local variables inside the `builder` function.
     Observe these changes by resizing the browser window.
