@@ -280,7 +280,7 @@ At this stage, your code should look like our code as shown on [the GitHub repos
 Complete the exercises below and show your work to a member of staff present at your next practical for **a sign-off**.
 
 1.  The **Flutter Inspector** is a tool that allows you to visualize the widget tree, view properties of widgets, and debug layout issues.
-    You can access it via the browser or by using the DevTools in Visual Studio Code. Use `Ctrl + Shift + P` or `⌘ + Shift + P` on macOS to open the command palette and type "Flutter: Open Flutter DevTools" and select the "Widget Inspector" option).
+    You can access it via the browser or by using the DevTools in Visual Studio Code. Use `Ctrl + Shift + P` or `⌘ + Shift + P` on macOS to open the command palette and type "Flutter: Open Flutter DevTools" and select the "Widget Inspector" option.
 
     Familiarise yourself with this tool, by watching this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and review its [official documentation](https://docs.flutter.dev/tools/devtools/inspector).
     As a small exercise, observe the relationship between the widgets in your app and the properties (e.g., width and height) of each widget.
