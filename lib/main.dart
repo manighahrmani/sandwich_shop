@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SandwichCounter extends StatelessWidget {
-  final String sandwichType;
-  final int count;
-
-  const SandwichCounter(this.count, this.sandwichType, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text('$count $sandwichType sandwich(es): ${'🥪' * count}');
-  }
-}
-
 void main() {
-  runApp(const SandwichShopApp());
+  runApp(const App());
 }
 
-class SandwichShopApp extends StatelessWidget {
-  const SandwichShopApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +14,21 @@ class SandwichShopApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(title: const Text('Sandwich Counter')),
         body: const Center(
-          child: SandwichCounter(5, 'Footlong'),
+          child: OrderItemDisplay(5, 'Footlong'),
         ),
       ),
     );
+  }
+}
+
+class OrderItemDisplay extends StatelessWidget {
+  final int quantity;
+  final String itemType;
+
+  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
   }
 }
