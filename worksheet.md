@@ -326,7 +326,46 @@ Complete the exercises below and show your work to a member of staff present at 
 
     ⚠️ **Show your updated `pubspec.yaml` file to a member of staff** for a sign-off.
 
-4. (Advanced) In the `MyHomePage` widget, add a new `FloatingActionButton` that resets the counter to `0`.
+4. Keeping your code tidy is crucial for readability and collaboration. Dart has a standard format that can be applied automatically.
+
+    First, deliberately mess up the formatting in your `lib/main.dart` file. For example, add extra spaces or remove indentation for a few widgets.
+
+    Next, right-click in the editor and select `Format Document`. You can also open the command palette with `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and type `Format Document` to find the command.
+    Notice how the code snaps back to the correct style. You can also set this to happen automatically on save by enabling the `editor.formatOnSave` setting.
+
+    For more details, refer to [the official documentation](https://docs.flutter.dev/tools/formatting) on code formatting.
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
+5. The Flutter SDK can automatically fix many problems in your code. For example the LLMs that you may be using could generate deprecated code for you.
+
+    To see how the SDK can fix your code for you, go to your `lib/main.dart` file and find the `Text` widget responsible for displaying the counter. The code for this widget looks like this:
+  
+    ```dart
+    Text(
+      '$_counter',
+      style: Theme.of(context).textTheme.headlineMedium,
+    ),
+    ```
+
+    Temporarily change the style from `headlineMedium` to the older, deprecated name `headline4`. After your change, the code should look like this:
+
+    ```dart
+    Text(
+      '$_counter',
+      style: Theme.of(context).textTheme.headline4,
+    ),
+    ```
+
+    VS Code should highlight `headline4` as a problem. Hover over the it and use the `Quick Fix` option that appears. It will suggest replacing the deprecated style with its modern equivalent (`headlineMedium`). Apply the fix and then commit your changes.
+
+    ![Flutter Fix](images/screenshot_flutter_fix.jpg)
+
+    Learn more about this feature from [the official Flutter Fix documentation](https://docs.flutter.dev/tools/flutter-fix).
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
+6. (Advanced) In the `MyHomePage` widget, add a new `FloatingActionButton` that resets the counter to `0`.
 
     As a hint, you can wrap the existing `FloatingActionButton` in a `Row` widget to add another button next to it.
 
@@ -334,7 +373,7 @@ Complete the exercises below and show your work to a member of staff present at 
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5. (Advanced) Running your app in a browser is great for quick development, but the ultimate goal is often a mobile app.
+4. (Advanced) Running your app in a browser is great for quick development, but the ultimate goal is often a mobile app.
 
     For this task, follow the official documentation to set up your physical phone for development and run the app on it.
 
