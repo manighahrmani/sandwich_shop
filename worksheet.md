@@ -285,7 +285,7 @@ Complete the exercises below and show your work to a member of staff present at 
     
     Next, modify the remaining `Text` widget so that it displays a static welcome message, like "Welcome to my shop\!", instead of the counter variable.
     
-    Finally, you can give your message some style by using the `style` property on the `Text` widget, which accepts a `TextStyle`. Look at the [official documentation for the TextStyle class](https://www.google.com/search?q=https://api.flutter.dev/flutter/material/TextStyle-class.html) to see how to change properties like `fontSize`, `color`, and `fontWeight` or use Copilot to help you with this. But make sure that you understand what you are doing, as this is a key part of the exercise.
+    Finally, you can give your message some style by using the `style` property on the `Text` widget, which accepts a `TextStyle`. Look at the [official documentation for the TextStyle class](https://api.flutter.dev/flutter/painting/TextStyle-class.html) to see how to change properties like `fontSize`, `color`, and `fontWeight` or use Copilot to help you with this. But make sure that you understand what you are doing, as this is a key part of the exercise.
 
     ⚠️ **Show your running app with the new welcome message to a member of staff** for a sign-off.
 
