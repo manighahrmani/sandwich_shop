@@ -4,7 +4,7 @@
 
 Ensure that you have already completed the following:
 
-  - [Worksheet 0 — Introduction to Dart, Git and GitHub](https://github.com/manighahrmani/sandwich_shop/blob/0/worksheet.md).
+- [Worksheet 0 — Introduction to Dart, Git and GitHub](https://github.com/manighahrmani/sandwich_shop/blob/0/worksheet.md).
 
 ## Getting Help
 
@@ -24,11 +24,11 @@ Use the shortcut on the desktop or head to AppsAnywhere using this link: [appsan
 
 #### Installing Git
 
-In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `'Git'` and click on launch. Do not select "GitHub Desktop".
+In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Git` and click on launch. Do not select "GitHub Desktop".
 
 ![Git in AppsAnywhere](images/screenshot_appsanywhere_git.jpg)
 
-To verify the installation, open the Start Menu by pressing the `'Windows'` key, type `'Git Bash'`, and select it. Write the following command in the terminal and press Enter:
+To verify the installation, open the Start Menu by pressing the `Windows` key, type `Git Bash`, and select it. Write the following command in the terminal and press Enter:
 
 ```bash
 git --version
@@ -38,9 +38,9 @@ You should see a version number indicating that Git is installed successfully.
 
 #### Installing the Flutter SDK
 
-In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `'Flutter And Dart SDK'` and click on launch.
+In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Flutter And Dart SDK` and click on launch.
 
-To verify the installation, search for `'Command Prompt'` or `'PowerShell'` in the Start Menu and open it. Write the following command and press Enter:
+To verify the installation, search for `Command Prompt` or `PowerShell` in the Start Menu and open it. Write the following command and press Enter:
 
 ```bash
 flutter --doctor
@@ -52,7 +52,7 @@ This may take a while, but it should return a report of your Flutter installatio
 
 #### Installing Visual Studio Code
 
-In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `'Visual Studio Code'` and launch it. It can take a while to load, so be patient.
+In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Visual Studio Code` and launch it. It can take a while to load, so be patient.
 
 ---
 
@@ -60,7 +60,7 @@ In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `'Visual Stud
 
 #### Opening the Terminal
 
-Open the Start Menu by pressing the Windows key, type `'PowerShell'`, and select `'Run as Administrator'`. You need administrator rights to install the package manager. If you don't have this permission, use the university computers instead.
+Open the Start Menu by pressing the Windows key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use the university computers instead.
 
 #### Installing the Chocolatey Package Manager
 
@@ -98,7 +98,7 @@ flutter doctor
 
 #### Opening the Terminal
 
-You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing `'Terminal'`, and pressing return.
+You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing `Terminal`, and pressing return.
 
 #### Installing the Homebrew Package Manager
 
@@ -137,21 +137,21 @@ Now that our environment is set up, we can create our first Flutter project.
 
 To sync your VS Code settings, first open [GitHub](https://github.com/) in your browser and log in.
 
-Back in VS Code, click the Account icon in the bottom left corner and select `'Backup and Sync Settings'`. This should automatically sync your settings with your GitHub account.
+Back in VS Code, click the Account icon in the bottom left corner and select `Backup and Sync Settings`. This should automatically sync your settings with your GitHub account.
 
 ![Visual Studio Code Account Icon](images/screenshot_vscode_account_icon.jpg)
 
-If this is your first time using VS Code, you'll need to install the Flutter extension. Open the Extensions view by clicking the Extensions icon in the Activity Bar or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS). In the search bar, type `'Flutter'` and install the official extension.
+If this is your first time using VS Code, you'll need to install the Flutter extension. Open the Extensions view by clicking the Extensions icon in the Activity Bar or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS). In the search bar, type `Flutter` and install the official extension.
 
 ![Flutter Extension](images/screenshot_flutter_extension.jpg)
 
 #### Creating a New Flutter Project
 
-In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS). In the palette, type `'Flutter: New Project'` and press Enter.
+In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS). In the palette, type `Flutter: New Project` and press Enter.
 
 ![VS Code Command Palette](images/screenshot_vscode_command_palette.jpg)
 
-Select `'Application'` when prompted for a template. You will then be asked to choose a project location and name. We recommend your user folder on the C drive.
+Select `Application` when prompted for a template. You will then be asked to choose a project location and name. We recommend your user folder on the C drive.
 
 Choose a name for your project, such as `sandwich_shop`, and press Enter. VS Code will now create a new Flutter project and open it for you.
 
@@ -168,6 +168,7 @@ The default application is a simple counter app. The `lib/main.dart` file contai
 We will learn more about stateless and stateful widgets in later worksheets. This is just a brief overview to get you started. But for now, use the Copilot extension to explore the code.
 
 Remember that Large Language Models (LLMs) like Copilot work best when you do all the following:
+
 1. Start with a **specific goal** for what you want the assistant to do (e.g., explain, fix an error, implement a feature)
 2. Provide a **source to ground** the response in a specific scope of information (e.g., Flutter or Dart's documentation)
 3. Add **context** to maximize response appropriateness and relevance (e.g., project structure, code snippets, where you're running the code)
@@ -184,7 +185,7 @@ Copilot should automatically add the relevant code context to your question. How
 
 At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like Edge or Chrome.
 
-Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `'Flutter: Select Device'`. Then select your browser from the list.
+Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Flutter: Select Device`. Then select your browser from the list.
 
 ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
 
@@ -192,7 +193,7 @@ Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ +
 
 You can run the app in several ways, for example by pressing the F5 key, opening a new terminal and running `flutter run`, or clicking the "Run" button that appears above the `main` function in `lib/main.dart`.
 
-You can also open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `'Terminal: Create New Terminal'` to open a terminal, then run the following command:
+You can also open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Terminal: Create New Terminal` to open a terminal, then run the following command:
 
 ```bash
 flutter run
@@ -216,7 +217,7 @@ Lastly, let's put our project on GitHub to track changes and back it up online.
 
 #### Initialising the Repository
 
-In the Activity Bar on the left, click the Source Control icon. Click on `'Initialize Repository'` to set up Git for your project.
+In the Activity Bar on the left, click the Source Control icon. Click on `Initialize Repository` to set up Git for your project.
 
 ![Source Control Panel](images/screenshot_vscode_source_control.jpg)
 
@@ -239,9 +240,9 @@ git add .
 git commit -m "Initial commit"
 ```
 
-You might see a pop-up asking to stage all changes and commit them directly; you can click `'Always'` to skip this in the future.
+You might see a pop-up asking to stage all changes and commit them directly; you can click `Always` to skip this in the future.
 
-The `'Commit'` button will now say `'Publish Branch'` or `'Sync Changes'`. Click this to push your local repository to GitHub. You may be asked to allow VS Code to log in to your GitHub account.
+The `Commit` button will now say `Publish Branch` or `Sync Changes`. Click this to push your local repository to GitHub. You may be asked to allow VS Code to log in to your GitHub account.
 
 ![Sync Changes Button](images/screenshot_vscode_sync_changes.jpg)
 
@@ -253,9 +254,7 @@ git push -u origin main
 
 Next, you will be asked to name your repository; enter `sandwich_shop`. You can choose to make it public, but for your coursework, you must make it **private**.
 
-
 ![Create GitHub Repository](images/screenshot_vscode_create_github_repo.jpg)
-
 
 #### Verifying the Repository on GitHub
 
@@ -267,11 +266,11 @@ The link will look like `https://github.com/YOUR_USERNAME/sandwich_shop` where `
 
 #### Making Another Commit
 
-Let's make another commit. In `lib/main.dart`, change the text in the `AppBar` widget from `'Flutter Demo Home Page'` to `'My Sandwich Shop'`. Save the file (**Ctrl + S** or **⌘ + S**) or better yet, enable auto-save by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing `'Auto Save'`, then press Enter to select `'Toggle Auto Save'`.
+Let's make another commit. In `lib/main.dart`, change the text in the `AppBar` widget from `Flutter Demo Home Page` to `My Sandwich Shop`. Save the file (**Ctrl + S** or **⌘ + S**) or better yet, enable auto-save by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing `Auto Save`, then press Enter to select `Toggle Auto Save`.
 
-Go back to the Source Control panel (use the Command Palette and enter `'Focus on Source Control View'` if you can't see it), stage the changes, and commit them with a message like `'Change AppBar title'`. Remember to always write meaningful commit messages that describe what changes you made. The commit message should ideally be written in the imperative mood, like `'Add new feature'` or `'Fix bug'`.
+Go back to the Source Control panel (use the Command Palette and enter `Focus on Source Control View` if you can't see it), stage the changes, and commit them with a message like `Change AppBar title`. Remember to always write meaningful commit messages that describe what changes you made. The commit message should ideally be written in the imperative mood, like `Add new feature` or `Fix bug`.
 
-Before you click on commit, you can also click on the changed files below the `'Changes'` section to see the differences (diff) between the current version and the last committed version.
+Before you click on commit, you can also click on the changed files below the `Changes` section to see the differences (diff) between the current version and the last committed version.
 
 ![Second Commit](images/screenshot_vscode_second_commit.jpg)
 
@@ -281,21 +280,21 @@ Once you have clicked on commit and then sync changes, you should be able to see
 
 Complete the exercises below and show your work to a member of staff present at your next practical for **a sign-off**.
 
-1.  You have already modified the title of the `AppBar` widget. This is different from the title of the app itself, which you can see in the browser tab. As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate, like "Sandwich Shop App". Remember to view the changes live with hot reload and to commit your changes to GitHub.
+1. You have already modified the title of the `AppBar` widget. This is different from the title of the app itself, which you can see in the browser tab. As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate, like "Sandwich Shop App". Remember to view the changes live with hot reload and to commit your changes to GitHub.
 
     ⚠️ **Show your running app with the updated browser tab title to a member of staff** for a sign-off.
 
-2.  The default app displays a counter. Your task is to change this by finding the `Column` widget inside the `_MyHomePageState` in your `lib/main.dart` file.
+2. The default app displays a counter. Your task is to change this by finding the `Column` widget inside the `_MyHomePageState` in your `lib/main.dart` file.
 
     First, remove one of the two `Text` widgets inside the column.
-    
-    Next, modify the remaining `Text` widget so that it displays a static welcome message, like "Welcome to my shop\!", instead of the counter variable.
-    
+
+    Next, modify the remaining `Text` widget so that it displays a static welcome message, like "Welcome to my shop!" instead of the counter variable.
+
     Finally, you can give your message some style by using the `style` property on the `Text` widget, which accepts a `TextStyle`. Look at the [official documentation for the TextStyle class](https://api.flutter.dev/flutter/painting/TextStyle-class.html) to see how to change properties like `fontSize`, `color`, and `fontWeight` or use Copilot to help you with this. But make sure that you understand what you are doing, as this is a key part of the exercise.
 
     ⚠️ **Show your running app with the new welcome message to a member of staff** for a sign-off.
 
-3.  The `pubspec.yaml` file is the heart of your project's configuration, managing dependencies, fonts, and project metadata. Open this file and take a moment to read through it, using an LLM or the [official documentation on the pubspec file](https://dart.dev/tools/pub/pubspec) to understand each section.
+3. The `pubspec.yaml` file is the heart of your project's configuration, managing dependencies, fonts, and project metadata. Open this file and take a moment to read through it, using an LLM or the [official documentation on the pubspec file](https://dart.dev/tools/pub/pubspec) to understand each section.
 
     Your task is to modify the file to match the cleaned-up version below. This involves changing the project name and description, updating the Dart SDK environment constraint, and removing the comments to make the file more readable.
 
@@ -327,18 +326,18 @@ Complete the exercises below and show your work to a member of staff present at 
 
     ⚠️ **Show your updated `pubspec.yaml` file to a member of staff** for a sign-off.
 
-4.  (Advanced) In the `MyHomePage` widget, add a new `FloatingActionButton` that resets the counter to `0`.
+4. (Advanced) In the `MyHomePage` widget, add a new `FloatingActionButton` that resets the counter to `0`.
 
     As a hint, you can wrap the existing `FloatingActionButton` in a `Row` widget to add another button next to it.
-    
+
     You will also need to create a new method, something like `_resetCounter()`, that sets the `_counter` to `0` inside a `setState()` call.
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5.  (Advanced) Running your app in a browser is great for quick development, but the ultimate goal is often a mobile app.
+5. (Advanced) Running your app in a browser is great for quick development, but the ultimate goal is often a mobile app.
 
     For this task, follow the official documentation to set up your physical phone for development and run the app on it.
-    
+
     You can find instructions to [set up an Android device](https://docs.flutter.dev/get-started/install/windows#android-setup) or an [iOS device](https://docs.flutter.dev/get-started/install/macos#deploy-to-ios-devices) on the Flutter website.
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
