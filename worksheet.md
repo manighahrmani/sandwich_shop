@@ -54,6 +54,8 @@ This may take a while, but it should return a report of your Flutter installatio
 
 In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **Visual Studio Code** and launch it. It can take a while to load, so be patient.
 
+---
+
 ### Personal Windows Computer
 
 #### Opening the Terminal
@@ -89,6 +91,8 @@ Close your current terminal and open a new one, which doesn't need to be run as 
 ```powershell
 flutter doctor
 ```
+
+---
 
 ### Personal macOS Computer
 
@@ -158,6 +162,8 @@ You should see a new folder structure in the Explorer view on the left side of V
 ![Project Structure](images/screenshot_flutter_project_structure.jpg)
 
 The default application is a simple counter app. The `lib/main.dart` file contains the entry point `void main() => runApp(const MyApp());`, which runs the root widget, `MyApp`. This `StatelessWidget` sets up the `MaterialApp` and defines the home screen, which is the `MyHomePage` widget. `MyHomePage` is a `StatefulWidget` because it manages the changing counter value. It contains the `_incrementCounter()` method, which uses `setState()` to rebuild the UI when the `_counter` variable changes.
+
+#### Using AI
 
 We will learn more about stateless and stateful widgets in later worksheets. This is just a brief overview to get you started. But for now, use the Copilot extension to explore the code.
 
