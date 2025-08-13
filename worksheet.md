@@ -8,45 +8,45 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 ## Introduction to Git and GitHub
 
-**Git** is the version control system we'll use to track changes in our code, while **GitHub** is the platform where we'll host our code repositories online. Since your coursework must be submitted via GitHub, a solid understanding of both is necessary for this module.
+Git is the version control system we'll use to track changes in our code, while GitHub is the platform where we'll host our code online. Since your coursework must be submitted via GitHub, a solid understanding of both is necessary for this module.
 
 The following free courses from GitHub will get you up to speed:
 
-### Introduction to GitHub
+### 1 - Introduction to GitHub
 
 This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
 
 [Link to the introduction course](https://github.com/skills/introduction-to-github)
 
-### Getting Started with GitHub Copilot
+### 2 - Introduction to GitHub Copilot
 
-Learn how to use GitHub's AI pair programmer to write code faster. As a student, you're eligible for a free Copilot subscription through the [**GitHub Student Developer Pack**](https://education.github.com/pack).
+GitHub's AI can assist you with tasks such as explaining code, fixing bugs, and even writing code snippets. As a student, you're eligible for a free Copilot subscription through the [GitHub Student Developer Pack](https://education.github.com/pack).
 
 [Link to the getting started with Copilot course](https://github.com/skills/getting-started-with-github-copilot)
 
 ## Introduction to the Dart Language
 
-**Dart** is the programming language developed by Google. It is a statically typed language, compiled to native code, language with C-style syntax. Even though it may not be as popular as languages like C or Java, it is the language of the Flutter framework which we will be using for cross-platform app development in this module. Below are the resources from our first-year Programming module that will get you started with Dart.
+Dart is the programming language developed by Google. It is a statically typed language, compiled to native code, language with C-style syntax. Even though it may not be as popular as languages like C or Java, it is the language of the Flutter framework which we will be using for cross-platform app development in this module. Below are the resources from our first-year Programming module that will get you started with Dart.
 
-### Getting started with Dart
+### 1 - Getting started with Dart
 
   * [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ESkq3xBzVgpPh8U0zkb3WXQB49yLKZjjC9QxM-f3V-PTiQ?e=p5ckav)
   * [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EQZicReK_3ZLkNAOj--M3psBntl0cZRT7piu6W3j4OFPcg)
   * [**GitHub Repository**](https://github.com/Programming-M30299/week-15-dart-code)
 
-### Functions and Control Flow in Dart
+### 2 - Functions and Control Flow in Dart
 
   * [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EVXFsog_gS9LlAFbUTUMXj4BXbKfWxQj0WjyN0dk9mblLw)
   * [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EbUO-PZOSWNPoA9TL1AqiSkBgURErCT0WE7I81dSu2OEQA?e=ZvHyB0)
   * [**GitHub Repository**](https://github.com/Programming-M30299/week-16-dart-code)
 
-### Strings and Collections in Dart
+### 3 - Strings and Collections in Dart
 
   * [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EV6lZOGcgydPuoR65cCrVfcBXW1SaRNSRgjqv3hzjd-EOA?e=o6d2EM)
   * [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EbUO-PZOSWNPoA9TL1AqiSkBgURErCT0WE7I81dSu2OEQA?e=N2Xhcy)
   * [**GitHub Repository**](https://github.com/Programming-M30299/week-17-dart-code)
 
-### Object-Oriented Programming in Dart
+### 4 - Object-Oriented Programming in Dart
 
   * [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ERG7VQKzCdVEsX0mc-s-nT4BLFUNsoR3lSpS3tLjSXYaLA)
   * [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EcpaP0-SOaJBqpDuSlcl4xwBTSzN9HgPhCOMnL74Zw54Zw)
