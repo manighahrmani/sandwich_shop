@@ -56,16 +56,25 @@ Dart is the programming language developed by Google. It is a statically typed l
 
 Complete the exercises below and show your work to a member of staff present at your next practical for **a sign-off**.
 
-1.  Your GitHub profile is your developer portfolio. As a small but important step, personalise your profile by adding a profile picture. Then write a short, one-line bio about yourself.
+1.  Your GitHub profile is your developer portfolio.
+
+    As a small but important step, personalise your profile by adding a profile picture. Then write a short, one-line bio about yourself.
+    
+    Include what skills you have and what roles you are interested in.
+    And if you already know how to use GitHub, create repositories for the courseworks and projects that you have completed in the past.
+
+    ⚠️ **Show your GitHub profile to a member of staff** for feedback and a sign-off.
 
 2.  Follow the instructions on [this document](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ERXv27njJSZBsmQd5zCrGAMBvuuicqakKSQAk47e0IKf5g) to install Dart SDK and Visual Studio Code on your computer.
 
-    Next, get [the GitHub for student pack](https://education.github.com/pack) and install the **GitHub Copilot** extension in Visual Studio Code. For more information, check out [this section](#introduction-to-git-and-github) of this worksheet.
+    Next, get [the GitHub for student pack](https://education.github.com/pack) and install the GitHub Copilot extension in Visual Studio Code. For more information, check out [this section](#introduction-to-git-and-github) of this worksheet.
 
-    Install the **GitHub Copilot** extension in VS Code. Finally, make a Dart file, e.g., `hello_dart.dart` and use Copilot. You can, for example, add a comment to ask Copilot to write a new function for you:
+    Install [the GitHub Copilot extension in VS Code](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot). Finally, make a Dart file, e.g., `hello_dart.dart` and use Copilot. You can, for example, add a comment to ask Copilot to write a new function for you:
 
     ````text
     ```dart
     // a function that returns the sum of two integers
     ```
     ````
+
+    ⚠️ **Show your Dart file to a member of staff** for a sign-off.
