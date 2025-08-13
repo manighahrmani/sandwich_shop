@@ -24,11 +24,11 @@ Use the shortcut on the desktop or head to AppsAnywhere using this link: [appsan
 
 #### Installing Git
 
-In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **Git** and click on launch. Do not select "GitHub Desktop".
+In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `'Git'` and click on launch. Do not select "GitHub Desktop".
 
 ![Git in AppsAnywhere](images/screenshot_appsanywhere_git.jpg)
 
-To verify the installation, open the Start Menu by pressing the **Windows** key, type **Git Bash**, and select it. Write the following command in the terminal and press Enter:
+To verify the installation, open the Start Menu by pressing the `'Windows'` key, type `'Git Bash'`, and select it. Write the following command in the terminal and press Enter:
 
 ```bash
 git --version
@@ -38,9 +38,9 @@ You should see a version number indicating that Git is installed successfully.
 
 #### Installing the Flutter SDK
 
-In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **Flutter And Dart SDK** and click on launch.
+In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `'Flutter And Dart SDK'` and click on launch.
 
-To verify the installation, search for **Command Prompt** or **PowerShell** in the Start Menu and open it. Write the following command and press Enter:
+To verify the installation, search for `'Command Prompt'` or `'PowerShell'` in the Start Menu and open it. Write the following command and press Enter:
 
 ```bash
 flutter --doctor
@@ -52,7 +52,7 @@ This may take a while, but it should return a report of your Flutter installatio
 
 #### Installing Visual Studio Code
 
-In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **Visual Studio Code** and launch it. It can take a while to load, so be patient.
+In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `'Visual Studio Code'` and launch it. It can take a while to load, so be patient.
 
 ---
 
@@ -60,7 +60,7 @@ In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for **Visual Stud
 
 #### Opening the Terminal
 
-Open the Start Menu by pressing the **Windows** key, type **PowerShell**, and select **Run as Administrator**. You need administrator rights to install the package manager. If you don't have this permission, use the university computers instead.
+Open the Start Menu by pressing the Windows key, type `'PowerShell'`, and select `'Run as Administrator'`. You need administrator rights to install the package manager. If you don't have this permission, use the university computers instead.
 
 #### Installing the Chocolatey Package Manager
 
@@ -98,13 +98,13 @@ flutter doctor
 
 #### Opening the Terminal
 
-You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing **Terminal**, and pressing **Return**.
+You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing `'Terminal'`, and pressing return.
 
 #### Installing the Homebrew Package Manager
 
 Homebrew is a package manager for macOS that simplifies installing software. To check if you have it installed, run `brew --version` in the terminal. If you see a version number, you can skip to the next step.
 
-If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the installation command provided on the homepage. Paste it into your terminal and press **Return** to install Homebrew. The command will look similar to this:
+If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the installation command provided on the homepage. Paste it into your terminal and press return to install Homebrew. The command will look similar to this:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -137,21 +137,21 @@ Now that our environment is set up, we can create our first Flutter project.
 
 To sync your VS Code settings, first open [GitHub](https://github.com/) in your browser and log in.
 
-Back in VS Code, click the Account icon in the bottom left corner and select **Backup and Sync Settings**. This should automatically sync your settings with your GitHub account.
+Back in VS Code, click the Account icon in the bottom left corner and select `'Backup and Sync Settings'`. This should automatically sync your settings with your GitHub account.
 
 ![Visual Studio Code Account Icon](images/screenshot_vscode_account_icon.jpg)
 
-If this is your first time using VS Code, you'll need to install the Flutter extension. Open the Extensions view by clicking the Extensions icon in the Activity Bar or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS). In the search bar, type **Flutter** and install the official extension.
+If this is your first time using VS Code, you'll need to install the Flutter extension. Open the Extensions view by clicking the Extensions icon in the Activity Bar or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS). In the search bar, type `'Flutter'` and install the official extension.
 
 ![Flutter Extension](images/screenshot_flutter_extension.jpg)
 
 #### Creating a New Flutter Project
 
-In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS). In the palette, type **Flutter: New Project** and press Enter.
+In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS). In the palette, type `'Flutter: New Project'` and press Enter.
 
 ![VS Code Command Palette](images/screenshot_vscode_command_palette.jpg)
 
-Select **Application** when prompted for a template. You will then be asked to choose a project location and name. We recommend your user folder on the C drive.
+Select `'Application'` when prompted for a template. You will then be asked to choose a project location and name. We recommend your user folder on the C drive.
 
 Choose a name for your project, such as `sandwich_shop`, and press Enter. VS Code will now create a new Flutter project and open it for you.
 
@@ -168,11 +168,11 @@ The default application is a simple counter app. The `lib/main.dart` file contai
 We will learn more about stateless and stateful widgets in later worksheets. This is just a brief overview to get you started. But for now, use the Copilot extension to explore the code.
 
 Remember that Large Language Models (LLMs) like Copilot work best when you do all the following:
-1. Start with a specific goal for what you want the assistant to do (e.g., explain, fix an error, implement a feature)
-2. Provide a source to ground the response in a specific scope of information (e.g., Flutter or Dart's documentation)
-3. Add context to maximize response appropriateness and relevance (e.g., project structure, code snippets, where you're running the code)
-4. Set clear expectations for the response (e.g., length of the explanation, inclusion of examples)
-5. Iterate based on previous prompts and responses to refine the result (e.g., ask follow-up questions or request clarifications)
+1. Start with a **specific goal** for what you want the assistant to do (e.g., explain, fix an error, implement a feature)
+2. Provide a **source to ground** the response in a specific scope of information (e.g., Flutter or Dart's documentation)
+3. Add **context** to maximize response appropriateness and relevance (e.g., project structure, code snippets, where you're running the code)
+4. Set **clear expectations** for the response (e.g., length of the explanation, inclusion of examples)
+5. Iterate based on **previous prompts and responses** to refine the result (e.g., ask follow-up questions or request clarifications)
 
 As an example, select a piece of code that you'd like to learn more about with your mouse. Then use the Copilot extension (**Ctrl + I** on Windows or **⌘ + I** on macOS) to ask the AI questions like: "I am new to Flutter, what does the selected code do? Give me a brief and simple explanation".
 
@@ -182,17 +182,17 @@ Copilot should automatically add the relevant code context to your question. How
 
 #### Selecting a Target Device
 
-At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like **Edge** or **Chrome**.
+At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like Edge or Chrome.
 
-Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type **Flutter: Select Device**. Then select your browser from the list.
+Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `'Flutter: Select Device'`. Then select your browser from the list.
 
 ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
 
 #### Running the App
 
-You can run the app in several ways, for example by pressing the **F5** key, opening a new terminal and running `flutter run`, or clicking the "Run" button that appears above the `main` function in `lib/main.dart`.
+You can run the app in several ways, for example by pressing the F5 key, opening a new terminal and running `flutter run`, or clicking the "Run" button that appears above the `main` function in `lib/main.dart`.
 
-You can also open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type **Terminal: Create New Terminal** to open a terminal, then run the following command:
+You can also open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `'Terminal: Create New Terminal'` to open a terminal, then run the following command:
 
 ```bash
 flutter run
@@ -216,7 +216,7 @@ Lastly, let's put our project on GitHub to track changes and back it up online.
 
 #### Initialising the Repository
 
-In the Activity Bar on the left, click the Source Control icon. Click on **Initialize Repository** to set up Git for your project. 
+In the Activity Bar on the left, click the Source Control icon. Click on `'Initialize Repository'` to set up Git for your project.
 
 ![Source Control Panel](images/screenshot_vscode_source_control.jpg)
 
@@ -239,9 +239,9 @@ git add .
 git commit -m "Initial commit"
 ```
 
-You might see a pop-up asking to stage all changes and commit them directly; you can click **Always** to skip this in the future.
+You might see a pop-up asking to stage all changes and commit them directly; you can click `'Always'` to skip this in the future.
 
-The **Commit** button will now say **Publish Branch** or **Sync Changes**. Click this to push your local repository to GitHub. You may be asked to allow VS Code to log in to your GitHub account.
+The `'Commit'` button will now say `'Publish Branch'` or `'Sync Changes'`. Click this to push your local repository to GitHub. You may be asked to allow VS Code to log in to your GitHub account.
 
 ![Sync Changes Button](images/screenshot_vscode_sync_changes.jpg)
 
@@ -267,7 +267,7 @@ The link will look like `https://github.com/YOUR_USERNAME/sandwich_shop` where `
 
 #### Making Another Commit
 
-Let's make another commit. In `lib/main.dart`, change the text in the `AppBar` widget from `'Flutter Demo Home Page'` to `'My Sandwich Shop'`. Save the file (**Ctrl + S** or **⌘ + S**) or better yet, enable auto-save by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing **Auto Save**, then press Enter to select **Toggle Auto Save**.
+Let's make another commit. In `lib/main.dart`, change the text in the `AppBar` widget from `'Flutter Demo Home Page'` to `'My Sandwich Shop'`. Save the file (**Ctrl + S** or **⌘ + S**) or better yet, enable auto-save by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing `'Auto Save'`, then press Enter to select `'Toggle Auto Save'`.
 
 Go back to the Source Control panel (use the Command Palette and enter `'Focus on Source Control View'` if you can't see it), stage the changes, and commit them with a message like `'Change AppBar title'`. Remember to always write meaningful commit messages that describe what changes you made. The commit message should ideally be written in the imperative mood, like `'Add new feature'` or `'Fix bug'`.
 
