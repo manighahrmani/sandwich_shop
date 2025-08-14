@@ -136,7 +136,6 @@ Make sure you have a device selected (e.g., Chrome or Edge from the bottom statu
 With a device selected run the app by pressing F5. You should see an application with an app bar titled "Sandwich Counter" and "Welcome to the Sandwich Shop\!" centred on the screen.
 
 ![Welcome to the Sandwich Shop](images/screenshot_welcome_to_sandwich_shop.jpg)
-_Figure: The Sandwich Counter app with a welcome message._
 
 #### Commit Your Changes
 
@@ -218,7 +217,6 @@ Run the app. You should now see "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" 
 
 
 ![Sandwich Counter](images/screenshot_sandwich_counter.jpg)
-_Figure: The Sandwich Counter app displaying the sandwich quantity and type._
 
 #### Commit Your Changes
 
@@ -236,7 +234,6 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
     Familiarise yourself with this tool by watching this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and reviewing its [official documentation](https://docs.flutter.dev/tools/devtools/inspector). Use it to observe the relationship between the widgets in your app.
 
     ![Flutter DevTools](images/screenshot_devtools.jpg)
-    _Figure: Flutter DevTools showing the widget tree and properties._
 
     ⚠️ **Show your running app and the widget inspector to a member of staff** for a sign-off. We need to make sure you can work your way around the widget inspector.
 
@@ -247,7 +244,6 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
     This is what it should look like:
     
     ![Container](images/screenshot_container.jpg)
-    _Figure: The application with a blue Container holding the OrderItemDisplay._
 
     Update the `width` and `height` properties to see what happens if the `OrderItemDisplay`'s text is too big for the `Container`.
 
@@ -256,7 +252,6 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 3.  Read about [layout widgets](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets) in the documentation. Use a `Column` or a `Row` to display three `OrderItemDisplay` widgets in the `App`'s `body`. Experiment with the `mainAxisAlignment` and `crossAxisAlignment` properties to align them.
 
     ![Layout](images/screenshot_layout.jpg)
-    _Figure: The application with three OrderItemDisplay widgets arranged in a Row._
 
     Resize the browser window. What happens if the `Row` is too wide for the screen? Use an LLM or the documentation to learn about layout "Constraints".
 
@@ -267,7 +262,6 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
     To fix this, wrap the `Column` in a `SingleChildScrollView` widget, or replace the `Column` with a `ListView` widget. Use the documentation for [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) and [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) to understand how they work.
 
     ![Overflow](images/screenshot_overflow.jpg)
-    _Figure: The application with an overflow error due to too many OrderItemDisplay widgets in a Column._
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
