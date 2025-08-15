@@ -4,8 +4,8 @@
 
 Ensure that you have already completed the following:
 
-  - [Worksheet 0 — Introduction to Dart, Git and GitHub](https://github.com/manighahrmani/sandwich_shop/blob/0/worksheet.md).
-  - [Worksheet 1 — Introduction to Flutter](https://github.com/manighahrmani/sandwich_shop/blob/1/worksheet.md).
+  - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+  - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
 
 ## Getting Help
 
