@@ -1,16 +1,16 @@
-# sandwich_shop
+# Sandwich Shop - Flutter Worksheets
 
-A new Flutter project.
+Welcome to the worksheets for the Sandwich Shop Flutter project. This series will guide you through setting up your development environment and building the application step by step.
 
-## Getting Started
+Select a worksheet below to get started. It is recommended to complete them in order.
 
-This project is a starting point for a Flutter application.
+## Table of Contents
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* [Worksheet 0: Setup and Introduction](./worksheet-0.md)
+* [Worksheet 1: Introduction to Flutter](./worksheet-1.md)
+* [Worksheet 2: (Add Title Here)](./worksheet-2.md)
+* [Worksheet 3: (Add Title Here)](./worksheet-3.md)
+* [Worksheet 4: (Add Title Here)](./worksheet-4.md)
+* [Worksheet 5: (Add Title Here)](./worksheet-5.md)
+* [Worksheet 6: (Add Title Here)](./worksheet-6.md)
+* [Worksheet 7: (Add Title Here)](./worksheet-7.md)
