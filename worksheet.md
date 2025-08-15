@@ -283,6 +283,6 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 6.  Read the documentation on creating [adaptive layouts](https://docs.flutter.dev/get-started/fundamentals/layout#adaptive-layouts). Wrap your UI in a `LayoutBuilder`. Inside its `builder` function, check the `constraints.maxWidth`.
 
     If the width is less than or equal to 600 pixels, display your `OrderItemDisplay` widgets in a `Column`. Otherwise, display them in a `Row`. Observe the changes by resizing your browser window.
-
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+    
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
