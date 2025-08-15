@@ -8,7 +8,7 @@ Select a worksheet below to get started. It is recommended to complete them in o
 
 * [Worksheet 0: Setup and Introduction](./worksheet-0.md)
 * [Worksheet 1: Introduction to Flutter](./worksheet-1.md)
-* [Worksheet 2: (Add Title Here)](./worksheet-2.md)
+* [Worksheet 2: Stateless Widgets](./worksheet-2.md)
 * [Worksheet 3: (Add Title Here)](./worksheet-3.md)
 * [Worksheet 4: (Add Title Here)](./worksheet-4.md)
 * [Worksheet 5: (Add Title Here)](./worksheet-5.md)
