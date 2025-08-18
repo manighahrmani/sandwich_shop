@@ -183,11 +183,11 @@ We will learn more about stateless and stateful widgets in later worksheets. Thi
 
 Remember that Large Language Models (LLMs) like Copilot, ChatGPT, or Claude work best when you do all the following:
 
-1. Start with a **specific goal** for what you want the assistant to do (e.g., explain, fix an error, implement a feature)
-2. Provide a **source to ground** the response in a specific scope of information (e.g., Flutter or Dart's documentation)
-3. Add **context** to maximize response appropriateness and relevance (e.g., project structure, code snippets, where you're running the code)
-4. Set **clear expectations** for the response (e.g., length of the explanation, inclusion of examples)
-5. Iterate based on **previous prompts and responses** to refine the result (e.g., ask follow-up questions or request clarifications)
+1. Start with a **specific goal** for what you want the AI to do (e.g., explain, fix an error, implement a feature)
+2. Provide a **source to ground** the response so for example the AI does not make assumptions or use outdated information (e.g., Flutter or Dart's documentation)
+3. Add **context** to make sure the response is appropriate and relevant (e.g., project structure, code snippets, the platform you're using)
+4. Set **clear expectations** for the response (e.g., level and length of the explanation, inclusion of examples)
+5. Refer to **previous prompts and responses** in your questions (e.g., ask follow-up questions or request clarifications)
 
 As an example, select a piece of code that you'd like to learn more about with your mouse. Then use the Copilot extension (**Ctrl + I** on Windows or **⌘ + I** on macOS) to ask the AI questions like: "I am new to Flutter, what does the selected code do? Give me a brief and simple explanation".
 
