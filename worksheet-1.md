@@ -383,16 +383,12 @@ Complete the exercises below and show your work to a member of staff present at 
 
 6. (Advanced) In the `MyHomePage` widget, add a new `FloatingActionButton` that resets the counter to `0`.
 
-    As a hint, you can wrap the existing `FloatingActionButton` in a `Row` widget to add another button next to it.
-
-    You will also need to create a new method, something like `_resetCounter()`, that sets the `_counter` to `0` inside a `setState()` call.
+    As a hint, you can wrap the existing `FloatingActionButton` in a `Row` widget to add another button next to it. You will also need to create a new method inside the `_MyHomePageState` class for this functionality.
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-4. (Advanced) Running your app in a browser is great for quick development, but the ultimate goal is often a mobile app.
+4. (Advanced) Running your app in a browser is great for quick development, but the ultimate aim of learning Flutter is to build natively compiled applications for mobile, web, and desktop from a single codebase (cross-platform development).
 
-    For this task, follow the official documentation to set up your physical phone for development and run the app on it.
-
-    You can find instructions to [set up an Android device](https://docs.flutter.dev/get-started/install/windows#android-setup) or an [iOS device](https://docs.flutter.dev/get-started/install/macos#deploy-to-ios-devices) on the Flutter website.
+    For this task, follow the official documentation to set up your physical phone for development and run the app on it. You can find instructions to [set up an Android device](https://docs.flutter.dev/get-started/install/windows#android-setup) or an [iOS device](https://docs.flutter.dev/get-started/install/macos#deploy-to-ios-devices) on the Flutter website.
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
