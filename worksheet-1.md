@@ -60,7 +60,7 @@ In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Visual Studi
 
 #### Opening the Terminal
 
-Open the Start Menu by pressing the Windows key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use the university computers instead.
+Open the `Start Menu` by pressing the `Windows` key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use [the university computers instead](#university-computers).
 
 #### Installing the Chocolatey Package Manager
 
