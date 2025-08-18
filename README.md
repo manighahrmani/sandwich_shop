@@ -1,12 +1,10 @@
 # Sandwich Shop - Flutter Worksheets
 
-Welcome to the worksheets for the Sandwich Shop Flutter project. This series will guide you through setting up your development environment and building the application step by step.
+The worksheets for the Flutter module are listed below. Complete them in order (do not skip the first one!) and after completing the exercises, show a member of staff your work for a sign-off.
 
-Select a worksheet below to get started. It is recommended to complete them in order.
+**Note:** The sign-offs contribute to your overall mark.
 
-## Table of Contents
-
-* [Worksheet 0: Setup and Introduction](./worksheet-0.md)
+* [Worksheet 0: Introduction to Dart, Git and GitHub](./worksheet-0.md)
 * [Worksheet 1: Introduction to Flutter](./worksheet-1.md)
 * [Worksheet 2: Stateless Widgets](./worksheet-2.md)
 * [Worksheet 3: (Add Title Here)](./worksheet-3.md)
