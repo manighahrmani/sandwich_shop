@@ -163,7 +163,7 @@ In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **â
 
 ![VS Code Command Palette](images/screenshot_vscode_command_palette.jpg)
 
-Select `Application` when prompted for a template. You will then be asked to choose a project location and name. We recommend your user folder on the C drive.
+Select `Application` when prompted for a template. You will then be asked to choose a project location and name. Make a note of the location you choose.
 
 Choose a name for your project, such as `sandwich_shop`, and press Enter. VS Code will now create a new Flutter project and open it for you.
 
