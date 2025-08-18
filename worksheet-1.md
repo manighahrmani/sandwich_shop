@@ -28,7 +28,7 @@ In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Git` and cli
 
 ![Git in AppsAnywhere](images/screenshot_appsanywhere_git.jpg)
 
-To verify the installation, open the Start Menu by pressing the `Windows` key, type `Git Bash`, and select it. Write the following command in the terminal and press Enter:
+To verify the installation, open the `Start Menu` by pressing the `Windows` key, type `Command Prompt` or `PowerShell`, and select it. Write the following command in the terminal and press Enter:
 
 ```bash
 git --version
@@ -40,7 +40,7 @@ You should see a version number indicating that Git is installed successfully.
 
 In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Flutter And Dart SDK` and click on launch.
 
-To verify the installation, search for `Command Prompt` or `PowerShell` in the Start Menu and open it. Write the following command and press Enter:
+To verify the installation, enter the following in `Command Prompt` or `PowerShell`:
 
 ```bash
 flutter --doctor
