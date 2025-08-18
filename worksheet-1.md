@@ -153,7 +153,7 @@ Back in VS Code, click the Account icon in the bottom left corner and select `Ba
 
 ![Visual Studio Code Account Icon](images/screenshot_vscode_account_icon.jpg)
 
-If this is your first time using VS Code, you'll need to install the Flutter extension. Open the Extensions view by clicking the Extensions icon in the Activity Bar or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS). In the search bar, type `Flutter` and install the official extension.
+If this is your first time using VS Code, you'll need to install [the Flutter extension](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter). Open the Extensions view by clicking the Extensions icon in the Activity Bar or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS). In the search bar, type `Flutter` and install the official extension.
 
 ![Flutter Extension](images/screenshot_flutter_extension.jpg)
 
