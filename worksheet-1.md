@@ -193,7 +193,7 @@ As an example, select a piece of code that you'd like to learn more about with y
 
 ![Copilot Example](images/screenshot_copilot_example.jpg)
 
-Copilot should automatically add the relevant code context to your question. However if you're using an LLM on the web (e.g., ChatGPT), you may need to provide items 2 and 3 manually.
+Copilot should automatically add the relevant code context to your question. However if you're using an LLM on the web (e.g., ChatGPT), you may need to provide items 2 and 3 (source and context) manually.
 
 #### Selecting a Target Device
 
