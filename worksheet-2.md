@@ -125,7 +125,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-Here, we've created a `widget tree`. `MaterialApp` is the root (parent), providing core app functionality. `Scaffold` provides the basic screen layout, including an `AppBar` (the top bar) and a `body`. The body contains a `Center` widget, which in turn holds our `Text` widget.
+Here, we've created a "widget tree". `MaterialApp` is the root (parent), providing core app functionality. `Scaffold` provides the basic screen layout, including an `AppBar` (the top bar) and a `body`. The body contains a `Center` widget, which in turn holds our `Text` widget.
 
 As before, for a deeper understanding of this structure, use Copilot to explain each widget's role.
 
