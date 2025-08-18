@@ -52,7 +52,7 @@ void main() {}
 
 #### Commit Your Changes
 
-Now is a good time to commit your changes. In VS Code, go to the Source Control panel. You can open this from `View \> Source Control`. Alternatively, you can use the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P** on macOS) and enter `Source Control`, which will open the Source Control panel.
+Now is a good time to commit your changes. In VS Code, go to the Source Control panel. You can open this from `View > Source Control`. Alternatively, you can use the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P** on macOS) and enter `Source Control`, which will open the Source Control panel.
 You should see `main.dart` listed under changes. Type a descriptive commit message, such as `Set Up the Project`, and click the `Commit` button, followed by `Sync Changes`.
 
 Alternatively, open the terminal (**Ctrl + \`** or **⌘ + \`**) and run these commands:
