@@ -31,11 +31,11 @@ Use Copilot to explore this library further. For example, you can ask it: "What 
 
 For completeness, below are some general categories of fundamental building blocks in Flutter:
 
-- `Structural elements` like `Scaffold` (for page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
-- `Buttons` like `ElevatedButton`, `TextButton`, and `IconButton`.
-- `Informational widgets` like `Text`, `Image`, and `Icon` (for displaying icons).
-- `Input widgets` like `TextField` (for text entry) and `Checkbox` (for boolean input).
-- `Layout widgets` like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
+- Structural elements like `Scaffold` (for page layout), `AppBar` (for the top application bar), and `Drawer` (for navigation menus).
+- Buttons like `ElevatedButton`, `TextButton`, and `IconButton`.
+- Informational widgets like `Text`, `Image`, and `Icon` (for displaying icons).
+- Input widgets like `TextField` (for text entry) and `Checkbox` (for boolean input).
+- Layout widgets like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
 
 #### Clean the Default Code
 
