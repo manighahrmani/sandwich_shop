@@ -173,6 +173,8 @@ You should see a new folder structure in the Explorer view on the left side of V
 
 ![Project Structure](images/screenshot_flutter_project_structure.jpg)
 
+You don't need to understand the code at this moment but below is a brief overview.
+
 The default application is a simple counter app. The `lib/main.dart` file contains the entry point `void main() => runApp(const MyApp());`, which runs the root widget, `MyApp`. This `StatelessWidget` sets up the `MaterialApp` and defines the home screen, which is the `MyHomePage` widget. `MyHomePage` is a `StatefulWidget` because it manages the changing counter value. It contains the `_incrementCounter()` method, which uses `setState()` to rebuild the UI when the `_counter` variable changes.
 
 #### Using AI
