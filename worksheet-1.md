@@ -346,7 +346,7 @@ Complete the exercises below and show your work to a member of staff present at 
 
     First, deliberately mess up the formatting in your `lib/main.dart` file. For example, add extra spaces or remove indentation for a few widgets.
 
-    Next, right-click in the editor and select `Format Document`. You can also open the command palette with `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and type `Format Document` to find the command.
+    Next, right-click in the editor and select `Format Document`. You can also open the command palette with **Ctrl+Shift+P** (or **Cmd+Shift+P** on macOS) and type `Format Document` to find the command.
     Notice how the code snaps back to the correct style. You can also set this to happen automatically on save by enabling the `editor.formatOnSave` setting.
 
     For more details, refer to [the official documentation](https://docs.flutter.dev/tools/formatting) on code formatting.
