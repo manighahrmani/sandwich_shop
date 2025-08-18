@@ -181,7 +181,7 @@ The default application is a simple counter app. The `lib/main.dart` file contai
 
 We will learn more about stateless and stateful widgets in later worksheets. This is just a brief overview to get you started. But for now, use the Copilot extension to explore the code.
 
-Remember that Large Language Models (LLMs) like Copilot work best when you do all the following:
+Remember that Large Language Models (LLMs) like Copilot, ChatGPT, or Claude work best when you do all the following:
 
 1. Start with a **specific goal** for what you want the assistant to do (e.g., explain, fix an error, implement a feature)
 2. Provide a **source to ground** the response in a specific scope of information (e.g., Flutter or Dart's documentation)
