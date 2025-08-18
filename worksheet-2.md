@@ -15,7 +15,7 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 We will start to incrementally build the "Sandwich Counter" application.
 
-Open the Flutter folder containing the project you created in [Worksheet 1](https://github.com/manighahrmani/sandwich_shop/blob/1/worksheet.md) in Visual Studio Code. This project should already be a repository in your GitHub account.
+Open the Flutter folder containing the project you created in Worksheet 1 in Visual Studio Code. This project should already be a repository in your GitHub account.
 
 #### Import the Material Design Library
 
