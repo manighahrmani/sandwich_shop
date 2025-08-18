@@ -169,7 +169,9 @@ Choose a name for your project, such as `sandwich_shop`, and press Enter. VS Cod
 
 #### Understanding the Project Structure
 
-You should see a new folder structure in the Explorer view on the left side of VS Code. You are encouraged to explore the files and folders, but the most important ones for now are `lib/`, which contains your Dart application code with the main entry point being `lib/main.dart`, and `pubspec.yaml`, which is a configuration file for managing your project's dependencies and assets.
+You should see a new folder structure in the Explorer view on the left side of VS Code. You are encouraged to explore the files and folders, but the most important files for now are located in the `lib/` folder. This folder contains your Dart application code with the main entry point being `lib/main.dart`.
+
+There is also `pubspec.yaml` in the root directory, which is a configuration file for managing your project's dependencies and assets.
 
 ![Project Structure](images/screenshot_flutter_project_structure.jpg)
 
