@@ -82,6 +82,12 @@ choco install vscode -y
 choco install flutter -y
 ```
 
+If you get an error about Dart being already installed, you can first remove it with the following command then reinstall Flutter with `choco install flutter -y`.
+
+```
+choco uninstall dart -y
+```
+
 Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
 
 #### Verifying the Installation
@@ -117,6 +123,12 @@ Once Homebrew is ready, you can install the necessary tools by running the follo
 ```bash
 brew install --cask visual-studio-code
 brew install --cask flutter
+```
+
+If you get an error about Dart being already installed, you can first remove it with the following command then reinstall Flutter with `brew install --cask flutter`.
+
+```bash
+brew uninstall dart
 ```
 
 Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
