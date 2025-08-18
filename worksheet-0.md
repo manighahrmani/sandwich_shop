@@ -26,7 +26,9 @@ GitHub's AI can assist you with tasks such as explaining code, fixing bugs, and 
 
 ## Introduction to the Dart Language
 
-Dart is the programming language developed by Google. It is a statically typed language, compiled to native code, language with C-style syntax. Even though it may not be as popular as languages like C or Java, it is the language of the Flutter framework which we will be using for cross-platform app development in this module. Below are the resources from our first-year Programming module that will get you started with Dart.
+Dart is the programming language developed by Google. It is a statically typed language, compiled to native code, language with C-style syntax. Even though it may not be as popular as languages like C or Java, it is the language of the Flutter framework which we will be using for cross-platform app development in this module.
+
+If you have not used Dart before or need a refresher, below are the resources from our first-year Programming module that will get you started.
 
 ### 1 - Getting started with Dart
 
