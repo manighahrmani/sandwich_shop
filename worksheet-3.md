@@ -153,11 +153,15 @@ Widget build(BuildContext context) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: null, // We'll add this later
+                onPressed: () {
+                    print('Add button pressed!');
+                },
                 child: const Text('Add'),
               ),
               ElevatedButton(
-                onPressed: null, // And this one too
+                onPressed: () {
+                    print('Remove button pressed!');
+                },
                 child: const Text('Remove'),
               ),
             ],
@@ -169,7 +173,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-Notice how we use `_quantity` when creating the `OrderItemDisplay`. The `State` object can access its own private variables directly. We've also added the two `ElevatedButton` widgets, but they don't do anything yet because their `onPressed` event handlers are `null`.
+Notice how we use `_quantity` when creating the `OrderItemDisplay`. The `State` object can access its own private variables directly.
 
 #### Update the `App` Widget
 
