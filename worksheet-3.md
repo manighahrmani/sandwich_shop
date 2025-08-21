@@ -175,6 +175,10 @@ Widget build(BuildContext context) {
 
 Notice how we use `_quantity` when creating the `OrderItemDisplay`. The `State` object can access its own private variables directly.
 
+#### Commit Your Changes
+
+Commit your changes with a message like `Build UI for OrderScreen`.
+
 #### Update the `App` Widget
 
 Finally, let's update our main `App` widget to use the new `OrderScreen` as its `home`. The `App` widget no longer needs its own `Scaffold`.
