@@ -24,13 +24,15 @@ In Flutter, we can think of state in two main categories: Ephemeral state and Ap
 
 For this worksheet, we will focus on ephemeral state. In our sandwich counter, the number of sandwiches the user has added to their cart (the `State`) doesn't need to be known by any other widget. If the user closes the app, we don't mind if the `State` resets. This makes it a perfect candidate for a `StatefulWidget`.
 
-## From Stateless to Stateful
+## A Reminder On Stateless Widgets
 
 We are starting with [the code that we ended Worksheet 2 with](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart). If you have completed some of the exercises and your code looks slightly different, that's okay. Just make sure you understand the changes we're making from this point onward.
 
-So far, our code only uses `StatelessWidget`s. As a reminder, stateless widgets are immutable. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).
+So far, all of our widgets were stateless. These widgets are immutable. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).
 
-To make our sandwich counter interactive, we first need to add some buttons. Let's add "Add" and "Remove" buttons below our sandwich display. Update the `body` of the `Scaffold` in your `App` widget to use a `Column` and a `Row`.
+#### Adding Interactive Buttons
+
+To make our sandwich counter interactive, we first need to add some buttons. Let's add "Add" and "Remove" buttons below our sandwich display. Update the `body` of the `Scaffold` in your `App` widget to use a `Column` and a `Row`. Hopefully you have already learnt about these from [the exercises in worksheet 2](https://manighahrmani.github.io/sandwich_shop/worksheet-2.html#exercises).
 
 ```dart
 home: Scaffold(
@@ -63,11 +65,19 @@ home: Scaffold(
 ),
 ```
 
-Here, we've used two `ElevatedButton` widgets. The most important property of them is `onPressed`. It takes a function that gets executed when the user taps the button. This is called an **event handler** (some of you may have already covered this in Python last year). For now, our buttons just print a message in the terminal (not on the UI) when they are pressed.
+Here, we've also used two `ElevatedButton` widgets. The most important property of them is `onPressed`. It takes a function that gets executed when the user taps the button. This is called an **event handler** (some of you may have already covered this in Python last year). For now, our buttons just print a message in the terminal (not on the UI) when they are pressed.
 
-Run the app. You will see the buttons, and when you click them, messages will appear in the "Debug Console" tab in VS Code. This is interactivity, but it's limited. We can't change the number `5` in `OrderItemDisplay(5, 'Footlong')` because it's hardcoded.
+To run the app, open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Terminal: Create New Terminal` and hit enter. In the terminal, run the command `flutter run`. You will see the buttons, and when you click them, messages will appear in the Terminal as shown below.
 
-To allow users to change the quantity, we need a mutable (changeable) variable. This is where we need to add a `StatefulWidget`. What is slightly special about `StatefulWidget`s is that we have to introduce two new classes:
+![Output of button presses](images/screenshot_eventhandler.png)
+
+#### Commit Your Changes
+
+First reopen the Command Palette. In there, type `Source Control: Focus on Changes View`. After reviewing your changes, commit them with a message like `Add add and remove buttons`.
+
+## Creating a `StatefulWidget` Widget
+
+We do have some interactivity, but it's limited. We can't change the number `5` in `OrderItemDisplay(5, 'Footlong')` because it's hardcoded. To allow users to change the quantity, we need a mutable (changeable) variable to store this value. This is where we need to add a `StatefulWidget`. What is slightly special about `StatefulWidget`s is that we have to introduce two new classes:
 
 1.  A `StatefulWidget` class.
 2.  A `State` class.
@@ -76,7 +86,6 @@ The `StatefulWidget` separates the widget's configuration from its mutable state
 
 In other words, the `StatefulWidget` is the permanent description of a part of your UI (like a blueprint for a house), while the `State` object holds the current, changeable data (like the people and furniture inside the house). When the data in the `State` object changes, Flutter uses the original blueprint (`StatefulWidget`) to rebuild the house with its new contents.
 
-## Creating an `OrderScreen` Widget
 
 We will create a new `StatefulWidget` called `OrderScreen` to manage the state of our sandwich order.
 
