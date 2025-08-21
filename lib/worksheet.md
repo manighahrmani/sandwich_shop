@@ -83,7 +83,7 @@ There are a lot of new concepts here and feel free to use Copilot or your LLM of
 
 Recall that you can open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Source Control: Focus on Changes View`.
 
-After reviewing your changes, commit them with a message like `Define OrderScreen stateful widget`. But don't run the app yet.
+After reviewing your changes, commit them with a message like `Define OrderScreen stateful widget`. You won't notice any changes in the app if you run it now.
 
 ## Building the UI for `OrderScreen`
 
@@ -91,7 +91,9 @@ Now, let's build the UI inside the `_OrderScreenState` class. We want to display
 
 #### Implement the `build` Method
 
-Replace the `Placeholder()` in the `_OrderScreenState`'s `build` method with a `Scaffold` containing our UI components.
+Replace the returned `Placeholder()` in the `_OrderScreenState`'s `build` method with a `Scaffold` containing our UI components. 
+
+This is what your `build` method should look like (and [this is what your `lib/main.dart` should look like](https://github.com/manighahrmani/sandwich_shop/blob/f6e2dda474a9743b61335b1125d4fa95d597b3f8/lib/main.dart)):
 
 ```dart
 @override
@@ -128,11 +130,11 @@ Widget build(BuildContext context) {
 }
 ```
 
-Notice how we use `_quantity` directly in the `OrderItemDisplay`. The `State` object can access its own private variables. We've also added two `ElevatedButton` widgets, but they don't do anything yet because their `onPressed` handlers are `null`.
+Notice how we use `_quantity` in the `_OrderScreenState`. The `State` object can access its own private variables directly (we will come back to this soon). We've also added two `ElevatedButton` widgets, but they don't do anything yet because their `onPressed` event handlers are not defined (`null`).
 
 #### Update the `App` Widget
 
-Finally, let's update our main `App` widget to use the new `OrderScreen` as its `home`.
+Finally, let's update our main `App` widget as we no longer need to have the `Scaffold` here. We will now use the new `OrderScreen` as its `home`.
 
 ```dart
 class App extends StatelessWidget {
@@ -148,13 +150,17 @@ class App extends StatelessWidget {
 }
 ```
 
-Recall that `maxQuantity` is a named parameter in the `OrderScreen` constructor (it is placed between curly braces `{}`). Run the app now. You should see the counter displaying "0 Footlong sandwich(es):" and two disabled buttons.
+Recall that `maxQuantity` is a named parameter in the `OrderScreen` constructor (it is placed between curly braces `{}`). It also has a default value of `10` so technically, we can omit it when creating an instance of `OrderScreen` in the `build` method of `App` and just use `OrderScreen()`.
 
----
+You may get warnings to use `const` when creating the `Row` and its children. Ignore them for now.
+
+Run the app now. You should see the counter displaying "0 Footlong sandwich(es):" and two disabled buttons.
 
 #### Commit Your Changes
 
 Commit your changes with a message like `Build UI for OrderScreen`.
+
+<!-- Reviewed till here -->
 
 ## Adding Interactivity with `setState()`
 
