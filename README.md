@@ -12,3 +12,4 @@ The worksheets for the Flutter module are listed below. Complete them in order (
 * [Worksheet 5: (Add Title Here)](./worksheet-5.md)
 * [Worksheet 6: (Add Title Here)](./worksheet-6.md)
 * [Worksheet 7: (Add Title Here)](./worksheet-7.md)
+* [Worksheet 8: (Add Title Here)](./worksheet-8.md)
