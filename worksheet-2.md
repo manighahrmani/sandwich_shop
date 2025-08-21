@@ -287,3 +287,22 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
     
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
+7. (Advanced) You may have already thought about a way not to create a separate `OrderItemDisplay` class. This could equally be achieved by defining a helper method in the `App` class, like this:
+
+    ```dart
+    Widget _buildOrderItemDisplay(int quantity, String itemType) {
+      return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}')
+    }
+    ```
+    You would then call this method in the `body` of the `Scaffold` of the `App` widget like this:
+
+    ```dart
+    body: const Center(
+      child: _buildOrderItemDisplay(5, 'Footlong'),
+    ),
+    ```
+
+    Watch this [YouTube video](https://youtu.be/IOyq-eTRhvo) to learn more about this approach and why it is not recommended albeit sounding like a simpler solution.
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
