@@ -2,7 +2,7 @@
 
 If you're new to the Dart programming language or haven't used Git and GitHub before, completing these materials is essential for you. If you're already comfortable with these topics, feel free to skip to the [Exercises](#exercises) section.
 
-## Getting Help
+## Getting help
 
 To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
@@ -24,7 +24,7 @@ GitHub's AI can assist you with tasks such as explaining code, fixing bugs, and 
 
 [Link to the getting started with Copilot course](https://github.com/skills/getting-started-with-github-copilot)
 
-## Introduction to the Dart Language
+## Introduction to the Dart language
 
 Dart is the programming language developed by Google. It is a statically typed language, compiled to native code, language with C-style syntax. Even though it may not be as popular as languages like C or Java, it is the language of the Flutter framework which we will be using for cross-platform app development in this module.
 
@@ -36,19 +36,19 @@ If you have not used Dart before or need a refresher, below are the resources fr
   * [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EQZicReK_3ZLkNAOj--M3psBntl0cZRT7piu6W3j4OFPcg)
   * [**GitHub Repository**](https://github.com/Programming-M30299/week-15-dart-code)
 
-### 2 - Functions and Control Flow in Dart
+### 2 - Functions and control flow in Dart
 
   * [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EVXFsog_gS9LlAFbUTUMXj4BXbKfWxQj0WjyN0dk9mblLw)
   * [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EbUO-PZOSWNPoA9TL1AqiSkBgURErCT0WE7I81dSu2OEQA?e=ZvHyB0)
   * [**GitHub Repository**](https://github.com/Programming-M30299/week-16-dart-code)
 
-### 3 - Strings and Collections in Dart
+### 3 - Strings and collections in Dart
 
   * [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EV6lZOGcgydPuoR65cCrVfcBXW1SaRNSRgjqv3hzjd-EOA?e=o6d2EM)
   * [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EbUO-PZOSWNPoA9TL1AqiSkBgURErCT0WE7I81dSu2OEQA?e=N2Xhcy)
   * [**GitHub Repository**](https://github.com/Programming-M30299/week-17-dart-code)
 
-### 4 - Object-Oriented Programming in Dart
+### 4 - Object-oriented programming in Dart
 
   * [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ERG7VQKzCdVEsX0mc-s-nT4BLFUNsoR3lSpS3tLjSXYaLA)
   * [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EcpaP0-SOaJBqpDuSlcl4xwBTSzN9HgPhCOMnL74Zw54Zw)

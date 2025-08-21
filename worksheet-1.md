@@ -1,20 +1,20 @@
 # Worksheet 1 — Introduction to Flutter
 
-## What You Need To Know Beforehand
+## What you need to know beforehand
 
 Ensure that you have already completed the following:
 
 - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
 
-## Getting Help
+## Getting help
 
 To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-## Set Up Your Development Environment
+## Set up your development environment
 
 We first need to ensure all the necessary tools are installed on your computer. You can use either the university computers or your personal Mac or Windows computer. Skip to the section that matches your operating system.
 
-### University Computers
+### University computers
 
 #### Logging in to AppsAnywhere
 
@@ -56,13 +56,13 @@ In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Visual Studi
 
 ---
 
-### Personal Windows Computer
+### Personal Windows computer
 
-#### Opening the Terminal
+#### Opening the terminal
 
 Open the `Start Menu` by pressing the `Windows` key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use [the university computers instead](#university-computers).
 
-#### Installing the Chocolatey Package Manager
+#### Installing the Chocolatey package manager
 
 We will use a package manager called Chocolatey to easily install all the required tools. First, check if it's already installed by running `choco --version`. If you see a version number, you can skip to the next step.
 
@@ -72,7 +72,7 @@ If it's not installed, go to the [Chocolatey installation page](https://chocolat
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 
-#### Installing Development Tools
+#### Installing development tools
 
 With Chocolatey installed, you can now install Git, Visual Studio Code, and the Flutter SDK. Run the following commands one by one in your PowerShell terminal with administrator rights:
 
@@ -90,7 +90,7 @@ choco uninstall dart -y
 
 Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
 
-#### Verifying the Installation
+#### Verifying the installation
 
 Close your current terminal and open a new one, which doesn't need to be run as an administrator. Run the following to check your installations:
 
@@ -100,13 +100,13 @@ flutter doctor
 
 ---
 
-### Personal macOS Computer
+### Personal macOS computer
 
-#### Opening the Terminal
+#### Opening the terminal
 
 You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing `Terminal`, and pressing return.
 
-#### Installing the Homebrew Package Manager
+#### Installing the Homebrew package manager
 
 Homebrew is a package manager for macOS that simplifies installing software. To check if you have it installed, run `brew --version` in the terminal. If you see a version number, you can skip to the next step.
 
@@ -116,7 +116,7 @@ If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the in
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-#### Installing Development Tools
+#### Installing development tools
 
 Once Homebrew is ready, you can install the necessary tools by running the following commands in your terminal:
 
@@ -133,7 +133,7 @@ brew uninstall dart
 
 Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
 
-#### Verifying the Installation
+#### Verifying the installation
 
 Close your current terminal and open a new one. Run the following command to check your installations:
 
@@ -141,11 +141,11 @@ Close your current terminal and open a new one. Run the following command to che
 flutter doctor
 ```
 
-## Your Flutter Application
+## Your Flutter application
 
 Now that our environment is set up, we can create our first Flutter project.
 
-#### Setting Up Visual Studio Code
+#### Setting up Visual Studio Code
 
 To sync your VS Code settings, first open [GitHub](https://github.com/) in your browser and log in.
 
@@ -157,7 +157,7 @@ If this is your first time using VS Code, you'll need to install [the Flutter ex
 
 ![Flutter Extension](images/screenshot_flutter_extension.jpg)
 
-#### Creating a New Flutter Project
+#### Creating a new Flutter project
 
 In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS). In the palette, type `Flutter: New Project` and press Enter.
 
@@ -167,7 +167,7 @@ Select `Application` when prompted for a template. You will then be asked to cho
 
 Choose a name for your project, such as `sandwich_shop`, and press Enter. VS Code will now create a new Flutter project and open it for you.
 
-#### Understanding the Project Structure
+#### Understanding the project structure
 
 You should see a new folder structure in the Explorer view on the left side of VS Code. You are encouraged to explore the files and folders, but the most important files for now are located in the `lib/` folder. This folder contains your Dart application code with the main entry point being `lib/main.dart`.
 
@@ -197,7 +197,7 @@ As an example, select a piece of code that you'd like to learn more about with y
 
 Copilot should automatically add the relevant code context to your question. However if you're using an LLM on the web (e.g., ChatGPT or Claude), you may need to provide items 2 and 3 (source and context) manually.
 
-#### Selecting a Target Device
+#### Selecting a target device
 
 At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like Edge or Chrome.
 
@@ -205,7 +205,7 @@ Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ +
 
 ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
 
-#### Running the App
+#### Running the app
 
 You can run the app in several ways, for example by pressing the F5 key, opening a new terminal and running `flutter run`, or clicking the "Run" button that appears above the `main` function in `lib/main.dart`.
 
@@ -217,7 +217,7 @@ flutter run
 
 VS Code will build and run your application, which should open in a browser window. Click the `+` button to see the counter increase.
 
-#### Using Hot Reload
+#### Using hot reload
 
 Hot reload is a powerful feature that lets you see code changes instantly without restarting the app.
 
@@ -227,11 +227,11 @@ You can enable it by clicking the lightning bolt icon (⚡) at the top of VS Cod
 
 As an example, while the app is running, enable hot reload and change the `colorSchemeSeed` property inside the `ThemeData` widget in `lib/main.dart` from `Colors.deepPurple` to `Colors.orange` and save the file. You should see the UI update in the browser instantly.
 
-## Setting Up a GitHub Repository
+## Setting up a GitHub repository
 
 Lastly, let's put our project on GitHub to track changes and back it up online.
 
-#### Initialising the Repository
+#### Initialising the repository
 
 In the Activity Bar on the left, click the Source Control icon. Click on `Initialize Repository` to set up Git for your project.
 
@@ -243,7 +243,7 @@ Alternatively, you can run the following command in the terminal to initialize G
 git init
 ```
 
-#### Making the First Commit
+#### Making the first commit
 
 You should now see all your project files listed in the Source Control panel. Hover over **Changes** and click the `+` icon to stage all files. Then, enter a commit message like `Initial commit` in the text box and click the **Commit** button to commit your changes.
 
@@ -272,7 +272,7 @@ Next, you will be asked to name your repository; enter `sandwich_shop`. You can 
 
 ![Create GitHub Repository](images/screenshot_vscode_create_github_repo.jpg)
 
-#### Verifying the Repository on GitHub
+#### Verifying the repository on GitHub
 
 You can verify that the project was published by navigating to your GitHub account in a web browser. You should see the newly created `sandwich_shop` repository.
 
@@ -280,7 +280,7 @@ You can verify that the project was published by navigating to your GitHub accou
 
 The link will look like `https://github.com/YOUR_USERNAME/sandwich_shop` where `YOUR_USERNAME` is your GitHub username.
 
-#### Making Another Commit
+#### Making another commit
 
 Let's make another commit. In `lib/main.dart`, change the text in the `AppBar` widget from `Flutter Demo Home Page` to `My Sandwich Shop`. Save the file (**Ctrl + S** or **⌘ + S**) or better yet, enable auto-save by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing `Auto Save`, then press Enter to select `Toggle Auto Save`.
 
