@@ -1,6 +1,6 @@
-# Worksheet 3 — Stateful Widgets
+# Worksheet 3 — Stateful widgets
 
-## What You Need To Know Beforehand
+## What you need to know beforehand
 
 Ensure that you have already completed the following:
 
@@ -8,11 +8,11 @@ Ensure that you have already completed the following:
   - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
   - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
 
-## Getting Help
+## Getting help
 
 To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-## Introduction to State
+## Introduction to state
 
 In the last worksheet, all our widgets were `Stateless`. This means their properties, once set, could not be changed. But what happens when we want our app to be interactive? What if we want to press a button and see something on the screen change, like the number of sandwiches in our order? To do this, we need to manage state.
 
@@ -24,13 +24,13 @@ In Flutter, we can think of state in two main categories: Ephemeral state and Ap
 
 For this worksheet, we will focus on ephemeral state. In our sandwich counter, the number of sandwiches the user has added to their cart (the `State`) doesn't need to be known by any other widget. If the user closes the app, we don't mind if the `State` resets. This makes it a perfect candidate for a `StatefulWidget`.
 
-## A Reminder On Stateless Widgets
+## A reminder on stateless widgets
 
 We are starting with [the code that we ended Worksheet 2 with](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart). If you have completed some of the exercises and your code looks slightly different, that's okay. Just make sure you understand the changes we're making from this point onward.
 
 So far, all of our widgets were stateless. These widgets are immutable. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).
 
-#### Adding Interactive Buttons
+#### Adding interactive buttons
 
 To make our sandwich counter interactive, we first need to add some buttons. Let's add "Add" and "Remove" buttons below our sandwich display. Update the `body` of the `Scaffold` in your `App` widget to use a `Column` and a `Row`. Hopefully you have already learnt about these from [the exercises in worksheet 2](https://manighahrmani.github.io/sandwich_shop/worksheet-2.html#exercises).
 
@@ -71,11 +71,11 @@ To run the app, open the Command Palette in VS Code with **Ctrl + Shift + P** on
 
 ![Output of button presses](images/screenshot_eventhandler.png)
 
-#### Commit Your Changes
+#### Commit your changes
 
 First reopen the Command Palette. In there, type `Source Control: Focus on Changes View`. After reviewing your changes, commit them with a message like `Add add and remove buttons`.
 
-## Creating a `StatefulWidget` Widget
+## Creating a `StatefulWidget` widget
 
 We do have some interactivity, but it's limited. We can't change the number `5` in `OrderItemDisplay(5, 'Footlong')` because it's hardcoded. To allow users to change the quantity, we need a mutable (changeable) variable to store this value. This is where we need to add a `StatefulWidget`. What is slightly special about `StatefulWidget`s is that we have to introduce two new classes:
 
@@ -88,7 +88,7 @@ In other words, the `StatefulWidget` is the permanent description of a part of y
 
 We will create a new `StatefulWidget` called `OrderScreen` to manage the state of our sandwich order.
 
-#### Define the `OrderScreen` StatefulWidget
+#### Define the `OrderScreen` stateful widget
 
 Add the following two classes to your `lib/main.dart` file. You can place them above the `OrderItemDisplay` class.
 
@@ -122,7 +122,7 @@ You may get a warning stating that the value of the `_quantity` isn't used or th
 
 Ask Copilot (or your LLM of choice) why the name of the class and the name of the mutable variable (`_quantity`) start with an underscore.
 
-#### Commit Your Changes
+#### Commit your changes
 
 Remember to commit your changes with a message like `Define OrderScreen stateful widget` before moving on.
 
@@ -130,7 +130,7 @@ Remember to commit your changes with a message like `Define OrderScreen stateful
 
 Now, let's build the UI inside the `_OrderScreenState` class. We want to display the `OrderItemDisplay` and the two buttons we created earlier.
 
-#### Implement the `build` Method
+#### Implement the `build` method
 
 Replace the returned `Placeholder()` in the `_OrderScreenState`'s `build` method with a `Scaffold` containing our UI components. This structure should look very familiar.
 
@@ -175,11 +175,11 @@ Widget build(BuildContext context) {
 
 Notice how we use `_quantity` when creating the `OrderItemDisplay`. The `State` object can access its own private variables directly.
 
-#### Commit Your Changes
+#### Commit your changes
 
 Commit your changes with a message like `Build UI for OrderScreen`.
 
-#### Update the `App` Widget
+#### Update the `App` widget
 
 Finally, let's update our main `App` widget to use the new `OrderScreen` as its `home`. The `App` widget no longer needs its own `Scaffold`.
 
@@ -201,17 +201,17 @@ Recall that `maxQuantity` is a named parameter in the `OrderScreen` constructor.
 
 Run the app now. You should see the counter displaying "0 Footlong sandwich(es):" and two disabled buttons.
 
-#### Commit Your Changes
+#### Commit your changes
 
 Commit your changes with a message like `Build UI for OrderScreen`.
 
-## Adding Interactivity with `setState()`
+## Adding interactivity with `setState()`
 
 The final step is to make the buttons work. We need to create methods that change the `_quantity` and then tell Flutter to rebuild the widget to reflect that change.
 
-#### Create Helper Methods
+#### Create helper methods
 
-Inside the `_OrderScreenState` class, add two new methods to handle increasing and decreasing the quantity.
+Inside the `_OrderScreenState` class, add two new methods to handle increasing and decreasing the quantity. These will be the event handlers for the buttons.
 
 Add the following methods inside the `_OrderScreenState` class above the `build` method and below the definition of `_quantity`:
 
@@ -237,11 +237,11 @@ The `State` object has a property called `widget`, which gives it access to the 
 
 The most important part is `setState()`. You must call `setState()` to notify Flutter that a state variable has changed. Calling `setState()` tells the  framework that this widget is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply changing `_quantity = _quantity + 1` without wrapping it in a `setState()` call will not cause the UI to update.
 
-#### Commit Your Changes
+#### Commit your changes
 
 Commit your changes with a message like `Add helper methods for quantity adjustment`.
 
-#### Wire Up the Buttons
+#### Link the buttons to their event handlers
 
 Now, update the `ElevatedButton`s in your `build` method to call these new functions.
 
@@ -260,6 +260,6 @@ Run the app one last time. The buttons should now be enabled, and clicking them 
 
 To learn more about `StatefulWidget`s, watch this excellent [YouTube video from the Flutter team](https://youtu.be/AqCMFXEmf3w).
 
-#### Commit Your Changes
+#### Commit your changes
 
 Commit your final changes with a message like `Implement counter functionality with setState`.
