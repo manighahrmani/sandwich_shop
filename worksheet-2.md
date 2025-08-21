@@ -1,23 +1,23 @@
-# Worksheet 2 — Stateless Widgets
+# Worksheet 2 — Stateless widgets
 
-## What You Need To Know Beforehand
+## What you need to know beforehand
 
 Ensure that you have already completed the following:
 
   - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
   - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
 
-## Getting Help
+## Getting help
 
 To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-## Set Up the Project
+## Set up the project
 
 We will start to incrementally build the "Sandwich Counter" application.
 
 Open the Flutter folder containing the project you created in Worksheet 1 in Visual Studio Code. This project should already be a repository in your GitHub account.
 
-#### Import the Material Design Library
+#### Import the Material Design library
 
 Open `lib/main.dart` and ensure that you have the correct `import` statement for Material Design components:
 
@@ -37,7 +37,7 @@ For completeness, below are some general categories of fundamental building bloc
 - Input widgets like `TextField` (for text entry) and `Checkbox` (for boolean input).
 - Layout widgets like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
 
-#### Clean the Default Code
+#### Clean the default code
 
 Locate the `main()` function in `lib/main.dart`, which is the entry point of your app. Let's clear out the default `MyApp` class and other related classes from the app.
 
@@ -50,7 +50,7 @@ import 'package:flutter/material.dart';
 void main() {}
 ```
 
-#### Commit Your Changes
+#### Commit your changes
 
 Now is a good time to commit your changes. In VS Code, go to the Source Control panel. You can open this from `View > Source Control`. Alternatively, you can use the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P** on macOS) and enter `Source Control`, which will open the Source Control panel.
 You should see `main.dart` listed under changes. Type a descriptive commit message, such as `Set Up the Project`, and click the `Commit` button, followed by `Sync Changes`.
@@ -63,11 +63,11 @@ git commit -m "Set Up the Project"
 git push
 ```
 
-## Define the Main App Widget: `App`
+## Define the main app widget: `App`
 
 We will now define the main widget for our application.
 
-#### Define the `App` Widget
+#### Define the `App` widget
 
 Add the following class definition to `lib/main.dart`, below the `main()` function, on a new line after the closing curly brace (`}`):
 
@@ -86,7 +86,7 @@ This `App` class is a `StatelessWidget`, meaning its state and properties can't 
 
 For now, it returns an empty `Container`, which is like a blank `div` in HTML. To understand this code better, select the entire class and ask Copilot (**Ctrl + I** or **⌘ + I**): "Explain what this `StatelessWidget` does, line by line. What is build and why do we need it? What does the override do? What about the super.key?"
 
-#### Use the `App` Widget
+#### Use the `App` widget
 
 Next, update the `main()` function to run our new `App` widget:
 
@@ -98,7 +98,7 @@ void main() {
 
 The `runApp()` function takes our `App` widget and makes it the root of the widget tree, displaying it on the screen. If you run the app now, you will just see a blank screen.
 
-#### Commit Your Changes
+#### Commit your changes
 
 Commit your work with a meaningful message, such as `Define the Main App Widget: App`.
 
@@ -106,7 +106,7 @@ Commit your work with a meaningful message, such as `Define the Main App Widget:
 
 Let's give our `App` widget some structure and content.
 
-#### Redefine the `build` Method
+#### Redefine the `build` method
 
 Modify the `build` method within the `App` class as follows:
 
@@ -129,7 +129,7 @@ Here, we've created a "widget tree". `MaterialApp` is the root (parent), providi
 
 As before, for a deeper understanding of this structure, use Copilot to explain each widget's role.
 
-#### Run the Application
+#### Run the application
 
 Make sure you have a device selected (e.g., Chrome or Edge from the bottom status bar). You can also open the Command Palette (`Ctrl + Shift + P` or `⌘ + Shift + P` on macOS) and type "Flutter: Select Device" to choose a device.
 
@@ -137,15 +137,15 @@ With a device selected run the app by pressing F5. You should see an application
 
 ![Welcome to the Sandwich Shop](images/screenshot_welcome_to_sandwich_shop.jpg)
 
-#### Commit Your Changes
+#### Commit your changes
 
 Commit your work with a message like `Define the UI inside App`.
 
-## Create the Custom `OrderItemDisplay` Widget
+## Create the custom `OrderItemDisplay` widget
 
 You can create your own reusable widgets by combining existing ones. We will create a custom widget to display a single sandwich order.
 
-#### Define the `OrderItemDisplay` Widget
+#### Define the `OrderItemDisplay` widget
 
 Add the definition for `OrderItemDisplay` in `lib/main.dart`, placing it below the `App` class:
 
@@ -167,11 +167,11 @@ This `StatelessWidget` has two `final` instance variables, `itemType` and `quant
 
 Running the app at this stage won't show any visual changes yet, as we haven't actually used the `OrderItemDisplay` widget in our `App`.
 
-#### Commit Your Changes
+#### Commit your changes
 
 Commit your new widget with the message `Define OrderItemDisplay custom widget`.
 
-#### Implement the `build` Method of `OrderItemDisplay`
+#### Implement the `build` method of `OrderItemDisplay`
 
 Now, let's update the `build` method of `OrderItemDisplay` to show the sandwich type and quantity with emojis. We want it to display something like: "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪".
 
@@ -184,7 +184,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-#### Commit Your Changes
+#### Commit your changes
 
 Commit this update with a message like `Implement dynamic text in OrderItemDisplay`.
 
@@ -192,7 +192,7 @@ Commit this update with a message like `Implement dynamic text in OrderItemDispl
 
 Now we can use our new custom widget inside the main `App`.
 
-#### Replace the Placeholder in `App`
+#### Replace the placeholder in `App`
 
 Find the `build` method of the `App` class and locate the `Center` widget within the `Scaffold`'s `body`. Then replace the placeholder `Text` widget in the `body` of the `Scaffold` with an instance of our new `OrderItemDisplay` widget as shown below:
 
@@ -211,14 +211,14 @@ Widget build(BuildContext context) {
 }
 ```
 
-#### Run the Application
+#### Run the application
 
 Run the app. You should now see "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" displayed in the centre of the screen.
 
 
 ![Sandwich Counter](images/screenshot_sandwich_counter.jpg)
 
-#### Commit Your Changes
+#### Commit your changes
 
 Commit your final changes for this section with the message `Use OrderItemDisplay in App`.
 
