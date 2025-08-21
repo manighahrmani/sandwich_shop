@@ -28,16 +28,51 @@ For this worksheet, we will focus on ephemeral state. In our sandwich counter, t
 
 We are starting with [the code that we ended Worksheet 2 with](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart). If you have completed some of the exercises and your code looks slightly different, that's okay. Just make sure you understand the changes we're making from this point onward.
 
-So far, our code only uses `StatelessWidget`s. As a reminder, stateless widgets are immutable. This means that once they are built, their properties cannot change. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).
+So far, our code only uses `StatelessWidget`s. As a reminder, stateless widgets are immutable. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).
 
-To make our sandwich counter interactive, for example to allow the users to add sandwiches to their order, we need to have mutable (changeable) variable(s). This is where we need to add a `StatefulWidget` to our code. What is slightly special about `StatefulWidget`s is that we have to introduce two new classes:
+To make our sandwich counter interactive, we first need to add some buttons. Let's add "Add" and "Remove" buttons below our sandwich display. Update the `body` of the `Scaffold` in your `App` widget to use a `Column` and a `Row`.
+
+```dart
+home: Scaffold(
+  appBar: AppBar(title: const Text('Sandwich Counter')),
+  body: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const OrderItemDisplay(5, 'Footlong'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                print('Add button pressed!');
+              },
+              child: const Text('Add'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print('Remove button pressed!');
+              },
+              child: const Text('Remove'),
+            ),
+          ],
+        ),
+      ],
+    ),
+  ),
+),
+```
+
+Here, we've used two `ElevatedButton` widgets. The most important property of them is `onPressed`. It takes a function that gets executed when the user taps the button. This is called an **event handler** (some of you may have already covered this in Python last year). For now, our buttons just print a message in the terminal (not on the UI) when they are pressed.
+
+Run the app. You will see the buttons, and when you click them, messages will appear in the "Debug Console" tab in VS Code. This is interactivity, but it's limited. We can't change the number `5` in `OrderItemDisplay(5, 'Footlong')` because it's hardcoded.
+
+To allow users to change the quantity, we need a mutable (changeable) variable. This is where we need to add a `StatefulWidget`. What is slightly special about `StatefulWidget`s is that we have to introduce two new classes:
 
 1.  A `StatefulWidget` class.
 2.  A `State` class.
 
-In the case of `StatelessWidget`s, there is no separate state class. The widget itself holds all the data/configurations it needs to build its UI element. And since these configurations are immutable, they are marked as `final`. Currently, `quantity` and `itemType` are immutable properties of the `Stateless` widget `OrderItemDisplay`.
-
-The `StatefulWidget` on the other hand separates the widget's configuration from its mutable state. The `StatefulWidget` class itself is responsible for creating the `State` class, while the `State` class holds the mutable state for the widget. There may also be some immutable configurations and the `StatefulWidget` itself can hold these as `final` properties.
+The `StatefulWidget` separates the widget's configuration from its mutable state. The `StatefulWidget` class itself is responsible for creating the `State` class, while the `State` class holds the mutable state for the widget.
 
 In other words, the `StatefulWidget` is the permanent description of a part of your UI (like a blueprint for a house), while the `State` object holds the current, changeable data (like the people and furniture inside the house). When the data in the `State` object changes, Flutter uses the original blueprint (`StatefulWidget`) to rebuild the house with its new contents.
 
@@ -71,29 +106,23 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-You may get a warning stating that value of the field `_quantity` isn't used or that it can be `final`. Ignore it for now.
+You may get a warning stating that the value of the field `_quantity` isn't used or that it can be `final`. Ignore it for now.
 
-There are a lot of new concepts here and feel free to use Copilot or your LLM of choice to explain them. But first read our simple description below:
+`OrderScreen` is our `StatefulWidget`. It's still immutable and contains a `final` property `maxQuantity`. Its job is to create its associated `State` object via the `createState()` method. All `StatefulWidget`s need to do this.
 
-`OrderScreen` is our `StatefulWidget`. It's still immutable and contains a `final` property `maxQuantity`. Its job is to create its associated `State` object via the `createState()` method. All `StatefulWidget`s need to do this (select the `createState()` method with your mouse and comment it out with **Ctrl + /** on Windows or **⌘ + /** on macOS to see what happens).
-
-`_OrderScreenState` is our `State` class. Its name starts with an underscore, indicating that it's private to the file (a convention in Dart). This is where our mutable state lives, like the `_quantity` variable. Notice it's not `final` (unlike the `quantity` instance variable in `OrderItemDisplay`). The `build()` method is also in this class, not in the `StatefulWidget`.
+`_OrderScreenState` is our `State` class. Its name starts with an underscore, indicating that it's private to the file (a convention in Dart). This is where our mutable state lives, like the `_quantity` variable. Notice it's not `final`. The `build()` method is also in this class, not in the `StatefulWidget`.
 
 #### Commit Your Changes
 
-Recall that you can open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Source Control: Focus on Changes View`.
-
-After reviewing your changes, commit them with a message like `Define OrderScreen stateful widget`. You won't notice any changes in the app if you run it now.
+Recall that you can open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Source Control: Focus on Changes View`. After reviewing your changes, commit them with a message like `Define OrderScreen stateful widget`.
 
 ## Building the UI for `OrderScreen`
 
-Now, let's build the UI inside the `_OrderScreenState` class. We want to display the `OrderItemDisplay` and two buttons to "Add" and "Remove" sandwiches.
+Now, let's build the UI inside the `_OrderScreenState` class. We want to display the `OrderItemDisplay` and the two buttons we created earlier.
 
 #### Implement the `build` Method
 
-Replace the returned `Placeholder()` in the `_OrderScreenState`'s `build` method with a `Scaffold` containing our UI components. 
-
-This is what your `build` method should look like (and [this is what your `lib/main.dart` should look like](https://github.com/manighahrmani/sandwich_shop/blob/f6e2dda474a9743b61335b1125d4fa95d597b3f8/lib/main.dart)):
+Replace the returned `Placeholder()` in the `_OrderScreenState`'s `build` method with a `Scaffold` containing our UI components. This structure should look very familiar.
 
 ```dart
 @override
@@ -130,11 +159,11 @@ Widget build(BuildContext context) {
 }
 ```
 
-Notice how we use `_quantity` in the `_OrderScreenState`. The `State` object can access its own private variables directly (we will come back to this soon). We've also added two `ElevatedButton` widgets, but they don't do anything yet because their `onPressed` event handlers are not defined (`null`).
+Notice how we use `_quantity` when creating the `OrderItemDisplay`. The `State` object can access its own private variables directly. We've also added the two `ElevatedButton` widgets, but they don't do anything yet because their `onPressed` event handlers are `null`.
 
 #### Update the `App` Widget
 
-Finally, let's update our main `App` widget as we no longer need to have the `Scaffold` here. We will now use the new `OrderScreen` as its `home`.
+Finally, let's update our main `App` widget to use the new `OrderScreen` as its `home`. The `App` widget no longer needs its own `Scaffold`.
 
 ```dart
 class App extends StatelessWidget {
@@ -150,17 +179,13 @@ class App extends StatelessWidget {
 }
 ```
 
-Recall that `maxQuantity` is a named parameter in the `OrderScreen` constructor (it is placed between curly braces `{}`). It also has a default value of `10` so technically, we can omit it when creating an instance of `OrderScreen` in the `build` method of `App` and just use `OrderScreen()`.
-
-You may get warnings to use `const` when creating the `Row` and its children. Ignore them for now.
+Recall that `maxQuantity` is a named parameter in the `OrderScreen` constructor. It also has a default value of `10`, so we could omit it here and just use `OrderScreen()`.
 
 Run the app now. You should see the counter displaying "0 Footlong sandwich(es):" and two disabled buttons.
 
 #### Commit Your Changes
 
 Commit your changes with a message like `Build UI for OrderScreen`.
-
-<!-- Reviewed till here -->
 
 ## Adding Interactivity with `setState()`
 
@@ -188,10 +213,9 @@ void _decreaseQuantity() {
 }
 ```
 
-Let's look at these methods closely:
+Let's look at these methods closely. The `State` object has a property called `widget`, which gives it access to the associated `StatefulWidget` (`OrderScreen` in this case). This is how we access the immutable `maxQuantity` property using `widget.maxQuantity`.
 
-  - `widget.maxQuantity`: The `State` object has a property called `widget`, which gives it access to the associated `StatefulWidget` (`OrderScreen` in this case). This is how we access the immutable `maxQuantity` property from the `State` class.
-  - `setState()`: This is the most important part. You **must** call `setState()` to notify Flutter that a state variable has changed. Calling `setState()` tells the framework that this widget is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply changing `_quantity = _quantity + 1` without wrapping it in a `setState()` call will not cause the UI to update.
+The most important part is `setState()`. You **must** call `setState()` to notify Flutter that a state variable has changed. Calling `setState()` tells the framework that this widget is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply changing `_quantity = _quantity + 1` without wrapping it in a `setState()` call will not cause the UI to update.
 
 #### Wire Up the Buttons
 
