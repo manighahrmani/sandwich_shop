@@ -39,7 +39,7 @@ In the case of `StatelessWidget`s, there is no separate state class. The widget 
 
 The `StatefulWidget` on the other hand separates the widget's configuration from its mutable state. The `StatefulWidget` class itself is responsible for creating the `State` class, while the `State` class holds the mutable state for the widget. There may also be some immutable configurations and the `StatefulWidget` itself can hold these as `final` properties.
 
-Think of it this way: the `StatefulWidget` is the permanent description of a part of your UI (like a blueprint for a house), while the `State` object holds the current, changeable data (like the people and furniture inside the house). When the data in the `State` object changes, Flutter uses the original blueprint (`StatefulWidget`) to rebuild the house with its new contents.
+In other words, the `StatefulWidget` is the permanent description of a part of your UI (like a blueprint for a house), while the `State` object holds the current, changeable data (like the people and furniture inside the house). When the data in the `State` object changes, Flutter uses the original blueprint (`StatefulWidget`) to rebuild the house with its new contents.
 
 ## Creating an `OrderScreen` Widget
 
@@ -71,6 +71,8 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
+You may get a warning stating that value of the field `_quantity` isn't used or that it can be `final`. Ignore it for now.
+
 There are a lot of new concepts here and feel free to use Copilot or your LLM of choice to explain them. But first read our simple description below:
 
 `OrderScreen` is our `StatefulWidget`. It's still immutable and contains a `final` property `maxQuantity`. Its job is to create its associated `State` object via the `createState()` method. All `StatefulWidget`s need to do this (select the `createState()` method with your mouse and comment it out with **Ctrl + /** on Windows or **⌘ + /** on macOS to see what happens).
@@ -79,7 +81,9 @@ There are a lot of new concepts here and feel free to use Copilot or your LLM of
 
 #### Commit Your Changes
 
-Commit your work with a message like `Define OrderScreen stateful widget`. But don't run the app yet.
+Recall that you can open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Source Control: Focus on Changes View`.
+
+After reviewing your changes, commit them with a message like `Define OrderScreen stateful widget`. But don't run the app yet.
 
 ## Building the UI for `OrderScreen`
 
