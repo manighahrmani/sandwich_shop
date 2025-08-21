@@ -11,13 +11,15 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Sandwich Shop App',
-      home: OrderScreen(),
+      home: OrderScreen(maxQuantity: 5),
     );
   }
 }
 
 class OrderScreen extends StatefulWidget {
-  const OrderScreen({super.key});
+  final int maxQuantity;
+
+  const OrderScreen({super.key, this.maxQuantity = 10});
 
   @override
   State<OrderScreen> createState() {
@@ -29,9 +31,11 @@ class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
 
   void _increaseQuantity() {
-    setState(() {
-      _quantity = _quantity + 1;
-    });
+    if (_quantity < widget.maxQuantity) {
+      setState(() {
+        _quantity = _quantity + 1;
+      });
+    }
   }
 
   void _decreaseQuantity() {
