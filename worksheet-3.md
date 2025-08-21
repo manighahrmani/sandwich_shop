@@ -86,7 +86,6 @@ The `StatefulWidget` separates the widget's configuration from its mutable state
 
 In other words, the `StatefulWidget` is the permanent description of a part of your UI (like a blueprint for a house), while the `State` object holds the current, changeable data (like the people and furniture inside the house). When the data in the `State` object changes, Flutter uses the original blueprint (`StatefulWidget`) to rebuild the house with its new contents.
 
-
 We will create a new `StatefulWidget` called `OrderScreen` to manage the state of our sandwich order.
 
 #### Define the `OrderScreen` StatefulWidget
@@ -115,11 +114,13 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-You may get a warning stating that the value of the field `_quantity` isn't used or that it can be `final`. Ignore it for now.
+You may get a warning stating that the value of the `_quantity` isn't used or that it can be `final`. Ignore it for now.
 
 `OrderScreen` is our `StatefulWidget`. It's still immutable and contains a `final` property `maxQuantity`. Its job is to create its associated `State` object via the `createState()` method. All `StatefulWidget`s need to do this.
 
-`_OrderScreenState` is our `State` class. Its name starts with an underscore, indicating that it's private to the file (a convention in Dart). This is where our mutable state lives, like the `_quantity` variable. Notice it's not `final`. The `build()` method is also in this class, not in the `StatefulWidget`.
+`_OrderScreenState` is our `State` class. This is where our mutable state lives, like the `_quantity` variable. Notice it's not `final`. The `build()` method is also in this class, not in the `StatefulWidget`.
+
+Ask Copilot (or your LLM of choice) why the name of the class and the name of the mutable variable (`_quantity`) start with an underscore.
 
 #### Commit Your Changes
 
