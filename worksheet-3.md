@@ -123,7 +123,7 @@ You may get a warning stating that the value of the field `_quantity` isn't used
 
 #### Commit Your Changes
 
-Recall that you can open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Source Control: Focus on Changes View`. After reviewing your changes, commit them with a message like `Define OrderScreen stateful widget`.
+Remember to commit your changes with a message like `Define OrderScreen stateful widget` before moving on.
 
 ## Building the UI for `OrderScreen`
 
