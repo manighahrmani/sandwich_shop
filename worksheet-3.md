@@ -213,6 +213,8 @@ The final step is to make the buttons work. We need to create methods that chang
 
 Inside the `_OrderScreenState` class, add two new methods to handle increasing and decreasing the quantity.
 
+Add the following methods inside the `_OrderScreenState` class above the `build` method and below the definition of `_quantity`:
+
 ```dart
 void _increaseQuantity() {
   if (_quantity < widget.maxQuantity) {
@@ -231,9 +233,13 @@ void _decreaseQuantity() {
 }
 ```
 
-Let's look at these methods closely. The `State` object has a property called `widget`, which gives it access to the associated `StatefulWidget` (`OrderScreen` in this case). This is how we access the immutable `maxQuantity` property using `widget.maxQuantity`.
+The `State` object has a property called `widget`, which gives it access to the associated `StatefulWidget` (`OrderScreen` in this case). This is how we access the immutable `maxQuantity` property using `widget.maxQuantity`.
 
-The most important part is `setState()`. You **must** call `setState()` to notify Flutter that a state variable has changed. Calling `setState()` tells the framework that this widget is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply changing `_quantity = _quantity + 1` without wrapping it in a `setState()` call will not cause the UI to update.
+The most important part is `setState()`. You must call `setState()` to notify Flutter that a state variable has changed. Calling `setState()` tells the  framework that this widget is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply changing `_quantity = _quantity + 1` without wrapping it in a `setState()` call will not cause the UI to update.
+
+#### Commit Your Changes
+
+Commit your changes with a message like `Add helper methods for quantity adjustment`.
 
 #### Wire Up the Buttons
 
