@@ -63,6 +63,8 @@ class _OrderScreenState extends State<OrderScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // !TODO As an exercise, ask them to add styling to the buttons
+                // and turn them to a custom StatelessWidget
                 ElevatedButton(
                   onPressed: _increaseQuantity,
                   child: const Text('Add'),
