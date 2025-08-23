@@ -73,7 +73,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   onPressed: _increaseQuantity,
                   child: const Text('Add'),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.5),
                 ElevatedButton(
                   onPressed: _decreaseQuantity,
                   child: const Text('Remove'),
