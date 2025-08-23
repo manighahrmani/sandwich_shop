@@ -267,3 +267,34 @@ To learn more about `StatefulWidget`s, watch this excellent [YouTube video from 
 #### Commit your changes
 
 Commit your final changes with a message like `Implement counter functionality with setState`.
+
+## Exercises ideas
+
+1. Add styling to the buttons and turn them to a custom StatelessWidget
+
+1. Wrap the buttons in a `SizedBox` to give them a fixed size (use the lightbulb icon in VS Code). Then inspect to see where the width actually adds a space to. Then ask them to insert the SizeBox where it should be. Also touch on relative values (MediaQuery)
+
+1. Add a row with a switch like this before the OrderItemDisplay:
+```dart
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('6 inch'),
+                Switch(
+                    value: _itemType == 'footlong', onChanged: _toggleFootlong),
+              ],
+            ),
+```
+And a separate callback like this:
+```dart
+  void _toggleFootlong(bool value) {
+    setState(() {
+      if (value) {
+        _itemType = 'footlong';
+      } else {
+        _itemType = 'six-inch';
+      }
+    });
+  }
+```
+
