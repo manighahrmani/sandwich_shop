@@ -65,7 +65,9 @@ home: Scaffold(
 ),
 ```
 
-Here, we've also used two `ElevatedButton` widgets. The most important property of them is `onPressed`. It takes a function that gets executed when the user taps the button. This is called an **event handler** (some of you may have already covered this in Python last year). For now, our buttons just print a message in the terminal (not on the UI) when they are pressed.
+Here, we've also used two `ElevatedButton` widgets. The most important property of them is `onPressed`. It takes a function that gets executed when the user taps the button. This is called an event handler or a **callback**. Some of you may remember event handlers from last year, they are functions that are invoked in response to an event, in this case, a button press.
+
+For now, our callback is an anonymous function (a function with no name) that just prints a message in the terminal (not on the UI) when they are pressed.
 
 To run the app, open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Terminal: Create New Terminal` and hit enter. In the terminal, run the command `flutter run`. You will see the buttons, and when you click them, messages will appear in the Terminal as shown below.
 
