@@ -65,10 +65,15 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 // !TODO As an exercise, ask them to add styling to the buttons
                 // and turn them to a custom StatelessWidget
+                // !TODO as another exercise ask them to use the lightbulb to
+                // first add a SizedBox around the buttons, then inspect the
+                // issue and then move the SizedBox between them
+                // !Todo cover relative positioning too (MediaQuery)
                 ElevatedButton(
                   onPressed: _increaseQuantity,
                   child: const Text('Add'),
                 ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.5),
                 ElevatedButton(
                   onPressed: _decreaseQuantity,
                   child: const Text('Remove'),
