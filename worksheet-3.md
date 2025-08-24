@@ -268,6 +268,37 @@ To learn more about `StatefulWidget`s, watch this excellent [YouTube video from 
 
 Commit your final changes with a message like `Implement counter functionality with setState`.
 
+## Adding Custom Notes to an Order
+
+Let's add some more interactivity to our app. In software development, we often start with a user story to define a new feature. Here is an example:
+
+```
+As a user, I want to add a note to my sandwich order so that I can make special requests (e.g., "no onions", "extra pickles"). I would like this note to be displayed on the screen to confirm it has been added to my order.
+```
+
+For the remainder of this worksheet, we will implement this feature using Copilot or the LLM of your choice.
+
+### Implementing the Feature
+
+Start by consulting [the Flutter documentation on user input](https://docs.flutter.dev/get-started/fundamentals/user-input) to understand its basic use. Browse through the features and scroll down until you find the [TextField widget](https://docs.flutter.dev/get-started/fundamentals/user-input#textfield). Read this part to understand its basic use.
+
+With the user story and documentation in hand, it's time to collaborate with your AI assistant. Instead of asking for the final code, guide the AI to help you think through the problem. Start by providing the user story and asking questions like the ones below.
+
+* "I want to implement this user story, what new information does my `OrderScreen` widget need to keep track of?"
+* "How can I add a text input field to my screen using Flutter?"
+* "How do I get the text from the user as they are typing it in the input box?"
+* "Once I have the user's note, how can I display it on the screen below the sandwich counter?"
+
+Remember that while Copilot can access your codebase, LLMs like ChatGPT require you to provide the code snippet (in this case the `OrderScreen` and `_OrderScreenState` classes) for context.
+
+Remember to use your IDE's features to help you. VS Code's suggestions (try hitting **Ctrl + Space** or **Cmd + Space** when you are inside the `TextField`'s braces for example to see its other properties).
+
+### Commit Your Changes
+
+Make sure to have hot reload enabled by hitting the thunder (⚡️) icon in the toolbar or by typing `r` if you are running the app in the terminal.
+
+After verifying that the feature works as described in the user story, commit your work to source control. A good commit message would be `Add order notes field`.
+
 ## Exercises ideas
 
 1. Add styling to the buttons and turn them to a custom StatelessWidget
