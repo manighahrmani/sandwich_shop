@@ -283,7 +283,13 @@ With the user story and documentation in hand, it's time to collaborate with you
   * "How do I get the text from the user as they are typing it in the input box?"
   * "Once I have the user's note, how can I display it on the screen below the sandwich counter?"
 
-Remember that while Copilot can access your codebase, LLMs like ChatGPT require you to provide the code snippet (in this case the `OrderScreen` and `_OrderScreenState` classes) for context.
+See below an example of how we have provided a rich prompt to Copilot. You can open your current file in the chat and open the Copilot panel (yours may be in a different location) by entering `Chat: Add File to Chat` in the Command Palette.
+
+This way, `main.dart` is already included in the context of Copilot. Remember that while Copilot can access your codebase, LLMs like ChatGPT require you to provide the code snippet (in this case the `OrderScreen` and `_OrderScreenState` classes) for context.
+
+![Example of rich prompt](images/screenshot_copilot_feature_user_story.jpg)
+
+The `Add Context` button can be used to include additional files, screenshots, instructions or other resources. We encourage you to explore other models and modes (e.g., Agent and Edit). 
 
 ### Refining Your Code with VS Code
 
