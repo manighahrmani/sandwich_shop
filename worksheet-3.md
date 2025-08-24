@@ -14,15 +14,11 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 ## Introduction to state
 
-In the last worksheet, all our widgets were `Stateless`. This means their properties, once set, could not be changed. But what happens when we want our app to be interactive? What if we want to press a button and see something on the screen change, like the number of sandwiches in our order? To do this, we need to manage state.
+In the last worksheet, our widgets were `Stateless`, meaning their properties couldn't change. To make our app interactive, for example, to change the number of sandwiches with a button press, we need to manage state.
 
-In Flutter, we can think of state in two main categories: Ephemeral state and App state.
+State is just data that can change over time. For this worksheet, we will focus on **ephemeral state**. This is a state (or data) that is local to a single widget, for example the content of a cart which is only relevant to that cart widget. (In a later worksheet we will learn about **app state**, which is shared across multiple widgets, for example login information of a user.)
 
-**Ephemeral state** This is the state that is contained within a single widget. For example, the quantity of items in a cart is an ephemeral state of the cart widget. Other parts of the app don't need to access this state. It's local. For this kind of state, a `StatefulWidget` is often the perfect tool.
-
-**App state** is state that you need to share across different parts of your app and potentially keep between user sessions. A simple example is the login information in a social media app. We will cover app state and persistence (saving data) in a later worksheet.
-
-For this worksheet, we will focus on ephemeral state. In our sandwich counter, the number of sandwiches the user has added to their cart (the `State`) doesn't need to be known by any other widget. If the user closes the app, we don't mind if the `State` resets. This makes it a perfect candidate for a `StatefulWidget`.
+The number of sandwiches in our order is a perfect example of this. To manage this kind of state, Flutter provides the `StatefulWidget`.
 
 ## A reminder on stateless widgets
 
@@ -77,16 +73,9 @@ To run the app, open the Command Palette in VS Code with **Ctrl + Shift + P** on
 
 First reopen the Command Palette. In there, type `Source Control: Focus on Changes View`. After reviewing your changes, commit them with a message like `Add add and remove buttons`.
 
-## Creating a `StatefulWidget` widget
+## Creating a `StatefulWidget`
 
-We do have some interactivity, but it's limited. We can't change the number `5` in `OrderItemDisplay(5, 'Footlong')` because it's hardcoded. To allow users to change the quantity, we need a mutable (changeable) variable to store this value. This is where we need to add a `StatefulWidget`. What is slightly special about `StatefulWidget`s is that we have to introduce two new classes:
-
-1.  A `StatefulWidget` class.
-2.  A `State` class.
-
-The `StatefulWidget` separates the widget's configuration from its mutable state. The `StatefulWidget` class itself is responsible for creating the `State` class, while the `State` class holds the mutable state for the widget.
-
-In other words, the `StatefulWidget` is the permanent description of a part of your UI (like a blueprint for a house), while the `State` object holds the current, changeable data (like the people and furniture inside the house). When the data in the `State` object changes, Flutter uses the original blueprint (`StatefulWidget`) to rebuild the house with its new contents.
+The hardcoded quantity in `OrderItemDisplay(5, 'Footlong')` is a problem because it's static. To make the quantity interactive, we need to replace our static UI with a widget that can manage a changing value. This is where `StatefulWidget` comes in.
 
 We will create a new `StatefulWidget` called `OrderScreen` to manage the state of our sandwich order.
 
@@ -118,11 +107,15 @@ class _OrderScreenState extends State<OrderScreen> {
 
 You may get a warning stating that the value of the `_quantity` isn't used or that it can be `final`. Ignore it for now.
 
-`OrderScreen` is our `StatefulWidget`. It's still immutable and contains a `final` property `maxQuantity`. Its job is to create its associated `State` object via the `createState()` method. All `StatefulWidget`s need to do this.
+This might look a bit strange. We have two classes to manage one widget. This is a fundamental concept in Flutter state management.
 
-`_OrderScreenState` is our `State` class. This is where our mutable state lives, like the `_quantity` variable. Notice it's not `final`. The `build()` method is also in this class, not in the `StatefulWidget`.
+Take a moment to read this structure. Use your AI assistant to find out the answers to these questions:
 
-Ask Copilot (or your LLM of choice) why the name of the class and the name of the mutable variable (`_quantity`) start with an underscore.
+  * "What is the difference between a `StatefulWidget` and a `State` object in Flutter?"
+  * "In Flutter, why is the `build` method inside the `State` class and not the `StatefulWidget` class?"
+  * "What does the underscore prefix on `_OrderScreenState` and `_quantity` mean in Dart?"
+
+Understanding this separation is key to working with interactive widgets in Flutter.
 
 #### Commit your changes
 
@@ -156,13 +149,13 @@ Widget build(BuildContext context) {
             children: [
               ElevatedButton(
                 onPressed: () {
-                    print('Add button pressed!');
+                  print('Add button pressed!');
                 },
                 child: const Text('Add'),
               ),
               ElevatedButton(
                 onPressed: () {
-                    print('Remove button pressed!');
+                  print('Remove button pressed!');
                 },
                 child: const Text('Remove'),
               ),
