@@ -273,7 +273,8 @@ Commit your final changes with a message like `Implement counter functionality w
 Let's add some more interactivity to our app. In software development, we often start with a user story to define a new feature. Here is an example:
 
 ```
-As a user, I want to add a note to my sandwich order so that I can make special requests (e.g., "no onions", "extra pickles"). I would like this note to be displayed on the screen to confirm it has been added to my order.
+As a user, I want to add a note to my sandwich order so that I can make special requests (e.g., "no onions", "extra pickles").
+I would like this note to be displayed on the screen to confirm it has been added to my order.
 ```
 
 For the remainder of this worksheet, we will implement this feature using Copilot or the LLM of your choice.
