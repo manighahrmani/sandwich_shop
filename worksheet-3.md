@@ -284,18 +284,22 @@ Start by consulting [the Flutter documentation on user input](https://docs.flutt
 
 With the user story and documentation in hand, it's time to collaborate with your AI assistant. Instead of asking for the final code, guide the AI to help you think through the problem. Start by providing the user story and asking questions like the ones below.
 
-* "I want to implement this user story, what new information does my `OrderScreen` widget need to keep track of?"
-* "How can I add a text input field to my screen using Flutter?"
-* "How do I get the text from the user as they are typing it in the input box?"
-* "Once I have the user's note, how can I display it on the screen below the sandwich counter?"
+  * "I want to implement this user story, what new information does my `OrderScreen` widget need to keep track of?"
+  * "How can I add a text input field to my screen using Flutter?"
+  * "How do I get the text from the user as they are typing it in the input box?"
+  * "Once I have the user's note, how can I display it on the screen below the sandwich counter?"
 
 Remember that while Copilot can access your codebase, LLMs like ChatGPT require you to provide the code snippet (in this case the `OrderScreen` and `_OrderScreenState` classes) for context.
 
-Remember to use your IDE's features to help you. VS Code's suggestions (try hitting **Ctrl + Space** or **Cmd + Space** when you are inside the `TextField`'s braces for example to see its other properties).
+### Refining Your Code with VS Code
+
+As you add new widgets, your code can become messy. First, ensure your code is well-formatted. Right-click anywhere in the `main.dart` file and select **Format Document** (or use the Command Palette to apply this).
+
+Next, look for any blue or yellow squiggly lines. These are hints from the Flutter analyser. For example, if you added an `InputDecoration` to your `TextField`, you might see a blue squiggly line underneath it. Hover over it with your mouse, and a message will likely suggest adding a `const` modifier. You can click **Quick Fix...** or press **Ctrl + .** on Windows or **Cmd + .** on macOS to apply the suggestion automatically.
 
 ### Commit Your Changes
 
-Make sure to have hot reload enabled by hitting the thunder (⚡️) icon in the toolbar or by typing `r` if you are running the app in the terminal.
+Make sure to have hot reload enabled by hitting the thunder (⚡️) icon in the toolbar or by typing `r` in the terminal if you are running the app there.
 
 After verifying that the feature works as described in the user story, commit your work to source control. A good commit message would be `Add order notes field`.
 
