@@ -4,8 +4,8 @@
 
 Ensure that you have already completed the following:
 
-  - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
-  - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
+- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+- [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
 
 ## Getting help
 
@@ -215,7 +215,6 @@ Widget build(BuildContext context) {
 
 Run the app. You should now see "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" displayed in the centre of the screen.
 
-
 ![Sandwich Counter](images/screenshot_sandwich_counter.jpg)
 
 #### Commit your changes
@@ -244,7 +243,6 @@ Row(
     ),
   ],
 ),
-//...
 ```
 
 #### Run the application
@@ -273,7 +271,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
     Give the `Container` a fixed `width` and `height` and a `color` (e.g., `Colors.blue`) to make it visible. See what happens when the `OrderItemDisplay`'s text is too big for the `Container`.
 
     This is what it should look like:
-    
+
     ![Container](images/screenshot_container.jpg)
 
     Update the `width` and `height` properties to see what happens if the `OrderItemDisplay`'s text is too big for the `Container`.
@@ -315,16 +313,17 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 6.  (Advanced) Read the documentation on creating [adaptive layouts](https://docs.flutter.dev/get-started/fundamentals/layout#adaptive-layouts). Wrap your UI in a `LayoutBuilder`. Inside its `builder` function, check the `constraints.maxWidth`.
 
     If the width is less than or equal to 600 pixels, display your `OrderItemDisplay` widgets in a `Column`. Otherwise, display them in a `Row`. Observe the changes by resizing your browser window.
-    
+
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-7. (Advanced) You may have already thought about a way not to create a separate `OrderItemDisplay` class. This could equally be achieved by defining a helper method in the `App` class, like this:
+7.  (Advanced) You may have already thought about a way not to create a separate `OrderItemDisplay` class. This could equally be achieved by defining a helper method in the `App` class, like this:
 
     ```dart
     Widget _buildOrderItemDisplay(int quantity, String itemType) {
       return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}')
     }
     ```
+
     You would then call this method in the `body` of the `Scaffold` of the `App` widget like this:
 
     ```dart
@@ -336,4 +335,3 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
     Watch this [YouTube video](https://youtu.be/IOyq-eTRhvo) to learn more about this approach and why it is not recommended albeit sounding like a simpler solution.
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
