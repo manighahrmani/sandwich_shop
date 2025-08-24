@@ -224,6 +224,37 @@ Commit your final changes for this section with the message `Use OrderItemDispla
 
 At this stage, your code should look like our code as shown on [the GitHub repository](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart).
 
+#### Link the helper methods to the buttons
+
+Now that we have our methods to change the state, let's connect them to our buttons. In the `build` method of `_OrderScreenState`, find the two `ElevatedButton` widgets.
+
+Replace the anonymous functions in the `onPressed` properties with references to your new methods. Note that we are passing the method itself, not calling it. That's why there are no parentheses `()` after the method names. The framework will call the method for us when the button is pressed.
+
+```dart
+Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    ElevatedButton(
+      onPressed: _increaseQuantity,
+      child: const Text('Add'),
+    ),
+    ElevatedButton(
+      onPressed: _decreaseQuantity,
+      child: const Text('Remove'),
+    ),
+  ],
+),
+//...
+```
+
+#### Run the application
+
+Run the app again (`flutter run` in the terminal, or press **F5** in VS Code). The buttons should now be enabled. Click "Add" and "Remove" to see the quantity change on the screen. The "Add" button will stop working once the quantity reaches the `maxQuantity` you set (5 in our case).
+
+#### Commit your changes
+
+Commit your working counter with a message like `Enable quantity buttons`.
+
 ## Exercises
 
 Complete the exercises below and show your work to a member of staff present at your next practical for **a sign-off**.
