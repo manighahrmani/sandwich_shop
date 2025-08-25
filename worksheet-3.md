@@ -103,7 +103,7 @@ class _OrderScreenState extends State<OrderScreen> {
     return const Placeholder();
   }
 }
-````
+```
 
 You may get a warning stating that the value of the `_quantity` isn't used or that it can be `final`. Ignore it for now.
 
@@ -114,6 +114,9 @@ Take a moment to read this structure. Use your AI assistant to find out the answ
 - "What is the difference between a `StatefulWidget` and a `State` object in Flutter?"
 - "In Flutter, why is the `build` method inside the `State` class and not the `StatefulWidget` class?"
 - "What does the underscore prefix on `_OrderScreenState` and `_quantity` mean in Dart?"
+- "Why does the `<OrderScreen>` mean after the `State` class?"
+
+Remember if you are using a Large Language Model (LLM) on the browser, like ChatGPT, you need to provide the code snippets as well as your questions. Alternatively use Copilot which you can open in VS Code by selecting the code snippet and pressing **Ctrl + I** in Windows or **Cmd + I** in macOS.
 
 Understanding this separation is key to working with interactive widgets in Flutter.
 
