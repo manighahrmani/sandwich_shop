@@ -79,7 +79,7 @@ We will create a new `StatefulWidget` called `OrderScreen` to manage the state o
 
 #### Define the `OrderScreen` stateful widget
 
-Add the following two classes to your `lib/main.dart` file. You can place them above the `OrderItemDisplay` class.
+Add the following two classes to your `lib/main.dart` file. You can place them above the `OrderItemDisplay` class and below the `App` class.
 
 ```dart
 class OrderScreen extends StatefulWidget {
