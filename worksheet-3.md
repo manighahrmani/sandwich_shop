@@ -4,9 +4,9 @@
 
 Ensure that you have already completed the following:
 
-  - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
-  - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
-  - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
+- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+- [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
+- [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
 
 ## Getting help
 
@@ -43,15 +43,11 @@ home: Scaffold(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () {
-                print('Add button pressed!');
-              },
+              onPressed: () => print('Add button pressed!'),
               child: const Text('Add'),
             ),
             ElevatedButton(
-              onPressed: () {
-                print('Remove button pressed!');
-              },
+              onPressed: () => print('Remove button pressed!'),
               child: const Text('Remove'),
             ),
           ],
@@ -65,7 +61,7 @@ home: Scaffold(
 
 Here, we've also used two `ElevatedButton` widgets. The most important property of them is `onPressed`. It takes a function that gets executed when the user taps the button. This is called an event handler or a **callback**. Some of you may remember event handlers from last year, they are functions that are invoked in response to an event, in this case, a button press.
 
-For now, our callback is an anonymous function (a function with no name) that just prints a message in the terminal (not on the UI) when they are pressed.
+For now, our callback is an arrow function that just prints a message in the terminal (not on the UI) when they are pressed. (For more information on the arrow function syntax, check out the Dart worksheets on functions linked in [worksheets 0](https://manighahrmani.github.io/sandwich_shop/worksheet-0.html#introduction-to-the-dart-language)).
 
 To run the app, open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Terminal: Create New Terminal` and hit enter. In the terminal, run the command `flutter run`. You will see the buttons, and when you click them, messages will appear in the Terminal as shown below.
 
@@ -105,7 +101,7 @@ class _OrderScreenState extends State<OrderScreen> {
     return const Placeholder();
   }
 }
-```
+````
 
 You may get a warning stating that the value of the `_quantity` isn't used or that it can be `final`. Ignore it for now.
 
@@ -113,9 +109,9 @@ This might look a bit strange. We have two classes to manage one widget. This is
 
 Take a moment to read this structure. Use your AI assistant to find out the answers to these questions:
 
-  * "What is the difference between a `StatefulWidget` and a `State` object in Flutter?"
-  * "In Flutter, why is the `build` method inside the `State` class and not the `StatefulWidget` class?"
-  * "What does the underscore prefix on `_OrderScreenState` and `_quantity` mean in Dart?"
+- "What is the difference between a `StatefulWidget` and a `State` object in Flutter?"
+- "In Flutter, why is the `build` method inside the `State` class and not the `StatefulWidget` class?"
+- "What does the underscore prefix on `_OrderScreenState` and `_quantity` mean in Dart?"
 
 Understanding this separation is key to working with interactive widgets in Flutter.
 
@@ -232,7 +228,7 @@ void _decreaseQuantity() {
 
 The `State` object has a property called `widget`, which gives it access to the associated `StatefulWidget` (`OrderScreen` in this case). This is how we access the immutable `maxQuantity` property using `widget.maxQuantity`.
 
-The most important part is `setState()`. You must call `setState()` to notify Flutter that a state variable has changed. Calling `setState()` tells the  framework that this widget is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply changing `_quantity = _quantity + 1` without wrapping it in a `setState()` call will not cause the UI to update.
+The most important part is `setState()`. You must call `setState()` to notify Flutter that a state variable has changed. Calling `setState()` tells the framework that this widget is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply changing `_quantity = _quantity + 1` without wrapping it in a `setState()` call will not cause the UI to update.
 
 #### Commit your changes
 
@@ -280,10 +276,10 @@ Start by consulting [the Flutter documentation on user input](https://docs.flutt
 
 With the user story and documentation in hand, it's time to collaborate with your AI assistant. Instead of asking for the final code, guide the AI to help you think through the problem. Start by providing the user story and asking questions like the ones below.
 
-  * "I want to implement this user story, what new information does my `OrderScreen` widget need to keep track of?"
-  * "How can I add a text input field to my screen using Flutter?"
-  * "How do I get the text from the user as they are typing it in the input box?"
-  * "Once I have the user's note, how can I display it on the screen below the sandwich counter?"
+- "I want to implement this user story, what new information does my `OrderScreen` widget need to keep track of?"
+- "How can I add a text input field to my screen using Flutter?"
+- "How do I get the text from the user as they are typing it in the input box?"
+- "Once I have the user's note, how can I display it on the screen below the sandwich counter?"
 
 See below an example of how we have provided a rich prompt to Copilot. You can open your current file in the chat and open the Copilot panel (yours may be in a different location) by entering `Chat: Add File to Chat` in the Command Palette.
 
@@ -291,7 +287,7 @@ This way, `main.dart` is already included in the context of Copilot. Remember th
 
 ![Example of rich prompt](images/screenshot_copilot_feature_user_story.jpg)
 
-The `Add Context` button can be used to include additional files, screenshots, instructions or other resources. We encourage you to explore other models and modes (e.g., Agent and Edit). 
+The `Add Context` button can be used to include additional files, screenshots, instructions or other resources. We encourage you to explore other models and modes (e.g., Agent and Edit).
 
 ### Refining Your Code with VS Code
 
@@ -312,6 +308,7 @@ After verifying that the feature works as described in the user story, commit yo
 1. Wrap the buttons in a `SizedBox` to give them a fixed size (use the lightbulb icon in VS Code). Then inspect to see where the width actually adds a space to. Then ask them to insert the SizeBox where it should be. Also touch on relative values (MediaQuery)
 
 1. Add a row with a switch like this before the OrderItemDisplay:
+
 ```dart
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -322,7 +319,9 @@ After verifying that the feature works as described in the user story, commit yo
               ],
             ),
 ```
+
 And a separate callback like this:
+
 ```dart
   void _toggleFootlong(bool value) {
     setState(() {
@@ -334,4 +333,3 @@ And a separate callback like this:
     });
   }
 ```
-
