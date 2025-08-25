@@ -32,18 +32,14 @@ class _OrderScreenState extends State<OrderScreen> {
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
-      setState(() {
-        _quantity = _quantity + 1;
-      });
+      setState(() => _quantity++);
     }
   }
 
   void _decreaseQuantity() {
-    setState(() {
-      if (_quantity > 0) {
-        _quantity = _quantity - 1;
-      }
-    });
+    if (_quantity > 0) {
+      setState(() => _quantity--);
+    }
   }
 
   @override
@@ -81,8 +77,8 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 
 class OrderItemDisplay extends StatelessWidget {
-  final String itemType;
   final int quantity;
+  final String itemType;
 
   const OrderItemDisplay(this.quantity, this.itemType, {super.key});
 
