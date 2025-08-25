@@ -214,24 +214,22 @@ Add the following methods inside the `_OrderScreenState` class above the `build`
 ```dart
 void _increaseQuantity() {
   if (_quantity < widget.maxQuantity) {
-    setState(() {
-      _quantity = _quantity + 1;
-    });
+    setState(() => _quantity++);
   }
 }
 
 void _decreaseQuantity() {
-  setState(() {
-    if (_quantity > 0) {
-      _quantity = _quantity - 1;
-    }
-  });
+  if (_quantity > 0) {
+    setState(() => _quantity--);
+  }
 }
 ```
 
 The `State` object has a property called `widget`, which gives it access to the associated `StatefulWidget` (`OrderScreen` in this case). This is how we access the immutable `maxQuantity` property using `widget.maxQuantity`.
 
-The most important part is `setState()`. You must call `setState()` to notify Flutter that a state variable has changed. Calling `setState()` tells the framework that this widget is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply changing `_quantity = _quantity + 1` without wrapping it in a `setState()` call will not cause the UI to update.
+The most important part is `setState()`. You must call `setState()` to notify Flutter that a state variable has changed. Between the brackets of `setState()`, you should pass a function that updates the state variable. In our case we have passed an arrow function that increments or decrements `_quantity`.
+
+Calling `setState()` tells the framework that this widget (`OrderScreen`) is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply writing `_quantity++` without wrapping it in a `setState()` call will not cause the UI to update.
 
 #### Commit your changes
 
