@@ -252,9 +252,9 @@ ElevatedButton(
 
 Run the app one last time. The buttons should now be enabled, and clicking them will update the sandwich count on the screen.
 
-As a small task, can you figure out why the buttons only work within a certain range of quantities? If you are confused by this, try to trace the logic in the `_increaseQuantity` and `_decreaseQuantity` methods. Feel free to ask Copilot for help.
+As a small task, can you figure out why the buttons only work within a certain range of quantities? If you are confused by this, try to trace the logic in the `_increaseQuantity` and `_decreaseQuantity` methods. Note that in VS Code you can jump to the method definitions by holding down the `Ctrl` key on Windows or `⌘` on macOS and clicking on the method name. Feel free to ask Copilot or your LLM of choice for help.
 
-To learn more about `StatefulWidget`s, watch this excellent [YouTube video from the Flutter team](https://youtu.be/AqCMFXEmf3w).
+To learn more about `StatefulWidget`s, watch this [YouTube video from the Flutter team](https://youtu.be/AqCMFXEmf3w).
 
 #### Commit your changes
 
