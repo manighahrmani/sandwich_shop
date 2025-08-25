@@ -302,35 +302,46 @@ Make sure to have hot reload enabled by hitting the thunder (⚡️) icon in the
 
 After verifying that the feature works as described in the user story, commit your work to source control. A good commit message would be `Add order notes field`.
 
-## Exercises ideas
+## **Exercises**
 
-1. Add styling to the buttons and turn them to a custom StatelessWidget
+Complete the exercises below and show your work to a member of staff at your next practical session for a **sign-off**.
 
-1. Wrap the buttons in a `SizedBox` to give them a fixed size (use the lightbulb icon in VS Code). Then inspect to see where the width actually adds a space to. Then ask them to insert the SizeBox where it should be. Also touch on relative values (MediaQuery)
+A key skill is learning how to write effective prompts for your AI assistant. For each task, provide the relevant code snippet, clearly state your goal, and ask for guidance on how to achieve it, rather than just asking for the final code. Also, remember to use VS Code's tools: format your document after making changes and use the **Quick Fix...** option (**Ctrl + .** or **⌘ + .**) to resolve any analyser warnings.
 
-1. Add a row with a switch like this before the OrderItemDisplay:
+1.  The `ElevatedButton` widgets look a bit plain. Add a background colour of your choice to them and update the text style. Maybe also try adding an icon to each of them.
 
-```dart
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('6 inch'),
-                Switch(
-                    value: _itemType == 'footlong', onChanged: _toggleFootlong),
-              ],
-            ),
-```
+    This causes a lot of duplication as you'd need to apply the same styles to each button. Reduce the repetition by defining a custom `StatelessWidget` called `StyledButton`. Recall that we already did this back in [worksheet 2](https://manighahrmani.github.io/sandwich_shop/worksheet-2.html#create-the-custom-orderitemdisplay-widget).
+    
+    Remember that your custom widget needs to accept multiple parameters in its constructor such as text to be displayed and the callback function.
 
-And a separate callback like this:
+    As a small extra step, try to add a gap between the buttons and align them at the opposing sides of the screen.
+    
+    VS Code has a useful feature called Refactor. You can use it by right-clicking on the name of the widgets (for example the `ElevatedButton`) and selecting `Refactor...`. You can do the same thing with the shortcut **Ctrl + Shift + R** on Windows or **⌘ + Shift + R** on macOS. This will open a menu where you can select `Wrap with Expanded` or `Wrap with SizeBox` as shown below.
 
-```dart
-  void _toggleFootlong(bool value) {
-    setState(() {
-      if (value) {
-        _itemType = 'footlong';
-      } else {
-        _itemType = 'six-inch';
-      }
-    });
-  }
-```
+    ![Refactor Menu](images/screenshot_refactor.jpg)
+
+    Keep hot reload active, use the widget inspector, refer to [the documentation page on layout widgets](https://docs.flutter.dev/ui/widgets/layout) and your AI assistant to complete this task.
+
+    ⚠️ **Show your running app with the newly styled buttons to a member of staff** for a sign-off.
+
+2.  Currently, the user can press the "Add" button even when the maximum quantity is reached, and the "Remove" button when the quantity is zero. While our logic prevents the state from updating, the buttons themselves should appear disabled to provide better user feedback.
+
+    Consult the [ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) or ask your AI assistant for help.
+
+    ⚠️ **Show your running app, demonstrating the disabled buttons at the quantity limits, to a member of staff** for a sign-off.
+
+3.  Let's add another piece of state. The user should be able to switch between a 'Footlong' and a 'Six-inch' sandwich.
+
+    First, write a user story for this feature. Picture in your mind how this should work and describe it in details. BBefore you use an AI, refer to [the documentation page for handling user input](https://docs.flutter.dev/get-started/fundamentals/user-input), browse it to find the simplest solution for such an input. For example, would a `SegmentedButton` be appropriate here or can we use a `Slider`? Is there anything else that might be easier to implement? Make sure to state your preferences to your AI assistant.
+
+    ⚠️ **Show your running app with the working sandwich type `Switch` to a member of staff** for a sign-off.
+
+4.  (Advanced) Add a "Reset" button to the `Row` with the "Add" and "Remove" buttons. When pressed, this button should reset the `_quantity` to 0, clear the `_itemType` back to its default, and also clear any text entered in the notes `TextField` from the main worksheet task.
+
+    To implement this, you will need to create a new method in `_OrderScreenState` that resets all the relevant state variables inside a single `setState` call. If you implemented the notes feature, you will also need to use a `TextEditingController` to programmatically clear the `TextField`.
+
+    Ask your AI assistant:
+    * "How can I clear the text of a `TextField` from a button press in Flutter?"
+    * "I need a function in my `State` class that resets multiple state variables (`_quantity`, `_itemType`, and a `TextEditingController`) to their initial values. What would that function look like?"
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
