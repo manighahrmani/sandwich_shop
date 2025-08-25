@@ -292,7 +292,7 @@ The `Add Context` button can be used to include additional files, screenshots, i
 
 ### Refining Your Code with VS Code
 
-As you add new widgets, your code can become messy. First, ensure your code is well-formatted. Right-click anywhere in the `main.dart` file and select **Format Document** (or use the Command Palette to apply this).
+As you add new widgets, your code can become messy. First, ensure your code is well-formatted (open Command Palette and enter `Format Document`).
 
 Next, look for any blue or yellow squiggly lines. These are hints from the Flutter analyser. For example, if you added an `InputDecoration` to your `TextField`, you might see a blue squiggly line underneath it. Hover over it with your mouse, and a message will likely suggest adding a `const` modifier. You can click **Quick Fix...** or press **Ctrl + .** on Windows or **⌘ + .** on macOS to apply the suggestion automatically.
 
