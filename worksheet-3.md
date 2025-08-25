@@ -207,7 +207,7 @@ The final step is to make the buttons work. We need to create methods that chang
 
 #### Create helper methods
 
-Inside the `_OrderScreenState` class, add two new methods to handle increasing and decreasing the quantity. These will be the event handlers for the buttons.
+We want to handle increasing and decreasing the quantity. To do so, we need additional methods in our `_OrderScreenState` class. These will be the callbacks (event handlers) for the buttons.
 
 Add the following methods inside the `_OrderScreenState` class above the `build` method and below the definition of `_quantity`:
 
