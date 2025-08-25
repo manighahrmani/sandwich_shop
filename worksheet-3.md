@@ -337,3 +337,5 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
     Before you use an AI, refer to [the documentation page for handling user input](https://docs.flutter.dev/get-started/fundamentals/user-input), browse it to find the simplest solution for such an input. For example, would a `SegmentedButton` be appropriate here or can we use a `Slider`? Is there anything else that might be easier to implement? Make sure to state your preferences to your AI assistant.
 
     ⚠️ **Show your running app the ability to switch between sandwich types to a member of staff** for a sign-off.
+
+<!-- TODO: Ideas for more exercises. Teach them about Enums and ask them to use a `DropdownMenu` or a similar widget that uses them (advanced, no sign off). Also, start them on the testing and prepare them for next week when we will talk about unit tests. -->
