@@ -118,8 +118,6 @@ Take a moment to read this structure. Use your AI assistant to find out the answ
 
 Remember if you are using a Large Language Model (LLM) on the browser, like ChatGPT, you need to provide the code snippets as well as your questions. Alternatively use Copilot which you can open in VS Code by selecting the code snippet and pressing **Ctrl + I** in Windows or **⌘ + I** in macOS.
 
-Understanding this separation is key to working with interactive widgets in Flutter.
-
 #### Commit your changes
 
 Remember to commit your changes with a message like `Define OrderScreen stateful widget` before moving on.
