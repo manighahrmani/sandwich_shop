@@ -1,18 +1,18 @@
-# Worksheet 3 — Stateful widgets
+# **Worksheet 3 — Stateful widgets**
 
-## What you need to know beforehand
+## **What you need to know beforehand**
 
 Ensure that you have already completed the following:
 
-- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
-- [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
-- [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
+  - [Worksheet 0 — Introduction to Dart, Git and GitHub](https://www.google.com/search?q=./worksheet-0.md).
+  - [Worksheet 1 — Introduction to Flutter](https://www.google.com/search?q=./worksheet-1.md).
+  - [Worksheet 2 — Stateless Widgets](https://www.google.com/search?q=./worksheet-2.md).
 
-## Getting help
+## **Getting help**
 
 To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-## Introduction to state
+#### **Introduction to state**
 
 In the last worksheet, our widgets were `Stateless`, meaning their properties couldn't change. To make our app interactive, for example, to change the number of sandwiches with a button press, we need to manage state.
 
@@ -20,13 +20,13 @@ State is just data that can change over time. For this worksheet, we will focus 
 
 The number of sandwiches in our order is a perfect example of this. To manage this kind of state, Flutter provides the `StatefulWidget`.
 
-## A reminder on stateless widgets
+## **A reminder on stateless widgets**
 
 We are starting with [the code that we ended Worksheet 2 with](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart). If you have completed some of the exercises and your code looks slightly different, that's okay. Just make sure you understand the changes we're making from this point onward.
 
 So far, all of our widgets were stateless. These widgets are immutable. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).
 
-#### Adding interactive buttons
+#### **Adding interactive buttons**
 
 To make our sandwich counter interactive, we first need to add some buttons. Let's add "Add" and "Remove" buttons below our sandwich display. Update the `body` of the `Scaffold` in your `App` widget to use a `Column` and a `Row`. Hopefully you have already learnt about these from [the exercises in worksheet 2](https://manighahrmani.github.io/sandwich_shop/worksheet-2.html#exercises). Remember these are all `StatelessWidget`s as for example the text of the buttons themselves does not change over time.
 
@@ -69,17 +69,17 @@ To run the app, open the Command Palette in VS Code with **Ctrl + Shift + P** on
 
 ![Output of button presses](images/screenshot_eventhandler.png)
 
-#### Commit your changes
+#### **Commit your changes**
 
 First reopen the Command Palette. In there, type `Source Control: Focus on Changes View`. After reviewing your changes, commit them with a message like `Add add and remove buttons`.
 
-## Creating a `StatefulWidget`
+## **Creating a `StatefulWidget`**
 
 The hardcoded quantity in `OrderItemDisplay(5, 'Footlong')` is a problem because it's static. To make the quantity interactive, we need to replace our static UI with a widget that can manage a changing value. This is where `StatefulWidget` comes in.
 
 We will create a new `StatefulWidget` called `OrderScreen` to manage the state of our sandwich order.
 
-#### Define the `OrderScreen` stateful widget
+#### **Define the `OrderScreen` stateful widget**
 
 Add the following two classes to your `lib/main.dart` file. You can place them above the `OrderItemDisplay` class and below the `App` class.
 
@@ -111,22 +111,22 @@ This might look a bit strange. We have two classes to manage one widget. This is
 
 Take a moment to read this structure. Use your AI assistant to find out the answers to these questions:
 
-- "What is the difference between a `StatefulWidget` and a `State` object in Flutter?"
-- "In Flutter, why is the `build` method inside the `State` class and not the `StatefulWidget` class?"
-- "What does the underscore prefix on `_OrderScreenState` and `_quantity` mean in Dart?"
-- "Why does the `<OrderScreen>` mean after the `State` class?"
+  - "What is the difference between a `StatefulWidget` and a `State` object in Flutter?"
+  - "In Flutter, why is the `build` method inside the `State` class and not the `StatefulWidget` class?"
+  - "What does the underscore prefix on `_OrderScreenState` and `_quantity` mean in Dart?"
+  - "Why does the `<OrderScreen>` mean after the `State` class?"
 
 Remember if you are using a Large Language Model (LLM) on the browser, like ChatGPT, you need to provide the code snippets as well as your questions. Alternatively use Copilot which you can open in VS Code by selecting the code snippet and pressing **Ctrl + I** in Windows or **⌘ + I** in macOS.
 
-#### Commit your changes
+#### **Commit your changes**
 
 Remember to commit your changes with a message like `Define OrderScreen stateful widget` before moving on.
 
-## Building the UI for `OrderScreen`
+## **Building the UI for `OrderScreen`**
 
 Now, let's build the UI inside the `_OrderScreenState` class. We want to display the `OrderItemDisplay` and the two buttons we created earlier.
 
-#### Implement the `build` method
+#### **Implement the `build` method**
 
 Replace the returned `Placeholder()` in the `_OrderScreenState`'s `build` method with a `Scaffold` containing our UI components. This structure should look very familiar.
 
@@ -171,11 +171,11 @@ Widget build(BuildContext context) {
 
 Notice how we use `_quantity` when creating the `OrderItemDisplay`. The `State` object can access its own private variables directly.
 
-#### Commit your changes
+#### **Commit your changes**
 
 Commit your changes with a message like `Build UI for OrderScreen`.
 
-#### Update the `App` widget
+#### **Update the `App` widget**
 
 Finally, let's update our main `App` widget to use the new `OrderScreen` as its `home`. The `App` widget no longer needs its own `Scaffold`.
 
@@ -197,15 +197,15 @@ Recall that `maxQuantity` is a named parameter in the `OrderScreen` constructor.
 
 Run the app now. You should see the counter displaying "0 Footlong sandwich(es):" and two disabled buttons.
 
-#### Commit your changes
+#### **Commit your changes**
 
-Commit your changes with a message like `Build UI for OrderScreen`.
+Commit your changes with a message like `Use OrderScreen in App`.
 
-## Adding interactivity with `setState()`
+## **Adding interactivity with `setState()`**
 
 The final step is to make the buttons work. We need to create methods that change the `_quantity` and then tell Flutter to rebuild the widget to reflect that change.
 
-#### Create helper methods
+#### **Create helper methods**
 
 We want to handle increasing and decreasing the quantity. To do so, we need additional methods in our `_OrderScreenState` class. These will be the callbacks (event handlers) for the buttons.
 
@@ -231,11 +231,11 @@ The most important part is `setState()`. You must call `setState()` to notify Fl
 
 Calling `setState()` tells the framework that this widget (`OrderScreen`) is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply writing `_quantity++` without wrapping it in a `setState()` call will not cause the UI to update.
 
-#### Commit your changes
+#### **Commit your changes**
 
 Commit your changes with a message like `Add helper methods for quantity adjustment`.
 
-#### Link the buttons to their event handlers
+#### **Link the buttons to their event handlers**
 
 Now, update the `ElevatedButton`s in your `build` method to call these new functions when they are pressed:
 
@@ -256,11 +256,11 @@ As a small task, can you figure out why the buttons only work within a certain r
 
 To learn more about `StatefulWidget`s, watch this [YouTube video from the Flutter team](https://youtu.be/AqCMFXEmf3w).
 
-#### Commit your changes
+#### **Commit your changes**
 
 Commit your final changes with a message like `Implement counter functionality with setState`.
 
-## Adding Custom Notes to an Order
+## **Adding Custom Notes to an Order**
 
 Let's add some more interactivity to our app. In software development, we often start with a user story to define a new feature. Here is an example:
 
@@ -271,16 +271,16 @@ I would like this note to be displayed on the screen to confirm it has been adde
 
 For the remainder of this worksheet, we will implement this feature using Copilot or the LLM of your choice.
 
-### Implementing the Feature
+### **Implementing the Feature**
 
 Start by consulting [the Flutter documentation on user input](https://docs.flutter.dev/get-started/fundamentals/user-input) to understand its basic use. Browse through the features and scroll down until you find the [TextField widget](https://docs.flutter.dev/get-started/fundamentals/user-input#textfield). Read this part to understand its basic use.
 
 With the user story and documentation in hand, it's time to collaborate with your AI assistant. Instead of asking for the final code, guide the AI to help you think through the problem. Start by providing the user story and asking questions like the ones below.
 
-- "I want to implement this user story, what new information does my `OrderScreen` widget need to keep track of?"
-- "How can I add a text input field to my screen using Flutter?"
-- "How do I get the text from the user as they are typing it in the input box?"
-- "Once I have the user's note, how can I display it on the screen below the sandwich counter?"
+  - "I want to implement this user story, what new information does my `OrderScreen` widget need to keep track of?"
+  - "How can I add a text input field to my screen using Flutter?"
+  - "How do I get the text from the user as they are typing it in the input box?"
+  - "Once I have the user's note, how can I display it on the screen below the sandwich counter?"
 
 See below an example of how we have provided a rich prompt to Copilot. You can open your current file in the chat and open the Copilot panel (yours may be in a different location) by entering `Chat: Add File to Chat` in the Command Palette.
 
@@ -290,13 +290,13 @@ This way, `main.dart` is already included in the context of Copilot. Remember th
 
 The `Add Context` button can be used to include additional files, screenshots, instructions or other resources. We encourage you to explore other models and modes (e.g., Agent and Edit).
 
-### Refining Your Code with VS Code
+### **Refining Your Code with VS Code**
 
 As you add new widgets, your code can become messy. First, ensure your code is well-formatted (open Command Palette and enter `Format Document`).
 
 Next, look for any blue or yellow squiggly lines. These are hints from the Flutter analyser. For example, if you added an `InputDecoration` to your `TextField`, you might see a blue squiggly line underneath it. Hover over it with your mouse, and a message will likely suggest adding a `const` modifier. You can click **Quick Fix...** or press **Ctrl + .** on Windows or **⌘ + .** on macOS to apply the suggestion automatically.
 
-### Commit Your Changes
+### **Commit Your Changes**
 
 Make sure to have hot reload enabled by hitting the thunder (⚡️) icon in the toolbar or by typing `r` in the terminal if you are running the app there.
 
