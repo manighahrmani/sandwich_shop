@@ -59,6 +59,8 @@ home: Scaffold(
 ),
 ```
 
+You may get some warning asking you not to invoke `print` in production code but ignore it for now.
+
 Here, we've also used two `ElevatedButton` widgets. The most important property of them is `onPressed`. It takes a function that gets executed when the user taps the button. This is called an event handler or a **callback**. Some of you may remember event handlers from last year, they are functions that are invoked in response to an event, in this case, a button press.
 
 For now, our callback is an arrow function that just prints a message in the terminal (not on the UI) when they are pressed. (For more information on the arrow function syntax, check out the Dart worksheets on functions linked in [worksheets 0](https://manighahrmani.github.io/sandwich_shop/worksheet-0.html#introduction-to-the-dart-language)).
