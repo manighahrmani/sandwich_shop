@@ -298,8 +298,6 @@ Complete the exercises below and show your work to a member of staff present at 
 
 If you are new to programming and find it easier to watch a video tutorial, consider making a separate project and following [the "Your first Flutter app" Codelab](https://codelabs.developers.google.com/codelabs/flutter-codelab-first#0). It teaches you pretty much what we cover in this worksheet and the next one.
 
-[![Flutter Codelab](https://img.youtube.com/vi/8sAyPDLorek/maxresdefault.jpg)](https://www.youtube.com/watch?v=8sAyPDLorek)
-
 1. You have already modified the title of the `AppBar` widget. This is different from the title of the app itself, which you can see in the browser tab. As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate, like "Sandwich Shop App". Remember to view the changes live with hot reload and to commit your changes to GitHub.
 
     ⚠️ **Show your running app with the updated browser tab title to a member of staff** for a sign-off.
