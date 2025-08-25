@@ -33,6 +33,7 @@ To make our sandwich counter interactive, we first need to add some buttons. Let
 ```dart
 home: Scaffold(
   appBar: AppBar(title: const Text('Sandwich Counter')),
+  // The part that you need to update starts from here
   body: Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -58,6 +59,7 @@ home: Scaffold(
       ],
     ),
   ),
+  // The part that you need to update ends here
 ),
 ```
 
