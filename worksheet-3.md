@@ -59,7 +59,7 @@ home: Scaffold(
 ),
 ```
 
-You may get some warning asking you not to invoke `print` in production code but ignore it for now.
+You may get some warning asking you not to invoke `print` in production code but ignore it for now. Also, to format your code and fix any potential indentation issues, open the Command Palette and enter `Format Document`.
 
 Here, we've also used two `ElevatedButton` widgets. The most important property of them is `onPressed`. It takes a function that gets executed when the user taps the button. This is called an event handler or a **callback**. Some of you may remember event handlers from last year, they are functions that are invoked in response to an event, in this case, a button press.
 
