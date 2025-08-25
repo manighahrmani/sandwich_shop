@@ -306,7 +306,7 @@ After verifying that the feature works as described in the user story, commit yo
 
 Complete the exercises below and show your work to a member of staff at your next practical session for a **sign-off**.
 
-A key skill is learning how to write effective prompts for your AI assistant. For each task, provide the relevant code snippet, clearly state your goal, and ask for guidance on how to achieve it, rather than just asking for the final code. Also, remember to use VS Code's tools: format your document after making changes and use the **Quick Fix...** option (**Ctrl + .** or **⌘ + .**) to resolve any analyser warnings.
+Remember to commit your changes and use VS Code's tools as describing in [this section](#refining-your-code-with-vs-code) while working on these exercises.
 
 1.  The `ElevatedButton` widgets look a bit plain. Add a background colour of your choice to them and update the text style. Maybe also try adding an icon to each of them.
 
@@ -332,16 +332,8 @@ A key skill is learning how to write effective prompts for your AI assistant. Fo
 
 3.  Let's add another piece of state. The user should be able to switch between a 'Footlong' and a 'Six-inch' sandwich.
 
-    First, write a user story for this feature. Picture in your mind how this should work and describe it in details. BBefore you use an AI, refer to [the documentation page for handling user input](https://docs.flutter.dev/get-started/fundamentals/user-input), browse it to find the simplest solution for such an input. For example, would a `SegmentedButton` be appropriate here or can we use a `Slider`? Is there anything else that might be easier to implement? Make sure to state your preferences to your AI assistant.
+    Similar to how we implemented [the order notes feature](#adding-custom-notes-to-an-order), write a user story for this feature. Picture in your mind how this should work and describe it in details.
+    
+    Before you use an AI, refer to [the documentation page for handling user input](https://docs.flutter.dev/get-started/fundamentals/user-input), browse it to find the simplest solution for such an input. For example, would a `SegmentedButton` be appropriate here or can we use a `Slider`? Is there anything else that might be easier to implement? Make sure to state your preferences to your AI assistant.
 
-    ⚠️ **Show your running app with the working sandwich type `Switch` to a member of staff** for a sign-off.
-
-4.  (Advanced) Add a "Reset" button to the `Row` with the "Add" and "Remove" buttons. When pressed, this button should reset the `_quantity` to 0, clear the `_itemType` back to its default, and also clear any text entered in the notes `TextField` from the main worksheet task.
-
-    To implement this, you will need to create a new method in `_OrderScreenState` that resets all the relevant state variables inside a single `setState` call. If you implemented the notes feature, you will also need to use a `TextEditingController` to programmatically clear the `TextField`.
-
-    Ask your AI assistant:
-    * "How can I clear the text of a `TextField` from a button press in Flutter?"
-    * "I need a function in my `State` class that resets multiple state variables (`_quantity`, `_itemType`, and a `TextEditingController`) to their initial values. What would that function look like?"
-
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+    ⚠️ **Show your running app the ability to switch between sandwich types to a member of staff** for a sign-off.
