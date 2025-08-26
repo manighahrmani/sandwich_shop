@@ -308,11 +308,24 @@ Complete the exercises below and show your work to a member of staff at your nex
 
 Remember to commit your changes and use VS Code's tools as describing in [this section](#refining-your-code-with-vs-code) while working on these exercises.
 
-1.  The `ElevatedButton` widgets look a bit plain. Add a background colour of your choice to them and update the text style. Maybe also try adding an icon to each of them.
+1.  The `ElevatedButton` widgets look a bit plain. Add a background colour of your choice to them and update the text style. You could also try adding an icon to each of them.
 
-    This causes a lot of duplication as you'd need to apply the same styles to each button. Reduce the repetition by defining a custom `StatelessWidget` called `StyledButton`. Recall that we already did this back in [worksheet 2](https://manighahrmani.github.io/sandwich_shop/worksheet-2.html#create-the-custom-orderitemdisplay-widget).
+    You can find the relevant properties in [the ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html). You will need to use the `style` property which takes a `ButtonStyle` object. You can create one using the `ElevatedButton.styleFrom` method. For example the following code snippet creates a red button with white text.
+
+    ```dart
+    ElevatedButton(
+      onPressed: VoidCallback _increaseQuantity,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+      ),
+      child: const Text('Add'),
+    ),
+    ```
+
+    Doing this for both buttons creates a lot of duplication. As an extra challenge, reduce the repetition by defining a custom `StatelessWidget` called `StyledButton`. Recall that we did this back in [worksheet 2](https://manighahrmani.github.io/sandwich_shop/worksheet-2.html#create-the-custom-orderitemdisplay-widget).
     
-    Remember that your custom widget needs to accept multiple parameters in its constructor such as text to be displayed and the callback function.
+    Your newly defined `StyledButton` class needs to have multiple instance variables and it should accept several parameters in its constructor. These include the text to be displayed on the button and the callback function to be called when the button is clicked.
 
     As a small extra step, try to add a gap between the buttons and align them at the opposing sides of the screen.
     
@@ -320,7 +333,7 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
     ![Refactor Menu](images/screenshot_refactor.jpg)
 
-    Keep hot reload active, use the widget inspector, refer to [the documentation page on layout widgets](https://docs.flutter.dev/ui/widgets/layout) and your AI assistant to complete this task.
+    Keep hot reload active, use the widget inspector, refer to [the documentation page on layout widgets](https://docs.flutter.dev/ui/widgets/layout) to figure out how and where the extra space should be added.
 
     ⚠️ **Show your running app with the newly styled buttons to a member of staff** for a sign-off.
 
