@@ -56,21 +56,69 @@ class _OrderScreenState extends State<OrderScreen> {
               _quantity,
               'Footlong',
             ),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
+                StyledButton(
                   onPressed: _increaseQuantity,
-                  child: const Text('Add'),
+                  icon: Icons.add,
+                  label: 'Add',
+                  backgroundColor: Colors.green,
                 ),
-                ElevatedButton(
+                const SizedBox(width: 8),
+                StyledButton(
                   onPressed: _decreaseQuantity,
-                  child: const Text('Remove'),
+                  icon: Icons.remove,
+                  label: 'Remove',
+                  backgroundColor: Colors.red,
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class StyledButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final IconData icon;
+  final String label;
+  final Color backgroundColor;
+
+  const StyledButton({
+    super.key,
+    required this.onPressed,
+    required this.icon,
+    required this.label,
+    required this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    TextStyle myTextStyle =
+        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+
+    ButtonStyle myButtonStyle = ElevatedButton.styleFrom(
+      backgroundColor: backgroundColor,
+      foregroundColor: Colors.white,
+      textStyle: myTextStyle,
+    );
+
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: myButtonStyle,
+      child: Row(
+        children: [
+          Icon(icon),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: myTextStyle,
+          ),
+        ],
       ),
     );
   }
