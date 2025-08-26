@@ -352,5 +352,3 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
     - "How can I use the enum in this widget?" Specify the widget you picked from the documentation and provide the necessary code snippets for context.
     
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
-<!-- TODO: Ideas for more exercises. Teach them about Enums and ask them to use a `DropdownMenu` or a similar widget that uses them (advanced, no sign off). Also, start them on the testing and prepare them for next week when we will talk about unit tests. -->
