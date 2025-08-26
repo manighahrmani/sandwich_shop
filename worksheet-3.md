@@ -338,4 +338,19 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
     ⚠️ **Show your running app the ability to switch between sandwich types to a member of staff** for a sign-off.
 
+4.  For another piece of state, let the user choose the bread type for their sandwich. You need to show the selected bread type in the UI.
+
+    To manage the different options in a clean and "safe" way, you would use an `enum`. An `enum` (short for "enumeration") is a special type that represents a fixed number of constant values. A `String` would not be suitable here as the user could type anything.
+
+    You need to use AI assistant to guide you on how you might implement this feature.
+    
+    First, refer to **[the documentation page on user input](https://docs.flutter.dev/get-started/fundamentals/user-input)** to find widgets that use enums (use **Ctrl + F** or **⌘ + F** in your browser to search for "enum" on that page).
+
+    After you have picked a widget type, formulate questions to solve this task. For example, you could ask:
+
+    - "How do I define and use an enum in my file to represent the bread type options?" Give the AI assistant some examples of the bread types you would like your enum to have.
+    - "How can I use the enum in this widget?" Specify the widget you picked from the documentation and provide the necessary code snippets for context.
+    
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
 <!-- TODO: Ideas for more exercises. Teach them about Enums and ask them to use a `DropdownMenu` or a similar widget that uses them (advanced, no sign off). Also, start them on the testing and prepare them for next week when we will talk about unit tests. -->
