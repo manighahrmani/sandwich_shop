@@ -31,16 +31,22 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
 
-  void _increaseQuantity() {
+  VoidCallback? _getIncreaseCallback() {
     if (_quantity < widget.maxQuantity) {
-      setState(() => _quantity++);
+      return () {
+        setState(() => _quantity++);
+      };
     }
+    return null;
   }
 
-  void _decreaseQuantity() {
+  VoidCallback? _getDecreaseCallback() {
     if (_quantity > 0) {
-      setState(() => _quantity--);
+      return () {
+        setState(() => _quantity--);
+      };
     }
+    return null;
   }
 
   @override
@@ -49,7 +55,7 @@ class _OrderScreenState extends State<OrderScreen> {
       appBar: AppBar(
         title: const Text(
           'Sandwich Counter',
-          style: Heading1,
+          style: heading1,
         ),
       ),
       body: Center(
@@ -65,14 +71,14 @@ class _OrderScreenState extends State<OrderScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 StyledButton(
-                  onPressed: _increaseQuantity,
+                  onPressed: _getIncreaseCallback(),
                   icon: Icons.add,
                   label: 'Add',
                   backgroundColor: Colors.green,
                 ),
                 const SizedBox(width: 8),
                 StyledButton(
-                  onPressed: _decreaseQuantity,
+                  onPressed: _getDecreaseCallback(),
                   icon: Icons.remove,
                   label: 'Remove',
                   backgroundColor: Colors.red,
@@ -87,7 +93,7 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 
 class StyledButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final IconData icon;
   final String label;
   final Color backgroundColor;
