@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_styles.dart';
 
 void main() {
   runApp(const App());
@@ -46,7 +47,10 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sandwich Counter'),
+        title: const Text(
+          'Sandwich Counter',
+          style: Heading1,
+        ),
       ),
       body: Center(
         child: Column(
@@ -98,13 +102,10 @@ class StyledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle myTextStyle =
-        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
-
     ButtonStyle myButtonStyle = ElevatedButton.styleFrom(
       backgroundColor: backgroundColor,
       foregroundColor: Colors.white,
-      textStyle: myTextStyle,
+      textStyle: normalText,
     );
 
     return ElevatedButton(
@@ -116,7 +117,7 @@ class StyledButton extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             label,
-            style: myTextStyle,
+            style: normalText,
           ),
         ],
       ),
@@ -132,6 +133,9 @@ class OrderItemDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
+    return Text(
+      '$quantity $itemType sandwich(es): ${'🥪' * quantity}',
+      style: normalText,
+    );
   }
 }
