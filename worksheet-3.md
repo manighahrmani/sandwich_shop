@@ -352,3 +352,23 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
     - "How can I use the enum in this widget?" Specify the widget you picked from the documentation and provide the necessary code snippets for context.
     
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
+5.  (Advanced) An Introduction to Widget Testing
+
+    Writing automated tests is a fundamental skill in software development. We will cover it in more details next week but let's take a sneak peak at Flutter's widget testing which allows you to test your UI components.
+
+    A widget test involves three main steps:
+
+    1.  Use a `WidgetTester` to **build** the widget on a test screen with `tester.pumpWidget()`.
+    2.  Simulate user **interaction** (e.g., tapping can be simulated with `tester.tap()`). For `Stateful` widgets, you need to call `tester.pump()` to rebuild the UI after state changes.
+    3.  Use `find` to locate widgets (e.g., `find.text('Add')`) and `expect` to **verify** that they appear as expected (`expect(finder, findsOneWidget)`).
+
+    AI assistants like GitHub Copilot are exceptionally good at writing tests. Try asking Copilot to "write widget tests for this file" or "generate a test case for adding an item" for example.
+
+    Start by finding the `test/widget_test.dart` file and read the comments we have left there. The tests did not take into account the changes that you made in the exercises (e.g., we are testing for `ElevatedButton` widgets as opposed to the custom `StyledButton` from exercise 1). The existing tests are hence broken and will fail.
+
+    Your task is to fix them. You can run the tests by clicking on the `Run` link above the `main()` function in `test/widget_test.dart` and you should get output similar to the shown below.
+
+    ![Introduction to widget testing](images/screenshot_widget_test_intro.jpg)
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
