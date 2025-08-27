@@ -24,16 +24,15 @@ Future<void> _testAppSetsOrderScreenAsHome(WidgetTester tester) async {
   expect(orderScreenFinder, findsOneWidget);
 }
 
-/// Verifies that the initial UI state of the [OrderScreen] shows zero sandwiches.
+/// Verifies that the initial UI state of the [OrderScreen] is correct.
 ///
 /// This test pumps the [App] widget and checks for two things:
-/// 1. The text '0 Footlong sandwich(es): ' is present, indicating the initial
-///    quantity is zero.
+/// 1. The text shows 0 sandwiches with the default bread and item type.
 /// 2. The app bar title 'Sandwich Counter' is displayed.
 Future<void> _testInitialStateShowsZeroSandwiches(WidgetTester tester) async {
   await tester.pumpWidget(const App());
 
-  Finder initialQuantityFinder = find.text('0 Footlong sandwich(es): ');
+  Finder initialQuantityFinder = find.text('0 white footlong sandwich(es): ');
   expect(initialQuantityFinder, findsOneWidget);
 
   Finder appBarTitleFinder = find.text('Sandwich Counter');
@@ -43,9 +42,8 @@ Future<void> _testInitialStateShowsZeroSandwiches(WidgetTester tester) async {
 /// Tests the 'Add' button functionality to ensure it increases the quantity.
 ///
 /// It pumps the [App] widget, finds the 'Add' button by its unique icon,
-/// simulates a tap using [tester.tap], and then rebuilds the widget tree with
-/// [tester.pump]. Finally, it verifies that the quantity displayed on the
-/// screen has increased to 1.
+/// simulates a tap, and then rebuilds the widget tree. Finally, it verifies
+/// that the quantity displayed on the screen has increased to 1.
 Future<void> _testTappingAddButtonIncreasesQuantity(WidgetTester tester) async {
   await tester.pumpWidget(const App());
 
@@ -53,7 +51,7 @@ Future<void> _testTappingAddButtonIncreasesQuantity(WidgetTester tester) async {
   await tester.tap(addIconFinder);
   await tester.pump();
 
-  Finder updatedQuantityFinder = find.text('1 Footlong sandwich(es): 🥪');
+  Finder updatedQuantityFinder = find.text('1 white footlong sandwich(es): 🥪');
   expect(updatedQuantityFinder, findsOneWidget);
 }
 
@@ -70,14 +68,14 @@ Future<void> _testTappingRemoveButtonDecreasesQuantity(
   await tester.tap(addIconFinder);
   await tester.pump();
 
-  Finder quantityOfOneFinder = find.text('1 Footlong sandwich(es): 🥪');
+  Finder quantityOfOneFinder = find.text('1 white footlong sandwich(es): 🥪');
   expect(quantityOfOneFinder, findsOneWidget);
 
   Finder removeIconFinder = find.byIcon(Icons.remove);
   await tester.tap(removeIconFinder);
   await tester.pump();
 
-  Finder quantityOfZeroFinder = find.text('0 Footlong sandwich(es): ');
+  Finder quantityOfZeroFinder = find.text('0 white footlong sandwich(es): ');
   expect(quantityOfZeroFinder, findsOneWidget);
 }
 
@@ -89,7 +87,7 @@ Future<void> _testTappingRemoveButtonDecreasesQuantity(
 Future<void> _testQuantityDoesNotGoBelowZero(WidgetTester tester) async {
   await tester.pumpWidget(const App());
 
-  Finder initialQuantityFinder = find.text('0 Footlong sandwich(es): ');
+  Finder initialQuantityFinder = find.text('0 white footlong sandwich(es): ');
   expect(initialQuantityFinder, findsOneWidget);
 
   Finder removeIconFinder = find.byIcon(Icons.remove);
@@ -103,7 +101,7 @@ Future<void> _testQuantityDoesNotGoBelowZero(WidgetTester tester) async {
 ///
 /// The [App] widget is initialized with a `maxQuantity` of 5. This test
 /// simulates tapping the 'Add' button 10 times and verifies that the quantity
-/// displayed on the screen does not exceed 5, confirming the upper bound logic.
+/// displayed on the screen does not exceed 5.
 Future<void> _testQuantityDoesNotExceedMaxQuantity(WidgetTester tester) async {
   await tester.pumpWidget(const App());
 
@@ -113,7 +111,8 @@ Future<void> _testQuantityDoesNotExceedMaxQuantity(WidgetTester tester) async {
     await tester.pump();
   }
 
-  Finder maxQuantityFinder = find.text('5 Footlong sandwich(es): 🥪🥪🥪🥪🥪');
+  Finder maxQuantityFinder =
+      find.text('5 white footlong sandwich(es): 🥪🥪🥪🥪🥪');
   expect(maxQuantityFinder, findsOneWidget);
 }
 
@@ -125,14 +124,11 @@ Future<void> _testQuantityDoesNotExceedMaxQuantity(WidgetTester tester) async {
 Future<void> _testRemoveButtonIsDisabledAtZero(WidgetTester tester) async {
   await tester.pumpWidget(const App());
 
-  // Find the 'Remove' button and get its widget instance.
   Finder removeButtonFinder = _findElevatedButtonByIcon(Icons.remove);
   ElevatedButton removeButton =
       tester.widget<ElevatedButton>(removeButtonFinder);
-  // Verify that its onPressed callback is null, meaning it's disabled.
   expect(removeButton.onPressed, isNull);
 
-  // For completeness, verify the 'Add' button is enabled.
   Finder addButtonFinder = _findElevatedButtonByIcon(Icons.add);
   ElevatedButton addButton = tester.widget<ElevatedButton>(addButtonFinder);
   expect(addButton.onPressed, isNotNull);
@@ -147,23 +143,61 @@ Future<void> _testAddButtonIsDisabledAtMaxQuantity(WidgetTester tester) async {
   await tester.pumpWidget(const App());
 
   Finder addIconFinder = find.byIcon(Icons.add);
-  // Increment to the max quantity (5).
   for (int i = 0; i < 5; i++) {
     await tester.tap(addIconFinder);
     await tester.pump();
   }
 
-  // Find the 'Add' button and get its widget instance.
   Finder addButtonFinder = _findElevatedButtonByIcon(Icons.add);
   ElevatedButton addButton = tester.widget<ElevatedButton>(addButtonFinder);
-  // Verify that its onPressed callback is null, meaning it's disabled.
   expect(addButton.onPressed, isNull);
 
-  // For completeness, verify the 'Remove' button is enabled.
   Finder removeButtonFinder = _findElevatedButtonByIcon(Icons.remove);
   ElevatedButton removeButton =
       tester.widget<ElevatedButton>(removeButtonFinder);
   expect(removeButton.onPressed, isNotNull);
+}
+
+/// Verifies that the [Switch] correctly toggles the sandwich type.
+///
+/// This test finds the [Switch] widget, taps it, and confirms that the
+/// displayed text in the [OrderItemDisplay] updates from 'footlong' to 'six-inch'.
+Future<void> _testSwitchTogglesSandwichType(WidgetTester tester) async {
+  await tester.pumpWidget(const App());
+
+  Finder initialDisplayFinder = find.text('0 white footlong sandwich(es): ');
+  expect(initialDisplayFinder, findsOneWidget);
+
+  Finder switchFinder = find.byType(Switch);
+  await tester.tap(switchFinder);
+  await tester.pump();
+
+  Finder updatedDisplayFinder = find.text('0 white six-inch sandwich(es): ');
+  expect(updatedDisplayFinder, findsOneWidget);
+}
+
+/// Verifies that the [DropdownMenu] correctly changes the bread type.
+///
+/// This test finds and opens the [DropdownMenu], selects a new bread type ('wheat'),
+/// and confirms that the displayed text in the [OrderItemDisplay] updates.
+Future<void> _testDropdownChangesBreadType(WidgetTester tester) async {
+  await tester.pumpWidget(const App());
+
+  Finder initialDisplayFinder = find.text('0 white footlong sandwich(es): ');
+  expect(initialDisplayFinder, findsOneWidget);
+
+  Finder dropdownFinder = find.byType(DropdownMenu<BreadType>);
+  await tester.tap(dropdownFinder);
+  await tester.pumpAndSettle(); // Wait for menu animation to finish.
+
+  // Find the menu item for 'wheat' and tap it. Use '.last' to ensure it's
+  // the one in the menu and not the one in the closed dropdown button.
+  Finder wheatMenuItemFinder = find.text('wheat').last;
+  await tester.tap(wheatMenuItemFinder);
+  await tester.pumpAndSettle(); // Wait for menu to close.
+
+  Finder updatedDisplayFinder = find.text('0 wheat footlong sandwich(es): ');
+  expect(updatedDisplayFinder, findsOneWidget);
 }
 
 /// Tests the [OrderItemDisplay] widget's output for a quantity of zero.
@@ -172,25 +206,38 @@ Future<void> _testAddButtonIsDisabledAtMaxQuantity(WidgetTester tester) async {
 /// and verifies that it correctly displays the text for zero items.
 Future<void> _testOrderItemDisplayForZero(WidgetTester tester) async {
   MaterialApp testApp = const MaterialApp(
-    home: Scaffold(body: OrderItemDisplay(0, 'Footlong')),
+    home: Scaffold(
+      body: OrderItemDisplay(
+        quantity: 0,
+        itemType: 'footlong',
+        breadType: BreadType.white,
+      ),
+    ),
   );
   await tester.pumpWidget(testApp);
 
-  Finder zeroDisplayFinder = find.text('0 Footlong sandwich(es): ');
+  Finder zeroDisplayFinder = find.text('0 white footlong sandwich(es): ');
   expect(zeroDisplayFinder, findsOneWidget);
 }
 
 /// Tests the [OrderItemDisplay] widget's output for a non-zero quantity.
 ///
 /// This test pumps the [OrderItemDisplay] widget with a quantity of 3 and
-/// verifies that it correctly displays the text along with three sandwich emojis.
+/// verifies that it correctly displays the text with three sandwich emojis.
 Future<void> _testOrderItemDisplayForThree(WidgetTester tester) async {
   MaterialApp testApp = const MaterialApp(
-    home: Scaffold(body: OrderItemDisplay(3, 'Footlong')),
+    home: Scaffold(
+      body: OrderItemDisplay(
+        quantity: 3,
+        itemType: 'footlong',
+        breadType: BreadType.wheat,
+      ),
+    ),
   );
   await tester.pumpWidget(testApp);
 
-  Finder threeDisplayFinder = find.text('3 Footlong sandwich(es): 🥪🥪🥪');
+  Finder threeDisplayFinder =
+      find.text('3 wheat footlong sandwich(es): 🥪🥪🥪');
   expect(threeDisplayFinder, findsOneWidget);
 }
 
@@ -215,6 +262,9 @@ void main() {
         'Remove button is disabled at zero', _testRemoveButtonIsDisabledAtZero);
     testWidgets('Add button is disabled at max quantity',
         _testAddButtonIsDisabledAtMaxQuantity);
+    testWidgets('Switch toggles sandwich type', _testSwitchTogglesSandwichType);
+    testWidgets(
+        'Dropdown menu changes bread type', _testDropdownChangesBreadType);
   });
 
   group('OrderItemDisplay widget', () {
