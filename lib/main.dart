@@ -53,6 +53,28 @@ class _OrderScreenState extends State<OrderScreen> {
     return null;
   }
 
+  void _onSandwichTypeChanged(bool value) {
+    setState(() => _isFootlong = value);
+  }
+
+  void _onBreadTypeSelected(BreadType? value) {
+    if (value != null) {
+      setState(() => _selectedBreadType = value);
+    }
+  }
+
+  List<DropdownMenuEntry<BreadType>> _buildDropdownEntries() {
+    List<DropdownMenuEntry<BreadType>> entries = [];
+    for (BreadType bread in BreadType.values) {
+      DropdownMenuEntry<BreadType> newEntry = DropdownMenuEntry<BreadType>(
+        value: bread,
+        label: bread.name,
+      );
+      entries.add(newEntry);
+    }
+    return entries;
+  }
+
   @override
   Widget build(BuildContext context) {
     String sandwichType = 'footlong';
@@ -83,32 +105,17 @@ class _OrderScreenState extends State<OrderScreen> {
                 const Text('six-inch', style: normalText),
                 Switch(
                   value: _isFootlong,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isFootlong = value;
-                    });
-                  },
+                  onChanged: _onSandwichTypeChanged,
                 ),
                 const Text('footlong', style: normalText),
               ],
             ),
             const SizedBox(height: 10),
             DropdownMenu<BreadType>(
+              textStyle: normalText,
               initialSelection: _selectedBreadType,
-              onSelected: (BreadType? value) {
-                if (value != null) {
-                  setState(() {
-                    _selectedBreadType = value;
-                  });
-                }
-              },
-              dropdownMenuEntries:
-                  BreadType.values.map<DropdownMenuEntry<BreadType>>(
-                (BreadType bread) {
-                  return DropdownMenuEntry<BreadType>(
-                      value: bread, label: bread.name);
-                },
-              ).toList(),
+              onSelected: _onBreadTypeSelected,
+              dropdownMenuEntries: _buildDropdownEntries(),
             ),
             const SizedBox(height: 20),
             Row(
