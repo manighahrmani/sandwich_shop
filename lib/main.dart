@@ -144,6 +144,9 @@ class _OrderScreenState extends State<OrderScreen> {
             Padding(
               padding: const EdgeInsets.all(40.0),
               child: TextField(
+                // We need a key to distinguish this TextField from the
+                // TextFields that are used in the DropdownMenu (for testing).
+                key: const Key('notes_textfield'),
                 controller: _notesController,
                 decoration: const InputDecoration(
                   labelText: 'Add a note (e.g., no onions)',
