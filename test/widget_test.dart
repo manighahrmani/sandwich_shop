@@ -4,9 +4,7 @@ import 'package:sandwich_shop/main.dart';
 
 /// Finds the specific [ElevatedButton] inside a [StyledButton] identified by its icon.
 Finder _findElevatedButtonByIcon(IconData icon) {
-  // First, find the specific StyledButton that has the desired icon.
   Finder styledButtonFinder = find.widgetWithIcon(StyledButton, icon);
-  // Then, find the ElevatedButton that is a descendant of that StyledButton.
   return find.descendant(
     of: styledButtonFinder,
     matching: find.byType(ElevatedButton),
@@ -26,14 +24,18 @@ Future<void> _testAppSetsOrderScreenAsHome(WidgetTester tester) async {
 
 /// Verifies that the initial UI state of the [OrderScreen] is correct.
 ///
-/// This test pumps the [App] widget and checks for two things:
+/// This test pumps the [App] widget and checks for three things:
 /// 1. The text shows 0 sandwiches with the default bread and item type.
-/// 2. The app bar title 'Sandwich Counter' is displayed.
-Future<void> _testInitialStateShowsZeroSandwiches(WidgetTester tester) async {
+/// 2. The default note 'No notes added.' is visible.
+/// 3. The app bar title 'Sandwich Counter' is displayed.
+Future<void> _testInitialStateIsCorrect(WidgetTester tester) async {
   await tester.pumpWidget(const App());
 
   Finder initialQuantityFinder = find.text('0 white footlong sandwich(es): ');
   expect(initialQuantityFinder, findsOneWidget);
+
+  Finder initialNoteFinder = find.text('Note: No notes added.');
+  expect(initialNoteFinder, findsOneWidget);
 
   Finder appBarTitleFinder = find.text('Sandwich Counter');
   expect(appBarTitleFinder, findsOneWidget);
@@ -188,22 +190,40 @@ Future<void> _testDropdownChangesBreadType(WidgetTester tester) async {
 
   Finder dropdownFinder = find.byType(DropdownMenu<BreadType>);
   await tester.tap(dropdownFinder);
-  await tester.pumpAndSettle(); // Wait for menu animation to finish.
+  await tester.pumpAndSettle();
 
-  // Find the menu item for 'wheat' and tap it. Use '.last' to ensure it's
-  // the one in the menu and not the one in the closed dropdown button.
   Finder wheatMenuItemFinder = find.text('wheat').last;
   await tester.tap(wheatMenuItemFinder);
-  await tester.pumpAndSettle(); // Wait for menu to close.
+  await tester.pumpAndSettle();
 
   Finder updatedDisplayFinder = find.text('0 wheat footlong sandwich(es): ');
   expect(updatedDisplayFinder, findsOneWidget);
 }
 
+/// Verifies that entering text into the [TextField] updates the order note.
+///
+/// This test finds the [TextField], enters new text, and confirms that the
+/// displayed note in the [OrderItemDisplay] updates accordingly.
+Future<void> _testTextFieldUpdatesOrderNote(WidgetTester tester) async {
+  await tester.pumpWidget(const App());
+
+  Finder initialNoteFinder = find.text('Note: No notes added.');
+  expect(initialNoteFinder, findsOneWidget);
+
+  // Find the specific TextField using its unique key.
+  Finder textFieldFinder = find.byKey(const Key('notes_textfield'));
+  await tester.enterText(textFieldFinder, 'extra pickles');
+  await tester.pump();
+
+  Finder updatedNoteFinder = find.text('Note: extra pickles');
+  expect(updatedNoteFinder, findsOneWidget);
+  expect(initialNoteFinder, findsNothing);
+}
+
 /// Tests the [OrderItemDisplay] widget's output for a quantity of zero.
 ///
-/// This test pumps only the [OrderItemDisplay] widget with a quantity of 0
-/// and verifies that it correctly displays the text for zero items.
+/// This test pumps only the [OrderItemDisplay] widget and verifies that it
+/// correctly displays the text for zero items and the provided note.
 Future<void> _testOrderItemDisplayForZero(WidgetTester tester) async {
   MaterialApp testApp = const MaterialApp(
     home: Scaffold(
@@ -211,6 +231,7 @@ Future<void> _testOrderItemDisplayForZero(WidgetTester tester) async {
         quantity: 0,
         itemType: 'footlong',
         breadType: BreadType.white,
+        orderNote: 'test note',
       ),
     ),
   );
@@ -218,12 +239,15 @@ Future<void> _testOrderItemDisplayForZero(WidgetTester tester) async {
 
   Finder zeroDisplayFinder = find.text('0 white footlong sandwich(es): ');
   expect(zeroDisplayFinder, findsOneWidget);
+
+  Finder noteFinder = find.text('Note: test note');
+  expect(noteFinder, findsOneWidget);
 }
 
 /// Tests the [OrderItemDisplay] widget's output for a non-zero quantity.
 ///
 /// This test pumps the [OrderItemDisplay] widget with a quantity of 3 and
-/// verifies that it correctly displays the text with three sandwich emojis.
+/// verifies that it correctly displays the text with emojis and the note.
 Future<void> _testOrderItemDisplayForThree(WidgetTester tester) async {
   MaterialApp testApp = const MaterialApp(
     home: Scaffold(
@@ -231,6 +255,7 @@ Future<void> _testOrderItemDisplayForThree(WidgetTester tester) async {
         quantity: 3,
         itemType: 'footlong',
         breadType: BreadType.wheat,
+        orderNote: 'another test note',
       ),
     ),
   );
@@ -239,6 +264,9 @@ Future<void> _testOrderItemDisplayForThree(WidgetTester tester) async {
   Finder threeDisplayFinder =
       find.text('3 wheat footlong sandwich(es): 🥪🥪🥪');
   expect(threeDisplayFinder, findsOneWidget);
+
+  Finder noteFinder = find.text('Note: another test note');
+  expect(noteFinder, findsOneWidget);
 }
 
 /// The main entry point for running all widget tests.
@@ -248,8 +276,7 @@ void main() {
   });
 
   group('OrderScreen interaction tests', () {
-    testWidgets('Initial state shows 0 sandwiches',
-        _testInitialStateShowsZeroSandwiches);
+    testWidgets('Initial state is correct', _testInitialStateIsCorrect);
     testWidgets('Tapping add button increases quantity',
         _testTappingAddButtonIncreasesQuantity);
     testWidgets('Tapping remove button decreases quantity',
@@ -265,6 +292,8 @@ void main() {
     testWidgets('Switch toggles sandwich type', _testSwitchTogglesSandwichType);
     testWidgets(
         'Dropdown menu changes bread type', _testDropdownChangesBreadType);
+    testWidgets(
+        'Text field updates order note', _testTextFieldUpdatesOrderNote);
   });
 
   group('OrderItemDisplay widget', () {
