@@ -142,7 +142,7 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              padding: const EdgeInsets.all(40.0),
               child: TextField(
                 controller: _notesController,
                 decoration: const InputDecoration(
@@ -205,10 +205,7 @@ class StyledButton extends StatelessWidget {
         children: [
           Icon(icon),
           const SizedBox(width: 8),
-          Text(
-            label,
-            style: normalText,
-          ),
+          Text(label),
         ],
       ),
     );
