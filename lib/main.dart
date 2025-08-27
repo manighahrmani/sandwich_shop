@@ -34,6 +34,28 @@ class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
   bool _isFootlong = true;
   BreadType _selectedBreadType = BreadType.white;
+  final TextEditingController _notesController = TextEditingController();
+  String _orderNote = 'No notes added.';
+
+  @override
+  void initState() {
+    super.initState();
+    _notesController.addListener(() {
+      setState(() {
+        if (_notesController.text.isEmpty) {
+          _orderNote = 'No notes added.';
+        } else {
+          _orderNote = _notesController.text;
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
+  }
 
   VoidCallback? _getIncreaseCallback() {
     if (_quantity < widget.maxQuantity) {
@@ -97,6 +119,7 @@ class _OrderScreenState extends State<OrderScreen> {
               quantity: _quantity,
               itemType: sandwichType,
               breadType: _selectedBreadType,
+              orderNote: _orderNote,
             ),
             const SizedBox(height: 20),
             Row(
@@ -116,6 +139,16 @@ class _OrderScreenState extends State<OrderScreen> {
               initialSelection: _selectedBreadType,
               onSelected: _onBreadTypeSelected,
               dropdownMenuEntries: _buildDropdownEntries(),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: TextField(
+                controller: _notesController,
+                decoration: const InputDecoration(
+                  labelText: 'Add a note (e.g., no onions)',
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             Row(
@@ -186,12 +219,14 @@ class OrderItemDisplay extends StatelessWidget {
   final int quantity;
   final String itemType;
   final BreadType breadType;
+  final String orderNote;
 
   const OrderItemDisplay({
     super.key,
     required this.quantity,
     required this.itemType,
     required this.breadType,
+    required this.orderNote,
   });
 
   @override
@@ -199,9 +234,27 @@ class OrderItemDisplay extends StatelessWidget {
     String displayText =
         '$quantity ${breadType.name} $itemType sandwich(es): ${'🥪' * quantity}';
 
-    return Text(
-      displayText,
-      style: normalText,
+    List<Widget> children = [
+      Text(
+        displayText,
+        style: normalText,
+        textAlign: TextAlign.center,
+      ),
+    ];
+
+    if (orderNote.isNotEmpty) {
+      children.add(const SizedBox(height: 8));
+      children.add(
+        Text(
+          'Note: $orderNote',
+          style: normalText.copyWith(fontWeight: FontWeight.normal),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
+    return Column(
+      children: children,
     );
   }
 }
