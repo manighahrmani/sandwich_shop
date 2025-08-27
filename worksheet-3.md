@@ -262,7 +262,9 @@ Commit your final changes with a message like `Implement counter functionality w
 
 ## **Adding Custom Notes to an Order**
 
-Let's add some more interactivity to our app. In software development, we often start with a user story to define a new feature. Here is an example:
+Let's add some more interactivity to our app. We would like to allow users to add custom notes to their sandwich orders. This could be special requests like "no onions" or "extra pickles".
+
+In software development, we often start with a user story to define a new feature. Here is an example:
 
 ```
 As a user, I want to add a note to my sandwich order so that I can make special requests (e.g., "no onions", "extra pickles").
