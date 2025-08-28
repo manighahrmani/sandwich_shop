@@ -1,8 +1,16 @@
-# Sandwich Shop - Flutter Worksheets
+# Flutter Worksheets
 
-The worksheets for the Flutter module are listed below. Complete them in order (do not skip the first one!) and after completing the exercises, show a member of staff your work for a sign-off.
+The worksheets for the Flutter module are listed below.
 
-**Note:** The sign-offs contribute to your overall mark.
+Complete them in order (do not skip the first one!).
+
+Every worksheet ends with a handful of **exercises**.
+
+After completing these exercises, show a member of staff your work for a **sign-off**.
+
+**Each sign-off is worth 5%** of the coursework mark.
+
+The **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
 
 * [Worksheet 0: Introduction to Dart, Git and GitHub](./worksheet-0.md)
 * [Worksheet 1: Introduction to Flutter](./worksheet-1.md)
