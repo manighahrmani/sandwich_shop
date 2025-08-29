@@ -1,6 +1,33 @@
 
-## Widget testing
+Talk about async await and futures.
+**BUT DON'T USE NAMED FUNCTIONS FOR TESTS AS THIS MAKES THINGS WAY TOO COMPLICATED. SIMPLIFY IT AND PASS TEST FUNCTIONS AS ANONYMOUS FUNCTIONS AS THE SECOND PARAMETER TO TEST()**, SIMPLIFY THE WIDGET_TEST FILE.
 
+Also start talking about separation of code into multiple files (starting with a separate file for styles).
+
+Add a note about this (what if we have multiple of one widget type?):
+```dart
+              child: TextField(
+                // We need a key to distinguish this TextField from the
+                // TextFields that are used in the DropdownMenu (for testing).
+                key: const Key('notes_textfield'),
+                controller: _notesController,
+                decoration: const InputDecoration(
+                  labelText: 'Add a note (e.g., no onions)',
+                ),
+              ),
+```
+
+Copilot video, talks about Test Driven Development (TDD) too (but in TS): https://youtu.be/smdBqEu7fx4?feature=shared
+
+Example of unit test for Python:
+https://docs.github.com/en/copilot/tutorials/write-tests
+
+## Unit testing
+
+Start with this: https://docs.flutter.dev/cookbook/testing/unit/introduction
+
+
+## Widget testing
 
 Start with this: https://docs.flutter.dev/cookbook/testing/widget/introduction
 ## More notes on pumping
@@ -27,25 +54,5 @@ find.byType(): Finds a widget by its type.
 find.byKey(): Finds a widget using a unique key.
 find.text(): Finds a Text widget containing a specific string. 
 
-Talk about async await and futures.
-**BUT DON'T USE NAMED FUNCTIONS FOR TESTS AS THIS MAKES THINGS WAY TOO COMPLICATED. SIMPLIFY IT AND PASS TEST FUNCTIONS AS ANONYMOUS FUNCTIONS AS THE SECOND PARAMETER TO TEST()**, SIMPLIFY THE WIDGET_TEST FILE.
-
-Also start talking about separation of code into multiple files (starting with a separate file for styles).
-
-Add a note about this (what if we have multiple of one widget type?):
-```dart
-              child: TextField(
-                // We need a key to distinguish this TextField from the
-                // TextFields that are used in the DropdownMenu (for testing).
-                key: const Key('notes_textfield'),
-                controller: _notesController,
-                decoration: const InputDecoration(
-                  labelText: 'Add a note (e.g., no onions)',
-                ),
-              ),
-```
-
-Copilot video, talks about Test Driven Development (TDD) too (but in TS): https://youtu.be/smdBqEu7fx4?feature=shared
-
-Example of unit test for Python:
-https://docs.github.com/en/copilot/tutorials/write-tests
+Put links about handling scroll but don't talk about it: https://docs.flutter.dev/cookbook/testing/widget/scrolling
+On the other hand, give some examples of user interaction: https://docs.flutter.dev/cookbook/testing/widget/tap-drag
