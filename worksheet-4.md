@@ -1,5 +1,6 @@
 
 Talk about async await and futures.
+**BUT DON'T USE NAMED FUNCTIONS FOR TESTS AS THIS MAKES THINGS WAY TOO COMPLICATED. SIMPLIFY IT AND PASS TEST FUNCTIONS AS ANONYMOUS FUNCTIONS AS THE SECOND PARAMETER TO TEST()**, SIMPLIFY THE WIDGET_TEST FILE.
 
 Also start talking about separation of code into multiple files (starting with a separate file for styles).
 
