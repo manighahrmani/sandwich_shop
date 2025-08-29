@@ -1,6 +1,13 @@
 
 ## Widget testing
 
+
+Start with this: https://docs.flutter.dev/cookbook/testing/widget/introduction
+## More notes on pumping
+Read notes on pumping widget (e.g., schedule a pump after a delay to allow for animations or `pumpAndSettle()`)
+https://docs.flutter.dev/cookbook/testing/widget/introduction#notes-about-the-pump-methods
+
+
 A `WidgetTester` is a core utility class in Flutter's flutter_test package that allows developers to programmatically build and interact with widgets in an isolated test environment. It acts as a controller for widget tests, simulating user interactions and the passage of time to verify that a widget's UI and behavior are correct.
 
 The WidgetTester provides a suite of methods that make it possible to test widgets without running the full application on a device or emulator. Its key responsibilities include: 
