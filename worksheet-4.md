@@ -13,7 +13,7 @@ Ensure that you have already completed the following:
 
 To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-### **Introduction to App Architecture**
+## **Introduction to App Architecture**
 
 As your app grows, it's important to have a clear and organised structure. Generally speaking, we need to organise our code into different layers, each with its own responsibility.
 
@@ -31,33 +31,28 @@ If you would like to learn more about app architecture, you can read the [offici
 
 In this worksheet we will focus on the first three layers: views, view models, and repositories. Services wrap API endpoints and expose asynchronous response objects, such as `Future` and `Stream` objects. We will learn more about asynchronous programming in a later worksheet.
 
-### App Architecture
+### Refactoring our code
 
-Let's start by refactoring our code into multiple files. First, create a new file called `app_styles.dart` in the `lib` folder and add the following code to it:
+Refactoring is the process of restructuring existing code, to improve it readability, maintainability, and performance, without changing its external behaviour.
 
-```dart
-import 'package:flutter/material.dart';
+Let's start by refactoring our code into separate layers. As a simple example, notice that we have already created a file called `app_styles.dart` in the `lib` folder which contains the text styles used in our app. Open this file and check where these styles are used in `main.dart` (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for the name of the variables in `app_styles.dart`).
 
-const TextStyle normalText = TextStyle(
-  fontSize: 16,
-);
+Next, open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ + Shift + E** on macOS. Right-click on the `lib` folder and select **New Folder**. Name this folder `views`. Similarly, create the following folders in the `lib` folder: `view_models`, and `repositories`. 
 
-const heading1 = TextStyle(
-  fontSize: 24,
-  fontWeight: FontWeight.bold,
-);
-```
+Drag and drop the `app_styles.dart` and `main.dart` files into the `views` subfolder of the `lib` folder.
 
-Next, create the following folders in the `lib` folder: `views`, `view_models`, and `repositories`. Your folder structure should now look like this:
+Your folder structure should now look like this:
 
 ```
 lib/
   ├── views/
+  │   ├── app_styles.dart
+  │   └── main.dart
   ├── view_models/
-  ├── repositories/
-  ├── app_styles.dart
-  └── main.dart
+  └── repositories/
 ```
+
+<!-- TODO: Reviewed till here -->
 
 Now, let's move the `OrderItemDisplay` and `StyledButton` widgets to their own files in the `views` folder. Create a new file called `order_item_display.dart` in the `views` folder and add the following code to it:
 
@@ -387,6 +382,8 @@ You can run these tests by opening the `order_view_model_test.dart` file in VS C
 Now, it's your turn. Use your AI assistant to create test files for the `OrderRepository` and the other methods in `OrderViewModel`.
 
 ## **Widget testing**
+
+<!-- Make sure to update the import statement as we have moved `main.dart` to the `lib` folder. -->
 
 The `WidgetTester` is a core utility class in Flutter's `flutter_test` package that allows developers to programmatically build and interact with widgets in an isolated test environment. It acts as a controller for widget tests, simulating user interactions and the passage of time to verify that a widget's UI and behavior are correct.
 
