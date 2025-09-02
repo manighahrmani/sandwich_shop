@@ -31,9 +31,9 @@ If you would like to learn more about app architecture, you can read the [offici
 
 In this worksheet we will focus on the first three layers: views, view models, and repositories. Services wrap API endpoints and expose asynchronous response objects, such as `Future` and `Stream` objects. We will learn more about asynchronous programming in a later worksheet.
 
-### Refactoring our code
+### **Refactoring our code**
 
-Refactoring is the process of restructuring existing code, to improve it readability, maintainability, and performance, without changing its external behaviour.
+Refactoring is the process of restructuring existing code to improve its readability, maintainability, and performance, without changing its external behaviour.
 
 Let's start by refactoring our code into separate layers. As a simple example, notice that we have already created a file called `app_styles.dart` in the `lib` folder which contains the text styles used in our app. Open this file and check where these styles are used in `main.dart` (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for the name of the variables in `app_styles.dart`).
 
@@ -52,162 +52,63 @@ lib/
   └── repositories/
 ```
 
-<!-- TODO: Reviewed till here -->
+Now, let's create a more meaningful separation by moving the business logic out of our UI code. The logic for managing the sandwich quantity (incrementing, decrementing, and checking limits) doesn't need to be inside the `_OrderScreenState` of `main.dart`. We can move it to a dedicated repository class.
 
-Now, let's move the `OrderItemDisplay` and `StyledButton` widgets from `main.dart` to their own files in the `views` folder. Create a new file called `order_item_display.dart` in the `views` folder and add the following code to it:
-
-```dart
-import 'package:flutter/material.dart';
-import '../app_styles.dart';
-import '../repositories/order_repository.dart';
-
-class OrderItemDisplay extends StatelessWidget {
-  final int quantity;
-  final String itemType;
-  final BreadType breadType;
-  final String orderNote;
-
-  const OrderItemDisplay({
-    super.key,
-    required this.quantity,
-    required this.itemType,
-    required this.breadType,
-    required this.orderNote,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    String displayText =
-        '$quantity ${breadType.name} $itemType sandwich(es): ${'🥪' * quantity}';
-
-    return Column(
-      children: [
-        Text(
-          displayText,
-          style: normalText,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Note: $orderNote',
-          style: normalText,
-        ),
-      ],
-    );
-  }
-}
-```
-
-Create another new file called `styled_button.dart` in the `views` folder and add the following code to it:
-
-```dart
-import 'package:flutter/material.dart';
-import '../app_styles.dart';
-
-class StyledButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final IconData icon;
-  final String label;
-  final Color backgroundColor;
-
-  const StyledButton({
-    super.key,
-    required this.onPressed,
-    required this.icon,
-    required this.label,
-    required this.backgroundColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    ButtonStyle myButtonStyle = ElevatedButton.styleFrom(
-      backgroundColor: backgroundColor,
-      foregroundColor: Colors.white,
-      textStyle: normalText,
-    );
-
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: myButtonStyle,
-      child: Row(
-        children: [
-          Icon(icon),
-          const SizedBox(width: 8),
-          Text(label),
-        ],
-      ),
-    );
-  }
-}
-```
-
-Now, create a new file called `order_repository.dart` in the `repositories` folder and add the following code to it:
+Right-click on the `repositories` folder and select **New File**. Name this file `order_repository.dart`. Open this file and add the following code to it. This class will now be the single source of truth for our order's quantity. Notice the new boolean getters `canIncrement` and `canDecrement` which encapsulate the logic for checking the quantity limits.
 
 ```dart
 enum BreadType { white, wheat, wholemeal }
+
+class OrderRepository {
+  int _quantity = 0;
+  final int maxQuantity;
+
+  OrderRepository({required this.maxQuantity});
+
+  int get quantity => _quantity;
+
+  bool get canIncrement => _quantity < maxQuantity;
+  bool get canDecrement => _quantity > 0;
+
+  void increment() {
+    if (canIncrement) {
+      _quantity++;
+    }
+  }
+
+  void decrement() {
+    if (canDecrement) {
+      _quantity--;
+    }
+  }
+}
 ```
 
-Finally, create a new file called `order_view_model.dart` in the `view_models` folder and add the following code to it:
+With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`. The callback methods are now cleaner as they delegate the condition checks to the repository. Update your `main.dart` file to use this new repository.
+
+This is what the updated `main.dart` file should look like (`main`, `App`, `OrderScreen`, `StyledButton` and `OrderItemDisplay` class definitions remain in this file):
 
 ```dart
 import 'package:flutter/material.dart';
-import '../repositories/order_repository.dart';
+import 'app_styles.dart';
+import 'repositories/order_repository.dart';
 
-class OrderViewModel with ChangeNotifier {
-  int _quantity = 0;
+class _OrderScreenState extends State<OrderScreen> {
+  late final OrderRepository _orderRepository;
+
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
   BreadType _selectedBreadType = BreadType.white;
-  final int maxQuantity;
 
-  OrderViewModel({this.maxQuantity = 10});
+  @override
+  void initState() {
+    super.initState();
+    // Initialise the repository with the maxQuantity from the widget
+    _orderRepository = OrderRepository(maxQuantity: widget.maxQuantity);
 
-  int get quantity => _quantity;
-  TextEditingController get notesController => _notesController;
-  bool get isFootlong => _isFootlong;
-  BreadType get selectedBreadType => _selectedBreadType;
-
-  VoidCallback? getIncreaseCallback() {
-    if (_quantity < maxQuantity) {
-      return () {
-        _quantity++;
-        notifyListeners();
-      };
-    }
-    return null;
-  }
-
-  VoidCallback? getDecreaseCallback() {
-    if (_quantity > 0) {
-      return () {
-        _quantity--;
-        notifyListeners();
-      };
-    }
-    return null;
-  }
-
-  void onSandwichTypeChanged(bool value) {
-    _isFootlong = value;
-    notifyListeners();
-  }
-
-  void onBreadTypeSelected(BreadType? value) {
-    if (value != null) {
-      _selectedBreadType = value;
-      notifyListeners();
-    }
-  }
-
-  List<DropdownMenuEntry<BreadType>> buildDropdownEntries() {
-    List<DropdownMenuEntry<BreadType>> entries = [];
-    for (BreadType bread in BreadType.values) {
-      DropdownMenuEntry<BreadType> newEntry = DropdownMenuEntry<BreadType>(
-        value: bread,
-        label: bread.name,
-      );
-      entries.add(newEntry);
-    }
-    return entries;
+    _notesController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -215,57 +116,30 @@ class OrderViewModel with ChangeNotifier {
     _notesController.dispose();
     super.dispose();
   }
-}
-```
 
-Now update your `main.dart` file to use the new `OrderScreen` and `OrderViewModel`.
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'app_styles.dart';
-import 'repositories/order_repository.dart';
-import 'view_models/order_view_model.dart';
-import 'views/order_item_display.dart';
-import 'views/styled_button.dart';
-
-void main() {
-  runApp(const App());
-}
-
-class App extends StatelessWidget {
-  const App({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => OrderViewModel(maxQuantity: 5),
-      child: const MaterialApp(
-        title: 'Sandwich Shop App',
-        home: OrderScreen(),
-      ),
-    );
+  VoidCallback? _getIncreaseCallback() {
+    if (_orderRepository.canIncrement) {
+      return () {
+        setState(() => _orderRepository.increment());
+      };
+    }
+    return null;
   }
-}
 
-class OrderScreen extends StatelessWidget {
-  const OrderScreen({super.key});
+  VoidCallback? _getDecreaseCallback() {
+    if (_orderRepository.canDecrement) {
+      return () {
+        setState(() => _orderRepository.decrement());
+      };
+    }
+    return null;
+  }
+
+  // ... (_onSandwichTypeChanged, _onBreadTypeSelected, _buildDropdownEntries remain the same) ...
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<OrderViewModel>(context);
-
-    String sandwichType = 'footlong';
-    if (!viewModel.isFootlong) {
-      sandwichType = 'six-inch';
-    }
-
-    String noteForDisplay;
-    if (viewModel.notesController.text.isEmpty) {
-      noteForDisplay = 'No notes added.';
-    } else {
-      noteForDisplay = viewModel.notesController.text;
-    }
+    // ... (sandwichType and noteForDisplay logic remains the same) ...
 
     return Scaffold(
       appBar: AppBar(
@@ -278,63 +152,13 @@ class OrderScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // Use the quantity from the repository
             OrderItemDisplay(
-              quantity: viewModel.quantity,
+              quantity: _orderRepository.quantity,
               itemType: sandwichType,
-              breadType: viewModel.selectedBreadType,
-              orderNote: noteForDisplay,
+              // ... other properties
             ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('six-inch', style: normalText),
-                Switch(
-                  value: viewModel.isFootlong,
-                  onChanged: viewModel.onSandwichTypeChanged,
-                ),
-                const Text('footlong', style: normalText),
-              ],
-            ),
-            const SizedBox(height: 10),
-            DropdownMenu<BreadType>(
-              textStyle: normalText,
-              initialSelection: viewModel.selectedBreadType,
-              onSelected: viewModel.onBreadTypeSelected,
-              dropdownMenuEntries: viewModel.buildDropdownEntries(),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: TextField(
-                // We need a key to distinguish this TextField from the
-                // TextFields that are used in the DropdownMenu (for testing).
-                key: const Key('notes_textfield'),
-                controller: viewModel.notesController,
-                decoration: const InputDecoration(
-                  labelText: 'Add a note (e.g., no onions)',
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                StyledButton(
-                  onPressed: viewModel.getIncreaseCallback(),
-                  icon: Icons.add,
-                  label: 'Add',
-                  backgroundColor: Colors.green,
-                ),
-                const SizedBox(width: 8),
-                StyledButton(
-                  onPressed: viewModel.getDecreaseCallback(),
-                  icon: Icons.remove,
-                  label: 'Remove',
-                  backgroundColor: Colors.red,
-                ),
-              ],
-            ),
+            // ... (rest of the UI code remains the same) ...
           ],
         ),
       ),
@@ -349,37 +173,81 @@ How can you ensure that your app continues to work as you add more features or c
 
 You should already have a `test` folder in your project (this is created automatically when you create a new Flutter project) and inside this folder there should be a `widget_test.dart` file.
 
-You should add subfolders here for the unit testing of the view models or repositories and one for widget/screen/views/UI tests.
+You should add subfolders here for the unit testing of the view models or repositories and one for widget/screen/views/UI tests. For our new repository, create a `repositories` folder inside the `test` folder.
+
+Unit tests are designed to verify the smallest testable parts of an application, called "units", in isolation. In our case, the `OrderRepository` class is a perfect example of a unit. By testing it separately from the Flutter UI, we can ensure its logic is correct, reliable, and predictable without the complexity of user interactions or rendering. This makes them extremely fast to run and helps catch bugs in your business logic early. For more information, you can read the official Flutter documentation on [unit testing](https://docs.flutter.dev/cookbook/testing/unit/introduction).
 
 ### **Unit testing example**
 
-Let's write a unit test for our `OrderViewModel`. Create a new file called `order_view_model_test.dart` in the `test/view_models` folder and add the following code to it:
+Now that we have moved our business logic into a pure Dart class (`OrderRepository`), we can write a unit test for it without needing to build any widgets. Unit tests are fast and focus on a single class or function.
+
+Create a new file called `order_repository_test.dart` in the `test/repositories` folder.
+
+
+This is what your folder structure should look like now:
+
+```
+lib/
+  ├── views/
+  │   ├── app_styles.dart
+  │   └── main.dart
+  ├── view_models/
+  └── repositories/
+test/
+  └── repositories/
+      └── order_repository_test.dart
+```
+
+
+Add the following code to `order_repository_test.dart`. This test verifies the core logic of our repository.
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/view_models/order_view_model.dart';
+import 'package:sandwich_shop/repositories/order_repository.dart';
 
 void main() {
-  group('OrderViewModel', () {
-    test('quantity should be incremented', () {
-      final viewModel = OrderViewModel(maxQuantity: 5);
-      viewModel.getIncreaseCallback()?.call();
-      expect(viewModel.quantity, 1);
+  group('OrderRepository', () {
+    test('initial quantity should be 0', () {
+      final repository = OrderRepository(maxQuantity: 5);
+      expect(repository.quantity, 0);
     });
 
-    test('quantity should not be incremented beyond maxQuantity', () {
-      final viewModel = OrderViewModel(maxQuantity: 1);
-      viewModel.getIncreaseCallback()?.call();
-      viewModel.getIncreaseCallback()?.call();
-      expect(viewModel.quantity, 1);
+    test('increment should increase quantity by 1', () {
+      final repository = OrderRepository(maxQuantity: 5);
+      repository.increment();
+      expect(repository.quantity, 1);
+    });
+
+    test('decrement should decrease quantity by 1', () {
+      final repository = OrderRepository(maxQuantity: 5);
+      repository.increment(); // quantity is now 1
+      repository.decrement(); // quantity is now 0
+      expect(repository.quantity, 0);
+    });
+
+    test('quantity should not exceed maxQuantity', () {
+      final repository = OrderRepository(maxQuantity: 2);
+      repository.increment(); // quantity is 1
+      repository.increment(); // quantity is 2
+      repository.increment(); // should not change
+      expect(repository.quantity, 2);
+    });
+
+    test('quantity should not go below 0', () {
+      final repository = OrderRepository(maxQuantity: 5);
+      repository.decrement(); // should not change
+      expect(repository.quantity, 0);
     });
   });
 }
 ```
 
-You can run these tests by opening the `order_view_model_test.dart` file in VS Code and clicking on the `Run` link above the `main` function.
+### **What to expect when you run tests**
 
-Now, it's your turn. Use your AI assistant to create test files for the `OrderRepository` and the other methods in `OrderViewModel`.
+You can run these tests by opening the `order_repository_test.dart` file in VS Code and clicking on the `Run` link above the `main` function.
+
+When you run the tests, a new "Test Results" panel will appear in your terminal area. You will see a list of your tests with icons next to them. A green tick (✅) means the test passed, meaning the `expect` function received the value it was waiting for. A red cross (❌) means the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This instant feedback is crucial for debugging.
+
 
 ## **Widget testing**
 
