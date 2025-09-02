@@ -54,7 +54,7 @@ lib/
 
 <!-- TODO: Reviewed till here -->
 
-Now, let's move the `OrderItemDisplay` and `StyledButton` widgets to their own files in the `views` folder. Create a new file called `order_item_display.dart` in the `views` folder and add the following code to it:
+Now, let's move the `OrderItemDisplay` and `StyledButton` widgets from `main.dart` to their own files in the `views` folder. Create a new file called `order_item_display.dart` in the `views` folder and add the following code to it:
 
 ```dart
 import 'package:flutter/material.dart';
