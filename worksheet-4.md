@@ -106,11 +106,11 @@ import '../repositories/order_repository.dart';
 
 The `..` is used to go up one directory level from `views` to `lib`, and then down into the `repositories` folder.
 
-
-This is what the updated `main.dart` file should look like (`main`, `App`, `OrderScreen`, `StyledButton` and `OrderItemDisplay` class definitions remain in this file):
+This is what the updated `_OrderScreenState` class should look like in `main.dart` (the rest of the code remains unchanged):
 
 ```dart
 class _OrderScreenState extends State<OrderScreen> {
+  // Declare a late variable for the repository (remove _quantity)
   late final OrderRepository _orderRepository;
 
   final TextEditingController _notesController = TextEditingController();
