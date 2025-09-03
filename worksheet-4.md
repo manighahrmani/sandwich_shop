@@ -262,13 +262,17 @@ The `_getIncreaseCallback` and `_getDecreaseCallback` methods are now simpler. T
 
 ## **Unit testing**
 
-How can you ensure that your app continues to work as you add more features or change existing functionality? By writing tests.
+Writing tests help you ensure that your code works as expected and helps prevent bugs from creeping in as you make changes and add new features. There are three main types of tests in Flutter:
+
+  - **Unit tests**: These tests verify the smallest testable parts of an application, called "units", in isolation. In our case, the `OrderRepository` class is a perfect example of a unit.
+  - **Widget tests**: These tests verify the UI and interactions of individual widgets. They can simulate user interactions and verify that the widget behaves as expected.
+  - **Integration tests**: These tests verify the integration of multiple widgets and services. They can simulate user interactions and verify that the app behaves as expected.
+
+For more information, you can read the official Flutter documentation on [unit testing](https://docs.flutter.dev/cookbook/testing). In this worksheet, we will focus on unit tests and widget tests.
 
 You should already have a `test` folder in your project (this is created automatically when you create a new Flutter project) and inside this folder there should be a `widget_test.dart` file.
 
-You should add subfolders here for the unit testing of the view models or repositories and one for widget/screen/views/UI tests. For our new repository, create a `repositories` folder inside the `test` folder.
-
-Unit tests are designed to verify the smallest testable parts of an application, called "units", in isolation. In our case, the `OrderRepository` class is a perfect example of a unit. By testing it separately from the Flutter UI, we can ensure its logic is correct, reliable, and predictable without the complexity of user interactions or rendering. This makes them extremely fast to run and helps catch bugs in your business logic early. For more information, you can read the official Flutter documentation on [unit testing](https://docs.flutter.dev/cookbook/testing/unit/introduction).
+You should add subfolders to the `test` folder for unit testing and widget testing. For our new repository, create a `repositories` folder inside the `test` folder.
 
 ### **Unit testing example**
 
