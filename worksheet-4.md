@@ -103,10 +103,8 @@ With the logic moved, we can now simplify our `_OrderScreenState` class in `main
 First, import the `OrderRepository` class at the top of your `main.dart` file. You may also need to move the `BreadType` enum from `main.dart` to the new `order_repository.dart` file to keep all your data model definitions in one place.
 
 ```dart
-import '../repositories/order_repository.dart';
+import 'package:sandwich_shop/repositories/order_repository.dart';
 ```
-
-The `..` is used to go up one directory level from `views` to `lib`, and then down into the `repositories` folder.
 
 Next, replace the entire `_OrderScreenState` class in your `main.dart` file with the following updated code.
 
@@ -341,7 +339,7 @@ void main() {
 
 ### **What to expect when you run tests**
 
-You can run these tests by opening the `order_repository_test.dart` file in VS Code and clicking on the `Run` link above the `main` function.
+Run these tests while the `order_repository_test.dart` is open in VS Code and click on the `Run` link above the `main` function.
 
 When you run the tests, a new "Test Results" panel will appear in your terminal area. You will see a list of your tests with icons next to them. A green tick (✅) means the test passed, meaning the `expect` function received the value it was waiting for. A red cross (❌) means the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This instant feedback is crucial for debugging.
 
