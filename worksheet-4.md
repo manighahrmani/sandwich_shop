@@ -268,7 +268,7 @@ Writing tests help you ensure that your code works as expected and helps prevent
   - **Widget tests**: These tests verify the UI and interactions of individual widgets. They can simulate user interactions and verify that the widget behaves as expected.
   - **Integration tests**: These tests verify the integration of multiple widgets and services. They can simulate user interactions and verify that the app behaves as expected.
 
-For more information, you can read the official Flutter documentation on [unit testing](https://docs.flutter.dev/cookbook/testing). In this worksheet, we will focus on unit tests and widget tests.
+For more information, you can read the official Flutter documentation on [testing](https://docs.flutter.dev/cookbook/testing). In this worksheet, we will focus on unit tests and widget tests.
 
 You should already have a `test` folder in your project (this is created automatically when you create a new Flutter project) and inside this folder there should be a `widget_test.dart` file.
 
