@@ -33,7 +33,7 @@ In this worksheet we will focus on the first three layers: views, view models, a
 
 ### **Refactoring our code**
 
-Refactoring is the process of restructuring existing code to improve its readability, maintainability, and performance, without changing its external behaviour.
+Refactoring is the process of restructuring existing code to improve its readability, maintainability, or performance, without changing its behaviour.
 
 Let's start by refactoring our code into separate layers. As a simple example, notice that we have already created a file called `app_styles.dart` in the `lib` folder which contains the text styles used in our app. Open this file and check where these styles are used in `main.dart` (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for the name of the variables in `app_styles.dart`).
 
