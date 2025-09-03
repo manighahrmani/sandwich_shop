@@ -106,8 +106,6 @@ Now, let's create a more meaningful separation by moving the business logic out 
 Right-click on the `repositories` folder and select **New File**. Name this file `order_repository.dart`. Open this file and add the following code to it. This class will now be the single source of truth for our order's quantity. Notice the new boolean getter methods `canIncrement` and `canDecrement` which encapsulate the logic for checking the quantity limits.
 
 ```dart
-enum BreadType { white, wheat, wholemeal }
-
 class OrderRepository {
   int _quantity = 0;
   final int maxQuantity;
