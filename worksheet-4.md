@@ -256,11 +256,9 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-We have replaced the `_quantity` integer with an instance of our new `OrderRepository`. We use the `late` keyword, which is a promise that we will initialise this variable before we use it. This is necessary because we need to access `widget.maxQuantity` in `initState` to create the repository instance.
+We no longer manage the `_quantity` in this class as it is the responsibility of our repository object `_orderRepository`. We use the `late` keyword for this instance variable, which is a promise that we will initialise this variable before we use it. In our `initState` method, we create an instance of `OrderRepository` and assign it to `_orderRepository` and provide the `maxQuantity` from the stateful widget.
 
-The `_getIncreaseCallback` and `_getDecreaseCallback` methods are now simpler. They use the `canIncrement` and `canDecrement` getters from the repository to decide whether the button should be enabled.
-
-The `OrderItemDisplay` widget now gets its quantity directly from `_orderRepository.quantity`. This makes our UI code cleaner and separates the business logic from the presentation logic.
+The `_getIncreaseCallback` and `_getDecreaseCallback` methods are now simpler. They use the `canIncrement` and `canDecrement` getters from the repository to decide whether the button should be enabled. So in future if we change the logic for incrementing or decrementing, we only need to update it in the repository.
 
 ## **Unit testing**
 
