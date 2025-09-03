@@ -337,6 +337,8 @@ void main() {
 }
 ```
 
+The `test` function takes a description of the test and a callback function that contains the actual test code. The `expect` function is used to assert that a value matches an expected value. Read the test descriptions and comments to understand what each test is doing (and feel free to ask your AI assistant if you have any questions).
+
 ### **What to expect when you run tests**
 
 Run these tests while the `order_repository_test.dart` is open in VS Code and click on the `Run` link above the `main` function. You should see the test results in the terminal panel at the bottom of VS Code as shown below:
