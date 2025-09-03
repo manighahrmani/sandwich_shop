@@ -45,13 +45,15 @@ git checkout 4
 
 Or you can manually make sure your `main.dart` file matches [ours](https://github.com/manighahrmani/sandwich_shop/blob/4/lib/main.dart). And create a new file called `app_styles.dart` in the `lib` folder and copy the contents from [here](https://github.com/manighahrmani/sandwich_shop/blob/4/lib/app_styles.dart). Run the app to make sure everything is working as expected and note that we have already completed the exercises from the previous worksheets.
 
+Take a moment to familiarise yourself with the code and feel free to ask you AI assistant if you have any questions about the new widgets.
+
 #### **Styles**
 
 The new `app_styles.dart` file is a simple example of refactoring styles out of the main UI code. This file contains the styles used in our app much like a CSS file in web development. You can add more styles to this file as needed. Open your `main.dart` and check to see where these styles are used (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for variables like `normalText`).
 
 #### **Folder structure**
 
-Next, open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ + Shift + E** on macOS. Right-click on the `lib` folder and select **New Folder**. Name this folder `views`. Similarly, create the following folders in the `lib` folder: `view_models`, and `repositories`. 
+Next, open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ + Shift + E** on macOS. Right-click on the `lib` folder and select **New Folder**. Name this folder `views`. Similarly, create the following folders in the `lib` folder: `view_models`, and `repositories`.
 
 Drag and drop the `app_styles.dart` and `main.dart` files into the `views` subfolder of the `lib` folder.
 
@@ -98,7 +100,7 @@ class OrderRepository {
 
 With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`. Update your `main.dart` file to use this new repository.
 
-First import the `OrderRepository` class at the top of `main.dart`:
+First, import the `OrderRepository` class at the top of your `main.dart` file. You may also need to move the `BreadType` enum from `main.dart` to the new `order_repository.dart` file to keep all your data model definitions in one place.
 
 ```dart
 import '../repositories/order_repository.dart';
@@ -106,13 +108,11 @@ import '../repositories/order_repository.dart';
 
 The `..` is used to go up one directory level from `views` to `lib`, and then down into the `repositories` folder.
 
-This is what the updated `_OrderScreenState` class should look like in `main.dart` (the rest of the code remains unchanged):
+Next, replace the entire `_OrderScreenState` class in your `main.dart` file with the following updated code.
 
 ```dart
 class _OrderScreenState extends State<OrderScreen> {
-  // Declare a late variable for the repository (remove _quantity)
   late final OrderRepository _orderRepository;
-
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
   BreadType _selectedBreadType = BreadType.white;
@@ -120,9 +120,7 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialise the repository with the maxQuantity from the widget
     _orderRepository = OrderRepository(maxQuantity: widget.maxQuantity);
-
     _notesController.addListener(() {
       setState(() {});
     });
@@ -136,27 +134,53 @@ class _OrderScreenState extends State<OrderScreen> {
 
   VoidCallback? _getIncreaseCallback() {
     if (_orderRepository.canIncrement) {
-      return () {
-        setState(() => _orderRepository.increment());
-      };
+      return () => setState(_orderRepository.increment);
     }
     return null;
   }
 
   VoidCallback? _getDecreaseCallback() {
     if (_orderRepository.canDecrement) {
-      return () {
-        setState(() => _orderRepository.decrement());
-      };
+      return () => setState(_orderRepository.decrement);
     }
     return null;
   }
 
-  // ... (_onSandwichTypeChanged, _onBreadTypeSelected, _buildDropdownEntries remain the same) ...
+  void _onSandwichTypeChanged(bool value) {
+    setState(() => _isFootlong = value);
+  }
+
+  void _onBreadTypeSelected(BreadType? value) {
+    if (value != null) {
+      setState(() => _selectedBreadType = value);
+    }
+  }
+
+  List<DropdownMenuEntry<BreadType>> _buildDropdownEntries() {
+    List<DropdownMenuEntry<BreadType>> entries = [];
+    for (BreadType bread in BreadType.values) {
+      DropdownMenuEntry<BreadType> newEntry = DropdownMenuEntry<BreadType>(
+        value: bread,
+        label: bread.name,
+      );
+      entries.add(newEntry);
+    }
+    return entries;
+  }
 
   @override
   Widget build(BuildContext context) {
-    // ... (sandwichType and noteForDisplay logic remains the same) ...
+    String sandwichType = 'footlong';
+    if (!_isFootlong) {
+      sandwichType = 'six-inch';
+    }
+
+    String noteForDisplay;
+    if (_notesController.text.isEmpty) {
+      noteForDisplay = 'No notes added.';
+    } else {
+      noteForDisplay = _notesController.text;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -169,13 +193,61 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Use the quantity from the repository
             OrderItemDisplay(
               quantity: _orderRepository.quantity,
               itemType: sandwichType,
-              // ... other properties
+              breadType: _selectedBreadType,
+              orderNote: noteForDisplay,
             ),
-            // ... (rest of the UI code remains the same) ...
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('six-inch', style: normalText),
+                Switch(
+                  value: _isFootlong,
+                  onChanged: _onSandwichTypeChanged,
+                ),
+                const Text('footlong', style: normalText),
+              ],
+            ),
+            const SizedBox(height: 10),
+            DropdownMenu<BreadType>(
+              textStyle: normalText,
+              initialSelection: _selectedBreadType,
+              onSelected: _onBreadTypeSelected,
+              dropdownMenuEntries: _buildDropdownEntries(),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: TextField(
+                key: const Key('notes_textfield'),
+                controller: _notesController,
+                decoration: const InputDecoration(
+                  labelText: 'Add a note (e.g., no onions)',
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                StyledButton(
+                  onPressed: _getIncreaseCallback(),
+                  icon: Icons.add,
+                  label: 'Add',
+                  backgroundColor: Colors.green,
+                ),
+                const SizedBox(width: 8),
+                StyledButton(
+                  onPressed: _getDecreaseCallback(),
+                  icon: Icons.remove,
+                  label: 'Remove',
+                  backgroundColor: Colors.red,
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -183,6 +255,12 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 }
 ```
+
+We have replaced the `_quantity` integer with an instance of our new `OrderRepository`. We use the `late` keyword, which is a promise that we will initialise this variable before we use it. This is necessary because we need to access `widget.maxQuantity` in `initState` to create the repository instance.
+
+The `_getIncreaseCallback` and `_getDecreaseCallback` methods are now simpler. They use the `canIncrement` and `canDecrement` getters from the repository to decide whether the button should be enabled.
+
+The `OrderItemDisplay` widget now gets its quantity directly from `_orderRepository.quantity`. This makes our UI code cleaner and separates the business logic from the presentation logic.
 
 ## **Unit testing**
 
