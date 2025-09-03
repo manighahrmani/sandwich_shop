@@ -35,7 +35,52 @@ In this worksheet we will focus on the first three layers: views, view models, a
 
 Refactoring is the process of restructuring existing code to improve its readability, maintainability, or performance, without changing its behaviour.
 
-Let's start by refactoring our code into separate layers. As a simple example, notice that we have already created a file called `app_styles.dart` in the `lib` folder which contains the text styles used in our app. Open this file and check where these styles are used in `main.dart` (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for the name of the variables in `app_styles.dart`).
+Let's start by refactoring our code into separate layers. As a simple example make a new `app_styles.dart` file in the `lib` folder and add the following code to it:
+```dart
+import 'package:flutter/material.dart';
+
+const TextStyle normalText = TextStyle(
+  fontSize: 16,
+);
+
+const heading1 = TextStyle(
+  fontSize: 24,
+  fontWeight: FontWeight.bold,
+);
+```
+
+This file should contain the styles used in our app much like a CSS file in web development. You can add more styles to this file as needed. Open your `main.dart` and check to see where you are using styles there (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for properties like `fontSize`).
+
+Next replace the style definitions in `main.dart` with references to the styles defined in `app_styles.dart`. For example, replace:
+```dart
+const Text(
+  'six-inch',
+  style: TextStyle(
+    fontSize: 16,
+  ),
+),
+```
+with:
+```dart
+import 'app_styles.dart'; // Add this import at the top of `main.dart`
+
+const Text(
+  'six-inch',
+  style: normalText,
+),
+```
+
+Or for a for the `ElevatedButton` widget add the following in their `styleFrom` method:
+```dart
+ElevatedButton(
+  onPressed: _increaseQuantity,
+  style: ElevatedButton.styleFrom(
+    textStyle: normalText,
+  ),
+),
+```
+
+Feel free to let Copilot help you refactor the styles in `main.dart` and replace them with references to the styles defined in `app_styles.dart`.
 
 Next, open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ + Shift + E** on macOS. Right-click on the `lib` folder and select **New Folder**. Name this folder `views`. Similarly, create the following folders in the `lib` folder: `view_models`, and `repositories`. 
 
