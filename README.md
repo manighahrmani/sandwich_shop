@@ -16,7 +16,7 @@ The **coursework is worth 50%** of your module mark and will be accessible on th
 * [Worksheet 1: Introduction to Flutter](./worksheet-1.md)
 * [Worksheet 2: Stateless Widgets](./worksheet-2.md)
 * [Worksheet 3: Stateful Widgets](./worksheet-3.md)
-* [Worksheet 4: (Add Title Here)](./worksheet-4.md)
+* [Worksheet 4: App Architecture and Testing](./worksheet-4.md)
 * [Worksheet 5: (Add Title Here)](./worksheet-5.md)
 * [Worksheet 6: (Add Title Here)](./worksheet-6.md)
 * [Worksheet 7: (Add Title Here)](./worksheet-7.md)
