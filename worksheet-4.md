@@ -278,7 +278,6 @@ Now that we have moved our business logic into a pure Dart class (`OrderReposito
 
 Create a new file called `order_repository_test.dart` in the `test/repositories` folder.
 
-
 This is what your folder structure should look like now:
 
 ```
@@ -292,7 +291,6 @@ test/
   └── repositories/
       └── order_repository_test.dart
 ```
-
 
 Add the following code to `order_repository_test.dart`. We are importing the `flutter_test` package which comes pre-installed with Flutter and provides the necessary tools for writing tests. We are also importing the `OrderRepository` class that we want to test.
 
@@ -337,7 +335,8 @@ void main() {
 }
 ```
 
-The `test` function takes a description of the test and a callback function that contains the actual test code. The `expect` function is used to assert that a value matches an expected value. Read the test descriptions and comments to understand what each test is doing (and feel free to ask your AI assistant if you have any questions).
+The tests in this file are grouped using the `group` function, which helps organise related tests together. Each individual test is defined using the `test` function.
+`test` takes a description of the test and a callback function that contains the actual test code. The `expect` function used within the callbacks assert that a value matches an expected value. Read the test descriptions and comments to understand what each test is doing (and feel free to ask your AI assistant if you have any questions).
 
 ### **What to expect when you run tests**
 
@@ -349,9 +348,32 @@ Each green tick means that the test passed, in other words, the `expect` functio
 
 ## **Widget testing**
 
-<!-- Make sure to update the import statement as we have moved `main.dart` to the `lib` folder. -->
+We have already provided you with example of widget testing in the `widget_test.dart` file. It is currently in the `test` folder. Create a new folder called `views` inside the `test` folder and move the `widget_test.dart` file into this new folder. This is what your folder structure should look like now:
 
-The `WidgetTester` is a core utility class in Flutter's `flutter_test` package that allows developers to programmatically build and interact with widgets in an isolated test environment. It acts as a controller for widget tests, simulating user interactions and the passage of time to verify that a widget's UI and behavior are correct.
+```
+lib/
+  ├── views/
+  │   ├── app_styles.dart
+  │   └── main.dart
+  ├── view_models/
+  └── repositories/
+  │   └── order_repository.dart
+test/
+  ├── repositories/
+  │   └── order_repository_test.dart
+  └── views/
+      └── widget_test.dart
+```
+
+Next open the `widget_test.dart` file and update the import statements at the top of the file to match the new folder structure. It should be changed to the following:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/views/main.dart';
+```
+
+The `WidgetTester` is a core utility class in Flutter's `flutter_test` package that allows developers to programmatically build and interact with widgets. It can also simulate user interactions to verify that a widget's UI and behavior are correct.
 
 `WidgetTester` is the type of the `tester` parameter in the following example:
 
