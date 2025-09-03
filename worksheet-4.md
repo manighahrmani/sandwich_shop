@@ -373,75 +373,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/views/main.dart';
 ```
 
-The `WidgetTester` is a core utility class in Flutter's `flutter_test` package that allows developers to programmatically build and interact with widgets. It can also simulate user interactions to verify that a widget's UI and behavior are correct.
+Look at the rest of the file now. You'll see that once again we have grouped our tests using the `group` function. This time, you'll notice that in each `test` function, the callback function is marked as `async` and takes a `WidgetTester` parameter named `tester`. This is because widget tests often involve asynchronous operations (they may need to wait for the UI to update or for animations to complete). 
 
-`WidgetTester` is the type of the `tester` parameter in the following example:
+`WidgetTester` class (defined within `flutter_test`) is a core utility class that allows developers to programmatically test widgets. This class provides the following types of methods:
 
-```dart
-void main() {
-  // Define a test. The TestWidgets function also provides a WidgetTester
-  // to work with. The WidgetTester allows you to build and interact
-  // with widgets in the test environment.
-  testWidgets('MyWidget has a title and message', (tester) async {
-    // Test code goes here.
-  });
-}
-```
-
-The `WidgetTester` provides a suite of methods that make it possible to test widgets without running the full application on a device or emulator. Its key responsibilities include:
-
-### **Building widgets**
-
-  - `pumpWidget()`: This method inflates a single widget and its descendants, rendering them into a test environment. This is the starting point for most widget tests.
-  - `pump()`: After a widget's state has changed (e.g., after a user interaction), this method rebuilds the widget tree to reflect the new state, and can advance the "fake" clock by a specified duration.
-  - `pumpAndSettle()`: This repeatedly calls `pump()` until all animations have completed and the widget tree is stable. It's useful for testing scenarios with animations or asynchronous changes.
-
-### **Simulating user interactions**
-
-The `WidgetTester` has methods for simulating common user gestures.
-
-  - `tap()`: Simulates a tap on a widget found by a `Finder`.
-  - `drag()` / `dragFrom()`: Simulates a drag gesture on a widget.
-  - `enterText()`: Enters text into a `TextField` or similar input widget.
-
-For example, to test the "Add" button in our app, we can write the following test:
-
-```dart
-testWidgets('tapping add button increases quantity', (WidgetTester tester) async {
-  await tester.pumpWidget(const App());
-  await tester.tap(find.widgetWithText(StyledButton, 'Add'));
-  await tester.pump();
-  expect(find.text('1 white footlong sandwich(es): 🥪'), findsOneWidget);
-});
-```
-
-### **Finding widgets**
-
-While not a method of `WidgetTester` itself, the `find` constant from `flutter_test` is used in conjunction with `WidgetTester` to locate widgets within the test environment.
-
-  - `find.byType()`: Finds a widget by its type.
-  - `find.byKey()`: Finds a widget using a unique key.
-  - `find.text()`: Finds a `Text` widget containing a specific string.
-
-What if we have multiple widgets of the same type? We can add a `key` to the widget to uniquely identify it. This is similar to an `id` in HTML.
-
-```dart
-child: TextField(
-  // We need a key to distinguish this TextField from the
-  // TextFields that are used in the DropdownMenu (for testing).
-  key: const Key('notes_textfield'),
-  controller: _notesController,
-  decoration: const InputDecoration(
-    labelText: 'Add a note (e.g., no onions)',
-  ),
-),
-```
-
-Then we can find the widget using its key:
-
-```dart
-find.byKey(const Key('notes_textfield'))
-```
+  - **Building widgets**: Methods to construct and render widgets in a test environment such as `pumpWidget()`, `pump()`, and `pumpAndSettle()`.
+  - **Simulating user interactions**: Methods to simulate user gestures like `tap()`, `drag()`, and `enterText()`.
+  - **Finding widgets**: Methods to locate widgets in the widget tree using `Finder` objects, such as `find.byType()`, `find.byKey()`, and `find.text()`. 
 
 For more information on widget testing, you can read the official Flutter documentation on [tapping and dragging widgets](https://docs.flutter.dev/cookbook/testing/widget/tap-drag) and [handling scrolling](https://docs.flutter.dev/cookbook/testing/widget/scrolling).
 http://googleusercontent.com/youtube_content/1 http://googleusercontent.com/youtube_content/2 http://googleusercontent.com/youtube_content/3
+
+Our example of widget testing does not cover all types of interactions and widget finding methods. To learn more about simulating user interactions, refer to this [documentation page](https://docs.flutter.dev/cookbook/testing/widget/tap-drag). And for more information on the `Finder` objects, check out this [documentation page](https://docs.flutter.dev/cookbook/testing/widget/finders).
