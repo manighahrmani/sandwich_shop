@@ -35,6 +35,8 @@ In this worksheet we will focus on the first three layers: views, view models, a
 
 Refactoring is the process of restructuring existing code to improve its readability, maintainability, or performance, without changing its behaviour.
 
+#### **Styles**
+
 Let's start by refactoring our code into separate layers. As a simple example make a new `app_styles.dart` file in the `lib` folder and add the following code to it:
 ```dart
 import 'package:flutter/material.dart';
@@ -80,7 +82,9 @@ ElevatedButton(
 ),
 ```
 
-Feel free to let Copilot help you refactor the styles in `main.dart` and replace them with references to the styles defined in `app_styles.dart`.
+Feel free to let Copilot help you refactor the styles in `main.dart` and replace them with references to the styles defined in `app_styles.dart`. Note that you can import and reuse the styles defined in `app_styles.dart` in any other view or widget in your project.
+
+#### **Folder structure**
 
 Next, open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ + Shift + E** on macOS. Right-click on the `lib` folder and select **New Folder**. Name this folder `views`. Similarly, create the following folders in the `lib` folder: `view_models`, and `repositories`. 
 
