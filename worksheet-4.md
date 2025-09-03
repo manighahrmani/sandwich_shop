@@ -145,10 +145,6 @@ The `..` is used to go up one directory level from `views` to `lib`, and then do
 This is what the updated `main.dart` file should look like (`main`, `App`, `OrderScreen`, `StyledButton` and `OrderItemDisplay` class definitions remain in this file):
 
 ```dart
-import 'package:flutter/material.dart';
-import 'app_styles.dart';
-import 'repositories/order_repository.dart';
-
 class _OrderScreenState extends State<OrderScreen> {
   late final OrderRepository _orderRepository;
 
