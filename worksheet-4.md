@@ -339,10 +339,11 @@ void main() {
 
 ### **What to expect when you run tests**
 
-Run these tests while the `order_repository_test.dart` is open in VS Code and click on the `Run` link above the `main` function.
+Run these tests while the `order_repository_test.dart` is open in VS Code and click on the `Run` link above the `main` function. You should see the test results in the terminal panel at the bottom of VS Code as shown below:
 
-When you run the tests, a new "Test Results" panel will appear in your terminal area. You will see a list of your tests with icons next to them. A green tick (✅) means the test passed, meaning the `expect` function received the value it was waiting for. A red cross (❌) means the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This instant feedback is crucial for debugging.
+![Running tests in VS Code](images/screenshot_running_tests.png)
 
+Each green tick means that the test passed, in other words, the `expect` function received the value it was waiting for. A red cross (❌) would mean the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This instant feedback is crucial for understanding what has gone wrong in your code.
 
 ## **Widget testing**
 
