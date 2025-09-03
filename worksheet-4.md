@@ -72,7 +72,7 @@ const Text(
 ),
 ```
 
-Or for a for the `ElevatedButton` widget add the following in their `styleFrom` method:
+For the `ElevatedButton` widgets you can add the following in their `styleFrom` method:
 ```dart
 ElevatedButton(
   onPressed: _increaseQuantity,
@@ -131,7 +131,16 @@ class OrderRepository {
 }
 ```
 
-With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`. The callback methods are now cleaner as they delegate the condition checks to the repository. Update your `main.dart` file to use this new repository.
+With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`. Update your `main.dart` file to use this new repository.
+
+First import the `OrderRepository` class at the top of `main.dart`:
+
+```dart
+import '../repositories/order_repository.dart';
+```
+
+The `..` is used to go up one directory level from `views` to `lib`, and then down into the `repositories` folder.
+
 
 This is what the updated `main.dart` file should look like (`main`, `App`, `OrderScreen`, `StyledButton` and `OrderItemDisplay` class definitions remain in this file):
 
