@@ -35,54 +35,19 @@ In this worksheet we will focus on the first three layers: views, view models, a
 
 Refactoring is the process of restructuring existing code to improve its readability, maintainability, or performance, without changing its behaviour.
 
+For this worksheet, you need to start with the code that we have provided in the branch 4 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/4). You can either clone the repository and checkout the branch 4 with the following commands:
+
+```bash
+git clone https://github.com/manighahrmani/sandwich_shop.git
+cd sandwich_shop
+git checkout 4
+```
+
+Or you can manually make sure your `main.dart` file matches [ours](https://github.com/manighahrmani/sandwich_shop/blob/4/lib/main.dart). And create a new file called `app_styles.dart` in the `lib` folder and copy the contents from [here](https://github.com/manighahrmani/sandwich_shop/blob/4/lib/app_styles.dart). Run the app to make sure everything is working as expected and note that we have already completed the exercises from the previous worksheets.
+
 #### **Styles**
 
-Let's start by refactoring our code into separate layers. As a simple example make a new `app_styles.dart` file in the `lib` folder and add the following code to it:
-```dart
-import 'package:flutter/material.dart';
-
-const TextStyle normalText = TextStyle(
-  fontSize: 16,
-);
-
-const heading1 = TextStyle(
-  fontSize: 24,
-  fontWeight: FontWeight.bold,
-);
-```
-
-This file should contain the styles used in our app much like a CSS file in web development. You can add more styles to this file as needed. Open your `main.dart` and check to see where you are using styles there (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for properties like `fontSize`).
-
-Next replace the style definitions in `main.dart` with references to the styles defined in `app_styles.dart`. For example, replace:
-```dart
-const Text(
-  'six-inch',
-  style: TextStyle(
-    fontSize: 16,
-  ),
-),
-```
-with the following (make sure to **import `app_styles.dart` at the top of `main.dart`**):
-```dart
-import 'app_styles.dart';
-
-const Text(
-  'six-inch',
-  style: normalText,
-),
-```
-
-For the `ElevatedButton` widgets you can add the following in their `styleFrom` method:
-```dart
-ElevatedButton(
-  onPressed: _increaseQuantity,
-  style: ElevatedButton.styleFrom(
-    textStyle: normalText,
-  ),
-),
-```
-
-Feel free to let Copilot help you refactor the styles in `main.dart` and replace them with references to the styles defined in `app_styles.dart`. Note that you can import and reuse the styles defined in `app_styles.dart` in any other view or widget in your project.
+The new `app_styles.dart` file is a simple example of refactoring styles out of the main UI code. This file contains the styles used in our app much like a CSS file in web development. You can add more styles to this file as needed. Open your `main.dart` and check to see where these styles are used (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for variables like `normalText`).
 
 #### **Folder structure**
 
