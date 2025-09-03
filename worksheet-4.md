@@ -294,7 +294,7 @@ test/
 ```
 
 
-Add the following code to `order_repository_test.dart`. This test verifies the core logic of our repository.
+Add the following code to `order_repository_test.dart`. We are importing the `flutter_test` package which comes pre-installed with Flutter and provides the necessary tools for writing tests. We are also importing the `OrderRepository` class that we want to test.
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
