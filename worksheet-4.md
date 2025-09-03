@@ -29,7 +29,7 @@ Here is a diagram that shows how these layers interact with each other:
 
 If you would like to learn more about app architecture, you can read the [official Flutter documentation](https://docs.flutter.dev/app-architecture/guide).
 
-In this worksheet we will focus on the first three layers: views, view models, and repositories. Services wrap API endpoints and expose asynchronous response objects, such as `Future` and `Stream` objects. We will learn more about asynchronous programming in a later worksheet.
+In this worksheet we will focus on the first three layers: views, view models, and repositories. Services wrap API endpoints and are typically used for fetching data asynchronously from external sources. We will learn more about them and asynchronous programming in a later worksheet.
 
 ### **Refactoring our code**
 
