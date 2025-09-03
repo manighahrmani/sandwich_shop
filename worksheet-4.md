@@ -62,9 +62,9 @@ const Text(
   ),
 ),
 ```
-with:
+with the following (make sure to **import `app_styles.dart` at the top of `main.dart`**):
 ```dart
-import 'app_styles.dart'; // Add this import at the top of `main.dart`
+import 'app_styles.dart';
 
 const Text(
   'six-inch',
