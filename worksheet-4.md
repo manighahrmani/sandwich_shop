@@ -29,7 +29,7 @@ Here is a diagram that shows how these layers interact with each other:
 
 If you would like to learn more about app architecture, you can read the [official Flutter documentation](https://docs.flutter.dev/app-architecture/guide).
 
-In this worksheet we will focus on the first three layers: views, view models, and repositories. Services wrap API endpoints and are typically used for fetching data asynchronously from external sources. We will learn more about them and asynchronous programming in a later worksheet.
+In this worksheet we will focus on the first three layers: views, view models, and repositories. Services wrap API endpoints and are typically used for fetching data asynchronously from external sources. We will learn more about services in a later worksheet.
 
 ### **Refactoring our code**
 
@@ -375,95 +375,32 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/views/main.dart';
 ```
 
-The tests are still failing for a few reasons:
+Run the tests again. They should all pass now. Let's walk through this file to understand how these tests work and what each part does.
 
-  - The tests are looking for `ElevatedButton` widgets, but we are now using our custom `StyledButton` widget.
-  - The display text has changed. It now includes the bread type (e.g., "0 **white** footlong sandwich(es): "), but our tests are still looking for the old text.
-  - The isolated tests for `OrderItemDisplay` are failing because its constructor now requires additional parameters (`breadType` and `orderNote`) which we aren't providing.
-
-Replace the entire contents of your `widget_test.dart` file with this corrected version. Read through the tests and comments to see how we have addressed the issues above.
+You'll notice each test is defined with `testWidgets` instead of `test`. This function takes a `WidgetTester` object in its callback parameter, which we have named `tester`. The `tester` is our main tool for building and interacting with our UI in the test environment. The general format of a widget test is:
 
 ```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/views/main.dart';
-
-void main() {
-  group('OrderScreen interaction tests', () {
-    testWidgets('Initial UI is displayed correctly', (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-
-      // Verify the initial state text, including default bread and size
-      expect(find.text('0 white footlong sandwich(es): '), findsOneWidget);
-      expect(find.text('Sandwich Counter'), findsOneWidget);
-      expect(find.byType(Switch), findsOneWidget);
-    });
-
-    testWidgets('Tapping add button increases quantity', (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-
-      // Find our custom StyledButton and tap it
-      await tester.tap(find.widgetWithText(StyledButton, 'Add'));
-      // Rebuild the widget after the state has changed.
-      await tester.pump();
-
-      // Verify the text has updated to reflect the new state
-      expect(find.text('1 white footlong sandwich(es): 🥪'), findsOneWidget);
-    });
-
-    testWidgets('Tapping remove button decreases quantity', (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-
-      // Add one item first
-      await tester.tap(find.widgetWithText(StyledButton, 'Add'));
-      await tester.pump();
-      expect(find.text('1 white footlong sandwich(es): 🥪'), findsOneWidget);
-
-      // Now remove it
-      await tester.tap(find.widgetWithText(StyledButton, 'Remove'));
-      await tester.pump();
-      expect(find.text('0 white footlong sandwich(es): '), findsOneWidget);
-    });
-
-    testWidgets('Quantity does not exceed maxQuantity of 5', (WidgetTester tester) async {
-      // The App() widget sets maxQuantity to 5 in its constructor
-      await tester.pumpWidget(const App());
-
-      // Tap the 'Add' button 6 times
-      for (int i = 0; i < 6; i++) {
-        await tester.tap(find.widgetWithText(StyledButton, 'Add'));
-        await tester.pump();
-      }
-
-      // Verify the quantity does not exceed the maximum
-      expect(find.text('5 white footlong sandwich(es): 🥪🥪🥪🥪🥪'), findsOneWidget);
-    });
-  });
-
-  group('OrderItemDisplay isolated tests', () {
-    testWidgets('Displays correctly for 3 sandwiches', (WidgetTester tester) async {
-      // The widget now requires all these properties to be passed
-      const widgetToBeTested = OrderItemDisplay(
-        quantity: 3,
-        itemType: 'six-inch',
-        breadType: BreadType.wheat,
-        orderNote: 'Extra cheese',
-      );
-
-      // We must wrap it in MaterialApp for it to build correctly
-      const testApp = MaterialApp(home: Scaffold(body: widgetToBeTested));
-      await tester.pumpWidget(testApp);
-
-      expect(find.text('3 wheat six-inch sandwich(es): 🥪🥪🥪'), findsOneWidget);
-      expect(find.text('Note: Extra cheese'), findsOneWidget);
-    });
-  });
-}
+testWidgets('description of the test', (WidgetTester tester) async {
+  const widgetToBeTested = /* widget code here */;
+  // Construct the widget
+  await tester.pumpWidget(widgetToBeTested);
+  // If it is an interactive widget, simulate user interaction
+  await tester.tap(find.byType(SomeWidget));
+  // If the interaction causes a state change, rebuild the widget
+  await tester.pump();
+  // Find the widget you want (by text, type, key, etc.) and verify it
+  expect(find.text('expected text'), findsOneWidget);
+});
 ```
 
-Run the tests again. They should all pass now. This process of running tests, seeing them fail after a code change, and then updating them is a common workflow in software development known as "Red-Green-Refactor".
+The callback function passed to `testWidgets` are marked as `async`, and you will see the `await` keyword used frequently inside the callbacks. This is because UI operations like rendering a widget or waiting for an animation are not instantaneous. The `await` keyword tells the test to pause and wait for the operation written to its right to complete before moving to the next line.
 
-To learn more about the powerful testing tools available in Flutter, refer to these documentation pages:
+The first step in most tests is `await tester.pumpWidget(const App())`. This command builds our entire `App` widget and renders its UI for the test. After an interaction like a button tap, which triggers a `setState` call in our app, we must call `await tester.pump()` ourselves. This tells the test environment to rebuild the UI and show the changes from our interaction. For animations, like the opening of the `DropdownMenu`, we use `await tester.pumpAndSettle()`, which repeatedly pumps frames until all animations have finished.
 
-  - [Tapping, dragging, and entering text](https://docs.flutter.dev/cookbook/testing/widget/tap-drag)
-  - [Finding widgets in a widget test](https://docs.flutter.dev/cookbook/testing/widget/finders)
-  - [Introduction to widget testing](https://docs.flutter.dev/cookbook/testing/widget/introduction)
+To check the results, we use the `expect` function. It takes a `Finder` and a `Matcher`. A `Finder` is a way to locate a widget. For example, `find.text('Sandwich Counter')` looks for a widget displaying that exact text, while `find.textContaining('footlong')` looks for a widget that includes "footlong" as part of its text. You can also find widgets by their type, like `find.byType(Switch)`, or by a unique key, like `find.byKey(const Key('notes_textfield'))`. The `Matcher`, such as `findsOneWidget`, then verifies that the `Finder` located the correct number of widgets on the screen.
+
+In the test for the dropdown menu, the finder `find.text('wheat').last` is used to select the 'wheat' option. We use `.last` because the word 'wheat' might appear in multiple places (for example, in the collapsed menu and also in the list of options that appears). Using `.last` helps us reliably tap on the option within the newly opened list.
+
+Finally, the tests for `StyledButton` and `OrderItemDisplay` show how you can test a single widget in isolation without building the entire app. We wrap the widget in a `MaterialApp` so that it has the necessary context to render correctly, allowing us to focus the test on just that one component.
+
+This is just an introduction to the powerful testing tools available in Flutter. To learn more, you can refer to the official documentation on [tapping, dragging, and entering text](https://docs.flutter.dev/cookbook/testing/widget/tap-drag), [finding widgets](https://docs.flutter.dev/cookbook/testing/widget/finders), and the general [introduction to widget testing](https://docs.flutter.dev/cookbook/testing/widget/introduction).
