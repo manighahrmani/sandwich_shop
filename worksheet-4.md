@@ -367,9 +367,10 @@ test/
 
 Next, open the `widget_test.dart` file. Before making any changes, try running the tests by clicking the `Run` link above the `main` function. You should get a list of problems at the bottom of the screen. This is expected. Our refactoring work has changed the location of `main.dart` for a start!
 
-First, update the import statements at the top of the `widget_test.dart` file to the following:
+First, update the import statements at the top of the `widget_test.dart` file to reflect the new folder structure. Replace the existing imports with the following:
 
 ```dart
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/views/main.dart';
 ```
