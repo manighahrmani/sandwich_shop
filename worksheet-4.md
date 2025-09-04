@@ -45,7 +45,7 @@ git checkout 4
 
 Or you can manually make sure your `main.dart` file matches [ours](https://github.com/manighahrmani/sandwich_shop/blob/4/lib/main.dart). And create a new file called `app_styles.dart` in the `lib` folder and copy the contents from [here](https://github.com/manighahrmani/sandwich_shop/blob/4/lib/app_styles.dart). Run the app to make sure everything is working as expected and note that we have already completed the exercises from the previous worksheets.
 
-Take a moment to familiarise yourself with the code and feel free to ask you AI assistant if you have any questions about the new widgets.
+Take a moment to familiarise yourself with the code and feel free to ask your AI assistant if you have any questions about the new widgets.
 
 #### **Styles**
 
@@ -258,6 +258,10 @@ We no longer manage the `_quantity` in this class as it is the responsibility of
 
 The `_getIncreaseCallback` and `_getDecreaseCallback` methods are now simpler. They use the `canIncrement` and `canDecrement` getters from the repository to decide whether the button should be enabled. So in future if we change the logic for incrementing or decrementing, we only need to update it in the repository.
 
+#### **Commit your changes**
+
+Remember to commit your changes at each stage with a meaningful commit message like `Create app_styles.dart`, a separate commit for restructuring the folder, creating the repository class, and so on.
+
 ## **Unit testing**
 
 Writing tests help you ensure that your code works as expected and helps prevent bugs from creeping in as you make changes and add new features. There are three main types of tests in Flutter:
@@ -338,6 +342,10 @@ void main() {
 The tests in this file are grouped using the `group` function, which helps organise related tests together. Each individual test is defined using the `test` function.
 `test` takes a description of the test and a callback function that contains the actual test code. The `expect` function used within the callbacks assert that a value matches an expected value. Read the test descriptions and comments to understand what each test is doing (and feel free to ask your AI assistant if you have any questions).
 
+#### **Commit your changes**
+
+Once again, make sure that you have committed your changes.
+
 ### **What to expect when you run tests**
 
 Run these tests while the `order_repository_test.dart` is open in VS Code and click on the `Run` link above the `main` function. You should see the test results in the terminal panel at the bottom of VS Code as shown below:
@@ -404,6 +412,10 @@ The `Matcher`, such as `findsOneWidget`, then verifies that the `Finder` located
 As a small note, observe that in the test for the dropdown menu, the finder `find.text('wheat').last` is used to select the 'wheat' option. We use `.last` because the word 'wheat' might appear in multiple places (for example, in the collapsed menu and also in the list of options that appears).
 
 Finally, the tests for `StyledButton` and `OrderItemDisplay` show how you can test a single widget in isolation without building the entire app. We wrap the widget in a `MaterialApp` so that it has the necessary context to render correctly, allowing us to focus the test on just that one component.
+
+#### **Commit your changes**
+
+Before moving to the exercises, check that you have committed and synced all your changes to GitHub.
 
 ## Exercise ideas
 
