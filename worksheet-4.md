@@ -411,7 +411,9 @@ import 'package:sandwich_shop/views/main.dart';
 
 Run the tests again. They should all pass now. Let's talk about these tests work and what each part does.
 
-You'll notice each test is defined with `testWidgets` instead of `test`. This function takes a `WidgetTester` object in its callback parameter, which is conventionally named `tester`. The `tester` is our main tool for building and interacting with our UI in the test environment. The general format of a widget test is:
+You'll notice each test is defined with `testWidgets` instead of `test`. This function takes a `WidgetTester` object in its callback parameter, which is conventionally named `tester`. The `tester` is our main tool for building and interacting with our UI in the test environment.
+
+The general format of a widget test is:
 
 ```dart
 testWidgets('description of the test', (WidgetTester tester) async {
@@ -427,17 +429,17 @@ testWidgets('description of the test', (WidgetTester tester) async {
 });
 ```
 
-The callback function passed to `testWidgets` are marked as `async`, and you will see the `await` keyword used frequently inside the callbacks. This is because UI operations like rendering a widget or waiting for an animation are not instantaneous. The `await` keyword tells the test to pause and wait for the operation written to its right to complete before moving to the next line.
+The callback function passed to `testWidgets` are marked as `async`, and you will see the `await` keyword used frequently inside the callbacks. Can you ask your AI assistant why this is necessary or what it even means?
 
 The first step in most tests is pumping the widget into the test environment using `await tester.pumpWidget()`. This method takes a widget and builds it in the test environment. As mentioned in the code snippet above, when it comes to interactive widgets, after simulating a user interaction like a tap, we often need to call `await tester.pump()` again to rebuild the widget and reflect any changes resulting from the interaction. For animations, like the opening of the `DropdownMenu`, we use `await tester.pumpAndSettle()`, which repeatedly pumps frames until all animations have finished.
 
-To check the results, we use the `expect` function. It takes a `Finder` and a `Matcher`. A `Finder` is a way to locate a widget. For example, `find.text('Sandwich Counter')` looks for a widget displaying that exact text, while `find.textContaining('footlong')` looks for a widget that includes "footlong" as part of its text. You can also find widgets by their type, like `find.byType(Switch)`, or by a unique key, like `find.byKey(const Key('notes_textfield'))`.
+To check the results, just like unit tests, we use the `expect` function. It takes a `Finder` and a `Matcher`. A `Finder` is a way to locate a widget. For example, `find.text('Sandwich Counter')` looks for a widget displaying that exact text, while `find.textContaining('footlong')` looks for a widget that includes "footlong" as part of its text. There are other ways of finding widgets which you can read about in the [official documentation](https://docs.flutter.dev/cookbook/testing/widget/finders).
 
 The `Matcher`, such as `findsOneWidget`, then verifies that the `Finder` located the correct number of widgets on the screen. Other examples of matchers include `findsNothing` (ensures no widgets were found) and `findsNWidgets(n)` (ensures exactly `n` widgets were found) but you'll most commonly use `findsOneWidget`.
 
-As a small note, observe that in the test for the dropdown menu, the finder `find.text('wheat').last` is used to select the 'wheat' option. We use `.last` because the word 'wheat' might appear in multiple places (for example, in the collapsed menu and also in the list of options that appears).
+As a small note, observe that in the test for the dropdown menu, the finder `find.text('wheat').last` is used to select the 'wheat' option. We use `.last` because the word 'wheat' might appear in multiple places. Can you guess where else it might appear in the widget tree? Try removing `.last` and running the test again to see what happens.
 
-Finally, the tests for `StyledButton` and `OrderItemDisplay` show how you can test a single widget in isolation without building the entire app. We wrap the widget in a `MaterialApp` so that it has the necessary context to render correctly, allowing us to focus the test on just that one component.
+Finally, the tests for `StyledButton` and `OrderItemDisplay` show how you can test a single widget, making sure it is rendered as expected, without building the entire app. We still need to wrap the widget in a `MaterialApp` so that it has the necessary context to render correctly.
 
 #### **Commit your changes**
 
