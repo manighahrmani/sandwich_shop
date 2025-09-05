@@ -445,7 +445,6 @@ Finally, the tests for `StyledButton` and `OrderItemDisplay` show how you can te
 
 Before moving to the exercises, check that you have committed and synced all your changes to GitHub.
 
-
 ## **Exercises**
 
 Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
