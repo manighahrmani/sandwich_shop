@@ -102,7 +102,7 @@ class OrderRepository {
 
 With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`. Update your `main.dart` file to use this new repository.
 
-First, import the `OrderRepository` class at the top of your `main.dart` file. You may also need to move the `BreadType` enum from `main.dart` to the new `order_repository.dart` file to keep all your data model definitions in one place.
+First, import the `OrderRepository` class at the top of your `main.dart` file:
 
 ```dart
 import 'package:sandwich_shop/repositories/order_repository.dart';
