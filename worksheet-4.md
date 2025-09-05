@@ -445,8 +445,72 @@ Finally, the tests for `StyledButton` and `OrderItemDisplay` show how you can te
 
 Before moving to the exercises, check that you have committed and synced all your changes to GitHub.
 
-## Exercise ideas
 
-1- Ask them to add a new type of widget which requires them to refer to [tapping, dragging, and entering text](https://docs.flutter.dev/cookbook/testing/widget/tap-drag) so they can simulate a different type of user interaction for a test
+## **Exercises**
 
-2- Ask them to add multiple widgets of the same type to the screen and then refer to [finders](https://docs.flutter.dev/cookbook/testing/widget/finders) to see how they can find a specific one with a key or by position.
+Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
+Of course. I've revised exercises 3, 4, and 5 based on your feedback and provided the corresponding solutions.
+
+-----
+
+## **Exercises**
+
+Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
+
+1.  Our widget tests currently cover tapping buttons and entering text. Let's expand our test coverage to other types of user interaction.
+
+    Write a new widget test in `test/views/widget_test.dart` to verify the functionality of the `Switch` widget that toggles between 'six-inch' and 'footlong'.
+
+    Hint: `Switch` widgets are toggled by tapping on them like buttons. If you are confused by how you can find the `Switch` widget or the text that changes when it is toggled, refer to [the documentation on Finders](https://docs.flutter.dev/cookbook/testing/widget/finders).
+
+    ⚠️ **Show your new passing widget test to a member of staff** for a sign-off.
+
+2.  Let's add an option for the user to have their sandwich toasted. First, in `lib/views/main.dart`, add a new state variable to your `_OrderScreenState` class: `bool _isToasted = false;`.
+
+    Next, in the `build` method, add the following `Row` inside the `Column`'s `children` list, just below the `Row` for the existing sandwich type `Switch` (search for `Switch` to find it quickly and add this after the closing bracket of that `Row`):
+
+    ```dart
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('untoasted', style: normalText),
+        Switch(
+          value: _isToasted,
+          onChanged: (value) {
+            setState(() => _isToasted = value);
+          },
+        ),
+        const Text('toasted', style: normalText),
+      ],
+    ),
+    ```
+
+    Feel free to fully implement this feature by updating the `OrderItemDisplay` widget to show whether the sandwich is toasted or not but this is not required for the purpose of this exercise.
+
+    The addition of the new switch creates a problem for our widget tests. More specifically, if you have a test that uses `find.byType(Switch)`, it will now fail because the finder will locate two widgets.
+
+    To solve this, refer to the [Finders documentation](https://docs.flutter.dev/cookbook/testing/widget/finders) and find a way to uniquely identify each `Switch` widget. (Hint: This is similar to giving an HTML element an `id` attribute.)
+
+    ⚠️ **Show your running app with the two switches and the updated, passing widget tests to a member of staff** for a sign-off.
+
+3.  Our app does not yet have a concept of price. Let's add a repository to manage the pricing logic. Suppose that a six-inch sandwich costs £7 and a footlong costs £11.
+
+    Create a new `PricingRepository` class in the `repositories` folder similar to `lib/repositories/order_repository.dart`. This class should calculate the total price of a sandwich order based on the quantity and sandwich size. This should give you an idea what the constructor of the class should look like and what method(s) it should have.
+
+    Next, similar to `test/repositories/order_repository_test.dart`, create a new unit test file in `test/repositories` to verify your pricing logic is correct for various quantities and for both sandwich sizes.
+
+    Finally, use your new repository in the `OrderScreen` to calculate and display the total price of the order. The price should be formatted to two decimal places (e.g., `£11.00`). You have the example of `OrderRepository` to refer to, but free to use your AI assistant to help you with how the `_OrderScreenState` class should be updated to use this new repository.
+
+    ⚠️ **Show your new unit tests and the running app displaying the order price to a member of staff** for a sign-off.
+
+4.  (Advanced) Let's add functionality to save an order to a local file. This task is more complex and will introduce you to the **ViewModel** pattern, which helps separate UI code from business logic.
+
+    First, use the `flutter pub add` command in your terminal to add [the `path_provider` package](https://pub.dev/packages/path_provider) to your dependencies:
+
+    ```bash
+    flutter pub add path_provider
+    ```
+    
+    This will add the package to your `pubspec.yaml` file automatically (check the Source Control view to see the changes).
+    
+    Then, follow the official documentation on [reading and writing files](https://docs.flutter.dev/cookbook/persistence/reading-writing-files) to create a `FileService` class in a new `lib/services` folder. This service will be responsible for writing a given string to a file named `order_history.txt` (your app should create this file if it doesn't already exist). Feel free to ask your AI assistant for help with this but make sure to provide it with sufficient context and describe the expected behaviour of the service.
