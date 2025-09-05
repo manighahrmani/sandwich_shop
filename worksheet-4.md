@@ -288,11 +288,11 @@ Add subfolders to the `test` folder for unit testing and widget testing. For our
 
 ### **Unit testing example**
 
-Now that we have moved our business logic into a pure Dart class (`OrderRepository`), we can write a unit test for it without needing to build any widgets. Unit tests are fast and focus on a single class or function.
+Now that we have moved our business logic into a pure Dart class (`OrderRepository`), we can write a unit test for it without needing to build any widgets.
 
 Create a new file called `order_repository_test.dart` in the `test/repositories` folder.
 
-This is what your folder structure should look like now:
+This is what your folder structure should look like:
 
 ```
 lib/
