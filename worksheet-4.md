@@ -505,12 +505,34 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
 4.  (Advanced) Let's add functionality to save an order to a local file. This task is more complex and will introduce you to the **ViewModel** pattern, which helps separate UI code from business logic.
 
-    First, use the `flutter pub add` command in your terminal to add [the `path_provider` package](https://pub.dev/packages/path_provider) to your dependencies:
+    First, add the [`path_provider` package](https://pub.dev/packages/path_provider) to your project by running the following command in your terminal:
 
     ```bash
     flutter pub add path_provider
     ```
     
     This will add the package to your `pubspec.yaml` file automatically (check the Source Control view to see the changes).
+
+    Next, create a `FileService` class in a new `lib/services` folder. This service will handle the external operation of writing to the device's storage. Operations like this are **asynchronous** because they might take some time to complete, and we don't want to freeze the app while waiting. In Dart, an asynchronous operations like reading from or writing to a file returns a `Future` object, which is like a promise for an object that will be available later. 
     
-    Then, follow the official documentation on [reading and writing files](https://docs.flutter.dev/cookbook/persistence/reading-writing-files) to create a `FileService` class in a new `lib/services` folder. This service will be responsible for writing a given string to a file named `order_history.txt` (your app should create this file if it doesn't already exist). Feel free to ask your AI assistant for help with this but make sure to provide it with sufficient context and describe the expected behaviour of the service.
+    Here's a simple example, paste it in a Dart file on the root of your project (not inside `lib` or `test` folders) and run it to see how it works:
+
+    ```dart
+    Future<int> calculateTheAnswer() async {
+      // Simulate a delay to mimic the delay in reading or writing a file
+      await Future.delayed(const Duration(seconds: 2));
+      return 42;
+    }
+
+    void main() async {
+      print('Calculating...');
+      int result = await calculateTheAnswer();
+      print('The result is $result');
+    }
+    ```
+
+    This is a good opportunity for us to introduce a **ViewModel**. A ViewModel acts as a bridge between the View and Repositories and/or Services. It prepares data for the UI to display and handles user interactions. To use this pattern, add the [`provider` package](https://pub.dev/packages/provider) to your project:
+
+    ```bash
+    flutter pub add provider
+    ```
