@@ -349,8 +349,20 @@ void main() {
 }
 ```
 
-The tests in this file are grouped using the `group` function, which helps organise related tests together. Each individual test is defined using the `test` function.
-`test` takes a description of the test and a callback function that contains the actual test code. The `expect` function used within the callbacks assert that a value matches an expected value. Read the test descriptions and comments to understand what each test is doing (and feel free to ask your AI assistant if you have any questions).
+The tests in this file are grouped using the `group` function, which helps organise related tests together. Each individual test is defined using the `test` function. The general format of a unit test is:
+
+```dart
+test('description of the test', () {
+  // Arrange: set up any necessary objects or conditions
+  final object = /* create object */;
+  // Act: perform the action you want to test
+  object.someMethod();
+  // Assert: check that the expected outcome occurred
+  expect(object.someProperty, expectedValue);
+});
+```
+
+As you can see, the `test` function takes a description of the test (as a `String`) and a callback function. In the callback, we typically follow the Arrange-Act-Assert pattern described in the code snippet above. Notice how the `expect` function is used to verify that the actual value matches the expected value (this is a built-in function provided by `flutter_test`). Feel free to ask your AI assistant if you have any questions.
 
 #### **Commit your changes**
 
