@@ -58,6 +58,14 @@ void main() {
   });
 
   group('OrderScreen - Controls', () {
+    testWidgets('toggles sandwich type with Switch',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      expect(find.textContaining('footlong sandwich'), findsOneWidget);
+      await tester.tap(find.byType(Switch));
+      await tester.pump();
+      expect(find.textContaining('six-inch sandwich'), findsOneWidget);
+    });
     testWidgets('changes bread type with DropdownMenu',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
