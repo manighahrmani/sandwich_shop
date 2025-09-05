@@ -403,15 +403,13 @@ test/
 
 Next, open `widget_test.dart`. Before making any changes, try running the tests by clicking the `Run` link above the `main` function. You should get a list of problems at the bottom of the screen. This is expected. When we were [restructuring our app](#folder-structure), we changed the location of `main.dart` for a start!
 
-First, update the import statements at the top of the `widget_test.dart` file to reflect the new folder structure. Replace the existing imports with the following:
+Update the import statement for `main.dart` at the top of `widget_test.dart` to include the `views` subfolder:
 
 ```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/views/main.dart';
 ```
 
-Run the tests again. They should all pass now. Let's walk through this file to understand how these tests work and what each part does.
+Run the tests again. They should all pass now. Let's talk about these tests work and what each part does.
 
 You'll notice each test is defined with `testWidgets` instead of `test`. This function takes a `WidgetTester` object in its callback parameter, which we have named `tester`. The `tester` is our main tool for building and interacting with our UI in the test environment. The general format of a widget test is:
 
