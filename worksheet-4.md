@@ -382,7 +382,9 @@ Before we move to widget testing, ensure that you have committed and synced all 
 
 ## **Widget testing**
 
-We have already provided you with an example of widget testing in the `widget_test.dart` file. It is currently in the `test` folder. Create a new folder called `views` inside the `test` folder and move the `widget_test.dart` file into this new folder. This is what your folder structure should look like now:
+We have already provided you with an example of widget testing in the `widget_test.dart` file. It is currently in the `test` folder. Create a new folder called `views` inside the `test` folder and move the `widget_test.dart` file into this new folder.
+
+This is what your folder structure should look like now:
 
 ```
 lib/
@@ -399,7 +401,7 @@ test/
       └── widget_test.dart
 ```
 
-Next, open the `widget_test.dart` file. Before making any changes, try running the tests by clicking the `Run` link above the `main` function. You should get a list of problems at the bottom of the screen. This is expected. Our refactoring work has changed the location of `main.dart` for a start!
+Next, open `widget_test.dart`. Before making any changes, try running the tests by clicking the `Run` link above the `main` function. You should get a list of problems at the bottom of the screen. This is expected. When we were [restructuring our app](#folder-structure), we changed the location of `main.dart` for a start!
 
 First, update the import statements at the top of the `widget_test.dart` file to reflect the new folder structure. Replace the existing imports with the following:
 
