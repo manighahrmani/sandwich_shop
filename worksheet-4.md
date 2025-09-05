@@ -264,9 +264,9 @@ class _OrderScreenState extends State<OrderScreen> {
 
 Open the Source Control view in VS Code with **Ctrl + Shift + G** on Windows or **⌃ + Shift + G** on macOS. You should see a list of changes that you have made to your project. Click on `main.dart` to see a side-by-side comparison of the old and new code. Pay attention to the changes that have been made.
 
-We no longer manage the `_quantity` in this class as it is the responsibility of our repository object `_orderRepository`. We use the `late` keyword for this instance variable, which is a promise that we will initialise this variable before we use it. In our `initState` method, we create an instance of `OrderRepository` and assign it to `_orderRepository` and provide the `maxQuantity` from the stateful widget.
+Can you get Copilot to explain why we no longer need the `_quantity` variable in this class? How has the logic for incrementing and decrementing changed?
 
-The `_getIncreaseCallback` and `_getDecreaseCallback` methods are now simpler. They use the `canIncrement` and `canDecrement` getters from the repository to decide whether the button should be enabled. So in future if we change the logic for incrementing or decrementing, we only need to update it in the repository.
+Notice that the `_getIncreaseCallback` and `_getDecreaseCallback` methods use the `canIncrement` and `canDecrement` getters from the repository to decide whether the button should be enabled. This way, if we change the logic for incrementing or decrementing, we only need to update it in the repository.
 
 #### **Commit your changes**
 
