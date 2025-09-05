@@ -278,7 +278,7 @@ Writing tests help you ensure that your code works as expected and helps prevent
 
   - **Unit tests**: These tests verify the smallest testable parts of an application, called "units", in isolation. In our case, the `OrderRepository` class is a perfect example of a unit.
   - **Widget tests**: These tests verify the UI and interactions of individual widgets. They can simulate user interactions and verify that the widget behaves as expected.
-  - **Integration tests**: These tests verify the integration of multiple widgets and services. They can simulate user interactions and verify that the app behaves as expected.
+  - **Integration tests**: These tests verify the integration of multiple components (how they work together). They can simulate user interactions and verify that the app behaves as expected.
 
 For more information, you can read the official Flutter documentation on [testing](https://docs.flutter.dev/cookbook/testing). In this worksheet, we will focus on unit tests and widget tests.
 
