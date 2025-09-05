@@ -270,7 +270,7 @@ Notice that the `_getIncreaseCallback` and `_getDecreaseCallback` methods use th
 
 #### **Commit your changes**
 
-Remember to commit your changes at each stage with a meaningful commit message like `Create app_styles.dart`, a separate commit for restructuring the folder, creating the repository class, and so on.
+Remember to commit your changes at each stage with a meaningful commit message before moving on.
 
 ## **Unit testing**
 
