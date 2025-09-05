@@ -411,7 +411,7 @@ import 'package:sandwich_shop/views/main.dart';
 
 Run the tests again. They should all pass now. Let's talk about these tests work and what each part does.
 
-You'll notice each test is defined with `testWidgets` instead of `test`. This function takes a `WidgetTester` object in its callback parameter, which we have named `tester`. The `tester` is our main tool for building and interacting with our UI in the test environment. The general format of a widget test is:
+You'll notice each test is defined with `testWidgets` instead of `test`. This function takes a `WidgetTester` object in its callback parameter, which is conventionally named `tester`. The `tester` is our main tool for building and interacting with our UI in the test environment. The general format of a widget test is:
 
 ```dart
 testWidgets('description of the test', (WidgetTester tester) async {
