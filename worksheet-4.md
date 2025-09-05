@@ -374,7 +374,11 @@ Run these tests while the `order_repository_test.dart` is open in VS Code and cl
 
 ![Running tests in VS Code](images/screenshot_running_tests.png)
 
-Each green tick means that the test passed, in other words, the `expect` function received the value it was waiting for. A red cross (❌) would mean the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This instant feedback is crucial for understanding what has gone wrong in your code.
+Each green tick means that the test passed. On the other hand, a red cross (❌) would mean the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This feedback is crucial for understanding what has gone wrong in your code.
+
+#### **Commit your changes**
+
+Before we move to widget testing, ensure that you have committed and synced all your changes to GitHub.
 
 ## **Widget testing**
 
