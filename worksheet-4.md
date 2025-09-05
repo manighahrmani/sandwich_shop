@@ -449,13 +449,6 @@ Before moving to the exercises, check that you have committed and synced all you
 ## **Exercises**
 
 Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
-Of course. I've revised exercises 3, 4, and 5 based on your feedback and provided the corresponding solutions.
-
------
-
-## **Exercises**
-
-Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
 
 1.  Our widget tests currently cover tapping buttons and entering text. Let's expand our test coverage to other types of user interaction.
 
