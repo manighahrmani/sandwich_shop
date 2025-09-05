@@ -502,37 +502,80 @@ Complete the exercises below. Remember to commit your changes after each exercis
     Finally, use your new repository in the `OrderScreen` to calculate and display the total price of the order. The price should be formatted to two decimal places (e.g., `£11.00`). You have the example of `OrderRepository` to refer to, but free to use your AI assistant to help you with how the `_OrderScreenState` class should be updated to use this new repository.
 
     ⚠️ **Show your new unit tests and the running app displaying the order price to a member of staff** for a sign-off.
+Of course. I've simplified exercise 4 to be more concise and self-contained, and updated exercise 5 and the solutions accordingly.
 
-4.  (Advanced) Let's add functionality to save an order to a local file. This task is more complex and will introduce you to the **ViewModel** pattern, which helps separate UI code from business logic.
+-----
 
-    First, add the [`path_provider` package](https://pub.dev/packages/path_provider) to your project by running the following command in your terminal:
+4.  (Advanced) Let's add functionality to save an order to a local file. This feature is only available on mobile and desktop platforms, so you will need to run your app on a compatible device.
+
+    First, add the `path_provider` package to your project by running the following command in your terminal:
 
     ```bash
     flutter pub add path_provider
     ```
-    
-    This will add the package to your `pubspec.yaml` file automatically (check the Source Control view to see the changes).
 
-    Next, create a `FileService` class in a new `lib/services` folder. This service will handle the external operation of writing to the device's storage. Operations like this are **asynchronous** because they might take some time to complete, and we don't want to freeze the app while waiting. In Dart, an asynchronous operations like reading from or writing to a file returns a `Future` object, which is like a promise for an object that will be available later. 
-    
-    Here's a simple example, paste it in a Dart file on the root of your project (not inside `lib` or `test` folders) and run it to see how it works:
+    This package helps find the correct directory to save files. Operations like writing to a device's storage are **asynchronous** because they might take some time to complete. In Dart, asynchronous methods return a `Future`, which is like a promise that the work will be done.
+
+    Create a `services` folder inside the `lib` folder. Then, create a new `file_service.dart` file and add create a `FileService` class in it. This service will handle the external operation of writing to the device's storage. Follow the `CounterStorage` class on the documentation page for [reading and writing files](https://docs.flutter.dev/cookbook/persistence/reading-writing-files) when writing this service.
+
+    Next, we'll use a simple **ViewModel**. For this exercise, it's just a plain Dart class that acts as a bridge between our UI and the `FileService`. Create the `OrderViewModel` class below in the `lib/view_models` folder.
 
     ```dart
-    Future<int> calculateTheAnswer() async {
-      // Simulate a delay to mimic the delay in reading or writing a file
-      await Future.delayed(const Duration(seconds: 2));
-      return 42;
-    }
+    import 'package:sandwich_shop/services/file_service.dart';
 
-    void main() async {
-      print('Calculating...');
-      int result = await calculateTheAnswer();
-      print('The result is $result');
+    class OrderViewModel {
+      final FileService fileService = FileService();
+
+      Future<void> saveOrderToFile({
+        required int quantity,
+        required bool isFootlong,
+      }) async {
+        String sandwichType = '';
+        if (isFootlong) {
+          sandwichType = 'footlong';
+        } else {
+          sandwichType = 'six-inch';
+        }
+        final String orderDetails = '$quantity $sandwichType sandwich(es)';
+        await fileService.writeOrder(orderDetails); // This should be a method in FileService
+      }
     }
     ```
 
-    This is a good opportunity for us to introduce a **ViewModel**. A ViewModel acts as a bridge between the View and Repositories and/or Services. It prepares data for the UI to display and handles user interactions. To use this pattern, add the [`provider` package](https://pub.dev/packages/provider) to your project:
+    Finally, update `_OrderScreenState` to use this ViewModel when the user clicks on a newly added "Save Order" button. The button should call the `saveOrderToFile` method of `OrderViewModel`, passing the current order details from the state.
 
-    ```bash
-    flutter pub add provider
+    Remember to write unit tests for both `FileService` and `OrderViewModel` to verify that the file writing logic works as expected. Additionally, feel free to implement a feature to read and display the previous order from the file when the app starts. Can you find out where the file is located on your device? Try adding a print statement to display the file path.
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
+5.  (Advanced) Let's add some images to our app like a company logo in the `AppBar`.
+
+    First, create an `assets/images` folder at the root of your project and add a simple logo image to it (e.g., `logo.png`). To make assets available to your app, you must declare the folder in your `pubspec.yaml` file. Open it and add an `assets` section at the bottom of the `flutter` section like this:
+
+    ```yaml
+    flutter:
+      uses-material-design: true
+
+      assets:
+        - assets/images/
     ```
+
+    Update your `OrderScreen`'s `AppBar` to display the logo. (Hint: Visit [this documentation page on `AppBar` widget](https://api.flutter.dev/flutter/material/AppBar-class.html) and check out the `leading` or `actions` properties.) You can find examples of how to load an asset in the [Image class documentation](https://api.flutter.dev/flutter/widgets/Image-class.html).
+
+    Finally, write a new widget test that verifies the logo is being displayed. A test for an image widget looks for the widget by its type and can even verify that the correct asset path is being used, as shown in the example below.
+
+    ```dart
+    testWidgets('displays logo in AppBar', (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+
+      // Find the widget by its type
+      final imageFinder = find.byType(Image);
+      expect(imageFinder, findsOneWidget);
+
+      // For a more robust test, you can check the asset source
+      final imageWidget = tester.widget<Image>(imageFinder);
+      expect((imageWidget.image as AssetImage).assetName, 'assets/images/logo.png');
+    });
+    ```
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
