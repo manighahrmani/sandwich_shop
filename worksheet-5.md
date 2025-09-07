@@ -79,71 +79,19 @@ Here's a reminder to commit your changes (commit them individually, the addition
 
 ### **The `Cart` model**
 
-Now that we can represent a single sandwich, we need a way to manage a collection of them in an order. Provide your implementation of `Sandwich` class to Copilot or your AI assistant of choice and ask it to help you create a `Cart` class that can hold multiple `Sandwich` objects.
-
-Think about what operations the user might want to perform on a cart and specify them. Also remember that we have a `PricingRepository` that can calculate the price of a sandwich based on its properties, so the `Cart` class doesn't need to perform the calculations by itself.
-
-### **The `Cart` model**
-
-Now that we can represent a single sandwich, we need a way to manage a collection of them in an order. For this, we'll create a `Cart` model. In the `models` folder, create a new file called `cart.dart` and add the following code:
-
-```dart
-import 'sandwich.dart';
-
-class Cart {
-  final List<Sandwich> _items = [];
-
-  List<Sandwich> get items => _items;
-
-  void add(Sandwich sandwich) {
-    _items.add(sandwich);
-  }
-
-  void remove(Sandwich sandwich) {
-    _items.remove(sandwich);
-  }
-}
-```
-
-You might notice we've removed the `totalPrice` getter from the initial draft. A `Cart`'s responsibility is to hold a list of items. It shouldn't be responsible for knowing the business rules for pricing. This principle is called **separation of concerns**, and it makes our code much cleaner and easier to maintain.
-
-So, how do we calculate the total price? We'll extend our `PricingRepository`.
+Now that we can represent a single sandwich, we need a way to manage a collection of them in an order. Provide your implementation of `Sandwich` class to Copilot or your AI assistant of choice and ask it to help you create a `Cart` class that can hold multiple `Sandwich` objects. Think about what operations the user might want to perform on a cart and specify them.
 
 #### **Calculating the Cart's Total Price**
 
-Since our `PricingRepository` is the single source of truth for all pricing logic, it's the perfect place to add the functionality for calculating the total price of a cart.
+Since our `PricingRepository` is the single source of truth for all pricing logic, we should leverage it to calculate the total price of all sandwiches in the cart.
 
-Open `lib/repositories/pricing_repository.dart` and add a new method to it:
+To do this, you may want to consider using collection types in `Cart` that allow you to store the sandwiches along with their quantities. This way, you can easily use the `calculatePrice` method from `PricingRepository` to compute the total price of the cart.
 
-```dart
-import 'package:sandwich_shop/models/cart.dart';
-
-class PricingRepository {
-  double calculatePrice({required int quantity, required bool isFootlong}) {
-    // This is a simplified version, assuming quantity is always 1 for this method
-    final double pricePerItem = isFootlong ? 11.00 : 7.00;
-    return quantity * pricePerItem;
-  }
-
-  // Add this new method
-  double calculateCartPrice(Cart cart) {
-    double totalPrice = 0.0;
-    for (var sandwich in cart.items) {
-      // Here we reuse the existing logic for single item price
-      totalPrice += calculatePrice(quantity: 1, isFootlong: sandwich.isFootlong);
-    }
-    return totalPrice;
-  }
-}
-```
-
-This new `calculateCartPrice` method takes a `Cart` object, iterates through each `Sandwich`, and uses our existing `calculatePrice` method to determine its individual price, summing them up to get a total.
-
-This approach is powerful. If you ever decide to change how sandwiches are priced (e.g., footlongs become £12.00), you only need to update the `calculatePrice` method in `PricingRepository`, and the cart's total price will automatically be correct without any other changes.
+As with the `Sandwich` model, use your AI assistant to help you write unit tests for the `Cart` model. Ensure that the tests cover all the operations you have implemented including the total price calculation.
 
 #### **Commit your changes**
 
-Commit the `Cart` model and the updated `PricingRepository` with a message like `Create Cart model and extend PricingRepository`.
+Commit the addition of the `Cart` model and its tests before moving on.
 
 ## **Managing Assets**
 
