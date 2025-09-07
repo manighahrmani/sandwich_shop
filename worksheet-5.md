@@ -97,7 +97,9 @@ Commit the addition of the `Cart` model and its tests before moving on.
 
 Our `Sandwich` model has an `image` property, but we haven't provided any images yet. In Flutter, static files like images, fonts, and configuration files are called **assets**.
 
-First, create an `assets` folder in the root of your project, at the same level as the `lib` and `test` folders. Inside the `assets` folder, create another folder called `images`. You can find some example sandwich images [here](https://www.google.com/search?q=https://github.com/manighahrmani/sandwich_shop/tree/main/assets/images). Download them and place them in your new `assets/images` folder.
+First, create an `assets` folder in the root of your project, at the same level as the `lib` and `test` folders. Inside the `assets` folder, create another folder called `images`.
+
+Use your AI assistant to help you find or create images for the sandwiches or a logo for the app. Save these images in the `assets/images` folder. Name them appropriately, for example, `footlong_wheat.png`, `six_inch_wholemeal.png`, etc.
 
 Next, you need to tell Flutter about these new assets. Open the `pubspec.yaml` file and add an `assets` section like this:
 
