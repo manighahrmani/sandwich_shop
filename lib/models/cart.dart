@@ -1,18 +1,29 @@
 import 'sandwich.dart';
+import 'package:sandwich_shop/repositories/pricing_repository.dart';
 
 class Cart {
-  final List<Sandwich> _items = [];
+  final Map<Sandwich, int> _items = {};
 
-  // This is a getter that exposes a read-only copy of the items
-  // to prevent accidental modification from outside the class.
-  List<Sandwich> get items => List.unmodifiable(_items);
+  // Returns a read-only copy of the items and their quantities
+  Map<Sandwich, int> get items => Map.unmodifiable(_items);
 
-  void add(Sandwich sandwich) {
-    _items.add(sandwich);
+  void add(Sandwich sandwich, {int quantity = 1}) {
+    if (_items.containsKey(sandwich)) {
+      _items[sandwich] = _items[sandwich]! + quantity;
+    } else {
+      _items[sandwich] = quantity;
+    }
   }
 
-  void remove(Sandwich sandwich) {
-    _items.remove(sandwich);
+  void remove(Sandwich sandwich, {int quantity = 1}) {
+    if (_items.containsKey(sandwich)) {
+      final currentQty = _items[sandwich]!;
+      if (currentQty > quantity) {
+        _items[sandwich] = currentQty - quantity;
+      } else {
+        _items.remove(sandwich);
+      }
+    }
   }
 
   void clear() {
@@ -20,10 +31,27 @@ class Cart {
   }
 
   double get totalPrice {
-    return 0.0;
+    final pricingRepository = PricingRepository();
+    double total = 0.0;
+
+    _items.forEach((sandwich, quantity) {
+      total += pricingRepository.calculatePrice(
+        quantity: quantity,
+        isFootlong: sandwich.isFootlong,
+      );
+    });
+
+    return total;
   }
 
   bool get isEmpty => _items.isEmpty;
 
   int get length => _items.length;
+
+  int getQuantity(Sandwich sandwich) {
+    if (_items.containsKey(sandwich)) {
+      return _items[sandwich]!;
+    }
+    return 0;
+  }
 }
