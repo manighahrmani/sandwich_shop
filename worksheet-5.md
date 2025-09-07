@@ -79,36 +79,9 @@ Here's a reminder to commit your changes (commit them individually, the addition
 
 ### **The `Cart` model**
 
-Now that we can represent a single sandwich, we need a way to manage a collection of them in an order. For this, we'll create a `Cart` model. In the `models` folder, create a new file called `cart.dart` and add the following code:
+Now that we can represent a single sandwich, we need a way to manage a collection of them in an order. Provide your implementation of `Sandwich` class to Copilot or your AI assistant of choice and ask it to help you create a `Cart` class that can hold multiple `Sandwich` objects.
 
-```dart
-import 'sandwich.dart';
-
-class Cart {
-  final List<Sandwich> _items = [];
-
-  List<Sandwich> get items => _items;
-
-  void add(Sandwich sandwich) {
-    _items.add(sandwich);
-  }
-
-  void remove(Sandwich sandwich) {
-    _items.remove(sandwich);
-  }
-
-  double get totalPrice {
-    // We will implement this later
-    return 0.0;
-  }
-}
-```
-
-This `Cart` class has a private list of `Sandwich` objects and provides methods to add and remove sandwiches. For a deeper understanding of lists in Dart, you can refer to the [official documentation](https://www.google.com/search?q=https://dart.dev/guides/language/language-tour%23lists).
-
-#### **Commit your changes**
-
-Now is a good time to commit your changes. Use a descriptive commit message, such as `Create Sandwich and Cart models`.
+Think about what operations the user might want to perform on a cart and specify them. Also remember that we have a `PricingRepository` that can calculate the price of a sandwich based on its properties, so the `Cart` class doesn't need to perform the calculations by itself.
 
 ### **The `Cart` model**
 
