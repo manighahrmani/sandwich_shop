@@ -16,7 +16,7 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 ## **Introduction to Data Models**
 
-So far, we've been passing simple data types like `String` and `int` between our widgets. As our app grows in complexity, it's better to group related data into custom classes. We call these **data models**.
+So far, we've been passing simple data types like `String` and `int` between our widgets. As our app grows in complexity, it's better to group related data into custom data types (classes). We call these **data models**.
 
 If you've worked with databases before, you can think of data models as being similar to **entities**. An entity is a real-world object or concept that can be distinctly identified. In our case, a "Sandwich" is a perfect example of an entity that we can represent with a data model.
 
@@ -24,7 +24,21 @@ If you've worked with databases before, you can think of data models as being si
 
 Let's start by defining a `Sandwich` model. This will help us manage all the properties of a sandwich in one place.
 
-In your `lib` folder, create a new folder called `models`. Inside the `models` folder, create a new file called `sandwich.dart` and add the following code:
+In your `lib` folder, create a new folder called `models`. This is what your project structure may look like:
+
+```
+lib/
+  ├── views/
+  │   ├── app_styles.dart
+  │   └── main.dart
+  ├── view_models/
+  │   └── order_view_model.dart
+  ├── models/
+  │   └── sandwich.dart
+  └── repositories/
+      ├── order_repository.dart
+      └── pricing_repository.dart
+```
 
 ```dart
 enum BreadType { white, wheat, wholemeal }
