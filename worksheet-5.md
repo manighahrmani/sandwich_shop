@@ -24,7 +24,7 @@ If you've worked with databases before, you can think of data models as being si
 
 Let's start by defining a `Sandwich` model. This will help us manage all the properties of a sandwich in one place.
 
-In your `lib` folder, create a new folder called `models`. This is what your project structure may look like:
+In your `lib` folder, create a new folder called `models`. Inside this folder, create a new file called `sandwich.dart`. This is what your project structure may look like:
 
 ```
 lib/
@@ -40,6 +40,8 @@ lib/
       └── pricing_repository.dart
 ```
 
+Add the following code to `sandwich.dart`:
+
 ```dart
 enum BreadType { white, wheat, wholemeal }
 
@@ -54,11 +56,26 @@ class Sandwich {
     required this.isFootlong,
     required this.breadType,
     required this.image,
-  });
+  }) {
+    if (name.isEmpty) {
+      throw ArgumentError('Name cannot be empty');
+    }
+    if (image.isEmpty || !image.startsWith('assets/images/')) {
+      throw ArgumentError('Image must be a valid asset path');
+    }
+  }
 }
 ```
 
-Here we have defined a `Sandwich` class with a few properties. The `image` property will hold the path to an image of the sandwich. We will come back to this later.
+Here we have defined a `Sandwich` class with a few properties. The `image` property will hold the path to an image of the sandwich hence it is a `String`. We will come back to this later.
+
+Does the `throw` statements make sense to you? If not, ask your AI assistant to explain them. Also, we are not storing the price of a sandwich here as it is determined by the `PricingRepository` based on the size of the sandwich (`isFootlong`).
+
+Before moving on, use your AI assistant to write a unit test for the `Sandwich` model. Remember to create a `models` folder inside the `test` folder to mirror the structure of the `lib` folder. Your test file should ideally be named `sandwich_test.dart`.
+
+#### **Commit your changes**
+
+Here's a reminder to commit your changes (commit them individually, the addition of the model and the test).
 
 ### **The `Cart` model**
 
