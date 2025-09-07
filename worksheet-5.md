@@ -110,6 +110,68 @@ This `Cart` class has a private list of `Sandwich` objects and provides methods 
 
 Now is a good time to commit your changes. Use a descriptive commit message, such as `Create Sandwich and Cart models`.
 
+### **The `Cart` model**
+
+Now that we can represent a single sandwich, we need a way to manage a collection of them in an order. For this, we'll create a `Cart` model. In the `models` folder, create a new file called `cart.dart` and add the following code:
+
+```dart
+import 'sandwich.dart';
+
+class Cart {
+  final List<Sandwich> _items = [];
+
+  List<Sandwich> get items => _items;
+
+  void add(Sandwich sandwich) {
+    _items.add(sandwich);
+  }
+
+  void remove(Sandwich sandwich) {
+    _items.remove(sandwich);
+  }
+}
+```
+
+You might notice we've removed the `totalPrice` getter from the initial draft. A `Cart`'s responsibility is to hold a list of items. It shouldn't be responsible for knowing the business rules for pricing. This principle is called **separation of concerns**, and it makes our code much cleaner and easier to maintain.
+
+So, how do we calculate the total price? We'll extend our `PricingRepository`.
+
+#### **Calculating the Cart's Total Price**
+
+Since our `PricingRepository` is the single source of truth for all pricing logic, it's the perfect place to add the functionality for calculating the total price of a cart.
+
+Open `lib/repositories/pricing_repository.dart` and add a new method to it:
+
+```dart
+import 'package:sandwich_shop/models/cart.dart';
+
+class PricingRepository {
+  double calculatePrice({required int quantity, required bool isFootlong}) {
+    // This is a simplified version, assuming quantity is always 1 for this method
+    final double pricePerItem = isFootlong ? 11.00 : 7.00;
+    return quantity * pricePerItem;
+  }
+
+  // Add this new method
+  double calculateCartPrice(Cart cart) {
+    double totalPrice = 0.0;
+    for (var sandwich in cart.items) {
+      // Here we reuse the existing logic for single item price
+      totalPrice += calculatePrice(quantity: 1, isFootlong: sandwich.isFootlong);
+    }
+    return totalPrice;
+  }
+}
+```
+
+This new `calculateCartPrice` method takes a `Cart` object, iterates through each `Sandwich`, and uses our existing `calculatePrice` method to determine its individual price, summing them up to get a total.
+
+This approach is powerful. If you ever decide to change how sandwiches are priced (e.g., footlongs become £12.00), you only need to update the `calculatePrice` method in `PricingRepository`, and the cart's total price will automatically be correct without any other changes.
+
+#### **Commit your changes**
+
+Commit the `Cart` model and the updated `PricingRepository` with a message like `Create Cart model and extend PricingRepository`.
+
 ## **Managing Assets**
 
 Our `Sandwich` model has an `image` property, but we haven't provided any images yet. In Flutter, static files like images, fonts, and configuration files are called **assets**.
