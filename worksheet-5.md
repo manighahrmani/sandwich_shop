@@ -131,7 +131,9 @@ First, create an `assets` folder in the root of your project, at the same level 
 
 You'll need to create images for each sandwich type and size combination. Based on our `SandwichType` enum, you'll need images named like: `veggieDelight_footlong.png` or `veggieDelight_six_inch.png` and so on for all the sandwich types.
 
-Use your AI assistant to help you find or create placeholder images for the sandwiches. You can use simple coloured rectangles or search for copyright-free sandwich images online. Save these images in the `assets/images` folder with the exact naming convention shown above.
+We have already provided you with a logo image called `logo.png` for the app bar. If you have [cloned/forked the repository](https://github.com/manighahrmani/sandwich_shop) this should already be in your folder, otherwise, download it from [this page](https://github.com/manighahrmani/sandwich_shop/blob/5/assets/images/logo.png) and save it as `logo.png` in the `assets/images` folder.
+
+Use your AI assistant to help you find or create placeholder images for the sandwiches and logo. You can use simple coloured rectangles or search for copyright-free images online. Save these images in the `assets/images` folder with the exact naming convention shown above.
 
 Next, you need to tell Flutter about these new assets. Open the `pubspec.yaml` file and add an `assets` section like this (**the `uses-material-design: true` line already exists there, just add everything below it**).
 
@@ -150,6 +152,30 @@ Now you can use these images in your app. For more information, you can read the
 
 Commit your new assets with the message `Add sandwich images as assets`.
 
+### **Adding a simple logo to the app bar**
+
+Before we dive into the more complex sandwich image display, let's start with a simple example of using images. We'll add a logo to the app bar.
+
+In your `main.dart` file, update the `AppBar` in the `build` method to include a logo:
+
+```dart
+appBar: AppBar(
+  leading: Image.asset('assets/images/logo.png'),
+  title: const Text(
+    'Sandwich Counter',
+    style: heading1,
+  ),
+),
+```
+
+The `Image.asset()` widget loads an image from your assets folder. The `leading` property of `AppBar` places the widget before the title. Run your app to see the logo appear in the app bar.
+
+For more information about the `Image` widget and its properties, check the [Flutter documentation on Image](https://api.flutter.dev/flutter/widgets/Image-class.html).
+
+#### **Commit your changes**
+
+Commit this simple logo addition before moving on to the more complex image display.
+
 ## **Updating the UI**
 
 Now that we have our models and assets, let's update our UI to use them. We'll create a simple interface where users can select a sandwich type, size, bread type, and quantity, then add it to their cart.
@@ -167,9 +193,28 @@ As mentioned before, you need to remove the import for `order_repository.dart` s
 
 You'll also need to remove the `BreadType` enum from `main.dart` since it's now defined in the `sandwich.dart` file.
 
+### **Displaying sandwich images**
+
+Now let's add dynamic image display that updates based on the user's selection. We'll show the sandwich image that corresponds to the selected type and size.
+
+First, let's add an image display to our UI. In your `_OrderScreenState` class, add this method to get the current sandwich image path:
+
+```dart
+String _getCurrentImagePath() {
+  final sandwich = Sandwich(
+    type: _selectedSandwichType,
+    isFootlong: _isFootlong,
+    breadType: _selectedBreadType,
+  );
+  return sandwich.image;
+}
+```
+
+This method creates a temporary `Sandwich` object with the current selections and uses its `image` getter to get the correct image path.
+
 ### **Creating the sandwich customization UI**
 
-We'll replace the current UI in `_OrderScreenState` with this form that allows users to customize their sandwich order before adding it to their cart.
+Now we'll update the UI to include the image display and replace the old order management system with our new cart-based approach. Replace the entirety of `_OrderScreenState` with the following:
 
 ```dart
 class _OrderScreenState extends State<OrderScreen> {
@@ -244,6 +289,15 @@ class _OrderScreenState extends State<OrderScreen> {
     }).toList();
   }
 
+  String _getCurrentImagePath() {
+    final sandwich = Sandwich(
+      type: _selectedSandwichType,
+      isFootlong: _isFootlong,
+      breadType: _selectedBreadType,
+    );
+    return sandwich.image;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -258,6 +312,29 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Image.asset(
+                _getCurrentImagePath(),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Text(
+                      'Image not found',
+                      style: normalText,
+                    ),
+                  );
+                },
+              ),
+            ),
+            
+            const SizedBox(height: 20),
+            
             DropdownMenu<SandwichType>(
               width: double.infinity,
               label: const Text('Sandwich Type'),
@@ -328,13 +405,6 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             
             const SizedBox(height: 20),
-            
-            // Simple cart display
-            Text(
-              'Cart has ${_cart.length} item(s)',
-              style: normalText,
-              textAlign: TextAlign.center,
-            ),
           ],
         ),
       ),
@@ -343,9 +413,24 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-This UI provides dropdown menus for selecting the sandwich type and bread type, a switch for choosing the size, quantity controls, and an "Add to Cart" button. When the user adds items to the cart, a confirmation message is printed to the debug console.
+This UI includes several key features:
 
-Note that currently, the user will only recieve a print statement in the debugging console to confirm the addition of a sandwich in the cart. This is something you need to fix later in an exercise.
+1. **Dynamic image display**: The `Container` with `Image.asset()` shows the current sandwich image. The `_getCurrentImagePath()` method ensures the image updates automatically when users change their selections.
+
+2. **Error handling**: The `errorBuilder` property handles cases where an image file doesn't exist, showing a "Image not found" message instead of crashing.
+
+3. **Responsive layout**: The image container has a fixed height but fills the available width, with rounded corners and a border for better visual appeal.
+
+4. **State management**: When users change the dropdown selection or toggle the switch, `setState()` is called, which triggers a rebuild and updates the displayed image automatically.
+
+The dropdown menus, switch, and quantity controls work together to update the image in real-time. When the user adds items to the cart, a confirmation message is printed to the debug console.
+
+Ask your AI assistant to explain any parts of this code you don't understand, particularly:
+- How `setState()` triggers image updates when selections change
+- What the `errorBuilder` property does and why it's important
+- How the `fit: BoxFit.cover` property affects image display
+
+For more information about image handling in Flutter, check the [Flutter documentation on Image](https://api.flutter.dev/flutter/widgets/Image-class.html) and [BoxFit](https://api.flutter.dev/flutter/painting/BoxFit.html).
 
 As always, write widget tests to ensure your UI behaves as expected. Test scenarios like adding items to the cart, changing quantities, and selecting different sandwich options.
 
