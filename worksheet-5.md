@@ -362,9 +362,10 @@ class _OrderScreenState extends State<OrderScreen> {
         ),
       ),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             SizedBox(
               height: 200,
               child: Image.asset(
@@ -448,13 +449,16 @@ class _OrderScreenState extends State<OrderScreen> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 ```
 
 The `Image.asset()` shows the current sandwich image. The `_getCurrentImagePath()` method ensures the image updates automatically when users change their selections. The `errorBuilder` property handles cases where an image file doesn't exist, showing a "Image not found" message instead of crashing.
+
 The dropdown menus, switch, and quantity controls work together to update the image in real-time. When the user adds items to the cart, a confirmation message is printed to the debug console using `debugPrint()`. If you don't see the debug console in VS Code, open the Command Palette (**Ctrl+Shift+P** or **⌘+Shift+P**) and type "Focus on Debug Console View" to open it.
+
+Notice that we wrap our `Column` in a `SingleChildScrollView` widget. This makes the entire interface scrollable, which is important when the content becomes too tall for the screen. This is particularly useful on smaller devices or when the screen is resized to a smaller height. You may remember doing an exercise on scrollable widgets in the [Worksheet 1](./worksheet-2.md).
 
 If you are confused by what the `errorBuilder` property does, or how the `fit: BoxFit.cover` property affects image display, ask your AI assistant to explain these concepts.
 
