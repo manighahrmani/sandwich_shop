@@ -169,7 +169,7 @@ You'll also need to remove the `BreadType` enum from `main.dart` since it's now 
 
 ### **Creating the sandwich customization UI**
 
-We'll replace the current UI with a form that allows users to customize their sandwich order. Use your AI assistant to help you understand how to use `DropdownMenu`, `Switch`, and `TextField` widgets to create this form if you're unfamiliar with them:
+We'll replace the current UI in `_OrderScreenState` with this form that allows users to customize their sandwich order before adding it to their cart.
 
 ```dart
 class _OrderScreenState extends State<OrderScreen> {
@@ -345,10 +345,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
 This UI provides dropdown menus for selecting the sandwich type and bread type, a switch for choosing the size, quantity controls, and an "Add to Cart" button. When the user adds items to the cart, a confirmation message is printed to the debug console.
 
-Ask your AI assistant to explain any parts of this code you don't understand, particularly:
-- How the `DropdownMenu` widgets work
-- How the `print()` statement helps with debugging
-- How the `_getAddToCartCallback()` method works to enable/disable the button
+Note that currently, the user will only recieve a print statement in the debugging console to confirm the addition of a sandwich in the cart. This is something you need to fix later in an exercise.
 
 As always, write widget tests to ensure your UI behaves as expected. Test scenarios like adding items to the cart, changing quantities, and selecting different sandwich options.
 
