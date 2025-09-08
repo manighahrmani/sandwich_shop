@@ -46,6 +46,8 @@ lib/
     └── pricing_repository.dart
 ```
 
+You will notice that we have not listed `lib/repository/order_repository.dart`. You can delete this file from your `repositories` folder as it's no longer needed with our new data model approach (more on this later).
+
 Add the following code to `sandwich.dart`:
 
 ```dart
