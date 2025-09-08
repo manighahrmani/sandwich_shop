@@ -214,7 +214,11 @@ This method creates a temporary `Sandwich` object with the current selections an
 
 ### **Creating the sandwich customization UI**
 
-Now we'll update the UI to include the image display and replace the old order management system with our new cart-based approach. Replace the entirety of `_OrderScreenState` with the following:
+Now we'll update the UI to include the image display and replace the old order management system with our new cart-based approach.
+
+Since we're changing the UI structure significantly, you can remove the `StyledButton` and `OrderItemDisplay` classes from the bottom of your `main.dart` file as they're no longer needed with our new approach.
+
+Replace the entirety of `_OrderScreenState` with the following:
 
 ```dart
 class _OrderScreenState extends State<OrderScreen> {
@@ -242,7 +246,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
   void _addToCart() {
     if (_quantity > 0) {
-      final sandwich = Sandwich(
+      final Sandwich sandwich = Sandwich(
         type: _selectedSandwichType,
         isFootlong: _isFootlong,
         breadType: _selectedBreadType,
@@ -260,7 +264,7 @@ class _OrderScreenState extends State<OrderScreen> {
       }
       String confirmationMessage = 'Added $_quantity $sizeText ${sandwich.name} sandwich(es) on ${_selectedBreadType.name} bread to cart';
       
-      print(confirmationMessage);
+      debugPrint(confirmationMessage);
     }
   }
 
@@ -272,30 +276,80 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   List<DropdownMenuEntry<SandwichType>> _buildSandwichTypeEntries() {
-    return SandwichType.values.map((type) {
-      return DropdownMenuEntry<SandwichType>(
+    List<DropdownMenuEntry<SandwichType>> entries = [];
+    for (SandwichType type in SandwichType.values) {
+      Sandwich sandwich = Sandwich(type: type, isFootlong: true, breadType: BreadType.white);
+      DropdownMenuEntry<SandwichType> entry = DropdownMenuEntry<SandwichType>(
         value: type,
-        label: Sandwich(type: type, isFootlong: true, breadType: BreadType.white).name,
+        label: sandwich.name,
       );
-    }).toList();
+      entries.add(entry);
+    }
+    return entries;
   }
 
   List<DropdownMenuEntry<BreadType>> _buildBreadTypeEntries() {
-    return BreadType.values.map((bread) {
-      return DropdownMenuEntry<BreadType>(
+    List<DropdownMenuEntry<BreadType>> entries = [];
+    for (BreadType bread in BreadType.values) {
+      DropdownMenuEntry<BreadType> entry = DropdownMenuEntry<BreadType>(
         value: bread,
         label: bread.name,
       );
-    }).toList();
+      entries.add(entry);
+    }
+    return entries;
   }
 
   String _getCurrentImagePath() {
-    final sandwich = Sandwich(
+    final Sandwich sandwich = Sandwich(
       type: _selectedSandwichType,
       isFootlong: _isFootlong,
       breadType: _selectedBreadType,
     );
     return sandwich.image;
+  }
+
+  void _onSandwichTypeChanged(SandwichType? value) {
+    if (value != null) {
+      setState(() {
+        _selectedSandwichType = value;
+      });
+    }
+  }
+
+  void _onSizeChanged(bool value) {
+    setState(() {
+      _isFootlong = value;
+    });
+  }
+
+  void _onBreadTypeChanged(BreadType? value) {
+    if (value != null) {
+      setState(() {
+        _selectedBreadType = value;
+      });
+    }
+  }
+
+  void _increaseQuantity() {
+    setState(() {
+      _quantity++;
+    });
+  }
+
+  void _decreaseQuantity() {
+    if (_quantity > 0) {
+      setState(() {
+        _quantity--;
+      });
+    }
+  }
+
+  VoidCallback? _getDecreaseCallback() {
+    if (_quantity > 0) {
+      return _decreaseQuantity;
+    }
+    return null;
   }
 
   @override
@@ -307,18 +361,12 @@ class _OrderScreenState extends State<OrderScreen> {
           style: heading1,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
+            SizedBox(
               height: 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(8),
-              ),
               child: Image.asset(
                 _getCurrentImagePath(),
                 fit: BoxFit.cover,
@@ -340,11 +388,7 @@ class _OrderScreenState extends State<OrderScreen> {
               label: const Text('Sandwich Type'),
               textStyle: normalText,
               initialSelection: _selectedSandwichType,
-              onSelected: (SandwichType? value) {
-                if (value != null) {
-                  setState(() => _selectedSandwichType = value);
-                }
-              },
+              onSelected: _onSandwichTypeChanged,
               dropdownMenuEntries: _buildSandwichTypeEntries(),
             ),
             
@@ -356,7 +400,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 const Text('Six-inch', style: normalText),
                 Switch(
                   value: _isFootlong,
-                  onChanged: (value) => setState(() => _isFootlong = value),
+                  onChanged: _onSizeChanged,
                 ),
                 const Text('Footlong', style: normalText),
               ],
@@ -369,11 +413,7 @@ class _OrderScreenState extends State<OrderScreen> {
               label: const Text('Bread Type'),
               textStyle: normalText,
               initialSelection: _selectedBreadType,
-              onSelected: (BreadType? value) {
-                if (value != null) {
-                  setState(() => _selectedBreadType = value);
-                }
-              },
+              onSelected: _onBreadTypeChanged,
               dropdownMenuEntries: _buildBreadTypeEntries(),
             ),
             
@@ -384,12 +424,12 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 const Text('Quantity: ', style: normalText),
                 IconButton(
-                  onPressed: _quantity > 0 ? () => setState(() => _quantity--) : null,
+                  onPressed: _getDecreaseCallback(),
                   icon: const Icon(Icons.remove),
                 ),
                 Text('$_quantity', style: heading2),
                 IconButton(
-                  onPressed: () => setState(() => _quantity++),
+                  onPressed: _increaseQuantity,
                   icon: const Icon(Icons.add),
                 ),
               ],
@@ -413,17 +453,8 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-This UI includes several key features:
-
-1. **Dynamic image display**: The `Container` with `Image.asset()` shows the current sandwich image. The `_getCurrentImagePath()` method ensures the image updates automatically when users change their selections.
-
-2. **Error handling**: The `errorBuilder` property handles cases where an image file doesn't exist, showing a "Image not found" message instead of crashing.
-
-3. **Responsive layout**: The image container has a fixed height but fills the available width, with rounded corners and a border for better visual appeal.
-
-4. **State management**: When users change the dropdown selection or toggle the switch, `setState()` is called, which triggers a rebuild and updates the displayed image automatically.
-
-The dropdown menus, switch, and quantity controls work together to update the image in real-time. When the user adds items to the cart, a confirmation message is printed to the debug console.
+The `Image.asset()` shows the current sandwich image. The `_getCurrentImagePath()` method ensures the image updates automatically when users change their selections. The `errorBuilder` property handles cases where an image file doesn't exist, showing a "Image not found" message instead of crashing.
+The dropdown menus, switch, and quantity controls work together to update the image in real-time. When the user adds items to the cart, a confirmation message is printed to the debug console using `debugPrint()`. If you don't see the debug console in VS Code, open the Command Palette (**Ctrl+Shift+P** or **⌘+Shift+P**) and type "Focus on Debug Console View" to open it.
 
 Ask your AI assistant to explain any parts of this code you don't understand, particularly:
 - How `setState()` triggers image updates when selections change
@@ -445,9 +476,9 @@ Make sure all your changes are committed before moving on to the exercises or th
 ## **Exercises**
 
 <!-- TODO: Add exercises for:
-1. Display Cart Total - show total price using Cart.totalPrice getter
-2. Cart View - create new screen showing all cart items with quantities and prices
-3. Remove from Cart - add functionality to remove items from cart
-4. Order Notes - re-implement notes functionality for individual orders
-5. Validation - prevent adding more than 10 of any single sandwich type
+1. Cart View - create new screen showing all cart items with quantities and prices
+1. Display Cart Total - show total price using Cart.totalPrice getter this is currently done as debug print
+1. Remove from Cart - add functionality to remove items from cart
+1. Order Notes - re-implement notes functionality for individual orders (not individual sandwiches)
+1. Validation - prevent adding more than 10 of any single sandwich type (this was previously in order_repository.dart).
 -->
