@@ -1,22 +1,44 @@
 enum BreadType { white, wheat, wholemeal }
 
+enum SandwichType {
+  veggieDelight,
+  chickenTeriyaki,
+  tunaMelt,
+  meatballMarinara,
+}
+
 class Sandwich {
-  final String name;
+  final SandwichType type;
   final bool isFootlong;
   final BreadType breadType;
-  final String image;
 
   Sandwich({
-    required this.name,
+    required this.type,
     required this.isFootlong,
     required this.breadType,
-    required this.image,
-  }) {
-    if (name.isEmpty) {
-      throw ArgumentError('Name cannot be empty');
+  });
+
+  String get name {
+    switch (type) {
+      case SandwichType.veggieDelight:
+        return 'Veggie Delight';
+      case SandwichType.chickenTeriyaki:
+        return 'Chicken Teriyaki';
+      case SandwichType.tunaMelt:
+        return 'Tuna Melt';
+      case SandwichType.meatballMarinara:
+        return 'Meatball Marinara';
     }
-    if (image.isEmpty || !image.startsWith('assets/images/')) {
-      throw ArgumentError('Image must be a valid asset path');
+  }
+
+  String get image {
+    String typeString = type.name;
+    String sizeString = '';
+    if (isFootlong) {
+      sizeString = 'footlong';
+    } else {
+      sizeString = 'six_inch';
     }
+    return 'assets/images/${typeString}_$sizeString.png';
   }
 }
