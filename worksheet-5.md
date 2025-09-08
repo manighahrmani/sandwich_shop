@@ -4,11 +4,11 @@
 
 Ensure that you have already completed the following:
 
-  - [Worksheet 0 — Introduction to Dart, Git and GitHub](https://www.google.com/search?q=./worksheet-0.md).
-  - [Worksheet 1 — Introduction to Flutter](https://www.google.com/search?q=./worksheet-1.md).
-  - [Worksheet 2 — Stateless Widgets](https://www.google.com/search?q=./worksheet-2.md).
-  - [Worksheet 3 — Stateful widgets](https://www.google.com/search?q=./worksheet-3.md).
-  - [Worksheet 4 — App Architecture and Testing](https://www.google.com/search?q=./worksheet-4.md).
+- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+- [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
+- [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
+- [Worksheet 3 — Stateful widgets](./worksheet-3.md).
+- [Worksheet 4 — App Architecture and Testing](./worksheet-4.md).
 
 ## **Getting help**
 
@@ -20,6 +20,14 @@ So far, we've been passing simple data types like `String` and `int` between our
 
 If you've worked with databases before, you can think of data models as being similar to **entities**. An entity is a real-world object or concept that can be distinctly identified. In our case, a "Sandwich" is a perfect example of an entity that we can represent with a data model.
 
+### **Business Logic Decisions**
+
+During your development, you as the developer would make certain business decisions about how the app should function. Here is an example of one such decision we have made regarding our app. 
+
+We assume that the price of a sandwich depends only on its size (footlong vs six-inch), not on the type of sandwich or bread type. This keeps our pricing simple and consistent.
+
+This is why our `PricingRepository` only needs to know the quantity and size (`isFootlong`) to calculate the total price. The sandwich type (like "Veggie Delight" or "Turkey Club") and bread type don't affect the price.
+
 ### **Creating the `Sandwich` model**
 
 Let's start by defining a `Sandwich` model. This will help us manage all the properties of a sandwich in one place.
@@ -28,16 +36,15 @@ In your `lib` folder, create a new folder called `models`. Inside this folder, c
 
 ```
 lib/
-  ├── views/
-  │   ├── app_styles.dart
-  │   └── main.dart
-  ├── view_models/
-  │   └── order_view_model.dart
-  ├── models/
-  │   └── sandwich.dart
-  └── repositories/
-      ├── order_repository.dart
-      └── pricing_repository.dart
+├── views/
+│   ├── app_styles.dart
+│   └── main.dart
+├── view_models/
+├── models/
+│   └── sandwich.dart
+└── repositories/
+    ├── order_repository.dart
+    └── pricing_repository.dart
 ```
 
 Add the following code to `sandwich.dart`:
@@ -45,31 +52,55 @@ Add the following code to `sandwich.dart`:
 ```dart
 enum BreadType { white, wheat, wholemeal }
 
+enum SandwichType { 
+  veggieDelight, 
+  chickenTeriyaki, 
+  tunaMelt,
+  meatballMarinara,
+}
+
 class Sandwich {
-  final String name;
+  final SandwichType type;
   final bool isFootlong;
   final BreadType breadType;
-  final String image;
 
   Sandwich({
-    required this.name,
+    required this.type,
     required this.isFootlong,
     required this.breadType,
-    required this.image,
-  }) {
-    if (name.isEmpty) {
-      throw ArgumentError('Name cannot be empty');
+  });
+
+  String get name {
+    switch (type) {
+      case SandwichType.veggieDelight:
+        return 'Veggie Delight';
+      case SandwichType.chickenTeriyaki:
+        return 'Chicken Teriyaki';
+      case SandwichType.tunaMelt:
+        return 'Tuna Melt';
+      case SandwichType.meatballMarinara:
+        return 'Meatball Marinara';
     }
-    if (image.isEmpty || !image.startsWith('assets/images/')) {
-      throw ArgumentError('Image must be a valid asset path');
+  }
+
+  String get image {
+    String typeString = type.name;
+    String sizeString = '';
+    if (isFootlong) {
+      sizeString = 'footlong';
+    } else {
+      sizeString = 'six_inch';
     }
+    return 'assets/images/${typeString}_$sizeString.png';
   }
 }
 ```
 
-Here we have defined a `Sandwich` class with a few properties. The `image` property will hold the path to an image of the sandwich hence it is a `String`. We will come back to this later.
+Here we have defined a `Sandwich` class with properties for the sandwich type, size, and bread type. Notice how we use enums for both `SandwichType` and `BreadType` to ensure users can only select from valid options. This is a preferable approach to using plain strings, as it reduces the risk of typos and values that are not part of the defined set.
 
-Does the `throw` statements make sense to you? If not, ask your AI assistant to explain them. Also, we are not storing the price of a sandwich here as it is determined by the `PricingRepository` based on the size of the sandwich (`isFootlong`).
+The `name` getter converts the enum value into a human-readable string, and the `image` getter automatically constructs the correct image path based on the sandwich type and size. For example, a footlong Veggie Delight would have the image path `assets/images/veggieDelight_footlong.png`.
+
+Ask your AI assistant to explain why we use getters here instead of storing the name and image as properties in the constructor. Also, ask about the advantages of using enums over plain strings.
 
 Before moving on, use your AI assistant to write a unit test for the `Sandwich` model. Remember to create a `models` folder inside the `test` folder to mirror the structure of the `lib` folder. Your test file should ideally be named `sandwich_test.dart`.
 
@@ -79,15 +110,13 @@ Here's a reminder to commit your changes (commit them individually, the addition
 
 ### **The `Cart` model**
 
-Now that we can represent a single sandwich, we need a way to manage a collection of them in an order. Provide your implementation of `Sandwich` class to Copilot or your AI assistant of choice and ask it to help you create a `Cart` class that can hold multiple `Sandwich` objects. Think about what operations the user might want to perform on a cart and specify them.
+Now that we can represent a single sandwich, we need a way to manage a collection of them in an order. We need to create a `Cart` class that can hold multiple `Sandwich` objects along with their quantities.
 
-#### **Calculating the Cart's Total Price**
+Create a new file called `cart.dart` in the `models` folder. Ask your AI assistant to help you implement a `Cart` class. Take your time writing a prompt that clearly describes the functionality you want. Think about what typical operations a user would perform on a cart of a food delivery app.
 
-Since our `PricingRepository` is the single source of truth for all pricing logic, we should leverage it to calculate the total price of all sandwiches in the cart.
+Remember that the price calculation should use our existing `PricingRepository` since it's the single source of truth for pricing logic. You'll need to import the `PricingRepository` and use its `calculatePrice` method in the `cart.dart` file.
 
-To do this, you may want to consider using collection types in `Cart` that allow you to store the sandwiches along with their quantities. This way, you can easily use the `calculatePrice` method from `PricingRepository` to compute the total price of the cart.
-
-As with the `Sandwich` model, use your AI assistant to help you write unit tests for the `Cart` model. Ensure that the tests cover all the operations you have implemented including the total price calculation.
+As before, write unit tests for the `Cart` model in a new file called `cart_test.dart` inside the `test/models` folder.
 
 #### **Commit your changes**
 
@@ -95,11 +124,16 @@ Commit the addition of the `Cart` model and its tests before moving on.
 
 ## **Managing Assets**
 
-Our `Sandwich` model has an `image` property, but we haven't provided any images yet. In Flutter, static files like images, fonts, and configuration files are called **assets**.
+Our `Sandwich` model automatically generates image paths, but we haven't provided any images yet. In Flutter, static files like images, fonts, and configuration files are called **assets**.
 
 First, create an `assets` folder in the root of your project, at the same level as the `lib` and `test` folders. Inside the `assets` folder, create another folder called `images`.
 
-Use your AI assistant to help you find or create images for the sandwiches or a logo for the app. Save these images in the `assets/images` folder. Name them appropriately, for example, `footlong_wheat.png`, `six_inch_wholemeal.png`, etc.
+You'll need to create images for each sandwich type and size combination. Based on our `SandwichType` enum, you'll need images named like:
+- `veggieDelight_footlong.png`
+- `veggieDelight_six_inch.png`
+- And so on for all the sandwich types.
+
+Use your AI assistant to help you find or create placeholder images for the sandwiches. You can use simple coloured rectangles or search for copyright-free sandwich images online. Save these images in the `assets/images` folder with the exact naming convention shown above.
 
 Next, you need to tell Flutter about these new assets. Open the `pubspec.yaml` file and add an `assets` section like this:
 
@@ -120,77 +154,96 @@ Commit your new assets with the message `Add sandwich images as assets`.
 
 ## **Updating the UI**
 
-Now that we have our models and assets, let's update our UI to use them.
+Now that we have our models and assets, let's update our UI to use them. We'll create a simple interface where users can select a sandwich type, size, bread type, and quantity, then add it to their cart.
 
-### **Updating the `OrderItemDisplay` widget**
+### **Updating the imports**
 
-Open `lib/views/main.dart` and update the `OrderItemDisplay` widget to display the sandwich image.
+First, open `lib/views/main.dart` and add the necessary imports at the top of the file:
 
 ```dart
-class OrderItemDisplay extends StatelessWidget {
-  final Sandwich sandwich;
-  final int quantity;
-  final String orderNote;
-
-  const OrderItemDisplay({
-    super.key,
-    required this.sandwich,
-    required this.quantity,
-    required this.orderNote,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    String displayText =
-        '$quantity ${sandwich.breadType.name} ${sandwich.name} sandwich(es): ${'🥪' * quantity}';
-
-    return Column(
-      children: [
-        Image.asset(sandwich.image),
-        const SizedBox(height: 8),
-        Text(
-          displayText,
-          style: normalText,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Note: $orderNote',
-          style: normalText,
-        ),
-      ],
-    );
-  }
-}
+import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sandwich_shop/models/cart.dart';
 ```
 
-### **Updating `_OrderScreenState`**
+You'll also need to remove the `BreadType` enum from `main.dart` since it's now defined in the `sandwich.dart` file.
 
-We need to refactor the `_OrderScreenState` to manage a list of different sandwiches in a cart. This is a significant change, so take your time to understand it. Use your AI assistant to help you answer questions like: "How do I use a `ListView.builder` to display a list of items?"
+### **Creating the sandwich customization UI**
 
-Here is the updated `_OrderScreenState`:
+We'll replace the current UI with a form that allows users to customize their sandwich order. Use your AI assistant to help you understand how to use `DropdownMenu`, `Switch`, and `TextField` widgets to create this form if you're unfamiliar with them:
 
 ```dart
 class _OrderScreenState extends State<OrderScreen> {
   final Cart _cart = Cart();
   final TextEditingController _notesController = TextEditingController();
+  
+  SandwichType _selectedSandwichType = SandwichType.veggieDelight;
+  bool _isFootlong = true;
+  BreadType _selectedBreadType = BreadType.white;
+  int _quantity = 1;
 
-  void _addSandwichToCart() {
-    setState(() {
-      _cart.add(
-        Sandwich(
-          name: 'Footlong',
-          isFootlong: true,
-          breadType: BreadType.wheat,
-          image: 'assets/images/footlong.png',
-        ),
-      );
+  @override
+  void initState() {
+    super.initState();
+    _notesController.addListener(() {
+      setState(() {});
     });
   }
 
-  void _removeSandwichFromCart(Sandwich sandwich) {
-    setState(() {
-      _cart.remove(sandwich);
-    });
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  void _addToCart() {
+    if (_quantity > 0) {
+      final sandwich = Sandwich(
+        type: _selectedSandwichType,
+        isFootlong: _isFootlong,
+        breadType: _selectedBreadType,
+      );
+      
+      setState(() {
+        _cart.add(sandwich, quantity: _quantity);
+      });
+
+      String sizeText;
+      if (_isFootlong) {
+        sizeText = 'footlong';
+      } else {
+        sizeText = 'six-inch';
+      }
+      String confirmationMessage = 'Added $_quantity $sizeText ${sandwich.name} sandwich(es) on ${_selectedBreadType.name} bread to cart';
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(confirmationMessage)),
+      );
+    }
+  }
+
+  VoidCallback? _getAddToCartCallback() {
+    if (_quantity > 0) {
+      return _addToCart;
+    }
+    return null;
+  }
+
+  List<DropdownMenuEntry<SandwichType>> _buildSandwichTypeEntries() {
+    return SandwichType.values.map((type) {
+      return DropdownMenuEntry<SandwichType>(
+        value: type,
+        label: Sandwich(type: type, isFootlong: true, breadType: BreadType.white).name,
+      );
+    }).toList();
+  }
+
+  List<DropdownMenuEntry<BreadType>> _buildBreadTypeEntries() {
+    return BreadType.values.map((bread) {
+      return DropdownMenuEntry<BreadType>(
+        value: bread,
+        label: bread.name,
+      );
+    }).toList();
   }
 
   @override
@@ -202,41 +255,119 @@ class _OrderScreenState extends State<OrderScreen> {
           style: heading1,
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: _cart.items.length,
-              itemBuilder: (context, index) {
-                final sandwich = _cart.items[index];
-                return ListTile(
-                  leading: Image.asset(sandwich.image),
-                  title: Text(sandwich.name),
-                  subtitle: Text(sandwich.breadType.name),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.remove_circle_outline),
-                    onPressed: () => _removeSandwichFromCart(sandwich),
-                  ),
-                );
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            DropdownMenu<SandwichType>(
+              width: double.infinity,
+              label: const Text('Sandwich Type'),
+              textStyle: normalText,
+              initialSelection: _selectedSandwichType,
+              onSelected: (SandwichType? value) {
+                if (value != null) {
+                  setState(() => _selectedSandwichType = value);
+                }
               },
+              dropdownMenuEntries: _buildSandwichTypeEntries(),
             ),
-          ),
-          // We will add the rest of the UI back in later
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addSandwichToCart,
-        child: const Icon(Icons.add),
+            
+            const SizedBox(height: 20),
+            
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Six-inch', style: normalText),
+                Switch(
+                  value: _isFootlong,
+                  onChanged: (value) => setState(() => _isFootlong = value),
+                ),
+                const Text('Footlong', style: normalText),
+              ],
+            ),
+            
+            const SizedBox(height: 20),
+            
+            DropdownMenu<BreadType>(
+              width: double.infinity,
+              label: const Text('Bread Type'),
+              textStyle: normalText,
+              initialSelection: _selectedBreadType,
+              onSelected: (BreadType? value) {
+                if (value != null) {
+                  setState(() => _selectedBreadType = value);
+                }
+              },
+              dropdownMenuEntries: _buildBreadTypeEntries(),
+            ),
+            
+            const SizedBox(height: 20),
+            
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Quantity: ', style: normalText),
+                IconButton(
+                  onPressed: _quantity > 0 ? () => setState(() => _quantity--) : null,
+                  icon: const Icon(Icons.remove),
+                ),
+                Text('$_quantity', style: heading2),
+                IconButton(
+                  onPressed: () => setState(() => _quantity++),
+                  icon: const Icon(Icons.add),
+                ),
+              ],
+            ),
+            
+            const SizedBox(height: 20),
+            
+            StyledButton(
+              onPressed: _getAddToCartCallback(),
+              icon: Icons.add_shopping_cart,
+              label: 'Add to Cart',
+              backgroundColor: Colors.green,
+            ),
+            
+            const SizedBox(height: 20),
+            
+            // Simple cart display
+            Text(
+              'Cart has ${_cart.length} item(s)',
+              style: normalText,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 ```
 
-For now, we have simplified the UI to focus on the cart functionality. When you run the app, you will see a floating action button that adds a hardcoded "Footlong" sandwich to the cart. You can then remove sandwiches from the cart by tapping the remove icon.
+This UI provides dropdown menus for selecting the sandwich type and bread type, a switch for choosing the size, quantity controls, and an "Add to Cart" button. When the user adds items to the cart, they'll see a confirmation message.
+
+Ask your AI assistant to explain any parts of this code you don't understand, particularly:
+- How the `DropdownMenu` widgets work
+- What `ScaffoldMessenger.showSnackBar` does
+- How the `_getAddToCartCallback()` method works to enable/disable the button
+
+As always, write widget tests to ensure your UI behaves as expected. Test scenarios like adding items to the cart, changing quantities, and selecting different sandwich options.
 
 #### **Commit your changes**
 
-Commit your work with a message like `Implement cart functionality with data models`.
+Once you've update and tested the UI, commit your changes.
 
-In the next worksheet, we will re-implement the UI for customising sandwiches and calculating the total price based on the items in the cart.
+#### **Commit your changes**
+
+Make sure all your changes are committed before moving on to the exercises or the next worksheet.
+
+## **Exercises**
+
+<!-- TODO: Add exercises for:
+1. Display Cart Total - show total price using Cart.totalPrice getter
+2. Cart View - create new screen showing all cart items with quantities and prices
+3. Remove from Cart - add functionality to remove items from cart
+4. Order Notes - re-implement notes functionality for individual orders
+5. Validation - prevent adding more than 10 of any single sandwich type
+-->
