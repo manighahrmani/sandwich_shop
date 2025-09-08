@@ -456,22 +456,13 @@ class _OrderScreenState extends State<OrderScreen> {
 The `Image.asset()` shows the current sandwich image. The `_getCurrentImagePath()` method ensures the image updates automatically when users change their selections. The `errorBuilder` property handles cases where an image file doesn't exist, showing a "Image not found" message instead of crashing.
 The dropdown menus, switch, and quantity controls work together to update the image in real-time. When the user adds items to the cart, a confirmation message is printed to the debug console using `debugPrint()`. If you don't see the debug console in VS Code, open the Command Palette (**Ctrl+Shift+P** or **⌘+Shift+P**) and type "Focus on Debug Console View" to open it.
 
-Ask your AI assistant to explain any parts of this code you don't understand, particularly:
-- How `setState()` triggers image updates when selections change
-- What the `errorBuilder` property does and why it's important
-- How the `fit: BoxFit.cover` property affects image display
+If you are confused by what the `errorBuilder` property does, or how the `fit: BoxFit.cover` property affects image display, ask your AI assistant to explain these concepts.
 
-For more information about image handling in Flutter, check the [Flutter documentation on Image](https://api.flutter.dev/flutter/widgets/Image-class.html) and [BoxFit](https://api.flutter.dev/flutter/painting/BoxFit.html).
-
-As always, write widget tests to ensure your UI behaves as expected. Test scenarios like adding items to the cart, changing quantities, and selecting different sandwich options.
+As always, write widget tests to ensure your UI behaves as expected (several tests in the the current `widget_test.dart` file that you have would almost certainly fail). Test scenarios like adding items to the cart, changing quantities, and selecting different sandwich options.
 
 #### **Commit your changes**
 
-Once you've update and tested the UI, commit your changes.
-
-#### **Commit your changes**
-
-Make sure all your changes are committed before moving on to the exercises or the next worksheet.
+Make sure all your changes are committed separately before moving on to the exercises.
 
 ## **Exercises**
 
