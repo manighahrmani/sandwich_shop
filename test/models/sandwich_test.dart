@@ -4,93 +4,64 @@ import 'package:sandwich_shop/models/sandwich.dart';
 void main() {
   group('Sandwich', () {
     test('should create a Sandwich with correct properties', () {
-      final sandwich = Sandwich(
-        name: 'Veggie Delight',
+      final Sandwich sandwich = Sandwich(
+        type: SandwichType.veggieDelight,
         isFootlong: true,
         breadType: BreadType.wholemeal,
-        image: 'assets/images/veggie.png',
       );
 
-      expect(sandwich.name, 'Veggie Delight');
+      expect(sandwich.type, SandwichType.veggieDelight);
       expect(sandwich.isFootlong, isTrue);
       expect(sandwich.breadType, BreadType.wholemeal);
-      expect(sandwich.image, 'assets/images/veggie.png');
+      expect(sandwich.name, 'Veggie Delight');
+      expect(sandwich.image, 'assets/images/veggieDelight_footlong.png');
     });
 
     test('should support all BreadType enum values', () {
-      for (final bread in BreadType.values) {
+      for (final BreadType bread in BreadType.values) {
         final sandwich = Sandwich(
-          name: 'Test',
+          type: SandwichType.tunaMelt,
           isFootlong: false,
           breadType: bread,
-          image: 'assets/images/test.png',
         );
         expect(sandwich.breadType, bread);
       }
     });
 
-    test('should handle isFootlong true and false', () {
-      final footlong = Sandwich(
-        name: 'Footlong',
-        isFootlong: true,
-        breadType: BreadType.white,
-        image: 'assets/images/footlong.png',
-      );
-      final sixInch = Sandwich(
-        name: 'Six Inch',
-        isFootlong: false,
-        breadType: BreadType.white,
-        image: 'assets/images/six-inch.png',
-      );
-
-      expect(footlong.isFootlong, isTrue);
-      expect(sixInch.isFootlong, isFalse);
-    });
-
-    test('should throw if name is empty', () {
-      expect(
-        () => Sandwich(
-          name: '',
+    test('should support all SandwichType enum values and correct names', () {
+      final Map<SandwichType, String> expectedNames = {
+        SandwichType.veggieDelight: 'Veggie Delight',
+        SandwichType.chickenTeriyaki: 'Chicken Teriyaki',
+        SandwichType.tunaMelt: 'Tuna Melt',
+        SandwichType.meatballMarinara: 'Meatball Marinara',
+      };
+      for (final SandwichType type in SandwichType.values) {
+        final Sandwich sandwich = Sandwich(
+          type: type,
           isFootlong: false,
-          breadType: BreadType.wheat,
-          image: 'assets/images/empty.png',
-        ),
-        throwsA(isA<ArgumentError>().having((e) => e.message, 'message', contains('Name cannot be empty'))),
-      );
+          breadType: BreadType.white,
+        );
+        expect(sandwich.type, type);
+        expect(sandwich.name, expectedNames[type]);
+      }
     });
 
-    test('should throw if image is empty', () {
-      expect(
-        () => Sandwich(
-          name: 'No Image',
-          isFootlong: false,
-          breadType: BreadType.wheat,
-          image: '',
-        ),
-        throwsA(isA<ArgumentError>().having((e) => e.message, 'message', contains('Image must be a valid asset path'))),
-      );
-    });
-
-    test('should throw if image does not start with assets/images/', () {
-      expect(
-        () => Sandwich(
-          name: 'Bad Image',
-          isFootlong: false,
-          breadType: BreadType.wheat,
-          image: 'bad/path.png',
-        ),
-        throwsA(isA<ArgumentError>().having((e) => e.message, 'message', contains('Image must be a valid asset path'))),
-      );
-    });
-
-    test('should allow valid asset image paths', () {
+    test('should generate correct image path for footlong', () {
       final sandwich = Sandwich(
-        name: 'Valid Image',
+        type: SandwichType.chickenTeriyaki,
+        isFootlong: true,
+        breadType: BreadType.wheat,
+      );
+      expect(sandwich.image, 'assets/images/chickenTeriyaki_footlong.png');
+    });
+
+    test('should generate correct image path for six inch', () {
+      final sandwich = Sandwich(
+        type: SandwichType.meatballMarinara,
         isFootlong: false,
         breadType: BreadType.white,
-        image: 'assets/images/valid.png',
       );
-      expect(sandwich.image, 'assets/images/valid.png');
+      expect(sandwich.image, 'assets/images/meatballMarinara_six_inch.png');
     });
   });
 }
