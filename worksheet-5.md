@@ -212,9 +212,7 @@ class _OrderScreenState extends State<OrderScreen> {
       }
       String confirmationMessage = 'Added $_quantity $sizeText ${sandwich.name} sandwich(es) on ${_selectedBreadType.name} bread to cart';
       
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(confirmationMessage)),
-      );
+      print(confirmationMessage);
     }
   }
 
@@ -342,11 +340,11 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-This UI provides dropdown menus for selecting the sandwich type and bread type, a switch for choosing the size, quantity controls, and an "Add to Cart" button. When the user adds items to the cart, they'll see a confirmation message.
+This UI provides dropdown menus for selecting the sandwich type and bread type, a switch for choosing the size, quantity controls, and an "Add to Cart" button. When the user adds items to the cart, a confirmation message is printed to the debug console.
 
 Ask your AI assistant to explain any parts of this code you don't understand, particularly:
 - How the `DropdownMenu` widgets work
-- What `ScaffoldMessenger.showSnackBar` does
+- How the `print()` statement helps with debugging
 - How the `_getAddToCartCallback()` method works to enable/disable the button
 
 As always, write widget tests to ensure your UI behaves as expected. Test scenarios like adding items to the cart, changing quantities, and selecting different sandwich options.
