@@ -163,6 +163,8 @@ import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/models/cart.dart';
 ```
 
+As mentioned before, you need to remove the import for `order_repository.dart` since it's no longer needed. The same goes for `pricing_repository.dart` as we will be using its `calculatePrice` method through the `Cart` model.
+
 You'll also need to remove the `BreadType` enum from `main.dart` since it's now defined in the `sandwich.dart` file.
 
 ### **Creating the sandwich customization UI**
