@@ -19,7 +19,7 @@ void main() {
 
     test('should support all BreadType enum values', () {
       for (final BreadType bread in BreadType.values) {
-        final sandwich = Sandwich(
+        final Sandwich sandwich = Sandwich(
           type: SandwichType.tunaMelt,
           isFootlong: false,
           breadType: bread,
@@ -47,7 +47,7 @@ void main() {
     });
 
     test('should generate correct image path for footlong', () {
-      final sandwich = Sandwich(
+      final Sandwich sandwich = Sandwich(
         type: SandwichType.chickenTeriyaki,
         isFootlong: true,
         breadType: BreadType.wheat,
@@ -56,7 +56,7 @@ void main() {
     });
 
     test('should generate correct image path for six inch', () {
-      final sandwich = Sandwich(
+      final Sandwich sandwich = Sandwich(
         type: SandwichType.meatballMarinara,
         isFootlong: false,
         breadType: BreadType.white,

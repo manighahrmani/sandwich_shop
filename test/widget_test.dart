@@ -93,13 +93,13 @@ void main() {
 
   group('StyledButton', () {
     testWidgets('renders with icon and label', (WidgetTester tester) async {
-      const testButton = StyledButton(
+      const StyledButton testButton = StyledButton(
         onPressed: null,
         icon: Icons.add,
         label: 'Test Add',
         backgroundColor: Colors.blue,
       );
-      const testApp = MaterialApp(
+      const MaterialApp testApp = MaterialApp(
         home: Scaffold(body: testButton),
       );
       await tester.pumpWidget(testApp);
@@ -112,13 +112,13 @@ void main() {
   group('OrderItemDisplay', () {
     testWidgets('shows correct text and note for zero sandwiches',
         (WidgetTester tester) async {
-      const widgetToBeTested = OrderItemDisplay(
+      const OrderItemDisplay widgetToBeTested = OrderItemDisplay(
         quantity: 0,
         itemType: 'footlong',
         breadType: BreadType.white,
         orderNote: 'No notes added.',
       );
-      const testApp = MaterialApp(
+      const MaterialApp testApp = MaterialApp(
         home: Scaffold(body: widgetToBeTested),
       );
       await tester.pumpWidget(testApp);
@@ -128,13 +128,13 @@ void main() {
 
     testWidgets('shows correct text and emoji for three sandwiches',
         (WidgetTester tester) async {
-      const widgetToBeTested = OrderItemDisplay(
+      const OrderItemDisplay widgetToBeTested = OrderItemDisplay(
         quantity: 3,
         itemType: 'footlong',
         breadType: BreadType.white,
         orderNote: 'No notes added.',
       );
-      const testApp = MaterialApp(
+      const MaterialApp testApp = MaterialApp(
         home: Scaffold(body: widgetToBeTested),
       );
       await tester.pumpWidget(testApp);
@@ -145,13 +145,13 @@ void main() {
 
     testWidgets('shows correct bread and type for two six-inch wheat',
         (WidgetTester tester) async {
-      const widgetToBeTested = OrderItemDisplay(
+      const OrderItemDisplay widgetToBeTested = OrderItemDisplay(
         quantity: 2,
         itemType: 'six-inch',
         breadType: BreadType.wheat,
         orderNote: 'No pickles',
       );
-      const testApp = MaterialApp(
+      const MaterialApp testApp = MaterialApp(
         home: Scaffold(body: widgetToBeTested),
       );
       await tester.pumpWidget(testApp);
@@ -161,13 +161,13 @@ void main() {
 
     testWidgets('shows correct bread and type for one wholemeal footlong',
         (WidgetTester tester) async {
-      const widgetToBeTested = OrderItemDisplay(
+      const OrderItemDisplay widgetToBeTested = OrderItemDisplay(
         quantity: 1,
         itemType: 'footlong',
         breadType: BreadType.wholemeal,
         orderNote: 'Lots of lettuce',
       );
-      const testApp = MaterialApp(
+      const MaterialApp testApp = MaterialApp(
         home: Scaffold(body: widgetToBeTested),
       );
       await tester.pumpWidget(testApp);
