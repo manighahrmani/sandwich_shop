@@ -96,11 +96,11 @@ class Sandwich {
 }
 ```
 
-Here we have defined a `Sandwich` class with properties for the sandwich type, size, and bread type. Notice how we use enums for both `SandwichType` and `BreadType` to ensure users can only select from valid options. This is a preferable approach to using plain strings, as it reduces the risk of typos and values that are not part of the defined set.
+Here we have defined a `Sandwich` class with properties for the sandwich type, size, and bread type. Notice how we use enums for both `SandwichType` and `BreadType` to ensure users can only select from valid options. This is a preferable approach to using `String`s, as it reduces the risk of typos and values that are not part of the defined set.
 
 The `name` getter converts the enum value into a human-readable string, and the `image` getter automatically constructs the correct image path based on the sandwich type and size. For example, a footlong Veggie Delight would have the image path `assets/images/veggieDelight_footlong.png`.
 
-Ask your AI assistant to explain why we use getters here instead of storing the name and image as properties in the constructor. Also, ask about the advantages of using enums over plain strings.
+Ask your AI assistant to explain why we use getters here instead of storing the name and image as instance variables recieved in the constructor.
 
 Before moving on, use your AI assistant to write a unit test for the `Sandwich` model. Remember to create a `models` folder inside the `test` folder to mirror the structure of the `lib` folder. Your test file should ideally be named `sandwich_test.dart`.
 
