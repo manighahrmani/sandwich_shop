@@ -130,88 +130,91 @@ class _OrderScreenState extends State<OrderScreen> {
         ),
       ),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: 200,
-              child: Image.asset(
-                _getCurrentImagePath(),
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Center(
-                    child: Text(
-                      'Image not found',
-                      style: normalText,
-                    ),
-                  );
-                },
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: 200,
+                child: Image.asset(
+                  _getCurrentImagePath(),
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Text(
+                        'Image not found',
+                        style: normalText,
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            DropdownMenu<SandwichType>(
-              width: double.infinity,
-              label: const Text('Sandwich Type'),
-              textStyle: normalText,
-              initialSelection: _selectedSandwichType,
-              onSelected: (SandwichType? value) {
-                if (value != null) {
-                  setState(() => _selectedSandwichType = value);
-                }
-              },
-              dropdownMenuEntries: _buildSandwichTypeEntries(),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Six-inch', style: normalText),
-                Switch(
-                  value: _isFootlong,
-                  onChanged: (value) => setState(() => _isFootlong = value),
-                ),
-                const Text('Footlong', style: normalText),
-              ],
-            ),
-            const SizedBox(height: 20),
-            DropdownMenu<BreadType>(
-              width: double.infinity,
-              label: const Text('Bread Type'),
-              textStyle: normalText,
-              initialSelection: _selectedBreadType,
-              onSelected: (BreadType? value) {
-                if (value != null) {
-                  setState(() => _selectedBreadType = value);
-                }
-              },
-              dropdownMenuEntries: _buildBreadTypeEntries(),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Quantity: ', style: normalText),
-                IconButton(
-                  onPressed:
-                      _quantity > 0 ? () => setState(() => _quantity--) : null,
-                  icon: const Icon(Icons.remove),
-                ),
-                Text('$_quantity', style: heading2),
-                IconButton(
-                  onPressed: () => setState(() => _quantity++),
-                  icon: const Icon(Icons.add),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            StyledButton(
-              onPressed: _getAddToCartCallback(),
-              icon: Icons.add_shopping_cart,
-              label: 'Add to Cart',
-              backgroundColor: Colors.green,
-            ),
-            const SizedBox(height: 20),
-          ],
+              const SizedBox(height: 20),
+              DropdownMenu<SandwichType>(
+                width: double.infinity,
+                label: const Text('Sandwich Type'),
+                textStyle: normalText,
+                initialSelection: _selectedSandwichType,
+                onSelected: (SandwichType? value) {
+                  if (value != null) {
+                    setState(() => _selectedSandwichType = value);
+                  }
+                },
+                dropdownMenuEntries: _buildSandwichTypeEntries(),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Six-inch', style: normalText),
+                  Switch(
+                    value: _isFootlong,
+                    onChanged: (value) => setState(() => _isFootlong = value),
+                  ),
+                  const Text('Footlong', style: normalText),
+                ],
+              ),
+              const SizedBox(height: 20),
+              DropdownMenu<BreadType>(
+                width: double.infinity,
+                label: const Text('Bread Type'),
+                textStyle: normalText,
+                initialSelection: _selectedBreadType,
+                onSelected: (BreadType? value) {
+                  if (value != null) {
+                    setState(() => _selectedBreadType = value);
+                  }
+                },
+                dropdownMenuEntries: _buildBreadTypeEntries(),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Quantity: ', style: normalText),
+                  IconButton(
+                    onPressed: _quantity > 0
+                        ? () => setState(() => _quantity--)
+                        : null,
+                    icon: const Icon(Icons.remove),
+                  ),
+                  Text('$_quantity', style: heading2),
+                  IconButton(
+                    onPressed: () => setState(() => _quantity++),
+                    icon: const Icon(Icons.add),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              StyledButton(
+                onPressed: _getAddToCartCallback(),
+                icon: Icons.add_shopping_cart,
+                label: 'Add to Cart',
+                backgroundColor: Colors.green,
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
