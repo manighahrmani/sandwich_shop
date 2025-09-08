@@ -129,12 +129,6 @@ Our `Sandwich` model automatically generates image paths, but we haven't provide
 
 First, create an `assets` folder in the root of your project, at the same level as the `lib` and `test` folders. Inside the `assets` folder, create another folder called `images`.
 
-You'll need to create images for each sandwich type and size combination. Based on our `SandwichType` enum, you'll need images named like: `veggieDelight_footlong.png` or `veggieDelight_six_inch.png` and so on for all the sandwich types.
-
-We have already provided you with a logo image called `logo.png` for the app bar. If you have [cloned/forked the repository](https://github.com/manighahrmani/sandwich_shop) this should already be in your folder, otherwise, download it from [this page](https://github.com/manighahrmani/sandwich_shop/blob/5/assets/images/logo.png) and save it as `logo.png` in the `assets/images` folder.
-
-Use your AI assistant to help you find or create placeholder images for the sandwiches and logo. You can use simple coloured rectangles or search for copyright-free images online. Save these images in the `assets/images` folder with the exact naming convention shown above.
-
 Next, you need to tell Flutter about these new assets. Open the `pubspec.yaml` file and add an `assets` section like this (**the `uses-material-design: true` line already exists there, just add everything below it**).
 
 ```yaml
@@ -146,7 +140,7 @@ flutter:
 
 Make sure the indentation is correct, as `pubspec.yaml` is sensitive to whitespace. The line `assets:` should be at the same indentation level as `uses-material-design:`.
 
-Now you can use these images in your app. For more information, you can read the official Flutter documentation on [adding assets and images](https://docs.flutter.dev/ui/assets/assets-and-images).
+Now you can use images saved in this folder in your app. For more information, you can read the official Flutter documentation on [adding assets and images](https://docs.flutter.dev/ui/assets/assets-and-images).
 
 #### **Commit your changes**
 
@@ -155,6 +149,8 @@ Commit your new assets before moving on.
 ### **Adding a simple logo to the app bar**
 
 Before we dive into the more complex sandwich image display, let's start with a simple example of using images. We'll add a logo to the app bar.
+
+We have already provided you with a logo image called `logo.png` for the app bar. If you have [cloned/forked the repository](https://github.com/manighahrmani/sandwich_shop) this should already be in your folder, otherwise, download it from [this page](https://github.com/manighahrmani/sandwich_shop/blob/5/assets/images/logo.png) and save it as `logo.png` in the `assets/images` folder.
 
 In your `lib/views/main.dart` file, update the `AppBar` in the `build` method to include a logo:
 
@@ -197,7 +193,11 @@ You'll also need to remove the `BreadType` enum from `lib/views/main.dart` since
 
 Now let's add dynamic image display that updates based on the user's selection. We'll show the sandwich image that corresponds to the selected type and size.
 
-First, let's add an image display to our UI. In your `_OrderScreenState` class, add this method to get the current sandwich image path:
+You'll need to create images for each sandwich type and size combination. Based on our `SandwichType` enum, you'll need images named like: `veggieDelight_footlong.png` or `veggieDelight_six_inch.png` and so on for all the sandwich types (this means a total of 8 images).
+
+Use your AI assistant to help you find or create placeholder images for the sandwiches and logo. You can use simple coloured rectangles or search for copyright-free images online. Save these images in the `assets/images` folder with the exact naming convention shown above.
+
+Next, let's add an image display to our UI. In your `_OrderScreenState` class, add this method to get the current sandwich image path:
 
 ```dart
 String _getCurrentImagePath() {
@@ -216,7 +216,7 @@ This method creates a temporary `Sandwich` object with the current selections an
 
 Now we'll update the UI to include the image display and replace the old order management system with our new cart-based approach.
 
-Since we're changing the UI structure significantly, you can remove the `StyledButton` and `OrderItemDisplay` classes from the bottom of your `lib/views/main.dart` file as they're no longer needed with our new approach.
+Since we're changing the UI structure significantly, you can remove the `OrderItemDisplay` classes from the bottom of your `lib/views/main.dart` file as it is no longer needed with our new approach.
 
 Replace the entirety of `_OrderScreenState` with the following:
 
@@ -474,23 +474,17 @@ Complete the exercises below and show your work to a member of staff at your nex
 
 Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
 
-1.  Our app currently only shows a confirmation message in the debug console when items are added to the cart. Let's display the cart total price in the UI instead.
+1.  Our app currently only shows a message (`confirmationMessage`) in the debug console when items are added to the cart. Let's display this message in the UI instead.
 
-    Update your `_OrderScreenState` class to display the current cart total using the `Cart.totalPrice` getter. Add a `Text` widget below the "Add to Cart" button that shows the total price formatted to two decimal places (e.g., "Total: £14.00").
+    Browse [the catalog of Flutter widgets](https://docs.flutter.dev/ui/widgets) or ask your AI assistant to suggest a suitable widget for displaying this message on the screen.
 
-    The price should update automatically when items are added to the cart. You'll need to access the cart's total price in your `build` method and display it using a `Text` widget with appropriate styling.
+    Think about how you as the user would want to see this message. Should it appear as a popup, a banner, or somewhere else on the screen? Would you want it to disappear after a few seconds, or stay until the user dismisses it?
+    
+    Remember not to implement a separate page for the cart yet, we will do that in a later exercise. And make sure not to use any third-party packages, only built-in Flutter widgets.
 
-    ⚠️ **Show your running app displaying the cart total price to a member of staff** for a sign-off.
+    ⚠️ **Show your running app displaying the confirmation message in the UI to a member of staff** for a sign-off.
 
-2.  Let's add validation to prevent users from adding too many sandwiches of the same type. Implement a business rule that prevents adding more than 10 of any single sandwich type to the cart.
-
-    Update your `_addToCart` method to check if adding the requested quantity would exceed the limit for that specific sandwich type. If it would, show an appropriate message to the user (you can use `debugPrint` for now) and don't add the items to the cart.
-
-    Test this by trying to add more than 10 of the same sandwich type and size combination. The app should prevent this and show a message.
-
-    ⚠️ **Show your running app demonstrating the validation limit to a member of staff** for a sign-off.
-
-3.  Currently, users can only add items to the cart but cannot remove them. Add functionality to remove items from the cart.
+2.  Currently, users can only add items to the cart but cannot remove them. Add functionality to remove items from the cart.
 
     Add a "Remove from Cart" button below the existing "Add to Cart" button. This button should remove one quantity of the currently selected sandwich type, size, and bread combination from the cart.
 
