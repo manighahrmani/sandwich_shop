@@ -128,10 +128,7 @@ Our `Sandwich` model automatically generates image paths, but we haven't provide
 
 First, create an `assets` folder in the root of your project, at the same level as the `lib` and `test` folders. Inside the `assets` folder, create another folder called `images`.
 
-You'll need to create images for each sandwich type and size combination. Based on our `SandwichType` enum, you'll need images named like:
-- `veggieDelight_footlong.png`
-- `veggieDelight_six_inch.png`
-- And so on for all the sandwich types.
+You'll need to create images for each sandwich type and size combination. Based on our `SandwichType` enum, you'll need images named like: `veggieDelight_footlong.png` or `veggieDelight_six_inch.png` and so on for all the sandwich types.
 
 Use your AI assistant to help you find or create placeholder images for the sandwiches. You can use simple coloured rectangles or search for copyright-free sandwich images online. Save these images in the `assets/images` folder with the exact naming convention shown above.
 
