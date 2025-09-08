@@ -132,7 +132,7 @@ You'll need to create images for each sandwich type and size combination. Based 
 
 Use your AI assistant to help you find or create placeholder images for the sandwiches. You can use simple coloured rectangles or search for copyright-free sandwich images online. Save these images in the `assets/images` folder with the exact naming convention shown above.
 
-Next, you need to tell Flutter about these new assets. Open the `pubspec.yaml` file and add an `assets` section like this:
+Next, you need to tell Flutter about these new assets. Open the `pubspec.yaml` file and add an `assets` section like this (**the `uses-material-design: true` line already exists there, just add everything below it**).
 
 ```yaml
 flutter:
