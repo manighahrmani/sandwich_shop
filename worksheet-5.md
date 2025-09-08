@@ -43,7 +43,6 @@ lib/
 ├── models/
 │   └── sandwich.dart
 └── repositories/
-    ├── order_repository.dart
     └── pricing_repository.dart
 ```
 
