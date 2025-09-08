@@ -7,7 +7,7 @@ Ensure that you have already completed the following:
 - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
 - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
 - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
-- [Worksheet 3 — Stateful widgets](./worksheet-3.md).
+- [Worksheet 3 — Stateful Widgets](./worksheet-3.md).
 - [Worksheet 4 — App Architecture and Testing](./worksheet-4.md).
 
 ## **Getting help**
@@ -32,7 +32,7 @@ This is why our `PricingRepository` only needs to know the quantity and size (`i
 
 Let's start by defining a `Sandwich` model. This will help us manage all the properties of a sandwich in one place.
 
-In your `lib` folder, create a new folder called `models`. Inside this folder, create a new file called `sandwich.dart`. This is what your project structure may look like:
+Open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ + Shift + E** on macOS. Right-click on the `lib` folder and select **New Folder**. Name this folder `models`. Right-click on the `models` folder and select **New File**. Name this file `sandwich.dart`. This is what your project structure may look like:
 
 ```
 lib/
@@ -46,7 +46,7 @@ lib/
     └── pricing_repository.dart
 ```
 
-You will notice that we have not listed `lib/repository/order_repository.dart`. You can **delete `order_repository.dart` from your `repositories` folder** as it's no longer needed with our new data model approach (more on this later). Make sure to remove the import statement for this file from `main.dart` as well as the `order_repository_test.dart` unit test from the `test/repository` folder.
+You will notice that we have not listed `lib/repository/order_repository.dart`. You can **delete `order_repository.dart` from your `repositories` folder** as it's no longer needed with our new data model approach (more on this later). Make sure to remove the import statement for this file from `lib/views/main.dart` as well as the `order_repository_test.dart` unit test from the `test/repositories` folder.
 
 Add the following code to `sandwich.dart`:
 
@@ -101,9 +101,9 @@ Here we have defined a `Sandwich` class with properties for the sandwich type, s
 
 The `name` getter converts the enum value into a human-readable string, and the `image` getter automatically constructs the correct image path based on the sandwich type and size. For example, a footlong Veggie Delight would have the image path `assets/images/veggieDelight_footlong.png`.
 
-Ask your AI assistant to explain why we use getters here instead of storing the name and image as instance variables recieved in the constructor.
+Use your AI assistant to explain why we use getters here instead of storing the name and image as instance variables received in the constructor.
 
-Before moving on, use your AI assistant to write a unit test for the `Sandwich` model. Remember to create a `models` folder inside the `test` folder to mirror the structure of the `lib` folder. Your test file should ideally be named `sandwich_test.dart`.
+Before moving on, use your AI assistant to write a unit test for the `Sandwich` model. Remember to create a `models` folder inside the `test` folder to mirror the structure of the `lib` folder. Your test file should be named `sandwich_test.dart`.
 
 #### **Commit your changes**
 
@@ -113,7 +113,7 @@ Here's a reminder to commit your changes (commit them individually, the addition
 
 Now that we can represent a single sandwich, we need a way to manage a collection of them in an order. We need to create a `Cart` class that can hold multiple `Sandwich` objects along with their quantities.
 
-Create a new file called `cart.dart` in the `models` folder. Ask your AI assistant to help you implement a `Cart` class. Take your time writing a prompt that clearly describes the functionality you want. Think about what typical operations a user would perform on a cart of a food delivery app.
+Right-click on the `models` folder and select **New File**. Name this file `cart.dart`. Ask your AI assistant to help you implement a `Cart` class. Take your time writing a prompt that clearly describes the functionality you want. Think about what typical operations a user would perform on a cart of a food delivery app.
 
 Remember that the price calculation should use our existing `PricingRepository` since it's the single source of truth for pricing logic. You'll need to import the `PricingRepository` and use its `calculatePrice` method in the `cart.dart` file.
 
@@ -150,13 +150,13 @@ Now you can use these images in your app. For more information, you can read the
 
 #### **Commit your changes**
 
-Commit your new assets with the message `Add sandwich images as assets`.
+Commit your new assets before moving on.
 
 ### **Adding a simple logo to the app bar**
 
 Before we dive into the more complex sandwich image display, let's start with a simple example of using images. We'll add a logo to the app bar.
 
-In your `main.dart` file, update the `AppBar` in the `build` method to include a logo:
+In your `lib/views/main.dart` file, update the `AppBar` in the `build` method to include a logo:
 
 ```dart
 appBar: AppBar(
@@ -168,7 +168,7 @@ appBar: AppBar(
 ),
 ```
 
-The `Image.asset()` widget loads an image from your assets folder. The `leading` property of `AppBar` places the widget before the title. Run your app to see the logo appear in the app bar.
+The `Image.asset()` widget loads an image from your assets folder. The `leading` property of `AppBar` places the widget before the title. Run your app by pressing **F5** to see the logo appear in the app bar.
 
 For more information about the `Image` widget and its properties, check the [Flutter documentation on Image](https://api.flutter.dev/flutter/widgets/Image-class.html).
 
@@ -191,7 +191,7 @@ import 'package:sandwich_shop/models/cart.dart';
 
 As mentioned before, you need to remove the import for `order_repository.dart` since it's no longer needed. The same goes for `pricing_repository.dart` as we will be using its `calculatePrice` method through the `Cart` model.
 
-You'll also need to remove the `BreadType` enum from `main.dart` since it's now defined in the `sandwich.dart` file.
+You'll also need to remove the `BreadType` enum from `lib/views/main.dart` since it's now defined in the `sandwich.dart` file.
 
 ### **Displaying sandwich images**
 
@@ -216,7 +216,7 @@ This method creates a temporary `Sandwich` object with the current selections an
 
 Now we'll update the UI to include the image display and replace the old order management system with our new cart-based approach.
 
-Since we're changing the UI structure significantly, you can remove the `StyledButton` and `OrderItemDisplay` classes from the bottom of your `main.dart` file as they're no longer needed with our new approach.
+Since we're changing the UI structure significantly, you can remove the `StyledButton` and `OrderItemDisplay` classes from the bottom of your `lib/views/main.dart` file as they're no longer needed with our new approach.
 
 Replace the entirety of `_OrderScreenState` with the following:
 
@@ -456,13 +456,13 @@ class _OrderScreenState extends State<OrderScreen> {
 
 The `Image.asset()` shows the current sandwich image. The `_getCurrentImagePath()` method ensures the image updates automatically when users change their selections. The `errorBuilder` property handles cases where an image file doesn't exist, showing a "Image not found" message instead of crashing.
 
-The dropdown menus, switch, and quantity controls work together to update the image in real-time. When the user adds items to the cart, a confirmation message is printed to the debug console using `debugPrint()`. If you don't see the debug console in VS Code, open the Command Palette (**Ctrl+Shift+P** or **⌘+Shift+P**) and type "Focus on Debug Console View" to open it.
+The dropdown menus, switch, and quantity controls work together to update the image in real-time. When the user adds items to the cart, a confirmation message is printed to the debug console using `debugPrint()`. If you don't see the debug console in VS Code, open the Command Palette (**Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS) and type "Focus on Debug Console View" to open it.
 
-Notice that we wrap our `Column` in a `SingleChildScrollView` widget. This makes the entire interface scrollable, which is important when the content becomes too tall for the screen. This is particularly useful on smaller devices or when the screen is resized to a smaller height. You may remember doing an exercise on scrollable widgets in the [Worksheet 1](./worksheet-2.md).
+Notice that we wrap our `Column` in a `SingleChildScrollView` widget. This makes the entire interface scrollable, which is important when the content becomes too tall for the screen. This is particularly useful on smaller devices or when the screen is resized to a smaller height. You may remember doing an exercise on scrollable widgets in [Worksheet 2](./worksheet-2.md).
 
 If you are confused by what the `errorBuilder` property does, or how the `fit: BoxFit.cover` property affects image display, ask your AI assistant to explain these concepts.
 
-As always, write widget tests to ensure your UI behaves as expected (several tests in the the current `widget_test.dart` file that you have would almost certainly fail). Test scenarios like adding items to the cart, changing quantities, and selecting different sandwich options.
+As always, write widget tests to ensure your UI behaves as expected (several tests in the current `test/views/widget_test.dart` file that you have would almost certainly fail). Test scenarios like adding items to the cart, changing quantities, and selecting different sandwich options.
 
 #### **Commit your changes**
 
@@ -470,10 +470,50 @@ Make sure all your changes are committed separately before moving on to the exer
 
 ## **Exercises**
 
-<!-- TODO: Add exercises for:
-1. Cart View - create new screen showing all cart items with quantities and prices
-1. Display Cart Total - show total price using Cart.totalPrice getter this is currently done as debug print
-1. Remove from Cart - add functionality to remove items from cart
-1. Order Notes - re-implement notes functionality for individual orders (not individual sandwiches)
-1. Validation - prevent adding more than 10 of any single sandwich type (this was previously in order_repository.dart).
--->
+Complete the exercises below and show your work to a member of staff at your next practical session for a **sign-off**.
+
+Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
+
+1.  Our app currently only shows a confirmation message in the debug console when items are added to the cart. Let's display the cart total price in the UI instead.
+
+    Update your `_OrderScreenState` class to display the current cart total using the `Cart.totalPrice` getter. Add a `Text` widget below the "Add to Cart" button that shows the total price formatted to two decimal places (e.g., "Total: £14.00").
+
+    The price should update automatically when items are added to the cart. You'll need to access the cart's total price in your `build` method and display it using a `Text` widget with appropriate styling.
+
+    ⚠️ **Show your running app displaying the cart total price to a member of staff** for a sign-off.
+
+2.  Let's add validation to prevent users from adding too many sandwiches of the same type. Implement a business rule that prevents adding more than 10 of any single sandwich type to the cart.
+
+    Update your `_addToCart` method to check if adding the requested quantity would exceed the limit for that specific sandwich type. If it would, show an appropriate message to the user (you can use `debugPrint` for now) and don't add the items to the cart.
+
+    Test this by trying to add more than 10 of the same sandwich type and size combination. The app should prevent this and show a message.
+
+    ⚠️ **Show your running app demonstrating the validation limit to a member of staff** for a sign-off.
+
+3.  Currently, users can only add items to the cart but cannot remove them. Add functionality to remove items from the cart.
+
+    Add a "Remove from Cart" button below the existing "Add to Cart" button. This button should remove one quantity of the currently selected sandwich type, size, and bread combination from the cart.
+
+    The button should be disabled when there are no items of the selected type in the cart. Update the cart total display to reflect the changes when items are removed.
+
+    Hint: You'll need to add a method to your `Cart` class to remove items, similar to how the `add` method works.
+
+    ⚠️ **Show your running app with the ability to remove items from the cart to a member of staff** for a sign-off.
+
+4.  (Advanced) Create a new screen to display all items currently in the cart with their quantities and individual prices.
+
+    Create a new `StatefulWidget` called `CartViewScreen` that displays a list of all items in the cart. Each item should show the sandwich name, size, bread type, quantity, and individual total price.
+
+    Add a "View Cart" button to your main screen that navigates to this new screen. You can use `Navigator.push()` to navigate between screens.
+
+    The cart view should also display the overall total price and allow users to navigate back to the main ordering screen.
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
+5.  (Advanced) Re-implement the order notes functionality, but this time for the entire order rather than individual sandwiches.
+
+    Add a `TextField` that allows users to add notes for the entire order (e.g., "Deliver to back door", "Call when arriving"). These notes should be separate from the sandwich customization and should apply to the whole order.
+
+    Store these notes in your cart or create a separate order management system. Display the notes in your cart view screen if you implemented exercise 4.
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
