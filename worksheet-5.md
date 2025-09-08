@@ -152,11 +152,14 @@ Before we dive into the more complex sandwich image display, let's start with a 
 
 We have already provided you with a logo image called `logo.png` for the app bar. If you have [cloned/forked the repository](https://github.com/manighahrmani/sandwich_shop) this should already be in your folder, otherwise, download it from [this page](https://github.com/manighahrmani/sandwich_shop/blob/5/assets/images/logo.png) and save it as `logo.png` in the `assets/images` folder.
 
-In your `lib/views/main.dart` file, update the `AppBar` in the `build` method to include a logo:
+In your `lib/views/main.dart` file, update the `AppBar` in the `build` method to include a logo. To change its size, you can wrap the `Image.asset()` widget in a `SizedBox`. Here's how you can do it:
 
 ```dart
 appBar: AppBar(
-  leading: Image.asset('assets/images/logo.png'),
+  leading: SizedBox(
+    height: 100,
+    child: Image.asset('assets/images/logo.png'),
+  ),
   title: const Text(
     'Sandwich Counter',
     style: heading1,
@@ -164,7 +167,9 @@ appBar: AppBar(
 ),
 ```
 
-The `Image.asset()` widget loads an image from your assets folder. The `leading` property of `AppBar` places the widget before the title. Run your app by pressing **F5** to see the logo appear in the app bar.
+The `Image.asset()` widget loads an image from your assets folder. The `leading` property of `AppBar` places the widget before the title. Run your app to see the logo appear in the app bar.
+
+Although the height of the `AppBar` is typically around 56 pixels so the image will be scaled down to fit, setting one of the dimensions in `SizedBox` helps maintain the aspect ratio of the image.
 
 For more information about the `Image` widget and its properties, check the [Flutter documentation on Image](https://api.flutter.dev/flutter/widgets/Image-class.html).
 
