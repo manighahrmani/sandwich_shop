@@ -201,7 +201,7 @@ First, let's add an image display to our UI. In your `_OrderScreenState` class, 
 
 ```dart
 String _getCurrentImagePath() {
-  final sandwich = Sandwich(
+  final Sandwich sandwich = Sandwich(
     type: _selectedSandwichType,
     isFootlong: _isFootlong,
     breadType: _selectedBreadType,
