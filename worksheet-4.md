@@ -110,7 +110,7 @@ class OrderRepository {
 }
 ```
 
-With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`. Update your `main.dart` file to use this new repository.
+With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`. 
 
 First, update the imports at the top of your `main.dart` file. Since we moved `app_styles.dart` to the views folder, you'll need to update that import and add the `OrderRepository` import:
 
