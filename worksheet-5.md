@@ -535,19 +535,35 @@ Remember to commit your changes after each exercise and use your AI assistant to
     Below is what your `lib` folder may look like after this exercise. Remember to write widget tests to ensure the cart view behaves as expected.
 
     ```
-    lib/
-    ├── views/
-    │   ├── app_styles.dart
-    │   ├── main.dart
-    │   ├── order_screen.dart
-    │   └── cart_view_screen.dart
-    ├── view_models/
-    ├── models/
-    │   ├── sandwich.dart
-    │   └── cart.dart
-    └── repositories/
-        └── pricing_repository.dart
+    sandwich_shop/
+    ├── assets/
+    │   └── images/
+    ├── lib/
+    │   ├── views/
+    │   │   ├── app_styles.dart
+    │   │   ├── cart_view_screen.dart
+    │   │   └── order_screen_view.dart
+    │   ├── view_models/
+    │   ├── models/
+    │   │   ├── cart.dart
+    │   │   └── sandwich.dart
+    │   └── repositories/
+    │       └── pricing_repository.dart
+    ├── test/
+    │   ├── views/
+    │   │   ├── cart_view_screen_test.dart
+    │   │   └── order_screen_view_test.dart
+    │   ├── view_models/
+    │   ├── models/
+    │   │   ├── cart_test.dart
+    │   │   └── sandwich_test.dart
+    │   └── repositories/
+    │       └── pricing_repository_test.dart
+    ├── pubspec.yaml
+    └── ...
     ```
+
+    Notice that the widget tests for each screen are in separate files named after the screen they are testing. (Instead of a single `widget_test.dart` file we have `cart_view_screen_test.dart` and `order_screen_view_test.dart` files.)
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
