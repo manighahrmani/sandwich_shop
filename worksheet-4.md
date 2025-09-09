@@ -494,8 +494,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     Finally, use your new repository in the `OrderScreen` to calculate and display the total price of the order. The price should be formatted to two decimal places (e.g., `£11.00`). You have the example of `OrderRepository` to refer to, but free to use your AI assistant to help you with how the `_OrderScreenState` class should be updated to use this new repository.
 
-    ⚠️ **Show your new unit tests and the running app displaying the order price to a member of staff** for a sign-off.
-Of course. I've simplified exercise 4 to be more concise and self-contained, and updated exercise 5 and the solutions accordingly.
+    ⚠️ **Show your new pricing repository and its unit tests to a member of staff** for a sign-off.
 
 4.  (Advanced) Let's add functionality to save an order to a local file. This feature is only available on mobile and desktop platforms, so you will need to run your app on a compatible device.
 
