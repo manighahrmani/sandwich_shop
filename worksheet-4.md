@@ -507,6 +507,22 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     This package helps find the correct directory to save files. Operations like writing to a device's storage are **asynchronous** because they might take some time to complete. In Dart, asynchronous methods return a `Future`, which is like a promise that the work will be done.
 
+    Here's a simple example, paste it in a file called `async-test.dart` on the root of your project (not inside `lib` or `test` folders) and run it with `dart run async-test.dart` to see how it works:
+
+    ```dart
+    Future<int> calculateTheAnswer() async {
+      // Simulate a delay to mimic the delay in reading or writing a file
+      await Future.delayed(const Duration(seconds: 2));
+      return 42;
+    }
+
+    void main() async {
+      print('Calculating...');
+      int result = await calculateTheAnswer();
+      print('The result is $result');
+    }
+    ```
+
     Create a `services` folder inside the `lib` folder. Then, create a new `file_service.dart` file and add create a `FileService` class in it. This service will handle the external operation of writing to the device's storage. Follow the `CounterStorage` class on the documentation page for [reading and writing files](https://docs.flutter.dev/cookbook/persistence/reading-writing-files) when writing this service.
 
     Next, we'll use a simple **ViewModel**. For this exercise, it's just a plain Dart class that acts as a bridge between our UI and the `FileService`. Create the `OrderViewModel` class below in the `lib/view_models` folder.
