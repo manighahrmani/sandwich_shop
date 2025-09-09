@@ -57,7 +57,7 @@ Also note that you can add more styles to this file as needed and use it across 
 
 Next, open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ + Shift + E** on macOS. Right-click on the `lib` folder and select **New Folder**. Name this folder `views`. Similarly, create the following folders in the `lib` folder: `view_models`, and `repositories`.
 
-Drag and drop the `app_styles.dart` file into the `views` subfolder of the `lib` folder. **Keep `main.dart` in the root `lib` folder** as Flutter needs it there to find your app's entry point.
+Drag and drop the `app_styles.dart` file into the `views` subfolder of the `lib` folder. **Keep `main.dart` in the `lib` folder** as Flutter needs it there to find your app's entry point.
 
 Your folder structure should now look like this:
 
