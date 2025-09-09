@@ -303,12 +303,14 @@ This is what your folder structure should look like:
 lib/
   ├── main.dart
   ├── views/
-  │   ├── app_styles.dart
+  │   └── app_styles.dart
   ├── view_models/
   └── repositories/
+      └── order_repository.dart
 test/
-  └── repositories/
-      └── order_repository_test.dart
+  ├── repositories/
+  │   └── order_repository_test.dart
+  └── widget_test.dart
 ```
 
 Add the following code to `order_repository_test.dart`. We are importing the `flutter_test` package which comes pre-installed with Flutter and provides the necessary tools for writing tests. We are also importing the `OrderRepository` class that we want to test.
