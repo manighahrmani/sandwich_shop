@@ -489,30 +489,26 @@ Remember to commit your changes after each exercise and use your AI assistant to
 
     ⚠️ **Show your running app displaying the confirmation message in the UI to a member of staff** for a sign-off.
 
-2.  Currently, users can only add items to the cart but cannot remove them. Add functionality to remove items from the cart.
+2.  (Advanced) So far, our app only has one screen (`main.dart`). Let's add a second screen to view the cart contents. This is a task which we will cover in more detail in the next worksheet, but let's give it a try now. Here's a [link to the Flutter documentation on navigation](https://docs.flutter.dev/cookbook/navigation/navigation-basics) to help you get started.
 
-    Add a "Remove from Cart" button below the existing "Add to Cart" button. This button should remove one quantity of the currently selected sandwich type, size, and bread combination from the cart.
+    Create a new `StatefulWidget` called `CartViewScreen` (and its associated state class) in `main.dart` for now. It should display a list of all items in the cart. Each item should show the sandwich name, size, bread type, quantity, and individual total price.
 
-    The button should be disabled when there are no items of the selected type in the cart. Update the cart total display to reflect the changes when items are removed.
+    Add a "View Cart" button to your main screen that navigates to this new screen. You can use `Navigator.push()` to navigate to the cart screen and `Navigator.pop()` to go back to the main screen.
 
-    Hint: You'll need to add a method to your `Cart` class to remove items, similar to how the `add` method works.
+    Think about what pieces of information would be most useful to display in the cart view and what actions the user might want to take. Write a user story if you are planning to use your AI assistant to help you implement this and make sure to provide sufficient context (e.g., the `Cart` model and its methods).
 
-    ⚠️ **Show your running app with the ability to remove items from the cart to a member of staff** for a sign-off.
+    Once you have implemented the new page, move the `CartViewScreen` widget to a new file called `cart_view_screen.dart` inside the `views` folder and import it into `main.dart`. You could additionally create a `order_screen.dart` file for the `OrderScreen` and `OrderScreenState` classes if you wish.
 
-4.  (Advanced) Create a new screen to display all items currently in the cart with their quantities and individual prices.
-
-    Create a new `StatefulWidget` called `CartViewScreen` that displays a list of all items in the cart. Each item should show the sandwich name, size, bread type, quantity, and individual total price.
-
-    Add a "View Cart" button to your main screen that navigates to this new screen. You can use `Navigator.push()` to navigate between screens.
-
-    The cart view should also display the overall total price and allow users to navigate back to the main ordering screen.
+    Remember to write widget tests to ensure the cart view behaves as expected.
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5.  (Advanced) Re-implement the order notes functionality, but this time for the entire order rather than individual sandwiches.
+3.  (Advanced) In the cart view, re-implement the order notes functionality, but this time for the entire order rather than individual sandwiches.
 
-    Add a `TextField` that allows users to add notes for the entire order (e.g., "Deliver to back door", "Call when arriving"). These notes should be separate from the sandwich customization and should apply to the whole order.
+    Similar to what we used to have in [`main.dart`](https://github.com/manighahrmani/sandwich_shop/blob/5/lib/views/main.dart), add a `TextField` that allows users to add notes for the entire order (e.g., "No onions" or "Extra serviettes").
 
-    Store these notes in your cart or create a separate order management system. Display the notes in your cart view screen if you implemented exercise 4.
+    Remember to store these notes in the `Cart` model. You may need to update the `Cart` class to include a `notes` property and a method to update it.
+
+    As always remember to update the unit tests and widget tests to cover this new functionality.
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
