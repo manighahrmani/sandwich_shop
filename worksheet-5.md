@@ -162,7 +162,7 @@ Commit your new assets before moving on.
 
 Before we dive into the more complex sandwich image display, let's start with a simple example of using images. We'll add a logo to the app bar.
 
-We have already provided you with a logo image called `logo.png` for the app bar. If you have [cloned/forked the repository](https://github.com/manighahrmani/sandwich_shop) this should already be in your folder, otherwise, download it from [this page](https://github.com/manighahrmani/sandwich_shop/blob/5/assets/images/logo.png) and save it as `logo.png` in the `assets/images` folder.
+We have already provided you with a logo image called `logo.png` for the app bar. If you have cloned/forked our repository, you should already have this, otherwise, download it from [this page](https://github.com/manighahrmani/sandwich_shop/blob/5/assets/images/logo.png) and save it as `logo.png` in the `assets/images` folder.
 
 In your `lib/main.dart` file, update the `AppBar` in the `build` method to include a logo. To change its size, you can wrap the `Image.asset()` widget in a `SizedBox`. Here's how you can do it:
 
