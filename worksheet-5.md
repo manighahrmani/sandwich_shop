@@ -36,9 +36,9 @@ Open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ 
 
 ```
 lib/
+├── main.dart
 ├── views/
-│   ├── app_styles.dart
-│   └── main.dart
+│   └── app_styles.dart
 ├── view_models/
 ├── models/
 │   └── sandwich.dart
@@ -46,7 +46,7 @@ lib/
     └── pricing_repository.dart
 ```
 
-You will notice that we have not listed `lib/repository/order_repository.dart`. You can **delete `order_repository.dart` from your `repositories` folder** as it's no longer needed with our new data model approach (more on this later). Make sure to remove the import statement for this file from `lib/views/main.dart` as well as the `order_repository_test.dart` unit test from the `test/repositories` folder.
+You will notice that we have not listed `lib/repository/order_repository.dart`. You can **delete `order_repository.dart` from your `repositories` folder** as it's no longer needed with our new data model approach (more on this later). Make sure to remove the import statement for this file from `lib/main.dart` as well as the `order_repository_test.dart` unit test from the `test/repositories` folder.
 
 Add the following code to `sandwich.dart`:
 
@@ -152,7 +152,7 @@ Before we dive into the more complex sandwich image display, let's start with a 
 
 We have already provided you with a logo image called `logo.png` for the app bar. If you have [cloned/forked the repository](https://github.com/manighahrmani/sandwich_shop) this should already be in your folder, otherwise, download it from [this page](https://github.com/manighahrmani/sandwich_shop/blob/5/assets/images/logo.png) and save it as `logo.png` in the `assets/images` folder.
 
-In your `lib/views/main.dart` file, update the `AppBar` in the `build` method to include a logo. To change its size, you can wrap the `Image.asset()` widget in a `SizedBox`. Here's how you can do it:
+In your `lib/main.dart` file, update the `AppBar` in the `build` method to include a logo. To change its size, you can wrap the `Image.asset()` widget in a `SizedBox`. Here's how you can do it:
 
 ```dart
 appBar: AppBar(
@@ -183,16 +183,17 @@ Now that we have our models and assets, let's update our UI to use them. We'll c
 
 ### **Updating the imports**
 
-First, open `lib/views/main.dart` and add the necessary imports at the top of the file:
+First, open `lib/main.dart` and add the necessary imports at the top of the file:
 
 ```dart
+import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/models/cart.dart';
 ```
 
 As mentioned before, you need to remove the import for `order_repository.dart` since it's no longer needed. The same goes for `pricing_repository.dart` as we will be using its `calculatePrice` method through the `Cart` model.
 
-You'll also need to remove the `BreadType` enum from `lib/views/main.dart` since it's now defined in the `sandwich.dart` file.
+You'll also need to remove the `BreadType` enum from `lib/main.dart` since it's now defined in the `sandwich.dart` file.
 
 ### **Displaying sandwich images**
 
@@ -221,7 +222,7 @@ This method creates a temporary `Sandwich` object with the current selections an
 
 Now we'll update the UI to include the image display and replace the old order management system with our new cart-based approach.
 
-Since we're changing the UI structure significantly, you can remove the `OrderItemDisplay` classes from the bottom of your `lib/views/main.dart` file as it is no longer needed with our new approach.
+Since we're changing the UI structure significantly, you can remove the `OrderItemDisplay` classes from the bottom of your `lib/main.dart` file as it is no longer needed with our new approach.
 
 Replace the entirety of `_OrderScreenState` with the following:
 
@@ -567,7 +568,7 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
 4.  (Advanced) In the cart view, re-implement the order notes functionality, but this time for the entire order rather than individual sandwiches.
 
-    Similar to what we used to have in [`main.dart`](https://github.com/manighahrmani/sandwich_shop/blob/5/lib/views/main.dart), add a `TextField` that allows users to add notes for the entire order (e.g., "No onions" or "Extra serviettes").
+    Similar to what we used to have in [`main.dart`](https://github.com/manighahrmani/sandwich_shop/blob/5/lib/main.dart), add a `TextField` that allows users to add notes for the entire order (e.g., "No onions" or "Extra serviettes").
 
     Remember to store these notes in the `Cart` model. You may need to update the `Cart` class to include a `notes` property and a method to update it.
 
