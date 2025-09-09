@@ -39,6 +39,82 @@ void main() {
     });
   });
 
+  group('OrderScreen - Cart Summary', () {
+    testWidgets('displays initial cart summary with zero items and price',
+        (WidgetTester tester) async {
+      const App app = App();
+      await tester.pumpWidget(app);
+
+      expect(find.text('Cart: 0 items - £0.00'), findsOneWidget);
+    });
+
+    testWidgets('updates cart summary when items are added to cart',
+        (WidgetTester tester) async {
+      const App app = App();
+      await tester.pumpWidget(app);
+
+      final Finder addToCartButtonFinder =
+          find.widgetWithText(StyledButton, 'Add to Cart');
+      await tester.ensureVisible(addToCartButtonFinder);
+      await tester.pumpAndSettle();
+      await tester.tap(addToCartButtonFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Cart: 1 items - £11.00'), findsOneWidget);
+    });
+
+    testWidgets('updates cart summary when quantity is increased before adding',
+        (WidgetTester tester) async {
+      const App app = App();
+      await tester.pumpWidget(app);
+
+      final Finder addButtonFinder = find.byIcon(Icons.add);
+      await tester.ensureVisible(addButtonFinder);
+      await tester.pumpAndSettle();
+      await tester.tap(addButtonFinder);
+      await tester.pumpAndSettle();
+      await tester.tap(addButtonFinder);
+      await tester.pumpAndSettle();
+
+      final Finder addToCartButtonFinder =
+          find.widgetWithText(StyledButton, 'Add to Cart');
+      await tester.ensureVisible(addToCartButtonFinder);
+      await tester.pumpAndSettle();
+      await tester.tap(addToCartButtonFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Cart: 3 items - £33.00'), findsOneWidget);
+    });
+
+    testWidgets('cart summary accumulates when multiple items are added',
+        (WidgetTester tester) async {
+      const App app = App();
+      await tester.pumpWidget(app);
+
+      final Finder addToCartButtonFinder =
+          find.widgetWithText(StyledButton, 'Add to Cart');
+      await tester.ensureVisible(addToCartButtonFinder);
+      await tester.pumpAndSettle();
+      await tester.tap(addToCartButtonFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Cart: 1 items - £11.00'), findsOneWidget);
+
+      final Finder addButtonFinder = find.byIcon(Icons.add);
+      await tester.ensureVisible(addButtonFinder);
+      await tester.pumpAndSettle();
+      await tester.tap(addButtonFinder);
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(addToCartButtonFinder);
+      await tester.pumpAndSettle();
+      await tester.tap(addToCartButtonFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Cart: 3 items - £33.00'), findsOneWidget);
+    });
+  });
+
   group('OrderScreen - Interactions', () {
     testWidgets('shows SnackBar confirmation when item is added to cart',
         (WidgetTester tester) async {
