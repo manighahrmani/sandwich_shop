@@ -164,7 +164,7 @@ Before we dive into the more complex sandwich image display, let's start with a 
 
 We have already provided you with a logo image called `logo.png` for the app bar. If you have cloned/forked our repository, you should already have this, otherwise, download it from [this page](https://github.com/manighahrmani/sandwich_shop/blob/5/assets/images/logo.png) and save it as `logo.png` in the `assets/images` folder.
 
-In your `lib/main.dart` file, update the `AppBar` in the `build` method to include a logo. To change its size, you can wrap the `Image.asset()` widget in a `SizedBox`. Here's how you can do it:
+In your `lib/main.dart` file, update the `AppBar` in the `build` method of `_OrderScreenState` to include a logo. To change its size, you can wrap the `Image.asset()` widget in a `SizedBox`. Here's how you can do it:
 
 ```dart
 appBar: AppBar(
@@ -191,19 +191,20 @@ Commit this simple logo addition before moving on to the more complex image disp
 
 ## **Updating the UI**
 
-Now that we have our models and assets, let's update our UI to use them. We'll create a simple interface where users can select a sandwich type, size, bread type, and quantity, then add it to their cart.
+Your `main.dart` should still have several errors (all to do with the use of `OrderRepository`). We will fix these shortly while also creating a simple interface where users can select a sandwich type, size, bread type, and quantity, then add it to their cart.
 
 ### **Updating the imports**
 
-First, open `lib/main.dart` and add the necessary imports at the top of the file:
+First, open `lib/main.dart` and make sure you have exactly the following imports at its top:
 
 ```dart
+import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/models/cart.dart';
 ```
 
-As mentioned before, you need to remove the import for `order_repository.dart` since it's no longer needed. The same goes for `pricing_repository.dart` as we will be using its `calculatePrice` method through the `Cart` model.
+As mentioned before, you need to remove the import for `order_repository.dart` since it's no longer needed. Similarly, remove the old import for `pricing_repository.dart` as we will be using its `calculatePrice` method through the `Cart` model (it is indirectly imported).
 
 You'll also need to remove the `BreadType` enum from `lib/main.dart` since it's now defined in the `sandwich.dart` file.
 
