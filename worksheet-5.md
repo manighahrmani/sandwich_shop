@@ -477,7 +477,7 @@ Make sure all your changes are committed separately before moving on to the exer
 
 Complete the exercises below and show your work to a member of staff at your next practical session for a **sign-off**.
 
-Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
+Even though your AI assistant may suggest this, for now, try not to use any third-party packages, only built-in Flutter widgets.
 
 1.  Our app currently only shows a message (`confirmationMessage`) in the debug console when items are added to the cart. Let's display this message in the UI instead.
 
@@ -485,15 +485,13 @@ Remember to commit your changes after each exercise and use your AI assistant to
 
     Think about how you as the user would want to see this message. Should it appear as a popup, a banner, or somewhere else on the screen? Would you want it to disappear after a few seconds, or stay until the user dismisses it?
     
-    Remember not to implement a separate page for the cart yet, we will do that in a later exercise. And make sure not to use any third-party packages, only built-in Flutter widgets.
+    Remember not to implement a separate page for the cart yet, we will do that in a later exercise. Once you are done, update the widget tests to relfect your changes.
 
     ⚠️ **Show your running app displaying the confirmation message in the UI to a member of staff** for a sign-off.
 
-2.  Let's add a cart summary display to our main screen. Instead of just showing a confirmation message when items are added, we want to show the number of items in the cart and the total price.
+2.  Let's add a permanent cart summary display to our main screen. In addtion of just showing a confirmation message when items are added, you need to show the number of items in the cart and the total price.
 
-    Create a new `Text` widget below the "Add to Cart" button that displays the total number of items in the cart and the total price. Make sure you have getters in your `Cart` model to retrieve this information.
-
-    Once the "Add to Cart" button is pressed, this summary should update to reflect the current state of the cart.
+    Try to do this in the simplest way possible. Just make sure that when the "Add to Cart" button is pressed, this displayed summary is updated to reflect the current state of the cart.
 
     Feel free to use your AI assistant to help you implement this feature, and make sure to write widget tests to verify that the cart summary updates correctly when items are added.
 
