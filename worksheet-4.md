@@ -72,7 +72,7 @@ lib/
 
 #### **Commit your changes**
 
-Before moving on, commit this restructuring of the folder with a meaningful commit message like `Restructure folder into views, view_models, and repositories` and sync your changes to GitHub.
+Before moving on, commit this restructuring of the folder with a commit message like `Restructure folder into views, view_models, and repositories` and sync your changes to GitHub.
 
 ### **Creating a repository class**
 
