@@ -225,6 +225,12 @@ class _OrderScreenState extends State<OrderScreen> {
                 backgroundColor: Colors.green,
               ),
               const SizedBox(height: 20),
+              Text(
+                'Cart: ${_cart.countOfItems} items - £${_cart.totalPrice.toStringAsFixed(2)}',
+                style: normalText,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
