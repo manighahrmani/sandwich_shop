@@ -216,23 +216,6 @@ You'll need to create images for each sandwich type and size combination. Based 
 
 Use your AI assistant to help you find or create placeholder images for the sandwiches and logo. You can use simple coloured rectangles or search for copyright-free images online. Save these images in the `assets/images` folder with the exact naming convention shown above.
 
-Next, let's add an image display to our UI. In your `_OrderScreenState` class, add this method to get the current sandwich image path:
-
-```dart
-String _getCurrentImagePath() {
-  final Sandwich sandwich = Sandwich(
-    type: _selectedSandwichType,
-    isFootlong: _isFootlong,
-    breadType: _selectedBreadType,
-  );
-  return sandwich.image;
-}
-```
-
-This method creates a temporary `Sandwich` object with the current selections and uses its `image` getter to get the correct image path.
-
-### **Creating the sandwich customization UI**
-
 Now we'll update the UI to include the image display and replace the old order management system with our new cart-based approach.
 
 Since we're changing the UI structure significantly, you can remove the `OrderItemDisplay` classes from the bottom of your `lib/main.dart` file as it is no longer needed with our new approach.
