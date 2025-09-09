@@ -31,11 +31,9 @@ If you would like to learn more about app architecture, you can read the [offici
 
 In this worksheet we will focus on the first three layers: views, view models, and repositories. Services wrap API endpoints and are typically used for fetching data asynchronously from external sources. We will learn more about services in a later worksheet.
 
-### **Refactoring our code**
+## **Getting started**
 
-Refactoring is the process of restructuring existing code to improve its readability, maintainability, or performance, without changing its behaviour.
-
-For this worksheet, you need to start with the code that we have provided in the branch 4 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/4). You can either clone the repository and checkout the branch 4 with the following commands:
+For this worksheet, you need to start with the code from branch 4 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/4). You can either clone the repository and checkout branch 4:
 
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
@@ -43,9 +41,12 @@ cd sandwich_shop
 git checkout 4
 ```
 
-Or you can manually make sure your `main.dart` file matches [our `main.dart`](https://github.com/manighahrmani/sandwich_shop/blob/4/lib/main.dart). And create a new file called `app_styles.dart` in the `lib` folder and copy the contents from [here](https://github.com/manighahrmani/sandwich_shop/blob/4/lib/app_styles.dart). Run the app to make sure everything is working as expected and note that we have already completed the exercises from the previous worksheets.
+Or manually ensure your code matches the repository. Run the app to make sure everything works as expected before proceeding. Note that we have already completed the exercises from the previous worksheets.
 
-Take a moment to familiarise yourself with the code and feel free to ask your AI assistant if you have any questions about the new widgets.
+
+### **Refactoring our code**
+
+Refactoring is the process of restructuring existing code to improve its readability, maintainability, or performance, without changing its behaviour.
 
 #### **Styles**
 
