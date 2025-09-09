@@ -147,7 +147,7 @@ class _OrderScreenState extends State<OrderScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: 400,
+                height: 300,
                 child: Image.asset(
                   _getCurrentImagePath(),
                   fit: BoxFit.cover,
