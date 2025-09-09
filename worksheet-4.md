@@ -377,6 +377,8 @@ Run these tests while the `order_repository_test.dart` is open in VS Code and cl
 
 Each green tick means that the test passed. On the other hand, a red cross (❌) would mean the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This feedback is crucial for understanding what has gone wrong in your code.
 
+You can also run all tests at once by opening a terminal and running `flutter test`. This command will execute all tests in your `test` folder, including both unit tests and widget tests. As you create more tests throughout this course, this becomes a convenient way to verify that all your code is working correctly.
+
 #### **Commit your changes**
 
 Before we move to widget testing, ensure that you have committed and synced all your changes to GitHub.
