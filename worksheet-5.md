@@ -7,7 +7,7 @@ Ensure that you have already completed the following:
 - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
 - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
 - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
-- [Worksheet 3 — Stateful Widgets](./worksheet-3.md).
+- [Worksheet 3 — Stateful widgets](./worksheet-3.md).
 - [Worksheet 4 — App Architecture and Testing](./worksheet-4.md).
 
 ## **Getting help**
@@ -489,7 +489,17 @@ Remember to commit your changes after each exercise and use your AI assistant to
 
     ⚠️ **Show your running app displaying the confirmation message in the UI to a member of staff** for a sign-off.
 
-2.  (Advanced) So far, our app only has one screen (`main.dart`). Let's add a second screen to view the cart contents. This is a task which we will cover in more detail in the next worksheet, but let's give it a try now. Here's a [link to the Flutter documentation on navigation](https://docs.flutter.dev/cookbook/navigation/navigation-basics) to help you get started.
+2.  Let's add a cart summary display to our main screen. Instead of just showing a confirmation message when items are added, we want to show the number of items in the cart and the total price.
+
+    Create a new `Text` widget below the "Add to Cart" button that displays the total number of items in the cart and the total price. Make sure you have getters in your `Cart` model to retrieve this information.
+
+    Once the "Add to Cart" button is pressed, this summary should update to reflect the current state of the cart.
+
+    Feel free to use your AI assistant to help you implement this feature, and make sure to write widget tests to verify that the cart summary updates correctly when items are added.
+
+    ⚠️ **Show your running app with the cart summary displaying the number of items and total price to a member of staff** for a sign-off.
+
+3.  (Advanced) So far, our app only has one screen (`main.dart`). Let's add a second screen to view the cart contents. This is a task which we will cover in more detail in the next worksheet, but let's give it a try now. Here's a [link to the Flutter documentation on navigation](https://docs.flutter.dev/cookbook/navigation/navigation-basics) to help you get started.
 
     Create a new `StatefulWidget` called `CartViewScreen` (and its associated state class) in `main.dart` for now. It should display a list of all items in the cart. Each item should show the sandwich name, size, bread type, quantity, and individual total price.
 
@@ -497,13 +507,51 @@ Remember to commit your changes after each exercise and use your AI assistant to
 
     Think about what pieces of information would be most useful to display in the cart view and what actions the user might want to take. Write a user story if you are planning to use your AI assistant to help you implement this and make sure to provide sufficient context (e.g., the `Cart` model and its methods).
 
-    Once you have implemented the new page, move the `CartViewScreen` widget to a new file called `cart_view_screen.dart` inside the `views` folder and import it into `main.dart`. You could additionally create a `order_screen.dart` file for the `OrderScreen` and `OrderScreenState` classes if you wish.
+    Once you have implemented the new page, move the `CartViewScreen` widget to a new file called `cart_view_screen.dart` inside the `views` folder and import it where you are using it (in `OrderScreen`). You could additionally create a `order_screen_view.dart` file for the `OrderScreen` and `OrderScreenState` classes if you wish. This way, `main.dart` will be short and simple, only containing the `App` class and the `main()` function.
 
-    Remember to write widget tests to ensure the cart view behaves as expected.
+    This is what your `main.dart` file may look like after the refactoring:
+
+    ```dart
+    import 'package:flutter/material.dart';
+    import 'package:sandwich_shop/views/order_screen_view.dart';
+
+    void main() {
+      runApp(const App());
+    }
+
+    class App extends StatelessWidget {
+      const App({super.key});
+
+      @override
+      Widget build(BuildContext context) {
+        return const MaterialApp(
+          title: 'Sandwich Shop App',
+          home: OrderScreen(maxQuantity: 5),
+        );
+      }
+    }
+    ```
+
+    Below is what your `lib` folder may look like after this exercise. Remember to write widget tests to ensure the cart view behaves as expected.
+
+    ```
+    lib/
+    ├── views/
+    │   ├── app_styles.dart
+    │   ├── main.dart
+    │   ├── order_screen.dart
+    │   └── cart_view_screen.dart
+    ├── view_models/
+    ├── models/
+    │   ├── sandwich.dart
+    │   └── cart.dart
+    └── repositories/
+        └── pricing_repository.dart
+    ```
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-3.  (Advanced) In the cart view, re-implement the order notes functionality, but this time for the entire order rather than individual sandwiches.
+4.  (Advanced) In the cart view, re-implement the order notes functionality, but this time for the entire order rather than individual sandwiches.
 
     Similar to what we used to have in [`main.dart`](https://github.com/manighahrmani/sandwich_shop/blob/5/lib/views/main.dart), add a `TextField` that allows users to add notes for the entire order (e.g., "No onions" or "Extra serviettes").
 
