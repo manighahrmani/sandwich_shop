@@ -454,7 +454,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     Write a new widget test in `test/views/widget_test.dart` to verify the functionality of the `Switch` widget that toggles between 'six-inch' and 'footlong'.
 
-    Hint: `Switch` widgets are toggled by tapping on them like buttons. If you are confused by how you can find the `Switch` widget or the text that changes when it is toggled, refer to [the documentation on Finders](https://docs.flutter.dev/cookbook/testing/widget/finders).
+    Hint: `Switch` widgets are toggled by tapping on them like buttons.
 
     ⚠️ **Show your new passing widget test to a member of staff** for a sign-off.
 
