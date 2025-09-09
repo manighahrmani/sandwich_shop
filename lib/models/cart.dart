@@ -48,6 +48,14 @@ class Cart {
 
   int get length => _items.length;
 
+  int get countOfItems {
+    int total = 0;
+    _items.forEach((sandwich, quantity) {
+      total += quantity;
+    });
+    return total;
+  }
+
   int getQuantity(Sandwich sandwich) {
     if (_items.containsKey(sandwich)) {
       return _items[sandwich]!;
