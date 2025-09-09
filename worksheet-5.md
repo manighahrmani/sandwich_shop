@@ -531,7 +531,7 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
     }
     ```
 
-    Below is what your `lib` folder may look like after this exercise. Remember to write widget tests to ensure the cart view behaves as expected.
+    Below is what your project folder may look like after this exercise. Remember to write widget tests to ensure the cart view behaves as expected.
 
     ```
     sandwich_shop/
