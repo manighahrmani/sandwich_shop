@@ -20,9 +20,21 @@ State is just data that can change over time. For this worksheet, we will focus 
 
 The number of sandwiches in our order is a perfect example of this. To manage this kind of state, Flutter provides the `StatefulWidget`.
 
+## **Getting started**
+
+For this worksheet, you need to start with the code from branch 3 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/3). You can either clone the repository and checkout branch 3:
+
+```bash
+git clone https://github.com/manighahrmani/sandwich_shop.git
+cd sandwich_shop
+git checkout 3
+```
+
+Or ensure your code matches [the code that we ended Worksheet 2 with](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart). Run the app to make sure everything works as expected before proceeding.
+
 ## **A reminder on stateless widgets**
 
-We are starting with [the code that we ended Worksheet 2 with](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart). If you have completed some of the exercises and your code looks slightly different, that's okay. Just make sure you understand the changes we're making from this point onward.
+If you have completed some of the exercises and your code looks slightly different, that's okay. Just make sure you understand the changes we're making from this point onward.
 
 So far, all of our widgets were stateless. These widgets are immutable. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).
 
