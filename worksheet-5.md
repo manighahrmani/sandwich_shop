@@ -508,7 +508,7 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
     Once you have implemented the new page, move the `CartViewScreen` widget to a new file called `cart_view_screen.dart` inside the `views` folder and import it where you are using it (in `OrderScreen`). You could additionally create a `order_screen_view.dart` file for the `OrderScreen` and `OrderScreenState` classes if you wish. This way, `main.dart` will be short and simple, only containing the `App` class and the `main()` function.
 
-    This is what your `main.dart` file may look like after the refactoring:
+    This is what your `lib/main.dart` file may look like after the refactoring:
 
     ```dart
     import 'package:flutter/material.dart';
@@ -538,6 +538,7 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
     ├── assets/
     │   └── images/
     ├── lib/
+    │   ├── main.dart
     │   ├── views/
     │   │   ├── app_styles.dart
     │   │   ├── cart_view_screen.dart
