@@ -57,15 +57,15 @@ Also note that you can add more styles to this file as needed and use it across 
 
 Next, open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ + Shift + E** on macOS. Right-click on the `lib` folder and select **New Folder**. Name this folder `views`. Similarly, create the following folders in the `lib` folder: `view_models`, and `repositories`.
 
-Drag and drop the `app_styles.dart` and `main.dart` files into the `views` subfolder of the `lib` folder.
+Drag and drop the `app_styles.dart` file into the `views` subfolder of the `lib` folder. **Keep `main.dart` in the root `lib` folder** as Flutter needs it there to find your app's entry point.
 
 Your folder structure should now look like this:
 
 ```
 lib/
+  ├── main.dart
   ├── views/
-  │   ├── app_styles.dart
-  │   └── main.dart
+  │   └── app_styles.dart
   ├── view_models/
   └── repositories/
 ```
@@ -108,9 +108,10 @@ class OrderRepository {
 
 With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`. Update your `main.dart` file to use this new repository.
 
-First, import the `OrderRepository` class at the top of your `main.dart` file:
+First, update the imports at the top of your `main.dart` file. Since we moved `app_styles.dart` to the views folder, you'll need to update that import and add the `OrderRepository` import:
 
 ```dart
+import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/repositories/order_repository.dart';
 ```
 
@@ -296,9 +297,9 @@ This is what your folder structure should look like:
 
 ```
 lib/
+  ├── main.dart
   ├── views/
   │   ├── app_styles.dart
-  │   └── main.dart
   ├── view_models/
   └── repositories/
 test/
@@ -388,12 +389,12 @@ This is what your folder structure should look like now:
 
 ```
 lib/
+  ├── main.dart
   ├── views/
-  │   ├── app_styles.dart
-  │   └── main.dart
+  │   └── app_styles.dart
   ├── view_models/
   └── repositories/
-  │   └── order_repository.dart
+      └── order_repository.dart
 test/
   ├── repositories/
   │   └── order_repository_test.dart
@@ -401,15 +402,7 @@ test/
       └── widget_test.dart
 ```
 
-Next, open `widget_test.dart`. Before making any changes, try running the tests by clicking the `Run` link above the `main` function. You should get a list of problems at the bottom of the screen. This is expected. When we were [restructuring our app](#folder-structure), we changed the location of `main.dart` for a start!
-
-Update the import statement for `main.dart` at the top of `widget_test.dart` to include the `views` subfolder:
-
-```dart
-import 'package:sandwich_shop/views/main.dart';
-```
-
-Run the tests again. They should all pass now. Let's talk about these tests work and what each part does.
+Next, open `widget_test.dart`. Before making any changes, try running the tests by clicking the `Run` link above the `main` function. The tests should run successfully.
 
 You'll notice each test is defined with `testWidgets` instead of `test`. This function takes a `WidgetTester` object in its callback parameter, which is conventionally named `tester`. The `tester` is our main tool for building and interacting with our UI in the test environment.
 
@@ -457,7 +450,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     ⚠️ **Show your new passing widget test to a member of staff** for a sign-off.
 
-2.  Let's add an option for the user to have their sandwich toasted. First, in `lib/views/main.dart`, add a new state variable to your `_OrderScreenState` class: `bool _isToasted = false;`.
+2.  Let's add an option for the user to have their sandwich toasted. First, in `lib/main.dart`, add a new state variable to your `_OrderScreenState` class: `bool _isToasted = false;`.
 
     Next, in the `build` method, add the following `Row` inside the `Column`'s `children` list, just below the `Row` for the existing sandwich type `Switch` (search for `Switch` to find it quickly and add this after the closing bracket of that `Row`):
 
