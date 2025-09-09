@@ -502,9 +502,19 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
     Create a new `StatefulWidget` called `CartViewScreen` (and its associated state class) in `main.dart` for now. It should display a list of all items in the cart. Each item should show the sandwich name, size, bread type, quantity, and individual total price.
 
-    Add a "View Cart" button to your main screen that navigates to this new screen. You can use `Navigator.push()` to navigate to the cart screen and `Navigator.pop()` to go back to the main screen.
+    Think about what pieces of information would be most useful to display in the cart view and how the user might reach/interact with this screen. Write a user story if you are planning to use your AI assistant to help you implement this and make sure to provide sufficient context (e.g., the `Cart` model and its methods).
 
-    Think about what pieces of information would be most useful to display in the cart view and what actions the user might want to take. Write a user story if you are planning to use your AI assistant to help you implement this and make sure to provide sufficient context (e.g., the `Cart` model and its methods).
+
+    Hint: You can use `Navigator.push()` to navigate to the cart screen and `Navigator.pop()` to go back to the main screen. Also, your `CartViewScreen` will need access to the cart data, so you'll need to pass it through the constructor. To display multiple items from a collection, you can use a for loop inside a `Column`'s children list like this:
+
+    ```dart
+    Column(
+      children: [
+        for (String item in itemList)
+          Text(item),
+      ],
+    )
+    ```
 
     Once you have implemented the new page, move the `CartViewScreen` widget to a new file called `cart_view_screen.dart` inside the `views` folder and import it where you are using it (in `OrderScreen`). You could additionally create a `order_screen_view.dart` file for the `OrderScreen` and `OrderScreenState` classes if you wish. This way, `main.dart` will be short and simple, only containing the `App` class and the `main()` function.
 
