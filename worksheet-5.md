@@ -14,6 +14,18 @@ Ensure that you have already completed the following:
 
 To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
+## **Getting started**
+
+For this worksheet, you need to start with the code from branch 5 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/5). You can either clone the repository and checkout branch 5:
+
+```bash
+git clone https://github.com/manighahrmani/sandwich_shop.git
+cd sandwich_shop
+git checkout 5
+```
+
+Or manually ensure your code matches the repository. Run the app to make sure everything works as expected before proceeding.
+
 ## **Introduction to Data Models**
 
 So far, we've been passing simple data types like `String` and `int` between our widgets. As our app grows in complexity, it's better to group related data into custom data types (classes). We call these **data models**.
