@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'app_styles.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 
