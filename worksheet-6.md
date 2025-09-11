@@ -47,7 +47,7 @@ Instead of jumping straight into coding, let's start by using AI to help us writ
 
 Run the app and add a few sandwiches to your cart. You should see a snack bar confirming the addition. Now, navigate to the cart page with the "View Cart" button. You should see the items you added along with their prices and the total price. This is what the cart page should look like:
 
-![Initial Cart Page](screenshot_initial_cart_page.png)
+![Initial Cart Page](images/screenshot_initial_cart_page.png)
 
 Let's say we want to enhance our cart functionality. Instead of immediately asking for code, we'll first ask our AI assistant to create a prompt. Here's a sample prompt you can use with your AI assistant (if you are using Copilot, set it to "Ask" mode):
 
@@ -118,13 +118,13 @@ Remember when using Copilot, you can set it to "Edit" mode to let it modify your
 
 See how we paused after each subtask to review the changes before reading them, accepting them, testing them and separately committing them. This is an important part of the PDD process, as it allows you to ensure that the AI is producing code that meets your requirements and adheres to best practices.
 
-![Using Copilot to implement cart modifications](screenshot_pdd_implementation_step.png)
+![Using Copilot to implement cart modifications](images/screenshot_pdd_implementation_step.png)
 
 Once you have completed all the subtasks, test your app to ensure everything works as expected and as before update the widget tests for the `cart_view_screen.dart` in `test/widget/cart_view_screen_test.dart` to cover the new functionality.
 
 Here is a screenshot of our cart page after implementing the modifications:
 
-![Updated Cart Page](screenshot_initial_cart_page.png)
+![Updated Cart Page](images/screenshot_initial_cart_page.png)
 
 ## **Navigation in Flutter**
 
