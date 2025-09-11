@@ -41,12 +41,34 @@ class _CartViewScreenState extends State<CartViewScreen> {
     setState(() {
       widget.cart.add(sandwich, quantity: 1);
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Quantity increased')),
+    );
   }
 
   void _decrementQuantity(Sandwich sandwich) {
+    final wasPresent = widget.cart.items.containsKey(sandwich);
     setState(() {
       widget.cart.remove(sandwich, quantity: 1);
     });
+    if (!widget.cart.items.containsKey(sandwich) && wasPresent) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Item removed from cart')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Quantity decreased')),
+      );
+    }
+  }
+
+  void _removeItem(Sandwich sandwich) {
+    setState(() {
+      widget.cart.remove(sandwich, quantity: widget.cart.getQuantity(sandwich));
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Item removed from cart')),
+    );
   }
 
   @override
@@ -105,6 +127,11 @@ class _CartViewScreenState extends State<CartViewScreen> {
                           Text(
                             '£${_getItemPrice(entry.key, entry.value).toStringAsFixed(2)}',
                             style: normalText,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            tooltip: 'Remove item',
+                            onPressed: () => _removeItem(entry.key),
                           ),
                         ],
                       ),
