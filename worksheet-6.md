@@ -254,8 +254,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     // Generate order confirmation data
-    final orderConfirmation = {
-      'orderId': 'ORD${DateTime.now().millisecondsSinceEpoch}',
+    final DateTime currentTime = DateTime.now();
+    final int timestamp = currentTime.millisecondsSinceEpoch;
+    final String orderId = 'ORD$timestamp';
+    
+    final Map<String, dynamic> orderConfirmation = {
+      'orderId': orderId,
       'totalAmount': widget.cart.totalPrice,
       'itemCount': widget.cart.countOfItems,
       'estimatedTime': '15-20 minutes',
@@ -269,11 +273,92 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _cancelOrder() {
-    Navigator.pop(context, {'status': 'cancelled'});
+    final Map<String, String> cancellationData = {'status': 'cancelled'};
+    Navigator.pop(context, cancellationData);
+  }
+
+  double _calculateItemPrice(Sandwich sandwich, int quantity) {
+    double unitPrice;
+    if (sandwich.isFootlong) {
+      unitPrice = 11.0;
+    } else {
+      unitPrice = 7.0;
+    }
+    return quantity * unitPrice;
+  }
+
+  List<Widget> _buildOrderItems() {
+    List<Widget> orderItems = [];
+    
+    for (MapEntry<Sandwich, int> entry in widget.cart.items.entries) {
+      final Sandwich sandwich = entry.key;
+      final int quantity = entry.value;
+      final double itemPrice = _calculateItemPrice(sandwich, quantity);
+      
+      final Widget itemRow = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              '${quantity}x ${sandwich.name}',
+              style: normalText,
+            ),
+          ),
+          Text(
+            '£${itemPrice.toStringAsFixed(2)}',
+            style: normalText,
+          ),
+        ],
+      );
+      
+      orderItems.add(itemRow);
+      orderItems.add(const SizedBox(height: 8));
+    }
+    
+    return orderItems;
+  }
+
+  List<Widget> _buildPaymentSection() {
+    if (_isProcessing) {
+      return [
+        const Center(
+          child: CircularProgressIndicator(),
+        ),
+        const SizedBox(height: 20),
+        const Text(
+          'Processing payment...',
+          style: normalText,
+          textAlign: TextAlign.center,
+        ),
+      ];
+    } else {
+      return [
+        ElevatedButton(
+          onPressed: _processPayment,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+          child: const Text('Confirm Payment', style: normalText),
+        ),
+        const SizedBox(height: 16),
+        OutlinedButton(
+          onPressed: _cancelOrder,
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+          child: const Text('Cancel Order', style: normalText),
+        ),
+      ];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> orderItems = _buildOrderItems();
+    final List<Widget> paymentSection = _buildPaymentSection();
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout', style: heading1),
@@ -287,24 +372,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const SizedBox(height: 20),
             
             // Display order items
-            for (var entry in widget.cart.items.entries) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      '${entry.value}x ${entry.key.name}',
-                      style: normalText,
-                    ),
-                  ),
-                  Text(
-                    '£${(entry.value * (entry.key.isFootlong ? 11.0 : 7.0)).toStringAsFixed(2)}',
-                    style: normalText,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-            ],
+            ...orderItems,
             
             const Divider(),
             const SizedBox(height: 10),
@@ -330,37 +398,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             
             const SizedBox(height: 20),
             
-            if (_isProcessing) ...[
-              const Center(
-                child: CircularProgressIndicator(),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Processing payment...',
-                style: normalText,
-                textAlign: TextAlign.center,
-              ),
-            ] else ...[
-              ElevatedButton(
-                onPressed: _processPayment,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text('Confirm Payment', style: normalText),
-              ),
-              
-              const SizedBox(height: 16),
-              
-              OutlinedButton(
-                onPressed: _cancelOrder,
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text('Cancel Order', style: normalText),
-              ),
-            ],
+            ...paymentSection,
           ],
         ),
       ),
@@ -369,59 +407,72 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 }
 ```
 
-### **Step 2: Add Checkout Button to Cart Screen**
-
 Now, update your `cart_view_screen.dart` to add a checkout button and handle the returned data. Add this method to the `_CartViewScreenState` class:
 
 ```dart
 Future<void> _navigateToCheckout() async {
-  if (widget.cart.items.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Your cart is empty'),
-        duration: Duration(seconds: 2),
-      ),
+  final bool cartIsEmpty = widget.cart.items.isEmpty;
+  
+  if (cartIsEmpty) {
+    const SnackBar emptyCartSnackBar = SnackBar(
+      content: Text('Your cart is empty'),
+      duration: Duration(seconds: 2),
     );
+    ScaffoldMessenger.of(context).showSnackBar(emptyCartSnackBar);
     return;
   }
 
-  final result = await Navigator.push<Map<String, dynamic>>(
+  final Map<String, dynamic>? result = await Navigator.push<Map<String, dynamic>>(
     context,
     MaterialPageRoute<Map<String, dynamic>>(
-      builder: (context) => CheckoutScreen(cart: widget.cart),
+      builder: (BuildContext context) => CheckoutScreen(cart: widget.cart),
     ),
   );
 
-  if (result != null && mounted) {
-    if (result['status'] == 'confirmed') {
-      // Clear the cart after successful order
-      setState(() {
-        widget.cart.clear();
-      });
-
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Order ${result['orderId']} confirmed! '
-            'Estimated time: ${result['estimatedTime']}',
-          ),
-          duration: const Duration(seconds: 4),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      // Optionally navigate back to order screen
-      Navigator.pop(context);
-    } else if (result['status'] == 'cancelled') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Order cancelled'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+  final bool hasResult = result != null;
+  final bool widgetStillMounted = mounted;
+  
+  if (hasResult && widgetStillMounted) {
+    final String status = result['status'] as String;
+    
+    if (status == 'confirmed') {
+      _handleConfirmedOrder(result);
+    } else if (status == 'cancelled') {
+      _handleCancelledOrder();
     }
   }
+}
+
+void _handleConfirmedOrder(Map<String, dynamic> orderData) {
+  // Clear the cart after successful order
+  setState(() {
+    widget.cart.clear();
+  });
+
+  // Extract order details
+  final String orderId = orderData['orderId'] as String;
+  final String estimatedTime = orderData['estimatedTime'] as String;
+  
+  // Show success message
+  final String successMessage = 'Order $orderId confirmed! Estimated time: $estimatedTime';
+  final SnackBar successSnackBar = SnackBar(
+    content: Text(successMessage),
+    duration: const Duration(seconds: 4),
+    backgroundColor: Colors.green,
+  );
+  
+  ScaffoldMessenger.of(context).showSnackBar(successSnackBar);
+
+  // Navigate back to order screen
+  Navigator.pop(context);
+}
+
+void _handleCancelledOrder() {
+  const SnackBar cancelledSnackBar = SnackBar(
+    content: Text('Order cancelled'),
+    duration: Duration(seconds: 2),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(cancelledSnackBar);
 }
 ```
 
@@ -435,17 +486,24 @@ Then add a checkout button to your cart screen's UI. In the `build` method, add 
 
 ```dart
 const SizedBox(height: 20),
-if (widget.cart.items.isNotEmpty)
-  StyledButton(
-    onPressed: _navigateToCheckout,
-    icon: Icons.payment,
-    label: 'Checkout',
-    backgroundColor: Colors.orange,
-  ),
+// Only show checkout button if cart has items
+Builder(
+  builder: (BuildContext context) {
+    final bool cartHasItems = widget.cart.items.isNotEmpty;
+    if (cartHasItems) {
+      return StyledButton(
+        onPressed: _navigateToCheckout,
+        icon: Icons.payment,
+        label: 'Checkout',
+        backgroundColor: Colors.orange,
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
+  },
+),
 const SizedBox(height: 10),
 ```
-
-### **Step 3: Understanding the Data Flow**
 
 This implementation demonstrates several key concepts:
 
@@ -465,8 +523,6 @@ The key points for returning data from screens are:
 - Use `Navigator.pop(context, returnValue)` to return data
 - Always check if the returned data is not null before using it
 - Use the `mounted` property to ensure the widget is still active before updating state
-
-### **Step 4: Test the Checkout Flow**
 
 Run your app and test the complete flow:
 
@@ -511,23 +567,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _saveProfile() {
-    final name = _nameController.text.trim();
-    final location = _locationController.text.trim();
+    final String name = _nameController.text.trim();
+    final String location = _locationController.text.trim();
     
-    if (name.isNotEmpty && location.isNotEmpty) {
-      // Return the profile data to the previous screen
-      Navigator.pop(context, {
-        'name': name,
-        'location': location,
-      });
+    final bool nameIsNotEmpty = name.isNotEmpty;
+    final bool locationIsNotEmpty = location.isNotEmpty;
+    final bool bothFieldsFilled = nameIsNotEmpty && locationIsNotEmpty;
+    
+    if (bothFieldsFilled) {
+      _returnProfileData(name, location);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill in all fields'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      _showValidationError();
     }
+  }
+
+  void _returnProfileData(String name, String location) {
+    final Map<String, String> profileData = {
+      'name': name,
+      'location': location,
+    };
+    Navigator.pop(context, profileData);
+  }
+
+  void _showValidationError() {
+    const SnackBar validationSnackBar = SnackBar(
+      content: Text('Please fill in all fields'),
+      duration: Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(validationSnackBar);
   }
 
   @override
@@ -577,21 +644,32 @@ Now, let's add a button to navigate to the profile screen from the order screen.
 
 ```dart
 Future<void> _navigateToProfile() async {
-  final result = await Navigator.push<Map<String, String>>(
+  final Map<String, String>? result = await Navigator.push<Map<String, String>>(
     context,
     MaterialPageRoute<Map<String, String>>(
-      builder: (context) => const ProfileScreen(),
+      builder: (BuildContext context) => const ProfileScreen(),
     ),
   );
   
-  if (result != null && mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Welcome, ${result['name']}! Ordering from ${result['location']}'),
-        duration: const Duration(seconds: 3),
-      ),
-    );
+  final bool hasResult = result != null;
+  final bool widgetStillMounted = mounted;
+  
+  if (hasResult && widgetStillMounted) {
+    _showWelcomeMessage(result);
   }
+}
+
+void _showWelcomeMessage(Map<String, String> profileData) {
+  final String name = profileData['name']!;
+  final String location = profileData['location']!;
+  final String welcomeMessage = 'Welcome, $name! Ordering from $location';
+  
+  final SnackBar welcomeSnackBar = SnackBar(
+    content: Text(welcomeMessage),
+    duration: const Duration(seconds: 3),
+  );
+  
+  ScaffoldMessenger.of(context).showSnackBar(welcomeSnackBar);
 }
 ```
 
