@@ -45,7 +45,9 @@ You can learn more about using AI for feature implementation in this video: [AI-
 
 Instead of jumping straight into coding, let's start by using AI to help us write proper requirements for a new feature.
 
-Run the app and add a few sandwiches to your cart. You should see a snack bar confirming the addition. Now, navigate to the cart page with the "View Cart" button. You should see the items you added along with their prices and the total price.
+Run the app and add a few sandwiches to your cart. You should see a snack bar confirming the addition. Now, navigate to the cart page with the "View Cart" button. You should see the items you added along with their prices and the total price. This is what the cart page should look like:
+
+![Initial Cart Page](screenshot_initial_cart_page.png)
 
 Let's say we want to enhance our cart functionality. Instead of immediately asking for code, we'll first ask our AI assistant to create a requirements document. Here's a sample prompt you can use with your AI assistant:
 
