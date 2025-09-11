@@ -52,13 +52,13 @@ Run the app and add a few sandwiches to your cart. You should see a snack bar co
 Let's say we want to enhance our cart functionality. Instead of immediately asking for code, we'll first ask our AI assistant to create a prompt. Here's a sample prompt you can use with your AI assistant (if you are using Copilot, set it to "Ask" mode):
 
 ```
-I'm building a sandwich shop app in Flutter. I need your help writing a prompt for a new feature.
+I have a sandwich shop app written in Flutter. I need your help writing good prompt I can send to an LLM to help me implement a new feature.
 
 I have two pages: an order screen where users can select sandwiches and add them to their cart, and a cart screen where users can see the items in their cart and the total price.
 
 I want to let the users modify the items in their cart. There are different ways a user might want to modify their cart like changing quantity or removing items entirely.
 
-For each of these features, include a clear description of the feature and what should happen when the user performs an action. Output the result in a Markdown code block.
+For each of these features, include a clear description and what should happen when the user performs an action. Output the result in a Markdown code block.
 ```
 
 This initial prompt can be improved by adding more specific details about the current app structure. You could for example include:
@@ -70,9 +70,13 @@ It also has one repository:
 - Pricing (calculates prices based on quantity and size, the price of a sandwich has nothing to do with its type or bread)
 ```
 
+This is what we initially got back from the AI: [prompt.md](https://github.com/manighahrmani/sandwich_shop/blob/2157fc03bb82e63206101518e408f1e02762ec54/prompt.md).
+
 You can also talk about the UI requirements or edge cases you want the code to handle for example, if the user tries to reduce the quantity of an item below 1, it should remove the item entirely from the cart.
 
-Save the output as `prompt.md` in your project directory. Review the document and manually edit it if needed. Here is the example of what we got:
+Save the output as `prompt.md` in your project directory. Review the document and manually edit it if needed.
+
+In our case, we asked the AI to refine the prompt after providing it with a screenshot of the current cart page, and an overview of the app structure and the functionality of the models and repository. This is what we ended up with: [prompt.md](https://github.com/manighahrmani/sandwich_shop/blob/5b8512d5a5b2074c3dada7a1de213860f5110433/prompt.md#L65).
 
 #### **From Requirements to Implementation**
 
