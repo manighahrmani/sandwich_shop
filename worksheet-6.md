@@ -766,19 +766,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    ⚠️ **Show your requirements document and working favorites feature to a member of staff** for a sign-off.
 
-2. **Enhanced Cart Functionality**: Complete the cart quantity modification feature we started in this worksheet.
-
-   Use AI to help you add +/- buttons next to each item in the cart view that allow users to:
-   - Increase item quantities
-   - Decrease item quantities (removing items when quantity reaches 0)
-   - See updated totals immediately
-   - Handle edge cases gracefully
-
-   Make sure to update both the UI and the underlying Cart model as needed. Write tests to verify the functionality works correctly.
-
-   ⚠️ **Show your enhanced cart with quantity modification working correctly to a member of staff** for a sign-off.
-
-3. **Enhanced Checkout Flow**: Extend the checkout screen we implemented in this worksheet to include additional features.
+2. **Enhanced Checkout Flow**: Extend the checkout screen we implemented in this worksheet to include additional features.
 
    Add the following enhancements to the checkout process:
    - A customer details form (name, phone number, delivery address)
@@ -791,26 +779,3 @@ Complete the exercises below. Remember to commit your changes after each exercis
    Use your AI assistant to help you design the additional screens and implement proper data passing between them. Make sure each screen returns appropriate data to the previous screen.
 
    ⚠️ **Show your enhanced checkout flow with customer details and receipt to a member of staff** for a sign-off.
-
-4. (Advanced) **Settings Screen**: Create a settings screen where users can configure app preferences like default sandwich size and preferred bread type.
-
-   The settings screen should:
-   - Allow users to set default sandwich size (six-inch or footlong)
-   - Allow users to set default bread type
-   - Save these preferences (for now, just store them in the app's state)
-   - Use the saved preferences as defaults in the order screen
-
-   Use your AI assistant to help design the UI and implement the functionality. Consider how the settings should be structured and how they integrate with the existing app.
-
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
-5. (Advanced) **Order History**: Implement a simple order history feature that keeps track of previous orders.
-
-   Create a new screen that shows:
-   - List of previous orders with date/time
-   - Order details (items, quantities, total price)
-   - Ability to "reorder" (add all items from a previous order to the current cart)
-
-   For now, just store the order history in memory (it will be lost when the app restarts). Use your AI assistant to help design the data structure and implement the functionality.
-
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
