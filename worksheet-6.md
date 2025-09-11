@@ -197,13 +197,13 @@ This is important because `ScaffoldMessenger` ensures the message persists even 
 
 Often, you need to do more than just showing a message that carries over navigation. You might want to send data to a new screen or receive data back from it. 
 
-In fact, this is already being done in your app. When navigating to the cart screen from the order screen, you pass the cart object:
+In fact, this is already being done in your app. When navigating to the cart screen from the order screen, you pass the cart object (this is how `OrderScreenView` constructs a `CartViewScreen`):
 
 ```dart
 CartViewScreen(cart: _cart)
 ```
 
-The `CartViewScreen` receives this data through its constructor:
+The `CartViewScreen` screen then receives this data through its constructor:
 
 ```dart
 class CartViewScreen extends StatefulWidget {
@@ -216,9 +216,9 @@ class CartViewScreen extends StatefulWidget {
 
 This is the standard way to pass data to a new screen in Flutter. The receiving widget declares the data it needs in its constructor, and the sending widget provides it during navigation.
 
-### **Returning Data from a Screen**
+Things become slightly more complex when you want to get data back from a screen. For example, you might want to return a confirmation when an order is placed. 
 
-Sometimes you want to get data back from a screen. For example, you might want to return a confirmation when an order is placed. Here's how you can modify navigation to handle returned data:
+Update the `_navigateToCartView()` method in `order_screen_view.dart` to wait for a result from the cart screen.
 
 ```dart
 // Sending screen - wait for a result
@@ -235,7 +235,11 @@ Future<void> _navigateAndWaitForResult() async {
     print('Received: $result');
   }
 }
+```
 
+Also, add a separate method in `cart_view_screen.dart` to return data when popping the screen. Here's how you can do it:
+
+```dart
 // Receiving screen - return data when popping
 void _returnWithData() {
   Navigator.pop(context, 'Some return value');
