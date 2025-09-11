@@ -39,6 +39,8 @@ One of the learning outcomes of this module is AI-driven development. We have be
 
 Among some of the advantages of PDD is that well-structured prompts produce more consistent and predictable results. AI can be unpredictable, and predictability is a quality we want in software development. Detailed requirements lead to better code quality and fewer bugs and in case any of the generated code has issues, we can always go back to the prompt and refine it. 
 
+You can learn more about using AI for feature implementation in this video: [AI-Powered App Development with Flutter](https://www.youtube.com/watch?v=fzYN_kgl-OM). The section at 16:58 (Copilot Vision) is particularly relevant for your coursework, as it shows how you can use images and prompts to guide the AI. We will be covering some of these concepts in this worksheet.
+
 ### **Requirements-First Development**
 
 Instead of jumping straight into coding, let's start by using AI to help us write proper requirements for a new feature.
