@@ -124,7 +124,7 @@ Once you have completed all the subtasks, test your app to ensure everything wor
 
 Here is a screenshot of our cart page after implementing the modifications:
 
-![Updated Cart Page](images/screenshot_initial_cart_page.png)
+![Updated Cart Page](images/screenshot_final_cart_page.png)
 
 ## **Navigation in Flutter**
 
