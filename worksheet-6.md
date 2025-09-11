@@ -52,9 +52,11 @@ Run the app and add a few sandwiches to your cart. You should see a snack bar co
 Let's say we want to enhance our cart functionality. Instead of immediately asking for code, we'll first ask our AI assistant to create a prompt. Here's a sample prompt you can use with your AI assistant (if you are using Copilot, set it to "Ask" mode):
 
 ```
-I'm building a sandwich shop app in Flutter. I have two pages: an order screen where users can select sandwiches and add them to their cart, and a cart screen where users can see the items in their cart and the total price.
+I'm building a sandwich shop app in Flutter. I need your help writing a prompt for a new feature.
 
-Write a detailed and structured prompt for me as I want to enable the users to modify the items in their cart. There are different ways a user might want to modify their cart like changing quantity or removing items entirely.
+I have two pages: an order screen where users can select sandwiches and add them to their cart, and a cart screen where users can see the items in their cart and the total price.
+
+I want to let the users modify the items in their cart. There are different ways a user might want to modify their cart like changing quantity or removing items entirely.
 
 For each of these features, include a clear description of the feature and what should happen when the user performs an action. Output the result in a Markdown code block.
 ```
