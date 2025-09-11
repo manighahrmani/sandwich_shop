@@ -250,10 +250,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       _isProcessing = true;
     });
 
-    // Simulate a payment processing delay
     await Future.delayed(const Duration(seconds: 2));
 
-    // Generate order confirmation data
     final DateTime currentTime = DateTime.now();
     final int timestamp = currentTime.millisecondsSinceEpoch;
     final String orderId = 'ORD$timestamp';
@@ -267,7 +265,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     };
 
     if (mounted) {
-      // Return the confirmation data to the previous screen
       Navigator.pop(context, orderConfirmation);
     }
   }
@@ -371,7 +368,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const Text('Order Summary', style: heading2),
             const SizedBox(height: 20),
             
-            // Display order items
             ...orderItems,
             
             const Divider(),
@@ -444,16 +440,13 @@ Future<void> _navigateToCheckout() async {
 }
 
 void _handleConfirmedOrder(Map<String, dynamic> orderData) {
-  // Clear the cart after successful order
   setState(() {
     widget.cart.clear();
   });
 
-  // Extract order details
   final String orderId = orderData['orderId'] as String;
   final String estimatedTime = orderData['estimatedTime'] as String;
   
-  // Show success message
   final String successMessage = 'Order $orderId confirmed! Estimated time: $estimatedTime';
   final SnackBar successSnackBar = SnackBar(
     content: Text(successMessage),
@@ -463,7 +456,6 @@ void _handleConfirmedOrder(Map<String, dynamic> orderData) {
   
   ScaffoldMessenger.of(context).showSnackBar(successSnackBar);
 
-  // Navigate back to order screen
   Navigator.pop(context);
 }
 
@@ -486,7 +478,6 @@ Then add a checkout button to your cart screen's UI. In the `build` method, add 
 
 ```dart
 const SizedBox(height: 20),
-// Only show checkout button if cart has items
 Builder(
   builder: (BuildContext context) {
     final bool cartHasItems = widget.cart.items.isNotEmpty;
@@ -505,32 +496,13 @@ Builder(
 const SizedBox(height: 10),
 ```
 
-This implementation demonstrates several key concepts:
+The `_navigateToCheckout()` method uses `await` to wait for the checkout screen to return data. The `MaterialPageRoute<Map<String, dynamic>>` specifies that we expect a Map to be returned from the checkout screen. We check if the result is not null and handle different scenarios like confirmed or cancelled orders.
 
-1. **Async Navigation**: The `_navigateToCheckout()` method uses `await` to wait for the checkout screen to return data.
+After a successful order, we clear the cart and update the UI. We show different messages based on the returned data to give users feedback about their actions.
 
-2. **Generic Type Specification**: `MaterialPageRoute<Map<String, dynamic>>` specifies that we expect a Map to be returned.
+When returning data from screens, use `await` when calling `Navigator.push()` to wait for the result. Specify the return type in the `MaterialPageRoute<T>` generic. Use `Navigator.pop(context, returnValue)` to return data from the receiving screen. Always check if the returned data is not null before using it. Use the `mounted` property to ensure the widget is still active before updating state.
 
-3. **Conditional Data Handling**: We check if `result` is not null and handle different scenarios (confirmed vs cancelled).
-
-4. **State Updates**: After a successful order, we clear the cart and update the UI.
-
-5. **User Feedback**: We show different messages based on the returned data.
-
-The key points for returning data from screens are:
-- Use `await` when calling `Navigator.push()` to wait for the result
-- Specify the return type in the `MaterialPageRoute<T>` generic
-- Use `Navigator.pop(context, returnValue)` to return data
-- Always check if the returned data is not null before using it
-- Use the `mounted` property to ensure the widget is still active before updating state
-
-Run your app and test the complete flow:
-
-1. Add some sandwiches to your cart
-2. Navigate to the cart view
-3. Press the "Checkout" button
-4. Try both "Confirm Payment" and "Cancel Order" options
-5. Observe how data is passed back and the UI responds accordingly
+Run your app and test the complete flow. Add some sandwiches to your cart, navigate to the cart view, and press the "Checkout" button. Try both "Confirm Payment" and "Cancel Order" options and observe how data is passed back and the UI responds accordingly.
 
 #### **Commit your changes**
 
@@ -690,11 +662,7 @@ StyledButton(
 ),
 ```
 
-This demonstrates:
-- Navigation to a new screen
-- Passing data back from a screen
-- Using the returned data to show a message
-- Proper handling of the `mounted` property for async operations
+This demonstrates navigation to a new screen and passing data back from that screen. We use the returned data to show a welcome message and properly handle the `mounted` property for async operations.
 
 Note that in this simple implementation, the profile data isn't persistent - it's just used to demonstrate navigation concepts. In a real app, you'd save this data to local storage or a database.
 
@@ -729,19 +697,16 @@ Explain the logic for each method and any edge cases I should consider.
 Based on the AI's suggestions, update your `Cart` class. You'll likely need methods like:
 
 ```dart
-// Update quantity of an existing item
 void updateQuantity(Sandwich sandwich, int newQuantity) {
-  // Implementation here
+
 }
 
-// Remove an item completely
 void removeItem(Sandwich sandwich) {
-  // Implementation here
+
 }
 
-// Get all items for display
 List<CartItem> get items {
-  // Implementation here
+
 }
 ```
 
