@@ -76,35 +76,55 @@ You can also talk about the UI requirements or edge cases you want the code to h
 
 Save the output as `prompt.md` in your project directory. Review the document and manually edit it if needed.
 
-In our case, we asked the AI to refine the prompt after providing it with a screenshot of the current cart page, and an overview of the app structure and the functionality of the models and repository. This is what we ended up with: [prompt.md](https://github.com/manighahrmani/sandwich_shop/blob/5b8512d5a5b2074c3dada7a1de213860f5110433/prompt.md#L65).
+In our case, we asked the AI to refine the prompt after providing it with a screenshot of the current cart page, and an overview of the app structure and the functionality of the models and repository. You could also provide the AI with screenshots of other apps such as Deliveroo or Uber Eats to give it a better idea of what you want. 
 
-#### **From Requirements to Implementation**
-
-Once you have solid requirements, you can use AI to help implement features systematically. Here's how you might approach implementing the cart modification feature:
-
-```
-Based on the requirements document we created, please help me implement the cart quantity modification feature.
-
-Current Cart class structure:
-[Include your current cart.dart code here]
-
-Requirements to implement:
-- Users should be able to increase/decrease quantities of items already in the cart
-- Minimum quantity is 1 (removing all quantities should remove the item entirely)
-- UI should show current quantity with + and - buttons
-- Changes should update the total price immediately
-
-Please provide:
-1. Updated Cart class methods (if needed)
-2. UI components for the cart view with quantity controls
-3. Explanation of how the state management should work
-
-Focus on clean, maintainable code that follows Flutter best practices.
-```
+This is what we ended up with: [prompt.md](https://github.com/manighahrmani/sandwich_shop/blob/5b8512d5a5b2074c3dada7a1de213860f5110433/prompt.md#L65).
 
 #### **Commit your changes**
 
-Before moving on to navigation, commit any requirements documents or code improvements you've made with AI assistance.
+Before moving on, commit your prompt file with an appropriate commit message (remember in PDD, prompts are part of the codebase).
+
+### **Requirements Document**
+
+Once you have solid prompt, you can use AI to write a requirements document for you. Here's a sample prompt you can use:
+
+```
+Write a detailed requirements document for the feature described in my previous prompt. The requirements should include:
+
+1. A clear description of the feature and its purpose
+2. User stories that describe how different users will interact with the feature
+3. Acceptance criteria that define when the feature is considered complete
+
+Respond in a structured Markdown format with separate subtasks.
+```
+
+This is what we got back from Copilot after a few modifications: [requirements.md](https://github.com/manighahrmani/sandwich_shop/blob/75d4eb7e53024b0868c3acd450cb7f028240cbc5/requirement.md#L5).
+
+#### **Commit your changes**
+
+Before implementing the feature, commit your requirements document with an appropriate commit message.
+
+### **From Requirements to Implementation**
+
+Now that you have a clear requirements document, you can use it to guide your implementation. Here's a sample prompt you can use:
+
+```
+Let's implement the feature described in my requirements document.
+
+Implement each subtask separately (I want to commit each one individually). For each subtask, explain your changes in detail, let me see what files you are modifying and then we can proceed to the next subtask.
+```
+
+Remember when using Copilot, you can set it to "Edit" mode to let it modify your files directly. Additionally, provide it with context by pasting relevant parts of your codebase (you can do this by entering a hash symbol `#` followed by the name of the file, for example `#cart.dart`).
+
+See how we paused after each subtask to review the changes before reading them, accepting them, testing them and separately committing them. This is an important part of the PDD process, as it allows you to ensure that the AI is producing code that meets your requirements and adheres to best practices.
+
+![Using Copilot to implement cart modifications](screenshot_pdd_implementation_step.png)
+
+Once you have completed all the subtasks, test your app to ensure everything works as expected and as before update the widget tests for the `cart_view_screen.dart` in `test/widget/cart_view_screen_test.dart` to cover the new functionality.
+
+Here is a screenshot of our cart page after implementing the modifications:
+
+![Updated Cart Page](screenshot_initial_cart_page.png)
 
 ## **Navigation in Flutter**
 
