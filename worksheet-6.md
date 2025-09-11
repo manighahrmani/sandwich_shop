@@ -41,7 +41,7 @@ Among some of the advantages of PDD is that well-structured prompts produce more
 
 You can learn more about using AI for feature implementation in this video: [AI-Powered App Development with Flutter](https://www.youtube.com/watch?v=fzYN_kgl-OM). The section at 16:58 (Copilot Vision) is particularly relevant for your coursework, as it shows how you can use images and prompts to guide the AI. We will be covering some of these concepts in this worksheet.
 
-### **Requirements-First Development**
+### **Prompt-Driven Development**
 
 Instead of jumping straight into coding, let's start by using AI to help us write proper requirements for a new feature.
 
@@ -49,12 +49,12 @@ Run the app and add a few sandwiches to your cart. You should see a snack bar co
 
 ![Initial Cart Page](screenshot_initial_cart_page.png)
 
-Let's say we want to enhance our cart functionality. Instead of immediately asking for code, we'll first ask our AI assistant to create a requirements document. Here's a sample prompt you can use with your AI assistant:
+Let's say we want to enhance our cart functionality. Instead of immediately asking for code, we'll first ask our AI assistant to create a prompt. Here's a sample prompt you can use with your AI assistant (if you are using Copilot, set it to "Ask" mode):
 
 ```
 I'm building a sandwich shop app in Flutter. I have two pages: an order screen where users can select sandwiches and add them to their cart, and a cart screen where users can see the items in their cart and the total price.
 
-Write a `requirements.md` document for me as I want to enable the users to modify the items in their cart. There are different ways a user might want to modify their cart like changing quantity or removing items entirely. 
+Write a `prompt.md` document for me as I want to enable the users to modify the items in their cart. There are different ways a user might want to modify their cart like changing quantity or removing items entirely. 
 
 For each of these features, include a clear description of the feature and what should happen when the user performs an action
 
@@ -69,9 +69,10 @@ The app currently has these models:
 It also has one repository:
 - Pricing (calculates prices based on quantity and size, the price of a sandwich has nothing to do with its type or bread)
 ```
+
 You can also talk about the UI requirements or edge cases you want the code to handle for example, if the user tries to reduce the quantity of an item below 1, it should remove the item entirely from the cart.
 
-Save the output as `requirements.md` in your project directory. Review the document and manually edit it if needed.
+Save the output as `prompt.md` in your project directory. Review the document and manually edit it if needed. Here is the example of what we got:
 
 #### **From Requirements to Implementation**
 
