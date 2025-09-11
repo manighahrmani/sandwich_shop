@@ -37,6 +37,18 @@ class _CartViewScreenState extends State<CartViewScreen> {
     );
   }
 
+  void _incrementQuantity(Sandwich sandwich) {
+    setState(() {
+      widget.cart.add(sandwich, quantity: 1);
+    });
+  }
+
+  void _decrementQuantity(Sandwich sandwich) {
+    setState(() {
+      widget.cart.remove(sandwich, quantity: 1);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,9 +79,27 @@ class _CartViewScreenState extends State<CartViewScreen> {
                       '${_getSizeText(entry.key.isFootlong)} on ${entry.key.breadType.name} bread',
                       style: normalText,
                     ),
-                    Text(
-                      'Qty: ${entry.value} - £${_getItemPrice(entry.key, entry.value).toStringAsFixed(2)}',
-                      style: normalText,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove),
+                          onPressed: () => _decrementQuantity(entry.key),
+                        ),
+                        Text(
+                          'Qty: ${entry.value}',
+                          style: normalText,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () => _incrementQuantity(entry.key),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          '£${_getItemPrice(entry.key, entry.value).toStringAsFixed(2)}',
+                          style: normalText,
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 20),
                   ],
