@@ -506,7 +506,7 @@ Run your app and test the complete flow. Add some sandwiches to your cart, navig
 
 #### **Commit your changes**
 
-Commit the checkout screen implementation and the cart screen updates separately with descriptive commit messages.
+We have not added reminders to commit your changes along the way but hopefully you have been making separate commits after each step of change and after each time you run to verify a change in your code.
 
 ## **Implementing a Profile Screen**
 
