@@ -195,6 +195,8 @@ This is important because `ScaffoldMessenger` ensures the message persists even 
 
 ## **Passing Data Between Screens**
 
+###  **Passing Data to a Screen**
+
 Often, you need to do more than just showing a message that carries over navigation. You might want to send data to a new screen or receive data back from it. 
 
 In fact, this is already being done in your app. When navigating to the cart screen from the order screen, you pass the cart object (this is how `OrderScreenView` constructs a `CartViewScreen`):
@@ -216,40 +218,267 @@ class CartViewScreen extends StatefulWidget {
 
 This is the standard way to pass data to a new screen in Flutter. The receiving widget declares the data it needs in its constructor, and the sending widget provides it during navigation.
 
-Things become slightly more complex when you want to get data back from a screen. For example, you might want to return a confirmation when an order is placed. 
+### **Returning Data from a Screen**
 
-Update the `_navigateToCartView()` method in `order_screen_view.dart` to wait for a result from the cart screen.
+Things become slightly more complex when you want to get data back from a screen. For example, you might want to return a confirmation when an order is placed.
+
+Let's implement a checkout flow to demonstrate this concept.
+
+We'll create a checkout screen that processes the order and returns confirmation data back to the cart screen. This will demonstrate how to pass data back from a screen using navigation.
+
+First, create a new file `lib/views/checkout_screen.dart`:
 
 ```dart
-// Sending screen - wait for a result
-Future<void> _navigateAndWaitForResult() async {
-  final result = await Navigator.push<String>(
-    context,
-    MaterialPageRoute<String>(
-      builder: (context) => SomeScreen(),
-    ),
-  );
-  
-  if (result != null) {
-    // Do something with the returned data
-    print('Received: $result');
+import 'package:flutter/material.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
+import 'package:sandwich_shop/models/cart.dart';
+
+class CheckoutScreen extends StatefulWidget {
+  final Cart cart;
+
+  const CheckoutScreen({super.key, required this.cart});
+
+  @override
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
+  bool _isProcessing = false;
+
+  Future<void> _processPayment() async {
+    setState(() {
+      _isProcessing = true;
+    });
+
+    // Simulate a payment processing delay
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Generate order confirmation data
+    final orderConfirmation = {
+      'orderId': 'ORD${DateTime.now().millisecondsSinceEpoch}',
+      'totalAmount': widget.cart.totalPrice,
+      'itemCount': widget.cart.countOfItems,
+      'estimatedTime': '15-20 minutes',
+      'status': 'confirmed'
+    };
+
+    if (mounted) {
+      // Return the confirmation data to the previous screen
+      Navigator.pop(context, orderConfirmation);
+    }
+  }
+
+  void _cancelOrder() {
+    Navigator.pop(context, {'status': 'cancelled'});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Checkout', style: heading1),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text('Order Summary', style: heading2),
+            const SizedBox(height: 20),
+            
+            // Display order items
+            for (var entry in widget.cart.items.entries) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${entry.value}x ${entry.key.name}',
+                      style: normalText,
+                    ),
+                  ),
+                  Text(
+                    '£${(entry.value * (entry.key.isFootlong ? 11.0 : 7.0)).toStringAsFixed(2)}',
+                    style: normalText,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+            ],
+            
+            const Divider(),
+            const SizedBox(height: 10),
+            
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Total:', style: heading2),
+                Text(
+                  '£${widget.cart.totalPrice.toStringAsFixed(2)}',
+                  style: heading2,
+                ),
+              ],
+            ),
+            
+            const SizedBox(height: 40),
+            
+            const Text(
+              'Payment Method: Card ending in 1234',
+              style: normalText,
+              textAlign: TextAlign.center,
+            ),
+            
+            const SizedBox(height: 20),
+            
+            if (_isProcessing) ...[
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Processing payment...',
+                style: normalText,
+                textAlign: TextAlign.center,
+              ),
+            ] else ...[
+              ElevatedButton(
+                onPressed: _processPayment,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text('Confirm Payment', style: normalText),
+              ),
+              
+              const SizedBox(height: 16),
+              
+              OutlinedButton(
+                onPressed: _cancelOrder,
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text('Cancel Order', style: normalText),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 }
 ```
 
-Also, add a separate method in `cart_view_screen.dart` to return data when popping the screen. Here's how you can do it:
+### **Step 2: Add Checkout Button to Cart Screen**
+
+Now, update your `cart_view_screen.dart` to add a checkout button and handle the returned data. Add this method to the `_CartViewScreenState` class:
 
 ```dart
-// Receiving screen - return data when popping
-void _returnWithData() {
-  Navigator.pop(context, 'Some return value');
+Future<void> _navigateToCheckout() async {
+  if (widget.cart.items.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Your cart is empty'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+    return;
+  }
+
+  final result = await Navigator.push<Map<String, dynamic>>(
+    context,
+    MaterialPageRoute<Map<String, dynamic>>(
+      builder: (context) => CheckoutScreen(cart: widget.cart),
+    ),
+  );
+
+  if (result != null && mounted) {
+    if (result['status'] == 'confirmed') {
+      // Clear the cart after successful order
+      setState(() {
+        widget.cart.clear();
+      });
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Order ${result['orderId']} confirmed! '
+            'Estimated time: ${result['estimatedTime']}',
+          ),
+          duration: const Duration(seconds: 4),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Optionally navigate back to order screen
+      Navigator.pop(context);
+    } else if (result['status'] == 'cancelled') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Order cancelled'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
 }
 ```
 
-The key points are:
+Add the import for the CheckoutScreen at the top of `cart_view_screen.dart`:
+
+```dart
+import 'package:sandwich_shop/views/checkout_screen.dart';
+```
+
+Then add a checkout button to your cart screen's UI. In the `build` method, add this button after the total price display:
+
+```dart
+const SizedBox(height: 20),
+if (widget.cart.items.isNotEmpty)
+  StyledButton(
+    onPressed: _navigateToCheckout,
+    icon: Icons.payment,
+    label: 'Checkout',
+    backgroundColor: Colors.orange,
+  ),
+const SizedBox(height: 10),
+```
+
+### **Step 3: Understanding the Data Flow**
+
+This implementation demonstrates several key concepts:
+
+1. **Async Navigation**: The `_navigateToCheckout()` method uses `await` to wait for the checkout screen to return data.
+
+2. **Generic Type Specification**: `MaterialPageRoute<Map<String, dynamic>>` specifies that we expect a Map to be returned.
+
+3. **Conditional Data Handling**: We check if `result` is not null and handle different scenarios (confirmed vs cancelled).
+
+4. **State Updates**: After a successful order, we clear the cart and update the UI.
+
+5. **User Feedback**: We show different messages based on the returned data.
+
+The key points for returning data from screens are:
 - Use `await` when calling `Navigator.push()` to wait for the result
-- Specify the return type in the `MaterialPageRoute<String>` generic
+- Specify the return type in the `MaterialPageRoute<T>` generic
 - Use `Navigator.pop(context, returnValue)` to return data
+- Always check if the returned data is not null before using it
+- Use the `mounted` property to ensure the widget is still active before updating state
+
+### **Step 4: Test the Checkout Flow**
+
+Run your app and test the complete flow:
+
+1. Add some sandwiches to your cart
+2. Navigate to the cart view
+3. Press the "Checkout" button
+4. Try both "Confirm Payment" and "Cancel Order" options
+5. Observe how data is passed back and the UI responds accordingly
+
+#### **Commit your changes**
+
+Commit the checkout screen implementation and the cart screen updates separately with descriptive commit messages.
 
 ## **Implementing a Profile Screen**
 
@@ -506,20 +735,19 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    ⚠️ **Show your enhanced cart with quantity modification working correctly to a member of staff** for a sign-off.
 
-3. **Order Confirmation Flow**: Create an order confirmation screen that users reach after reviewing their cart.
+3. **Enhanced Checkout Flow**: Extend the checkout screen we implemented in this worksheet to include additional features.
 
-   The flow should be: Order Screen → Cart View → Order Confirmation → Back to Order Screen (with cleared cart).
+   Add the following enhancements to the checkout process:
+   - A customer details form (name, phone number, delivery address)
+   - Order notes field for special instructions
+   - Multiple payment method options (Card, Cash, Mobile Payment)
+   - Order receipt screen that shows after successful payment
 
-   The confirmation screen should:
-   - Display order summary with total price
-   - Show estimated preparation time (you can make this up, like "15-20 minutes")
-   - Have a "Confirm Order" button that returns to the main screen
-   - Clear the cart when the order is confirmed
-   - Show a success message on the main screen
+   The enhanced flow should be: Order Screen → Cart View → Checkout → Customer Details → Payment → Receipt → Back to Order Screen.
 
-   Use proper navigation with data passing to implement this flow. Ask your AI assistant to help you design the user experience and implement the screens.
+   Use your AI assistant to help you design the additional screens and implement proper data passing between them. Make sure each screen returns appropriate data to the previous screen.
 
-   ⚠️ **Show your complete order confirmation flow working end-to-end to a member of staff** for a sign-off.
+   ⚠️ **Show your enhanced checkout flow with customer details and receipt to a member of staff** for a sign-off.
 
 4. (Advanced) **Settings Screen**: Create a settings screen where users can configure app preferences like default sandwich size and preferred bread type.
 
