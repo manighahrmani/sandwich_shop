@@ -54,11 +54,9 @@ Let's say we want to enhance our cart functionality. Instead of immediately aski
 ```
 I'm building a sandwich shop app in Flutter. I have two pages: an order screen where users can select sandwiches and add them to their cart, and a cart screen where users can see the items in their cart and the total price.
 
-Write a `prompt.md` document for me as I want to enable the users to modify the items in their cart. There are different ways a user might want to modify their cart like changing quantity or removing items entirely. 
+Write a detailed and structured prompt for me as I want to enable the users to modify the items in their cart. There are different ways a user might want to modify their cart like changing quantity or removing items entirely.
 
-For each of these features, include a clear description of the feature and what should happen when the user performs an action
-
-Format this as a proper requirements document that could be used by a development team.
+For each of these features, include a clear description of the feature and what should happen when the user performs an action.
 ```
 
 This initial prompt can be improved by adding more specific details about the current app structure. You could for example include:
