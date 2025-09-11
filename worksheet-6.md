@@ -45,7 +45,7 @@ You can learn more about using AI for feature implementation in this video: [AI-
 
 Instead of jumping straight into coding, let's start by using AI to help us write proper requirements for a new feature.
 
-Run the app and add a few sandwiches to your cart. You should see a snack bar confirming the addition. Now, navigate to the cart page with the "View Cart" button. You should see the items you added along with their prices and the total price. This is what the cart page should look like:
+Run the app and add a few sandwiches to your cart. You should see a snack bar confirming the addition. Now, you can see that we have implemented a second screen "CartViewScreen" in `lib/views/cart_view_screen.dart` that displays the items in the cart. You can navigate to this screen from the order screen in `lib/views/order_screen_view.dart` by pressing the "View Cart" button. When you navigate to the cart page with the "View Cart" button, you should see the items you added along with their prices and the total price. This is what the cart page should look like:
 
 ![Initial Cart Page](images/screenshot_initial_cart_page.png)
 
@@ -193,17 +193,11 @@ ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
 This is important because `ScaffoldMessenger` ensures the message persists even if the user navigates to a different screen. Try this: add a sandwich to your cart, then immediately navigate to the cart view. You'll see the confirmation message appears on the cart screen, not just the order screen.
 
-#### **Commit your changes**
-
-Before implementing new navigation features, commit your current working state.
-
 ## **Passing Data Between Screens**
 
-Often, you need to send data to a new screen or receive data back from it. Let's explore both scenarios.
+Often, you need to do more than just showing a message that carries over navigation. You might want to send data to a new screen or receive data back from it. 
 
-### **Sending Data to a New Screen**
-
-You're already doing this in your app! When navigating to the cart screen, you pass the cart object:
+In fact, this is already being done in your app. When navigating to the cart screen from the order screen, you pass the cart object:
 
 ```dart
 CartViewScreen(cart: _cart)
