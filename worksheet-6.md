@@ -141,25 +141,11 @@ For our sandwich shop app, basic navigation using `Navigator.push()` and `Naviga
 
 ### **Basic Navigation Patterns**
 
-The most common navigation pattern is pushing a new route and then popping back:
+This is our current navigation pattern which is the most common and simple one.
+
+In `lib/views/order_screen_view.dart`, inside the `_OrderScreenViewState` class, we have a button "View Cart" button that on press calls the `_navigateToCartView()` method shown below:
 
 ```dart
-// Navigate to a new screen
-Navigator.push(
-  context,
-  MaterialPageRoute<void>(
-    builder: (context) => NewScreen(),
-  ),
-);
-
-// Go back to the previous screen
-Navigator.pop(context);
-```
-
-In your current app, you already have navigation between the order screen and cart screen. Let's examine how this works:
-
-```dart
-// In order_screen_view.dart - navigating TO the cart
 void _navigateToCartView() {
   Navigator.push(
     context,
@@ -168,14 +154,36 @@ void _navigateToCartView() {
     ),
   );
 }
+```
 
-// In cart_view_screen.dart - navigating BACK to the order screen
+`CartViewScreen` is the constructor of the cart screen widget defined in `lib/views/cart_view_screen.dart`. The `Navigator.push()` method takes the current `context` (which is a reference to the current widget tree) and a `MaterialPageRoute` object that defines the new route to be pushed onto the stack. The `builder` parameter of `MaterialPageRoute` is a function that returns the widget for the new screen.
+
+Basically, all you need to know is that `Navigator.push()` adds a new screen on top of the current one, in this case, `CartViewScreen`:
+
+```dart
+class CartViewScreen extends StatefulWidget {
+  final Cart cart;
+
+  const CartViewScreen({super.key, required this.cart});
+
+  @override
+  State<CartViewScreen> createState() {
+    return _CartViewScreenState();
+  }
+}
+```
+
+When the user wants to go back, we have added a "Back to Order" button in the cart screen that the following `_goBack()` method in the `_CartViewScreenState` class:
+
+```dart
 void _goBack() {
   Navigator.pop(context);
 }
 ```
 
 ### **Showing Messages Across Navigation**
+
+Something small but important to note is that Flutter provides a way to show messages that persist across navigation.
 
 Notice in your current code that we use `ScaffoldMessenger` to show snack bars:
 
