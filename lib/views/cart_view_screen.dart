@@ -71,39 +71,46 @@ class _CartViewScreenState extends State<CartViewScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 20),
-              for (MapEntry<Sandwich, int> entry in widget.cart.items.entries)
-                Column(
-                  children: [
-                    Text(entry.key.name, style: heading2),
-                    Text(
-                      '${_getSizeText(entry.key.isFootlong)} on ${entry.key.breadType.name} bread',
-                      style: normalText,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.remove),
-                          onPressed: () => _decrementQuantity(entry.key),
-                        ),
-                        Text(
-                          'Qty: ${entry.value}',
-                          style: normalText,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () => _incrementQuantity(entry.key),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          '£${_getItemPrice(entry.key, entry.value).toStringAsFixed(2)}',
-                          style: normalText,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+              if (widget.cart.items.isEmpty)
+                const Text(
+                  'Your cart is empty.',
+                  style: heading2,
+                  textAlign: TextAlign.center,
+                )
+              else
+                for (MapEntry<Sandwich, int> entry in widget.cart.items.entries)
+                  Column(
+                    children: [
+                      Text(entry.key.name, style: heading2),
+                      Text(
+                        '${_getSizeText(entry.key.isFootlong)} on ${entry.key.breadType.name} bread',
+                        style: normalText,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove),
+                            onPressed: () => _decrementQuantity(entry.key),
+                          ),
+                          Text(
+                            'Qty: ${entry.value}',
+                            style: normalText,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () => _incrementQuantity(entry.key),
+                          ),
+                          const SizedBox(width: 16),
+                          Text(
+                            '£${_getItemPrice(entry.key, entry.value).toStringAsFixed(2)}',
+                            style: normalText,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
               Text(
                 'Total: £${widget.cart.totalPrice.toStringAsFixed(2)}',
                 style: heading2,
