@@ -128,13 +128,14 @@ Here is a screenshot of our cart page after implementing the modifications:
 
 ## **Navigation in Flutter**
 
-Navigation is how users move between different screens (called **routes** in Flutter) in your app. Understanding navigation is crucial for creating multi-screen applications.
+In one of [the exercises from last week's worksheet](./worksheet-5.md#exercises), we started you off with creating the cart screen and navigating to it from the order screen. This week's code provides our simple implementation of the cart screen. Let's take a closer look at this and how navigation works in Flutter.
 
-### **Key Navigation Concepts**
+Here are some key terms to understand:
 
-- **Route**: In Flutter, a route is simply a widget that represents a screen or page. This is equivalent to an Activity in Android or a ViewController in iOS.
-- **Navigator**: A widget that manages a stack of routes. It handles pushing new routes onto the stack and popping them off.
-- **Navigation Stack**: Think of navigation as a stack of cards. When you navigate to a new screen, you place a new card on top of the stack. When you go back, you remove the top card, revealing the previous screen underneath.
+- **Route**: In Flutter, a route is simply a widget that represents a screen or page. This is equivalent to an Activity in Android or a ViewController in iOS. In a web app, this would be an equivalent to a URL path taking you to a different page.
+- **Navigator**: A widget that manages a [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) of routes. It handles pushing new routes onto the stack and popping them off.
+
+Think of navigation as a stack of cards. When you navigate to a new screen, you place (push) a new card on top of the stack. When you go back, you remove (pop) the top card, revealing the previous screen underneath.
 
 For our sandwich shop app, basic navigation using `Navigator.push()` and `Navigator.pop()` is sufficient. More complex apps might benefit from packages like [go_router](https://pub.dev/packages/go_router), but we'll stick to the basics for now.
 
