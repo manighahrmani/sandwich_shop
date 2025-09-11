@@ -56,7 +56,7 @@ I'm building a sandwich shop app in Flutter. I have two pages: an order screen w
 
 Write a detailed and structured prompt for me as I want to enable the users to modify the items in their cart. There are different ways a user might want to modify their cart like changing quantity or removing items entirely.
 
-For each of these features, include a clear description of the feature and what should happen when the user performs an action.
+For each of these features, include a clear description of the feature and what should happen when the user performs an action. Output the result in a Markdown code block.
 ```
 
 This initial prompt can be improved by adding more specific details about the current app structure. You could for example include:
