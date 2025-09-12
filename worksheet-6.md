@@ -143,7 +143,7 @@ For our sandwich shop app, basic navigation using `Navigator.push()` and `Naviga
 
 This is our current navigation pattern which is the most common and simple one.
 
-In `lib/views/order_screen_view.dart`, inside the `_OrderScreenViewState` class, we have a button "View Cart" button that on press calls the `_navigateToCartView()` method shown below:
+In `lib/views/order_screen_view.dart`, inside the `_OrderScreenState` class, we have a "View Cart" button that on press calls the `_navigateToCartView()` method shown below:
 
 ```dart
 void _navigateToCartView() {
@@ -173,13 +173,7 @@ class CartViewScreen extends StatefulWidget {
 }
 ```
 
-When the user wants to go back, we have added a "Back to Order" button in the cart screen that the following `_goBack()` method in the `_CartViewScreenState` class:
-
-```dart
-void _goBack() {
-  Navigator.pop(context);
-}
-```
+When the user wants to go back, we have added a "Back to Order" button in the cart screen that calls `Navigator.pop(context)` to return to the previous screen.
 
 ### **Showing Messages Across Navigation**
 
@@ -199,7 +193,7 @@ This is important because `ScaffoldMessenger` ensures the message persists even 
 
 Often, you need to do more than just showing a message that carries over navigation. You might want to send data to a new screen or receive data back from it. 
 
-In fact, this is already being done in your app. When navigating to the cart screen from the order screen, you pass the cart object (this is how `OrderScreenView` constructs a `CartViewScreen`):
+In fact, this is already being done in your app. When navigating to the cart screen from the order screen, you pass the cart object (this is how `OrderScreen` constructs a `CartViewScreen`):
 
 ```dart
 CartViewScreen(cart: _cart)
@@ -384,43 +378,43 @@ In the `_CartViewScreenState` class, add this method to navigate to the checkout
 
 ```dart
 Future<void> _navigateToCheckout() async {
-    if (widget.cart.items.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Your cart is empty'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return;
-    }
+  if (widget.cart.items.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Your cart is empty'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+    return;
+  }
 
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CheckoutScreen(cart: widget.cart),
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => CheckoutScreen(cart: widget.cart),
+    ),
+  );
+
+  if (result != null && mounted) {
+    setState(() {
+      widget.cart.clear();
+    });
+
+    final String orderId = result['orderId'] as String;
+    final String estimatedTime = result['estimatedTime'] as String;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content:
+            Text('Order $orderId confirmed! Estimated time: $estimatedTime'),
+        duration: const Duration(seconds: 4),
+        backgroundColor: Colors.green,
       ),
     );
 
-    if (result != null && mounted) {
-      setState(() {
-        widget.cart.clear();
-      });
-
-      final String orderId = result['orderId'] as String;
-      final String estimatedTime = result['estimatedTime'] as String;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text('Order $orderId confirmed! Estimated time: $estimatedTime'),
-          duration: const Duration(seconds: 4),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      Navigator.pop(context);
-    }
+    Navigator.pop(context);
   }
+}
 ```
 
 
@@ -444,6 +438,12 @@ Builder(
   },
 ),
 const SizedBox(height: 20),
+```
+
+You'll also notice that `CartViewScreen` uses the `StyledButton` widget. Add this import to the top of your `cart_view_screen.dart` file for this:
+
+```dart
+import 'package:sandwich_shop/views/order_screen_view.dart';
 ```
 
 The `_navigateToCheckout()` method uses `await` when calling `Navigator.push()`to wait for the checkout screen to return data which we store in `result`. The `MaterialPageRoute` specifies that we expect a result to be returned from the checkout screen. When the payment is processed successfully, the checkout screen returns order confirmation data.
@@ -491,7 +491,21 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    ⚠️ **Show your enhanced checkout flow with customer details and receipt to a member of staff** for a sign-off.
 
-3. (Advanced) **Deep Linking Setup**: Configure your app to handle deep links so that users can navigate directly to specific screens via URLs.
+3. (Optional) **Profile Screen Implementation**: Create a simple profile screen where users can enter their name and preferred sandwich shop location.
+
+   Create a new `ProfileScreen` widget that:
+   - Has text fields for name and location
+   - Validates that both fields are filled before saving
+   - Returns the profile data back to the order screen
+   - Shows a welcome message with the user's information
+
+   Add a "Profile" button to your order screen that navigates to this new screen. When the user saves their profile, show a welcome message on the order screen.
+
+   This exercise demonstrates navigation with data return, form validation, and user feedback patterns.
+
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
+4. (Advanced) **Deep Linking Setup**: Configure your app to handle deep links so that users can navigate directly to specific screens via URLs.
 
     Refactor the app's navigation to use named routes instead of `MaterialPageRoute`. This makes your navigation logic cleaner and more centralized.
 
@@ -507,7 +521,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-4. (Advanced) **Settings Screen with Persistent Data**: Create a settings screen where users can configure app preferences like default sandwich size, preferred bread type, and notification preferences.
+5. (Advanced) **Settings Screen with Persistent Data**: Create a settings screen where users can configure app preferences like default sandwich size, preferred bread type, and notification preferences.
 
    This exercise introduces you to data persistence concepts that we'll cover more thoroughly in the next worksheet. For now, use the `shared_preferences` package to store simple key-value pairs.
 
