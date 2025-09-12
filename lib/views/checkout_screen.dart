@@ -33,7 +33,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       'totalAmount': widget.cart.totalPrice,
       'itemCount': widget.cart.countOfItems,
       'estimatedTime': '15-20 minutes',
-      'status': 'confirmed'
     };
 
     // Check if this State object is being shown in the widget tree
@@ -41,11 +40,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       // Pop the checkout screen and return to the order screen with the confirmation
       Navigator.pop(context, orderConfirmation);
     }
-  }
-
-  void _cancelOrder() {
-    final Map<String, String> cancellationData = {'status': 'cancelled'};
-    Navigator.pop(context, cancellationData);
   }
 
   double _calculateItemPrice(Sandwich sandwich, int quantity) {
@@ -130,21 +124,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           child: const Text('Confirm Payment', style: normalText),
         ),
       );
-      columnChildren.add(const SizedBox(height: 16));
-      columnChildren.add(
-        OutlinedButton(
-          onPressed: _cancelOrder,
-          child: const Text('Cancel Order', style: normalText),
-        ),
-      );
     }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout', style: heading1),
       ),
-      body: Column(
-        children: columnChildren,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: columnChildren,
+        ),
       ),
     );
   }
