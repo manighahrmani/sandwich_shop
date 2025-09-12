@@ -29,11 +29,10 @@ class _CartViewScreenState extends State<CartViewScreen> {
       return;
     }
 
-    final Map<String, dynamic>? result =
-        await Navigator.push<Map<String, dynamic>>(
+    final result = await Navigator.push(
       context,
-      MaterialPageRoute<Map<String, dynamic>>(
-        builder: (BuildContext context) => CheckoutScreen(cart: widget.cart),
+      MaterialPageRoute(
+        builder: (context) => CheckoutScreen(cart: widget.cart),
       ),
     );
 
@@ -196,7 +195,6 @@ class _CartViewScreenState extends State<CartViewScreen> {
                   }
                 },
               ),
-              const SizedBox(height: 10),
               const SizedBox(height: 20),
               StyledButton(
                 onPressed: () => Navigator.pop(context),
