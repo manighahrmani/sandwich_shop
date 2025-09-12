@@ -154,6 +154,8 @@ Make sure the indentation is correct, as `pubspec.yaml` is sensitive to whitespa
 
 Now you can use images saved in this folder in your app. For more information, you can read the official Flutter documentation on [adding assets and images](https://docs.flutter.dev/ui/assets/assets-and-images).
 
+For your coursework you should **not** to incorporate any videos or audio files, but if you wish to explore this check out [this page](https://docs.flutter.dev/cookbook/plugins/play-video).
+
 #### **Commit your changes**
 
 Commit your new assets before moving on.
