@@ -264,7 +264,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       'totalAmount': widget.cart.totalPrice,
       'itemCount': widget.cart.countOfItems,
       'estimatedTime': '15-20 minutes',
-      'status': 'confirmed'
     };
 
     // Check if this State object is being shown in the widget tree
@@ -272,11 +271,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       // Pop the checkout screen and return to the order screen with the confirmation
       Navigator.pop(context, orderConfirmation);
     }
-  }
-
-  void _cancelOrder() {
-    final Map<String, String> cancellationData = {'status': 'cancelled'};
-    Navigator.pop(context, cancellationData);
   }
 
   double _calculateItemPrice(Sandwich sandwich, int quantity) {
@@ -361,21 +355,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           child: const Text('Confirm Payment', style: normalText),
         ),
       );
-      columnChildren.add(const SizedBox(height: 16));
-      columnChildren.add(
-        OutlinedButton(
-          onPressed: _cancelOrder,
-          child: const Text('Cancel Order', style: normalText),
-        ),
-      );
     }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout', style: heading1),
       ),
-      body: Column(
-        children: columnChildren,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: columnChildren,
+        ),
       ),
     );
   }
@@ -408,13 +398,7 @@ Future<void> _navigateToCheckout() async {
   final bool widgetStillMounted = mounted;
   
   if (hasResult && widgetStillMounted) {
-    final String status = result['status'] as String;
-    
-    if (status == 'confirmed') {
-      _handleConfirmedOrder(result);
-    } else if (status == 'cancelled') {
-      _handleCancelledOrder();
-    }
+    _handleConfirmedOrder(result);
   }
 }
 
@@ -436,14 +420,6 @@ void _handleConfirmedOrder(Map<String, dynamic> orderData) {
   ScaffoldMessenger.of(context).showSnackBar(successSnackBar);
 
   Navigator.pop(context);
-}
-
-void _handleCancelledOrder() {
-  const SnackBar cancelledSnackBar = SnackBar(
-    content: Text('Order cancelled'),
-    duration: Duration(seconds: 2),
-  );
-  ScaffoldMessenger.of(context).showSnackBar(cancelledSnackBar);
 }
 ```
 
@@ -475,13 +451,13 @@ Builder(
 const SizedBox(height: 10),
 ```
 
-The `_navigateToCheckout()` method uses `await` to wait for the checkout screen to return data. The `MaterialPageRoute<Map<String, dynamic>>` specifies that we expect a Map to be returned from the checkout screen. We check if the result is not null and handle different scenarios like confirmed or cancelled orders.
+The `_navigateToCheckout()` method uses `await` to wait for the checkout screen to return data. The `MaterialPageRoute<Map<String, dynamic>>` specifies that we expect a Map to be returned from the checkout screen. When the payment is processed successfully, the checkout screen returns order confirmation data.
 
-After a successful order, we clear the cart and update the UI. We show different messages based on the returned data to give users feedback about their actions.
+After a successful order, we clear the cart and update the UI. We show a success message with the order ID and estimated time to give users feedback about their order.
 
 When returning data from screens, use `await` when calling `Navigator.push()` to wait for the result. Specify the return type in the `MaterialPageRoute<T>` generic. Use `Navigator.pop(context, returnValue)` to return data from the receiving screen. Always check if the returned data is not null before using it. Use the `mounted` property to ensure the widget is still active before updating state.
 
-Run your app and test the complete flow. Add some sandwiches to your cart, navigate to the cart view, and press the "Checkout" button. Try both "Confirm Payment" and "Cancel Order" options and observe how data is passed back and the UI responds accordingly.
+Run your app and test the complete flow. Add some sandwiches to your cart, navigate to the cart view, and press the "Checkout" button. Press "Confirm Payment" and observe how the order confirmation data is passed back and the UI responds accordingly.
 
 #### **Commit your changes**
 
