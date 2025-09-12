@@ -466,7 +466,7 @@ We have not added reminders to commit your changes along the way but hopefully y
 
 Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
 
-1. Let's add a simple profile screen where users can enter their details.
+1. Let's add a simple profile screen where users can enter their details. For now, you can add a link to this screen at the bottom of your order screen (we will fix this in the next exercise).
 
   As we did earlier in [this worksheet](#prompt-driven-development), use your AI assistant to help you write a prompt for this feature.
 
@@ -476,35 +476,19 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    ⚠️ **Show your working profile screen to a member of staff** for a sign-off.
 
-2. Create a simple profile screen where users can enter their name and preferred sandwich shop location.
+2. Let's enhance our app's navigation by adding a drawer menu that provides easy access to different screens. This is a common pattern in mobile apps that allows users to navigate between major sections.
 
-   Create a new `ProfileScreen` widget that:
-   - Has text fields for name and location
-   - Validates that both fields are filled before saving
-   - Returns the profile data back to the order screen
-   - Shows a welcome message with the user's information
+   A `Drawer` is a panel that slides in from the edge of a `Scaffold` to show the app's main navigation options. You can read more about it in its [documentation page](https://api.flutter.dev/flutter/material/Drawer-class.html). For now, you'll implement a drawer that includes navigation to your profile screen, cart view, and potentially other sections of your app.
 
-   Add a "Profile" button to your order screen that navigates to this new screen. When the user saves their profile, show a welcome message on the order screen.
+   Ask your AI assistant to explain how `Drawer` widgets work and how they integrate with the `AppBar`. Could you have this drawer accessible from all screens in your app?
 
-   This exercise demonstrates navigation with data return, form validation, and user feedback patterns.
+   Consider how the drawer should behave when navigating between screens. Should it replace the current screen or push a new one onto the navigation stack? Ask your AI assistant about the difference between `Navigator.push()` and `Navigator.pushReplacement()` in this context.
 
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+   Test your implementation by navigating between different screens using the drawer and ensure the navigation behaves as expected and as always, update your widget tests to cover the new navigation drawer functionality.
 
-3. Extend the checkout screen we implemented in this worksheet to include additional features.
+   ⚠️ **Show your working navigation drawer to a member of staff** for a sign-off.
 
-   Add the following enhancements to the checkout process:
-   - A customer details form (name, phone number, delivery address)
-   - Order notes field for special instructions
-   - Multiple payment method options (Card, Cash, Mobile Payment)
-   - Order receipt screen that shows after successful payment
-
-   The enhanced flow should be: Order Screen → Cart View → Checkout → Customer Details → Payment → Receipt → Back to Order Screen.
-
-   Use your AI assistant to help you design the additional screens and implement proper data passing between them. Make sure each screen returns appropriate data to the previous screen.
-
-   ⚠️ **Show your enhanced checkout flow with customer details and receipt to a member of staff** for a sign-off.
-
-4. (Advanced) Configure your app to handle deep links so that users can navigate directly to specific screens via URLs.
+3. (Advanced) **Deep Linking Setup**: Configure your app to handle deep links so that users can navigate directly to specific screens via URLs.
 
     Refactor the app's navigation to use named routes instead of `MaterialPageRoute`. This makes your navigation logic cleaner and more centralized.
 
