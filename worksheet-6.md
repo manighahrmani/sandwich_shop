@@ -232,6 +232,8 @@ First, create a new file `lib/views/checkout_screen.dart`:
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/models/cart.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sandwich_shop/repositories/pricing_repository.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final Cart cart;
@@ -250,12 +252,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       _isProcessing = true;
     });
 
+    // A fake delay to simulate payment processing
     await Future.delayed(const Duration(seconds: 2));
 
     final DateTime currentTime = DateTime.now();
     final int timestamp = currentTime.millisecondsSinceEpoch;
     final String orderId = 'ORD$timestamp';
-    
+
     final Map<String, dynamic> orderConfirmation = {
       'orderId': orderId,
       'totalAmount': widget.cart.totalPrice,
@@ -264,7 +267,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       'status': 'confirmed'
     };
 
+    // Check if this State object is being shown in the widget tree
     if (mounted) {
+      // Pop the checkout screen and return to the order screen with the confirmation
       Navigator.pop(context, orderConfirmation);
     }
   }
@@ -275,31 +280,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   double _calculateItemPrice(Sandwich sandwich, int quantity) {
-    double unitPrice;
-    if (sandwich.isFootlong) {
-      unitPrice = 11.0;
-    } else {
-      unitPrice = 7.0;
-    }
-    return quantity * unitPrice;
+    PricingRepository repo = PricingRepository();
+    return repo.calculatePrice(
+        quantity: quantity, isFootlong: sandwich.isFootlong);
   }
 
-  List<Widget> _buildOrderItems() {
-    List<Widget> orderItems = [];
-    
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> columnChildren = [];
+
+    columnChildren.add(const Text('Order Summary', style: heading2));
+    columnChildren.add(const SizedBox(height: 20));
+
     for (MapEntry<Sandwich, int> entry in widget.cart.items.entries) {
       final Sandwich sandwich = entry.key;
       final int quantity = entry.value;
       final double itemPrice = _calculateItemPrice(sandwich, quantity);
-      
+
       final Widget itemRow = Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Text(
-              '${quantity}x ${sandwich.name}',
-              style: normalText,
-            ),
+          Text(
+            '${quantity}x ${sandwich.name}',
+            style: normalText,
           ),
           Text(
             '£${itemPrice.toStringAsFixed(2)}',
@@ -307,96 +310,72 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ],
       );
-      
-      orderItems.add(itemRow);
-      orderItems.add(const SizedBox(height: 8));
-    }
-    
-    return orderItems;
-  }
 
-  List<Widget> _buildPaymentSection() {
+      columnChildren.add(itemRow);
+      columnChildren.add(const SizedBox(height: 8));
+    }
+
+    columnChildren.add(const Divider());
+    columnChildren.add(const SizedBox(height: 10));
+
+    final Widget totalRow = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text('Total:', style: heading2),
+        Text(
+          '£${widget.cart.totalPrice.toStringAsFixed(2)}',
+          style: heading2,
+        ),
+      ],
+    );
+    columnChildren.add(totalRow);
+    columnChildren.add(const SizedBox(height: 40));
+
+    columnChildren.add(
+      const Text(
+        'Payment Method: Card ending in 1234',
+        style: normalText,
+        textAlign: TextAlign.center,
+      ),
+    );
+    columnChildren.add(const SizedBox(height: 20));
+
     if (_isProcessing) {
-      return [
+      columnChildren.add(
         const Center(
           child: CircularProgressIndicator(),
         ),
-        const SizedBox(height: 20),
+      );
+      columnChildren.add(const SizedBox(height: 20));
+      columnChildren.add(
         const Text(
           'Processing payment...',
           style: normalText,
           textAlign: TextAlign.center,
         ),
-      ];
+      );
     } else {
-      return [
+      columnChildren.add(
         ElevatedButton(
           onPressed: _processPayment,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-          ),
           child: const Text('Confirm Payment', style: normalText),
         ),
-        const SizedBox(height: 16),
+      );
+      columnChildren.add(const SizedBox(height: 16));
+      columnChildren.add(
         OutlinedButton(
           onPressed: _cancelOrder,
-          style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-          ),
           child: const Text('Cancel Order', style: normalText),
         ),
-      ];
+      );
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> orderItems = _buildOrderItems();
-    final List<Widget> paymentSection = _buildPaymentSection();
-    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout', style: heading1),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text('Order Summary', style: heading2),
-            const SizedBox(height: 20),
-            
-            ...orderItems,
-            
-            const Divider(),
-            const SizedBox(height: 10),
-            
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Total:', style: heading2),
-                Text(
-                  '£${widget.cart.totalPrice.toStringAsFixed(2)}',
-                  style: heading2,
-                ),
-              ],
-            ),
-            
-            const SizedBox(height: 40),
-            
-            const Text(
-              'Payment Method: Card ending in 1234',
-              style: normalText,
-              textAlign: TextAlign.center,
-            ),
-            
-            const SizedBox(height: 20),
-            
-            ...paymentSection,
-          ],
-        ),
+      body: Column(
+        children: columnChildren,
       ),
     );
   }
@@ -474,7 +453,7 @@ Add the import for the CheckoutScreen at the top of `cart_view_screen.dart`:
 import 'package:sandwich_shop/views/checkout_screen.dart';
 ```
 
-Then add a checkout button to your cart screen's UI. In the `build` method, add this button after the total price display:
+Then add a checkout button to your cart screen's UI. In the `build` method of `_CartViewScreenState`, add this button after the total price display. You can add it just before the "Back to Order" button:
 
 ```dart
 const SizedBox(height: 20),
