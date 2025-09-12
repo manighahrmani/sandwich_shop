@@ -126,6 +126,12 @@ Here is a screenshot of our cart page after implementing the modifications:
 
 ![Updated Cart Page](images/screenshot_final_cart_page.png)
 
+As before, remember to update the widget tests for the `cart_view_screen.dart` in `test/widget/cart_view_screen_test.dart` to cover the new functionality you have added.
+
+#### **Commit your changes**
+
+Once you have implemented the feature, commit your changes with an appropriate commit message.
+
 ## **Navigation in Flutter**
 
 In one of [the exercises from last week's worksheet](./worksheet-5.md#exercises), we started you off with creating the cart screen and navigating to it from the order screen. This week's code provides our simple implementation of the cart screen. Let's take a closer look at this and how navigation works in Flutter.
@@ -366,7 +372,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 }
 ```
 
-Commit your changes but don't run the app yet.
+Commit your changes and add widget tests for the new checkout screen in `test/widget/checkout_screen_test.dart`.
 
 Now, update your `cart_view_screen.dart` and add the import for the CheckoutScreen at the top of the file:
 
