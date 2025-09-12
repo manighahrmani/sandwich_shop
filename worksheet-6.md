@@ -500,14 +500,12 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5. (Advanced) Create a settings screen where users can configure app preferences like default sandwich size, preferred bread type, and notification preferences. This exercise introduces you to data persistence concepts that we'll cover more thoroughly in the next worksheet.
+5. (Advanced) Create a settings screen where users can configure app-wide preferences, such as enabling dark mode, adjusting font sizes, or other accessibility settings.
 
-   For now, you'll use the `shared_preferences` package to store simple key-value pairs. Add this package to your project by running `flutter pub add shared_preferences` in your terminal. This package allows you to save user preferences that persist between app sessions.
+   This exercise introduces you to data persistence, a concept we'll cover more thoroughly in the next worksheet. For now, you can use the `shared_preferences` package, which allows you to save simple key-value data that persists between app sessions.
 
-   Ask your AI assistant to help you create a settings screen that allows users to set default preferences for their sandwich orders. The screen should save these preferences using SharedPreferences and load them when the app starts. You'll also need to update your order screen to use these saved preferences as default values.
+   To get started, add the package to your project by running `flutter pub add shared_preferences` in your terminal.
 
-   Think about what preferences would be most useful for users to set. Consider default sandwich size, preferred bread type, and whether they want notifications enabled. The settings should be applied immediately when the user changes them and should persist when they restart the app.
-
-   Test your implementation by changing settings, closing the app completely, and reopening it to verify that your preferences are remembered. You can also use your AI assistant to help you understand how SharedPreferences works and how to handle loading preferences asynchronously.
+   Your task is to create a settings screen and use `shared_preferences` to save at least one user preference. This can be as simple as font size or theme preference (light/dark mode). When the user changes a setting, save it using `shared_preferences`. When the app restarts, this preference should be loaded and applied.
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
