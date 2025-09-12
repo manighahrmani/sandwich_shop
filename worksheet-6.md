@@ -37,7 +37,7 @@ One of the learning outcomes of this module is AI-driven development. We have be
 
 - **Prompt-driven Development (PDD)**: A more systematic approach where developers use carefully crafted prompts to guide AI through the entire development process. Prompts often in Markdown format (ending with `.md`, similar to `README.md`) are stored alongside the codebase, modified and refined over time just like code itself. The overall aim is to make AI-driven development a more structured, reproducible and reliable process.
 
-Among some of the advantages of PDD is that well-structured prompts produce more consistent and predictable results. AI can be unpredictable, and predictability is a quality we want in software development. Detailed requirements lead to better code quality and fewer bugs and in case any of the generated code has issues, we can always go back to the prompt and refine it. 
+Among some of the advantages of PDD is that well-structured prompts produce more consistent and predictable results. AI can be unpredictable, and predictability is a quality we want in software development. Detailed requirements lead to better code quality and fewer bugs and in case any of the generated code has issues, we can always go back to the prompt and refine it.
 
 You can learn more about using AI for feature implementation in this video: [AI-Powered App Development with Flutter](https://www.youtube.com/watch?v=fzYN_kgl-OM). The section at 16:58 (Copilot Vision) is particularly relevant for your coursework, as it shows how you can use images and prompts to guide the AI. We will be covering some of these concepts in this worksheet.
 
@@ -62,6 +62,7 @@ For each of these features, include a clear description and what should happen w
 ```
 
 This initial prompt can be improved by adding more specific details about the current app structure. You could for example include:
+
 ```
 The app currently has these models:
 - Sandwich (with type, size, bread type)
@@ -76,7 +77,7 @@ You can also talk about the UI requirements or edge cases you want the code to h
 
 Save the output as `prompt.md` in your project directory. Review the document and manually edit it if needed.
 
-In our case, we asked the AI to refine the prompt after providing it with a screenshot of the current cart page, and an overview of the app structure and the functionality of the models and repository. You could also provide the AI with screenshots of other apps such as Deliveroo or Uber Eats to give it a better idea of what you want. 
+In our case, we asked the AI to refine the prompt after providing it with a screenshot of the current cart page, and an overview of the app structure and the functionality of the models and repository. You could also provide the AI with screenshots of other apps such as Deliveroo or Uber Eats to give it a better idea of what you want.
 
 This is what we ended up with: [prompt.md](https://github.com/manighahrmani/sandwich_shop/blob/5b8512d5a5b2074c3dada7a1de213860f5110433/prompt.md#L65).
 
@@ -139,7 +140,7 @@ In one of [the exercises from last week's worksheet](./worksheet-5.md#exercises)
 Here are some key terms to understand:
 
 - **Route**: In Flutter, a route is simply a widget that represents a screen or page. This is equivalent to an Activity in Android or a ViewController in iOS. In a web app, this would be an equivalent to a URL path taking you to a different page.
-- **Navigator**: A widget that manages a [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) of routes. It handles pushing new routes onto the stack and popping them off.
+- **Navigator**: A widget that manages a [stack](<https://en.wikipedia.org/wiki/Stack_(abstract_data_type)>) of routes. It handles pushing new routes onto the stack and popping them off.
 
 Think of navigation as a stack of cards. When you navigate to a new screen, you place (push) a new card on top of the stack. When you go back, you remove (pop) the top card, revealing the previous screen underneath.
 
@@ -195,9 +196,9 @@ This is important because `ScaffoldMessenger` ensures the message persists even 
 
 ## **Passing Data Between Screens**
 
-###  **Passing Data to a Screen**
+### **Passing Data to a Screen**
 
-Often, you need to do more than just showing a message that carries over navigation. You might want to send data to a new screen or receive data back from it. 
+Often, you need to do more than just showing a message that carries over navigation. You might want to send data to a new screen or receive data back from it.
 
 In fact, this is already being done in your app. When navigating to the cart screen from the order screen, you pass the cart object (this is how `OrderScreen` constructs a `CartViewScreen`):
 
@@ -210,7 +211,7 @@ The `CartViewScreen` screen then receives this data through its constructor:
 ```dart
 class CartViewScreen extends StatefulWidget {
   final Cart cart;
-  
+
   const CartViewScreen({super.key, required this.cart});
   // ...
 }
@@ -423,7 +424,6 @@ Future<void> _navigateToCheckout() async {
 }
 ```
 
-
 Then add a checkout button to your cart screen's UI. In the `build` method of `_CartViewScreenState`, add this button after the total price display. You can add it just before the "Back to Order" button:
 
 ```dart
@@ -468,13 +468,13 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
 1. Let's add a simple profile screen where users can enter their details. For now, you can add a link to this screen at the bottom of your order screen (we will fix this in the next exercise).
 
-  As we did earlier in [this worksheet](#prompt-driven-development), use your AI assistant to help you write a prompt for this feature.
+As we did earlier in [this worksheet](#prompt-driven-development), use your AI assistant to help you write a prompt for this feature.
 
-  At the end of this exercise you should have created a new screen `lib/views/profile_screen.dart` and with a `ProfileScreen` class. There's no need to perform any actual authentication or data persistence for this exercise. We will do this next week. You can decide how and where the user can access this screen from the existing app.
+At the end of this exercise you should have created a new screen `lib/views/profile_screen.dart` and with a `ProfileScreen` class. There's no need to perform any actual authentication or data persistence for this exercise. We will do this next week. You can decide how and where the user can access this screen from the existing app.
 
-  Make sure to write widget tests for your profile screen.
+Make sure to write widget tests for your profile screen.
 
-   ⚠️ **Show your working profile screen to a member of staff** for a sign-off.
+⚠️ **Show your working profile screen to a member of staff** for a sign-off.
 
 2. Let's enhance our app's navigation by adding a drawer menu that provides easy access to different screens. This is a common pattern in mobile apps that allows users to navigate between major sections.
 
@@ -488,7 +488,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    ⚠️ **Show your working navigation drawer to a member of staff** for a sign-off.
 
-4. (Advanced) Configure your app to handle [deep links](https://docs.flutter.dev/ui/navigation/deep-linking) using GoRouter, which is the recommended approach for URL-based navigation in Flutter.
+3. (Advanced) Configure your app to handle [deep links](https://docs.flutter.dev/ui/navigation/deep-linking) using GoRouter, which is the recommended approach for URL-based navigation in Flutter.
 
    Add the `go_router` package to your project by running `flutter pub add go_router`. GoRouter uses the Router API to provide URL-based navigation that works seamlessly across mobile and web platforms, replacing the older named routes approach which is no longer recommended.
 
@@ -500,7 +500,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5. (Advanced) Create a settings screen where users can configure app-wide preferences, such as enabling dark mode, adjusting font sizes, or other accessibility settings.
+4. (Advanced) Create a settings screen where users can configure app-wide preferences, such as enabling dark mode, adjusting font sizes, or other accessibility settings.
 
    This exercise introduces you to data persistence, a concept we'll cover more thoroughly in the next worksheet. For now, you can use the `shared_preferences` package, which allows you to save simple key-value data that persists between app sessions.
 
