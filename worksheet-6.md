@@ -466,38 +466,17 @@ We have not added reminders to commit your changes along the way but hopefully y
 
 Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
 
-1. **AI-Assisted Requirements and Implementation**: Use AI to help you implement a "Favorites" feature where users can mark sandwiches as favorites and view them on a separate screen.
+1. Let's add a simple profile screen where users can enter their details.
 
-   Start by creating a requirements document with AI assistance. Your prompt should include:
-   - Current app structure and models
-   - Desired functionality (mark/unmark favorites, view favorites list)
-   - UI/UX requirements
-   - Data persistence needs (for now, just in-memory storage is fine)
+  As we did earlier in [this worksheet](#prompt-driven-development), use your AI assistant to help you write a prompt for this feature.
 
-   Then use AI to help implement the feature, including:
-   - Updates to the Sandwich model or a new Favorites model
-   - UI components for marking favorites (like a heart icon)
-   - A new favorites screen accessible from the main screen
-   - Navigation between screens
-   - Proper state management
+  At the end of this exercise you should have created a new screen `lib/views/profile_screen.dart` and with a `ProfileScreen` class. There's no need to perform any actual authentication or data persistence for this exercise. We will do this next week. You can decide how and where the user can access this screen from the existing app.
 
-   ⚠️ **Show your requirements document and working favorites feature to a member of staff** for a sign-off.
+  Make sure to write widget tests for your profile screen.
 
-2. **Enhanced Checkout Flow**: Extend the checkout screen we implemented in this worksheet to include additional features.
+   ⚠️ **Show your working profile screen to a member of staff** for a sign-off.
 
-   Add the following enhancements to the checkout process:
-   - A customer details form (name, phone number, delivery address)
-   - Order notes field for special instructions
-   - Multiple payment method options (Card, Cash, Mobile Payment)
-   - Order receipt screen that shows after successful payment
-
-   The enhanced flow should be: Order Screen → Cart View → Checkout → Customer Details → Payment → Receipt → Back to Order Screen.
-
-   Use your AI assistant to help you design the additional screens and implement proper data passing between them. Make sure each screen returns appropriate data to the previous screen.
-
-   ⚠️ **Show your enhanced checkout flow with customer details and receipt to a member of staff** for a sign-off.
-
-3. (Optional) **Profile Screen Implementation**: Create a simple profile screen where users can enter their name and preferred sandwich shop location.
+2. Create a simple profile screen where users can enter their name and preferred sandwich shop location.
 
    Create a new `ProfileScreen` widget that:
    - Has text fields for name and location
@@ -511,7 +490,21 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-4. (Advanced) **Deep Linking Setup**: Configure your app to handle deep links so that users can navigate directly to specific screens via URLs.
+3. Extend the checkout screen we implemented in this worksheet to include additional features.
+
+   Add the following enhancements to the checkout process:
+   - A customer details form (name, phone number, delivery address)
+   - Order notes field for special instructions
+   - Multiple payment method options (Card, Cash, Mobile Payment)
+   - Order receipt screen that shows after successful payment
+
+   The enhanced flow should be: Order Screen → Cart View → Checkout → Customer Details → Payment → Receipt → Back to Order Screen.
+
+   Use your AI assistant to help you design the additional screens and implement proper data passing between them. Make sure each screen returns appropriate data to the previous screen.
+
+   ⚠️ **Show your enhanced checkout flow with customer details and receipt to a member of staff** for a sign-off.
+
+4. (Advanced) Configure your app to handle deep links so that users can navigate directly to specific screens via URLs.
 
     Refactor the app's navigation to use named routes instead of `MaterialPageRoute`. This makes your navigation logic cleaner and more centralized.
 
@@ -527,7 +520,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5. (Advanced) **Settings Screen with Persistent Data**: Create a settings screen where users can configure app preferences like default sandwich size, preferred bread type, and notification preferences.
+5. (Advanced) Create a settings screen where users can configure app preferences like default sandwich size, preferred bread type, and notification preferences.
 
    This exercise introduces you to data persistence concepts that we'll cover more thoroughly in the next worksheet. For now, use the `shared_preferences` package to store simple key-value pairs.
 
