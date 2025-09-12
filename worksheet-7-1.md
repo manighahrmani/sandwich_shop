@@ -114,9 +114,9 @@ class Cart extends ChangeNotifier {
 
   int get countOfItems {
     int total = 0;
-    _items.forEach((sandwich, quantity) {
+    for (int quantity in _items.values) {
       total += quantity;
-    });
+    }
     return total;
   }
 
