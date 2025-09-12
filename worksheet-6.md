@@ -259,7 +259,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final int timestamp = currentTime.millisecondsSinceEpoch;
     final String orderId = 'ORD$timestamp';
 
-    final Map<String, dynamic> orderConfirmation = {
+    final Map orderConfirmation = {
       'orderId': orderId,
       'totalAmount': widget.cart.totalPrice,
       'itemCount': widget.cart.countOfItems,
@@ -372,62 +372,57 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 }
 ```
 
-Now, update your `cart_view_screen.dart` to add a checkout button and handle the returned data. Add this method to the `_CartViewScreenState` class:
+Commit your changes but don't run the app yet.
 
-```dart
-Future<void> _navigateToCheckout() async {
-  final bool cartIsEmpty = widget.cart.items.isEmpty;
-  
-  if (cartIsEmpty) {
-    const SnackBar emptyCartSnackBar = SnackBar(
-      content: Text('Your cart is empty'),
-      duration: Duration(seconds: 2),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(emptyCartSnackBar);
-    return;
-  }
-
-  final Map<String, dynamic>? result = await Navigator.push<Map<String, dynamic>>(
-    context,
-    MaterialPageRoute<Map<String, dynamic>>(
-      builder: (BuildContext context) => CheckoutScreen(cart: widget.cart),
-    ),
-  );
-
-  final bool hasResult = result != null;
-  final bool widgetStillMounted = mounted;
-  
-  if (hasResult && widgetStillMounted) {
-    _handleConfirmedOrder(result);
-  }
-}
-
-void _handleConfirmedOrder(Map<String, dynamic> orderData) {
-  setState(() {
-    widget.cart.clear();
-  });
-
-  final String orderId = orderData['orderId'] as String;
-  final String estimatedTime = orderData['estimatedTime'] as String;
-  
-  final String successMessage = 'Order $orderId confirmed! Estimated time: $estimatedTime';
-  final SnackBar successSnackBar = SnackBar(
-    content: Text(successMessage),
-    duration: const Duration(seconds: 4),
-    backgroundColor: Colors.green,
-  );
-  
-  ScaffoldMessenger.of(context).showSnackBar(successSnackBar);
-
-  Navigator.pop(context);
-}
-```
-
-Add the import for the CheckoutScreen at the top of `cart_view_screen.dart`:
+Now, update your `cart_view_screen.dart` and add the import for the CheckoutScreen at the top of the file:
 
 ```dart
 import 'package:sandwich_shop/views/checkout_screen.dart';
 ```
+
+In the `_CartViewScreenState` class, add this method to navigate to the checkout screen and handle the returned data:
+
+```dart
+Future<void> _navigateToCheckout() async {
+    if (widget.cart.items.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Your cart is empty'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CheckoutScreen(cart: widget.cart),
+      ),
+    );
+
+    if (result != null && mounted) {
+      setState(() {
+        widget.cart.clear();
+      });
+
+      final String orderId = result['orderId'] as String;
+      final String estimatedTime = result['estimatedTime'] as String;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('Order $orderId confirmed! Estimated time: $estimatedTime'),
+          duration: const Duration(seconds: 4),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.pop(context);
+    }
+  }
+```
+
 
 Then add a checkout button to your cart screen's UI. In the `build` method of `_CartViewScreenState`, add this button after the total price display. You can add it just before the "Back to Order" button:
 
@@ -448,257 +443,18 @@ Builder(
     }
   },
 ),
-const SizedBox(height: 10),
+const SizedBox(height: 20),
 ```
 
-The `_navigateToCheckout()` method uses `await` to wait for the checkout screen to return data. The `MaterialPageRoute<Map<String, dynamic>>` specifies that we expect a Map to be returned from the checkout screen. When the payment is processed successfully, the checkout screen returns order confirmation data.
+The `_navigateToCheckout()` method uses `await` when calling `Navigator.push()`to wait for the checkout screen to return data which we store in `result`. The `MaterialPageRoute` specifies that we expect a result to be returned from the checkout screen. When the payment is processed successfully, the checkout screen returns order confirmation data.
 
-After a successful order, we clear the cart and update the UI. We show a success message with the order ID and estimated time to give users feedback about their order.
+We first check that the result is not null and that the widget is still mounted (i.e., it hasn't been disposed of). If so, we clear the cart and update the UI. We show a success message with the order ID and estimated time to give users feedback about their order.
 
-When returning data from screens, use `await` when calling `Navigator.push()` to wait for the result. Specify the return type in the `MaterialPageRoute<T>` generic. Use `Navigator.pop(context, returnValue)` to return data from the receiving screen. Always check if the returned data is not null before using it. Use the `mounted` property to ensure the widget is still active before updating state.
-
-Run your app and test the complete flow. Add some sandwiches to your cart, navigate to the cart view, and press the "Checkout" button. Press "Confirm Payment" and observe how the order confirmation data is passed back and the UI responds accordingly.
+Run your app and test the checkout flow. Add some sandwiches to your cart, navigate to the cart view, and press the "Checkout" button. Press "Confirm Payment" and observe how the order confirmation data is passed back and the UI responds accordingly.
 
 #### **Commit your changes**
 
 We have not added reminders to commit your changes along the way but hopefully you have been making separate commits after each step of change and after each time you run to verify a change in your code.
-
-## **Implementing a Profile Screen**
-
-Let's add a new screen to demonstrate navigation concepts. We'll create a simple profile screen where users can enter their name and preferred sandwich shop location.
-
-### **Creating the Profile Screen**
-
-First, create a new file `lib/views/profile_screen.dart`:
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:sandwich_shop/views/app_styles.dart';
-
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _locationController.dispose();
-    super.dispose();
-  }
-
-  void _saveProfile() {
-    final String name = _nameController.text.trim();
-    final String location = _locationController.text.trim();
-    
-    final bool nameIsNotEmpty = name.isNotEmpty;
-    final bool locationIsNotEmpty = location.isNotEmpty;
-    final bool bothFieldsFilled = nameIsNotEmpty && locationIsNotEmpty;
-    
-    if (bothFieldsFilled) {
-      _returnProfileData(name, location);
-    } else {
-      _showValidationError();
-    }
-  }
-
-  void _returnProfileData(String name, String location) {
-    final Map<String, String> profileData = {
-      'name': name,
-      'location': location,
-    };
-    Navigator.pop(context, profileData);
-  }
-
-  void _showValidationError() {
-    const SnackBar validationSnackBar = SnackBar(
-      content: Text('Please fill in all fields'),
-      duration: Duration(seconds: 2),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(validationSnackBar);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile', style: heading1),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text('Enter your details:', style: heading2),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Your Name',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _locationController,
-              decoration: const InputDecoration(
-                labelText: 'Preferred Location',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _saveProfile,
-              child: const Text('Save Profile'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-```
-
-### **Adding Navigation to the Profile Screen**
-
-Now, let's add a button to navigate to the profile screen from the order screen. In your `order_screen_view.dart`, add this method:
-
-```dart
-Future<void> _navigateToProfile() async {
-  final Map<String, String>? result = await Navigator.push<Map<String, String>>(
-    context,
-    MaterialPageRoute<Map<String, String>>(
-      builder: (BuildContext context) => const ProfileScreen(),
-    ),
-  );
-  
-  final bool hasResult = result != null;
-  final bool widgetStillMounted = mounted;
-  
-  if (hasResult && widgetStillMounted) {
-    _showWelcomeMessage(result);
-  }
-}
-
-void _showWelcomeMessage(Map<String, String> profileData) {
-  final String name = profileData['name']!;
-  final String location = profileData['location']!;
-  final String welcomeMessage = 'Welcome, $name! Ordering from $location';
-  
-  final SnackBar welcomeSnackBar = SnackBar(
-    content: Text(welcomeMessage),
-    duration: const Duration(seconds: 3),
-  );
-  
-  ScaffoldMessenger.of(context).showSnackBar(welcomeSnackBar);
-}
-```
-
-Add the import for the ProfileScreen at the top of the file:
-
-```dart
-import 'package:sandwich_shop/views/profile_screen.dart';
-```
-
-Then add a profile button to your order screen's UI. You can add it near the other buttons:
-
-```dart
-StyledButton(
-  onPressed: _navigateToProfile,
-  icon: Icons.person,
-  label: 'Profile',
-  backgroundColor: Colors.purple,
-),
-```
-
-This demonstrates navigation to a new screen and passing data back from that screen. We use the returned data to show a welcome message and properly handle the `mounted` property for async operations.
-
-Note that in this simple implementation, the profile data isn't persistent - it's just used to demonstrate navigation concepts. In a real app, you'd save this data to local storage or a database.
-
-#### **Commit your changes**
-
-Commit the new profile screen and navigation implementation.
-
-## **Using AI to Enhance Cart Functionality**
-
-Now let's use AI to help us implement the cart quantity modification feature we discussed in the requirements section.
-
-### **Step 1: Analyze Current Cart Implementation**
-
-First, examine your current `Cart` class in `lib/models/cart.dart`. You should see methods for adding items and calculating totals. Ask your AI assistant to help you understand what modifications are needed:
-
-```
-I have a Cart class in my Flutter app that currently allows adding items. I want to add the ability to modify quantities of existing items and remove items entirely.
-
-Current Cart class:
-[Paste your cart.dart code here]
-
-Please analyze this code and suggest what methods I need to add to support:
-1. Updating the quantity of an existing item
-2. Removing an item completely
-3. Getting a list of all items with their quantities for display
-
-Explain the logic for each method and any edge cases I should consider.
-```
-
-### **Step 2: Implement Cart Modifications**
-
-Based on the AI's suggestions, update your `Cart` class. You'll likely need methods like:
-
-```dart
-void updateQuantity(Sandwich sandwich, int newQuantity) {
-
-}
-
-void removeItem(Sandwich sandwich) {
-
-}
-
-List<CartItem> get items {
-
-}
-```
-
-### **Step 3: Update the Cart View UI**
-
-Ask your AI assistant to help you create UI components for the cart view:
-
-```
-I need to update my cart view screen to show quantity controls for each item. Each cart item should display:
-- Sandwich name and details
-- Current quantity with + and - buttons
-- Individual item total price
-- Remove item button
-
-Current CartViewScreen:
-[Paste relevant parts of your cart_view_screen.dart]
-
-Please provide the UI code for displaying cart items with quantity controls, following Flutter best practices.
-```
-
-### **Step 4: Test Your Implementation**
-
-Write widget tests for your new cart functionality. Ask your AI assistant:
-
-```
-I've implemented cart quantity modification features. Please help me write widget tests that verify:
-1. Quantity can be increased and decreased
-2. Items are removed when quantity reaches 0
-3. Total price updates correctly
-4. UI displays the correct information
-
-Provide test code that follows the testing patterns we've used in previous worksheets.
-```
-
-#### **Commit your changes**
-
-Commit your enhanced cart functionality with proper commit messages describing each change.
 
 ## **Exercises**
 
