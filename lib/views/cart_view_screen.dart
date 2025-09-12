@@ -19,14 +19,13 @@ class CartViewScreen extends StatefulWidget {
 
 class _CartViewScreenState extends State<CartViewScreen> {
   Future<void> _navigateToCheckout() async {
-    final bool cartIsEmpty = widget.cart.items.isEmpty;
-
-    if (cartIsEmpty) {
-      const SnackBar emptyCartSnackBar = SnackBar(
-        content: Text('Your cart is empty'),
-        duration: Duration(seconds: 2),
+    if (widget.cart.items.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Your cart is empty'),
+          duration: Duration(seconds: 2),
+        ),
       );
-      ScaffoldMessenger.of(context).showSnackBar(emptyCartSnackBar);
       return;
     }
 
@@ -38,51 +37,25 @@ class _CartViewScreenState extends State<CartViewScreen> {
       ),
     );
 
-    final bool hasResult = result != null;
-    final bool widgetStillMounted = mounted;
+    if (result != null && mounted) {
+      setState(() {
+        widget.cart.clear();
+      });
 
-    if (hasResult && widgetStillMounted) {
-      final String status = result['status'] as String;
+      final String orderId = result['orderId'] as String;
+      final String estimatedTime = result['estimatedTime'] as String;
 
-      if (status == 'confirmed') {
-        _handleConfirmedOrder(result);
-      } else if (status == 'cancelled') {
-        _handleCancelledOrder();
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('Order $orderId confirmed! Estimated time: $estimatedTime'),
+          duration: const Duration(seconds: 4),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.pop(context);
     }
-  }
-
-  void _handleConfirmedOrder(Map<String, dynamic> orderData) {
-    setState(() {
-      widget.cart.clear();
-    });
-
-    final String orderId = orderData['orderId'] as String;
-    final String estimatedTime = orderData['estimatedTime'] as String;
-
-    final String successMessage =
-        'Order $orderId confirmed! Estimated time: $estimatedTime';
-    final SnackBar successSnackBar = SnackBar(
-      content: Text(successMessage),
-      duration: const Duration(seconds: 4),
-      backgroundColor: Colors.green,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(successSnackBar);
-
-    Navigator.pop(context);
-  }
-
-  void _handleCancelledOrder() {
-    const SnackBar cancelledSnackBar = SnackBar(
-      content: Text('Order cancelled'),
-      duration: Duration(seconds: 2),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(cancelledSnackBar);
-  }
-
-  void _goBack() {
-    Navigator.pop(context);
   }
 
   String _getSizeText(bool isFootlong) {
@@ -226,7 +199,7 @@ class _CartViewScreenState extends State<CartViewScreen> {
               const SizedBox(height: 10),
               const SizedBox(height: 20),
               StyledButton(
-                onPressed: _goBack,
+                onPressed: () => Navigator.pop(context),
                 icon: Icons.arrow_back,
                 label: 'Back to Order',
                 backgroundColor: Colors.grey,
