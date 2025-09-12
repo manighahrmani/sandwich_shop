@@ -4,6 +4,7 @@ import 'package:sandwich_shop/views/order_screen_view.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/pricing_repository.dart';
+import 'package:sandwich_shop/views/checkout_screen.dart';
 
 class CartViewScreen extends StatefulWidget {
   final Cart cart;
@@ -17,6 +18,69 @@ class CartViewScreen extends StatefulWidget {
 }
 
 class _CartViewScreenState extends State<CartViewScreen> {
+  Future<void> _navigateToCheckout() async {
+    final bool cartIsEmpty = widget.cart.items.isEmpty;
+
+    if (cartIsEmpty) {
+      const SnackBar emptyCartSnackBar = SnackBar(
+        content: Text('Your cart is empty'),
+        duration: Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(emptyCartSnackBar);
+      return;
+    }
+
+    final Map<String, dynamic>? result =
+        await Navigator.push<Map<String, dynamic>>(
+      context,
+      MaterialPageRoute<Map<String, dynamic>>(
+        builder: (BuildContext context) => CheckoutScreen(cart: widget.cart),
+      ),
+    );
+
+    final bool hasResult = result != null;
+    final bool widgetStillMounted = mounted;
+
+    if (hasResult && widgetStillMounted) {
+      final String status = result['status'] as String;
+
+      if (status == 'confirmed') {
+        _handleConfirmedOrder(result);
+      } else if (status == 'cancelled') {
+        _handleCancelledOrder();
+      }
+    }
+  }
+
+  void _handleConfirmedOrder(Map<String, dynamic> orderData) {
+    setState(() {
+      widget.cart.clear();
+    });
+
+    final String orderId = orderData['orderId'] as String;
+    final String estimatedTime = orderData['estimatedTime'] as String;
+
+    final String successMessage =
+        'Order $orderId confirmed! Estimated time: $estimatedTime';
+    final SnackBar successSnackBar = SnackBar(
+      content: Text(successMessage),
+      duration: const Duration(seconds: 4),
+      backgroundColor: Colors.green,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(successSnackBar);
+
+    Navigator.pop(context);
+  }
+
+  void _handleCancelledOrder() {
+    const SnackBar cancelledSnackBar = SnackBar(
+      content: Text('Order cancelled'),
+      duration: Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(cancelledSnackBar);
+  }
+
   void _goBack() {
     Navigator.pop(context);
   }
@@ -143,6 +207,23 @@ class _CartViewScreenState extends State<CartViewScreen> {
                 style: heading2,
                 textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 20),
+              Builder(
+                builder: (BuildContext context) {
+                  final bool cartHasItems = widget.cart.items.isNotEmpty;
+                  if (cartHasItems) {
+                    return StyledButton(
+                      onPressed: _navigateToCheckout,
+                      icon: Icons.payment,
+                      label: 'Checkout',
+                      backgroundColor: Colors.orange,
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+              const SizedBox(height: 10),
               const SizedBox(height: 20),
               StyledButton(
                 onPressed: _goBack,
