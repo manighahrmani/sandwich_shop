@@ -28,7 +28,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final int timestamp = currentTime.millisecondsSinceEpoch;
     final String orderId = 'ORD$timestamp';
 
-    final Map<String, dynamic> orderConfirmation = {
+    final Map orderConfirmation = {
       'orderId': orderId,
       'totalAmount': widget.cart.totalPrice,
       'itemCount': widget.cart.countOfItems,
