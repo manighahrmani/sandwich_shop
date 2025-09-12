@@ -488,35 +488,26 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    ⚠️ **Show your working navigation drawer to a member of staff** for a sign-off.
 
-3. (Advanced) **Deep Linking Setup**: Configure your app to handle deep links so that users can navigate directly to specific screens via URLs.
+4. (Advanced) Configure your app to handle [deep links](https://docs.flutter.dev/ui/navigation/deep-linking) using GoRouter, which is the recommended approach for URL-based navigation in Flutter.
 
-    Refactor the app's navigation to use named routes instead of `MaterialPageRoute`. This makes your navigation logic cleaner and more centralized.
+   Add the `go_router` package to your project by running `flutter pub add go_router`. GoRouter uses the Router API to provide URL-based navigation that works seamlessly across mobile and web platforms, replacing the older named routes approach which is no longer recommended.
 
-      * In your `MaterialApp` widget in `main.dart`, define a map of `routes`.
-      * Create static route names (e.g., `static const String routeName = '/cart';`) in your screen widgets.
-      * Replace `Navigator.push` with `Navigator.pushNamed`.
-      * Since you need to pass the `Cart` object, you will need to use the `onGenerateRoute` property of `MaterialApp` to handle passing arguments to your routes. Research how to use `RouteSettings` to achieve this.
+   Ask your AI assistant to help you refactor your app to use `MaterialApp.router` with GoRouter instead of the basic MaterialApp. You'll need to define routes for your main screens like `/`, `/cart`, and `/profile`.
 
-   This is particularly useful for web deployment. Follow the [Flutter deep linking documentation](https://docs.flutter.dev/ui/navigation/deep-linking) to:
-   - Configure URL-based routing
-   - Handle different URL patterns (e.g., `/cart`, `/profile`)
-   - Test deep linking in your browser when running on web
+   GoRouter automatically handles deep linking on web platforms. For mobile platforms, enable Flutter's deep linking by adding the appropriate metadata to your platform configuration files (see [this documentation page](https://docs.flutter.dev/ui/navigation/deep-linking)).
+
+   Test your implementation by running the app on your browser and typing URLs like `localhost:port/#/cart` in the address bar. The navigation should work correctly with proper browser back button support.
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5. (Advanced) Create a settings screen where users can configure app preferences like default sandwich size, preferred bread type, and notification preferences.
+5. (Advanced) Create a settings screen where users can configure app preferences like default sandwich size, preferred bread type, and notification preferences. This exercise introduces you to data persistence concepts that we'll cover more thoroughly in the next worksheet.
 
-   This exercise introduces you to data persistence concepts that we'll cover more thoroughly in the next worksheet. For now, use the `shared_preferences` package to store simple key-value pairs.
+   For now, you'll use the `shared_preferences` package to store simple key-value pairs. Add this package to your project by running `flutter pub add shared_preferences` in your terminal. This package allows you to save user preferences that persist between app sessions.
 
-   Add the package to your `pubspec.yaml`:
-   ```bash
-   flutter pub add shared_preferences
-   ```
+   Ask your AI assistant to help you create a settings screen that allows users to set default preferences for their sandwich orders. The screen should save these preferences using SharedPreferences and load them when the app starts. You'll also need to update your order screen to use these saved preferences as default values.
 
-   Create a settings screen that:
-   - Allows users to set default preferences
-   - Saves preferences using SharedPreferences
-   - Loads saved preferences when the app starts
-   - Uses the saved preferences as defaults in the order screen
+   Think about what preferences would be most useful for users to set. Consider default sandwich size, preferred bread type, and whether they want notifications enabled. The settings should be applied immediately when the user changes them and should persist when they restart the app.
+
+   Test your implementation by changing settings, closing the app completely, and reopening it to verify that your preferences are remembered. You can also use your AI assistant to help you understand how SharedPreferences works and how to handle loading preferences asynchronously.
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
