@@ -779,3 +779,36 @@ Complete the exercises below. Remember to commit your changes after each exercis
    Use your AI assistant to help you design the additional screens and implement proper data passing between them. Make sure each screen returns appropriate data to the previous screen.
 
    ⚠️ **Show your enhanced checkout flow with customer details and receipt to a member of staff** for a sign-off.
+
+3. (Advanced) **Deep Linking Setup**: Configure your app to handle deep links so that users can navigate directly to specific screens via URLs.
+
+    Refactor the app's navigation to use named routes instead of `MaterialPageRoute`. This makes your navigation logic cleaner and more centralized.
+
+      * In your `MaterialApp` widget in `main.dart`, define a map of `routes`.
+      * Create static route names (e.g., `static const String routeName = '/cart';`) in your screen widgets.
+      * Replace `Navigator.push` with `Navigator.pushNamed`.
+      * Since you need to pass the `Cart` object, you will need to use the `onGenerateRoute` property of `MaterialApp` to handle passing arguments to your routes. Research how to use `RouteSettings` to achieve this.
+
+   This is particularly useful for web deployment. Follow the [Flutter deep linking documentation](https://docs.flutter.dev/ui/navigation/deep-linking) to:
+   - Configure URL-based routing
+   - Handle different URL patterns (e.g., `/cart`, `/profile`)
+   - Test deep linking in your browser when running on web
+
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
+4. (Advanced) **Settings Screen with Persistent Data**: Create a settings screen where users can configure app preferences like default sandwich size, preferred bread type, and notification preferences.
+
+   This exercise introduces you to data persistence concepts that we'll cover more thoroughly in the next worksheet. For now, use the `shared_preferences` package to store simple key-value pairs.
+
+   Add the package to your `pubspec.yaml`:
+   ```bash
+   flutter pub add shared_preferences
+   ```
+
+   Create a settings screen that:
+   - Allows users to set default preferences
+   - Saves preferences using SharedPreferences
+   - Loads saved preferences when the app starts
+   - Uses the saved preferences as defaults in the order screen
+
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
