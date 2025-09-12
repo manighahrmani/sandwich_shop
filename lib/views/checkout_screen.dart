@@ -127,10 +127,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       columnChildren.add(
         ElevatedButton(
           onPressed: _processPayment,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
-          ),
           child: const Text('Confirm Payment', style: normalText),
         ),
       );
@@ -147,12 +143,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       appBar: AppBar(
         title: const Text('Checkout', style: heading1),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: columnChildren,
-        ),
+      body: Column(
+        children: columnChildren,
       ),
     );
   }
