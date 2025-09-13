@@ -164,6 +164,23 @@ class _OrderScreenState extends State<OrderScreen> {
           'Sandwich Counter',
           style: heading1,
         ),
+        actions: [
+          Consumer<Cart>(
+            builder: (context, cart, child) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.shopping_cart),
+                    SizedBox(width: 4),
+                    Text('${cart.countOfItems}'),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
