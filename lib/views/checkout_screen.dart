@@ -20,13 +20,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       _isProcessing = true;
     });
 
+    final Cart cart = Provider.of<Cart>(context, listen: false);
+
     await Future.delayed(const Duration(seconds: 2));
 
     final DateTime currentTime = DateTime.now();
     final int timestamp = currentTime.millisecondsSinceEpoch;
     final String orderId = 'ORD$timestamp';
 
-    final Cart cart = Provider.of<Cart>(context, listen: false);
     final Map orderConfirmation = {
       'orderId': orderId,
       'totalAmount': cart.totalPrice,
