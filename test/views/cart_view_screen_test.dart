@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 import 'package:sandwich_shop/views/cart_view_screen.dart';
 import 'package:sandwich_shop/views/order_screen_view.dart';
 import 'package:sandwich_shop/models/cart.dart';
@@ -10,8 +11,13 @@ void main() {
     testWidgets('displays empty cart message when cart is empty',
         (WidgetTester tester) async {
       final Cart emptyCart = Cart();
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: emptyCart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: emptyCart,
+          child: cartViewScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -30,8 +36,13 @@ void main() {
       );
       cart.add(sandwich, quantity: 2);
 
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: cartViewScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -59,8 +70,13 @@ void main() {
       cart.add(sandwich1, quantity: 1);
       cart.add(sandwich2, quantity: 3);
 
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: cartViewScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -83,8 +99,13 @@ void main() {
       );
       cart.add(sandwich, quantity: 1);
 
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: cartViewScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -94,8 +115,13 @@ void main() {
     testWidgets('hides checkout button when cart is empty',
         (WidgetTester tester) async {
       final Cart emptyCart = Cart();
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: emptyCart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: emptyCart,
+          child: cartViewScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -112,8 +138,13 @@ void main() {
       );
       cart.add(sandwich, quantity: 1);
 
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: cartViewScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -137,8 +168,13 @@ void main() {
       );
       cart.add(sandwich, quantity: 2);
 
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: cartViewScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -162,8 +198,13 @@ void main() {
       );
       cart.add(sandwich, quantity: 2);
 
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: cartViewScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -180,8 +221,13 @@ void main() {
 
     testWidgets('back button navigates back', (WidgetTester tester) async {
       final Cart cart = Cart();
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: cartViewScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -192,6 +238,67 @@ void main() {
       final StyledButton backButton =
           tester.widget<StyledButton>(backButtonFinder);
       expect(backButton.onPressed, isNotNull);
+    });
+
+    testWidgets('displays logo in app bar', (WidgetTester tester) async {
+      final Cart cart = Cart();
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: cartViewScreen,
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      // Find the app bar first
+      final appBarFinder = find.byType(AppBar);
+      expect(appBarFinder, findsOneWidget);
+
+      // Find images within the app bar
+      final appBarImagesFinder = find.descendant(
+        of: appBarFinder,
+        matching: find.byType(Image),
+      );
+      expect(appBarImagesFinder, findsOneWidget);
+
+      // Verify the logo image asset path
+      final Image logoImage = tester.widget(appBarImagesFinder);
+      expect(
+          (logoImage.image as AssetImage).assetName, 'assets/images/logo.png');
+    });
+
+    testWidgets('displays cart indicator in app bar',
+        (WidgetTester tester) async {
+      final Cart cart = Cart();
+      final Sandwich sandwich = Sandwich(
+        type: SandwichType.veggieDelight,
+        isFootlong: true,
+        breadType: BreadType.white,
+      );
+      cart.add(sandwich, quantity: 3);
+
+      final CartViewScreen cartViewScreen = const CartViewScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: cartViewScreen,
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      // Find the cart indicator in the app bar
+      final appBarFinder = find.byType(AppBar);
+      final cartIconFinder = find.descendant(
+        of: appBarFinder,
+        matching: find.byIcon(Icons.shopping_cart),
+      );
+      expect(cartIconFinder, findsOneWidget);
+
+      // Verify cart count is displayed
+      expect(find.text('3'), findsOneWidget);
     });
   });
 }
