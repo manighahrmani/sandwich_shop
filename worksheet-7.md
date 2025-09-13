@@ -155,6 +155,7 @@ class App extends StatelessWidget {
       create: (context) => Cart(),
       child: const MaterialApp(
         title: 'Sandwich Shop App',
+        debugShowCheckedModeBanner: false,
         home: OrderScreen(maxQuantity: 5),
       ),
     );
@@ -163,6 +164,8 @@ class App extends StatelessWidget {
 ```
 
 Again, review the changes in the Source Control panel before committing. The `ChangeNotifierProvider` creates a single instance of `Cart` and makes it available to all descendant widgets (all screens in our app). The `create` function is called only once, so we have a single shared cart.
+
+We've also added `debugShowCheckedModeBanner: false` to remove the debug banner from the app.
 
 ### **Consuming the Cart in Screens**
 
@@ -324,6 +327,23 @@ class _OrderScreenState extends State<OrderScreen> {
           'Sandwich Counter',
           style: heading1,
         ),
+        actions: [
+          Consumer<Cart>(
+            builder: (context, cart, child) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.shopping_cart),
+                    const SizedBox(width: 4),
+                    Text('${cart.countOfItems}'),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -444,7 +464,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
 You will have an error caused by how the `CartViewScreen` is constructed without a cart parameter. We will fix this next. Just review the changes in the Source Control panel and commit your changes.
 
-Notice how we use `Provider.of<Cart>(context, listen: false)` to access the cart when we don't need to rebuild the widget when the cart changes. On the other hand, for the cart summary display, we use `Consumer<Cart>` to automatically rebuild when the cart changes.
+Notice how we use `Provider.of<Cart>(context, listen: false)` to access the cart when we don't need to rebuild the widget when the cart changes. On the other hand, for the cart summary display and the cart indicator in the app bar, we use `Consumer<Cart>` to automatically rebuild when the cart changes. The cart indicator in the app bar will now show the total number of items across all screens, updating automatically as items are added or removed.
 
 Now update `lib/views/cart_view_screen.dart` to remove the cart parameter and use the provided cart instead:
 
@@ -569,6 +589,23 @@ class _CartViewScreenState extends State<CartViewScreen> {
           'Cart View',
           style: heading1,
         ),
+        actions: [
+          Consumer<Cart>(
+            builder: (context, cart, child) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.shopping_cart),
+                    const SizedBox(width: 4),
+                    Text('${cart.countOfItems}'),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -719,7 +756,31 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 100,
+            child: Image.asset('assets/images/logo.png'),
+          ),
+        ),
         title: const Text('Checkout', style: heading1),
+        actions: [
+          Consumer<Cart>(
+            builder: (context, cart, child) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.shopping_cart),
+                    const SizedBox(width: 4),
+                    Text('${cart.countOfItems}'),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -812,7 +873,51 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 }
 ```
 
+Finally, update the profile screen to maintain consistency with the app bar design. This is a new page that we have added (it was one of the exercises from the previous worksheet). In `lib/views/profile_screen.dart`, add the provider import and update the app bar:
+
+```dart
+import 'package:provider/provider.dart';
+import 'package:sandwich_shop/models/cart.dart';
+```
+
+Then update the app bar in the build method:
+
+```dart
+appBar: AppBar(
+  leading: Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: SizedBox(
+      height: 100,
+      child: Image.asset('assets/images/logo.png'),
+    ),
+  ),
+  title: const Text(
+    'Profile',
+    style: heading1,
+  ),
+  actions: [
+    Consumer<Cart>(
+      builder: (context, cart, child) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.shopping_cart),
+              const SizedBox(width: 4),
+              Text('${cart.countOfItems}'),
+            ],
+          ),
+        );
+      },
+    ),
+  ],
+),
+```
+
 Test your app to ensure the state management is working correctly. The cart should now be shared across all screens and automatically update when modified.
+
+You'll notice that all screens now have a cart indicator showing the total number of items. This cart indicator updates automatically as you add or remove items, showing how the provider pattern can be used for state management.
 
 ## **Third-Party Packages**
 
@@ -931,7 +1036,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 ```
 
-Add a button to navigate to the settings screen in your order screen. In `lib/views/order_screen_view.dart`, add this method:
+Add a button to navigate to the settings screen in your order screen. In `lib/views/order_screen_view.dart`, add this method after the existing navigation methods:
 
 ```dart
 void _navigateToSettings() {
@@ -944,7 +1049,7 @@ void _navigateToSettings() {
 }
 ```
 
-And add this button in the build method:
+And add this button in the build method after the existing buttons:
 
 ```dart
 StyledButton(
@@ -1223,7 +1328,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 }
 ```
 
-Add a button to navigate to order history in your order screen. In `lib/views/order_screen_view.dart`, add this method:
+Add a button to navigate to order history in your order screen. In `lib/views/order_screen_view.dart`, add this method after the existing navigation methods:
 
 ```dart
 void _navigateToOrderHistory() {
@@ -1236,7 +1341,7 @@ void _navigateToOrderHistory() {
 }
 ```
 
-And add this button in the build method:
+And add this button in the build method after the existing buttons:
 
 ```dart
 StyledButton(
