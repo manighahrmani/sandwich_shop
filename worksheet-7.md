@@ -50,13 +50,13 @@ We have purposefully not talked about packages a lot so far and we will do so in
 
 - **ChangeNotifier**: A class that can notify listeners when it changes. For example, our cart model will be a ChangeNotifier.
 - **ChangeNotifierProvider**: A widget that provides a ChangeNotifier to its descendants. In our case, the descendants of the cart will be the order screen and cart screen.
-- **Consumer**: A widget that listens to changes in a ChangeNotifier and rebuilds when necessary. For us, the cart summary display will be a Consumer.
+- **Consumer**: A widget that listens to changes in a ChangeNotifier and rebuilds when necessary. For us, the cart summary display in the order screen will be a Consumer.
 
 ### **Creating a Cart Model with ChangeNotifier**
 
 Let's refactor our `Cart` class to extend `ChangeNotifier` (feel free to revisit our [Object-Oriented Dart Worksheet](./worksheet-0.md#4---object-oriented-programming-in-dart) if you need a refresher). This will allow widgets to listen for changes and automatically rebuild when the cart is modified.
 
-Open `lib/models/cart.dart` and update it as follows:
+Open `lib/models/cart.dart` and update it to the following:
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -130,7 +130,7 @@ class Cart extends ChangeNotifier {
 }
 ```
 
-The key changes are extending `ChangeNotifier` and calling `notifyListeners()` whenever the cart is modified. This tells any listening widgets that they need to rebuild.
+Before committing your changes, see review the changes in the Source Control panel. The key changes are extending `ChangeNotifier` and calling `notifyListeners()` whenever the cart is modified. This tells any listening widgets that they need to rebuild.
 
 ### **Providing the Cart to the App**
 
@@ -162,7 +162,7 @@ class App extends StatelessWidget {
 }
 ```
 
-The `ChangeNotifierProvider` creates a single instance of `Cart` and makes it available to all descendant widgets.
+Again, review the changes in the Source Control panel before committing. The `ChangeNotifierProvider` creates a single instance of `Cart` and makes it available to all descendant widgets (all screens in our app). The `create` function is called only once, so we have a single shared cart.
 
 ### **Consuming the Cart in Screens**
 
