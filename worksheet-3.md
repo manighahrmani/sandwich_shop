@@ -22,12 +22,12 @@ The number of sandwiches in our order is a perfect example of this. To manage th
 
 ## **Getting started**
 
-For this worksheet, you need to start with the code from branch 3 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/3). You can either clone the repository and checkout branch 3:
+For this worksheet, you need to start with the code from branch 2 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/2). You can either clone the repository and checkout branch 2:
 
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
 cd sandwich_shop
-git checkout 3
+git checkout 2
 ```
 
 Or ensure your code matches [the code that we ended Worksheet 2 with](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart). Run the app to make sure everything works as expected before proceeding.
