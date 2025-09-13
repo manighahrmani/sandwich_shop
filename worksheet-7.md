@@ -873,7 +873,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 }
 ```
 
-Finally, update the profile screen to maintain consistency with the app bar design. This is a new page that we have added (it was one of the exercises from the previous worksheet). In `lib/views/profile_screen.dart`, add the provider import and update the app bar:
+Don't forget to update the profile screen to maintain consistency with the app bar design. This is a new page that we have added (it was one of the exercises from the previous worksheet). In `lib/views/profile_screen.dart`, add the provider import and update the app bar:
 
 ```dart
 import 'package:provider/provider.dart';
@@ -918,6 +918,8 @@ appBar: AppBar(
 Test your app to ensure the state management is working correctly. The cart should now be shared across all screens and automatically update when modified.
 
 You'll notice that all screens now have a cart indicator showing the total number of items. This cart indicator updates automatically as you add or remove items, showing how the provider pattern can be used for state management.
+
+Before moving on, make sure to update the widget tests for all screens to check for the newly added functionality (some of the current tests will fail, and we have not tested the existance of the cart indicator).
 
 ## **Third-Party Packages**
 
