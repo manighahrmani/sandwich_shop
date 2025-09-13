@@ -34,7 +34,7 @@ So far, we've been managing state within individual widgets using `setState()`. 
 
 Currently, we pass the cart object between screens, but this becomes cumbersome when you have many screens that need the same data. This is where **app state management** comes in.
 
-App state is different from the ephemeral state we've been using. While ephemeral state belongs to a single widget, app state is shared across multiple parts of your app and persists as users navigate between screens.
+App state is different from the ephemeral state we've been using (see [Worksheet 3](./worksheet-3.md)). While ephemeral state belongs to a single widget, app state is shared across multiple parts of your app and persists as users navigate between screens.
 
 ### **The Provider Package**
 
@@ -46,15 +46,15 @@ Add the provider package to your project:
 flutter pub add provider
 ```
 
-The provider package introduces three key concepts:
+We have purposefully not talked about packages a lot so far and we will do so in [#Third-Party Packages](#third-party-packages) later in this worksheet. The provider package you have installed introduces three key concepts:
 
-- **ChangeNotifier**: A class that can notify listeners when it changes.
-- **ChangeNotifierProvider**: A widget that provides a ChangeNotifier to its descendants.
-- **Consumer**: A widget that listens to changes in a ChangeNotifier and rebuilds when necessary.
+- **ChangeNotifier**: A class that can notify listeners when it changes. For example, our cart model will be a ChangeNotifier.
+- **ChangeNotifierProvider**: A widget that provides a ChangeNotifier to its descendants. In our case, the descendants of the cart will be the order screen and cart screen.
+- **Consumer**: A widget that listens to changes in a ChangeNotifier and rebuilds when necessary. For us, the cart summary display will be a Consumer.
 
 ### **Creating a Cart Model with ChangeNotifier**
 
-Let's refactor our `Cart` class to extend `ChangeNotifier`. This will allow widgets to listen for changes and automatically rebuild when the cart is modified.
+Let's refactor our `Cart` class to extend `ChangeNotifier` (feel free to revisit our [Object-Oriented Dart Worksheet](./worksheet-0.md#4---object-oriented-programming-in-dart) if you need a refresher). This will allow widgets to listen for changes and automatically rebuild when the cart is modified.
 
 Open `lib/models/cart.dart` and update it as follows:
 
