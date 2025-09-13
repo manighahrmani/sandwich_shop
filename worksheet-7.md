@@ -1368,6 +1368,8 @@ Test the order history feature. Complete a few orders and verify they appear in 
 
 Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems.
 
+0. Remove the redundancy by introducing a common widgets file in the views folder. Put the common appbar in there. Also refactor the tests to test this part separately.
+
 1. Our current state management only handles the cart. Let's add user preferences to the provider pattern.
 
    Create a `UserPreferences` class that extends `ChangeNotifier` and manages settings like font size and theme preferences. Update your app to use `MultiProvider` to provide both the cart and user preferences.
