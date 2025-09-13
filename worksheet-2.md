@@ -13,12 +13,12 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 ## **Getting started**
 
-For this worksheet, you can start with the code from branch 2 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/2) which should be similar to what you'd have at the end of worksheet 1. You can either clone the repository and checkout branch 2 by running the following in the terminal (skip to the `checkout` if you have already cloned our repository):
+For this worksheet, you can start with the code from branch 1 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/1) which should be similar to what you'd have at the end of worksheet 1. You can either clone the repository and checkout branch 1 by running the following in the terminal (skip to the `checkout` if you have already cloned our repository):
 
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
 cd sandwich_shop
-git checkout 2
+git checkout 1
 ```
 
 Alternatively, you can continue with the Flutter project you created in Worksheet 1. This project should already be a repository in your GitHub account.

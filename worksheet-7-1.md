@@ -18,12 +18,12 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 ## **Getting started**
 
-For this worksheet, you need to start with the code from branch 7 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/7). You can either clone the repository and checkout branch 7:
+For this worksheet, you need to start with the code from branch 6 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/6). You can either clone the repository and checkout branch 6:
 
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
 cd sandwich_shop
-git checkout 7
+git checkout 6
 ```
 
 Or manually ensure your code matches the repository. Run the app to make sure everything works as expected before proceeding.

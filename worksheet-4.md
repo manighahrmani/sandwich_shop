@@ -33,12 +33,12 @@ In this worksheet we will focus on the first three layers: views, view models, a
 
 ## **Getting started**
 
-For this worksheet, you need to start with the code from branch 4 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/4). You can either clone the repository and checkout branch 4:
+For this worksheet, you need to start with the code from branch 3 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/3). You can either clone the repository and checkout branch 3:
 
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
 cd sandwich_shop
-git checkout 4
+git checkout 3
 ```
 
 Or manually ensure your code matches the repository. Run the app to make sure everything works as expected before proceeding. Note that we have already completed the exercises from the previous worksheets.
