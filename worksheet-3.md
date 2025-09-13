@@ -282,7 +282,7 @@ In software development, we often start with a user story to define a new featur
 As a user, I want to add a note to my sandwich order so that I can make special requests (e.g., "no onions", "extra pickles"). The user would add the notes before pressing the "Add" and "Remove" buttons.
 ```
 
-For the remainder of this worksheet, we will implement this feature using Copilot or the LLM of your choice.
+As a small introduction to AI-Driven Development, we will implement this feature using Copilot or the LLM of your choice. In a later worksheet we will cover this in more details.
 
 ### **Implementing the Feature**
 
