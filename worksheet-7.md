@@ -812,9 +812,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 }
 ```
 
-#### **Commit your changes**
-
-Test your app to ensure the state management is working correctly. The cart should now be shared across all screens and automatically update when modified. Commit your changes with an appropriate message.
+Test your app to ensure the state management is working correctly. The cart should now be shared across all screens and automatically update when modified.
 
 ## **Third-Party Packages**
 
