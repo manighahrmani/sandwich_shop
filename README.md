@@ -13,7 +13,7 @@ Every worksheet ends with a handful of **exercises**. After completing these exe
 * [Worksheet 4: App Architecture and Testing](./worksheet-4.md)
 * [Worksheet 5: Data Models and Assets](./worksheet-5.md)
 * [Worksheet 6: AI-Driven Development and Navigation](./worksheet-6.md)
-* [Worksheet 7: (Add Title Here)](./worksheet-7.md)
+* [Worksheet 7: State Management and Persistence](./worksheet-7.md)
 * [Worksheet 8: (Add Title Here)](./worksheet-8.md)
 
 ## **Getting help**
