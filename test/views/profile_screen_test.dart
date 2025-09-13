@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 import 'package:sandwich_shop/views/profile_screen.dart';
+import 'package:sandwich_shop/models/cart.dart';
 
 void main() {
   group('ProfileScreen', () {
     testWidgets('displays initial UI elements correctly',
         (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -21,8 +29,14 @@ void main() {
     });
 
     testWidgets('has proper layout structure', (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -32,10 +46,74 @@ void main() {
       expect(find.byType(SizedBox), findsWidgets);
     });
 
+    testWidgets('displays logo in app bar', (WidgetTester tester) async {
+      final Cart cart = Cart();
+      const ProfileScreen profileScreen = ProfileScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      // Find the app bar first
+      final appBarFinder = find.byType(AppBar);
+      expect(appBarFinder, findsOneWidget);
+
+      // Find images within the app bar
+      final appBarImagesFinder = find.descendant(
+        of: appBarFinder,
+        matching: find.byType(Image),
+      );
+      expect(appBarImagesFinder, findsOneWidget);
+
+      // Verify the logo image asset path
+      final Image logoImage = tester.widget(appBarImagesFinder);
+      expect(
+          (logoImage.image as AssetImage).assetName, 'assets/images/logo.png');
+    });
+
+    testWidgets('displays cart indicator in app bar',
+        (WidgetTester tester) async {
+      final Cart cart = Cart();
+      const ProfileScreen profileScreen = ProfileScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      // Find the cart indicator in the app bar
+      final appBarFinder = find.byType(AppBar);
+      final cartIconFinder = find.descendant(
+        of: appBarFinder,
+        matching: find.byIcon(Icons.shopping_cart),
+      );
+      expect(cartIconFinder, findsOneWidget);
+
+      // Verify initial cart count is displayed
+      final cartCountFinder = find.descendant(
+        of: appBarFinder,
+        matching: find.text('0'),
+      );
+      expect(cartCountFinder, findsOneWidget);
+    });
+
     testWidgets('text fields accept input correctly',
         (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -54,8 +132,14 @@ void main() {
 
     testWidgets('shows validation error when name field is empty',
         (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -72,8 +156,14 @@ void main() {
 
     testWidgets('shows validation error when location field is empty',
         (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -90,8 +180,14 @@ void main() {
 
     testWidgets('shows validation error when both fields are empty',
         (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -106,24 +202,32 @@ void main() {
     testWidgets('trims whitespace from input fields',
         (WidgetTester tester) async {
       Map<String, String>? result;
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
       final MaterialApp app = MaterialApp(
-        home: Builder(
-          builder: (BuildContext context) {
-            return Scaffold(
-              body: ElevatedButton(
-                onPressed: () async {
-                  result = await Navigator.push<Map<String, String>>(
-                    context,
-                    MaterialPageRoute<Map<String, String>>(
-                      builder: (BuildContext context) => profileScreen,
-                    ),
-                  );
-                },
-                child: const Text('Go to Profile'),
-              ),
-            );
-          },
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: Builder(
+            builder: (BuildContext context) {
+              return Scaffold(
+                body: ElevatedButton(
+                  onPressed: () async {
+                    result = await Navigator.push<Map<String, String>>(
+                      context,
+                      MaterialPageRoute<Map<String, String>>(
+                        builder: (BuildContext context) =>
+                            ChangeNotifierProvider<Cart>.value(
+                          value: cart,
+                          child: profileScreen,
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text('Go to Profile'),
+                ),
+              );
+            },
+          ),
         ),
       );
 
@@ -150,24 +254,32 @@ void main() {
     testWidgets('returns profile data when both fields are filled',
         (WidgetTester tester) async {
       Map<String, String>? result;
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
       final MaterialApp app = MaterialApp(
-        home: Builder(
-          builder: (BuildContext context) {
-            return Scaffold(
-              body: ElevatedButton(
-                onPressed: () async {
-                  result = await Navigator.push<Map<String, String>>(
-                    context,
-                    MaterialPageRoute<Map<String, String>>(
-                      builder: (BuildContext context) => profileScreen,
-                    ),
-                  );
-                },
-                child: const Text('Go to Profile'),
-              ),
-            );
-          },
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: Builder(
+            builder: (BuildContext context) {
+              return Scaffold(
+                body: ElevatedButton(
+                  onPressed: () async {
+                    result = await Navigator.push<Map<String, String>>(
+                      context,
+                      MaterialPageRoute<Map<String, String>>(
+                        builder: (BuildContext context) =>
+                            ChangeNotifierProvider<Cart>.value(
+                          value: cart,
+                          child: profileScreen,
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text('Go to Profile'),
+                ),
+              );
+            },
+          ),
         ),
       );
 
@@ -193,8 +305,14 @@ void main() {
 
     testWidgets('text fields have proper decoration',
         (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -214,8 +332,14 @@ void main() {
     });
 
     testWidgets('save button is always enabled', (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -229,24 +353,32 @@ void main() {
     testWidgets('handles special characters in input fields',
         (WidgetTester tester) async {
       Map<String, String>? result;
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
       final MaterialApp app = MaterialApp(
-        home: Builder(
-          builder: (BuildContext context) {
-            return Scaffold(
-              body: ElevatedButton(
-                onPressed: () async {
-                  result = await Navigator.push<Map<String, String>>(
-                    context,
-                    MaterialPageRoute<Map<String, String>>(
-                      builder: (BuildContext context) => profileScreen,
-                    ),
-                  );
-                },
-                child: const Text('Go to Profile'),
-              ),
-            );
-          },
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: Builder(
+            builder: (BuildContext context) {
+              return Scaffold(
+                body: ElevatedButton(
+                  onPressed: () async {
+                    result = await Navigator.push<Map<String, String>>(
+                      context,
+                      MaterialPageRoute<Map<String, String>>(
+                        builder: (BuildContext context) =>
+                            ChangeNotifierProvider<Cart>.value(
+                          value: cart,
+                          child: profileScreen,
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text('Go to Profile'),
+                ),
+              );
+            },
+          ),
         ),
       );
 
@@ -272,8 +404,14 @@ void main() {
 
     testWidgets('column has correct cross axis alignment',
         (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -284,8 +422,14 @@ void main() {
     });
 
     testWidgets('snackbar has correct duration', (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
@@ -303,8 +447,14 @@ void main() {
 
     testWidgets('handles empty strings after trimming',
         (WidgetTester tester) async {
+      final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      const MaterialApp app = MaterialApp(home: profileScreen);
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: profileScreen,
+        ),
+      );
 
       await tester.pumpWidget(app);
 
