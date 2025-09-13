@@ -126,8 +126,8 @@ class _CartViewScreenState extends State<CartViewScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.shopping_cart),
-                    SizedBox(width: 4),
+                    const Icon(Icons.shopping_cart),
+                    const SizedBox(width: 4),
                     Text('${cart.countOfItems}'),
                   ],
                 ),
