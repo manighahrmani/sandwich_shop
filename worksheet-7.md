@@ -174,7 +174,7 @@ Update `lib/views/order_screen_view.dart`. First, add the provider import:
 import 'package:provider/provider.dart';
 ```
 
-Then, in the `_OrderScreenState` class, remove the `final Cart _cart = Cart();` line and update the methods that use the cart:
+Then, in the `_OrderScreenState` class, remove the `final Cart _cart = Cart();` line defining the cart as a local instance variable and update the methods that use the cart:
 
 ```dart
 class _OrderScreenState extends State<OrderScreen> {
@@ -442,7 +442,9 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-Notice how we use `Provider.of<Cart>(context, listen: false)` to access the cart when we don't need to rebuild the widget when the cart changes. For the cart summary display, we use `Consumer<Cart>` to automatically rebuild when the cart changes.
+You will have an error caused by how the `CartViewScreen` is constructed without a cart parameter. We will fix this next. Just review the changes in the Source Control panel and commit your changes.
+
+Notice how we use `Provider.of<Cart>(context, listen: false)` to access the cart when we don't need to rebuild the widget when the cart changes. On the other hand, for the cart summary display, we use `Consumer<Cart>` to automatically rebuild when the cart changes.
 
 Now update `lib/views/cart_view_screen.dart` to remove the cart parameter and use the provided cart instead:
 
@@ -660,6 +662,8 @@ class _CartViewScreenState extends State<CartViewScreen> {
   }
 }
 ```
+
+Again, you will have an error because the `CheckoutScreen` is constructed without a cart parameter. Review the changes in the Source Control and commit them.
 
 Finally, update `lib/views/checkout_screen.dart` to use the provided cart:
 
