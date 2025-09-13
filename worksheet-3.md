@@ -330,7 +330,7 @@ For comprehensive information about debugging Flutter apps, visit the [official 
 
 #### **Setting breakpoints and inspecting state**
 
-Let's practice debugging with your current sandwich counter app. First, make a small change that will help us see debugging in action. In your `_increaseQuantity` method, temporarily add a line that might cause confusion:
+Let's practice debugging with your current sandwich counter app. First, make a small change that will help us see debugging in action. In your `_increaseQuantity` method, temporarily add the following `print` statement inside the `setState` call:
 
 ```dart
 void _increaseQuantity() {
@@ -346,7 +346,7 @@ void _increaseQuantity() {
 
 Now, let's set a breakpoint. Click in the left margin next to the line `_quantity++;` in your `_increaseQuantity` method. You should see a red dot appear, indicating a breakpoint.
 
-<!-- Insert screenshot of breakpoint here -->
+![Setting a breakpoint](images/screenshot_debug_breakpoint.png)
 
 Start your app in debug mode by pressing **F5** or clicking the play button with a bug icon in the top toolbar. When you click the "Add" button in your running app, the debugger will pause execution at your breakpoint.
 
@@ -356,9 +356,13 @@ When the debugger pauses, you'll see several useful panels:
 - **Call Stack**: Shows the sequence of method calls that led to this point
 - **Debug Console**: Displays output from your `print` statements and allows you to evaluate expressions
 
-You can use the debugging toolbar to step through your code line by line, continue execution, or stop debugging entirely.
+You can use the debugging toolbar to step through your code line by line, continue execution, or stop debugging entirely. For a definition of what these buttons do, visit [this section of the documentation page](https://docs.flutter.dev/testing/native-debugging#vs-code-flutter-debugging-toolbar).
 
 Next, try this simple debugging exercise: temporarily change your `maxQuantity` in the `App` widget from `5` to `3`, then run your app and use the debugger to step through the `_increaseQuantity` method. Watch how the variables change as you add sandwiches and observe what happens when you try to exceed the limit.
+
+After clicking the add button, may need to use the "Step Into" button (the down arrow, **F11**) to enter the `setState` method and see how `_quantity` is updated. In the Variables panel, you should see `_quantity` listed under the "Local" section, as one of the instance variables of the `_OrderScreenState` class. There may be a lot more variables listed as well, so a handy tip is to add the variable's name (e.g., `_quantity`) in the "Watch" section to track it more easily.
+
+![Debugging exercise](images/screenshot_debug_panel.png)
 
 Remember to remove the temporary `print` statement and reset your `maxQuantity` to `5` when you're done experimenting.
 
