@@ -316,6 +316,56 @@ Make sure to have hot reload enabled by hitting the thunder (⚡️) icon in the
 
 After verifying that the feature works as described in the user story, commit your work to source control. A good commit message would be `Add order notes field`.
 
+## **Debugging your Flutter app**
+
+As your app becomes more complex, you'll inevitably encounter bugs or unexpected behaviour. Let's take a look at the debugging tools in VS Code that help you identify and fix issues.
+
+#### **Using the VS Code debugger**
+
+The VS Code debugger is your primary tool for stepping through code and inspecting variables. To start debugging, click the bug icon (🪲) in the Activity Bar on the left side of VS Code. This opens the Debug panel with several useful sections.
+
+You can also access debugging tools through the Command Palette by pressing **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and typing `Flutter: Open Flutter DevTools`.
+
+For comprehensive information about debugging Flutter apps, visit the [official Flutter debugging documentation](https://docs.flutter.dev/testing/native-debugging)..
+
+#### **Setting breakpoints and inspecting state**
+
+Let's practice debugging with your current sandwich counter app. First, make a small change that will help us see debugging in action. In your `_increaseQuantity` method, temporarily add a line that might cause confusion:
+
+```dart
+void _increaseQuantity() {
+  if (_quantity < widget.maxQuantity) {
+    setState(() {
+      _quantity++;
+      // Add this temporary line to see debugging in action
+      print('Current quantity: $_quantity');
+    });
+  }
+}
+```
+
+Now, let's set a breakpoint. Click in the left margin next to the line `_quantity++;` in your `_increaseQuantity` method. You should see a red dot appear, indicating a breakpoint.
+
+<!-- Insert screenshot of breakpoint here -->
+
+Start your app in debug mode by pressing **F5** or clicking the play button with a bug icon in the top toolbar. When you click the "Add" button in your running app, the debugger will pause execution at your breakpoint.
+
+When the debugger pauses, you'll see several useful panels:
+
+- **Variables**: Shows the current values of all variables in scope, including `_quantity` and `widget.maxQuantity`
+- **Call Stack**: Shows the sequence of method calls that led to this point
+- **Debug Console**: Displays output from your `print` statements and allows you to evaluate expressions
+
+You can use the debugging toolbar to step through your code line by line, continue execution, or stop debugging entirely.
+
+Next, try this simple debugging exercise: temporarily change your `maxQuantity` in the `App` widget from `5` to `3`, then run your app and use the debugger to step through the `_increaseQuantity` method. Watch how the variables change as you add sandwiches and observe what happens when you try to exceed the limit.
+
+Remember to remove the temporary `print` statement and reset your `maxQuantity` to `5` when you're done experimenting.
+
+#### **Common Flutter errors**
+
+Flutter has excellent error messages, but they can sometimes be overwhelming. For a comprehensive list of common Flutter errors and their explanations, bookmark this page: [Flutter Common Errors](https://docs.flutter.dev/testing/common-errors). When you encounter an error, you can use **Ctrl + F** on Windows or **⌘ + F** on macOS to search for keywords from your error message.
+
 ## **Exercises**
 
 Complete the exercises below and show your work to a member of staff at your next practical session for a **sign-off**.
