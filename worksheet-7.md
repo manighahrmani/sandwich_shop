@@ -949,7 +949,9 @@ For simple key-value data like user preferences, use the `shared_preferences` pa
 
 `shared_preferences` is perfect for storing settings like theme preferences, user names, or simple configuration options.
 
-For this section, you must run the app on a device or simulator (not on web) as shared preferences work differently on web platforms.
+For this section, you must run the app on a device (your operating system, connected device or emulator) but not web. We will be building a settings screen as shown below which would allow us to modify the font size (the font sizes imported from `app_styles.dart`):
+
+![Settings Screen](images/screenshot_settings_on_emulator.png)
 
 Add the package to your project:
 
@@ -992,7 +994,6 @@ class AppStyles {
   );
 }
 
-// Keep these for backward compatibility, but they now use the dynamic styles
 TextStyle get normalText => AppStyles.normalText;
 TextStyle get heading1 => AppStyles.heading1;
 TextStyle get heading2 => AppStyles.heading2;
@@ -1034,15 +1035,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _fontSize = fontSize;
     });
-    
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Font size saved! Restart the app to see changes in all screens.'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-    }
   }
 
   @override
@@ -1065,27 +1057,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
         title: Text('Settings', style: AppStyles.heading1),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.settings),
-                const SizedBox(width: 4),
-                Text('Settings', style: AppStyles.normalText),
-              ],
-            ),
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Font Size Settings', style: AppStyles.heading2),
-            const SizedBox(height: 10),
+            Text('Font Size', style: AppStyles.heading2),
+            const SizedBox(height: 20),
             Text(
               'Current size: ${_fontSize.toInt()}px',
               style: TextStyle(fontSize: _fontSize),
@@ -1099,59 +1077,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               label: _fontSize.toInt().toString(),
               onChanged: _saveFontSize,
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             Text(
-              'Preview Text',
-              style: AppStyles.heading2,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'This is how normal text will look with the selected font size.',
+              'This is sample text to preview the font size.',
               style: TextStyle(fontSize: _fontSize),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Text(
-              'This is how headings will look.',
-              style: TextStyle(
-                fontSize: _fontSize + 8,
-                fontWeight: FontWeight.bold,
-              ),
+              'Font size changes are saved automatically. Restart the app to see changes in all screens.',
+              style: AppStyles.normalText,
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 40),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.blue.shade200),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.info, color: Colors.blue.shade700),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Note',
-                        style: TextStyle(
-                          fontSize: _fontSize,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade700,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Font size changes are saved automatically. You may need to restart the app to see changes in all screens.',
-                    style: TextStyle(
-                      fontSize: _fontSize - 2,
-                      color: Colors.blue.shade700,
-                    ),
-                  ),
-                ],
-              ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Back to Order', style: AppStyles.normalText),
             ),
           ],
         ),
@@ -1224,9 +1164,39 @@ Don't forget to import the settings screen:
 import 'package:sandwich_shop/views/settings_screen.dart';
 ```
 
-#### **Commit your changes**
+Since our text styles are no longer constant (they now depend on shared preferences), you'll need to remove the `const` keyword from widgets that use these styles. You'll see errors like "Invalid constant value".
 
-Test the settings screen on a device or simulator (not web). Change the font size and restart the app - you should see the font size changes applied throughout all screens of the app.
+The easiest way to fix these is to open the Problems panel in VS Code (in Command Palette, type "Problems: Focus on Problems View" and hit Enter), then look for errors related to const constructors. Right click on each error or select them and use the Quick Fix (**Ctrl + .** on Windows or **⌘ + .** on Mac) to remove the `const` keyword.
+
+See below what this should look like:
+
+![Problems View Screenshot](images/screenshot_fixing_problems.png)
+
+This would change:
+```dart
+const Center(
+  child: Text(
+    'Image not found',
+    style: normalText,
+  ),
+)
+```
+
+To:
+```dart
+Center(
+  child: Text(
+    'Image not found',
+    style: normalText,
+  ),
+)
+```
+
+You'll need to do this for any widget that uses `normalText`, `heading1`, or `heading2` styles.
+
+Once you have tested the settings screen and ensured that font size changes persist across app restarts, add widget tests for the settings screen and make sure the tests still pass for all other screens. And as always remember to commit your changes regularly.
+
+<!-- Done till here -->
 
 ### **SQLite for Complex Data**
 
