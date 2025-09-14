@@ -4,9 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:sandwich_shop/views/checkout_screen.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   group('CheckoutScreen', () {
+    setUpAll(() {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    });
     testWidgets('displays order summary with empty cart',
         (WidgetTester tester) async {
       final Cart emptyCart = Cart();
