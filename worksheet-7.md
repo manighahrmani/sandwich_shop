@@ -1526,40 +1526,6 @@ Test this feature on a device or simulator (not web). Complete a few orders and 
 
 ## **Exercises**
 
-Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems.
+This week we have had a heavy worksheet so we will keep the exercises light. Complete the following exercise which is mainly about refactoring. You can also try to add more features if you have time, for example, manually deleting orders from the order history screen (which would require you to modify the the data stored on the SQLite database).
 
 0. Remove the redundancy by introducing a common widgets file in the views folder. Put the common appbar in there. Also refactor the tests to test this part separately. Also the styled button can be put inside this common widgets file.
-
-1. Our current state management only handles the cart. Let's add user preferences to the provider pattern.
-
-   Create a `UserPreferences` class that extends `ChangeNotifier` and manages settings like font size and theme preferences. Update your app to use `MultiProvider` to provide both the cart and user preferences.
-
-   Update the settings screen to use the new `UserPreferences` provider instead of directly accessing `SharedPreferences`.
-
-   ⚠️ **Show your working user preferences provider to a member of staff** for a sign-off.
-
-2. Let's enhance the order history with more detailed information. Currently, we only save basic order information, but we should also save what items were ordered.
-
-   Create a new table for order items that stores the sandwich details for each order. You'll need to modify the database schema and create appropriate models.
-
-   Update the order history screen to show the actual items that were ordered, not just the count and total price.
-
-   ⚠️ **Show your enhanced order history with item details to a member of staff** for a sign-off.
-
-3. (Advanced) Add a favorites feature that allows users to save their favorite sandwich combinations.
-
-   Create a new model for favorite sandwiches and add database operations to save, load, and delete favorites. Add a favorites screen where users can view their saved combinations and quickly add them to their cart.
-
-   Consider how this feature should integrate with your existing state management. Should favorites be part of a provider, or handled differently?
-
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
-4. (Advanced) Implement data export functionality that allows users to export their order history as a CSV file.
-
-   You'll need to use the `path_provider` package to find a suitable directory for saving files, and format the order data as CSV. Consider how users will access the exported file on different platforms.
-
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
-## **Looking Ahead**
-
-Next week, we'll explore cloud services and how to integrate your app with Firebase for features like user authentication, cloud storage, and real-time data synchronization. Some of the persistence features we've implemented this week can be enhanced or replaced with cloud-based solutions.
