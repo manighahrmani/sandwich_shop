@@ -1545,7 +1545,7 @@ We have not mentioned committing your changes in this section but we would ideal
 
 ## **Exercises**
 
-This worksheet covers substantial material, so exercises are kept minimal.
+This week we have had a heavy worksheet so we will keep the exercises light. Complete the following exercises at your own pace.
 
 1. Our codebase currently has a lot of redundancy and inconsistencies. For example, the app bar is implemented separately in each screen, and the cart indicator is also duplicated.
 
@@ -1553,7 +1553,7 @@ This worksheet covers substantial material, so exercises are kept minimal.
 
     The goal of this exercise is to eliminate duplication, standardize the look of the app across all screens, and ideally add a more consistent navigation experience.
 
-    ⚠️ **Show your consistent app bar across all pages to a member of staff** for a sign-off.
+    ⚠️ **Show your consistent appbar across all pages to a member of staff** for a sign-off.
 
 2. (Advanced) Our database operations so far are only limited to creating a table, inserting and reading data. You are already familiar with SQL commands like `UPDATE` and `DELETE` from your previous database module.
 
