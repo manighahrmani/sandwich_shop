@@ -919,13 +919,13 @@ Test your app to ensure the state management is working correctly. The cart shou
 
 You'll notice that all screens now have a cart indicator showing the total number of items. This cart indicator updates automatically as you add or remove items, showing how the provider pattern can be used for state management.
 
-Before moving on, make sure to update the widget tests for all screens to check for the newly added functionality (some of the current tests will fail, and we have not tested the existance of the cart indicator).
+Before moving on, make sure to update the widget tests for all screens to check for the newly added functionality (some of the current tests will fail, and we have not tested the existence of the cart indicator).
 
 ## **Third-Party Packages**
 
 Flutter has a rich ecosystem of third-party packages that can add functionality to your app. These packages are published on [pub.dev](https://pub.dev), Flutter's official package repository.
 
-While packages can save development time, use them judiciously. Every package is a potential source of bugs and security vulnerabilities. You're essentially trusting the package maintainer not to introduce malicious code or make mistakes that could affect your app.
+While packages can save development time, we would recommend against using them as much as possible. Every package is a potential source of bugs and security vulnerabilities. You're trusting the package maintainers, who are often an open-source volunteer and not a professionals paid by Google. You are trusting outsiders not to introduce malicious code or make mistakes that could affect your app. See this YouTube video for an example of one such incident that could have had catastrophic consequences: [The largest supply-chain attack ever](https://youtu.be/QVqIx-Y8s-s).
 
 To add a package to your project, use the `flutter pub add` command:
 
@@ -935,7 +935,7 @@ flutter pub add package_name
 
 This automatically adds the package to your `pubspec.yaml` file and downloads it. You can then import and use the package in your Dart code.
 
-For your coursework, try to minimize the number of third-party packages you use. Focus on learning Flutter's built-in capabilities first.
+For your coursework, **minimize the number of third-party packages you use**. Focus on learning Flutter's built-in capabilities first.
 
 ## **Data Persistence**
 
@@ -943,7 +943,9 @@ So far, all data in our app is lost when the app is closed. Real apps need to pe
 
 ### **Shared Preferences for Simple Settings**
 
-For simple key-value data like user preferences, use the `shared_preferences` package. This is perfect for storing settings like theme preferences, user names, or simple configuration options.
+For simple key-value data like user preferences, use the `shared_preferences` package. Some of you may have already used this package in the previous worksheet, feel free to skip this section if you have.
+
+`shared_preferences` is perfect for storing settings like theme preferences, user names, or simple configuration options.
 
 Add the package to your project:
 
