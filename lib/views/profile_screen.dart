@@ -63,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Image.asset('assets/images/logo.png'),
           ),
         ),
-        title: const Text(
+        title: Text(
           'Profile',
           style: heading1,
         ),
@@ -75,8 +75,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.shopping_cart),
-                    SizedBox(width: 4),
+                    const Icon(Icons.shopping_cart),
+                    const SizedBox(width: 4),
                     Text('${cart.countOfItems}'),
                   ],
                 ),
@@ -90,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text('Enter your details:', style: heading2),
+            Text('Enter your details:', style: heading2),
             const SizedBox(height: 20),
             TextField(
               controller: _nameController,
