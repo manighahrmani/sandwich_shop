@@ -1529,7 +1529,13 @@ As with shared preferences, test this feature on a device or simulator (not web)
 
 The database file is stored at `/data/data/<your_app_id>/databases/sandwich_shop.db` on Android devices.
 
-Remember to add widget tests for the order history screen and the updated checkout and order screens. Also, since we have added a model and a service, use your AI assistant to help you write unit tests for these new classes (manually check to make sure all functionality is tested and that all tests pass by running `flutter test`).
+Remember to add widget tests for the order history screen and the updated checkout and order screens. Also, since we have added a model and a service, use your AI assistant to help you write unit tests for these new classes. To test SQLite functionality, you can use the `sqflite_common_ffi` package which allows you to run SQLite in a Dart VM environment (like during tests). Add it to your `dev_dependencies` in `pubspec.yaml` by running:
+
+```bash
+flutter pub add --dev sqflite_common_ffi
+```
+
+Read more about it in the [official documentation](https://pub.dev/packages/sqflite_common_ffi). Once you have added all the tests, make sure to manually check to make sure all functionality is tested and that all tests pass by running `flutter test`.
 
 We have not mentioned committing your changes in this section but we would ideally want you to commit each step of the way. For example, after creating the model, after creating the service, after updating the checkout screen, and after creating the order history screen. Well done if you have completed the worksheet up to this point!
 
