@@ -10,7 +10,7 @@ void main() {
     testWidgets('displays order summary with empty cart',
         (WidgetTester tester) async {
       final Cart emptyCart = Cart();
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: emptyCart,
@@ -37,7 +37,7 @@ void main() {
       );
       cart.add(sandwich, quantity: 2);
 
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -69,7 +69,7 @@ void main() {
       cart.add(sandwich1, quantity: 1);
       cart.add(sandwich2, quantity: 3);
 
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -87,7 +87,7 @@ void main() {
     testWidgets('shows confirm payment button initially',
         (WidgetTester tester) async {
       final Cart cart = Cart();
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -113,7 +113,7 @@ void main() {
       );
       cart.add(sandwich, quantity: 1);
 
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -144,7 +144,7 @@ void main() {
       );
       cart.add(footlongSandwich, quantity: 1);
 
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -168,7 +168,7 @@ void main() {
       );
       cart.add(sixInchSandwich, quantity: 1);
 
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -198,7 +198,7 @@ void main() {
       cart.add(footlongSandwich, quantity: 1);
       cart.add(sixInchSandwich, quantity: 2);
 
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -215,7 +215,7 @@ void main() {
 
     testWidgets('has proper layout structure', (WidgetTester tester) async {
       final Cart cart = Cart();
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -234,7 +234,7 @@ void main() {
     testWidgets('payment method text is displayed correctly',
         (WidgetTester tester) async {
       final Cart cart = Cart();
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -262,7 +262,7 @@ void main() {
       );
       cart.add(sandwich, quantity: 1);
 
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -292,7 +292,7 @@ void main() {
       );
       cart.add(sandwich, quantity: 1);
 
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
@@ -315,7 +315,7 @@ void main() {
       );
       cart.add(sandwich, quantity: 3);
 
-      final CheckoutScreen checkoutScreen = const CheckoutScreen();
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
       final MaterialApp app = MaterialApp(
         home: ChangeNotifierProvider<Cart>.value(
           value: cart,
