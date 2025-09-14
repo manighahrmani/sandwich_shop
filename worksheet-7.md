@@ -30,11 +30,9 @@ Or manually ensure your code matches the repository. Run the app to make sure ev
 
 ## **Introduction to App State Management**
 
-So far, we've been managing state within individual widgets using `setState()`. This works well for simple apps, but as your app grows, you'll find that multiple screens need to share the same data. For example, both your order screen and cart screen need access to the cart data.
+So far, we've been managing ephemeral state within individual widgets using `setState()`. This works well for simple apps, but as your app grows, you'll find that multiple screens need to share the same data. For example, both your order screen and cart screen need access to the cart data.
 
 Currently, we pass the cart object between screens, but this becomes cumbersome when you have many screens that need the same data. This is where **app state management** comes in.
-
-App state is different from the ephemeral state we've been using (see [Worksheet 3](./worksheet-3.md)). While ephemeral state belongs to a single widget, app state is shared across multiple parts of your app and persists as users navigate between screens.
 
 ### **The Provider Package**
 
@@ -925,7 +923,7 @@ Before moving on, make sure to update the widget tests for all screens to check 
 
 Flutter has a rich ecosystem of third-party packages that can add functionality to your app. These packages are published on [pub.dev](https://pub.dev), Flutter's official package repository.
 
-While packages can save development time, we would recommend against using them as much as possible. Every package is a potential source of bugs and security vulnerabilities. You're trusting the package maintainers, who are often an open-source volunteer and not a professionals paid by Google. You are trusting outsiders not to introduce malicious code or make mistakes that could affect your app. See this YouTube video for an example of one such incident that could have had catastrophic consequences: [The largest supply-chain attack ever](https://youtu.be/QVqIx-Y8s-s).
+We recommend against using them as much as possible. Every package is a potential source of bugs and security vulnerabilities. Installing a package means trusting the package maintainers, who are often an open-source volunteer and not a professionals paid by Google. You are trusting them not to introduce malicious code or make mistakes that could affect your app. See this YouTube video for an example of one such incident that could have had catastrophic consequences: [The largest supply-chain attack ever](https://youtu.be/QVqIx-Y8s-s).
 
 To add a package to your project, use the `flutter pub add` command:
 
@@ -1543,12 +1541,24 @@ We have not mentioned committing your changes in this section but we would ideal
 
 This week we have had a heavy worksheet so we will keep the exercises light. Complete the following exercises at your own pace.
 
-1. Remove the redundancy by introducing a common widgets file in the views folder. Put the common appbar in there. Also refactor the tests to test this part separately. Also the styled button can be put inside this common widgets file. Add missing navigation for example from order history back to other pages (or go back to the previous worksheet and implement a `Drawer` widget for navigation).
-- Eliminated duplicate StyledButton implementations
-- Standardized app bar structure and logo placement
+1. Our codebase currently has a lot of redundancy and inconsistencies. For example, the app bar is implemented separately in each screen, and the cart indicator is also duplicated.
 
-2. You can also try to add more features if you have time, for example, manually deleting orders from the order history screen (which would require you to modify the the data stored on the SQLite database).
+    You can choose to place duplicated code (widgets) in a separate file, ideally called `common_widgets.dart` inside the `views` folder and import it wherever needed. You can for example, take your solution to the second exercise form [Worksheet 6](worksheet-6.md#exercises) and place it there. Think about what else can be placed there to decrease redundancy and declutter your codebase.
 
-3. (Advanced) Introduction to integration tests (more on this next week)
+    The goal of this exercise is to eliminate duplication, standardize the look of the app across all screens, and ideally add a more consistent navigation experience.
 
-<!-- TODO: See if this file can be shortened or add a warning on top of it instead -->
+    ⚠️ **Show your consistent appbar across all pages to a member of staff** for a sign-off.
+
+2. (Advanced) Our database operations so far are only limited to creating a table, inserting and reading data. You are already familiar with SQL commands like `UPDATE` and `DELETE` from your previous database module.
+
+    Extend the functionality of the order history screen to allow users to modify their orders after a certain period of time (e.g., 5 minutes after placing the order).
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+
+3. (Advanced) We've shown you examples of unit testing and widget testing so far. Another type of testing is integration testing, which tests the complete app or a large part of it.
+
+    In Flutter, integration tests are written using the `integration_test` package. You can read more about it in the [official documentation](https://docs.flutter.dev/testing/integration-tests). We will cover this topic in more detail in the next worksheet but you are welcome to explore it now.
+
+    As a solid goal, write integration tests that cover the main user flows in your app, such as placing an order from start to finish.
+
+    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
