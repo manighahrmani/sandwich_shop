@@ -941,7 +941,7 @@ For your coursework, **minimize the number of third-party packages you use**. Fo
 
 ## **Data Persistence**
 
-So far, all data in our app is lost when the app is closed. Real apps need to persist data between sessions. Flutter offers several approaches to data persistence, depending on your needs.
+So far, all our app data, for example the cart contents, is lost when the app is closed. Real apps need to persist data. Flutter offers several approaches to data persistence, depending on your needs.
 
 ### **Shared Preferences for Simple Settings**
 
@@ -1042,7 +1042,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 ```
 
-Add a button to navigate to the settings screen in your order screen. In `lib/views/order_screen_view.dart`, add this method after the existing navigation methods:
+Next, we need to add a button to navigate to the settings screen in our order screen (which we are treating as our home page). In `lib/views/order_screen_view.dart`, inside the `_OrderScreenState` class, add this method to handle navigation to the settings screen:
 
 ```dart
 void _navigateToSettings() {
@@ -1055,9 +1055,10 @@ void _navigateToSettings() {
 }
 ```
 
-And add this button in the build method after the existing buttons:
+Then add this button in the build method after the profile button:
 
 ```dart
+const SizedBox(height: 20),
 StyledButton(
   onPressed: _navigateToSettings,
   icon: Icons.settings,
