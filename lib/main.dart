@@ -16,7 +16,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => Cart(),
+      create: (BuildContext context) {
+        return Cart();
+      },
       child: const MaterialApp(
         title: 'Sandwich Shop App',
         debugShowCheckedModeBanner: false,
