@@ -1486,9 +1486,9 @@ Don't forget to import the order history screen:
 import 'package:sandwich_shop/views/order_history_screen.dart';
 ```
 
-#### **Commit your changes**
+Again, this is a feature that should be tested on a device or simulator (not web). Run the app, complete a few orders, and navigate to the order history screen to see your saved orders.
 
-Test the order history feature. Complete a few orders and verify they appear in the order history screen.
+You can see the saved database in `/data/data/<your_app_id>/databases/sandwich_shop.db` on Android devices or simulators. You can use a SQLite viewer to inspect the database contents.
 
 ## **Exercises**
 
