@@ -83,18 +83,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               label: _fontSize.toInt().toString(),
               onChanged: _saveFontSize,
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             Text(
               'This is sample text to preview the font size.',
               style: TextStyle(fontSize: _fontSize),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             Text(
               'Font size changes are saved automatically. Restart the app to see changes in all screens.',
               style: AppStyles.normalText,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               child: Text('Back to Order', style: AppStyles.normalText),
