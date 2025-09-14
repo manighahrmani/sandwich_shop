@@ -935,6 +935,8 @@ flutter pub add package_name
 
 This automatically adds the package to your `pubspec.yaml` file and downloads it. You can then import and use the package in your Dart code.
 
+`add` is a subcommand of the `flutter pub` command. This is one of the many commands that Flutter provides to manage your project's dependencies. You can learn more about `flutter pub` and its subcommands (e.g., `outdated` which lists outdated packages in your project) in the [official documentation](https://dart.dev/tools/pub/cmd). Once you clone your project on a different machine, you can run `flutter pub get` to download all dependencies listed in `pubspec.yaml` although Visual Studio Code should do this automatically when you open the project.
+
 For your coursework, **minimize the number of third-party packages you use**. Focus on learning Flutter's built-in capabilities first.
 
 ## **Data Persistence**
