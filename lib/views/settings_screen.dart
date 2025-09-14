@@ -63,27 +63,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
         title: Text('Settings', style: AppStyles.heading1),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.settings),
-                const SizedBox(width: 4),
-                Text('Settings', style: AppStyles.normalText),
-              ],
-            ),
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Font Size Settings', style: AppStyles.heading2),
-            const SizedBox(height: 10),
+            Text('Font Size', style: AppStyles.heading2),
+            const SizedBox(height: 20),
             Text(
               'Current size: ${_fontSize.toInt()}px',
               style: TextStyle(fontSize: _fontSize),
@@ -99,57 +85,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 40),
             Text(
-              'Preview Text',
-              style: AppStyles.heading2,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'This is how normal text will look with the selected font size.',
+              'This is sample text to preview the font size.',
               style: TextStyle(fontSize: _fontSize),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 40),
             Text(
-              'This is how headings will look.',
-              style: TextStyle(
-                fontSize: _fontSize + 8,
-                fontWeight: FontWeight.bold,
-              ),
+              'Font size changes are saved automatically. Restart the app to see changes in all screens.',
+              style: AppStyles.normalText,
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.blue.shade200),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.info, color: Colors.blue.shade700),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Note',
-                        style: TextStyle(
-                          fontSize: _fontSize,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade700,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Font size changes are saved automatically. You may need to restart the app to see changes in all screens.',
-                    style: TextStyle(
-                      fontSize: _fontSize - 2,
-                      color: Colors.blue.shade700,
-                    ),
-                  ),
-                ],
-              ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Back to Order', style: AppStyles.normalText),
             ),
           ],
         ),
