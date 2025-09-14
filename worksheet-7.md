@@ -49,8 +49,10 @@ flutter pub add provider
 We have purposefully not talked about packages a lot so far and we will do so in [#Third-Party Packages](#third-party-packages) later in this worksheet. The provider package you have installed introduces three key concepts:
 
 - **Notifier**: A class that extends the `ChangeNotifier` class and holds the app state. It notifies listeners when the state changes. Our `Cart` class will be our notifier.
-- **Provider**: A widget that provides an instance of a `ChangeNotifier` to its descendants. We will use `ChangeNotifierProvider` to provide our cart model to the entire app.
+- **Provider**: A widget that provides an instance of a `ChangeNotifier` to its descendants. Usually this is done at the top level of your app (in our case, in `main.dart`). We will use `ChangeNotifierProvider` to provide our cart model to the entire app.
 - **Consumer**: A widget that listens to changes in the provided notifier and rebuilds when notified. You will see how we will use `Consumer<Cart>` to listen for changes in the cart and update the UI accordingly.
+
+For a more in-depth explanation of these concepts, see [this page on app state management](https://docs.flutter.dev/data-and-backend/state-mgmt/simple).
 
 ### **Creating a Cart Model with ChangeNotifier**
 
