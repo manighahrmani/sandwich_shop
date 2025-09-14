@@ -30,6 +30,8 @@ Or manually ensure your code matches the repository. Run the app to make sure ev
 
 ## **Introduction to App State Management**
 
+⚠️ **Note**: This is a comprehensive worksheet covering advanced topics you do not have to use to be able to pass your coursework. Complete as much as you can, but do not worry if you cannot finish everything.
+
 So far, we've been managing ephemeral state within individual widgets using `setState()`. This works well for simple apps, but as your app grows, you'll find that multiple screens need to share the same data. For example, both your order screen and cart screen need access to the cart data.
 
 Currently, we pass the cart object between screens, but this becomes cumbersome when you have many screens that need the same data. This is where **app state management** comes in.
@@ -1196,7 +1198,7 @@ You'll need to do this for any widget that uses `normalText`, `heading1`, or `he
 
 Once you have tested the settings screen and ensured that font size changes persist across app restarts, add widget tests for the settings screen and make sure the tests still pass for all other screens. And as always remember to commit your changes regularly.
 
-### **SQLite for Complex Data**
+### **SQLite for Complex Data (Optional)**
 
 For more complex data that requires querying and relationships, use SQLite. This is suitable for storing structured data like order history, user profiles, or any data that benefits from SQL queries.
 
@@ -1543,7 +1545,7 @@ We have not mentioned committing your changes in this section but we would ideal
 
 ## **Exercises**
 
-This week we have had a heavy worksheet so we will keep the exercises light. Complete the following exercises at your own pace.
+This worksheet covers substantial material, so exercises are kept minimal.
 
 1. Our codebase currently has a lot of redundancy and inconsistencies. For example, the app bar is implemented separately in each screen, and the cart indicator is also duplicated.
 
@@ -1551,7 +1553,7 @@ This week we have had a heavy worksheet so we will keep the exercises light. Com
 
     The goal of this exercise is to eliminate duplication, standardize the look of the app across all screens, and ideally add a more consistent navigation experience.
 
-    ⚠️ **Show your consistent appbar across all pages to a member of staff** for a sign-off.
+    ⚠️ **Show your consistent app bar across all pages to a member of staff** for a sign-off.
 
 2. (Advanced) Our database operations so far are only limited to creating a table, inserting and reading data. You are already familiar with SQL commands like `UPDATE` and `DELETE` from your previous database module.
 
