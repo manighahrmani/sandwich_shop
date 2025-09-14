@@ -1243,7 +1243,8 @@ class SavedOrder {
         orderId = map['orderId'] as String,
         totalAmount = map['totalAmount'] as double,
         itemCount = map['itemCount'] as int,
-        orderDate = DateTime.fromMillisecondsSinceEpoch(map['orderDate'] as int);
+        orderDate =
+            DateTime.fromMillisecondsSinceEpoch(map['orderDate'] as int);
 }
 ```
 
@@ -1400,7 +1401,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   }
 
   String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+    String output = '${date.day}/${date.month}/${date.year}';
+    output += ' ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+    return output;
   }
 
   @override
@@ -1466,15 +1469,18 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(order.orderId, style: AppStyles.heading2),
-                          Text('£${order.totalAmount.toStringAsFixed(2)}', style: AppStyles.heading2),
+                          Text('£${order.totalAmount.toStringAsFixed(2)}',
+                              style: AppStyles.heading2),
                         ],
                       ),
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${order.itemCount} items', style: AppStyles.normalText),
-                          Text(_formatDate(order.orderDate), style: AppStyles.normalText),
+                          Text('${order.itemCount} items',
+                              style: AppStyles.normalText),
+                          Text(_formatDate(order.orderDate),
+                              style: AppStyles.normalText),
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -1491,7 +1497,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 }
 ```
 
-Add a button to navigate to order history in your order screen. In `lib/views/order_screen_view.dart`, add this method after the existing navigation methods:
+To navigate to this page, we need to add a button to `lib/views/order_screen_view.dart` that takes us to order history screen. In `lib/views/order_screen_view.dart`, inside the `_OrderScreenState` class, add this method after the existing navigation methods:
 
 ```dart
 void _navigateToOrderHistory() {
@@ -1504,7 +1510,7 @@ void _navigateToOrderHistory() {
 }
 ```
 
-And add this button in the build method after the existing buttons:
+And add this button in the build method after the settings button:
 
 ```dart
 const SizedBox(height: 20),
@@ -1522,10 +1528,16 @@ Don't forget to import the order history screen:
 import 'package:sandwich_shop/views/order_history_screen.dart';
 ```
 
-Test this feature on a device or simulator (not web). Complete a few orders and navigate to the order history screen to see your saved orders. The database file is stored at `/data/data/<your_app_id>/databases/sandwich_shop.db` on Android devices.
+As with shared preferences, test this feature on a device or simulator (not web). Complete a few orders and navigate to the order history screen to see your saved orders. 
+
+The database file is stored at `/data/data/<your_app_id>/databases/sandwich_shop.db` on Android devices.
+
+Remember to add widget tests for the order history screen and the updated checkout and order screens. Also, since we have added a model and a service, use your AI assistant to help you write unit tests for these new classes (manually check to make sure all functionality is tested and that all tests pass by running `flutter test`).
+
+We have not mentioned committing your changes in this section but we would ideally want you to commit each step of the way. For example, after creating the model, after creating the service, after updating the checkout screen, and after creating the order history screen. Well done if you have completed the worksheet up to this point!
 
 ## **Exercises**
 
 This week we have had a heavy worksheet so we will keep the exercises light. Complete the following exercise which is mainly about refactoring. You can also try to add more features if you have time, for example, manually deleting orders from the order history screen (which would require you to modify the the data stored on the SQLite database).
 
-0. Remove the redundancy by introducing a common widgets file in the views folder. Put the common appbar in there. Also refactor the tests to test this part separately. Also the styled button can be put inside this common widgets file.
+0. Remove the redundancy by introducing a common widgets file in the views folder. Put the common appbar in there. Also refactor the tests to test this part separately. Also the styled button can be put inside this common widgets file. Add missing navigation for example from order history back to other pages (or go back to the previous worksheet and implement a `Drawer` widget for navigation).
