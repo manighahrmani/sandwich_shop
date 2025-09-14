@@ -37,6 +37,8 @@ void main() {
 
       expect(find.widgetWithText(StyledButton, 'Add to Cart'), findsOneWidget);
       expect(find.widgetWithText(StyledButton, 'View Cart'), findsOneWidget);
+      expect(find.widgetWithText(StyledButton, 'Profile'), findsOneWidget);
+      expect(find.widgetWithText(StyledButton, 'Settings'), findsOneWidget);
     });
 
     testWidgets('displays cart indicator in app bar',
@@ -405,6 +407,48 @@ void main() {
       final StyledButton viewCartButton =
           tester.widget<StyledButton>(viewCartButtonFinder);
       expect(viewCartButton.onPressed, isNotNull);
+    });
+
+    testWidgets('navigates to profile when Profile button is tapped',
+        (WidgetTester tester) async {
+      final Cart cart = Cart();
+      const OrderScreen orderScreen = OrderScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: orderScreen,
+        ),
+      );
+      await tester.pumpWidget(app);
+
+      final Finder profileButtonFinder =
+          find.widgetWithText(StyledButton, 'Profile');
+      expect(profileButtonFinder, findsOneWidget);
+
+      final StyledButton profileButton =
+          tester.widget<StyledButton>(profileButtonFinder);
+      expect(profileButton.onPressed, isNotNull);
+    });
+
+    testWidgets('navigates to settings when Settings button is tapped',
+        (WidgetTester tester) async {
+      final Cart cart = Cart();
+      const OrderScreen orderScreen = OrderScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: orderScreen,
+        ),
+      );
+      await tester.pumpWidget(app);
+
+      final Finder settingsButtonFinder =
+          find.widgetWithText(StyledButton, 'Settings');
+      expect(settingsButtonFinder, findsOneWidget);
+
+      final StyledButton settingsButton =
+          tester.widget<StyledButton>(settingsButtonFinder);
+      expect(settingsButton.onPressed, isNotNull);
     });
   });
 
