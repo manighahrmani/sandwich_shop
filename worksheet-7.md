@@ -1194,8 +1194,6 @@ You'll need to do this for any widget that uses `normalText`, `heading1`, or `he
 
 Once you have tested the settings screen and ensured that font size changes persist across app restarts, add widget tests for the settings screen and make sure the tests still pass for all other screens. And as always remember to commit your changes regularly.
 
-<!-- Done till here -->
-
 ### **SQLite for Complex Data**
 
 For more complex data that requires querying and relationships, use SQLite. This is suitable for storing structured data like order history, user profiles, or any data that benefits from SQL queries.
@@ -1230,7 +1228,6 @@ class SavedOrder {
 
   Map<String, Object?> toMap() {
     return {
-      'id': id,
       'orderId': orderId,
       'totalAmount': totalAmount,
       'itemCount': itemCount,
