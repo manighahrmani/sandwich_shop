@@ -30,7 +30,6 @@ class AppStyles {
       );
 }
 
-// Keep these for backward compatibility, but they now use the dynamic styles
 TextStyle get normalText => AppStyles.normalText;
 TextStyle get heading1 => AppStyles.heading1;
 TextStyle get heading2 => AppStyles.heading2;
