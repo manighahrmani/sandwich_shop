@@ -1550,3 +1550,5 @@ This week we have had a heavy worksheet so we will keep the exercises light. Com
 2. You can also try to add more features if you have time, for example, manually deleting orders from the order history screen (which would require you to modify the the data stored on the SQLite database).
 
 3. (Advanced) Introduction to integration tests (more on this next week)
+
+<!-- TODO: See if this file can be shortened or add a warning on top of it instead -->
