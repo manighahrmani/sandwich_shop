@@ -1541,6 +1541,12 @@ We have not mentioned committing your changes in this section but we would ideal
 
 ## **Exercises**
 
-This week we have had a heavy worksheet so we will keep the exercises light. Complete the following exercise which is mainly about refactoring. You can also try to add more features if you have time, for example, manually deleting orders from the order history screen (which would require you to modify the the data stored on the SQLite database).
+This week we have had a heavy worksheet so we will keep the exercises light. Complete the following exercises at your own pace.
 
-0. Remove the redundancy by introducing a common widgets file in the views folder. Put the common appbar in there. Also refactor the tests to test this part separately. Also the styled button can be put inside this common widgets file. Add missing navigation for example from order history back to other pages (or go back to the previous worksheet and implement a `Drawer` widget for navigation).
+1. Remove the redundancy by introducing a common widgets file in the views folder. Put the common appbar in there. Also refactor the tests to test this part separately. Also the styled button can be put inside this common widgets file. Add missing navigation for example from order history back to other pages (or go back to the previous worksheet and implement a `Drawer` widget for navigation).
+- Eliminated duplicate StyledButton implementations
+- Standardized app bar structure and logo placement
+
+2. You can also try to add more features if you have time, for example, manually deleting orders from the order history screen (which would require you to modify the the data stored on the SQLite database).
+
+3. (Advanced) Introduction to integration tests (more on this next week)
