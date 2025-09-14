@@ -46,13 +46,13 @@ flutter pub add provider
 
 We have purposefully not talked about packages a lot so far and we will do so in [#Third-Party Packages](#third-party-packages) later in this worksheet. The provider package you have installed introduces three key concepts:
 
-- **ChangeNotifier**: A class that can notify listeners when it changes. For example, our cart model will be a ChangeNotifier.
-- **ChangeNotifierProvider**: A widget that provides a ChangeNotifier to its descendants. In our case, the descendants of the cart will be the order screen and cart screen.
-- **Consumer**: A widget that listens to changes in a ChangeNotifier and rebuilds when necessary. For us, the cart summary display in the order screen will be a Consumer.
+- **Notifier**: A class that extends the `ChangeNotifier` class and holds the app state. It notifies listeners when the state changes. Our `Cart` class will be our notifier.
+- **Provider**: A widget that provides an instance of a `ChangeNotifier` to its descendants. We will use `ChangeNotifierProvider` to provide our cart model to the entire app.
+- **Consumer**: A widget that listens to changes in the provided notifier and rebuilds when notified. You will see how we will use `Consumer<Cart>` to listen for changes in the cart and update the UI accordingly.
 
 ### **Creating a Cart Model with ChangeNotifier**
 
-Let's refactor our `Cart` class to extend `ChangeNotifier` (feel free to revisit our [Object-Oriented Dart Worksheet](./worksheet-0.md#4---object-oriented-programming-in-dart) if you need a refresher). This will allow widgets to listen for changes and automatically rebuild when the cart is modified.
+Let's refactor our `Cart` class to extend `ChangeNotifier` (feel free to revisit our [Object-Oriented Dart Worksheet](./worksheet-0.md#4---object-oriented-programming-in-dart) for a refresher). This will allow widgets to listen for changes and automatically rebuild when the cart is modified.
 
 Open `lib/models/cart.dart` and update it to the following:
 
@@ -150,7 +150,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => Cart(),
+      create: (BuildContext context) {
+        return Cart();
+      },
       child: const MaterialApp(
         title: 'Sandwich Shop App',
         debugShowCheckedModeBanner: false,
@@ -161,9 +163,9 @@ class App extends StatelessWidget {
 }
 ```
 
-Again, review the changes in the Source Control panel before committing. The `ChangeNotifierProvider` creates a single instance of `Cart` and makes it available to all descendant widgets (all screens in our app). The `create` function is called only once, so we have a single shared cart.
+Again, review the changes in the Source Control panel before committing. The `ChangeNotifierProvider` creates a single instance of `Cart` and makes it available to all descendant widgets. The `create` function is called once, so we have a single shared cart and `context` is passed to it so our provider (`Cart`) knows where it is in the widget tree.
 
-We've also added `debugShowCheckedModeBanner: false` to remove the debug banner from the app.
+We've also added `debugShowCheckedModeBanner: false` to remove the debug banner from the app. This is a purely aesthetic change.
 
 ### **Consuming the Cart in Screens**
 
@@ -460,9 +462,11 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-You will have an error caused by how the `CartViewScreen` is constructed without a cart parameter. We will fix this next. Just review the changes in the Source Control panel and commit your changes.
+You will have an error caused by how the `CartViewScreen` is constructed without a cart parameter. We will fix this next. Just review the changes in the Source Control panel.
 
-Notice how we use `Provider.of<Cart>(context, listen: false)` to access the cart when we don't need to rebuild the widget when the cart changes. On the other hand, for the cart summary display and the cart indicator in the app bar, we use `Consumer<Cart>` to automatically rebuild when the cart changes. The cart indicator in the app bar will now show the total number of items across all screens, updating automatically as items are added or removed.
+Notice how we use `Provider.of<Cart>(context, listen: false)` to access the cart when we don't need to rebuild the widget when the cart changes (hover your mouse over `listen` in VS Code to see what it does). This is also the case when adding items to the cart or navigating to another screen.
+
+On the other hand, for the cart summary display and the cart indicator in the app bar, we use `Consumer<Cart>` to automatically rebuild when the cart changes. We additionally have a small cart indicator in the app that shows the total number of items in the cart.
 
 Now update `lib/views/cart_view_screen.dart` to remove the cart parameter and use the provided cart instead:
 
@@ -915,13 +919,11 @@ appBar: AppBar(
 
 Test your app to ensure the state management is working correctly. The cart should now be shared across all screens and automatically update when modified.
 
-You'll notice that all screens now have a cart indicator showing the total number of items. This cart indicator updates automatically as you add or remove items, showing how the provider pattern can be used for state management.
-
 Before moving on, make sure to update the widget tests for all screens to check for the newly added functionality (some of the current tests will fail, and we have not tested the existence of the cart indicator).
 
 ## **Third-Party Packages**
 
-Flutter has a rich ecosystem of third-party packages that can add functionality to your app. These packages are published on [pub.dev](https://pub.dev), Flutter's official package repository.
+There are a lot of third-party Flutter packages that can add functionality to your app. These packages are published on [pub.dev](https://pub.dev). Those of you who are familiar with JavaScript may find this similar to npm packages.
 
 We recommend against using them as much as possible. Every package is a potential source of bugs and security vulnerabilities. Installing a package means trusting the package maintainers, who are often an open-source volunteer and not a professionals paid by Google. You are trusting them not to introduce malicious code or make mistakes that could affect your app. See this YouTube video for an example of one such incident that could have had catastrophic consequences: [The largest supply-chain attack ever](https://youtu.be/QVqIx-Y8s-s).
 
@@ -1118,7 +1120,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => Cart(),
+      create: (BuildContext context) {
+        return Cart();
+      },
       child: const MaterialApp(
         title: 'Sandwich Shop App',
         debugShowCheckedModeBanner: false,
