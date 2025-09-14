@@ -949,9 +949,7 @@ For simple key-value data like user preferences, use the `shared_preferences` pa
 
 `shared_preferences` is perfect for storing settings like theme preferences, user names, or simple configuration options.
 
-For this section, you must run the app on a device (your operating system, connected device or emulator) but not web. We will be building a settings screen as shown below which would allow us to modify the font size (the font sizes imported from `app_styles.dart`):
-
-![Settings Screen](images/screenshot_settings_on_emulator.png)
+For this section, you must run the app on a device (your operating system, connected device or emulator) but not web. We will be building a settings screen which would allow us to modify the font size (the font sizes imported from `app_styles.dart`).
 
 Add the package to your project:
 
