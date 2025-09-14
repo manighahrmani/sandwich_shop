@@ -949,17 +949,59 @@ For simple key-value data like user preferences, use the `shared_preferences` pa
 
 `shared_preferences` is perfect for storing settings like theme preferences, user names, or simple configuration options.
 
+For this section, you must run the app on a device or simulator (not on web) as shared preferences work differently on web platforms.
+
 Add the package to your project:
 
 ```bash
 flutter pub add shared_preferences
 ```
 
-Let's create a simple settings screen that demonstrates shared preferences. Create a new file `lib/views/settings_screen.dart`:
+First, let's update our `app_styles.dart` to load font sizes from shared preferences. This will make font size changes visible throughout the entire app. Update `lib/views/app_styles.dart`:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+class AppStyles {
+  static double _baseFontSize = 16.0;
+  
+  static Future<void> loadFontSize() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    _baseFontSize = prefs.getDouble('fontSize') ?? 16.0;
+  }
+  
+  static Future<void> saveFontSize(double fontSize) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('fontSize', fontSize);
+    _baseFontSize = fontSize;
+  }
+  
+  static double get baseFontSize => _baseFontSize;
+  
+  static TextStyle get normalText => TextStyle(fontSize: _baseFontSize);
+  
+  static TextStyle get heading1 => TextStyle(
+    fontSize: _baseFontSize + 8,
+    fontWeight: FontWeight.bold,
+  );
+  
+  static TextStyle get heading2 => TextStyle(
+    fontSize: _baseFontSize + 4,
+    fontWeight: FontWeight.bold,
+  );
+}
+
+// Keep these for backward compatibility, but they now use the dynamic styles
+TextStyle get normalText => AppStyles.normalText;
+TextStyle get heading1 => AppStyles.heading1;
+TextStyle get heading2 => AppStyles.heading2;
+```
+
+Now create a settings screen that demonstrates shared preferences. Create a new file `lib/views/settings_screen.dart`:
+
+```dart
+import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -980,19 +1022,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadSettings() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await AppStyles.loadFontSize();
     setState(() {
-      _fontSize = prefs.getDouble('fontSize') ?? 16.0;
+      _fontSize = AppStyles.baseFontSize;
       _isLoading = false;
     });
   }
 
   Future<void> _saveFontSize(double fontSize) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble('fontSize', fontSize);
+    await AppStyles.saveFontSize(fontSize);
     setState(() {
       _fontSize = fontSize;
     });
+    
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Font size saved! Restart the app to see changes in all screens.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   @override
@@ -1007,17 +1057,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings', style: heading1),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 100,
+            child: Image.asset('assets/images/logo.png'),
+          ),
+        ),
+        title: Text('Settings', style: AppStyles.heading1),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.settings),
+                const SizedBox(width: 4),
+                Text('Settings', style: AppStyles.normalText),
+              ],
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Font Size', style: heading2),
+            Text('Font Size Settings', style: AppStyles.heading2),
             const SizedBox(height: 10),
             Text(
-              'Current size: ${_fontSize.toInt()}',
+              'Current size: ${_fontSize.toInt()}px',
               style: TextStyle(fontSize: _fontSize),
             ),
             const SizedBox(height: 20),
@@ -1030,9 +1100,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onChanged: _saveFontSize,
             ),
             const SizedBox(height: 40),
-            const Text(
-              'This is sample text to preview the font size.',
-              style: TextStyle(fontSize: 16),
+            Text(
+              'Preview Text',
+              style: AppStyles.heading2,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'This is how normal text will look with the selected font size.',
+              style: TextStyle(fontSize: _fontSize),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'This is how headings will look.',
+              style: TextStyle(
+                fontSize: _fontSize + 8,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 40),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.blue.shade200),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.info, color: Colors.blue.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Note',
+                        style: TextStyle(
+                          fontSize: _fontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue.shade700,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Font size changes are saved automatically. You may need to restart the app to see changes in all screens.',
+                    style: TextStyle(
+                      fontSize: _fontSize - 2,
+                      color: Colors.blue.shade700,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -1042,7 +1161,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 ```
 
-Next, we need to add a button to navigate to the settings screen in our order screen (which we are treating as our home page). In `lib/views/order_screen_view.dart`, inside the `_OrderScreenState` class, add this method to handle navigation to the settings screen:
+Next, we need to initialize the font size when the app starts. Update `lib/main.dart` to load the saved font size:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sandwich_shop/models/cart.dart';
+import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppStyles.loadFontSize();
+  runApp(const App());
+}
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => Cart(),
+      child: const MaterialApp(
+        title: 'Sandwich Shop App',
+        debugShowCheckedModeBanner: false,
+        home: OrderScreen(maxQuantity: 5),
+      ),
+    );
+  }
+}
+```
+
+Now add a button to navigate to the settings screen in your order screen. In `lib/views/order_screen_view.dart`, inside the `_OrderScreenState` class, add this method to handle navigation to the settings screen:
 
 ```dart
 void _navigateToSettings() {
@@ -1075,7 +1226,7 @@ import 'package:sandwich_shop/views/settings_screen.dart';
 
 #### **Commit your changes**
 
-Test the settings screen. The font size should persist when you close and reopen the app.
+Test the settings screen on a device or simulator (not web). Change the font size and restart the app - you should see the font size changes applied throughout all screens of the app.
 
 ### **SQLite for Complex Data**
 
