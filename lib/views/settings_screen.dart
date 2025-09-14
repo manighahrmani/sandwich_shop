@@ -31,16 +31,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _fontSize = fontSize;
     });
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-              'Font size saved! Restart the app to see changes in all screens.'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-    }
   }
 
   @override
