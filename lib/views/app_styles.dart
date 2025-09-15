@@ -6,7 +6,14 @@ class AppStyles {
 
   static Future<void> loadFontSize() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    _baseFontSize = prefs.getDouble('fontSize') ?? 16.0;
+    _baseFontSize = 16.0;
+
+    if (prefs.containsKey('fontSize')) {
+      final double? savedSize = prefs.getDouble('fontSize');
+      if (savedSize != null && savedSize >= 10.0 && savedSize <= 30.0) {
+        _baseFontSize = savedSize;
+      }
+    }
   }
 
   static Future<void> saveFontSize(double fontSize) async {
