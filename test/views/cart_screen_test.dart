@@ -19,7 +19,6 @@ void main() {
 
       expect(find.text('Cart View'), findsOneWidget);
       expect(find.text('Total: £0.00'), findsOneWidget);
-      // Note: This implementation doesn't show "Your cart is empty." message
     });
 
     testWidgets('displays cart items when cart has items',
@@ -105,18 +104,15 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      // Find the app bar first
       final appBarFinder = find.byType(AppBar);
       expect(appBarFinder, findsOneWidget);
 
-      // Find images within the app bar
       final appBarImagesFinder = find.descendant(
         of: appBarFinder,
         matching: find.byType(Image),
       );
       expect(appBarImagesFinder, findsOneWidget);
 
-      // Verify the logo image asset path
       final Image logoImage = tester.widget(appBarImagesFinder);
       expect(
           (logoImage.image as AssetImage).assetName, 'assets/images/logo.png');
@@ -139,7 +135,6 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      // Verify pricing calculation
       expect(find.text('Qty: 3 - £33.00'), findsOneWidget);
       expect(find.text('Total: £33.00'), findsOneWidget);
     });
