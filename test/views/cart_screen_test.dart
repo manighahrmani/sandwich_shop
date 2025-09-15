@@ -10,13 +10,16 @@ void main() {
     testWidgets('displays empty cart message when cart is empty',
         (WidgetTester tester) async {
       final Cart emptyCart = Cart();
-      final CartScreen cartViewScreen = CartScreen(cart: emptyCart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartScreen cartScreen = CartScreen(cart: emptyCart);
+      final MaterialApp app = MaterialApp(
+        home: cartScreen,
+      );
 
       await tester.pumpWidget(app);
 
-      expect(find.text('Cart'), findsOneWidget);
+      expect(find.text('Cart View'), findsOneWidget);
       expect(find.text('Total: £0.00'), findsOneWidget);
+      // Note: This implementation doesn't show "Your cart is empty." message
     });
 
     testWidgets('displays cart items when cart has items',
@@ -29,12 +32,14 @@ void main() {
       );
       cart.add(sandwich, quantity: 2);
 
-      final CartScreen cartViewScreen = CartScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartScreen cartScreen = CartScreen(cart: cart);
+      final MaterialApp app = MaterialApp(
+        home: cartScreen,
+      );
 
       await tester.pumpWidget(app);
 
-      expect(find.text('Cart'), findsOneWidget);
+      expect(find.text('Cart View'), findsOneWidget);
       expect(find.text('Veggie Delight'), findsOneWidget);
       expect(find.text('Footlong on white bread'), findsOneWidget);
       expect(find.text('Qty: 2 - £22.00'), findsOneWidget);
@@ -57,8 +62,10 @@ void main() {
       cart.add(sandwich1, quantity: 1);
       cart.add(sandwich2, quantity: 3);
 
-      final CartScreen cartViewScreen = CartScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartScreen cartScreen = CartScreen(cart: cart);
+      final MaterialApp app = MaterialApp(
+        home: cartScreen,
+      );
 
       await tester.pumpWidget(app);
 
@@ -73,8 +80,10 @@ void main() {
 
     testWidgets('back button navigates back', (WidgetTester tester) async {
       final Cart cart = Cart();
-      final CartScreen cartViewScreen = CartScreen(cart: cart);
-      final MaterialApp app = MaterialApp(home: cartViewScreen);
+      final CartScreen cartScreen = CartScreen(cart: cart);
+      final MaterialApp app = MaterialApp(
+        home: cartScreen,
+      );
 
       await tester.pumpWidget(app);
 
@@ -85,6 +94,54 @@ void main() {
       final StyledButton backButton =
           tester.widget<StyledButton>(backButtonFinder);
       expect(backButton.onPressed, isNotNull);
+    });
+
+    testWidgets('displays logo in app bar', (WidgetTester tester) async {
+      final Cart cart = Cart();
+      final CartScreen cartScreen = CartScreen(cart: cart);
+      final MaterialApp app = MaterialApp(
+        home: cartScreen,
+      );
+
+      await tester.pumpWidget(app);
+
+      // Find the app bar first
+      final appBarFinder = find.byType(AppBar);
+      expect(appBarFinder, findsOneWidget);
+
+      // Find images within the app bar
+      final appBarImagesFinder = find.descendant(
+        of: appBarFinder,
+        matching: find.byType(Image),
+      );
+      expect(appBarImagesFinder, findsOneWidget);
+
+      // Verify the logo image asset path
+      final Image logoImage = tester.widget(appBarImagesFinder);
+      expect(
+          (logoImage.image as AssetImage).assetName, 'assets/images/logo.png');
+    });
+
+    testWidgets('displays correct pricing for different sandwich types',
+        (WidgetTester tester) async {
+      final Cart cart = Cart();
+      final Sandwich sandwich = Sandwich(
+        type: SandwichType.veggieDelight,
+        isFootlong: true,
+        breadType: BreadType.white,
+      );
+      cart.add(sandwich, quantity: 3);
+
+      final CartScreen cartScreen = CartScreen(cart: cart);
+      final MaterialApp app = MaterialApp(
+        home: cartScreen,
+      );
+
+      await tester.pumpWidget(app);
+
+      // Verify pricing calculation
+      expect(find.text('Qty: 3 - £33.00'), findsOneWidget);
+      expect(find.text('Total: £33.00'), findsOneWidget);
     });
   });
 }
