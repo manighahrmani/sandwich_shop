@@ -125,7 +125,7 @@ Here is a screenshot of our cart page after implementing the modifications:
 
 ![Updated Cart Page](images/screenshot_final_cart_page.png)
 
-As before, remember to update the widget tests for the `cart_screen.dart` in `test/widget/cart_screen_test.dart` to cover the new functionality you have added.
+As before, remember to update the widget tests for the `cart_screen.dart` in `test/views/cart_screen_test.dart` to cover the new functionality you have added.
 
 #### **Commit your changes**
 
@@ -367,11 +367,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 Commit your changes and add widget tests for the new checkout screen in `test/views/checkout_screen_test.dart`.
 
-Now, update `lib/views/cart_screen.dart`. First, add the necessary imports at the top of the file:
+Now, update `lib/views/cart_screen.dart`. First, add the necessary import at the top of the file:
 
 ```dart
 import 'package:sandwich_shop/views/checkout_screen.dart';
-import 'package:sandwich_shop/views/order_screen.dart';
 ```
 
 In the `_CartScreenState` class, add this method to navigate to the checkout screen and handle the returned data:
