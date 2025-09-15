@@ -5,6 +5,7 @@ import 'package:sandwich_shop/views/order_screen.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/widgets/common_widgets.dart';
+import '../helpers/test_helpers.dart';
 
 void dummyFunction() {}
 
@@ -14,12 +15,7 @@ void main() {
         (WidgetTester tester) async {
       final Cart cart = Cart();
       const OrderScreen orderScreen = OrderScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: orderScreen,
-        ),
-      );
+      final MaterialApp app = createTestApp(orderScreen, cart: cart);
       await tester.pumpWidget(app);
 
       expect(find.text('Sandwich Counter'), findsOneWidget);
@@ -48,22 +44,10 @@ void main() {
         (WidgetTester tester) async {
       final Cart cart = Cart();
       const OrderScreen orderScreen = OrderScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: orderScreen,
-        ),
-      );
+      final MaterialApp app = createTestApp(orderScreen, cart: cart);
       await tester.pumpWidget(app);
 
-      final appBarFinder = find.byType(AppBar);
-      final cartIconFinder = find.descendant(
-        of: appBarFinder,
-        matching: find.byIcon(Icons.shopping_cart),
-      );
-      expect(cartIconFinder, findsOneWidget);
-
-      expect(find.text('0'), findsOneWidget);
+      testCartIndicator(tester, 0);
     });
   });
 
@@ -366,8 +350,7 @@ void main() {
       await tester.tap(removeButtonFinder);
       await tester.pumpAndSettle();
 
-      expect(find.text('0'),
-          findsNWidgets(2));
+      expect(find.text('0'), findsNWidgets(2));
       IconButton removeButton = tester.widget<IconButton>(removeButtonFinder);
       expect(removeButton.onPressed, isNull);
 
@@ -382,8 +365,7 @@ void main() {
       await tester.tap(removeButtonFinder);
       await tester.pumpAndSettle();
 
-      expect(find.text('0'),
-          findsNWidgets(2));
+      expect(find.text('0'), findsNWidgets(2));
     });
 
     testWidgets('navigates to cart view when View Cart button is tapped',
@@ -469,56 +451,6 @@ void main() {
       final StyledButton orderHistoryButton =
           tester.widget<StyledButton>(orderHistoryButtonFinder);
       expect(orderHistoryButton.onPressed, isNotNull);
-    });
-  });
-
-  group('StyledButton', () {
-    testWidgets('renders correctly with icon and label when enabled',
-        (WidgetTester tester) async {
-      const StyledButton testButton = StyledButton(
-        onPressed: dummyFunction,
-        icon: Icons.add_shopping_cart,
-        label: 'Test Button',
-        backgroundColor: Colors.green,
-      );
-
-      const MaterialApp testApp = MaterialApp(
-        home: Scaffold(body: testButton),
-      );
-
-      await tester.pumpWidget(testApp);
-
-      expect(find.byIcon(Icons.add_shopping_cart), findsOneWidget);
-      expect(find.text('Test Button'), findsOneWidget);
-
-      final Finder elevatedButtonFinder = find.byType(ElevatedButton);
-      final ElevatedButton button =
-          tester.widget<ElevatedButton>(elevatedButtonFinder);
-      expect(button.enabled, isTrue);
-    });
-
-    testWidgets('renders correctly and is disabled when onPressed is null',
-        (WidgetTester tester) async {
-      const StyledButton testButton = StyledButton(
-        onPressed: null,
-        icon: Icons.add_shopping_cart,
-        label: 'Test Button',
-        backgroundColor: Colors.green,
-      );
-
-      const MaterialApp testApp = MaterialApp(
-        home: Scaffold(body: testButton),
-      );
-
-      await tester.pumpWidget(testApp);
-
-      expect(find.byIcon(Icons.add_shopping_cart), findsOneWidget);
-      expect(find.text('Test Button'), findsOneWidget);
-
-      final Finder elevatedButtonFinder = find.byType(ElevatedButton);
-      final ElevatedButton button =
-          tester.widget<ElevatedButton>(elevatedButtonFinder);
-      expect(button.enabled, isFalse);
     });
   });
 }

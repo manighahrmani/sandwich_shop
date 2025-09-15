@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:sandwich_shop/views/profile_screen.dart';
 import 'package:sandwich_shop/models/cart.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
   group('ProfileScreen', () {
@@ -10,12 +11,7 @@ void main() {
         (WidgetTester tester) async {
       final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: profileScreen,
-        ),
-      );
+      final MaterialApp app = createTestApp(profileScreen, cart: cart);
 
       await tester.pumpWidget(app);
 
@@ -28,87 +24,26 @@ void main() {
       expect(find.byType(ElevatedButton), findsOneWidget);
     });
 
-    testWidgets('has proper layout structure', (WidgetTester tester) async {
-      final Cart cart = Cart();
-      const ProfileScreen profileScreen = ProfileScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: profileScreen,
-        ),
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(Scaffold), findsOneWidget);
-      expect(find.byType(AppBar), findsOneWidget);
-      expect(find.byType(Column), findsOneWidget);
-      expect(find.byType(SizedBox), findsWidgets);
-    });
-
-    testWidgets('displays logo in app bar', (WidgetTester tester) async {
-      final Cart cart = Cart();
-      const ProfileScreen profileScreen = ProfileScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: profileScreen,
-        ),
-      );
-
-      await tester.pumpWidget(app);
-
-      final appBarFinder = find.byType(AppBar);
-      expect(appBarFinder, findsOneWidget);
-
-      final appBarImagesFinder = find.descendant(
-        of: appBarFinder,
-        matching: find.byType(Image),
-      );
-      expect(appBarImagesFinder, findsOneWidget);
-
-      final Image logoImage = tester.widget(appBarImagesFinder);
-      expect(
-          (logoImage.image as AssetImage).assetName, 'assets/images/logo.png');
-    });
-
-    testWidgets('displays cart indicator in app bar',
+    testWidgets('displays common app bar elements correctly',
         (WidgetTester tester) async {
       final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: profileScreen,
-        ),
-      );
+      final MaterialApp app = createTestApp(profileScreen, cart: cart);
 
       await tester.pumpWidget(app);
 
-      final appBarFinder = find.byType(AppBar);
-      final cartIconFinder = find.descendant(
-        of: appBarFinder,
-        matching: find.byIcon(Icons.shopping_cart),
-      );
-      expect(cartIconFinder, findsOneWidget);
-
-      final cartCountFinder = find.descendant(
-        of: appBarFinder,
-        matching: find.text('0'),
-      );
-      expect(cartCountFinder, findsOneWidget);
+      testCommonAppBarLogo(tester);
+      testCartIndicator(tester, 0);
+      testBasicScaffoldStructure(tester);
+      expect(find.byType(Column), findsOneWidget);
+      expect(find.byType(SizedBox), findsWidgets);
     });
 
     testWidgets('text fields accept input correctly',
         (WidgetTester tester) async {
       final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: profileScreen,
-        ),
-      );
+      final MaterialApp app = createTestApp(profileScreen, cart: cart);
 
       await tester.pumpWidget(app);
 
@@ -129,12 +64,7 @@ void main() {
         (WidgetTester tester) async {
       final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: profileScreen,
-        ),
-      );
+      final MaterialApp app = createTestApp(profileScreen, cart: cart);
 
       await tester.pumpWidget(app);
 
@@ -153,12 +83,7 @@ void main() {
         (WidgetTester tester) async {
       final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: profileScreen,
-        ),
-      );
+      final MaterialApp app = createTestApp(profileScreen, cart: cart);
 
       await tester.pumpWidget(app);
 
@@ -177,12 +102,7 @@ void main() {
         (WidgetTester tester) async {
       final Cart cart = Cart();
       const ProfileScreen profileScreen = ProfileScreen();
-      final MaterialApp app = MaterialApp(
-        home: ChangeNotifierProvider<Cart>.value(
-          value: cart,
-          child: profileScreen,
-        ),
-      );
+      final MaterialApp app = createTestApp(profileScreen, cart: cart);
 
       await tester.pumpWidget(app);
 
