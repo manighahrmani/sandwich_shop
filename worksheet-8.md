@@ -29,68 +29,113 @@ git checkout 8
 
 Or manually ensure your code matches the repository. Run the app to make sure everything works as expected before proceeding.
 
-## **Introduction to Integration Testing**
+## **Integration Testing**
 
-So far, we have written **unit tests** to check individual functions or classes and **widget tests** to verify that our widgets look and behave as expected. However, these tests don't tell us if the different parts of our app work together correctly. That's where **integration testing** comes in.
+So far, we have written **unit tests** to check individual functions or classes and **widget tests** to verify that our widgets look and behave as expected. However, these tests don't tell us if the different parts of our app work together correctly. **Integration tests** verify that different parts of your app work together properly.
 
-Integration tests, also known as end-to-end (E2E) tests, verify the behaviour of the complete app. They simulate a user's interaction with the app, from launching it to navigating between screens and interacting with widgets. This helps us catch bugs that might only appear when different components are working together.
+Integration tests verify the behaviour of the complete app. They simulate an end-to-end user flow from launching the app to navigating between screens and performing various actions.
 
-For a more detailed introduction to integration testing in Flutter, you can read the official documentation on the topic: [Introduction to integration testing](https://docs.flutter.dev/cookbook/testing/integration/introduction).
-
-In this worksheet, we'll focus on using integration tests to verify the functionality of our app. We won't be covering performance testing, but it's another area where integration tests can be very useful.
+For a more detailed introduction to integration testing in Flutter, you can read the official documentation on the topic: [Introduction to integration testing](https://docs.flutter.dev/cookbook/testing/integration/introduction). In this worksheet, we'll provide a brief example of integration tests to verify the functionality of our app.
 
 ### **Writing Integration Tests**
 
-Writing integration tests is similar to writing widget tests, but with a few key differences. We will use the `integration_test` package, which allows us to run tests on a real device or emulator. This is important because it allows us to test our app in an environment that is as close to the real world as possible.
+Flutter provides the `integration_test` package for writing integration tests. Let's add it to your project:
 
-You can learn more about writing integration tests in the official Flutter documentation: [Integration testing](https://docs.flutter.dev/testing/integration-tests).
-
-As you have learned in previous worksheets, you can use AI to help you write tests. You can use Prompt Driven Development (PDD) to create a prompt that describes the user flow you want to test, and then ask your AI assistant to help you write the test code.
-
-For example, you could write a prompt like this:
-
-```
-I have a sandwich shop app written in Flutter. I want to write an integration test that covers the following user flow:
-
-1.  The user launches the app and sees the order screen.
-2.  The user selects a sandwich type, size, and bread type.
-3.  The user adds the sandwich to the cart.
-4.  The user navigates to the cart screen and sees the added sandwich.
-
-Please help me write an integration test for this user flow.
+```bash
+flutter pub add 'dev:integration_test:{"sdk":"flutter"}'
 ```
 
-Your AI assistant can then help you write the test code, which might look something like this:
+Create a new directory called `integration_test` in your project root (at the same level as `lib` and `test`):
+
+```
+sandwich_shop/
+├── lib/
+├── test/
+├── integration_test/
+└── ...
+```
+
+Inside the `integration_test` directory, create a new file called `app_test.dart`. Below is an example of the integration test code that you can write in such file:
 
 ```dart
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package.integration_test/integration_test.dart';
+import 'package:integration_test/integration_test.dart';
 import 'package:sandwich_shop/main.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('end-to-end test', () {
-    testWidgets('add a sandwich to the cart and verify it is in the cart',
-        (WidgetTester tester) async {
+  group('Sandwich Shop Integration Tests', () {
+    testWidgets('Complete order flow test', (WidgetTester tester) async {
+      // Start the app
       app.main();
       await tester.pumpAndSettle();
 
-      // Add a sandwich to the cart
-      await tester.tap(find.text('Veggie Delight'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Add to Cart'));
+      // Verify we're on the order screen
+      expect(find.text('Sandwich Counter'), findsOneWidget);
+      expect(find.text('Cart: 0 items - £0.00'), findsOneWidget);
+
+      // Add a sandwich to cart
+      final addToCartButton = find.text('Add to Cart');
+      await tester.tap(addToCartButton);
       await tester.pumpAndSettle();
 
-      // Navigate to the cart screen
-      await tester.tap(find.text('View Cart'));
+      // Verify cart summary updated
+      expect(find.text('Cart: 1 items - £11.00'), findsOneWidget);
+
+      // Navigate to cart view
+      final viewCartButton = find.text('View Cart');
+      await tester.tap(viewCartButton);
       await tester.pumpAndSettle();
 
-      // Verify that the sandwich is in the cart
+      // Verify we're on cart screen and item is there
+      expect(find.text('Cart'), findsOneWidget);
       expect(find.text('Veggie Delight'), findsOneWidget);
+      expect(find.text('Total: £11.00'), findsOneWidget);
+
+      // Go back to order screen
+      final backButton = find.text('Back to Order');
+      await tester.tap(backButton);
+      await tester.pumpAndSettle();
+
+      // Verify we're back on order screen
+      expect(find.text('Sandwich Counter'), findsOneWidget);
+    });
+
+    testWidgets('Settings screen font size test', (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      // Navigate to settings
+      final settingsButton = find.text('Settings');
+      await tester.ensureVisible(settingsButton);
+      await tester.tap(settingsButton);
+      await tester.pumpAndSettle();
+
+      // Verify we're on settings screen
+      expect(find.text('Settings'), findsOneWidget);
+      expect(find.text('Font Size'), findsOneWidget);
+
+      // Find and interact with the slider
+      final slider = find.byType(Slider);
+      expect(slider, findsOneWidget);
+
+      // Drag the slider to change font size
+      await tester.drag(slider, const Offset(50, 0));
+      await tester.pumpAndSettle();
+
+      // Verify the font size changed (text should be different)
+      expect(find.text('Current size: 16px'), findsNothing);
     });
   });
 }
+```
+
+Run the integration tests, use the following command or using the Run button on top of the `main` function in VS Code:
+
+```bash
+flutter test integration_test/
 ```
 
 ## **Deployment**
