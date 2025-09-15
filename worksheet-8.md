@@ -364,19 +364,19 @@ You can learn more about using the Firebase Realtime Database with Flutter in th
 
 Once you have finished developing and testing your app, you may want to deploy it to your users. The deployment process involves creating a release build of your app, which is an optimised version of your app that is ready for production.
 
-You can find more information about deploying Flutter apps in the official documentation: [Deployment](https://docs.flutter.dev/deployment).
-
-### **Build Modes**
+You can find more information about deploying Flutter apps in the official documentation: [Deployment](https://docs.flutter.dev/deployment). This section will only provide a brief overview of the deployment process.
 
 Flutter has three build modes:
 
-  - **Debug mode**: This is the mode you use when you are developing your app. It includes features like hot reload and a debugger, but it is not optimised for performance.
-  - **Profile mode**: This mode is used to analyse the performance of your app. It is similar to release mode, but it includes some extra debugging information.
-  - **Release mode**: This is the mode you should use when you are ready to deploy your app. It is optimised for performance and does not include any debugging information.
+  - **Debug mode**: Used during development. Includes debugging information and hot reload. Apps are larger and slower.
+  - **Profile mode**: Used for performance testing. Includes some debugging features but is optimized for performance analysis.
+  - **Release mode**: Used for production. Fully optimized, smallest size, fastest performance, no debugging features.
 
-When you are submitting your coursework, you should always create a release build of your app. You can do this by running the following command:
+When submitting your coursework, you should ideally create a separate release build of your app (in addition to the debug built you would be using during the demo). You can do this by running the following commands:
 
 ```bash
+flutter clean
+flutter pub get
 flutter build <target> --release
 ```
 
@@ -384,7 +384,15 @@ Replace `<target>` with the platform you want to build for (e.g., `apk` for Andr
 
 ### **Code Obfuscation**
 
-When you create a release build of your app, you should also consider obfuscating your code. **Code obfuscation** is the process of modifying your app's binary to make it harder for humans to understand. This can help protect your app from reverse engineering and other security threats.
+**Code obfuscation** makes your compiled code harder for others to reverse engineer by replacing class and function names with meaningless symbols. While it's not foolproof, it adds a layer of protection for your app.
+
+To build with obfuscation:
+
+```bash
+flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols
+```
+
+The `--split-debug-info` flag creates symbol files that you'll need if you want to debug crash reports from obfuscated builds. Keep these files safe (do not commit them to GitHub).
 
 You can learn more about code obfuscation in the official Flutter documentation: [Obfuscate your app](https://docs.flutter.dev/deployment/obfuscate).
 
@@ -396,20 +404,30 @@ Before you submit your coursework, there are a few things you should do to make 
   - **Update your `README.md`**: Your `README.md` file should include instructions on how to build and run your app, as well as any other relevant information.
   - **Create a release build**: Create a release build of your app for the platform you are targeting.
 
-For more information on building and releasing apps for different platforms, you can check out the following guides:
-
-  - [Build and release an Android app](https://docs.flutter.dev/deployment/android)
-  - [Build and release an iOS app](https://docs.flutter.dev/deployment/ios)
-  - [Build and release a macOS app](https://docs.flutter.dev/deployment/macos)
-  - [Build and release a Linux app](https://docs.flutter.dev/deployment/linux)
-  - [Build and release a Windows app](https://docs.flutter.dev/deployment/windows)
-  - [Build and release a web app](https://docs.flutter.dev/deployment/web)
-
+For more information on building and releasing apps for different platforms, you can check out [the documentation page on deployment](https://docs.flutter.dev/deployment).
 
 ## **Exercises**
 
-This has been a very heavy worksheet, so the exercises for this week are a bit lighter.
+Complete the exercises below to practice integration testing and explore deployment options.
 
-1.  **Write an integration test**: Write an integration test for a key user flow in your app. For example, you could write a test that adds an item to the cart, navigates to the checkout screen, and completes the order.
-2.  **Set up Firebase**: Set up a Firebase project and implement one feature using Firebase. For example, you could use Firebase Authentication to add user authentication to your app, or you could use Firestore to store your order history.
-3.  **Deploy your app**: Prepare your app for submission by creating a release build and updating your `README.md` file.
+
+1. There are several features of the app that are not covered by unit or widget tests. Think about all the different user journeys in your app and write integration tests to cover them.
+
+   Use your AI assistant to help you identify edge cases and write thorough tests. Remember to test both happy paths (everything works correctly) and error scenarios.
+
+   ⚠️ **Show your updated integration tests to a member of staff and describe the changes made** for a sign-off.
+
+2. Create a release build of the sandwich app after you have tested it thoroughly.
+
+   Compare the size and performance of your debug vs release builds. What differences do you notice?
+
+   ⚠️ **Show your release build running on a device and your updated README to a member of staff** for a sign-off.
+
+3. This exercise is optional but will prepare you for your coursework if you aim to use Firebase. Choose one or more of the following Firebase features and integrate it into the sandwich app:
+
+   - **Authentication**: Add user sign-in/sign-up functionality with email/password or Google sign-in
+   - **Firestore Database**: Store saved orders in the cloud instead of locally on the SQLite database
+   - **Storage**: Allow users to upload profile pictures
+   - **Hosting**: Deploy your web version to Firebase Hosting, this way you should be able to access your app from any browser
+
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off, but it will demonstrate advanced skills in your coursework.
