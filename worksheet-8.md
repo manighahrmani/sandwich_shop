@@ -6688,3 +6688,686 @@ void main() {
 ```
 
 Now I need your help writing worksheet 8 for me.
+
+I want to cover integration testing and introduce them to Firebase. Also I want to say a little about releasing apps for production.
+
+## Integration testing
+
+For this section I want to rely on this page (add a link to it at some point): https://docs.flutter.dev/cookbook/testing/integration/introduction
+
+This is the content of this page:
+```
+Unit tests and widget tests validate individual classes, functions, or widgets. They don't validate how individual pieces work together in whole or capture the performance of an app running on a real device. To perform these tasks, use integration tests.
+
+Integration tests verify the behavior of the complete app. This test can also be called end-to-end testing or GUI testing.
+
+The Flutter SDK includes the integration_test package.
+
+Terminology
+host machine
+The system on which you develop your app, like a desktop computer.
+
+target device
+The mobile device, browser, or desktop application that runs your Flutter app.
+
+If you run your app in a web browser or as a desktop application, the host machine and the target device are the same.
+
+Dependent package
+To run integration tests, add the integration_test package as a dependency for your Flutter app test file.
+
+To migrate existing projects that use flutter_driver, consult the Migrating from flutter_driver guide.
+
+Tests written with the integration_test package can perform the following tasks.
+
+Run on the target device. To test multiple Android or iOS devices, use Firebase Test Lab.
+Run from the host machine with flutter test integration_test.
+Use flutter_test APIs. This makes integration tests similar to writing widget tests.
+Use cases for integration testing
+The other guides in this section explain how to use integration tests to validate functionality and performance.
+```
+
+Note that I don't want to focus on performance at all, the whole section is to give them a taste of integration testing mainly to check if different components of the app work together correctly (not in an optimised way).
+
+Next I want to show them how to write integration test (show them how some of these can be automated with AI, see earlier worksheets how I have taught them Prompt Driven Development). This is the page and add a link to it at some point in this section: https://docs.flutter.dev/testing/integration-tests
+
+This is the content of this page:
+```
+ntroduction
+This guide describes how to run integration tests with your Flutter app. With it, you'll learn how to do the following:
+
+Set up integration tests.
+Verify if an app displays specific text.
+Tap specific widgets.
+Run integration tests.
+The guide references the counter_app project that comes with Flutter and the Flutter integration_test package. The integration_test package lets you:
+
+Use the flutter drive command to run tests on a physical device or emulator.
+Run on Firebase Test Lab, to automate testing on a variety of devices.
+Use flutter_test APIs to write tests in a style similar to widget tests.
+Create a new app to test
+Integration testing requires an app to test. This example uses the built-in Counter App example that Flutter produces when you run the flutter create command. The counter app allows a user to tap on a button to increase a counter.
+
+To create an instance of the built-in Flutter app, run the following command in your terminal:
+
+flutter create counter_app
+content_copy
+Change into the counter_app directory.
+
+Open lib/main.dart in your preferred IDE.
+
+Add a key parameter to the floatingActionButton() widget with an instance of a Key class with a string value of increment.
+
+ floatingActionButton: FloatingActionButton(
+   key: const ValueKey('increment'),
+   onPressed: _incrementCounter,
+   tooltip: 'Increment',
+   child: const Icon(Icons.add),
+ ),
+content_copy
+Save your lib/main.dart file.
+
+After these changes, the lib/main.dart file should resemble the following code.
+
+lib/main.dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Counter App',
+      home: MyHomePage(title: 'Counter App Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.title)),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('You have pushed the button this many times:'),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        // Provide a Key to this button. This allows finding this
+        // specific button inside the test suite, and tapping it.
+        key: const Key('increment'),
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+content_copy
+Add the integration_test dependency
+You need to add the testing packages to your new app.
+
+To add integration_test and flutter_test packages as dev_dependencies using sdk: flutter, run following command.
+
+flutter pub add 'dev:integration_test:{"sdk":"flutter"}'
+content_copy
+Output:
+
+Building flutter tool...
+Resolving dependencies... 
+Got dependencies.
+Resolving dependencies... 
++ file 7.0.0
++ flutter_driver 0.0.0 from sdk flutter
++ fuchsia_remote_debug_protocol 0.0.0 from sdk flutter
++ integration_test 0.0.0 from sdk flutter
+...
+  test_api 0.6.1 (0.7.1 available)
+  vm_service 13.0.0 (14.2.1 available)
++ webdriver 3.0.3
+Changed 8 dependencies!
+7 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+content_copy
+Updated pubspec.yaml file:
+
+pubspec.yaml
+# ...
+dev_dependencies:
+  # ... added dependencies
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  integration_test:
+    sdk: flutter
+# ...
+content_copy
+Create the integration test files
+Integration tests reside in a separate directory inside your Flutter project.
+
+Create a new directory named integration_test.
+Add empty file named app_test.dart in that directory.
+The resulting directory tree should resemble the following:
+
+counter_app/
+  lib/
+    main.dart
+  integration_test/
+    app_test.dart
+content_copy
+Write the integration test
+The integration test file consists of a Dart code file with dependencies on integration_test, flutter_test, and your app's Dart file.
+
+Open your integration_test/app_test.dart file in your preferred IDE.
+
+Copy the following code and paste it into your integration_test/app_test.dart file. The last import should point to the main.dart file of your counter_app. (This import points to the example app called introduction.)
+
+integration_test/counter_test.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:how_to/main.dart';
+import 'package:integration_test/integration_test.dart';
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  group('end-to-end test', () {
+    testWidgets('tap on the floating action button, verify counter', (
+      tester,
+    ) async {
+      // Load app widget.
+      await tester.pumpWidget(const MyApp());
+
+      // Verify the counter starts at 0.
+      expect(find.text('0'), findsOneWidget);
+
+      // Finds the floating action button to tap on.
+      final fab = find.byKey(const ValueKey('increment'));
+
+      // Emulate a tap on the floating action button.
+      await tester.tap(fab);
+
+      // Trigger a frame.
+      await tester.pumpAndSettle();
+
+      // Verify the counter increments by 1.
+      expect(find.text('1'), findsOneWidget);
+    });
+  });
+}
+content_copy
+This example goes through three steps:
+
+Initialize IntegrationTestWidgetsFlutterBinding. This singleton service executes tests on a physical device.
+
+Interact and test widgets using the WidgetTester class.
+
+Test the important scenarios.
+
+Run integration tests
+The integration tests that run vary depending on the platform on which you test.
+
+To test a desktop platform, use the command line or a CI system.
+To test a mobile platform, use the command line or Firebase Test Lab.
+To test in a web browser, use the command line.
+```
+
+The rest of this page has been omitted as they need to follow the instructions on the page to run the tests. The rest of the page is linked with this URL: https://docs.flutter.dev/testing/integration-tests#test-on-a-desktop-platform
+
+There is also a page on profiling integration tests but I think this is out of scope for this course: https://docs.flutter.dev/cookbook/testing/integration/profiling
+
+## Deployment
+
+For deployment, most of what they need to know is found on this page: https://docs.flutter.dev/deployment/
+
+It covers topics like obfuscation: https://docs.flutter.dev/deployment/obfuscate
+
+```
+What is code obfuscation?
+Code obfuscation is the process of modifying an app's binary to make it harder for humans to understand. Obfuscation hides function and class names in your compiled Dart code, replacing each symbol with another symbol, making it difficult for an attacker to reverse engineer your proprietary app.
+
+Limitations and warnings
+Flutter's code obfuscation works only on a release build.
+
+Warning
+It is a poor security practice to store secrets in an app.
+
+Obfuscating your code does not encrypt resources nor does it protect against reverse engineering. It only renames symbols with more obscure names.
+
+Web apps don't support obfuscation. A web app can be minified, which provides a similar result. When you build a release version of a Flutter web app, the web compiler minifies the app. To learn more, see Build and release a web app.
+
+Supported targets
+The following build targets support the obfuscation process described on this page:
+
+aar
+apk
+appbundle
+ios
+ios-framework
+ipa
+linux
+macos
+macos-framework
+windows
+For detailed information about the command line options available for a build target, run the following command. The --obfuscate and --split-debug-info options should be listed in the output. If they aren't, you'll need to install a newer version of Flutter to obfuscate your code.
+
+flutter build <build-target> -h
+content_copy
+<build-target>: The build target. For example, apk.
+Obfuscate your app
+To obfuscate your app and create a symbol map, use the flutter build command in release mode with the --obfuscate and --split-debug-info options. If you want to debug your obfuscated app in the future, you will need the symbol map.
+
+Run the following command to obfuscate your app and generate a SYMBOLS file:
+
+flutter build <build-target> \ 
+   --obfuscate \ 
+   --split-debug-info=/<symbols-directory>
+content_copy
+<build-target>: The build target. For example, apk.
+<symbols-directory>: The directory where the SYMBOLS file should be placed. For example, out/android.
+Once you've obfuscated your binary, backup the SYMBOLS file. You might need this if you lose your original SYMBOLs file and you want to de-obfuscate a stack trace.
+
+Read an obfuscated stack trace
+To debug a stack trace created by an obfuscated app, use the following steps to make it human readable:
+
+Find the matching SYMBOLS file. For example, a crash from an Android arm64 device would need app.android-arm64.symbols.
+
+Provide both the stack trace (stored in a file) and the SYMBOLS file to the flutter symbolize command.
+
+flutter symbolize \
+   -i <stack-trace-file> \
+   -d <obfuscated-symbols-file>
+content_copy
+<stack-trace-file>: The file path for the stacktrace. For example, ???.
+<obfuscated-symbols-file>: The file path for the symbols file that contains the obfuscated symbols. For example, out/android/app.android-arm64.symbols.
+For more information about the symbolize command, run flutter symbolize -h.
+
+Read an obfuscated name
+You can generate a JSON file that contains an obfuscation map. An obfuscation map is a JSON array with pairs of original names and obfuscated names. For example, ["MaterialApp", "ex", "Scaffold", "ey"], where ex is the obfuscated name of MaterialApp.
+
+To generate an obfuscation map, use the following command:
+
+flutter build <build-target> \
+   --obfuscate \
+   --split-debug-info=/<symbols-directory> \
+   --extra-gen-snapshot-options=--save-obfuscation-map=/<obfuscation-map-file>
+content_copy
+<build-target>: The build target. For example, apk.
+<symbols-directory>: The directory where the symbols should be placed. For example, out/android
+<obfuscation-map-file>: The file path where the JSON obfuscation map should be placed. For example, out/android/map.json
+Caveat
+Be aware of the following when coding an app that will eventually be an obfuscated binary.
+
+Code that relies on matching specific class, function, or library names will fail. For example, the following call to expect() won't work in an obfuscated binary:
+
+expect(foo.runtimeType.toString(), equals('Foo'));
+content_copy
+Enum names are not obfuscated currently.
+```
+
+Just explain this concept to them and why it is important. Also talk about release modes (debug, profile, release) and why they should always use release mode for production apps. Maybe also include things like `flutter clean` before building for release (or other techniques they should know when they are submitting their coursework). For their coursework they are submitting a GitHub repo so they should be aware of these things, add a section on README.md too.
+
+Also the following which they should checkout by visiting the link depending on their target and needs: https://docs.flutter.dev/deployment
+
+Create app flavors for Android
+Create app flavors for iOS and macOS
+Build and release an Android app
+Build and release an iOS app
+Build and release a macOS app
+Build and release a Linux app
+Build and release a Windows app
+Build and release a web app
+Set up continuous deployment
+
+## Firebase
+
+Explain firstly what are cloud providers and why they are useful. Then introduce Firebase and its features. I want to focus on the following features:
+Authentication (for signing in users)
+Firestore Database (for storing the orders as well as other data in this specific example, order history etc.)
+Hosting
+Storage (for images)
+
+This is something that only the motivated students with extra time should explore and it will give them more marks for their coursework if they do. But they need to independently explore this and I don't want the worksheet to be too prescriptive on it:
+
+This is a beginners guide to firebase in general: https://firebase.google.com/docs/guides
+
+And this is the setup guide for Flutter in particular: https://firebase.google.com/docs/flutter
+
+I believe to use the data features of Firebase they need to know about JSON and serialization
+
+Give them this link and explain it shortly: https://docs.flutter.dev/data-and-backend/serialization/json
+
+there is also an interactive codelab they can do if they want to practice: https://firebase.google.com/codelabs/firebase-get-to-know-flutter#0
+
+For their coursework I think they would mainly want to use the Realtime Database: https://firebase.google.com/docs/database/flutter/start
+
+Here are the content of this page, explain the topics to them from 0 (they may not know about JSON or serialization):
+
+```
+        Which JSON serialization method is right for me?
+        This article covers two general strategies for working with JSON:
+
+        Manual serialization
+        Automated serialization using code generation
+        Different projects come with different complexities and use cases. For smaller proof-of-concept projects or quick prototypes, using code generators might be overkill. For apps with several JSON models with more complexity, encoding by hand can quickly become tedious, repetitive, and lend itself to many small errors.
+
+        Use manual serialization for smaller projects
+        Manual JSON decoding refers to using the built-in JSON decoder in dart:convert. It involves passing the raw JSON string to the jsonDecode() function, and then looking up the values you need in the resulting Map<String, dynamic>. It has no external dependencies or particular setup process, and it's good for a quick proof of concept.
+
+        Manual decoding does not perform well when your project becomes bigger. Writing decoding logic by hand can become hard to manage and error-prone. If you have a typo when accessing a nonexistent JSON field, your code throws an error during runtime.
+
+        If you do not have many JSON models in your project and are looking to test a concept quickly, manual serialization might be the way you want to start. For an example of manual encoding, see Serializing JSON manually using dart:convert.
+
+        Tip
+        For hands-on practice deserializing JSON and taking advantage of Dart 3's new features, check out the Dive into Dart's patterns and records codelab.
+
+        Use code generation for medium to large projects
+        JSON serialization with code generation means having an external library generate the encoding boilerplate for you. After some initial setup, you run a file watcher that generates the code from your model classes. For example, json_serializable and built_value are these kinds of libraries.
+
+        This approach scales well for a larger project. No hand-written boilerplate is needed, and typos when accessing JSON fields are caught at compile-time. The downside with code generation is that it requires some initial setup. Also, the generated source files might produce visual clutter in your project navigator.
+
+        You might want to use generated code for JSON serialization when you have a medium or a larger project. To see an example of code generation based JSON encoding, see Serializing JSON using code generation libraries.
+
+        Is there a GSON/Jackson/Moshi equivalent in Flutter?
+        The simple answer is no.
+
+        Such a library would require using runtime reflection, which is disabled in Flutter. Runtime reflection interferes with tree shaking, which Dart has supported for quite a long time. With tree shaking, you can "shake off" unused code from your release builds. This optimizes the app's size significantly.
+
+        Since reflection makes all code implicitly used by default, it makes tree shaking difficult. The tools cannot know what parts are unused at runtime, so the redundant code is hard to strip away. App sizes cannot be easily optimized when using reflection.
+
+        Although you cannot use runtime reflection with Flutter, some libraries give you similarly easy-to-use APIs but are based on code generation instead. This approach is covered in more detail in the code generation libraries section.
+
+
+        Serializing JSON manually using dart:convert
+        Basic JSON serialization in Flutter is very simple. Flutter has a built-in dart:convert library that includes a straightforward JSON encoder and decoder.
+
+        The following sample JSON implements a simple user model.
+
+        {
+        "name": "John Smith",
+        "email": "john@example.com"
+        }
+        content_copy
+        With dart:convert, you can serialize this JSON model in two ways.
+
+        Serializing JSON inline
+        By looking at the dart:convert documentation, you'll see that you can decode the JSON by calling the jsonDecode() function, with the JSON string as the method argument.
+
+        final user = jsonDecode(jsonString) as Map<String, dynamic>;
+
+        print('Howdy, ${user['name']}!');
+        print('We sent the verification link to ${user['email']}.');
+        content_copy
+        Unfortunately, jsonDecode() returns a dynamic, meaning that you do not know the types of the values until runtime. With this approach, you lose most of the statically typed language features: type safety, autocompletion and most importantly, compile-time exceptions. Your code will become instantly more error-prone.
+
+        For example, whenever you access the name or email fields, you could quickly introduce a typo. A typo that the compiler doesn't know about since the JSON lives in a map structure.
+
+        Serializing JSON inside model classes
+        Combat the previously mentioned problems by introducing a plain model class, called User in this example. Inside the User class, you'll find:
+
+        A User.fromJson() constructor, for constructing a new User instance from a map structure.
+        A toJson() method, which converts a User instance into a map.
+        With this approach, the calling code can have type safety, autocompletion for the name and email fields, and compile-time exceptions. If you make typos or treat the fields as ints instead of Strings, the app won't compile, instead of crashing at runtime.
+
+        user.dart
+
+        class User {
+        final String name;
+        final String email;
+
+        User(this.name, this.email);
+
+        User.fromJson(Map<String, dynamic> json)
+            : name = json['name'] as String,
+            email = json['email'] as String;
+
+        Map<String, dynamic> toJson() => {'name': name, 'email': email};
+        }
+        content_copy
+        The responsibility of the decoding logic is now moved inside the model itself. With this new approach, you can decode a user easily.
+
+        final userMap = jsonDecode(jsonString) as Map<String, dynamic>;
+        final user = User.fromJson(userMap);
+
+        print('Howdy, ${user.name}!');
+        print('We sent the verification link to ${user.email}.');
+        content_copy
+        To encode a user, pass the User object to the jsonEncode() function. You don't need to call the toJson() method, since jsonEncode() already does it for you.
+
+        String json = jsonEncode(user);
+        content_copy
+        With this approach, the calling code doesn't have to worry about JSON serialization at all. However, the model class still definitely has to. In a production app, you would want to ensure that the serialization works properly. In practice, the User.fromJson() and User.toJson() methods both need to have unit tests in place to verify correct behavior.
+
+        Note
+        The cookbook contains a more comprehensive worked example of using JSON model classes, using an isolate to parse the JSON file on a background thread. This approach is ideal if you need your app to remain responsive while the JSON file is being decoded.
+
+        However, real-world scenarios are not always that simple. Sometimes JSON API responses are more complex, for example since they contain nested JSON objects that must be parsed through their own model class.
+
+        It would be nice if there were something that handled the JSON encoding and decoding for you. Luckily, there is!
+
+
+        Serializing JSON using code generation libraries
+        Although there are other libraries available, this guide uses json_serializable, an automated source code generator that generates the JSON serialization boilerplate for you.
+
+        Choosing a library
+        You might have noticed two Flutter Favorite packages on pub.dev that generate JSON serialization code, json_serializable and built_value. How do you choose between these packages? The json_serializable package allows you to make regular classes serializable by using annotations, whereas the built_value package provides a higher-level way of defining immutable value classes that can also be serialized to JSON.
+
+        Since the serialization code is not handwritten or maintained manually anymore, you minimize the risk of having JSON serialization exceptions at runtime.
+
+        Setting up json_serializable in a project
+        To include json_serializable in your project, you need one regular dependency, and two dev dependencies. In short, dev dependencies are dependencies that are not included in our app source code—they are only used in the development environment.
+
+        To add the dependencies, run flutter pub add:
+
+        flutter pub add json_annotation dev:build_runner dev:json_serializable
+        content_copy
+        Run flutter pub get inside your project root folder (or click Packages get in your editor) to make these new dependencies available in your project.
+
+        Creating model classes the json_serializable way
+        The following shows how to convert the User class to a json_serializable class. For the sake of simplicity, this code uses the simplified JSON model from the previous samples.
+
+        user.dart
+
+        import 'package:json_annotation/json_annotation.dart';
+
+        /// This allows the `User` class to access private members in
+        /// the generated file. The value for this is *.g.dart, where
+        /// the star denotes the source file name.
+        part 'user.g.dart';
+
+        /// An annotation for the code generator to know that this class needs the
+        /// JSON serialization logic to be generated.
+        @JsonSerializable()
+        class User {
+        User(this.name, this.email);
+
+        String name;
+        String email;
+
+        /// A necessary factory constructor for creating a new User instance
+        /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
+        /// The constructor is named after the source class, in this case, User.
+        factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+        /// `toJson` is the convention for a class to declare support for serialization
+        /// to JSON. The implementation simply calls the private, generated
+        /// helper method `_$UserToJson`.
+        Map<String, dynamic> toJson() => _$UserToJson(this);
+        }
+        content_copy
+        With this setup, the source code generator generates code for encoding and decoding the name and email fields from JSON.
+
+        If needed, it is also easy to customize the naming strategy. For example, if the API returns objects with snake_case, and you want to use lowerCamelCase in your models, you can use the @JsonKey annotation with a name parameter:
+
+        /// Tell json_serializable that "registration_date_millis" should be
+        /// mapped to this property.
+        @JsonKey(name: 'registration_date_millis')
+        final int registrationDateMillis;
+        content_copy
+        It's best if both server and client follow the same naming strategy.
+        @JsonSerializable() provides fieldRename enum for totally converting dart fields into JSON keys.
+
+        Modifying @JsonSerializable(fieldRename: FieldRename.snake) is equivalent to adding @JsonKey(name: '<snake_case>') to each field.
+
+        Sometimes server data is uncertain, so it is necessary to verify and protect data on client.
+        Other commonly used @JsonKey annotations include:
+
+        /// Tell json_serializable to use "defaultValue" if the JSON doesn't
+        /// contain this key or if the value is `null`.
+        @JsonKey(defaultValue: false)
+        final bool isAdult;
+
+        /// When `true` tell json_serializable that JSON must contain the key, 
+        /// If the key doesn't exist, an exception is thrown.
+        @JsonKey(required: true)
+        final String id;
+
+        /// When `true` tell json_serializable that generated code should 
+        /// ignore this field completely. 
+        @JsonKey(ignore: true)
+        final String verificationCode;
+        content_copy
+        Running the code generation utility
+        When creating json_serializable classes the first time, you'll get errors similar to the following:
+
+        Target of URI hasn't been generated: 'user.g.dart'.
+        content_copy
+        These errors are entirely normal and are simply because the generated code for the model class does not exist yet. To resolve this, run the code generator that generates the serialization boilerplate.
+
+        There are two ways of running the code generator.
+
+        One-time code generation
+        By running dart run build_runner build --delete-conflicting-outputs in the project root, you generate JSON serialization code for your models whenever they are needed. This triggers a one-time build that goes through the source files, picks the relevant ones, and generates the necessary serialization code for them.
+
+        While this is convenient, it would be nice if you did not have to run the build manually every time you make changes in your model classes.
+
+        Generating code continuously
+        A watcher makes our source code generation process more convenient. It watches changes in our project files and automatically builds the necessary files when needed. Start the watcher by running dart run build_runner watch --delete-conflicting-outputs in the project root.
+
+        It is safe to start the watcher once and leave it running in the background.
+
+        Consuming json_serializable models
+        To decode a JSON string the json_serializable way, you do not have actually to make any changes to our previous code.
+
+        final userMap = jsonDecode(jsonString) as Map<String, dynamic>;
+        final user = User.fromJson(userMap);
+        content_copy
+        The same goes for encoding. The calling API is the same as before.
+
+        String json = jsonEncode(user);
+        content_copy
+        With json_serializable, you can forget any manual JSON serialization in the User class. The source code generator creates a file called user.g.dart, that has all the necessary serialization logic. You no longer have to write automated tests to ensure that the serialization works—it's now the library's responsibility to make sure the serialization works appropriately.
+
+        Generating code for nested classes
+        You might have code that has nested classes within a class. If that is the case, and you have tried to pass the class in JSON format as an argument to a service (such as Firebase, for example), you might have experienced an Invalid argument error.
+
+        Consider the following Address class:
+
+        import 'package:json_annotation/json_annotation.dart';
+        part 'address.g.dart';
+
+        @JsonSerializable()
+        class Address {
+        String street;
+        String city;
+
+        Address(this.street, this.city);
+
+        factory Address.fromJson(Map<String, dynamic> json) =>
+            _$AddressFromJson(json);
+        Map<String, dynamic> toJson() => _$AddressToJson(this);
+        }
+        content_copy
+        The Address class is nested inside the User class:
+
+        import 'package:json_annotation/json_annotation.dart';
+
+        import 'address.dart';
+
+        part 'user.g.dart';
+
+        @JsonSerializable()
+        class User {
+        User(this.name, this.address);
+
+        String name;
+        Address address;
+
+        factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+        Map<String, dynamic> toJson() => _$UserToJson(this);
+        }
+        content_copy
+        Running dart run build_runner build --delete-conflicting-outputs in the terminal creates the *.g.dart file, but the private _$UserToJson() function looks something like the following:
+
+        Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+        'name': instance.name,
+        'address': instance.address,
+        };
+        content_copy
+        All looks fine now, but if you do a print() on the user object:
+
+        Address address = Address('My st.', 'New York');
+        User user = User('John', address);
+        print(user.toJson());
+        content_copy
+        The result is:
+
+        {name: John, address: Instance of 'address'}
+        content_copy
+        When what you probably want is output like the following:
+
+        {name: John, address: {street: My st., city: New York}}
+        content_copy
+        To make this work, pass explicitToJson: true in the @JsonSerializable() annotation over the class declaration. The User class now looks as follows:
+
+        import 'package:json_annotation/json_annotation.dart';
+
+        import 'address.dart';
+
+        part 'user.g.dart';
+
+        @JsonSerializable(explicitToJson: true)
+        class User {
+        User(this.name, this.address);
+
+        String name;
+        Address address;
+
+        factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+        Map<String, dynamic> toJson() => _$UserToJson(this);
+        }
+        content_copy
+        For more information, see explicitToJson in the JsonSerializable class for the json_annotation package.
+```
+
+You also need to explain the concept of Factory in Dart as they will need it for the `fromJson` method.
+
+
+I want to keep this worksheet shorter than last week so don't give them too many exercises at the end. Their main tasks should be to setup some features in Firebase, write some integration tests and deploy their app (the worksheet should not hold their hands and walk them through all these topics from A-Z, it should just introduce and maybe give some examples). Still, keep worksheet 8 in the same style as previous worksheets.
