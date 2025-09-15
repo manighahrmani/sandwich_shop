@@ -7,16 +7,16 @@ import 'package:sandwich_shop/repositories/pricing_repository.dart';
 import 'package:sandwich_shop/views/checkout_screen.dart';
 import 'package:sandwich_shop/widgets/common_widgets.dart';
 
-class CartViewScreen extends StatefulWidget {
-  const CartViewScreen({super.key});
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
 
   @override
-  State<CartViewScreen> createState() {
-    return _CartViewScreenState();
+  State<CartScreen> createState() {
+    return _CartScreenState();
   }
 }
 
-class _CartViewScreenState extends State<CartViewScreen> {
+class _CartScreenState extends State<CartScreen> {
   Future<void> _navigateToCheckout() async {
     final Cart cart = Provider.of<Cart>(context, listen: false);
 
@@ -107,7 +107,7 @@ class _CartViewScreenState extends State<CartViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(
-        title: 'Cart View',
+        title: 'Cart',
         actions: [
           Consumer<Cart>(
             builder: (context, cart, child) {
