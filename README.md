@@ -14,7 +14,7 @@ Every worksheet ends with a handful of **exercises**. After completing these exe
 * [Worksheet 5: Data Models and Assets](./worksheet-5.md)
 * [Worksheet 6: AI-Driven Development and Navigation](./worksheet-6.md)
 * [Worksheet 7: State Management and Persistence](./worksheet-7.md)
-* [Worksheet 8 — Integration Testing, Firebase, and Deployment](./worksheet-8.md)
+* [Worksheet 8: Integration Testing, Firebase, and Deployment](./worksheet-8.md)
 
 ## **Getting help**
 
