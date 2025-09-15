@@ -1,4 +1,4 @@
-# **Worksheet 8 — Integration Testing, Deployment and Firebase**
+# **Worksheet 8 — Integration Testing, Firebase, and Deployment**
 
 ## **What you need to know beforehand**
 
