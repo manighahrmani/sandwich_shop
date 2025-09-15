@@ -45,7 +45,7 @@ You can learn more about using AI for feature implementation in this video: [AI-
 
 Instead of jumping straight into coding, let's start by using AI to help us write proper requirements for a new feature.
 
-Run the app and add a few sandwiches to your cart. You should see a snack bar confirming the addition. You will also see that we have implemented a second screen, `CartViewScreen` in `lib/views/cart_view_screen.dart`, that displays the items in the cart. You can navigate to this screen from the order screen by pressing the "View Cart" button. This is what the cart page should look like:
+Run the app and add a few sandwiches to your cart. You should see a snack bar confirming the addition. You will also see that we have implemented a second screen, `CartScreen` in `lib/views/cart_screen.dart`, that displays the items in the cart. You can navigate to this screen from the order screen by pressing the "View Cart" button. This is what the cart page should look like:
 
 ![Initial Cart Page](images/screenshot_initial_cart_page.png)
 
@@ -119,13 +119,13 @@ Remember, when using Copilot, you can set it to "Edit" mode to let it modify you
 Notice how you can pause after each subtask to review the changes. It is an important part of the PDD process to read, test, and commit each change separately. This allows you to ensure the AI is producing code that meets your requirements and adheres to best practices.
 
 ![Using Copilot to implement cart modifications](images/screenshot_pdd_implementation_step.png)
-Once you have completed all the subtasks, test your app to ensure everything works as expected. As before, update the widget tests for the cart screen in `test/views/cart_view_screen_test.dart` to cover the new functionality.
+Once you have completed all the subtasks, test your app to ensure everything works as expected. As before, update the widget tests for the cart screen in `test/views/cart_screen_test.dart` to cover the new functionality.
 
 Here is a screenshot of our cart page after implementing the modifications:
 
 ![Updated Cart Page](images/screenshot_final_cart_page.png)
 
-As before, remember to update the widget tests for the `cart_view_screen.dart` in `test/widget/cart_view_screen_test.dart` to cover the new functionality you have added.
+As before, remember to update the widget tests for the `cart_screen.dart` in `test/widget/cart_screen_test.dart` to cover the new functionality you have added.
 
 #### **Commit your changes**
 
@@ -148,32 +148,32 @@ For our sandwich shop app, basic navigation using `Navigator.push()` and `Naviga
 
 Our current navigation pattern is the most common and simple one.
 
-In `lib/views/order_screen_view.dart`, the "View Cart" button's `onPressed` callback calls the `_navigateToCartView()` method:
+In `lib/views/order_screen.dart`, the "View Cart" button's `onPressed` callback calls the `_navigateToCartView()` method:
 
 ```dart
 void _navigateToCartView() {
   Navigator.push(
     context,
     MaterialPageRoute<void>(
-      builder: (BuildContext context) => CartViewScreen(cart: _cart),
+      builder: (BuildContext context) => CartScreen(cart: _cart),
     ),
   );
 }
 ```
 
-The `Navigator.push()` method takes the current `BuildContext` and a `MaterialPageRoute` that builds the new screen. The `builder` function returns the widget for the new screen, in this case `CartViewScreen`.
+The `Navigator.push()` method takes the current `BuildContext` and a `MaterialPageRoute` that builds the new screen. The `builder` function returns the widget for the new screen, in this case `CartScreen`.
 
-Basically, all you need to know is that `Navigator.push()` adds a new screen on top of the current one, in this case, `CartViewScreen`:
+Basically, all you need to know is that `Navigator.push()` adds a new screen on top of the current one, in this case, `CartScreen`:
 
 ```dart
-class CartViewScreen extends StatefulWidget {
+class CartScreen extends StatefulWidget {
   final Cart cart;
 
-  const CartViewScreen({super.key, required this.cart});
+  const CartScreen({super.key, required this.cart});
 
   @override
-  State<CartViewScreen> createState() {
-    return _CartViewScreenState();
+  State<CartScreen> createState() {
+    return _CartScreenState();
   }
 }
 ```
@@ -194,19 +194,19 @@ This is important because `ScaffoldMessenger` ensures the message is shown even 
 
 ### **Passing Data Forwards**
 
-Often, you need to send data to a new screen. This is already being done in your app. When navigating to the cart screen, we are already passing the `_cart` object to the `CartViewScreen` constructor:
+Often, you need to send data to a new screen. This is already being done in your app. When navigating to the cart screen, we are already passing the `_cart` object to the `CartScreen` constructor:
 
 ```dart
-CartViewScreen(cart: _cart)
+CartScreen(cart: _cart)
 ```
 
-The `CartViewScreen` then receives this data through its constructor:
+The `CartScreen` then receives this data through its constructor:
 
 ```dart
-class CartViewScreen extends StatefulWidget {
+class CartScreen extends StatefulWidget {
   final Cart cart;
 
-  const CartViewScreen({super.key, required this.cart});
+  const CartScreen({super.key, required this.cart});
   // ...
 }
 ```
@@ -367,14 +367,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 Commit your changes and add widget tests for the new checkout screen in `test/views/checkout_screen_test.dart`.
 
-Now, update `lib/views/cart_view_screen.dart`. First, add the necessary imports at the top of the file:
+Now, update `lib/views/cart_screen.dart`. First, add the necessary imports at the top of the file:
 
 ```dart
 import 'package:sandwich_shop/views/checkout_screen.dart';
-import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
 ```
 
-In the `_CartViewScreenState` class, add this method to navigate to the checkout screen and handle the returned data:
+In the `_CartScreenState` class, add this method to navigate to the checkout screen and handle the returned data:
 
 ```dart
 Future<void> _navigateToCheckout() async {
@@ -417,7 +417,7 @@ Future<void> _navigateToCheckout() async {
 }
 ```
 
-Finally, add a checkout button to your cart screen's UI. In the `build` method of `_CartViewScreenState`, add this button just before the "Back to Order" button:
+Finally, add a checkout button to your cart screen's UI. In the `build` method of `_CartScreenState`, add this button just before the "Back to Order" button:
 
 ```dart
 const SizedBox(height: 20),
