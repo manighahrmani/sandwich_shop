@@ -336,6 +336,28 @@ As a small note, the `_$` prefix in `_$UserFromJson` is a convention used by the
 
 For your coursework, you might want to use the Firebase Realtime Database to store and sync data for your app. The Realtime Database is a cloud-hosted database. Data is stored as JSON and synchronised in realtime to every connected client.
 
+Here's a simple example of how you might store order data:
+
+```dart
+import 'package:firebase_database/firebase_database.dart';
+
+class FirebaseOrderService {
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+
+  Future<void> saveOrder(Map<String, dynamic> orderData) async {
+    try {
+      await _database.child('orders').push().set(orderData);
+    } catch (e) {
+      print('Error saving order: $e');
+    }
+  }
+
+  Stream<DatabaseEvent> getOrders() {
+    return _database.child('orders').onValue;
+  }
+}
+```
+
 You can learn more about using the Firebase Realtime Database with Flutter in the official documentation: [Get Started with Firebase Realtime Database for Flutter](https://firebase.google.com/docs/database/flutter/start).
 
 ## **Deployment**
