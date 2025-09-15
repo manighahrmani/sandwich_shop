@@ -108,36 +108,36 @@ void main() {
       expect(find.text('Processing payment...'), findsNothing);
     });
 
-    // testWidgets('shows processing state when payment is initiated',
-    //     (WidgetTester tester) async {
-    //   final Cart cart = Cart();
-    //   final Sandwich sandwich = Sandwich(
-    //     type: SandwichType.veggieDelight,
-    //     isFootlong: true,
-    //     breadType: BreadType.white,
-    //   );
-    //   cart.add(sandwich, quantity: 1);
+    testWidgets('shows processing state when payment is initiated',
+        (WidgetTester tester) async {
+      final Cart cart = Cart();
+      final Sandwich sandwich = Sandwich(
+        type: SandwichType.veggieDelight,
+        isFootlong: true,
+        breadType: BreadType.white,
+      );
+      cart.add(sandwich, quantity: 1);
 
-    //   const CheckoutScreen checkoutScreen = CheckoutScreen();
-    //   final MaterialApp app = MaterialApp(
-    //     home: ChangeNotifierProvider<Cart>.value(
-    //       value: cart,
-    //       child: checkoutScreen,
-    //     ),
-    //   );
+      const CheckoutScreen checkoutScreen = CheckoutScreen();
+      final MaterialApp app = MaterialApp(
+        home: ChangeNotifierProvider<Cart>.value(
+          value: cart,
+          child: checkoutScreen,
+        ),
+      );
 
-    //   await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-    //   final Finder confirmButtonFinder = find.text('Confirm Payment');
-    //   await tester.tap(confirmButtonFinder);
-    //   await tester.pump();
+      final Finder confirmButtonFinder = find.text('Confirm Payment');
+      await tester.tap(confirmButtonFinder);
+      await tester.pump();
 
-    //   expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    //   expect(find.text('Processing payment...'), findsOneWidget);
-    //   expect(find.text('Confirm Payment'), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.text('Processing payment...'), findsOneWidget);
+      expect(find.text('Confirm Payment'), findsNothing);
 
-    //   await tester.pumpAndSettle();
-    // });
+      await tester.pumpAndSettle();
+    });
 
     testWidgets('calculates item prices correctly for footlong sandwiches',
         (WidgetTester tester) async {
