@@ -50,9 +50,11 @@ Refactoring is the process of restructuring existing code to improve its readabi
 
 #### **Styles**
 
-The new `app_styles.dart` file is a simple example of refactoring styles out of the main UI code. This file contains the styles used in our app much like a CSS file in web development. Note that this is not a mandatory way of managing styles in Flutter, you as the developer can choose to manage the architecture of your app in any way you see fit.
+Take a peek at the code at [the branch 4 of our repository](https://github.com/manighahrmani/sandwich_shop/tree/4). You'll be using this code next week.
 
-Also note that you can add more styles to this file as needed and use it across multiple files. Open your `main.dart`, observer how `app_styles.dart` is imported, and check to see where these styles are used (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for variables like `normalText`).
+Make a [new `app_styles.dart` file](https://github.com/manighahrmani/sandwich_shop/blob/e7cca94bcf2775a174d4ecfc477626b2d157986c/lib/app_styles.dart) in your project. This is a simple example of refactoring styles out of the main UI code. This file contains the styles used in our app much like a CSS file in web development. Note that this is not a mandatory way of managing styles in Flutter, you as the developer can choose to manage the architecture of your app in any way you see fit.
+
+Also note that you can add more styles to this file as needed and use it across multiple files. Open [the `main.dart` at branch 4](https://github.com/manighahrmani/sandwich_shop/blob/e7cca94bcf2775a174d4ecfc477626b2d157986c/lib/main.dart), update your code accordingly, and observe how `app_styles.dart` is imported, and check to see where these styles are used (use the search functionality in VS Code **Shift + Ctrl + F** on Windows or **Shift + ⌘ + F** on macOS and search for variables like `normalText`).
 
 #### **Folder structure**
 
