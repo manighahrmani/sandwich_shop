@@ -492,12 +492,12 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
 3.  (Advanced) So far, our app only has one screen (`main.dart`). Let's add a second screen to view the cart contents. This is a task which we will cover in more detail in the next worksheet, but let's give it a try now. Here's a [link to the Flutter documentation on navigation](https://docs.flutter.dev/cookbook/navigation/navigation-basics) to help you get started.
 
-    Create a new `StatefulWidget` called `CartViewScreen` (and its associated state class) in `main.dart` for now. It should display a list of all items in the cart. Each item should show the sandwich name, size, bread type, quantity, and individual total price.
+    Create a new `StatefulWidget` called `CartScreen` (and its associated state class) in `main.dart` for now. It should display a list of all items in the cart. Each item should show the sandwich name, size, bread type, quantity, and individual total price.
 
     Think about what pieces of information would be most useful to display in the cart view and how the user might reach/interact with this screen. Write a user story if you are planning to use your AI assistant to help you implement this and make sure to provide sufficient context (e.g., the `Cart` model and its methods).
 
 
-    Hint: You can use `Navigator.push()` to navigate to the cart screen and `Navigator.pop()` to go back to the main screen. Also, your `CartViewScreen` will need access to the cart data, so you'll need to pass it through the constructor. To display multiple items from a collection, you can use a for loop inside a `Column`'s children list like this:
+    Hint: You can use `Navigator.push()` to navigate to the cart screen and `Navigator.pop()` to go back to the main screen. Also, your `CartScreen` will need access to the cart data, so you'll need to pass it through the constructor. To display multiple items from a collection, you can use a for loop inside a `Column`'s children list like this:
 
     ```dart
     Column(
@@ -508,13 +508,13 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
     )
     ```
 
-    Once you have implemented the new page, move the `CartViewScreen` widget to a new file called `cart_view_screen.dart` inside the `views` folder and import it where you are using it (in `OrderScreen`). You could additionally create a `order_screen_view.dart` file for the `OrderScreen` and `OrderScreenState` classes if you wish. This way, `main.dart` will be short and simple, only containing the `App` class and the `main()` function.
+    Once you have implemented the new page, move the `CartScreen` widget to a new file called `cart_screen.dart` inside the `views` folder and import it where you are using it (in `OrderScreen`). You could additionally create a `order_screen.dart` file for the `OrderScreen` and `OrderScreenState` classes if you wish. This way, `main.dart` will be short and simple, only containing the `App` class and the `main()` function.
 
     This is what your `lib/main.dart` file may look like after the refactoring:
 
     ```dart
     import 'package:flutter/material.dart';
-    import 'package:sandwich_shop/views/order_screen_view.dart';
+    import 'package:sandwich_shop/views/order_screen.dart';
 
     void main() {
       runApp(const App());
@@ -543,8 +543,8 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
     │   ├── main.dart
     │   ├── views/
     │   │   ├── app_styles.dart
-    │   │   ├── cart_view_screen.dart
-    │   │   └── order_screen_view.dart
+    │   │   ├── cart_screen.dart
+    │   │   └── order_screen.dart
     │   ├── view_models/
     │   ├── models/
     │   │   ├── cart.dart
@@ -553,8 +553,8 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
     │       └── pricing_repository.dart
     ├── test/
     │   ├── views/
-    │   │   ├── cart_view_screen_test.dart
-    │   │   └── order_screen_view_test.dart
+    │   │   ├── cart_screen_test.dart
+    │   │   └── order_screen_test.dart
     │   ├── view_models/
     │   ├── models/
     │   │   ├── cart_test.dart
@@ -565,7 +565,7 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
     └── ...
     ```
 
-    Notice that the widget tests for each screen are in separate files named after the screen they are testing. (Instead of a single `widget_test.dart` file we have `cart_view_screen_test.dart` and `order_screen_view_test.dart` files.)
+    Notice that the widget tests for each screen are in separate files named after the screen they are testing. (Instead of a single `widget_test.dart` file we have `cart_screen_test.dart` and `order_screen_test.dart` files.)
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 

@@ -142,7 +142,7 @@ Now we need to make the cart available to all screens in our app. Update `lib/ma
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandwich_shop/models/cart.dart';
-import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
 
 void main() {
   runApp(const App());
@@ -175,7 +175,7 @@ We've also added `debugShowCheckedModeBanner: false` to remove the debug banner 
 
 Now we need to update our screens to use the provided cart instead of creating their own instances. Let's start with the order screen.
 
-Update `lib/views/order_screen_view.dart`. First, add the provider import:
+Update `lib/views/order_screen.dart`. First, add the provider import:
 
 ```dart
 import 'package:provider/provider.dart';
@@ -276,7 +276,7 @@ class _OrderScreenState extends State<OrderScreen> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const CartViewScreen(),
+        builder: (BuildContext context) => const CartScreen(),
       ),
     );
   }
@@ -466,34 +466,34 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-You will have an error caused by how the `CartViewScreen` is constructed without a cart parameter. We will fix this next. Just review the changes in the Source Control panel.
+You will have an error caused by how the `CartScreen` is constructed without a cart parameter. We will fix this next. Just review the changes in the Source Control panel.
 
 Notice how we use `Provider.of<Cart>(context, listen: false)` to access the cart when we don't need to rebuild the widget when the cart changes (hover your mouse over `listen` in VS Code to see what it does). This is also the case when adding items to the cart or navigating to another screen.
 
 On the other hand, for the cart summary display and the cart indicator in the app bar, we use `Consumer<Cart>` to automatically rebuild when the cart changes. We additionally have a small cart indicator in the app that shows the total number of items in the cart.
 
-Now update `lib/views/cart_view_screen.dart` to remove the cart parameter and use the provided cart instead:
+Now update `lib/views/cart_screen.dart` to remove the cart parameter and use the provided cart instead:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
-import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/pricing_repository.dart';
 import 'package:sandwich_shop/views/checkout_screen.dart';
 
-class CartViewScreen extends StatefulWidget {
-  const CartViewScreen({super.key});
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
 
   @override
-  State<CartViewScreen> createState() {
-    return _CartViewScreenState();
+  State<CartScreen> createState() {
+    return _CartScreenState();
   }
 }
 
-class _CartViewScreenState extends State<CartViewScreen> {
+class _CartScreenState extends State<CartScreen> {
   Future<void> _navigateToCheckout() async {
     final Cart cart = Provider.of<Cart>(context, listen: false);
     
@@ -1109,7 +1109,7 @@ Next, we need to initialize the font size when the app starts. Update `lib/main.
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandwich_shop/models/cart.dart';
-import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 
 void main() async {
@@ -1137,7 +1137,7 @@ class App extends StatelessWidget {
 }
 ```
 
-Now add a button to navigate to the settings screen in your order screen. In `lib/views/order_screen_view.dart`, inside the `_OrderScreenState` class, add this method to handle navigation to the settings screen:
+Now add a button to navigate to the settings screen in your order screen. In `lib/views/order_screen.dart`, inside the `_OrderScreenState` class, add this method to handle navigation to the settings screen:
 
 ```dart
 void _navigateToSettings() {
@@ -1500,7 +1500,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 }
 ```
 
-To navigate to this page, we need to add a button to `lib/views/order_screen_view.dart` that takes us to order history screen. In `lib/views/order_screen_view.dart`, inside the `_OrderScreenState` class, add this method after the existing navigation methods:
+To navigate to this page, we need to add a button to `lib/views/order_screen.dart` that takes us to order history screen. In `lib/views/order_screen.dart`, inside the `_OrderScreenState` class, add this method after the existing navigation methods:
 
 ```dart
 void _navigateToOrderHistory() {
