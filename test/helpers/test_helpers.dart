@@ -11,9 +11,15 @@ void initializeTestDatabase() {
 }
 
 MaterialApp createTestApp(Widget child, {Cart? cart}) {
+  Cart cartValue;
+  if (cart != null) {
+    cartValue = cart;
+  } else {
+    cartValue = Cart();
+  }
   return MaterialApp(
     home: ChangeNotifierProvider<Cart>.value(
-      value: cart ?? Cart(),
+      value: cartValue,
       child: child,
     ),
   );
