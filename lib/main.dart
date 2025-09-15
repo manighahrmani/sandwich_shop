@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
 
 void main() {
   runApp(const App());
