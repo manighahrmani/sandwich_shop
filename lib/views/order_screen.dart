@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
-import 'package:sandwich_shop/views/cart_view_screen.dart';
+import 'package:sandwich_shop/views/cart_screen.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 
@@ -79,7 +79,7 @@ class _OrderScreenState extends State<OrderScreen> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => CartViewScreen(cart: _cart),
+        builder: (BuildContext context) => CartScreen(cart: _cart),
       ),
     );
   }

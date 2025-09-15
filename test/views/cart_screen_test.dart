@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/views/cart_view_screen.dart';
-import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/cart_screen.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 
 void main() {
-  group('CartViewScreen', () {
+  group('CartScreen', () {
     testWidgets('displays empty cart message when cart is empty',
         (WidgetTester tester) async {
       final Cart emptyCart = Cart();
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: emptyCart);
+      final CartScreen cartViewScreen = CartScreen(cart: emptyCart);
       final MaterialApp app = MaterialApp(home: cartViewScreen);
 
       await tester.pumpWidget(app);
 
-      expect(find.text('Cart View'), findsOneWidget);
+      expect(find.text('Cart'), findsOneWidget);
       expect(find.text('Total: £0.00'), findsOneWidget);
     });
 
@@ -29,12 +29,12 @@ void main() {
       );
       cart.add(sandwich, quantity: 2);
 
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
+      final CartScreen cartViewScreen = CartScreen(cart: cart);
       final MaterialApp app = MaterialApp(home: cartViewScreen);
 
       await tester.pumpWidget(app);
 
-      expect(find.text('Cart View'), findsOneWidget);
+      expect(find.text('Cart'), findsOneWidget);
       expect(find.text('Veggie Delight'), findsOneWidget);
       expect(find.text('Footlong on white bread'), findsOneWidget);
       expect(find.text('Qty: 2 - £22.00'), findsOneWidget);
@@ -57,7 +57,7 @@ void main() {
       cart.add(sandwich1, quantity: 1);
       cart.add(sandwich2, quantity: 3);
 
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
+      final CartScreen cartViewScreen = CartScreen(cart: cart);
       final MaterialApp app = MaterialApp(home: cartViewScreen);
 
       await tester.pumpWidget(app);
@@ -73,7 +73,7 @@ void main() {
 
     testWidgets('back button navigates back', (WidgetTester tester) async {
       final Cart cart = Cart();
-      final CartViewScreen cartViewScreen = CartViewScreen(cart: cart);
+      final CartScreen cartViewScreen = CartScreen(cart: cart);
       final MaterialApp app = MaterialApp(home: cartViewScreen);
 
       await tester.pumpWidget(app);

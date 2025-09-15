@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/main.dart';
-import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
 
 void main() {
   group('App', () {

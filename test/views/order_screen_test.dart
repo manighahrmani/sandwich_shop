@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 
 void dummyFunction() {}
