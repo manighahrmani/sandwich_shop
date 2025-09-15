@@ -210,54 +210,95 @@ Note that the integration tests must be run on a real device or an emulator/simu
 
 ## **Firebase**
 
-So far, our app has been completely self-contained. All the data is stored on the device, and there is no communication with a server. However, most real-world apps need to communicate with a server to store and retrieve data.
+So far, our app has been completely self-contained. All the data is stored on the device, and there is no communication with a server. But that is not how most real-world apps work.
 
-**Cloud providers** like Amazon Web Services (AWS), Google Cloud Platform (GCP), and Microsoft Azure offer a wide range of services that you can use to build and deploy your app. These services include things like databases, authentication, and hosting.
+Cloud providers like Amazon Web Services (AWS), Google Cloud Platform (GCP), and Microsoft Azure offer a wide range of services that you can use to build and deploy your app. These services include things like databases, authentication, and hosting.
 
-**Firebase** is a platform developed by Google for creating mobile and web applications. It provides a suite of tools and services that can help you build your app faster and with less effort.
+**Firebase** is a platform developed by Google for creating mobile and web applications. It provides a suite of tools and services and it is particularly well-suited for Flutter apps.
 
-Some of the key features of Firebase include:
+Here are some features of Firebase you might find useful, particularly for your coursework:
 
-  - **Authentication**: Firebase Authentication allows you to easily add user authentication to your app. You can use a variety of authentication providers, including email and password, phone numbers, and social media providers like Google, Facebook, and Twitter.
-  - **Firestore Database**: Firestore is a NoSQL database that you can use to store and sync data for your app. It is a flexible, scalable database for mobile, web, and server development from Firebase and Google Cloud.
-  - **Hosting**: Firebase Hosting provides fast and secure hosting for your web app.
-  - **Storage**: Firebase Storage allows you to store and serve user-generated content, such as photos and videos.
-
-This is an advanced topic that you can explore if you have extra time. Using Firebase in your coursework can earn you extra marks, but you will need to explore it independently.
+  - **Authentication**: It allows you to easily add user authentication to your app using a variety of authentication providers, including email and password, phone numbers, and social media providers like Google and Facebook.
+  - **Realtime Database**: A cloud-hosted NoSQL database (not relational) made to be flexible and scalable.
+  - **Hosting**: Fast and secure web hosting for your Flutter app.
+  - **Storage**: Storage for your application's assets as well as user-generated content like profile pictures.
 
 ### **Using Firebase with Flutter**
 
-To use Firebase with Flutter, you will need to add the Firebase SDK to your app. You can find more information on how to do this in the official Firebase documentation: [Get started with Firebase for Flutter](https://firebase.google.com/docs/flutter/setup).
+To use Firebase with Flutter, you will need a Google account and you also need to add the Firebase SDK to your app. You can find more information on how to do this in [the Firebase documentation page](https://firebase.google.com/docs/flutter/setup).
 
-You can also check out this interactive codelab to learn more about using Firebase with Flutter: [Get to know Firebase for Flutter](https://firebase.google.com/codelabs/firebase-get-to-know-flutter#0).
+We also recommend you checking out this interactive codelab to learn more about using Firebase with Flutter: [Get to know Firebase for Flutter](https://firebase.google.com/codelabs/firebase-get-to-know-flutter#0).
 
 ### **JSON Serialization**
 
-When you are working with data from a server, you will often need to convert it from a JSON format to a Dart object. This process is called **JSON serialization**.
+Before we dive into using Firebase, there is one topic that we do need to cover when working with Firebase (or any other backend service).
 
-You can learn more about JSON serialization in the official Flutter documentation: [JSON and serialization](https://docs.flutter.dev/data-and-backend/serialization/json).
+Servers typically communicate using JSON (JavaScript Object Notation), which is a lightweight data-interchange format that is easy for humans to read and write, and easy for machines to parse and generate. Here's an example:
 
-### **Factory Constructors**
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "age": 30,
+  "isActive": true
+}
+```
 
-When you are working with JSON serialization, you will often need to use **factory constructors**. A factory constructor is a special type of constructor that can return an instance of a class that is not the same as the class it is defined in.
-
-For example, you could use a factory constructor to create a `User` object from a JSON map:
+Assuming we have a Dart class to represent a user, this JSON object would be an instance of that class:
 
 ```dart
 class User {
   final String name;
   final String email;
+  final int age;
+  final bool isActive;
 
-  User(this.name, this.email);
+  User(this.name, this.email, this.age, this.isActive);
+}
 
+User john = User('John Doe', 'john@example.com', 30, true);
+```
+
+If you are working with Firebase, you will often be translating data between Dart objects and JSON. The process of data from Dart objects to JSON is called **(JSON) serialization**, and the process of data from JSON to Dart objects is called **deserialization**.
+
+You can learn more about JSON serialization in the official Flutter documentation: [JSON and serialization](https://docs.flutter.dev/data-and-backend/serialization/json). Watch the video and look at the examples, understanding this topic is vital if you are planning to use the Firebase Realtime Database.
+
+When working with JSON serialization, you'll often see **factory constructors**. A factory constructor is a special type of constructor that doesn't always create a new instance of the class. Instead, it can return an existing instance or perform some logic before creating the instance.
+
+Here's an example of how you might use a factory constructor for JSON deserialization:
+
+```dart
+class User {
+  final String name;
+  final String email;
+  final int age;
+  final bool isActive;
+
+  User(this.name, this.email, this.age, this.isActive);
+
+  // Factory constructor for creating User from JSON
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      json['name'],
-      json['email'],
+      json['name'] as String,
+      json['email'] as String,
+      json['age'] as int,
+      json['isActive'] as bool,
     );
+  }
+
+  // Method for converting User to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'email': email,
+      'age': age,
+      'isActive': isActive,
+    };
   }
 }
 ```
+
+The `factory` keyword tells Dart that this constructor might not return a new instance every time it's called. It is often used for deserialization because it allows you to define how to create an instance of the class from a JSON object.
 
 ### **Firebase Realtime Database**
 
