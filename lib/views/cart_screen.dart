@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
-import 'package:sandwich_shop/views/order_screen_view.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/pricing_repository.dart';
 import 'package:sandwich_shop/views/checkout_screen.dart';
 
-class CartViewScreen extends StatefulWidget {
+class CartScreen extends StatefulWidget {
   final Cart cart;
 
-  const CartViewScreen({super.key, required this.cart});
+  const CartScreen({super.key, required this.cart});
 
   @override
-  State<CartViewScreen> createState() {
-    return _CartViewScreenState();
+  State<CartScreen> createState() {
+    return _CartScreenState();
   }
 }
 
-class _CartViewScreenState extends State<CartViewScreen> {
+class _CartScreenState extends State<CartScreen> {
   Future<void> _navigateToCheckout() async {
     if (widget.cart.items.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
