@@ -15,7 +15,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      expect(find.text('Cart'), findsOneWidget);
+      expect(find.text('Cart View'), findsOneWidget);
       expect(find.text('Your cart is empty.'), findsOneWidget);
       expect(find.text('Total: £0.00'), findsOneWidget);
     });
@@ -35,7 +35,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      expect(find.text('Cart'), findsOneWidget);
+      expect(find.text('Cart View'), findsOneWidget);
       expect(find.text('Veggie Delight'), findsOneWidget);
       expect(find.text('Footlong on white bread'), findsOneWidget);
       expect(find.text('Qty: 2'), findsOneWidget);
