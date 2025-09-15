@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/views/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
   group('SettingsScreen', () {
@@ -41,25 +42,16 @@ void main() {
           find.widgetWithText(ElevatedButton, 'Back to Order'), findsOneWidget);
     });
 
-    testWidgets('displays logo in app bar', (WidgetTester tester) async {
+    testWidgets('displays common app bar elements correctly',
+        (WidgetTester tester) async {
       const SettingsScreen settingsScreen = SettingsScreen();
       const MaterialApp app = MaterialApp(home: settingsScreen);
 
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      final appBarFinder = find.byType(AppBar);
-      expect(appBarFinder, findsOneWidget);
-
-      final appBarImagesFinder = find.descendant(
-        of: appBarFinder,
-        matching: find.byType(Image),
-      );
-      expect(appBarImagesFinder, findsOneWidget);
-
-      final Image logoImage = tester.widget(appBarImagesFinder);
-      expect(
-          (logoImage.image as AssetImage).assetName, 'assets/images/logo.png');
+      testCommonAppBarLogo(tester);
+      testBasicScaffoldStructure(tester);
     });
 
     testWidgets('slider changes font size', (WidgetTester tester) async {
