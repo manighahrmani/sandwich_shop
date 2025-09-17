@@ -20,6 +20,8 @@ Every worksheet ends with a handful of **exercises**. After completing these exe
 
 To get support with the worksheets, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-## **Providing feedback**
+## **Feedback**
 
-To provide feedback on the organisation of the Flutter part of the module, complete this anonymous (note that you need to be logged into Microsoft with your student account to be able to access the form, but your username will not be collected): [Feedback form](https://forms.office.com/e/88jd4UGAui)
+To provide feedback on the organisation of the Flutter part of the module, complete this anonymous [feedback form](https://forms.office.com/e/88jd4UGAui). Note that you need to be logged into Microsoft with your student account to be able to access the form, but your username will not be collected.
+
+The worksheets are not perfect. If you notice any mistakes or would like any improvements, please open [the repository](https://github.com/manighahrmani/sandwich_shop), go to the Issues tab and open a new issue describing the mistake. Provide as much detail as possible so that we can fix it quickly.
