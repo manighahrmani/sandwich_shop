@@ -16,13 +16,22 @@ The following free courses from GitHub will get you up to speed:
 
 This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
 
-[Link to the introduction course](https://github.com/skills/introduction-to-github)
+⚠️ **Note**: Use a personal email address (not your university email) to sign up for GitHub. If you already have a GitHub account with your university email, you need to change the primary email to a personal one. Make sure to verify both email addresses in your GitHub account settings and enable two-factor authentication (2FA).
+
+![GitHub Email Settings](images/screenshot_GitHub_emails.png)
+
+
+Once you have done this, complete the following
+[introduction course](https://github.com/skills/introduction-to-github).
 
 ### 2 - Introduction to GitHub Copilot
 
 GitHub's AI can assist you with tasks such as explaining code, fixing bugs, and even writing code snippets. As a student, you're eligible for a free Copilot subscription through the [GitHub Student Developer Pack](https://education.github.com/pack).
 
-[Link to the getting started with Copilot course](https://github.com/skills/getting-started-with-github-copilot)
+⚠️ **Note**: While signing up for GitHub for education, you need to be on-campus (or use the [VPN](https://myport.port.ac.uk/it-support/student-it-support/guide-to-the-virtual-private-network-vpn)) so that they can verify you are on the university campus.
+
+Once you have access to Copilot, complete the following
+[getting started course](https://github.com/skills/getting-started-with-github-copilot).
 
 ## Introduction to the Dart language
 
