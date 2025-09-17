@@ -26,7 +26,7 @@ Use the shortcut on the desktop or head to AppsAnywhere using this link: [appsan
 
 In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Git` and click on launch. Do not select "GitHub Desktop".
 
-![Git in AppsAnywhere](images/screenshot_appsanywhere_git.jpg)
+![Git in AppsAnywhere](images/screenshot_appsanywhere_git.png)
 
 To verify the installation, open the `Start Menu` by pressing the `Windows` key, type `Command Prompt` or `PowerShell`, and select it. Write the following command in the terminal and press Enter:
 
