@@ -281,19 +281,19 @@ git commit -m "Initial commit"
 
 You might see a pop-up asking to stage all changes and commit them directly; you can click `Always` to skip this in the future.
 
-The `Commit` button will now say `Publish Branch` or `Sync Changes`. Click this to push your local repository to GitHub. You may be asked to allow VS Code (or Firebase Studio) to log in to your GitHub account.
+The `Commit` button will now say `Publish Branch`:
+
+![Publish Branch Button](images/screenshot_firebase_studio_publish_branch.png)
+
+Or `Sync Changes`:
 
 ![Sync Changes Button](images/screenshot_vscode_sync_changes.jpg)
 
-You can do this from the terminal as well by running:
+Click this to push your local repository to GitHub. You may be asked to allow VS Code (or Firebase Studio) to log in to your GitHub account.
 
-```bash
-git push -u origin main
-```
+Next, you will be asked to name your repository; enter `sandwich_shop`. Let this be a **public** repository and click `Publish Repository`.
 
-Next, you will be asked to name your repository; enter `sandwich_shop`. You can choose to make it public, but for your coursework, you must make it **private**.
-
-![Create GitHub Repository](images/screenshot_vscode_create_github_repo.jpg)
+![Create GitHub Repository](images/screenshot_vscode_create_github_repo.png)
 
 #### **Verifying the repository on GitHub**
 
