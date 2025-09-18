@@ -43,7 +43,7 @@ In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Flutter And 
 To verify the installation, enter the following in `Command Prompt` or `PowerShell`:
 
 ```bash
-flutter --doctor
+flutter doctor
 ```
 
 This may take a while, but it should return a report of your Flutter installation status.
