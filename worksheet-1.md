@@ -1,28 +1,54 @@
-# Worksheet 1 — Introduction to Flutter
+# **Worksheet 1 — Introduction to Flutter**
 
-## What you need to know beforehand
+## **What you need to know beforehand**
 
 Ensure that you have already completed the following:
 
 - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
 
-## Getting help
+## **Getting help**
 
 To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-## Set up your development environment
+## **Set up your development environment**
 
-We first need to ensure all the necessary tools are installed on your computer. You can use either the university computers or your personal Mac or Windows computer. Skip to the section that matches your operating system.
+We first need to ensure all the necessary tools are installed on your computer. You can use Firebase Studio (a free browser-based IDE), the university computers, or your personal Mac or Windows computer. Skip to the section that matches your choice.
 
-### University computers
+### **Firebase Studio**
 
-#### Logging in to AppsAnywhere
+This is a temporary solution in case the university computers are not working as expected or if you do not have your laptop. You can access it from anywhere using a web browser. You will need a personal Google account to log in, **not your university Google account**.
+
+Firebase Studio, previously known as Project IDX, provides a complete development environment in your browser, based on VS Code.
+
+#### **Creating a Flutter Project**
+
+Open [idx.google.com](https://idx.google.com) in any browser and sign in with your **personal Google account**.
+
+Once you have agreed to the terms and conditions, you will see a screen similar to the one below.
+
+![Firebase Studio selection of template](images/screenshot_firebase_studio_template.png)
+
+Select Flutter from the list of templates (it is a blue icon that looks like a tilted "F"). Give your workspace a name, such as `sandwich_shop`, and create it.
+
+This will set up a complete Flutter project for you, ready to go. The interface will look very similar to VS Code, but it runs entirely in your browser.
+
+Running the app on Firebase studio is slightly different from a local VS Code setup. By default, your app should be running on both an Android emulator and a web browser. You can close the Android emulator as we will mainly be using web as our target device for most of the worksheets.
+
+![Firebase Studio interface](images/screenshot_firebase_studio_emulators.png)
+
+If it is not running, open the Command Palette with **Ctrl + Shift + P** (or **⌘ + Shift + P** on macOS) and type `Firebase Studio: Show Web Preview`. Select it to start the web version of your app.
+
+Continue with the rest of the worksheet as normal. The other minor difference is that instead of GitHub Copilot, Firebase Studio uses Google's AI assistant called Gemini (you can see it on the right-hand side). You can use it in a similar way to Copilot by selecting code and asking questions about it.
+
+### **University computers**
+
+#### **Logging in to AppsAnywhere**
 
 Use the shortcut on the desktop or head to AppsAnywhere using this link: [appsanywhere.port.ac.uk](https://appsanywhere.port.ac.uk/sso). Once you have logged in, you will see a dialogue shown below. First, tick the box for "Always allow appsanywhere.port.ac.uk to open links of this type in the associated app" and then click on the "Open AppsAnywhere Launcher" button.
 
 ![AppsAnywhere launcher](images/screenshot_appsanywhere_launcher.jpg)
 
-#### Installing Git
+#### **Installing Git**
 
 In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Git` and click on launch. Do not select "GitHub Desktop".
 
@@ -36,7 +62,7 @@ git --version
 
 You should see a version number indicating that Git is installed successfully.
 
-#### Installing the Flutter SDK
+#### **Installing the Flutter SDK**
 
 In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Flutter And Dart SDK` and click on launch.
 
@@ -49,20 +75,17 @@ flutter doctor
 This may take a while, but it should return a report of your Flutter installation status.
 
 ![Flutter Doctor Report](images/screenshot_flutter_doctor.jpg)
-
-#### Installing Visual Studio Code
+#### **Installing Visual Studio Code**
 
 In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Visual Studio Code` and launch it. It can take a while to load, so be patient.
 
----
+### **Personal Windows computer**
 
-### Personal Windows computer
+#### **Opening the terminal**
 
-#### Opening the terminal
+Open the `Start Menu` by pressing the `Windows` key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use [the university computers instead](https://www.google.com/search?q=%23university-computers).
 
-Open the `Start Menu` by pressing the `Windows` key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use [the university computers instead](#university-computers).
-
-#### Installing the Chocolatey package manager
+#### **Installing the Chocolatey package manager**
 
 We will use a package manager called Chocolatey to easily install all the required tools. First, check if it's already installed by running `choco --version`. If you see a version number, you can skip to the next step.
 
@@ -72,7 +95,7 @@ If it's not installed, go to the [Chocolatey installation page](https://chocolat
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 
-#### Installing development tools
+#### **Installing development tools**
 
 With Chocolatey installed, you can now install Git, Visual Studio Code, and the Flutter SDK. Run the following commands one by one in your PowerShell terminal with administrator rights:
 
@@ -90,7 +113,7 @@ choco uninstall dart -y
 
 Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
 
-#### Verifying the installation
+#### **Verifying the installation**
 
 Close your current terminal and open a new one, which doesn't need to be run as an administrator. Run the following to check your installations:
 
@@ -98,15 +121,13 @@ Close your current terminal and open a new one, which doesn't need to be run as 
 flutter doctor
 ```
 
----
+### **Personal macOS computer**
 
-### Personal macOS computer
-
-#### Opening the terminal
+#### **Opening the terminal**
 
 You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing `Terminal`, and pressing return.
 
-#### Installing the Homebrew package manager
+#### **Installing the Homebrew package manager**
 
 Homebrew is a package manager for macOS that simplifies installing software. To check if you have it installed, run `brew --version` in the terminal. If you see a version number, you can skip to the next step.
 
@@ -116,7 +137,7 @@ If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the in
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-#### Installing development tools
+#### **Installing development tools**
 
 Once Homebrew is ready, you can install the necessary tools by running the following commands in your terminal:
 
@@ -133,7 +154,7 @@ brew uninstall dart
 
 Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
 
-#### Verifying the installation
+#### **Verifying the installation**
 
 Close your current terminal and open a new one. Run the following command to check your installations:
 
@@ -141,11 +162,11 @@ Close your current terminal and open a new one. Run the following command to che
 flutter doctor
 ```
 
-## Your Flutter application
+## **Your Flutter application**
 
 Now that our environment is set up, we can create our first Flutter project.
 
-#### Setting up Visual Studio Code
+#### **Setting up Visual Studio Code**
 
 To sync your VS Code settings, first open [GitHub](https://github.com/) in your browser and log in.
 
@@ -157,7 +178,7 @@ If this is your first time using VS Code, you'll need to install [the Flutter ex
 
 ![Flutter Extension](images/screenshot_flutter_extension.jpg)
 
-#### Creating a new Flutter project
+#### **Creating a new Flutter project**
 
 In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS). In the palette, type `Flutter: New Project` and press Enter.
 
@@ -167,7 +188,7 @@ Select `Application` when prompted for a template. You will then be asked to cho
 
 Choose a name for your project, such as `sandwich_shop`, and press Enter. VS Code will now create a new Flutter project and open it for you.
 
-#### Understanding the project structure
+#### **Understanding the project structure**
 
 You should see a new folder structure in the Explorer view on the left side of VS Code. You are encouraged to explore the files and folders, but the most important files for now are located in the `lib/` folder. This folder contains your Dart application code with the main entry point being `lib/main.dart` (this is the file that runs when you start your app).
 
@@ -180,7 +201,7 @@ You don't need to understand the code at this moment but below is a brief overvi
 
 The default application is a simple counter app. The `lib/main.dart` file contains the entry point `void main() => runApp(const MyApp());`, which runs the root widget, `MyApp`. This `StatelessWidget` sets up the `MaterialApp` and defines the home screen, which is the `MyHomePage` widget. `MyHomePage` is a `StatefulWidget` because it manages the changing counter value. It contains the `_incrementCounter()` method, which uses `setState()` to rebuild the UI when the `_counter` variable changes.
 
-#### Using AI
+#### **Using AI**
 
 We will learn more about stateless and stateful widgets in later worksheets. This is just a brief overview to get you started. But for now, use the Copilot extension to explore the code.
 
@@ -198,15 +219,14 @@ As an example, select a piece of code that you'd like to learn more about with y
 
 Copilot should automatically add the relevant code context to your question. However if you're using an LLM on the web (e.g., ChatGPT or Claude), you may need to provide items 2 and 3 (source and context) manually.
 
-#### Selecting a target device
+#### **Selecting a target device**
 
 At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like Edge or Chrome.
 
 Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Flutter: Select Device`. Then select your browser from the list.
 
 ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
-
-#### Running the app
+#### **Running the app**
 
 You can run the app in several ways, for example by pressing the F5 key, opening a new terminal and running `flutter run`, or clicking the "Run" button that appears above the `main` function in `lib/main.dart`.
 
@@ -218,7 +238,7 @@ flutter run
 
 VS Code will build and run your application, which should open in a browser window. Click the `+` button to see the counter increase.
 
-#### Using hot reload
+#### **Using hot reload**
 
 Hot reload is a powerful feature that lets you see code changes instantly without restarting the app.
 
@@ -228,11 +248,13 @@ You can enable it by clicking the lightning bolt icon (⚡) at the top of VS Cod
 
 As an example, while the app is running, enable hot reload and change the `colorSchemeSeed` property inside the `ThemeData` widget in `lib/main.dart` from `Colors.deepPurple` to `Colors.orange` and save the file. You should see the UI update in the browser instantly.
 
-## Setting up a GitHub repository
+## **Setting up a GitHub repository**
 
 Lastly, let's put our project on GitHub to track changes and back it up online.
 
-#### Initialising the repository
+#### **Initialising the repository**
+
+You should ignore this step if you are using Firebase Studio as it already initializes a Git repository for you. Skip to [Making the first commit](#making-the-first-commit).
 
 In the Activity Bar on the left, click the Source Control icon. Click on `Initialize Repository` to set up Git for your project.
 
@@ -244,7 +266,7 @@ Alternatively, you can run the following command in the terminal to initialize G
 git init
 ```
 
-#### Making the first commit
+#### **Making the first commit**
 
 You should now see all your project files listed in the Source Control panel. Hover over **Changes** and click the `+` icon to stage all files. Then, enter a commit message like `Initial commit` in the text box and click the **Commit** button to commit your changes.
 
@@ -259,7 +281,7 @@ git commit -m "Initial commit"
 
 You might see a pop-up asking to stage all changes and commit them directly; you can click `Always` to skip this in the future.
 
-The `Commit` button will now say `Publish Branch` or `Sync Changes`. Click this to push your local repository to GitHub. You may be asked to allow VS Code to log in to your GitHub account.
+The `Commit` button will now say `Publish Branch` or `Sync Changes`. Click this to push your local repository to GitHub. You may be asked to allow VS Code (or Firebase Studio) to log in to your GitHub account.
 
 ![Sync Changes Button](images/screenshot_vscode_sync_changes.jpg)
 
@@ -273,7 +295,7 @@ Next, you will be asked to name your repository; enter `sandwich_shop`. You can 
 
 ![Create GitHub Repository](images/screenshot_vscode_create_github_repo.jpg)
 
-#### Verifying the repository on GitHub
+#### **Verifying the repository on GitHub**
 
 You can verify that the project was published by navigating to your GitHub account in a web browser. You should see the newly created `sandwich_shop` repository.
 
@@ -281,7 +303,7 @@ You can verify that the project was published by navigating to your GitHub accou
 
 The link will look like `https://github.com/YOUR_USERNAME/sandwich_shop` where `YOUR_USERNAME` is your GitHub username.
 
-#### Making another commit
+#### **Making another commit**
 
 Let's make another commit. In `lib/main.dart`, change the text in the `AppBar` widget from `Flutter Demo Home Page` to `My Sandwich Shop`. Save the file (**Ctrl + S** or **⌘ + S**) or better yet, enable auto-save by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing `Auto Save`, then press Enter to select `Toggle Auto Save`.
 
@@ -293,7 +315,7 @@ Before you click on commit, you can also click on the changed files below the `C
 
 Once you have clicked on commit and then sync changes, you should be able to see the changes to the file in your GitHub repository.
 
-## Exercises
+## **Exercises**
 
 Complete the exercises below and show your work to a member of staff present at your next practical for **a sign-off**.
 
@@ -361,7 +383,7 @@ If you are new to programming and find it easier to watch a video tutorial, cons
 5. The Flutter SDK can automatically fix many problems in your code. For example the LLMs that you may be using could generate deprecated code for you.
 
     To see how the SDK can fix your code for you, go to your `lib/main.dart` file and find the `Text` widget responsible for displaying the counter. The code for this widget looks like this:
-  
+
     ```dart
     Text(
       '$_counter',
