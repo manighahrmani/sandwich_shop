@@ -31,11 +31,11 @@ Or manually ensure your code matches the repository. Run the app to make sure ev
 
 One of the learning outcomes of this module is AI-driven development. We have been hinting at this in the earlier worksheets, but let's formalise things a little. Below are the different ways developers use AI:
 
-  - **Vibe Coding**: This refers to the informal and passive approach where developers ask AI for quick solutions without much structure or planning. While this can be useful for simple tasks, it is not sustainable for larger projects and often leads to inconsistent results and technical debt.
+- **Vibe Coding**: This refers to the informal and passive approach where developers ask AI for quick solutions without much structure or planning. While this can be useful for simple tasks, it is not sustainable for larger projects and often leads to inconsistent results and technical debt.
 
-  - **Prompt Engineering**: The practice of crafting specific, well-structured prompts to get better results from AI models. This involves understanding how to communicate effectively with AI to get the desired output.
+- **Prompt Engineering**: The practice of crafting specific, well-structured prompts to get better results from AI models. This involves understanding how to communicate effectively with AI to get the desired output.
 
-  - **Prompt-driven Development (PDD)**: A more systematic approach where developers use carefully crafted prompts to guide AI through the entire development process. Prompts, often in Markdown format (ending with `.md`), are stored alongside the codebase, modified and refined over time just like code itself. The overall aim is to make AI-driven development a more structured, reproducible and reliable process.
+- **Prompt-driven Development (PDD)**: A more systematic approach where developers use carefully crafted prompts to guide AI through the entire development process. Prompts, often in Markdown format (ending with `.md`), are stored alongside the codebase, modified and refined over time just like code itself. The overall aim is to make AI-driven development a more structured, reproducible and reliable process.
 
 Among some of the advantages of PDD is that well-structured prompts produce more consistent and predictable results. AI can be unpredictable, and predictability is a quality we want in software development. Detailed requirements lead to better code quality and fewer bugs, and if any generated code has issues, we can always go back to the prompt and refine it.
 
@@ -51,7 +51,7 @@ Run the app and add a few sandwiches to your cart. You should see a snack bar co
 
 Let's say we want to enhance our cart functionality. Instead of immediately asking for code, we'll first ask our AI assistant to help us create a prompt. Here's a sample prompt you can use (if you are using Copilot, set it to "Ask" mode):
 
-```
+```text
 I have a sandwich shop app written in Flutter. I need your help writing good prompt I can send to an LLM to help me implement a new feature.
 
 I have two pages: an order screen where users can select sandwiches and add them to their cart, and a cart screen where users can see the items in their cart and the total price.
@@ -63,7 +63,7 @@ For each of these features, include a clear description and what should happen w
 
 This initial prompt can be improved by adding more specific details about the current app structure. You could, for example, include:
 
-```
+```text
 The app currently has these models:
 - Sandwich (with type, size, bread type)
 - Cart (with add/remove/clear methods and total price calculation)
@@ -80,7 +80,7 @@ In our case, we asked the AI to refine the prompt after providing it with a scre
 
 This is what we ended up with: [prompt.md](https://github.com/manighahrmani/sandwich_shop/blob/5b8512d5a5b2074c3dada7a1de213860f5110433/prompt.md#L65).
 
-#### **Commit your changes**
+#### **Commit your changes (1)**
 
 Before moving on, commit your prompt file with an appropriate commit message. Remember, in PDD, prompts are part of the codebase.
 
@@ -88,7 +88,7 @@ Before moving on, commit your prompt file with an appropriate commit message. Re
 
 Once you have a solid prompt, you can use AI to write a requirements document. Here's a sample prompt you can use:
 
-```
+```text
 Write a detailed requirements document for the feature described in my previous prompt. The requirements should include:
 
 1. A clear description of the feature and its purpose.
@@ -108,7 +108,7 @@ Before implementing the feature, commit your requirements document with an appro
 
 Now that you have a clear requirements document, you can use it to guide your implementation. Here's a sample prompt you can use:
 
-```
+```text
 Let's implement the feature described in my requirements document.
 
 Implement each subtask separately, as I want to commit each one individually. For each subtask, explain your changes in detail, show me what files you are modifying, and then we can proceed to the next subtask.
@@ -127,7 +127,7 @@ Here is a screenshot of our cart page after implementing the modifications:
 
 As before, remember to update the widget tests for the `cart_screen.dart` in `test/views/cart_screen_test.dart` to cover the new functionality you have added.
 
-#### **Commit your changes**
+#### **Commit your changes (2)**
 
 Once you have implemented and tested the feature, commit your changes with an appropriate commit message.
 
@@ -137,8 +137,8 @@ In one of the exercises from last week's worksheet, we started creating a cart s
 
 Here are some key terms to understand:
 
-  - **Route**: A route is a screen or a page in your app. This is equivalent to an `Activity` in Android or a `ViewController` in iOS.
-  - **Navigator**: A widget that manages a [stack](<https://en.wikipedia.org/wiki/Stack_(abstract_data_type)>) of routes. It handles pushing new routes onto the stack (navigating to a new screen) and popping them off (going back).
+- **Route**: A route is a screen or a page in your app. This is equivalent to an `Activity` in Android or a `ViewController` in iOS.
+- **Navigator**: A widget that manages a [stack](<https://en.wikipedia.org/wiki/Stack_(abstract_data_type)>) of routes. It handles pushing new routes onto the stack (navigating to a new screen) and popping them off (going back).
 
 Think of navigation as a stack of cards. When you navigate to a new screen, you place (push) a new card on top of the stack. When you go back, you remove (pop) the top card, revealing the screen underneath.
 
@@ -363,7 +363,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 }
 ```
 
-#### **Commit your changes**
+#### **Commit your changes (3)**
 
 Commit your changes and add widget tests for the new checkout screen in `test/views/checkout_screen_test.dart`.
 
@@ -444,7 +444,7 @@ We check that the `result` is not null and that the widget is still `mounted` (i
 
 Run your app and test the full checkout flow.
 
-#### **Commit your changes**
+#### **Commit your changes (4)**
 
 Commit the changes for integrating the checkout screen and update any relevant widget tests.
 
@@ -452,7 +452,7 @@ Commit the changes for integrating the checkout screen and update any relevant w
 
 Complete the exercises below. Remember to commit your changes after each exercise.
 
-1.  Let's add a simple profile screen where users can enter their details. For now, you can add a link to this screen at the bottom of your order screen (we will improve this in the next exercise).
+1. Let's add a simple profile screen where users can enter their details. For now, you can add a link to this screen at the bottom of your order screen (we will improve this in the next exercise).
 
     As we did earlier in this worksheet, use your AI assistant to help you write a prompt for this feature.
 
@@ -462,7 +462,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     ⚠️ **Show your working profile screen to a member of staff** for a sign-off.
 
-2.  Let's enhance our app's navigation by adding a `Drawer` menu. A `Drawer` is a panel that slides in from the edge of a `Scaffold` to show the app's main navigation options. You can read more about it in its [documentation page](https://api.flutter.dev/flutter/material/Drawer-class.html).
+2. Let's enhance our app's navigation by adding a `Drawer` menu. A `Drawer` is a panel that slides in from the edge of a `Scaffold` to show the app's main navigation options. You can read more about it in its [documentation page](https://api.flutter.dev/flutter/material/Drawer-class.html).
 
     Implement a drawer that includes navigation to your order screen, cart view, and profile screen.
 
@@ -474,7 +474,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     ⚠️ **Show your working navigation drawer to a member of staff** for a sign-off.
 
-3.  (Advanced) Configure your app to handle [deep links](https://docs.flutter.dev/ui/navigation/deep-linking) using `go_router`, which is the recommended approach for URL-based navigation in Flutter.
+3. (Advanced) Configure your app to handle [deep links](https://docs.flutter.dev/ui/navigation/deep-linking) using `go_router`, which is the recommended approach for URL-based navigation in Flutter.
 
     Add the `go_router` package to your project by running `flutter pub add go_router`.
 
@@ -484,7 +484,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-4.  (Advanced) Create a settings screen where users can configure app-wide preferences, such as enabling dark mode or adjusting font sizes.
+4. (Advanced) Create a settings screen where users can configure app-wide preferences, such as enabling dark mode or adjusting font sizes.
 
     This exercise introduces you to data persistence. You can use the `shared_preferences` package, which allows you to save simple key-value data that persists between app sessions. Add the package by running `flutter pub add shared_preferences`.
 
