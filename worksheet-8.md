@@ -4,14 +4,14 @@
 
 Ensure that you have already completed the following:
 
-  - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
-  - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
-  - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
-  - [Worksheet 3 — Stateful widgets](./worksheet-3.md).
-  - [Worksheet 4 — App Architecture and Testing](./worksheet-4.md).
-  - [Worksheet 5 — Data Models and Assets](./worksheet-5.md).
-  - [Worksheet 6 — AI-Driven Development and Navigation](./worksheet-6.md).
-  - [Worksheet 7 — State Management and Persistence](./worksheet-7.md).
+- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+- [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
+- [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
+- [Worksheet 3 — Stateful widgets](./worksheet-3.md).
+- [Worksheet 4 — App Architecture and Testing](./worksheet-4.md).
+- [Worksheet 5 — Data Models and Assets](./worksheet-5.md).
+- [Worksheet 6 — AI-Driven Development and Navigation](./worksheet-6.md).
+- [Worksheet 7 — State Management and Persistence](./worksheet-7.md).
 
 ## **Getting help**
 
@@ -47,7 +47,7 @@ flutter pub add 'dev:integration_test:{"sdk":"flutter"}'
 
 Create a new directory called `integration_test` in your project root (at the same level as `lib` and `test`):
 
-```
+```text
 sandwich_shop/
 ├── lib/
 ├── test/
@@ -218,10 +218,10 @@ Cloud providers like Amazon Web Services (AWS), Google Cloud Platform (GCP), and
 
 Here are some features of Firebase you might find useful, particularly for your coursework:
 
-  - **Authentication**: It allows you to easily add user authentication to your app using a variety of authentication providers, including email and password, phone numbers, and social media providers like Google and Facebook.
-  - **Realtime Database**: A cloud-hosted NoSQL database (not relational) made to be flexible and scalable.
-  - **Hosting**: Fast and secure web hosting for your Flutter app.
-  - **Storage**: Storage for your application's assets as well as user-generated content like profile pictures.
+- **Authentication**: It allows you to easily add user authentication to your app using a variety of authentication providers, including email and password, phone numbers, and social media providers like Google and Facebook.
+- **Realtime Database**: A cloud-hosted NoSQL database (not relational) made to be flexible and scalable.
+- **Hosting**: Fast and secure web hosting for your Flutter app.
+- **Storage**: Storage for your application's assets as well as user-generated content like profile pictures.
 
 ### **Using Firebase with Flutter**
 
@@ -368,9 +368,9 @@ You can find more information about deploying Flutter apps in the official docum
 
 Flutter has three build modes:
 
-  - **Debug mode**: Used during development. Includes debugging information and hot reload. Apps are larger and slower.
-  - **Profile mode**: Used for performance testing. Includes some debugging features but is optimized for performance analysis.
-  - **Release mode**: Used for production. Fully optimized, smallest size, fastest performance, no debugging features.
+- **Debug mode**: Used during development. Includes debugging information and hot reload. Apps are larger and slower.
+- **Profile mode**: Used for performance testing. Includes some debugging features but is optimized for performance analysis.
+- **Release mode**: Used for production. Fully optimized, smallest size, fastest performance, no debugging features.
 
 When submitting your coursework, you should ideally create a separate release build of your app (in addition to the debug built you would be using during the demo). You can do this by running the following commands:
 
@@ -400,16 +400,15 @@ You can learn more about code obfuscation in the official Flutter documentation:
 
 Before you submit your coursework, there are a few things you should do to make sure your app is ready:
 
-  - **Clean your project**: Run `flutter clean` to remove any temporary files from your project.
-  - **Update your `README.md`**: Your `README.md` file should include instructions on how to build and run your app, as well as any other relevant information.
-  - **Create a release build**: Create a release build of your app for the platform you are targeting.
+- **Clean your project**: Run `flutter clean` to remove any temporary files from your project.
+- **Update your `README.md`**: Your `README.md` file should include instructions on how to build and run your app, as well as any other relevant information.
+- **Create a release build**: Create a release build of your app for the platform you are targeting.
 
 For more information on building and releasing apps for different platforms, you can check out [the documentation page on deployment](https://docs.flutter.dev/deployment).
 
 ## **Exercises**
 
 Complete the exercises below to practice integration testing and explore deployment options.
-
 
 1. There are several features of the app that are not covered by unit or widget tests. Think about all the different user journeys in your app and write integration tests to cover them.
 
