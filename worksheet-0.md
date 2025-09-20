@@ -81,10 +81,8 @@ Complete the exercises below and show your work to a member of staff present at 
 
     Install [the GitHub Copilot extension in VS Code](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot). Finally, make a Dart file, e.g., `hello_dart.dart` and use Copilot. You can, for example, add a comment to ask Copilot to write a new function for you:
 
-    ````text
-    ```dart
-    // a function that returns the sum of two integers
+    ```text
+    // Write a function that returns the sum of two integers
     ```
-    ````
 
     ⚠️ **Show your Dart file to a member of staff** for a sign-off.
