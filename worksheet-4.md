@@ -4,10 +4,10 @@
 
 Ensure that you have already completed the following:
 
-  - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
-  - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
-  - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
-  - [Worksheet 3 — Stateful widgets](./worksheet-3.md).
+- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+- [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
+- [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
+- [Worksheet 3 — Stateful widgets](./worksheet-3.md).
 
 ## **Getting help**
 
@@ -19,10 +19,10 @@ As your app grows, it's important to have a clear and organised structure. Gener
 
 For this worksheet, we will be following the simple Model-View-ViewModel (MVVM) architecture. It recommends separating your app into the following layers which roughly translate to folders in your `lib` directory:
 
-  - **Views**: These are the widgets that make up your app's user interface (UI).
-  - **View Models**: These are the classes that sit between the views and the repositories (not to be confused with GitHub repositories). They are responsible for retrieving data from the repositories and transforming it into a format that can be easily displayed by the views. They also include things like the callbacks that allow the view to interact with the data.
-  - **Repositories**: These are the classes that are responsible for providing data to the view models. They typically interact with services to fetch data.
-  - **Services**: These are the classes that are responsible for fetching data from external sources, such as cloud services or a database.
+- **Views**: These are the widgets that make up your app's user interface (UI).
+- **View Models**: These are the classes that sit between the views and the repositories (not to be confused with GitHub repositories). They are responsible for retrieving data from the repositories and transforming it into a format that can be easily displayed by the views. They also include things like the callbacks that allow the view to interact with the data.
+- **Repositories**: These are the classes that are responsible for providing data to the view models. They typically interact with services to fetch data.
+- **Services**: These are the classes that are responsible for fetching data from external sources, such as cloud services or a database.
 
 Here is a diagram that shows how these layers interact with each other:
 ![A simple app architecture diagram](images/app-architecture.png)
@@ -42,7 +42,6 @@ git checkout 3
 ```
 
 Or manually ensure your code matches the repository. Run the app to make sure everything works as expected before proceeding. Note that we have already completed the exercises from the previous worksheets.
-
 
 ### **Refactoring our code**
 
@@ -68,7 +67,7 @@ import 'package:sandwich_shop/views/app_styles.dart';
 
 Your folder structure should now look like this:
 
-```
+```text
 lib/
   ├── main.dart
   ├── views/
@@ -77,7 +76,7 @@ lib/
   └── repositories/
 ```
 
-#### **Commit your changes**
+#### **Commit your changes (1)**
 
 Before moving on, commit this restructuring of the folder with a commit message like `Restructure folder into views, view_models, and repositories` and sync your changes to GitHub.
 
@@ -113,7 +112,7 @@ class OrderRepository {
 }
 ```
 
-With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`. 
+With the logic moved, we can now simplify our `_OrderScreenState` class in `main.dart`.
 
 First, update the imports at the top of your `main.dart` file. Since we moved `app_styles.dart` to the views folder, you'll need to update that import and add the `OrderRepository` import:
 
@@ -276,7 +275,7 @@ Can you get Copilot to explain why we no longer need the `_quantity` variable in
 
 Notice that the `_getIncreaseCallback` and `_getDecreaseCallback` methods use the `canIncrement` and `canDecrement` getters from the repository to decide whether the button should be enabled. This way, if we change the logic for incrementing or decrementing, we only need to update it in the repository.
 
-#### **Commit your changes**
+#### **Commit your changes (2)**
 
 Remember to commit your changes at each stage with a meaningful commit message before moving on.
 
@@ -284,9 +283,9 @@ Remember to commit your changes at each stage with a meaningful commit message b
 
 Writing tests help you ensure that your code works as expected and helps prevent bugs from creeping in as you make changes and add new features. There are three main types of tests in Flutter:
 
-  - **Unit tests**: These tests verify the smallest testable parts of an application, called "units", in isolation. In our case, the `OrderRepository` class is a perfect example of a unit.
-  - **Widget tests**: These tests verify the UI and interactions of individual widgets. They can simulate user interactions and verify that the widget behaves as expected.
-  - **Integration tests**: These tests verify the integration of multiple components (how they work together). They can simulate user interactions and verify that the app behaves as expected.
+- **Unit tests**: These tests verify the smallest testable parts of an application, called "units", in isolation. In our case, the `OrderRepository` class is a perfect example of a unit.
+- **Widget tests**: These tests verify the UI and interactions of individual widgets. They can simulate user interactions and verify that the widget behaves as expected.
+- **Integration tests**: These tests verify the integration of multiple components (how they work together). They can simulate user interactions and verify that the app behaves as expected.
 
 For more information, you can read the official Flutter documentation on [testing](https://docs.flutter.dev/cookbook/testing). In this worksheet, we will focus on unit tests and widget tests.
 
@@ -302,7 +301,7 @@ Create a new file called `order_repository_test.dart` in the `test/repositories`
 
 This is what your folder structure should look like:
 
-```
+```text
 lib/
   ├── main.dart
   ├── views/
@@ -374,7 +373,7 @@ test('description of the test', () {
 
 As you can see, the `test` function takes a description of the test (as a `String`) and a callback function. In the callback, we typically follow the Arrange-Act-Assert pattern described in the code snippet above. Notice how the `expect` function is used to verify that the actual value matches the expected value (this is a built-in function provided by `flutter_test`). Feel free to ask your AI assistant if you have any questions.
 
-#### **Commit your changes**
+### **Commit your changes (3)**
 
 Once again, make sure that you have committed your changes.
 
@@ -388,7 +387,7 @@ Each green tick means that the test passed. On the other hand, a red cross (❌)
 
 You can also run all tests at once by opening a terminal and running `flutter test`. This command will execute all tests in your `test` folder, including both unit tests and widget tests. As you create more tests throughout this course, this becomes a convenient way to verify that all your code is working correctly.
 
-#### **Commit your changes**
+### **Commit your changes (4)**
 
 Before we move to widget testing, ensure that you have committed and synced all your changes to GitHub.
 
@@ -398,7 +397,7 @@ We have already provided you with an example of widget testing in the `widget_te
 
 This is what your folder structure should look like now:
 
-```
+```text
 lib/
   ├── main.dart
   ├── views/
@@ -445,7 +444,7 @@ As a small note, observe that in the test for the dropdown menu, the finder `fin
 
 Finally, the tests for `StyledButton` and `OrderItemDisplay` show how you can test a single widget, making sure it is rendered as expected, without building the entire app. We still need to wrap the widget in a `MaterialApp` so that it has the necessary context to render correctly.
 
-#### **Commit your changes**
+### **Commit your changes (5)**
 
 Before moving to the exercises, check that you have committed and synced all your changes to GitHub.
 
@@ -453,7 +452,7 @@ Before moving to the exercises, check that you have committed and synced all you
 
 Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
 
-1.  Our widget tests currently cover tapping buttons and entering text. Let's expand our test coverage to other types of user interaction.
+1. Our widget tests currently cover tapping buttons and entering text. Let's expand our test coverage to other types of user interaction.
 
     Write a new widget test in `test/views/widget_test.dart` to verify the functionality of the `Switch` widget that toggles between 'six-inch' and 'footlong'.
 
@@ -461,7 +460,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     ⚠️ **Show your new passing widget test to a member of staff** for a sign-off.
 
-2.  Let's add an option for the user to have their sandwich toasted. First, in `lib/main.dart`, add a new state variable to your `_OrderScreenState` class: `bool _isToasted = false;`.
+2. Let's add an option for the user to have their sandwich toasted. First, in `lib/main.dart`, add a new state variable to your `_OrderScreenState` class: `bool _isToasted = false;`.
 
     Next, in the `build` method, add the following `Row` inside the `Column`'s `children` list, just below the `Row` for the existing sandwich type `Switch` (search for `Switch` to find it quickly and add this after the closing bracket of that `Row`):
 
@@ -489,7 +488,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     ⚠️ **Show your running app with the two switches and the updated, passing widget tests to a member of staff** for a sign-off.
 
-3.  Our app does not yet have a concept of price. Let's add a repository to manage the pricing logic. Suppose that a six-inch sandwich costs £7 and a footlong costs £11.
+3. Our app does not yet have a concept of price. Let's add a repository to manage the pricing logic. Suppose that a six-inch sandwich costs £7 and a footlong costs £11.
 
     Create a new `PricingRepository` class in the `repositories` folder similar to `lib/repositories/order_repository.dart`. This class should calculate the total price of a sandwich order based on the quantity and sandwich size. This should give you an idea what the constructor of the class should look like and what method(s) it should have.
 
@@ -499,7 +498,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     ⚠️ **Show your new pricing repository and its unit tests to a member of staff** for a sign-off.
 
-4.  (Advanced) Let's add functionality to save an order to a local file. This feature is only available on mobile and desktop platforms, so you will need to run your app on a compatible device.
+4. (Advanced) Let's add functionality to save an order to a local file. This feature is only available on mobile and desktop platforms, so you will need to run your app on a compatible device.
 
     First, add the `path_provider` package to your project by running the following command in your terminal:
 
@@ -557,7 +556,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5.  (Advanced) Let's add some images to our app like a company logo in the `AppBar`.
+5. (Advanced) Let's add some images to our app like a company logo in the `AppBar`.
 
     First, create an `assets/images` folder at the root of your project and add a simple logo image to it (e.g., `logo.png`). To make assets available to your app, you must declare the folder in your `pubspec.yaml` file. Open it and add an `assets` section at the bottom of the `flutter` section like this:
 
