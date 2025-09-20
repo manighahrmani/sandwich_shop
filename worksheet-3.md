@@ -4,15 +4,15 @@
 
 Ensure that you have already completed the following:
 
-  - [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
-  - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
-  - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
+- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+- [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
+- [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
 
 ## **Getting help**
 
 To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-#### **Introduction to state**
+### **Introduction to state**
 
 In the last worksheet, our widgets were `Stateless`, meaning their properties couldn't change. To make our app interactive, for example, to change the number of sandwiches with a button press, we need to manage state.
 
@@ -38,7 +38,7 @@ If you have completed some of the exercises and your code looks slightly differe
 
 So far, all of our widgets were stateless. These widgets are immutable. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).
 
-#### **Adding interactive buttons**
+### **Adding interactive buttons**
 
 To make our sandwich counter interactive, we first need to add some buttons. Let's add "Add" and "Remove" buttons below our sandwich display. Update the `body` of the `Scaffold` in your `App` widget to use a `Column` and a `Row`. Hopefully you have already learnt about these from [the exercises in worksheet 2](https://manighahrmani.github.io/sandwich_shop/worksheet-2.html#exercises). Remember these are all `StatelessWidget`s as for example the text of the buttons themselves does not change over time.
 
@@ -81,7 +81,7 @@ To run the app, open the Command Palette in VS Code with **Ctrl + Shift + P** on
 
 ![Output of button presses](images/screenshot_eventhandler.png)
 
-#### **Commit your changes**
+### **Commit your changes (1)**
 
 First reopen the Command Palette. In there, type `Source Control: Focus on Changes View`. After reviewing your changes, commit them with a message like `Add add and remove buttons`.
 
@@ -91,7 +91,7 @@ The hardcoded quantity in `OrderItemDisplay(5, 'Footlong')` is a problem because
 
 We will create a new `StatefulWidget` called `OrderScreen` to manage the state of our sandwich order.
 
-#### **Define the `OrderScreen` stateful widget**
+### **Define the `OrderScreen` stateful widget**
 
 Add the following two classes to your `lib/main.dart` file. You can place them above the `OrderItemDisplay` class and below the `App` class.
 
@@ -123,14 +123,14 @@ This might look a bit strange. We have two classes to manage one widget. This is
 
 Take a moment to read this structure. Use your AI assistant to find out the answers to these questions:
 
-  - "What is the difference between a `StatefulWidget` and a `State` object in Flutter?"
-  - "In Flutter, why is the `build` method inside the `State` class and not the `StatefulWidget` class?"
-  - "What does the underscore prefix on `_OrderScreenState` and `_quantity` mean in Dart?"
-  - "Why does the `<OrderScreen>` mean after the `State` class?"
+- "What is the difference between a `StatefulWidget` and a `State` object in Flutter?"
+- "In Flutter, why is the `build` method inside the `State` class and not the `StatefulWidget` class?"
+- "What does the underscore prefix on `_OrderScreenState` and `_quantity` mean in Dart?"
+- "Why does the `<OrderScreen>` mean after the `State` class?"
 
 Remember if you are using a Large Language Model (LLM) on the browser, like ChatGPT, you need to provide the code snippets as well as your questions. Alternatively use Copilot which you can open in VS Code by selecting the code snippet and pressing **Ctrl + I** in Windows or **⌘ + I** in macOS.
 
-#### **Commit your changes**
+### **Commit your changes (2)**
 
 Remember to commit your changes with a message like `Define OrderScreen stateful widget` before moving on.
 
@@ -138,7 +138,7 @@ Remember to commit your changes with a message like `Define OrderScreen stateful
 
 Now, let's build the UI inside the `_OrderScreenState` class. We want to display the `OrderItemDisplay` and the two buttons we created earlier.
 
-#### **Implement the `build` method**
+### **Implement the `build` method**
 
 Replace the returned `Placeholder()` in the `_OrderScreenState`'s `build` method with a `Scaffold` containing our UI components. This structure should look very familiar.
 
@@ -183,11 +183,11 @@ Widget build(BuildContext context) {
 
 Notice how we use `_quantity` when creating the `OrderItemDisplay`. The `State` object can access its own private variables directly.
 
-#### **Commit your changes**
+### **Commit your changes (3)**
 
 Commit your changes with a message like `Build UI for OrderScreen`.
 
-#### **Update the `App` widget**
+### **Update the `App` widget**
 
 Finally, let's update our main `App` widget to use the new `OrderScreen` as its `home`. The `App` widget no longer needs its own `Scaffold`.
 
@@ -209,7 +209,7 @@ Recall that `maxQuantity` is a named parameter in the `OrderScreen` constructor.
 
 Run the app now. You should see the counter displaying "0 Footlong sandwich(es):" and two disabled buttons.
 
-#### **Commit your changes**
+### **Commit your changes (4)**
 
 Commit your changes with a message like `Use OrderScreen in App`.
 
@@ -217,7 +217,7 @@ Commit your changes with a message like `Use OrderScreen in App`.
 
 The final step is to make the buttons work. We need to create methods that change the `_quantity` and then tell Flutter to rebuild the widget to reflect that change.
 
-#### **Create helper methods**
+### **Create helper methods**
 
 We want to handle increasing and decreasing the quantity. To do so, we need additional methods in our `_OrderScreenState` class. These will be the callbacks (event handlers) for the buttons.
 
@@ -243,11 +243,11 @@ The most important part is `setState()`. You must call `setState()` to notify Fl
 
 Calling `setState()` tells the framework that this widget (`OrderScreen`) is "dirty" and needs to be rebuilt. Flutter then calls the `build()` method again, and the UI updates with the new `_quantity` value. Simply writing `_quantity++` without wrapping it in a `setState()` call will not cause the UI to update.
 
-#### **Commit your changes**
+### **Commit your changes (5)**
 
 Commit your changes with a message like `Add helper methods for quantity adjustment`.
 
-#### **Link the buttons to their event handlers**
+### **Link the buttons to their event handlers**
 
 Now, update the `ElevatedButton`s in your `build` method to call these new functions when they are pressed:
 
@@ -268,7 +268,7 @@ As a small task, can you figure out why the buttons only work within a certain r
 
 To learn more about `StatefulWidget`s, watch this [YouTube video from the Flutter team](https://youtu.be/AqCMFXEmf3w).
 
-#### **Commit your changes**
+### **Commit your changes (6)**
 
 Commit your final changes with a message like `Implement counter functionality with setState`.
 
@@ -278,7 +278,7 @@ Let's add some more interactivity to our app. We would like to allow users to ad
 
 In software development, we often start with a user story to define a new feature. Here is an example, feel free to modify it to suit your needs.
 
-```
+```txt
 As a user, I want to add a note to my sandwich order so that I can make special requests (e.g., "no onions", "extra pickles"). The user would add the notes before pressing the "Add" and "Remove" buttons.
 ```
 
@@ -292,9 +292,9 @@ You don't have to update the UI based on the notes. This can be slightly challen
 
 With the user story and documentation in hand, it's time to collaborate with your AI assistant. Instead of asking for the final code, guide the AI to help you think through the problem. Start by providing the user story and asking questions like the ones below.
 
-  - "I want to implement this user story, what new information does my `OrderScreen` widget need to keep track of?"
-  - "How can I add a text input field to my screen using Flutter?"
-  - "How can I modify the style of the text input field for example to add a border and a hint text?"
+- "I want to implement this user story, what new information does my `OrderScreen` widget need to keep track of?"
+- "How can I add a text input field to my screen using Flutter?"
+- "How can I modify the style of the text input field for example to add a border and a hint text?"
 
 See below an example of how we have provided a rich prompt to Copilot. You can open your current file in the chat and open the Copilot panel (yours may be in a different location) by entering `Chat: Add File to Chat` in the Command Palette.
 
@@ -310,7 +310,7 @@ As you add new widgets, your code can become messy. First, ensure your code is w
 
 Next, look for any blue or yellow squiggly lines. These are hints from the Flutter analyser. For example, if you added an `InputDecoration` to your `TextField`, you might see a blue squiggly line underneath it. Hover over it with your mouse, and a message will likely suggest adding a `const` modifier. You can click **Quick Fix...** or press **Ctrl + .** on Windows or **⌘ + .** on macOS to apply the suggestion automatically.
 
-### **Commit Your Changes**
+### **Commit Your Changes (7)**
 
 Make sure to have hot reload enabled by hitting the thunder (⚡️) icon in the toolbar or by typing `r` in the terminal if you are running the app there.
 
@@ -320,7 +320,7 @@ After verifying that the feature works as described in the user story, commit yo
 
 As your app becomes more complex, you'll inevitably encounter bugs or unexpected behaviour. Let's take a look at the debugging tools in VS Code that help you identify and fix issues.
 
-#### **Using the VS Code debugger**
+### **Using the VS Code debugger**
 
 The VS Code debugger is your primary tool for stepping through code and inspecting variables. To start debugging, click the bug icon (🪲) in the Activity Bar on the left side of VS Code. This opens the Debug panel with several useful sections.
 
@@ -328,7 +328,7 @@ You can also access debugging tools through the Command Palette by pressing **Ct
 
 For comprehensive information about debugging Flutter apps, visit the [official Flutter debugging documentation](https://docs.flutter.dev/testing/native-debugging)..
 
-#### **Setting breakpoints and inspecting state**
+### **Setting breakpoints and inspecting state**
 
 Let's practice debugging with your current sandwich counter app. First, make a small change that will help us see debugging in action. In your `_increaseQuantity` method, temporarily add the following `print` statement inside the `setState` call:
 
@@ -366,7 +366,7 @@ After clicking the add button, may need to use the "Step Into" button (the down 
 
 Remember to remove the temporary `print` statement and reset your `maxQuantity` to `5` when you're done experimenting.
 
-#### **Common Flutter errors**
+### **Common Flutter errors**
 
 Flutter has excellent error messages, but they can sometimes be overwhelming. For a comprehensive list of common Flutter errors and their explanations, bookmark this page: [Flutter Common Errors](https://docs.flutter.dev/testing/common-errors). When you encounter an error, you can use **Ctrl + F** on Windows or **⌘ + F** on macOS to search for keywords from your error message.
 
@@ -376,80 +376,80 @@ Complete the exercises below and show your work to a member of staff at your nex
 
 Remember to commit your changes and use VS Code's tools as describing in [this section](#refining-your-code-with-vs-code) while working on these exercises.
 
-1.  The `ElevatedButton` widgets look a bit plain. Add a background colour of your choice to them and update the text style. You could also try adding an icon to each of them.
+1. The `ElevatedButton` widgets look a bit plain. Add a background colour of your choice to them and update the text style. You could also try adding an icon to each of them.
 
-    You can find the relevant properties in [the ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html). You will need to use the `style` property which takes a `ButtonStyle` object. You can create one using the `ElevatedButton.styleFrom` method. For example the following code snippet creates a red button with white text.
+   You can find the relevant properties in [the ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html). You will need to use the `style` property which takes a `ButtonStyle` object. You can create one using the `ElevatedButton.styleFrom` method. For example the following code snippet creates a red button with white text.
 
-    ```dart
-    ElevatedButton(
-      onPressed: VoidCallback _increaseQuantity,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
-      ),
-      child: const Text('Add'),
-    ),
-    ```
+   ```dart
+   ElevatedButton(
+     onPressed: VoidCallback _increaseQuantity,
+     style: ElevatedButton.styleFrom(
+       backgroundColor: Colors.red,
+       foregroundColor: Colors.white,
+     ),
+     child: const Text('Add'),
+   ),
+   ```
 
-    Doing this for both buttons creates a lot of duplication. As an extra challenge, reduce the repetition by defining a custom `StatelessWidget` called `StyledButton`. Recall that we did this back in [worksheet 2](https://manighahrmani.github.io/sandwich_shop/worksheet-2.html#create-the-custom-orderitemdisplay-widget).
-    
-    Your newly defined `StyledButton` class needs to have multiple instance variables and it should accept several parameters in its constructor. These include the text to be displayed on the button and the callback function to be called when the button is clicked.
+   Doing this for both buttons creates a lot of duplication. As an extra challenge, reduce the repetition by defining a custom `StatelessWidget` called `StyledButton`. Recall that we did this back in [worksheet 2](https://manighahrmani.github.io/sandwich_shop/worksheet-2.html#create-the-custom-orderitemdisplay-widget).
 
-    As a small extra step, try to add a gap between the buttons and align them at the opposing sides of the screen.
-    
-    VS Code has a useful feature called Refactor. You can use it by right-clicking on the name of the widgets (for example the `ElevatedButton`) and selecting `Refactor...`. You can do the same thing with the shortcut **Ctrl + Shift + R** on Windows or **⌘ + Shift + R** on macOS. This will open a menu where you can select `Wrap with Expanded` or `Wrap with SizeBox` as shown below.
+   Your newly defined `StyledButton` class needs to have multiple instance variables and it should accept several parameters in its constructor. These include the text to be displayed on the button and the callback function to be called when the button is clicked.
 
-    ![Refactor Menu](images/screenshot_refactor.jpg)
+   As a small extra step, try to add a gap between the buttons and align them at the opposing sides of the screen.
 
-    Keep hot reload active, use the widget inspector, refer to [the documentation page on layout widgets](https://docs.flutter.dev/ui/widgets/layout) to figure out how and where the extra space should be added.
+   VS Code has a useful feature called Refactor. You can use it by right-clicking on the name of the widgets (for example the `ElevatedButton`) and selecting `Refactor...`. You can do the same thing with the shortcut **Ctrl + Shift + R** on Windows or **⌘ + Shift + R** on macOS. This will open a menu where you can select `Wrap with Expanded` or `Wrap with SizeBox` as shown below.
 
-    ⚠️ **Show your running app with the newly styled buttons to a member of staff** for a sign-off.
+   ![Refactor Menu](images/screenshot_refactor.jpg)
 
-2.  Currently, the user can press the "Add" button even when the maximum quantity is reached, and the "Remove" button when the quantity is zero. While our logic prevents the state from updating, the buttons themselves should appear disabled to provide better user feedback.
+   Keep hot reload active, use the widget inspector, refer to [the documentation page on layout widgets](https://docs.flutter.dev/ui/widgets/layout) to figure out how and where the extra space should be added.
 
-    Consult the [ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) to see how you can disable a button. Hint: There are different ways to do this, one of which involves updating the type of the callback function `_increaseQuantity` and `_decreaseQuantity` from `void` to `VoidCallback?` (this way they can either return a void function or a null value).
+   ⚠️ **Show your running app with the newly styled buttons to a member of staff** for a sign-off.
 
-    ⚠️ **Show your running app, demonstrating the disabled buttons at the quantity limits, to a member of staff** for a sign-off.
+2. Currently, the user can press the "Add" button even when the maximum quantity is reached, and the "Remove" button when the quantity is zero. While our logic prevents the state from updating, the buttons themselves should appear disabled to provide better user feedback.
 
-3.  Let's add another piece of state. The user should be able to switch between a 'Footlong' and a 'Six-inch' sandwich.
+   Consult the [ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) to see how you can disable a button. Hint: There are different ways to do this, one of which involves updating the type of the callback function `_increaseQuantity` and `_decreaseQuantity` from `void` to `VoidCallback?` (this way they can either return a void function or a null value).
 
-    Similar to how we implemented [the order notes feature](#adding-custom-notes-to-an-order), write a user story for this feature. Picture in your mind how this should work and describe it in details.
-    
-    Before you use an AI, refer to [the documentation page for handling user input](https://docs.flutter.dev/get-started/fundamentals/user-input), browse it to find the simplest solution for such an input. For example, would a `SegmentedButton` be appropriate here or can we use a `Slider`? Is there anything else that might be easier to implement? Make sure to state your preferences to your AI assistant.
+   ⚠️ **Show your running app, demonstrating the disabled buttons at the quantity limits, to a member of staff** for a sign-off.
 
-    ⚠️ **Show your running app the ability to switch between sandwich types to a member of staff** for a sign-off.
+3. Let's add another piece of state. The user should be able to switch between a 'Footlong' and a 'Six-inch' sandwich.
 
-4.  For another piece of state, let the user choose the bread type for their sandwich. You need to show the selected bread type in the UI.
+   Similar to how we implemented [the order notes feature](#adding-custom-notes-to-an-order), write a user story for this feature. Picture in your mind how this should work and describe it in details.
 
-    To manage the different options in a clean and "safe" way, you would use an `enum`. An `enum` (short for "enumeration") is a special type that represents a fixed number of constant values. A `String` would not be suitable here as the user could type anything.
+   Before you use an AI, refer to [the documentation page for handling user input](https://docs.flutter.dev/get-started/fundamentals/user-input), browse it to find the simplest solution for such an input. For example, would a `SegmentedButton` be appropriate here or can we use a `Slider`? Is there anything else that might be easier to implement? Make sure to state your preferences to your AI assistant.
 
-    You need to use AI assistant to guide you on how you might implement this feature.
-    
-    First, refer to **[the documentation page on user input](https://docs.flutter.dev/get-started/fundamentals/user-input)** to find widgets that use enums (use **Ctrl + F** or **⌘ + F** in your browser to search for "enum" on that page).
+   ⚠️ **Show your running app the ability to switch between sandwich types to a member of staff** for a sign-off.
 
-    After you have picked a widget type, formulate questions to solve this task. For example, you could ask:
+4. For another piece of state, let the user choose the bread type for their sandwich. You need to show the selected bread type in the UI.
 
-    - "How do I define and use an enum in my file to represent the bread type options?" Give the AI assistant some examples of the bread types you would like your enum to have.
-    - "How can I use the enum in this widget?" Specify the widget you picked from the documentation and provide the necessary code snippets for context.
-    
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+   To manage the different options in a clean and "safe" way, you would use an `enum`. An `enum` (short for "enumeration") is a special type that represents a fixed number of constant values. A `String` would not be suitable here as the user could type anything.
 
-5.  (Advanced) An Introduction to Widget Testing
+   You need to use AI assistant to guide you on how you might implement this feature.
 
-    Writing automated tests is a fundamental skill in software development. We will cover it in more details next week but let's take a sneak peak at Flutter's widget testing which allows you to test your UI components.
+   First, refer to **[the documentation page on user input](https://docs.flutter.dev/get-started/fundamentals/user-input)** to find widgets that use enums (use **Ctrl + F** or **⌘ + F** in your browser to search for "enum" on that page).
 
-    A widget test involves three main steps:
+   After you have picked a widget type, formulate questions to solve this task. For example, you could ask:
 
-    1.  Use a `WidgetTester` to **build** the widget on a test screen with `tester.pumpWidget()`.
-    2.  Simulate user **interaction** (e.g., tapping can be simulated with `tester.tap()`). For `Stateful` widgets, you need to call `tester.pump()` to rebuild the UI after state changes.
-    3.  Use `find` to locate widgets (e.g., `find.text('Add')`) and `expect` to **verify** that they appear as expected (`expect(finder, findsOneWidget)`).
+   - "How do I define and use an enum in my file to represent the bread type options?" Give the AI assistant some examples of the bread types you would like your enum to have.
+   - "How can I use the enum in this widget?" Specify the widget you picked from the documentation and provide the necessary code snippets for context.
 
-    AI assistants like GitHub Copilot are exceptionally good at writing tests. Try asking Copilot to "write widget tests for this file" or "generate a test case for adding an item" for example.
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-    Start by finding the `test/widget_test.dart` file and read the comments we have left there. The tests did not take into account the changes that you made in the exercises (e.g., we are testing for `ElevatedButton` widgets as opposed to the custom `StyledButton` from exercise 1). The existing tests are hence broken and will fail.
+5. (Advanced) An Introduction to Widget Testing
 
-    Your task is to fix them. You can run the tests by clicking on the `Run` link above the `main()` function in `test/widget_test.dart` and you should get output similar to the shown below.
+   Writing automated tests is a fundamental skill in software development. We will cover it in more details next week but let's take a sneak peak at Flutter's widget testing which allows you to test your UI components.
 
-    ![Introduction to widget testing](images/screenshot_widget_test_intro.jpg)
+   A widget test involves three main steps:
 
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+   1. Use a `WidgetTester` to **build** the widget on a test screen with `tester.pumpWidget()`.
+   2. Simulate user **interaction** (e.g., tapping can be simulated with `tester.tap()`). For `Stateful` widgets, you need to call `tester.pump()` to rebuild the UI after state changes.
+   3. Use `find` to locate widgets (e.g., `find.text('Add')`) and `expect` to **verify** that they appear as expected (`expect(finder, findsOneWidget)`).
+
+   AI assistants like GitHub Copilot are exceptionally good at writing tests. Try asking Copilot to "write widget tests for this file" or "generate a test case for adding an item" for example.
+
+   Start by finding the `test/widget_test.dart` file and read the comments we have left there. The tests did not take into account the changes that you made in the exercises (e.g., we are testing for `ElevatedButton` widgets as opposed to the custom `StyledButton` from exercise 1). The existing tests are hence broken and will fail.
+
+   Your task is to fix them. You can run the tests by clicking on the `Run` link above the `main()` function in `test/widget_test.dart` and you should get output similar to the shown below.
+
+   ![Introduction to widget testing](images/screenshot_widget_test_intro.jpg)
+
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
