@@ -79,7 +79,7 @@ Complete the exercises below and show your work to a member of staff present at 
 
     Next, get [the GitHub for student pack](https://education.github.com/pack) and install the GitHub Copilot extension in Visual Studio Code. For more information, check out [this section](#introduction-to-git-and-github) of this worksheet.
 
-    Install [the GitHub Copilot extension in VS Code](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot). Finally, make a Dart file, e.g., `hello_dart.dart` and use Copilot. You can, for example, add a comment to ask Copilot to write a new function for you:
+    Install [the GitHub Copilot extension in VS Code](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) if it's not already installed. Finally, make a Dart file, e.g., `hello_dart.dart` and use Copilot. You can, for example, add a comment to ask Copilot to write a new function for you:
 
     ```text
     // Write a function that returns the sum of two integers
