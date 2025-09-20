@@ -75,13 +75,14 @@ flutter doctor
 This may take a while, but it should return a report of your Flutter installation status.
 
 ![Flutter Doctor Report](images/screenshot_flutter_doctor.jpg)
+
 #### **Installing Visual Studio Code**
 
 In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Visual Studio Code` and launch it. It can take a while to load, so be patient.
 
 ### **Personal Windows computer**
 
-#### **Opening the terminal**
+#### **Opening the terminal on Windows**
 
 Open the `Start Menu` by pressing the `Windows` key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use [the university computers instead](https://www.google.com/search?q=%23university-computers).
 
@@ -95,7 +96,7 @@ If it's not installed, go to the [Chocolatey installation page](https://chocolat
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 
-#### **Installing development tools**
+#### **Installing development tools on Windows**
 
 With Chocolatey installed, you can now install Git, Visual Studio Code, and the Flutter SDK. Run the following commands one by one in your PowerShell terminal with administrator rights:
 
@@ -107,13 +108,13 @@ choco install flutter -y
 
 If you get an error about Dart being already installed, you can first remove it with the following command then reinstall Flutter with `choco install flutter -y`.
 
-```
+```bash
 choco uninstall dart -y
 ```
 
 Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
 
-#### **Verifying the installation**
+#### **Verifying the installation on Windows**
 
 Close your current terminal and open a new one, which doesn't need to be run as an administrator. Run the following to check your installations:
 
@@ -123,7 +124,7 @@ flutter doctor
 
 ### **Personal macOS computer**
 
-#### **Opening the terminal**
+#### **Opening the terminal on macOS**
 
 You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing `Terminal`, and pressing return.
 
@@ -137,7 +138,7 @@ If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the in
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-#### **Installing development tools**
+#### **Installing development tools on macOS**
 
 Once Homebrew is ready, you can install the necessary tools by running the following commands in your terminal:
 
@@ -154,7 +155,7 @@ brew uninstall dart
 
 Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
 
-#### **Verifying the installation**
+#### **Verifying the installation on macOS**
 
 Close your current terminal and open a new one. Run the following command to check your installations:
 
@@ -166,7 +167,7 @@ flutter doctor
 
 Now that our environment is set up, we can create our first Flutter project.
 
-#### **Setting up Visual Studio Code**
+### **Setting up Visual Studio Code**
 
 To sync your VS Code settings, first open [GitHub](https://github.com/) in your browser and log in.
 
@@ -178,7 +179,7 @@ If this is your first time using VS Code, you'll need to install [the Flutter ex
 
 ![Flutter Extension](images/screenshot_flutter_extension.jpg)
 
-#### **Creating a new Flutter project**
+### **Creating a new Flutter project**
 
 In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS). In the palette, type `Flutter: New Project` and press Enter.
 
@@ -188,7 +189,7 @@ Select `Application` when prompted for a template. You will then be asked to cho
 
 Choose a name for your project, such as `sandwich_shop`, and press Enter. VS Code will now create a new Flutter project and open it for you.
 
-#### **Understanding the project structure**
+### **Understanding the project structure**
 
 You should see a new folder structure in the Explorer view on the left side of VS Code. You are encouraged to explore the files and folders, but the most important files for now are located in the `lib/` folder. This folder contains your Dart application code with the main entry point being `lib/main.dart` (this is the file that runs when you start your app).
 
@@ -201,7 +202,7 @@ You don't need to understand the code at this moment but below is a brief overvi
 
 The default application is a simple counter app. The `lib/main.dart` file contains the entry point `void main() => runApp(const MyApp());`, which runs the root widget, `MyApp`. This `StatelessWidget` sets up the `MaterialApp` and defines the home screen, which is the `MyHomePage` widget. `MyHomePage` is a `StatefulWidget` because it manages the changing counter value. It contains the `_incrementCounter()` method, which uses `setState()` to rebuild the UI when the `_counter` variable changes.
 
-#### **Using AI**
+### **Using AI**
 
 We will learn more about stateless and stateful widgets in later worksheets. This is just a brief overview to get you started. But for now, use the Copilot extension to explore the code.
 
@@ -219,14 +220,15 @@ As an example, select a piece of code that you'd like to learn more about with y
 
 Copilot should automatically add the relevant code context to your question. However if you're using an LLM on the web (e.g., ChatGPT or Claude), you may need to provide items 2 and 3 (source and context) manually.
 
-#### **Selecting a target device**
+### **Selecting a target device**
 
 At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like Edge or Chrome.
 
 Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Flutter: Select Device`. Then select your browser from the list.
 
 ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
-#### **Running the app**
+
+### **Running the app**
 
 You can run the app in several ways, for example by pressing the F5 key, opening a new terminal and running `flutter run`, or clicking the "Run" button that appears above the `main` function in `lib/main.dart`.
 
@@ -238,7 +240,7 @@ flutter run
 
 VS Code will build and run your application, which should open in a browser window. Click the `+` button to see the counter increase.
 
-#### **Using hot reload**
+### **Using hot reload**
 
 Hot reload is a powerful feature that lets you see code changes instantly without restarting the app.
 
@@ -248,7 +250,7 @@ You can enable it by clicking the lightning bolt icon (⚡) at the top of VS Cod
 
 As an example, while the app is running, enable hot reload and change the `colorSchemeSeed` property inside the `ThemeData` widget in `lib/main.dart` from `Colors.deepPurple` to `Colors.orange` and save the file. You should see the UI update in the browser instantly.
 
-## **Setting up a GitHub repository**
+### **Setting up a GitHub repository**
 
 Lastly, let's put our project on GitHub to track changes and back it up online.
 
@@ -323,99 +325,99 @@ If you are new to programming and find it easier to watch a video tutorial, cons
 
 1. You have already modified the title of the `AppBar` widget. This is different from the title of the app itself, which you can see in the browser tab. As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate, like "Sandwich Shop App". Remember to view the changes live with hot reload and to commit your changes to GitHub.
 
-    ⚠️ **Show your running app with the updated browser tab title to a member of staff** for a sign-off.
+   ⚠️ **Show your running app with the updated browser tab title to a member of staff** for a sign-off.
 
 2. The default app displays a counter. Your task is to change this by finding the `Column` widget inside the `_MyHomePageState` in your `lib/main.dart` file.
 
-    First, remove one of the two `Text` widgets inside the column.
+   First, remove one of the two `Text` widgets inside the column.
 
-    Next, modify the remaining `Text` widget so that it displays a static welcome message, like "Welcome to my shop!" instead of the counter variable.
+   Next, modify the remaining `Text` widget so that it displays a static welcome message, like "Welcome to my shop!" instead of the counter variable.
 
-    Finally, you can give your message some style by using the `style` property on the `Text` widget, which accepts a `TextStyle`. Look at the [official documentation for the TextStyle class](https://api.flutter.dev/flutter/painting/TextStyle-class.html) to see how to change properties like `fontSize`, `color`, and `fontWeight` or use Copilot to help you with this.
+   Finally, you can give your message some style by using the `style` property on the `Text` widget, which accepts a `TextStyle`. Look at the [official documentation for the TextStyle class](https://api.flutter.dev/flutter/painting/TextStyle-class.html) to see how to change properties like `fontSize`, `color`, and `fontWeight` or use Copilot to help you with this.
 
-    Make sure that you understand what is happening at every step. On rare occasions, AI assistants may not provide a correct solution but more often, they provide an optimal solution that is hard to understand. If you saw a syntax you are not familiar with for example, a ternary operator (`condition ? expr1 : expr2`), ask your AI assistant to explain it to you or use a simpler approach like an `if` statement.
+   Make sure that you understand what is happening at every step. On rare occasions, AI assistants may not provide a correct solution but more often, they provide an optimal solution that is hard to understand. If you saw a syntax you are not familiar with for example, a ternary operator (`condition ? expr1 : expr2`), ask your AI assistant to explain it to you or use a simpler approach like an `if` statement.
 
-    ⚠️ **Show your running app with the new welcome message to a member of staff** for a sign-off.
+   ⚠️ **Show your running app with the new welcome message to a member of staff** for a sign-off.
 
 3. The `pubspec.yaml` file is the heart of your project's configuration, managing dependencies, fonts, and project metadata. Open this file and take a moment to read through it, using an LLM or the [official documentation on the pubspec file](https://dart.dev/tools/pub/pubspec) to understand each section.
 
-    Your task is to modify the file to match the cleaned-up version below. This involves changing the project name and description, updating the Dart SDK environment constraint, and removing the comments to make the file more readable.
+   Your task is to modify the file to match the cleaned-up version below. This involves changing the project name and description, updating the Dart SDK environment constraint, and removing the comments to make the file more readable.
 
-    ```yaml
-    name: sandwich_shop
-    description: "A Flutter project for a sandwich shop."
-    publish_to: "none"
+   ```yaml
+   name: sandwich_shop
+   description: "A Flutter project for a sandwich shop."
+   publish_to: "none"
 
-    version: 1.0.0+1
+   version: 1.0.0+1
 
-    environment:
-      sdk: ">=2.17.0 <4.0.0"
+   environment:
+     sdk: ">=2.17.0 <4.0.0"
 
-    dependencies:
-      flutter:
-        sdk: flutter
-      cupertino_icons: ^1.0.0
+   dependencies:
+     flutter:
+       sdk: flutter
+     cupertino_icons: ^1.0.0
 
-    dev_dependencies:
-      flutter_test:
-        sdk: flutter
-      flutter_lints: ^2.0.0
+   dev_dependencies:
+     flutter_test:
+       sdk: flutter
+     flutter_lints: ^2.0.0
 
-    flutter:
-      uses-material-design: true
-    ```
+   flutter:
+     uses-material-design: true
+   ```
 
-    After saving your changes, you must synchronise the dependencies. While VS Code often does this automatically, you can run `flutter pub get` in the terminal to do it manually.
+   After saving your changes, you must synchronise the dependencies. While VS Code often does this automatically, you can run `flutter pub get` in the terminal to do it manually.
 
-    ⚠️ **Show your updated `pubspec.yaml` file to a member of staff** for a sign-off.
+   ⚠️ **Show your updated `pubspec.yaml` file to a member of staff** for a sign-off.
 
 4. Keeping your code tidy is crucial for readability and collaboration. Dart has a standard format that can be applied automatically.
 
-    First, deliberately mess up the formatting in your `lib/main.dart` file. For example, add extra spaces or remove indentation for a few widgets.
+   First, deliberately mess up the formatting in your `lib/main.dart` file. For example, add extra spaces or remove indentation for a few widgets.
 
-    Next, right-click in the editor and select `Format Document`. You can also open the command palette with **Ctrl+Shift+P** (or **Cmd+Shift+P** on macOS) and type `Format Document` to find the command.
-    Notice how the code snaps back to the correct style. You can also set this to happen automatically on save by enabling the `editor.formatOnSave` setting. Ask your LLM for help with this.
+   Next, right-click in the editor and select `Format Document`. You can also open the command palette with **Ctrl+Shift+P** (or **Cmd+Shift+P** on macOS) and type `Format Document` to find the command.
+   Notice how the code snaps back to the correct style. You can also set this to happen automatically on save by enabling the `editor.formatOnSave` setting. Ask your LLM for help with this.
 
-    For more details, refer to [the official documentation](https://docs.flutter.dev/tools/formatting) on code formatting.
+   For more details, refer to [the official documentation](https://docs.flutter.dev/tools/formatting) on code formatting.
 
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
 5. The Flutter SDK can automatically fix many problems in your code. For example the LLMs that you may be using could generate deprecated code for you.
 
-    To see how the SDK can fix your code for you, go to your `lib/main.dart` file and find the `Text` widget responsible for displaying the counter. The code for this widget looks like this:
+   To see how the SDK can fix your code for you, go to your `lib/main.dart` file and find the `Text` widget responsible for displaying the counter. The code for this widget looks like this:
 
-    ```dart
-    Text(
-      '$_counter',
-      style: Theme.of(context).textTheme.headlineMedium,
-    ),
-    ```
+   ```dart
+   Text(
+     '$_counter',
+     style: Theme.of(context).textTheme.headlineMedium,
+   ),
+   ```
 
-    Temporarily change the style from `headlineMedium` to the older, deprecated name `headline4`. After your change, the code should look like this:
+   Temporarily change the style from `headlineMedium` to the older, deprecated name `headline4`. After your change, the code should look like this:
 
-    ```dart
-    Text(
-      '$_counter',
-      style: Theme.of(context).textTheme.headline4,
-    ),
-    ```
+   ```dart
+   Text(
+     '$_counter',
+     style: Theme.of(context).textTheme.headline4,
+   ),
+   ```
 
-    VS Code should highlight `headline4` as a problem. Hover over the it and use the `Quick Fix` option that appears. It will suggest replacing the deprecated style with its modern equivalent (`headlineMedium`). Apply the fix and then commit your changes.
+   VS Code should highlight `headline4` as a problem. Hover over the it and use the `Quick Fix` option that appears. It will suggest replacing the deprecated style with its modern equivalent (`headlineMedium`). Apply the fix and then commit your changes.
 
-    ![Flutter Fix](images/screenshot_flutter_fix.jpg)
+   ![Flutter Fix](images/screenshot_flutter_fix.jpg)
 
-    Learn more about this feature from [the official Flutter fix documentation](https://docs.flutter.dev/tools/flutter-fix).
+   Learn more about this feature from [the official Flutter fix documentation](https://docs.flutter.dev/tools/flutter-fix).
 
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
 6. (Advanced) In the `MyHomePage` widget, add a new `FloatingActionButton` that resets the counter to `0`.
 
-    As a hint, you can wrap the existing `FloatingActionButton` in a `Row` widget to add another button next to it. You will also need to create a new method inside the `_MyHomePageState` class for this functionality.
+   As a hint, you can wrap the existing `FloatingActionButton` in a `Row` widget to add another button next to it. You will also need to create a new method inside the `_MyHomePageState` class for this functionality.
 
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-4. (Advanced) Running your app in a browser is great for quick development, but the ultimate aim of learning Flutter is to build natively compiled applications for mobile, web, and desktop from a single codebase (cross-platform development).
+7. (Advanced) Running your app in a browser is great for quick development, but the ultimate aim of learning Flutter is to build natively compiled applications for mobile, web, and desktop from a single codebase (cross-platform development).
 
-    For this task, follow the official documentation to set up your physical phone for development and run the app on it. You can find instructions to [set up an Android device](https://docs.flutter.dev/get-started/install/windows#android-setup) or an [iOS device](https://docs.flutter.dev/get-started/install/macos#deploy-to-ios-devices) on the Flutter website.
+   For this task, follow the official documentation to set up your physical phone for development and run the app on it. You can find instructions to [set up an Android device](https://docs.flutter.dev/get-started/install/windows#android-setup) or an [iOS device](https://docs.flutter.dev/get-started/install/macos#deploy-to-ios-devices) on the Flutter website.
 
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
