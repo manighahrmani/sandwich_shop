@@ -34,7 +34,7 @@ If you've worked with databases before, you can think of data models as being si
 
 ### **Business Logic Decisions**
 
-During your development, you as the developer would make certain business decisions about how the app should function. Here is an example of one such decision we have made regarding our app. 
+During your development, you as the developer would make certain business decisions about how the app should function. Here is an example of one such decision we have made regarding our app.
 
 We assume that the price of a sandwich depends only on its size (footlong vs six-inch), not on the type of sandwich or bread type. This keeps our pricing simple and consistent.
 
@@ -46,7 +46,7 @@ Let's start by defining a `Sandwich` model. This will help us manage all the pro
 
 Open the Explorer view in VS Code with **Ctrl + Shift + E** on Windows or **⌘ + Shift + E** on macOS. Right-click on the `lib` folder and select **New Folder**. Name this folder `models`. Right-click on the `models` folder and select **New File**. Name this file `sandwich.dart`. This is what your project structure may look like:
 
-```
+```text
 lib/
 ├── main.dart
 ├── views/
@@ -65,9 +65,9 @@ Add the following code to `sandwich.dart`:
 ```dart
 enum BreadType { white, wheat, wholemeal }
 
-enum SandwichType { 
-  veggieDelight, 
-  chickenTeriyaki, 
+enum SandwichType {
+  veggieDelight,
+  chickenTeriyaki,
   tunaMelt,
   meatballMarinara,
 }
@@ -117,7 +117,7 @@ Use your AI assistant to explain why we use getters here instead of storing the 
 
 Before moving on, use your AI assistant to write a unit test for the `Sandwich` model. Remember to create a `models` folder inside the `test` folder to mirror the structure of the `lib` folder. Your test file should be named `sandwich_test.dart`.
 
-#### **Commit your changes**
+#### **Commit your changes (1)**
 
 Here's a reminder to commit your changes (commit them individually, the addition of the model and the test).
 
@@ -131,7 +131,7 @@ Remember that the price calculation should use our existing `PricingRepository` 
 
 As before, write unit tests for the `Cart` model in a new file called `cart_test.dart` inside the `test/models` folder.
 
-#### **Commit your changes**
+#### **Commit your changes (2)**
 
 Commit the addition of the `Cart` model and its tests before moving on.
 
@@ -156,7 +156,7 @@ Now you can use images saved in this folder in your app. For more information, y
 
 For your coursework you should **not** to incorporate any videos or audio files, but if you wish to explore this check out [this page](https://docs.flutter.dev/cookbook/plugins/play-video).
 
-#### **Commit your changes**
+### **Commit your changes (3)**
 
 Commit your new assets before moving on.
 
@@ -187,7 +187,7 @@ Although the height of the `AppBar` is typically around 56 pixels so the image w
 
 For more information about the `Image` widget and its properties, check the [Flutter documentation on Image](https://api.flutter.dev/flutter/widgets/Image-class.html).
 
-#### **Commit your changes**
+#### **Commit your changes (4)**
 
 Commit this simple logo addition before moving on to the more complex image display.
 
@@ -462,7 +462,7 @@ If you are confused by what the `errorBuilder` property does, or how the `fit: B
 
 As always, write widget tests to ensure your UI behaves as expected (several tests in the current `test/views/widget_test.dart` file that you have would almost certainly fail). Test scenarios like adding items to the cart, changing quantities, and selecting different sandwich options.
 
-#### **Commit your changes**
+#### **Commit your changes (5)**
 
 Make sure all your changes are committed separately before moving on to the exercises.
 
@@ -472,17 +472,17 @@ Complete the exercises below and show your work to a member of staff at your nex
 
 Even though your AI assistant may suggest this, for now, try not to use any third-party packages, only built-in Flutter widgets.
 
-1.  Our app currently only shows a message (`confirmationMessage`) in the debug console when items are added to the cart. Let's display this message in the UI instead.
+1. Our app currently only shows a message (`confirmationMessage`) in the debug console when items are added to the cart. Let's display this message in the UI instead.
 
     Browse [the catalog of Flutter widgets](https://docs.flutter.dev/ui/widgets) or ask your AI assistant to suggest a suitable widget for displaying this message on the screen.
 
     Think about how you as the user would want to see this message. Should it appear as a popup, a banner, or somewhere else on the screen? Would you want it to disappear after a few seconds, or stay until the user dismisses it?
-    
-    Remember not to implement a separate page for the cart yet, we will do that in a later exercise. Once you are done, update the widget tests to relfect your changes.
+
+    Remember not to implement a separate page for the cart yet, we will do that in a later exercise. Once you are done, update the widget tests to reflect your changes.
 
     ⚠️ **Show your running app displaying the confirmation message in the UI to a member of staff** for a sign-off.
 
-2.  Let's add a permanent cart summary display to our main screen. In addtion of just showing a confirmation message when items are added, you need to show the number of items in the cart and the total price.
+2. Let's add a permanent cart summary display to our main screen. In addition of just showing a confirmation message when items are added, you need to show the number of items in the cart and the total price.
 
     Try to do this in the simplest way possible. Just make sure that when the "Add to Cart" button is pressed, this displayed summary is updated to reflect the current state of the cart.
 
@@ -490,12 +490,11 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
     ⚠️ **Show your running app with the cart summary displaying the number of items and total price to a member of staff** for a sign-off.
 
-3.  (Advanced) So far, our app only has one screen (`main.dart`). Let's add a second screen to view the cart contents. This is a task which we will cover in more detail in the next worksheet, but let's give it a try now. Here's a [link to the Flutter documentation on navigation](https://docs.flutter.dev/cookbook/navigation/navigation-basics) to help you get started.
+3. (Advanced) So far, our app only has one screen (`main.dart`). Let's add a second screen to view the cart contents. This is a task which we will cover in more detail in the next worksheet, but let's give it a try now. Here's a [link to the Flutter documentation on navigation](https://docs.flutter.dev/cookbook/navigation/navigation-basics) to help you get started.
 
     Create a new `StatefulWidget` called `CartScreen` (and its associated state class) in `main.dart` for now. It should display a list of all items in the cart. Each item should show the sandwich name, size, bread type, quantity, and individual total price.
 
     Think about what pieces of information would be most useful to display in the cart view and how the user might reach/interact with this screen. Write a user story if you are planning to use your AI assistant to help you implement this and make sure to provide sufficient context (e.g., the `Cart` model and its methods).
-
 
     Hint: You can use `Navigator.push()` to navigate to the cart screen and `Navigator.pop()` to go back to the main screen. Also, your `CartScreen` will need access to the cart data, so you'll need to pass it through the constructor. To display multiple items from a collection, you can use a for loop inside a `Column`'s children list like this:
 
@@ -535,7 +534,7 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
     Below is what your project folder may look like after this exercise. Remember to write widget tests to ensure the cart view behaves as expected.
 
-    ```
+    ```text
     sandwich_shop/
     ├── assets/
     │   └── images/
@@ -569,7 +568,7 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-4.  (Advanced) In the cart view, re-implement the order notes functionality, but this time for the entire order rather than individual sandwiches.
+4. (Advanced) In the cart view, re-implement the order notes functionality, but this time for the entire order rather than individual sandwiches.
 
     Similar to what we used to have in [`main.dart`](https://github.com/manighahrmani/sandwich_shop/blob/5/lib/main.dart), add a `TextField` that allows users to add notes for the entire order (e.g., "No onions" or "Extra serviettes").
 
