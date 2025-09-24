@@ -47,7 +47,7 @@ Instead of jumping straight into coding, let's start by using AI to help us writ
 
 Run the app and add a few sandwiches to your cart. You should see a snack bar confirming the addition. You will also see that we have implemented a second screen, `CartScreen` in `lib/views/cart_screen.dart`, that displays the items in the cart. You can navigate to this screen from the order screen by pressing the "View Cart" button. This is what the cart page should look like:
 
-![Initial Cart Page](images/screenshot_initial_cart_page.png)
+![Initial Cart Page|200](images/screenshot_initial_cart_page.png)
 
 Let's say we want to enhance our cart functionality. Instead of immediately asking for code, we'll first ask our AI assistant to help us create a prompt. Here's a sample prompt you can use (if you are using Copilot, set it to "Ask" mode):
 
