@@ -89,4 +89,6 @@ Complete the exercises below and show your work to a member of staff present at 
     // Write a function that returns the sum of two integers
     ```
 
+    Run this function from the `main` function and print the result to the integrated terminal of Visual Studio Code (refer to the [Getting started with Dart](#1---getting-started-with-dart) section).
+
     ⚠️ **Show your Dart file to a member of staff** for a sign-off.
