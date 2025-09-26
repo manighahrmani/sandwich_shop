@@ -1,10 +1,16 @@
 # Flutter Worksheets
 
-The worksheets for the Flutter module are listed below. Complete them in order (do not skip Worksheet 0!).
+This is the homepage for the Flutter course which is the first half of the Programming Applications and Programming Languages (M30235) and User Experience Design and Implementation (M32605) modules.
 
-Every worksheet ends with a handful of **exercises**. After completing these exercises, show a member of staff your work for a **sign-off**.
+## **Teaching material**
 
-**Each sign-off is worth 5%** of the coursework mark. The **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
+We only have worksheets for this course. This is because there is no exam for this part of the module, so we do not have lecture slides. You can find the timeline and a plan of the topics covered using the link below
+
+[**Flutter Module Schedule 2025-26**](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EdnDt0kJQr9FqDlKCGqc21QBwcN55ecrSboI0ndxGQq8MQ)
+
+### **Worksheets and sign-offs**
+
+You should aim to complete the worksheets in the order they are presented below. Do not skip Worksheet 0 and it is fine if you cannot make it all the way to Worksheet 8.
 
 * [Worksheet 0: Introduction to Dart, Git and GitHub](./worksheet-0.md)
 * [Worksheet 1: Introduction to Flutter](./worksheet-1.md)
@@ -15,6 +21,23 @@ Every worksheet ends with a handful of **exercises**. After completing these exe
 * [Worksheet 6: AI-Driven Development and Navigation](./worksheet-6.md)
 * [Worksheet 7: State Management and Persistence](./worksheet-7.md)
 * [Worksheet 8: Integration Testing, Firebase, and Deployment](./worksheet-8.md)
+
+Every worksheet ends with a handful of **exercises**.  After completing these exercises, show a member of staff your work for a **sign-off**. **Each sign-off is worth 5%** of the coursework mark.
+
+### **Assessment**
+
+This course is assessed through a single coursework (Item 1 in the module specification). This **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
+
+The mark for the coursework is made up of the mark for the sign-offs (45%), the mark for the application that you are developing as part of the coursework (30%) and the mark for your software development practices (25%). See the diagram below for a breakdown of the marks.
+
+```mermaid
+pie title Flutter Course Assessment Breakdown (50% of Module Mark)
+    "Sign-offs (45%)" : 45
+    "Application Development (30%)" : 30
+    "Software Development Practices (25%)" : 25
+```
+
+Note that by software development practices, we are referring to the following: version control (GitHub), verification (testing), utilisation of cloud services (Firebase), and the application of AI tools (evidence of correct AI-driven development).
 
 ## **Getting help**
 
