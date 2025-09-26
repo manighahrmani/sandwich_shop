@@ -16,9 +16,13 @@ The following free courses from GitHub will get you up to speed:
 
 This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
 
-⚠️ **Note**: Use a personal email address (not your university email) to sign up for GitHub. If you already have a GitHub account with your university email, you need to change the primary email to a personal one. Make sure to verify both email addresses in your GitHub account settings and enable two-factor authentication (2FA).
+⚠️ **Note**: Use a personal email address (not your university email) to sign up for GitHub. If you already have a GitHub account with your university email, you need to change the primary email to a personal one.
 
 ![GitHub Email Settings](images/screenshot_GitHub_emails.png)
+
+Make sure to verify both email addresses in your GitHub account settings and enable two-factor authentication (2FA).
+
+![GitHub 2FA Settings](images/screenshot_GitHub_auth.png)
 
 Once you have done this, complete the following
 [introduction course](https://github.com/skills/introduction-to-github).
