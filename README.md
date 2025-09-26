@@ -28,16 +28,11 @@ Every worksheet ends with a handful of **exercises**.  After completing these ex
 
 This course is assessed through a single coursework (Item 1 in the module specification). This **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
 
-The mark for the coursework is made up of the mark for the sign-offs (45%), the mark for the application that you are developing as part of the coursework (30%) and the mark for your software development practices (25%). See the diagram below for a breakdown of the marks.
+The mark for the coursework is made up of the mark for the sign-offs (45%), the mark for the application that you are submitting as part of the coursework (30%) and the mark for your software development practices (25%). See the diagram below for a breakdown of the marks.
 
-```mermaid
-pie title Flutter Course Assessment Breakdown (50% of Module Mark)
-    "Sign-offs (45%)" : 45
-    "Application Development (30%)" : 30
-    "Software Development Practices (25%)" : 25
-```
+![Flutter Course Assessment Breakdown](./images/assessment-breakdown.png)
 
-Note that by software development practices, we are referring to the following: version control (GitHub), verification (testing), utilisation of cloud services (Firebase), and the application of AI tools (evidence of correct AI-driven development).
+By software development practices, we are referring to the following: version control (GitHub), verification (testing), utilisation of cloud services (Firebase), and the application of AI tools (evidence of correct AI-driven development).
 
 ## **Getting help**
 
