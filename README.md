@@ -1,4 +1,4 @@
-# Flutter Worksheets
+# **Flutter Course**
 
 This is the homepage for the Flutter course which is the first half of the Programming Applications and Programming Languages (M30235) and User Experience Design and Implementation (M32605) modules.
 
