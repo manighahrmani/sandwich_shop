@@ -20,7 +20,7 @@ This course covers the basics of creating repositories, committing changes, work
 
 ![GitHub Email Settings](images/screenshot_GitHub_emails.png)
 
-Make sure to verify both email addresses in your GitHub account settings and enable two-factor authentication (2FA).
+Make sure to verify both email addresses in your GitHub account settings and enable two-factor authentication (2FA). We recommend using the GitHub mobile app for 2FA as shown below.
 
 ![GitHub 2FA Settings](images/screenshot_GitHub_auth.png)
 
