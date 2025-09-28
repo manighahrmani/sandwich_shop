@@ -206,7 +206,7 @@ The default application is a simple counter app. The `lib/main.dart` file contai
 
 We will learn more about stateless and stateful widgets in later worksheets. This is just a brief overview to get you started. But for now, use the Copilot extension to explore the code.
 
-Remember that Large Language Models (LLMs) like Copilot, ChatGPT, or Claude work best when you do all the following:
+Remember that Large Language Models (LLMs) like Copilot, Gemini, ChatGPT, or Claude work best when you do all the following:
 
 1. Start with a **specific goal** for what you want the AI to do (e.g., explain, fix an error, implement a feature)
 2. Provide a **source to ground** the response so for example the AI does not make assumptions or use outdated information (e.g., Flutter or Dart's documentation)
@@ -218,13 +218,15 @@ As an example, select a piece of code that you'd like to learn more about with y
 
 ![Copilot Example](images/screenshot_copilot_example.jpg)
 
-Copilot should automatically add the relevant code context to your question. However if you're using an LLM on the web (e.g., ChatGPT or Claude), you may need to provide items 2 and 3 (source and context) manually.
+Copilot (and similarly Gemini in Firebase Studio) should automatically add the relevant code context to your question. However if you're using an LLM on the web (e.g., ChatGPT or Claude), you may need to provide items 2 and 3 (source and context) manually.
 
 ### **Selecting a target device**
 
-At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like Edge or Chrome.
+In Firebase Studio, your app should already be running in a web browser. If it is not, open the Command Palette with **Ctrl + Shift + P** (or **⌘ + Shift + P** on macOS) and type `Firebase Studio: Show Web Preview`. You can also open this as a separate tab by clicking on the "Open in New Window" icon as shown below. You need to trust the domain to allow pop-ups.
 
-Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Flutter: Select Device`. Then select your browser from the list.
+![Firebase Studio web preview](images/screenshot_firebase_open_separate_tab.png)
+
+On VS Code, you need to select a target device to run your app. At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like Edge or Chrome. Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Flutter: Select Device`. Then select your browser from the list.
 
 ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
 
