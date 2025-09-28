@@ -242,6 +242,28 @@ flutter run
 
 VS Code will build and run your application, which should open in a browser window. Click the `+` button to see the counter increase.
 
+### **Viewing the app as a mobile app**
+
+For the purpose of this module, you will primarily be developing applications designed for mobile devices. While running the app in a web browser is convenient, it's important to view it in a mobile layout. You can achieve this using your browser's developer tools or by running a device emulator.
+
+#### **Using browser developer tools**
+
+When your app is running in the browser (Chrome, Edge or a similar browser, but not Safari!), you can simulate a mobile view. Right-click anywhere on the page and select `Inspect` or `Developer Tools`. You could alternatively press the **F12** key. This will open the developer tools.
+
+In the developer tools panel, look for an icon that looks like a phone and tablet, often called the `Toggle device toolbar`. Click it to switch to a mobile device view. Below is an example of how it looks in Chrome.
+
+![Chrome Developer Tools](images/screenshot_chrome_developer_tools.png)
+
+You can then use the dropdown menu at the top of the screen to select different device presets, such as an iPhone or a Pixel, to see how your app looks and behaves on various screen sizes.
+
+#### **Using an emulator**
+
+A more accurate way to test is by using an emulator, which simulates a physical device on your computer.
+
+In VS Code, you can launch an emulator by clicking the device name in the status bar at the bottom right and selecting a configured emulator, or choosing `Start Android Emulator` (and on macOS, `Start iOS Simulator`). This requires a more detailed setup, which typically involves installing Android Studio or Xcode, for more information refer to the final exercise in this worksheet.
+
+In Firebase Studio, an Android emulator is usually available by default. If it is not running, you can launch/show it from the Command Palette with **Ctrl + Shift + P** (or **⌘ + Shift + P** on macOS) and typing `Firebase Studio: Show Android Emulator Preview`.
+
 ### **Using hot reload**
 
 Hot reload is a powerful feature that lets you see code changes instantly without restarting the app.
