@@ -22,11 +22,7 @@ This is the homepage for the Flutter course which is the first half of the Progr
 
 ## **Teaching material**
 
-We only have worksheets for this course. This is because there is no exam for this part of the module, so we do not have lecture slides. You can find the timeline and a plan of the topics covered using the link below
-
-[**Flutter Module Schedule 2025-26**](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EdnDt0kJQr9FqDlKCGqc21QBwcN55ecrSboI0ndxGQq8MQ)
-
-### **Worksheets and sign-offs**
+We only have worksheets for this course. This is because there is no exam for this part of the module, so we do not have lecture slides.
 
 You should aim to complete the worksheets in the order they are presented below. Do not skip Worksheet 0 and it is fine if you cannot make it all the way to Worksheet 8.
 
