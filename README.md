@@ -40,13 +40,15 @@ You should aim to complete the worksheets in the order they are presented below.
 * [Worksheet 7: State Management and Persistence](./worksheet-7.md)
 * [Worksheet 8: Integration Testing, Firebase, and Deployment](./worksheet-8.md)
 
-Every worksheet ends with a handful of **exercises**.  After completing these exercises, show a member of staff your work for a **sign-off**. **Each sign-off is worth 5%** of the coursework mark.
+Every worksheet ends with a handful of **exercises**.  After completing these exercises, show a member of staff your work for a **sign-off**. **Each sign-off is worth 5%** of the Flutter Course mark.
+
+There are a total of 9 sign-offs (one for each worksheet), and you have a two-week window to get each sign-off. For example, you can get the sign-off for Worksheet 0 in either Week 1 or Week 2. You can get the sign-off for Worksheet 1 in either Week 2 or Week 3, and so on.
 
 ### **Assessment**
 
 This course is assessed through a single coursework (Item 1 in the module specification). This **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
 
-The mark for the coursework is made up of the mark for the sign-offs (45%), the mark for the application that you are submitting as part of the coursework (30%) and the mark for your software development practices (25%). See the diagram below for a breakdown of the marks.
+The mark for the Flutter Course is made up of the mark for the weekly sign-offs (45%), the mark for the application that you are submitting as part of the coursework (30%) and the mark for your software development practices used while developing this application (25%). See the diagram below for a breakdown of the marks.
 
 ![Flutter Course Assessment Breakdown](./images/assessment-breakdown.png)
 
