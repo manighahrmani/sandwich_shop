@@ -11,8 +11,8 @@ This is the homepage for the Flutter course which is the first half of the Progr
 | 13/10/2025 | 17/10/2025 | 11 | Stateless Widgets | Debugging and inspection |
 | 20/10/2025 | 24/10/2025 | 12 | Stateful Widgets | AI-Driven Development |
 | 27/10/2025 | 31/10/2025 | 13 | **Consolidation week** | |
-| 03/11/2025 | 07/11/2025 | 14 | Data Models and Assets | Test-Driven Development |
-| 10/11/2025 | 14/11/2025 | 15 | AI-Driven Development and Navigation | Coursework intro |
+| 03/11/2025 | 07/11/2025 | 14 | Data Models and Assets | Coursework intro |
+| 10/11/2025 | 14/11/2025 | 15 | AI-Driven Development and Navigation | Test-Driven Development |
 | 17/11/2025 | 21/11/2025 | 16 | State Management and Persistence | More AI-Driven Development |
 | 24/11/2025 | 28/11/2025 | 17 | Integration Testing, Firebase, and Deployment | Firebase |
 | 01/12/2025 | 05/12/2025 | 18 | Support | No Lecture |
