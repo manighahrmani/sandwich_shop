@@ -40,7 +40,7 @@ Every worksheet ends with a handful of **exercises**.  After completing these ex
 
 There are a total of 9 sign-offs (one for each worksheet), and you have a two-week window to get each sign-off. For example, you can get the sign-off for Worksheet 0 in either Week 1 or Week 2. You can get the sign-off for Worksheet 1 in either Week 2 or Week 3, and so on.
 
-### **Assessment**
+## **Assessment**
 
 This course is assessed through a single coursework (Item 1 in the module specification). This **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
 
