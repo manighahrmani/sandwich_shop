@@ -33,8 +33,8 @@ GitHub's AI can assist you with tasks such as explaining code, fixing bugs, and 
 
 ⚠️ **Note**: While signing up for GitHub for education, you need to be on-campus (or use the [VPN](https://myport.port.ac.uk/it-support/student-it-support/guide-to-the-virtual-private-network-vpn)) so that they can verify you are on the university campus.
 
-Once you have access to Copilot, complete the following
-[getting started course](https://github.com/skills/getting-started-with-github-copilot).
+Once you have access to Copilot, try completing the following
+[getting started course](https://github.com/skills/getting-started-with-github-copilot). If you get stuck at any point, ask for help on the Discord channel or during your practical session.
 
 ## Introduction to the Dart language
 
