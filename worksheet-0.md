@@ -24,6 +24,8 @@ Make sure to verify both email addresses in your GitHub account settings and ena
 
 ![GitHub 2FA Settings](images/screenshot_GitHub_auth.png)
 
+#### The GitHub intro course you need to complete
+
 Once you have done this, complete the following
 [introduction course](https://github.com/skills/introduction-to-github).
 
@@ -32,6 +34,8 @@ Once you have done this, complete the following
 GitHub's AI can assist you with tasks such as explaining code, fixing bugs, and even writing code snippets. As a student, you're eligible for a free Copilot subscription through the [GitHub Student Developer Pack](https://education.github.com/pack).
 
 ⚠️ **Note**: While signing up for GitHub for education, you need to be on-campus (or use the [VPN](https://myport.port.ac.uk/it-support/student-it-support/guide-to-the-virtual-private-network-vpn)) so that they can verify you are on the university campus.
+
+#### The GitHub Copilot course you need to complete
 
 Once you have access to Copilot, try completing the following
 [getting started course](https://github.com/skills/getting-started-with-github-copilot). If you get stuck at any point, ask for help on the Discord channel or during your practical session.
