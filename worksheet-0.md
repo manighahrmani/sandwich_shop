@@ -44,27 +44,27 @@ If you have not used Dart before or need a refresher, below are the resources fr
 
 ### 1 - Getting started with Dart
 
-- [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ESkq3xBzVgpPh8U0zkb3WXQB49yLKZjjC9QxM-f3V-PTiQ?e=p5ckav)
-- [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EQZicReK_3ZLkNAOj--M3psBntl0cZRT7piu6W3j4OFPcg)
-- [**GitHub Repository**](https://github.com/Programming-M30299/week-15-dart-code)
+- [Worksheet](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ESkq3xBzVgpPh8U0zkb3WXQB49yLKZjjC9QxM-f3V-PTiQ?e=p5ckav)
+- [Lecture](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EVmN28MeTSJArB6s17-KaMABMv9ODrV-UWmxrwp8Crysrg)
+- [GitHub Repository](https://github.com/Programming-M30299/week-15-dart-code)
 
 ### 2 - Functions and control flow in Dart
 
-- [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EVXFsog_gS9LlAFbUTUMXj4BXbKfWxQj0WjyN0dk9mblLw)
-- [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EbUO-PZOSWNPoA9TL1AqiSkBgURErCT0WE7I81dSu2OEQA?e=ZvHyB0)
-- [**GitHub Repository**](https://github.com/Programming-M30299/week-16-dart-code)
+- [Worksheet](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EVXFsog_gS9LlAFbUTUMXj4BXbKfWxQj0WjyN0dk9mblLw)
+- [Lecture](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EYOxV2VhhS9Httce_NolwK0BygFbKPTvYluvAH5RjVSJyQ)
+- [GitHub Repository](https://github.com/Programming-M30299/week-16-dart-code)
 
 ### 3 - Strings and collections in Dart
 
-- [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EV6lZOGcgydPuoR65cCrVfcBXW1SaRNSRgjqv3hzjd-EOA?e=o6d2EM)
-- [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EbUO-PZOSWNPoA9TL1AqiSkBgURErCT0WE7I81dSu2OEQA?e=N2Xhcy)
-- [**GitHub Repository**](https://github.com/Programming-M30299/week-17-dart-code)
+- [Worksheet](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EV6lZOGcgydPuoR65cCrVfcBXW1SaRNSRgjqv3hzjd-EOA?e=o6d2EM)
+- [Lecture](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EUAY-sw2UGBDrkDQMtN7aR0BnMaKCoBDKOpvSTOahdmJPg)
+- [GitHub Repository](https://github.com/Programming-M30299/week-17-dart-code)
 
 ### 4 - Object-oriented programming in Dart
 
-- [**Worksheet**](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ERG7VQKzCdVEsX0mc-s-nT4BLFUNsoR3lSpS3tLjSXYaLA)
-- [**Lecture**](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/EcpaP0-SOaJBqpDuSlcl4xwBTSzN9HgPhCOMnL74Zw54Zw)
-- [**GitHub Repository**](https://github.com/Programming-M30299/week-18-dart-code)
+- [Worksheet](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ERG7VQKzCdVEsX0mc-s-nT4BLFUNsoR3lSpS3tLjSXYaLA)
+- [Lecture](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/ERgiWNc5RXdNlks_UYVQAA0BFiNclHexTJh5_aej4xs4LQ?e=myXE7c)
+- [GitHub Repository](https://github.com/Programming-M30299/week-18-dart-code)
 
 ## Exercises
 
