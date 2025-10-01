@@ -204,12 +204,14 @@ The default application is a simple counter app. The `lib/main.dart` file contai
 
 ### **Using AI**
 
-We will learn more about stateless and stateful widgets in later worksheets. This is just a brief overview to get you started. But for now, use the Copilot extension to explore the code.
+We will learn more about stateless and stateful widgets in later worksheets. This is just a brief overview to get you started. But for now, we want you to use your AI tool of choice to explore the code.
+
+#### **Basics good practices of using AI**
 
 Remember that Large Language Models (LLMs) like Copilot, Gemini, ChatGPT, or Claude work best when you do all the following:
 
 1. Start with a **specific goal** for what you want the AI to do (e.g., explain, fix an error, implement a feature)
-2. Provide a **source to ground** the response so for example the AI does not make assumptions or use outdated information (e.g., Flutter or Dart's documentation)
+2. Provide a **source to ground** the response so for example the AI does not make assumptions or use outdated information (for example you may need to copy and paste sections from the Flutter or Dart's documentation)
 3. Add **context** to make sure the response is appropriate and relevant (e.g., project structure, code snippets, the platform you're using)
 4. Set **clear expectations** for the response (e.g., level and length of the explanation, inclusion of examples)
 5. Refer to **previous prompts and responses** in your questions (e.g., ask follow-up questions or request clarifications)
@@ -218,7 +220,55 @@ As an example, select a piece of code that you'd like to learn more about with y
 
 ![Copilot Example](images/screenshot_copilot_example.jpg)
 
-Copilot (and similarly Gemini in Firebase Studio) should automatically add the relevant code context to your question. However if you're using an LLM on the web (e.g., ChatGPT or Claude), you may need to provide items 2 and 3 (source and context) manually.
+#### **Structuring your prompts effectively**
+
+Copilot (and similarly Gemini in Firebase Studio) should automatically add the relevant code context to your question. You can add more context by using the `#` (hash) symbol or the attach button (📎) to reference other parts of the code or files in your project.
+
+However if you're using an LLM on the web (e.g., ChatGPT or Claude), you must provide the context manually.
+
+A good way to structure your prompts, especially when using online LLMs, is to clearly separate your instructions from your code. This helps the AI understand exactly what you are asking about.
+
+You can do this using **code blocks**. A code block is created by enclosing your code within three **backticks** (\`\`\`). It is also good practice to specify the programming language, like `dart`, after the opening backticks to enable correct syntax highlighting and improve the AI's understanding.
+
+Be careful not to confuse the backtick character (\` ) with a single quote ('). The backtick key is usually located at the top-left of a UK keyboard, below the  `Esc\` key on a Windows keyboard, or next to the left `Shift` key on a Mac keyboard.
+
+Here is an example of a well-structured prompt:
+
+````md
+I am new to Flutter and trying to understand the code below from the default counter app. Can you explain what the `build` method does in short and simple terms?
+
+Here is the code I want you to explain:
+```dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      title: Text(widget.title),
+    ),
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Text(
+            'You have pushed the button this many times:',
+          ),
+          Text(
+            '$_counter',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ],
+      ),
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: _incrementCounter,
+      tooltip: 'Increment',
+      child: const Icon(Icons.add),
+    ),
+  );
+}
+```
+````
 
 ### **Selecting a target device**
 
