@@ -230,7 +230,7 @@ A good way to structure your prompts, especially when using online LLMs, is to c
 
 You can do this using **code blocks**. A code block is created by enclosing your code within three **backticks** (\`\`\`). It is also good practice to specify the programming language, like `dart`, after the opening backticks to enable correct syntax highlighting and improve the AI's understanding.
 
-Be careful not to confuse the backtick character (\` ) with a single quote ('). The backtick key is usually located at the top-left of a UK keyboard, below the  `Esc` key on a Windows keyboard, or next to the left `Shift` key on a Mac keyboard.
+Be careful not to confuse the backtick character (\` ) with a single quote ('). The backtick key is usually located at the top-left of a UK keyboard, below the `Esc` key on a Windows keyboard, or next to the left `Shift` key on a Mac keyboard.
 
 Here is an example of a well-structured prompt:
 
@@ -239,6 +239,7 @@ I am new to Flutter and trying to understand the code below from the default cou
 Can you explain what the `build` method does in short and simple terms?
 
 Here is the code I want you to explain:
+
 ```dart
 @override
 Widget build(BuildContext context) {
@@ -398,25 +399,35 @@ Complete the exercises below and show your work to a member of staff present at 
 
 If you are new to programming and find it easier to watch a video tutorial, consider making a separate project and following [the "Your first Flutter app" Codelab](https://codelabs.developers.google.com/codelabs/flutter-codelab-first#0). It teaches you pretty much what we cover in this worksheet and the next one.
 
-1. You have already modified the title of the `AppBar` widget. This is different from the title of the app itself, which you can see in the browser tab. As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate, like "Sandwich Shop App". Remember to view the changes live with hot reload and to commit your changes to GitHub.
+1. In [the "Setting up a GitHub repository"](#setting-up-a-github-repository) section, we walked you through creating a GitHub repository to back up the `sandwich_shop` project. Make sure you have completed this section and you are comfortable with the process of making commits and pushing them to GitHub.
+
+   ⚠️ **Show your GitHub repository to a member of staff** for a sign-off.
+
+2. You have already modified the title of the `AppBar` widget. This is different from the title of the app itself, which you can see in the browser tab. This is highlighted in the image below:
+
+   ![Browser Tab Title](images/screenshot_apptitle.png)
+
+   As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate, like "Sandwich Shop App". Hint: VS Code and Firebase Studio have a search feature that you can access by pressing **Ctrl + Shift + F** (or **⌘ + Shift + F** on macOS). You can use this to search for the current title of the app.
+
+   Remember to view the changes live with hot reload and to commit your changes to GitHub.
 
    ⚠️ **Show your running app with the updated browser tab title to a member of staff** for a sign-off.
 
-2. The default app displays a counter. Your task is to change this by finding the `Column` widget inside the `_MyHomePageState` in your `lib/main.dart` file.
+3. The default app displays a counter. Your task is to change this by finding the `Column` widget inside the `_MyHomePageState` in your `lib/main.dart` file.
 
-   First, remove one of the two `Text` widgets inside the column.
+   First, remove the second `Text` widget inside the column. This may cause the Flutter analyser to show a warning (blue squiggly line). Hover your mouse over the highlighted code and read the message. You can use the `Quick Fix` option that appears below this message to apply the suggested fix (you can also open the Quick Fix menu by pressing **Ctrl + .** or **⌘ + .** on macOS).
 
    Next, modify the remaining `Text` widget so that it displays a static welcome message, like "Welcome to my shop!" instead of the counter variable.
 
-   Finally, you can give your message some style by using the `style` property on the `Text` widget, which accepts a `TextStyle`. Look at the [official documentation for the TextStyle class](https://api.flutter.dev/flutter/painting/TextStyle-class.html) to see how to change properties like `fontSize`, `color`, and `fontWeight` or use Copilot to help you with this.
+   Optionally, you can give your message some style by using the `style` property on the `Text` widget, which accepts a `TextStyle`. Look at the [official documentation for the TextStyle class](https://api.flutter.dev/flutter/painting/TextStyle-class.html) to see how to change properties like `fontSize`, `color`, and `fontWeight` or use Copilot to help you with this.
 
-   Make sure that you understand what is happening at every step. On rare occasions, AI assistants may not provide a correct solution but more often, they provide an optimal solution that is hard to understand. If you saw a syntax you are not familiar with for example, a ternary operator (`condition ? expr1 : expr2`), ask your AI assistant to explain it to you or use a simpler approach like an `if` statement.
+   Make sure that you understand what is happening at every step. On rare occasions, AI assistants may not provide a correct solution. More often, they provide an overly optimal solution that may be hard to understand for you. If you saw a syntax you are not familiar with for example, a ternary operator (`condition ? expr1 : expr2`), ask your AI assistant to explain it to you or use a simpler approach like an `if` statement.
 
    ⚠️ **Show your running app with the new welcome message to a member of staff** for a sign-off.
 
-3. The `pubspec.yaml` file is the heart of your project's configuration, managing dependencies, fonts, and project metadata. Open this file and take a moment to read through it, using an LLM or the [official documentation on the pubspec file](https://dart.dev/tools/pub/pubspec) to understand each section.
+4. The `pubspec.yaml` file is the heart of your project's configuration, managing dependencies, fonts, and project metadata. Open this file and take a moment to read through it, using an LLM or the [official documentation on the pubspec file](https://dart.dev/tools/pub/pubspec) to understand each section.
 
-   Your task is to modify the file to match the cleaned-up version below. This involves changing the project name and description, updating the Dart SDK environment constraint, and removing the comments to make the file more readable.
+   Your task is to modify the file to match the cleaned-up version below. This involves changing the project name and description, updating the Dart SDK environment constraint, and removing the comments to make the file is shorter.
 
    ```yaml
    name: sandwich_shop
@@ -442,22 +453,22 @@ If you are new to programming and find it easier to watch a video tutorial, cons
      uses-material-design: true
    ```
 
-   After saving your changes, you must synchronise the dependencies. While VS Code often does this automatically, you can run `flutter pub get` in the terminal to do it manually.
+   After saving your changes, you must synchronise the dependencies. While VS Code and Firebase Studio often does this automatically, you should run `flutter pub get` in the terminal to ensure everything is up to date.
 
    ⚠️ **Show your updated `pubspec.yaml` file to a member of staff** for a sign-off.
 
-4. Keeping your code tidy is crucial for readability and collaboration. Dart has a standard format that can be applied automatically.
+5. Keeping your code tidy is crucial for readability and collaboration. Dart has a standard format that can be applied automatically.
 
-   First, deliberately mess up the formatting in your `lib/main.dart` file. For example, add extra spaces or remove indentation for a few widgets.
+   First, deliberately mess up the formatting in your `lib/main.dart` file. For example, add extra spaces or remove newlines or indentation for a few widgets.
 
-   Next, right-click in the editor and select `Format Document`. You can also open the command palette with **Ctrl+Shift+P** (or **Cmd+Shift+P** on macOS) and type `Format Document` to find the command.
+   Next, right-click in the editor and select `Format Document`. You can also open the command palette with **Ctrl+Shift+P** (or **⌘+Shift+P** on macOS) and type `Format Document` to find the command.
    Notice how the code snaps back to the correct style. You can also set this to happen automatically on save by enabling the `editor.formatOnSave` setting. Ask your LLM for help with this.
 
    For more details, refer to [the official documentation](https://docs.flutter.dev/tools/formatting) on code formatting.
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5. The Flutter SDK can automatically fix many problems in your code. For example the LLMs that you may be using could generate deprecated code for you.
+6. The Flutter SDK can automatically fix many problems in your code. For example the LLMs that you may be using could generate deprecated code for you.
 
    To see how the SDK can fix your code for you, go to your `lib/main.dart` file and find the `Text` widget responsible for displaying the counter. The code for this widget looks like this:
 
@@ -485,14 +496,8 @@ If you are new to programming and find it easier to watch a video tutorial, cons
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-6. (Advanced) In the `MyHomePage` widget, add a new `FloatingActionButton` that resets the counter to `0`.
-
-   As a hint, you can wrap the existing `FloatingActionButton` in a `Row` widget to add another button next to it. You will also need to create a new method inside the `_MyHomePageState` class for this functionality.
-
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
 7. (Advanced) Running your app in a browser is great for quick development, but the ultimate aim of learning Flutter is to build natively compiled applications for mobile, web, and desktop from a single codebase (cross-platform development).
 
-   For this task, follow the official documentation to set up your physical phone for development and run the app on it. You can find instructions to [set up an Android device](https://docs.flutter.dev/get-started/install/windows#android-setup) or an [iOS device](https://docs.flutter.dev/get-started/install/macos#deploy-to-ios-devices) on the Flutter website.
+   For this task, follow the official documentation to set up your physical phone or an emulated device for development and run the app on it. You can find instructions to [set up an Android device](https://docs.flutter.dev/platform-integration/android/setup) or an [iOS device](https://docs.flutter.dev/platform-integration/ios/setup) on the Flutter website.
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
