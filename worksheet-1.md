@@ -415,7 +415,7 @@ If you are new to programming and find it easier to watch a video tutorial, cons
 
 3. The default app displays a counter. Your task is to change this by finding the `Column` widget inside the `_MyHomePageState` in your `lib/main.dart` file.
 
-   First, remove the second `Text` widget inside the column. This may cause the Flutter analyser to show a warning (blue squiggly line). Hover your mouse over the highlighted code and read the message. You can use the `Quick Fix` option that appears below this message to apply the suggested fix (you can also open the Quick Fix menu by pressing **Ctrl + .** or **⌘ + .** on macOS).
+   First, remove the second `Text` widget inside the column. This may cause the Flutter analyser to show a warning (blue squiggly line). Hover your mouse over the highlighted code and read the message. You can use the `Quick Fix` option that appears below this message to apply the suggested fix (you can also open the Quick Fix menu by pressing **Ctrl + .** or **⌘ + .** on macOS). You may also have a separate warning message (yellow squiggly line) somewhere else in the file. Find it and fix it too.
 
    Next, modify the remaining `Text` widget so that it displays a static welcome message, like "Welcome to my shop!" instead of the counter variable.
 
