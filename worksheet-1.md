@@ -230,7 +230,7 @@ A good way to structure your prompts, especially when using online LLMs, is to c
 
 You can do this using **code blocks**. A code block is created by enclosing your code within three **backticks** (\`\`\`). It is also good practice to specify the programming language, like `dart`, after the opening backticks to enable correct syntax highlighting and improve the AI's understanding.
 
-Be careful not to confuse the backtick character (\` ) with a single quote ('). The backtick key is usually located at the top-left of a UK keyboard, below the  `Esc\` key on a Windows keyboard, or next to the left `Shift` key on a Mac keyboard.
+Be careful not to confuse the backtick character (\` ) with a single quote ('). The backtick key is usually located at the top-left of a UK keyboard, below the  `Esc` key on a Windows keyboard, or next to the left `Shift` key on a Mac keyboard.
 
 Here is an example of a well-structured prompt:
 
