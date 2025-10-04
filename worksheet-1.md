@@ -235,7 +235,8 @@ Be careful not to confuse the backtick character (\` ) with a single quote ('). 
 Here is an example of a well-structured prompt:
 
 ````md
-I am new to Flutter and trying to understand the code below from the default counter app. Can you explain what the `build` method does in short and simple terms?
+I am new to Flutter and trying to understand the code below from the default counter app.
+Can you explain what the `build` method does in short and simple terms?
 
 Here is the code I want you to explain:
 ```dart
