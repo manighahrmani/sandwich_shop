@@ -171,6 +171,8 @@ class OrderItemDisplay extends StatelessWidget {
 }
 ```
 
+You may need to auto-fix any warnings by hovering over the squiggly lines and clicking on the lightbulb icon or pressing **Ctrl + .** on Windows or **⌘ + .** on macOS.
+
 This `StatelessWidget` has two `final` instance variables, `itemType` and `quantity`, which are set by its constructor. `final` means they cannot be changed after the widget is created.
 
 Running the app at this stage won't show any visual changes yet, as we haven't actually used the `OrderItemDisplay` widget in our `App`.
