@@ -258,7 +258,9 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     ⚠️ **Show your running app with the coloured container to a member of staff** for a sign-off.
 
-3. Read about [layout widgets](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets) in the documentation. Use a `Column` or a `Row` to display three `OrderItemDisplay` widgets in the `App`'s `body`. Experiment with the `mainAxisAlignment` and `crossAxisAlignment` properties to align them.
+3. Read about [layout widgets](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets) in the documentation pages.
+
+    Your task is to use a `Column` or a `Row` to display three `OrderItemDisplay` widgets in instead of one in the `Container` where the current `OrderItemDisplay` is. Experiment with the `mainAxisAlignment` and `crossAxisAlignment` properties to align them.
 
     The image below shows an example of a `Row` with three `OrderItemDisplay` widgets. (Note that we have skipped the previous exercise, your implementation should still have the coloured container from the last exercise.)
 
