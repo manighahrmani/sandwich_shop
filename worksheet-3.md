@@ -36,7 +36,7 @@ Or ensure your code matches [the code that we ended Worksheet 2 with](https://gi
 
 If you have completed some of the exercises and your code looks slightly different, that's okay. Just make sure you understand the changes we're making from this point onward.
 
-So far, all of our widgets were stateless. These widgets are immutable. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).
+So far, all of our widgets were stateless. These widgets are immutable. They are like a photograph: a snapshot of the User Interface (UI) at a particular point in time. If you want to find out more about them, **watch this [YouTube video on StatelessWidgets](https://youtu.be/wE7khGHVkYY).**
 
 ### **Adding interactive buttons**
 
@@ -262,7 +262,7 @@ Run the app one last time. The buttons should now be enabled, and clicking them 
 
 As a small task, can you figure out why the buttons only work within a certain range of quantities? If you are confused by this, try to trace the logic in the `_increaseQuantity` and `_decreaseQuantity` methods. Note that in VS Code you can jump to the method definitions by holding down the `Ctrl` key on Windows or `⌘` on macOS and clicking on the method name. Feel free to ask Copilot or your LLM of choice for help.
 
-To learn more about `StatefulWidget`s, watch this [YouTube video from the Flutter team](https://youtu.be/AqCMFXEmf3w).
+To learn more about `StatefulWidget`s, **watch this [YouTube video from the Flutter team](https://youtu.be/AqCMFXEmf3w).**
 
 ### **Commit your changes (6)**
 
