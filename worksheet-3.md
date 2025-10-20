@@ -161,15 +161,11 @@ Widget build(BuildContext context) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  print('Add button pressed!');
-                },
+                onPressed: () => print('Add button pressed!'),
                 child: const Text('Add'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  print('Remove button pressed!');
-                },
+                onPressed: () => print('Remove button pressed!'),
                 child: const Text('Remove'),
               ),
             ],
