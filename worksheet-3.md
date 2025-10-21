@@ -403,7 +403,9 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
 2. Currently, the user can press the "Add" button even when the maximum quantity is reached, and the "Remove" button when the quantity is zero. While our logic prevents the state from updating, the buttons themselves should appear disabled to provide better user feedback.
 
-   Consult the [ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) to see how you can disable a button. Hint: There are different ways to do this, one of which involves updating the type of the callback function `_increaseQuantity` and `_decreaseQuantity` from `void` to `VoidCallback?` (this way they can either return a void function or a null value).
+   Consult the [ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) to see how you can disable a button.
+
+   There are different ways to do this, one of which involves updating the type of the callback function `_increaseQuantity` and `_decreaseQuantity` from `void` to `VoidCallback?` (this way they can either return a void function or a null value). You are required to explore all options and pick the one you find the easiest to understand. Feel free to think outside the box (you can even update other parts of the `_OrderScreenState` class if you find it necessary).
 
    ⚠️ **Show your running app, demonstrating the disabled buttons at the quantity limits, to a member of staff** for a sign-off.
 
