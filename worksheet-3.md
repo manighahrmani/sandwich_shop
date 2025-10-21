@@ -405,7 +405,7 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
    Consult the [ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) to see how you can disable a button.
 
-   There are different ways to do this, one of which involves updating the type of the callback function `_increaseQuantity` and `_decreaseQuantity` from `void` to `VoidCallback?` (this way they can either return a void function or a null value). You are required to explore all options and pick the one you find the easiest to understand. Feel free to think outside the box (you can even update other parts of the `_OrderScreenState` class if you find it necessary).
+   There are different ways to do this. You are required to explore all options and pick the one you find the easiest to understand. Feel free to think outside the box (you can even update other parts of the `_OrderScreenState` class if you find it necessary).
 
    ⚠️ **Show your running app, demonstrating the disabled buttons at the quantity limits, to a member of staff** for a sign-off.
 
@@ -414,6 +414,8 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
    Similar to how we implemented [the order notes feature](#adding-custom-notes-to-an-order), write a user story for this feature. Picture in your mind how this should work and describe it in details.
 
    Before you use an AI, refer to [the documentation page for handling user input](https://docs.flutter.dev/get-started/fundamentals/user-input), browse it to find the simplest solution for such an input. For example, would a `SegmentedButton` be appropriate here or can we use a `Slider`? Is there anything else that might be easier to implement? Make sure to state your preferences to your AI assistant.
+
+   Note that you will need to update the `OrderItemDisplay` widget to display the selected sandwich type.
 
    ⚠️ **Show your running app the ability to switch between sandwich types to a member of staff** for a sign-off.
 
