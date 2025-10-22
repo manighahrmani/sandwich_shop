@@ -434,9 +434,7 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5. (Advanced) An Introduction to Widget Testing
-
-   Writing automated tests is a fundamental skill in software development. We will cover it in more details next week but let's take a sneak peak at Flutter's widget testing which allows you to test your UI components.
+5. (Advanced) Writing automated tests is a fundamental skill in software development. We will cover it in more details next week but let's take a sneak peak at Flutter's widget testing which allows you to test your UI components.
 
    A widget test involves three main steps:
 
