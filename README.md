@@ -59,3 +59,5 @@ To get support with the worksheets, join the [Discord channel](https://portdotac
 To provide feedback on the organisation of the Flutter part of the module, complete this anonymous [feedback form](https://forms.office.com/e/88jd4UGAui). Note that you need to be logged into Microsoft with your student account to be able to access the form, but your username will not be collected.
 
 The worksheets are not perfect. If you notice any mistakes or would like any improvements, please open [the repository](https://github.com/manighahrmani/sandwich_shop), go to the Issues tab and open a new issue describing the mistake. Provide as much detail as possible so that we can fix it quickly.
+
+<iframe width="700" height="900" frameborder="0" scrolling="no" src="https://portdotacdotuk-my.sharepoint.com/personal/mani_ghahremani_port_ac_uk/_layouts/15/Doc.aspx?sourcedoc={48d18991-9e20-43df-9a23-f30953f6de8b}&action=embedview&Item='engagement_helper'!A1%3AJ170&wdHideGridlines=True&wdInConfigurator=True&wdInConfigurator=True"></iframe>
