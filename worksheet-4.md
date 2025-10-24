@@ -1,4 +1,4 @@
-# **Worksheet 4 — App Architecture and Testing**
+# **Worksheet 4 — App Architecture, Testing and README**
 
 ## **What you need to know beforehand**
 
