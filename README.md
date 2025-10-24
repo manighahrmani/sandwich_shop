@@ -30,7 +30,7 @@ You should aim to complete the worksheets in the order they are presented below.
 * [Worksheet 1: Introduction to Flutter](./worksheet-1.md)
 * [Worksheet 2: Stateless Widgets](./worksheet-2.md)
 * [Worksheet 3: Stateful Widgets](./worksheet-3.md)
-* [Worksheet 4: App Architecture and Testing](./worksheet-4.md)
+* [Worksheet 4: App Architecture, Testing, and README](./worksheet-4.md)
 * [Worksheet 5: Data Models and Assets](./worksheet-5.md)
 * [Worksheet 6: AI-Driven Development and Navigation](./worksheet-6.md)
 * [Worksheet 7: State Management and Persistence](./worksheet-7.md)
