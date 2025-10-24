@@ -82,7 +82,7 @@ lib/
 
 #### **Commit your changes (1)**
 
-Before moving on, commit this restructuring of the folder with a commit message like `Restructure folder into views, view_models, and repositories` and sync your changes to GitHub.
+Before moving on, commit this restructuring of the folder, addition of the `app_styles.dart` file, and the updates in the `main.dart` file with commit messages like `Restructure folder into views, view_models, and repositories`, `Add app_styles.dart for managing styles`, `Update main.dart to use app_styles.dart` and sync your changes to GitHub.
 
 ### **Creating a repository class**
 
