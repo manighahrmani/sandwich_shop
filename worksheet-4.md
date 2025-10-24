@@ -448,11 +448,80 @@ Finally, the tests for `StyledButton` and `OrderItemDisplay` show how you can te
 
 Before moving to the exercises, check that you have committed and synced all your changes to GitHub.
 
+## **Writing a README**
+
+One of the most important aspects of software developement is the often overlooked documentation. A well-written README file is the first thing people (e.g., employers) see when they visit your portfolio on GitHub.
+
+A README file (usually named `README.md`) is a file that introduces and explains your project. It's written in Markdown format, which allows you to format text with headers, lists, links, and images. [GitHub has a good cheatsheet on Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) which we recommend. But as part of the first exercise you will be asking your AI to produce a README for you.
+
+Think of the README serves as the front page of your repository and should provide all the essential information someone needs to understand, install, and use your project.
+
+### **Components of a README**
+
+A README typically includes the following:
+
+#### **1. Project Title and Description**
+- Clear, descriptive title
+- Brief explanation of what the app does
+- Key features or functionality
+
+#### **2. Installation and Setup Instructions**
+- Prerequisites (OS, SDKs, tools, etc.)
+- How to clone the repository
+- Step-by-step installation guide
+- How to run the project
+
+#### **3. Usage Instructions**
+- How to use the main features
+- Any important user flows
+- Configuration options if any
+- How to run tests
+- Ideally some screenshots or GIFs to illustrate the features
+
+#### **5. Project Structure and technologies used (Optional)**
+- Brief overview of folder organization
+- Key files and their purposes
+- Key packages or dependencies
+- Development tools
+
+#### **6. Known Issues or Limitations (Optional)**
+- Current bugs or limitations
+- Future improvements planned
+- Contribution guidelines (if applicable)
+
+#### **7. Contact Information**
+- Your name and contact details
+- Links to other projects or profiles if relevant
+
+A good README is correct and concise. You need to make sure it is formatted, most importantly has clear headings/sections. You are also responsible to update the README regularly as your project evolves. (There are automated ways of doing this, e.g., with GitHub Workflows but this is outside the scope of this module.)
+
 ## **Exercises**
 
 Complete the exercises below. Remember to commit your changes after each exercise and use your AI assistant to help you think through the problems rather than just asking for the solution.
 
-1. Our widget tests currently cover tapping buttons and entering text. Let's expand our test coverage to other types of user interaction.
+1. Use your AI tool of choice to generate a `README.md` file.
+
+    Start by creating a new file called `README.md` in your project root. Open Copilot Chat, complete the prompt provided below (the promot is left incomplete for you to finish) and see what it generates:
+
+    ```
+    Generate a comprehensive README.md file for my Flutter sandwich shop app. 
+    Look at my project structure and code to understand what the app does. 
+    Include: ...
+    ```
+
+    Copilot has access to your entire codebase,  so it can analyze your project structure, dependencies, and code to create accurate documentation. If this is not automatically and the output is generic and ambigous, you need to manually attach (the `#` symbol) the files that you consider important for Copilot to read. Remember you can provide Copilot screenshots too.
+
+    If you're using a browser-based AI like ChatGPT, Gemini or Claude, you'll need to provide context since it can't see your files. Gather the following information to share with the AI:
+      - Your project folder structure (from VS Code Explorer)
+      - Contents of your `pubspec.yaml` file (dependencies and Flutter version)
+      - A brief description of what your app does and its main features
+      - Any screenshots you've taken of your app
+
+    Once you have a generated README, carefully review it against the quality criteria mentioned in the last section of the workheet. Is it accurate? Is it complete? Do the instructions work? Do you need to customise anything (feel free to ask the AI to refine the document).
+
+    ⚠️ **Show your README.md file to a member of staff** for a sign-off.
+
+2. Our widget tests currently cover tapping buttons and entering text. Let's expand our test coverage to other types of user interaction.
 
     Write a new widget test in `test/views/widget_test.dart` to verify the functionality of the `Switch` widget that toggles between 'six-inch' and 'footlong'.
 
@@ -460,7 +529,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     ⚠️ **Show your new passing widget test to a member of staff** for a sign-off.
 
-2. Let's add an option for the user to have their sandwich toasted. First, in `lib/main.dart`, add a new state variable to your `_OrderScreenState` class: `bool _isToasted = false;`.
+3. Let's add an option for the user to have their sandwich toasted. First, in `lib/main.dart`, add a new state variable to your `_OrderScreenState` class: `bool _isToasted = false;`.
 
     Next, in the `build` method, add the following `Row` inside the `Column`'s `children` list, just below the `Row` for the existing sandwich type `Switch` (search for `Switch` to find it quickly and add this after the closing bracket of that `Row`):
 
@@ -488,7 +557,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     ⚠️ **Show your running app with the two switches and the updated, passing widget tests to a member of staff** for a sign-off.
 
-3. Our app does not yet have a concept of price. Let's add a repository to manage the pricing logic. Suppose that a six-inch sandwich costs £7 and a footlong costs £11.
+4. Our app does not yet have a concept of price. Let's add a repository to manage the pricing logic. Suppose that a six-inch sandwich costs £7 and a footlong costs £11.
 
     Create a new `PricingRepository` class in the `repositories` folder similar to `lib/repositories/order_repository.dart`. This class should calculate the total price of a sandwich order based on the quantity and sandwich size. This should give you an idea what the constructor of the class should look like and what method(s) it should have.
 
@@ -498,7 +567,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     ⚠️ **Show your new pricing repository and its unit tests to a member of staff** for a sign-off.
 
-4. (Advanced) Let's add functionality to save an order to a local file. This feature is only available on mobile and desktop platforms, so you will need to run your app on a compatible device.
+5. (Advanced) Let's add functionality to save an order to a local file. This feature is only available on mobile and desktop platforms, so you will need to run your app on a compatible device.
 
     First, add the `path_provider` package to your project by running the following command in your terminal:
 
@@ -556,7 +625,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
-5. (Advanced) Let's add some images to our app like a company logo in the `AppBar`.
+6. (Advanced) Let's add some images to our app like a company logo in the `AppBar`.
 
     First, create an `assets/images` folder at the root of your project and add a simple logo image to it (e.g., `logo.png`). To make assets available to your app, you must declare the folder in your `pubspec.yaml` file. Open it and add an `assets` section at the bottom of the `flutter` section like this:
 
