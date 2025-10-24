@@ -4,21 +4,21 @@ This is the homepage for the Flutter course which is the first half of the Progr
 
 ## **Schedule**
 
-| Week Commencing | Week Ending | CMIS Week | Worksheet Topics | Lecture Topics |
-|-----------------|-------------|-----------|---------------|----------------|
-| 29/09/2025 | 03/10/2025 | 9 | Introduction to Dart, Git and GitHub | GitHub intro |
-| 06/10/2025 | 10/10/2025 | 10 | Introduction to Flutter | Flutter intro |
-| 13/10/2025 | 17/10/2025 | 11 | Stateless Widgets | Debugging and inspection |
-| 20/10/2025 | 24/10/2025 | 12 | Stateful Widgets | AI-Driven Development |
-| 27/10/2025 | 31/10/2025 | 13 | **Consolidation week** | |
-| 03/11/2025 | 07/11/2025 | 14 | Data Models and Assets | Coursework intro |
-| 10/11/2025 | 14/11/2025 | 15 | AI-Driven Development and Navigation | Test-Driven Development |
-| 17/11/2025 | 21/11/2025 | 16 | State Management and Persistence | More AI-Driven Development |
-| 24/11/2025 | 28/11/2025 | 17 | Integration Testing, Firebase, and Deployment | Firebase |
-| 01/12/2025 | 05/12/2025 | 18 | Support | No Lecture |
-| 08/12/2025 | 12/12/2025 | 19 | Marking | No Lecture |
-| 15/12/2025 | 19/12/2025 | 20 | Marking | No Lecture |
-| 22/12/2025 | 26/12/2025 | 21 | **Xmas Vacation** | |
+| Week Commencing | Week Ending | CMIS Week | Worksheet | Deadline | Lecture Topics |
+|-----------------|-------------|-----------|-----------|----------|---------------------------------|
+| 29/09/2025 | 03/10/2025 | 9 | Worksheet 0 | | GitHub intro |
+| 06/10/2025 | 10/10/2025 | 10 | Worksheet 1 | 0 | Flutter intro |
+| 13/10/2025 | 17/10/2025 | 11 | Worksheet 2 | 0, 1 | Debugging and inspection |
+| 20/10/2025 | 24/10/2025 | 12 | Worksheet 3 | 1, 2 | AI-Driven Development |
+| 27/10/2025 | 31/10/2025 | 13 | **Consolidation week** | | |
+| 03/11/2025 | 07/11/2025 | 14 | Worksheet 4 | 2, 3 | Coursework intro |
+| 10/11/2025 | 14/11/2025 | 15 | Worksheet 5 | 3, 4 | Test-Driven Development |
+| 17/11/2025 | 21/11/2025 | 16 | Worksheet 6 | 4, 5 | More AI-Driven Development |
+| 24/11/2025 | 28/11/2025 | 17 | Worksheet 7 | 5, 6 | Firebase |
+| 01/12/2025 | 05/12/2025 | 18 | Worksheet 8 | 6, 7 | No Lecture |
+| 08/12/2025 | 12/12/2025 | 19 | Marking | 7, 8 | No Lecture |
+| 15/12/2025 | 19/12/2025 | 20 | Marking | 8 | No Lecture |
+| 22/12/2025 | 26/12/2025 | 21 | **Xmas Vacation** | | |
 
 ## **Teaching material**
 
