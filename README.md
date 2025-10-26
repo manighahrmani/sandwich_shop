@@ -4,8 +4,8 @@ This is the homepage for the Flutter course which is the first half of the Progr
 
 ## **Schedule**
 
-| Week Commencing | Week Ending | CMIS Week | Worksheet | Deadline | Lecture Topics (ish!) |
-|-----------------|-------------|-----------|-----------|----------|---------------------------------|
+| Week Commencing | Week Ending | [CMIS](https://timetabling.port.ac.uk) Week | Worksheet | Sign-off Deadline | Lecture Topics (ish!) |
+|-----------------|-------------|-----------|-----------|-----------------------------|---------------------------------|
 | 29/09/2025 | 03/10/2025 | 9 | Worksheet 0 | | GitHub intro |
 | 06/10/2025 | 10/10/2025 | 10 | Worksheet 1 | 0 | Flutter intro |
 | 13/10/2025 | 17/10/2025 | 11 | Worksheet 2 | 0, 1 | Debugging and inspection |
