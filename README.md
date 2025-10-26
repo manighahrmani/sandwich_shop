@@ -44,7 +44,7 @@ There are a total of 9 sign-offs (one for each worksheet), and you have a two-we
 
 This course is assessed through a single coursework (Item 1 in the module specification). This **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
 
-The mark for the Flutter Course is made up of the mark for the weekly sign-offs (45%), the mark for the application that you are submitting as part of the coursework (30%) and the mark for your software development practices used while developing this application (25%). See the diagram below for a breakdown of the marks.
+The mark for the Flutter Course is made up of the mark for the weekly sign-offs (45%), the mark for the application that you are submitting as part of the coursework (30%) and the mark for your software development practices used while developing this application (25%). See the diagram below for a visual breakdown of the marks.
 
 ![Flutter Course Assessment Breakdown](./images/assessment-breakdown.png)
 
@@ -58,7 +58,7 @@ To get support with the worksheets, join the [Discord channel](https://portdotac
 
 To provide feedback on the organisation of the Flutter part of the module, complete this anonymous [feedback form](https://forms.office.com/e/88jd4UGAui). Note that you need to be logged into Microsoft with your student account to be able to access the form, but your username will not be collected.
 
-The worksheets are not perfect. If you notice any mistakes or would like any improvements, please open [the repository](https://github.com/manighahrmani/sandwich_shop), go to the Issues tab and open a new issue describing the mistake. Provide as much detail as possible so that we can fix it quickly.
+If you notice any mistakes or would like any improvements, please open [the repository](https://github.com/manighahrmani/sandwich_shop), go to the Issues tab and open a new issue describing the mistake. Provide as much detail as possible so that we can fix it quickly.
 
 ## **Sign-offs Tracker**
 
