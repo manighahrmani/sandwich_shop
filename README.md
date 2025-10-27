@@ -68,4 +68,4 @@ This [Excel sheet](https://portdotacdotuk-my.sharepoint.com/:x:/g/personal/mani_
 
 This is only here so that the IT department can test that embedded documents work correctly.
 
-<iframe width="1000" height="1000" frameborder="0" scrolling="no" src="https://portdotacdotuk-my.sharepoint.com/personal/mani_ghahremani_port_ac_uk/_layouts/15/Doc.aspx?sourcedoc={48d18991-9e20-43df-9a23-f30953f6de8b}&action=embedview&Item=PublicData&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"></iframe>
+<iframe width="700" height="900" frameborder="0" scrolling="no" src="https://portdotacdotuk-my.sharepoint.com/personal/mani_ghahremani_port_ac_uk/_layouts/15/Doc.aspx?sourceDoc={48d18991-9e20-43df-9a23-f30953f6de8b}&action=embedview&wdAllowInteractivity=False&Item=PublicData&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"></iframe> 
