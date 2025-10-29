@@ -64,7 +64,7 @@ If you notice any mistakes or would like any improvements, please open [the repo
 
 This [Excel sheet](https://portdotacdotuk-my.sharepoint.com/:x:/g/personal/mani_ghahremani_port_ac_uk/EU37A4NaOt5LrYCW2OJZgsoBr1rTjj-nLj1n9SrpVsIs2w?e=SxcJC3) allows you to track which sign-offs you have completed. Search for your UP number with **Ctrl + F** or **⌘ + F** to find your row quickly. If you cannot find your UP number, please let me know by messaging me on Discord.
 
-## **Temporary Embeded Document**
+## **Temporary Embedded Document**
 
 This is only here so that the IT department can test that embedded documents work correctly.
 
