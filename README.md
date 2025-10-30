@@ -15,9 +15,9 @@ This is the homepage for the Flutter course which is the first half of the Progr
 | 10/11/2025 | 14/11/2025 | 15 | Worksheet 5 | 3, 4 | Test-Driven Development |
 | 17/11/2025 | 21/11/2025 | 16 | Worksheet 6 | 4, 5 | More AI-Driven Development |
 | 24/11/2025 | 28/11/2025 | 17 | Worksheet 7 | 5, 6 | Firebase |
-| 01/12/2025 | 05/12/2025 | 18 | Worksheet 8 | 6, 7 | No Lecture |
-| 08/12/2025 | 12/12/2025 | 19 | Marking | 7, 8 | No Lecture |
-| 15/12/2025 | 19/12/2025 | 20 | Marking | 8 | No Lecture |
+| 01/12/2025 | 05/12/2025 | 18 | Worksheet 8 | 6, 7, Demo | No Lecture |
+| 08/12/2025 | 12/12/2025 | 19 | None | 7, 8, Demo | No Lecture |
+| 15/12/2025 | 19/12/2025 | 20 | None | 8, Demo | No Lecture |
 | 22/12/2025 | 26/12/2025 | 21 | **Xmas Vacation** | | |
 
 ## **Teaching material**
