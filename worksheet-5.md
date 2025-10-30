@@ -137,6 +137,8 @@ Commit the addition of the `Cart` model and its tests before moving on.
 
 ## **Managing Assets**
 
+### **Adding assets to the project**
+
 Our `Sandwich` model automatically generates image paths, but we haven't provided any images yet. In Flutter, static files like images, fonts, and configuration files are called **assets**.
 
 First, create an `assets` folder in the root of your project, at the same level as the `lib` and `test` folders. Inside the `assets` folder, create another folder called `images`.
@@ -156,7 +158,7 @@ Now you can use images saved in this folder in your app. For more information, y
 
 For your coursework you should **not** to incorporate any videos or audio files, but if you wish to explore this check out [this page](https://docs.flutter.dev/cookbook/plugins/play-video).
 
-### **Commit your changes (3)**
+#### **Commit your changes (3)**
 
 Commit your new assets before moving on.
 
