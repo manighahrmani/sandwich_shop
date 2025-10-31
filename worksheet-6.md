@@ -448,6 +448,96 @@ Run your app and test the full checkout flow.
 
 Commit the changes for integrating the checkout screen and update any relevant widget tests.
 
+## **Named Routes and Flutter Web Routing**
+
+Before diving into the exercises, let's explore how Flutter handles routing, especially for web applications. We'll create a simple example to demonstrate named routes.
+
+First, create a basic About Us page. Create a new file `lib/views/about_screen.dart`:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
+
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('About Us', style: heading1),
+      ),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Welcome to Sandwich Shop!', style: heading2),
+            SizedBox(height: 20),
+            Text(
+              'We are a family-owned business dedicated to serving the best sandwiches in town. '
+              style: normalText,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+Now, update the `App` class in your `main.dart` file to include named routes using the `routes` property:
+
+```dart
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Sandwich Shop App',
+      home: OrderScreen(maxQuantity: 5),
+      routes: {
+        '/about': (context) => AboutScreen(),
+      },
+    );
+  }
+}
+```
+
+Alternatively, for more complex routing scenarios, you can use `onGenerateRoute`:
+
+```dart
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Sandwich Shop App',
+      home: const OrderScreen(maxQuantity: 5),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/about':
+            return MaterialPageRoute(builder: (_) => const AboutScreen());
+          default:
+            return MaterialPageRoute(builder: (_) => const OrderScreen(maxQuantity: 5));
+        }
+      },
+    );
+  }
+}
+```
+
+Flutter web uses hash-based routing by default. When you run your app in a browser, URLs look like `http://localhost:49856/#/about`. The structure breaks down as:
+
+- `http://localhost:49856/` - base URL
+- `#/about` - the hash fragment that Flutter interprets as the route
+
+This means users can navigate directly to specific screens by typing URLs in their browser, and the browser's back button will work correctly.
+
+Test this by running your app in a web browser and typing `localhost:PORT/#/about` in the address bar (replace `PORT` with the port number your app is running on). You should be able to navigate directly to the About screen.
+
 ## **Exercises**
 
 Complete the exercises below. Remember to commit your changes after each exercise.
