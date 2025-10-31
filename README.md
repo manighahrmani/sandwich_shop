@@ -15,9 +15,9 @@ This is the homepage for the Flutter course which is the first half of the Progr
 | 10/11/2025 | 14/11/2025 | 15 | Worksheet 5 | 3, 4 | Test-Driven Development |
 | 17/11/2025 | 21/11/2025 | 16 | Worksheet 6 | 4, 5 | More AI-Driven Development |
 | 24/11/2025 | 28/11/2025 | 17 | Worksheet 7 | 5, 6 | Firebase |
-| 01/12/2025 | 05/12/2025 | 18 | Worksheet 8 | 6, 7, Demo | Coursework drop-in |
-| 08/12/2025 | 12/12/2025 | 19 | None | 7, 8, Demo | Coursework drop-in |
-| 15/12/2025 | 19/12/2025 | 20 | None | 8, Demo | Coursework drop-in |
+| 01/12/2025 | 05/12/2025 | 18 | Worksheet 8 | 6, 7, Demo | Coursework support drop-in |
+| 08/12/2025 | 12/12/2025 | 19 | None | 7, 8, Demo | Coursework support drop-in |
+| 15/12/2025 | 19/12/2025 | 20 | None | 8, Demo | Coursework support drop-in |
 | 22/12/2025 | 26/12/2025 | 21 | **Xmas Vacation** | | |
 
 ## **Teaching material**
@@ -38,7 +38,7 @@ You should aim to complete the worksheets in the order they are presented below.
 
 Every worksheet ends with a handful of **exercises**.  After completing these exercises, show a member of staff your work for a **sign-off**. **Each sign-off is worth 5%** of the Flutter Course mark.
 
-There are a total of 9 sign-offs (one for each worksheet), and you have a two-week window to get each sign-off. For example, you can get the sign-off for Worksheet 0 in either Week 1 or Week 2. You can get the sign-off for Worksheet 1 in either Week 2 or Week 3, and so on.
+There are a total of 9 sign-offs (one for each worksheet), and you have a two-week window to get each sign-off and the deadlines are shown in the schedule above. You can complete sign-offs early if you wish.
 
 ## **Assessment**
 
@@ -66,6 +66,6 @@ This [Excel sheet](https://portdotacdotuk-my.sharepoint.com/:x:/g/personal/mani_
 
 ## **Temporary Embedded Document**
 
-This is only here so that the IT department can test that embedded documents work correctly.
+Ignore this section. It is only here so that the IT department can test to see why the embedded documents doesn't work.
 
 <iframe width="700" height="900" frameborder="0" scrolling="no" src="https://portdotacdotuk-my.sharepoint.com/personal/mani_ghahremani_port_ac_uk/_layouts/15/Doc.aspx?sourceDoc={48d18991-9e20-43df-9a23-f30953f6de8b}&action=embedview&wdAllowInteractivity=False&Item=PublicData&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"></iframe> 
