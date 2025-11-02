@@ -273,7 +273,7 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
-If you don't have the implementation of `StyledButton` in `main.dart`, feel free to replace it with regular `ElevatedButton`s for now.
+You may get errors about missing classes like `OrderItemDisplay` and `StyledButton`, and the `BreadType` type. If you don't have have these implemented yet, feel free to copy them from [branch 4's `main.dart`](https://github.com/manighahrmani/sandwich_shop/blob/e7cca94bcf2775a174d4ecfc477626b2d157986c/lib/main.dart).
 
 Open the Source Control view in VS Code with **Ctrl + Shift + G** on Windows or **⌃ + Shift + G** on macOS. You should see a list of changes that you have made to your project. Click on `main.dart` to see a side-by-side comparison of the old and new code. Pay attention to the changes that have been made.
 
