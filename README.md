@@ -1,76 +1,116 @@
 # Sandwich Shop
 
-This is a simple Flutter app that allows users to order sandwiches.
-The app is built using Flutter and Dart, and it is designed primarily to be run in a web
-browser.
+A Flutter application for ordering sandwiches with customizable options and quantity management.
 
-## Install the essential tools
+## Description
 
-1. **Terminal**:
+This Flutter app provides a User Interface (UI) for customers to order sandwiches. Users can select sandwich size (footlong or six-inch), choose bread type, specify quantity, and add custom notes to their orders. The app also features a clean UI real-time order updates and visual feedback.
 
-    - **macOS** – use the built-in Terminal app by pressing **⌘ + Space**, typing **Terminal**, and pressing **Return**.
-    - **Windows** – open the start menu using the **Windows** key. Then enter **cmd** to open the **Command Prompt**. Alternatively, you can use **Windows PowerShell** or **Windows Terminal**.
+### Key Features
 
-2. **Git** – verify that you have `git` installed by entering `git --version`, in the terminal.
-    If this is missing, download the installer from [Git's official site](https://git-scm.com/downloads?utm_source=chatgpt.com).
+- **Sandwich Size Selection**: Toggle between footlong and six-inch options
+- **Bread Type Selection**: Choose from white, wheat, or wholemeal bread
+- **Quantity Management**: Add/remove sandwiches with configurable maximum limits
+- **Order Notes**: Add custom instructions (e.g., "no onions")
+- **Visual Order Display**: Real-time sandwich emoji display based on quantity
+- **Responsive UI**: Clean Material Design interface with custom styling
 
-3. **Package managers**:
+## Installation and Setup
 
-    - **Homebrew** (macOS) – verify that you have `brew` installed with `brew --version`; if missing, follow the instructions on the [Homebrew installation page](https://brew.sh/).
-    - **Chocolatey** (Windows) – verify that you have `choco` installed with `choco --version`; if missing, follow the instructions on the [Chocolatey installation page](https://chocolatey.org/install).
+### Prerequisites
 
-4. **Flutter SDK** – verify that you have `flutter` installed and it is working with `flutter doctor`; if missing, install it using your package manager:
+- **Flutter SDK** (>=2.17.0 <4.0.0)
+- **Git** for version control
+- **IDE**: Visual Studio Code (recommended)
 
-    - **macOS**: `brew install --cask flutter`
-    - **Windows**: `choco install flutter`
+### Installation Steps
 
-5. **Visual Studio Code** – verify that you have `code` installed with `code --version`; if missing, use your package manager to install it:
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/manighahrmani/sandwich_shop.git
+   cd sandwich_shop
+   ```
 
-    - **macOS**: `brew install --cask visual-studio-code`
-    - **Windows**: `choco install vscode`
+2. **Install Dependencies**
+   ```bash
+   flutter pub get
+   ```
 
-## Get the code
+3. **Verify Flutter Installation**
+   ```bash
+   flutter doctor
+   ```
 
-### If this is your first time working on this project
+4. **Run the Application**
+   ```bash
+   # For web (recommended)
+   flutter run -d chrome
+   
+   # For other platforms
+   flutter run
+   ```
 
-Enter the following commands in your terminal to clone the repository and
-open it in Visual Studio Code.
-You may want to change directory (`cd`) to the directory where you want to clone the
-repository first.
+## Usage Instructions
+
+### Main Features
+
+1. **Selecting Sandwich Size**
+   - Use the toggle switch to choose between six-inch and footlong sandwiches
+   - The display updates automatically to show your selection
+
+2. **Choosing Bread Type**
+   - Select from the dropdown menu: white, wheat, or wholemeal
+   - Your choice is reflected in the order display
+
+3. **Managing Quantity**
+   - Click the green "Add" button to increase sandwich quantity
+   - Click the red "Remove" button to decrease quantity
+   - Maximum quantity is configurable (default: 5 sandwiches)
+   - Buttons are disabled when limits are reached
+
+4. **Adding Order Notes**
+   - Use the text field to add special instructions
+   - Example: "no onions", "extra cheese", "toasted"
+   - Notes appear in the order summary
+
+5. **Order Display**
+   - Real-time visual representation with sandwich emojis (🥪)
+   - Shows quantity, bread type, size, and notes
+   - Updates automatically as you make changes
+
+### Running Tests
+
+Execute the test suite to verify functionality:
 
 ```bash
-git clone --branch 4 https://github.com/manighahrmani/sandwich_shop
-cd sandwich_shop
-code .
+# Run all tests
+flutter test
+
+# Run specific test files
+flutter test test/repositories/order_repository_test.dart
+flutter test test/views/widget_test.dart
 ```
 
-### If you have already cloned the repository
+## Project Structure
 
-Enter the following commands in your terminal to switch to the correct branch.
-Remember to `cd` to the directory where you cloned the repository first.
+```
+lib/
+├── main.dart                    # Main app entry point and UI components
+├── repositories/
+│   └── order_repository.dart    # Order state management and business logic
+└── views/
+    └── app_styles.dart         # Centralized styling and theme definitions
 
-```bash
-git fetch origin
-git checkout 4
+test/
+├── repositories/
+│   └── order_repository_test.dart  # Unit tests for order logic
+└── views/
+    └── widget_test.dart            # Widget and integration tests
 ```
 
-## Run the app
+### Key Files
 
-Open the integrated terminal in Visual Studio Code by first opening the Command
-Palette with **⌘ + Shift + P** (macOS) or **Ctrl + Shift + P** (Windows) and
-typing **Terminal: Create New Terminal** then pressing **Enter**.
-
-In the terminal, run the following commands to install the dependencies and run
-the app in your web browser:
-
-```bash
-flutter pub get
-flutter run
-```
-
-## Get support
-
-Use [the dedicated Discord channel](https://discord.com/channels/760155974467059762/1370633732779933806)
-to ask your questions and get help from the community.
-Please provide as much context as possible, including the error messages you are seeing and
-screenshots (you can open Discord in your web browser).
+- **`lib/main.dart`**: Contains the main app structure, OrderScreen widget, and UI components
+- **`lib/repositories/order_repository.dart`**: Manages order state, quantity limits, and business logic
+- **`lib/views/app_styles.dart`**: Defines consistent text styles and theming
+- **`test/repositories/order_repository_test.dart`**: Unit tests for order management functionality
