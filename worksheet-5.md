@@ -16,6 +16,8 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 ## **Getting started**
 
+⚠️ Recall that the first exercise from worksheet 3 required you to create a README.md file for your project. Hopefully you have managed to finish this task. Before we begin, compare your README with [the model README file that we have provided in branch 4](https://github.com/manighahrmani/sandwich_shop/blob/4/README.md).
+
 For this worksheet, as an exception, start with the code from branch 5 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/5). You can either clone the repository and checkout branch 5:
 
 ```bash
