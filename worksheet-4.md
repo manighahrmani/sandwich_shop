@@ -521,16 +521,16 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    Copilot has access to your entire codebase, so it can analyze your project structure, dependencies, and code to create accurate documentation. If this is not automatically and the output is generic and ambiguous, you need to manually attach (the `#` symbol) the files that you consider important for Copilot to read. Remember you can provide Copilot screenshots too.
 
-   If you're using a browser-based AI like ChatGPT, Gemini or Claude, you'll need to provide context since it can't see your files. Gather the following information to share with the AI:
+   If you're using a browser-based AI, you'll need to provide context since it can't see your files. Gather the following information to share with the AI:
 
    - Your project folder structure (from VS Code Explorer)
    - Contents of your `pubspec.yaml` file (dependencies and Flutter version)
    - A brief description of what your app does and its main features
    - Any screenshots you've taken of your app
 
-   Once you have a generated README, carefully review it against the quality criteria mentioned in the last section of the worksheet. Is it accurate? Is it complete? Do the instructions work? Do you need to customise anything (feel free to ask the AI to refine the document).
+   Once you have a generated README, carefully review it against the quality criteria mentioned in the last section of the worksheet. Is it accurate? Is it complete? Do the instructions work? Do you need to customise anything (feel free to ask the AI to refine the document further).
 
-   ⚠️ **Show your README.md file to a member of staff** for a sign-off.
+   ⚠️ **Show your README.md file to a member of staff** for a sign-off. If you do attempt any other exercises, remember to update the README accordingly.
 
 2. Our widget tests currently cover tapping buttons and entering text. Let's expand our test coverage to other types of user interaction.
 
