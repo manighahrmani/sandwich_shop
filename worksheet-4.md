@@ -399,7 +399,7 @@ Before we move to widget testing, ensure that you have committed and synced all 
 
 ## **Widget testing**
 
-We have already provided you with an example of widget testing in the `widget_test.dart` file. It is currently in the `test` folder. Create a new folder called `views` inside the `test` folder and move the `widget_test.dart` file into this new folder.
+[The `widget_test.dart` file in branch 4](https://github.com/manighahrmani/sandwich_shop/blob/e7cca94bcf2775a174d4ecfc477626b2d157986c/test/widget_test.dart) provides you with an example of widget testing. Copy the contents of this file into the existing `widget_test.dart` file in the `test` folder. Create a new folder called `views` inside the `test` folder and move the `widget_test.dart` file into this new folder.
 
 This is what your folder structure should look like now:
 
