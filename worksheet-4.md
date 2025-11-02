@@ -572,11 +572,9 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
 4. Our app does not yet have a concept of price. Let's add a repository to manage the pricing logic. Suppose that a six-inch sandwich costs £7 and a footlong costs £11.
 
-   Create a new `PricingRepository` class in the `repositories` folder similar to `lib/repositories/order_repository.dart`. This class should calculate the total price of a sandwich order based on the quantity and sandwich size. This should give you an idea what the constructor of the class should look like and what method(s) it should have.
+   Create a new `PricingRepository` class in the `repositories`. This class should calculate the total price of a sandwich order based on the quantity and sandwich size. This should give you an idea what the constructor of the class should look like and what method(s) it should have.
 
-   Next, similar to `test/repositories/order_repository_test.dart`, create a new unit test file in `test/repositories` to verify your pricing logic is correct for various quantities and for both sandwich sizes.
-
-   Finally, use your new repository in the `OrderScreen` to calculate and display the total price of the order. The price should be formatted to two decimal places (e.g., `£11.00`). You have the example of `OrderRepository` to refer to, but free to use your AI assistant to help you with how the `_OrderScreenState` class should be updated to use this new repository.
+   Before integrating this new repository, create a new unit test file similar to  what we did for `OrderRepository`. Finally, use it in `OrderScreen` to calculate and display the total price of the order.
 
    ⚠️ **Show your new pricing repository and its unit tests to a member of staff** for a sign-off.
 
