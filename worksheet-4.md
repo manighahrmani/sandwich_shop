@@ -273,6 +273,8 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 ```
 
+If you don't have the implementation of `StyledButton` in `main.dart`, feel free to replace it with regular `ElevatedButton`s for now.
+
 Open the Source Control view in VS Code with **Ctrl + Shift + G** on Windows or **⌃ + Shift + G** on macOS. You should see a list of changes that you have made to your project. Click on `main.dart` to see a side-by-side comparison of the old and new code. Pay attention to the changes that have been made.
 
 Can you get Copilot to explain why we no longer need the `_quantity` variable in this class? How has the logic for incrementing and decrementing changed?
