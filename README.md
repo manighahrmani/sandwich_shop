@@ -36,13 +36,19 @@ You should aim to complete the worksheets in the order they are presented below.
 * [Worksheet 7: State Management and Persistence](./worksheet-7.md)
 * [Worksheet 8: Integration Testing, Firebase, and Deployment](./worksheet-8.md)
 
+## **Assessment**
+
+This course is assessed through a single coursework (Item 1 in the module specification). This **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
+
+### **Sign-offs**
+
 Every worksheet ends with a handful of **exercises**.  After completing these exercises, show a member of staff your work for a **sign-off**. **Each sign-off is worth 5%** of the Flutter Course mark.
 
 There are a total of 9 sign-offs (one for each worksheet), and you have a two-week window to get each sign-off and the deadlines are shown in the schedule above. You can complete sign-offs early if you wish.
 
-## **Assessment**
+### **Coursework**
 
-This course is assessed through a single coursework (Item 1 in the module specification). This **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
+Use [this link to access the coursework brief](https://youtu.be/Pf0_Be5PPPU?si=mAkutSBUBltzDH1w&t=64). The submission sections will open on Moodle soon and the on-time deadline for submission is 13:00 on Wednesday 3rd December 2025 (more information about late submissions can be found in the brief).
 
 The mark for the Flutter Course is made up of the mark for the weekly sign-offs (45%), the mark for the application that you are submitting as part of the coursework (30%) and the mark for your software development practices used while developing this application (25%). See the diagram below for a visual breakdown of the marks.
 
