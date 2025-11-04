@@ -48,7 +48,7 @@ There are a total of nine sign-offs (one for each worksheet), and you have a two
 
 ### **Coursework (55%)**
 
-Use [this link to access the coursework brief](https://youtu.be/Pf0_Be5PPPU?si=mAkutSBUBltzDH1w&t=64). The submission sections will open on Moodle soon and the on-time deadline for submission is 13:00 on Wednesday 3rd December 2025 (more information about late submissions can be found in the brief).
+Use [this link to access the coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EbM1UcwOHMRLmcKeI0btHqYBeZ3ADWjyN0EXBWdHLhsO_g?e=AvWfQe). The submission sections will open on Moodle soon and the on-time deadline for submission is 13:00 on Wednesday 3rd December 2025 (more information about late submissions can be found in the brief).
 
 The mark for the coursework is made up of two components: the mark for the functionality of the application you are submitting (30%) and the mark for your software development practices used while developing this application (25%).
 
