@@ -38,7 +38,7 @@ You should aim to complete the worksheets in the order they are presented below.
 
 ## **Assessment**
 
-This part of the module which runs though Teaching Block 1 (TB1) is listed as Item 1 in the module specification. Item 1 is worth 50% of the overall module mark of the module. Your mark for item 1 is made up of weekly sign-offs (45%) and a coursework (55%).
+This part of the module which runs though Teaching Block 1 (TB1) is listed as Item 1 in the module specification. Item 1 is worth 50% of the overall module mark. Your mark for item 1 is made up of weekly sign-offs (45%) and a coursework (55%).
 
 ### **Sign-offs (45%)**
 
