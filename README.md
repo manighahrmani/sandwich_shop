@@ -1,6 +1,6 @@
 # **Flutter Course**
 
-This is the homepage for the Flutter course which is the first half of the Programming Applications and Programming Languages (M30235) and User Experience Design and Implementation (M32605) modules. (It is called "sandwich_shop" because the worksheets build an app for a sandwich shop.)
+This is the homepage for the Flutter Course which is the first half of the Programming Applications and Programming Languages (M30235) and User Experience Design and Implementation (M32605) modules. (It is called "sandwich_shop" because the worksheets build an app for a sandwich shop.)
 
 ## **Schedule**
 
@@ -22,7 +22,7 @@ This is the homepage for the Flutter course which is the first half of the Progr
 
 ## **Teaching material**
 
-We only have worksheets for this course. This is because there is no exam for this part of the module, so we do not have lecture slides.
+We only have worksheets for this part of the module. This is because there is no exam for this part of the module, so we do not have lecture slides.
 
 You should aim to complete the worksheets in the order they are presented below. Do not skip Worksheet 0 and it is fine if you cannot make it all the way to Worksheet 8.
 
@@ -38,23 +38,25 @@ You should aim to complete the worksheets in the order they are presented below.
 
 ## **Assessment**
 
-This course is assessed through a single coursework (Item 1 in the module specification). This **coursework is worth 50%** of your module mark and will be accessible on the Teaching Block 1 (TB1) section of the Moodle page.
+This part of the module which runs though Teaching Block 1 (TB1) is listed as Item 1 in the module specification. Item 1 is worth 50% of the overall module mark of the module. Your mark for item 1 is made up of weekly sign-offs (45%) and a coursework (55%).
 
-### **Sign-offs**
+### **Sign-offs (45%)**
 
 Every worksheet ends with a handful of **exercises**.  After completing these exercises, show a member of staff your work for a **sign-off**. **Each sign-off is worth 5%** of the Flutter Course mark.
 
-There are a total of 9 sign-offs (one for each worksheet), and you have a two-week window to get each sign-off and the deadlines are shown in the schedule above. You can complete sign-offs early if you wish.
+There are a total of nine sign-offs (one for each worksheet), and you have a two-week window to get each sign-off and the deadlines are shown in the schedule above. You can complete sign-offs early if you wish.
 
-### **Coursework**
+### **Coursework (55%)**
 
 Use [this link to access the coursework brief](https://youtu.be/Pf0_Be5PPPU?si=mAkutSBUBltzDH1w&t=64). The submission sections will open on Moodle soon and the on-time deadline for submission is 13:00 on Wednesday 3rd December 2025 (more information about late submissions can be found in the brief).
 
-The mark for the Flutter Course is made up of the mark for the weekly sign-offs (45%), the mark for the application that you are submitting as part of the coursework (30%) and the mark for your software development practices used while developing this application (25%). See the diagram below for a visual breakdown of the marks.
-
-![Flutter Course Assessment Breakdown](./images/assessment-breakdown.png)
+The mark for the coursework is made up of two components: the mark for the functionality of the application you are submitting (30%) and the mark for your software development practices used while developing this application (25%).
 
 By software development practices, we are referring to the following: version control (GitHub), verification (testing), utilisation of cloud services (Firebase), and the application of AI tools (evidence of correct AI-driven development).
+
+See the diagram below for a visual breakdown of the marks.
+
+![Flutter Course Assessment Breakdown](./images/assessment-breakdown.png)
 
 ## **Getting help**
 
