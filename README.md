@@ -2,8 +2,6 @@
 
 This is the homepage for the Flutter Course which is the first half of the Programming Applications and Programming Languages (M30235) and User Experience Design and Implementation (M32605) modules. (It is called "sandwich_shop" because the worksheets build an app for a sandwich shop.)
 
-test
-
 ## **Schedule**
 
 | Week Commencing | Week Ending | [CMIS](https://timetabling.port.ac.uk) Week | Worksheet | Sign-off Deadline | Lecture Topics (ish!) |
