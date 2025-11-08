@@ -626,19 +626,17 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
 1. Our app currently only shows a message (`confirmationMessage`) in the debug console when items are added to the cart. Let's display this message in the UI instead.
 
-    Browse [the catalog of Flutter widgets](https://docs.flutter.dev/ui/widgets) or ask your AI assistant to suggest a suitable widget for displaying this message on the screen.
+    If you are using Copilot (or Gemini in Firebase), switch to Ask mode and write a prompt that explain what feature you want to implement (ideally with a use case/user story). Ask it to suggest a suitable Flutter widget to display this message on the screen. For each widget it suggests, ask it to explain why that widget is appropriate and how to implement it (ask it to provide code snippets). Take your time to understand each approach and decide which widget you want to use before switching back to Edit or Agent mode to implement it.
 
-    Think about how you as the user would want to see this message. Should it appear as a popup, a banner, or somewhere else on the screen? Would you want it to disappear after a few seconds, or stay until the user dismisses it?
+    Alternatively, use a browser based AI assistant but provide it with sufficient context about your app and what you want to achieve or manually browse [the catalog of Flutter widgets](https://docs.flutter.dev/ui/widgets) to find a suitable widget for this task.
 
-    Remember not to implement a separate page for the cart yet, we will do that in a later exercise. Once you are done, update the widget tests to reflect your changes.
+    Remember not to implement a separate page or a permanent UI for the cart in the home page yet. We will do that in a later exercise. So far, we are only concerned with displaying the confirmation message. Once you are done, update the widget tests to reflect your changes.
 
     ⚠️ **Show your running app displaying the confirmation message in the UI to a member of staff** for a sign-off.
 
 2. Let's add a permanent cart summary display to our main screen. In addition of just showing a confirmation message when items are added, you need to show the number of items in the cart and the total price.
 
-    Try to do this in the simplest way possible. Just make sure that when the "Add to Cart" button is pressed, this displayed summary is updated to reflect the current state of the cart.
-
-    Feel free to use your AI assistant to help you implement this feature, and make sure to write widget tests to verify that the cart summary updates correctly when items are added.
+    Similar to the previous exercise, there are several ways to do this. Your aim should be to do so in the simplest way possible. Just make sure that when the "Add to Cart" button is pressed, this displayed summary is updated to reflect the current state of the cart. As always, make sure to write widget tests to verify that the cart summary updates correctly when items are added.
 
     ⚠️ **Show your running app with the cart summary displaying the number of items and total price to a member of staff** for a sign-off.
 
