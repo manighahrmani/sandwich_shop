@@ -614,6 +614,10 @@ FutureBuilder<List<Sandwich>>(
 )
 ```
 
+#### **Commit your changes (6)**
+
+If you have implemented any of the above optional JSON/CSV loading functionality, make sure to commit your changes before moving on. You should have ideally committed each logical change separately (e.g., adding the JSON file, updating the model, creating the repository, updating the UI).
+
 ## **Exercises**
 
 Complete the exercises below and show your work to a member of staff at your next practical session for a **sign-off**.
