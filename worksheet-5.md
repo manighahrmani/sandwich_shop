@@ -468,6 +468,152 @@ As always, write widget tests to ensure your UI behaves as expected (several tes
 
 Make sure all your changes are committed separately before moving on to the exercises.
 
+## **Loading Data from Files (Optional)**
+
+So far, our sandwich types are hardcoded as enums in the `Sandwich` model. This means every time we want to add a new sandwich or change a name, we need to modify the code and rebuild the app. In real-world applications, data like menu items often comes from external sources like files or APIs.
+
+We will see more about this in [Worksheet 7](./worksheet-7.md) but for now,let's quickly see how to load sandwich data from files.
+
+There are several ways to store data in general.
+
+- **Structured** - Data where every instance has the same properties
+- **Semi-structured** - Data where instances have different properties
+- **Unstructured** - Data where no rules or structure is enforced on the instances
+
+Worksheet 7 will discuss structured data sources. As for the other two categories, a Flutter project will typically use one of the following:
+
+- **Plain text files** - Unstructure but simple
+- **JSON files** - (Semi-)structured but easy to parse and widely used
+- **CSV files** - (Semi-)structured, good for tabular data, easy to edit
+- **YAML files** - (Semi-)structured, human-readable, good for configuration
+
+For this exercise, we'll focus on **JSON** as it's the most common format for mobile apps and provides a good balance between readability and structure.
+
+### **Creating a JSON data file**
+
+First, create a new file called `sandwiches.json` in your `assets` folder (not in the `images` subfolder, but directly in `assets`):
+
+```text
+assets/
+├── images/
+│   └── ...
+└── sandwiches.json
+```
+
+Add the following content to `sandwiches.json`:
+
+```json
+{
+  "sandwiches": [
+    {
+      "id": "veggie_delight",
+      "name": "Veggie Delight",
+      "description": "Fresh vegetables with your choice of bread",
+      "available": true
+    },
+    {
+      "id": "chicken_teriyaki",
+      "name": "Chicken Teriyaki",
+      "description": "Tender chicken with teriyaki sauce",
+      "available": true
+    },
+    {
+      "id": "tuna_melt",
+      "name": "Tuna Melt",
+      "description": "Classic tuna with melted cheese",
+      "available": true
+    },
+    {
+      "id": "meatball_marinara",
+      "name": "Meatball Marinara",
+      "description": "Italian meatballs in marinara sauce",
+      "available": true
+    }
+  ]
+}
+```
+
+Don't forget to register this file in your `pubspec.yaml`:
+
+```yaml
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/sandwiches.json
+```
+
+### **Loading and parsing JSON**
+
+To load JSON data in Flutter, you'll need to first read the file as a string using `rootBundle.loadString()`. Next, parse the JSON string using the `dart:convert` library (it is included in the Dart SDK by default). Finally, extract the relevant fields from the parsed data and convert the parsed data into your model objects.
+
+Here's a basic example of how to load the JSON file:
+
+```dart
+import 'dart:convert';
+import 'package:flutter/services.dart';
+
+Future<List<Map<String, dynamic>>> loadSandwichData() async {
+  final String jsonString = await rootBundle.loadString('assets/sandwiches.json');
+  final Map<String, dynamic> jsonData = json.decode(jsonString);
+  return List<Map<String, dynamic>>.from(jsonData['sandwiches']);
+}
+```
+
+### **Updating your model**
+
+You'll need to use your AI tools to update your `Sandwich` model to work with this data. Make sure to add:
+
+- A factory constructor like `Sandwich.fromJson(Map<String, dynamic> json)` to create sandwich objects from JSON data
+- An `id` field to identify each sandwich type
+- A `description` and an `available` field
+
+We will learn more about factory constructors in [Worksheet 8](./worksheet-8.md), but for now think of them as alternative constructors that can create objects from different data sources (like JSON) rather than requiring all parameters to be passed directly.
+
+The enum approach can still be useful for bread types and sizes, but sandwich types can now be loaded dynamically.
+
+### **Alternative: CSV files**
+
+If you prefer a simpler format that's easy to edit in spreadsheet applications, you could use CSV instead. Here's what `sandwiches.csv` might look like:
+
+```csv
+id,name,description,available
+veggie_delight,Veggie Delight,Fresh vegetables with your choice of bread,true
+chicken_teriyaki,Chicken Teriyaki,Tender chicken with teriyaki sauce,true
+tuna_melt,Tuna Melt,Classic tuna with melted cheese,true
+meatball_marinara,Meatball Marinara,Italian meatballs in marinara sauce,true
+```
+
+You would need to write a parser to split each line by commas and create sandwich objects. Ask your AI assistant about the pros and cons of CSV vs JSON for this use case.
+
+### **Where to implement data handling**
+
+The best place to handle data loading is in a **repository** class. You could create a `SandwichRepository` in the `repositories` folder that loads the sandwich data from the file, stores it temporarily in memory (caches it) so you don't reload it every time and ultimately provides methods like `getAllSandwiches()` or `getSandwichById(String id)`.
+
+This follows the MVVM architecture pattern we introduced in [Worksheet 4](./worksheet-4.md), keeping data access logic separate from your UI code.
+
+### **Handling asynchronous data**
+
+Since loading files is an asynchronous operation, you'll need to use `FutureBuilder` or similar widgets to handle the loading state in your UI. Don't worry if you don't fully understand the code or the concept of asynchronous programming yet; we will cover this in more detail in future worksheets. For now, just be aware that the data loading process won't be instantaneous. `snapshot.connectionState` helps you determine whether the data is still loading, has loaded successfully, or encountered an error. Based on this, the UI (in this case the dropdown menu) can display a loading indicator, an error message, or the actual data.
+
+Here's a basic pattern:
+
+```dart
+FutureBuilder<List<Sandwich>>(
+  future: sandwichRepository.getAllSandwiches(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return CircularProgressIndicator();
+    }
+    if (snapshot.hasError) {
+      return Text('Error loading sandwiches');
+    }
+    // Use snapshot.data to build your dropdown
+    return DropdownMenu(...);
+  },
+)
+```
+
 ## **Exercises**
 
 Complete the exercises below and show your work to a member of staff at your next practical session for a **sign-off**.
