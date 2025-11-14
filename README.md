@@ -68,9 +68,9 @@ The referral/deferral assessment for this Flutter Course is a coursework that yo
 
 If there are external reasons stopping you from engaging with the module, submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/exams/extenuating-circumstances) as soon as you can and notify me when your ECF is approved.
 
-Note that ECFs apply to the whole Item 1 (the entire Flutter Course, 50%). You cannot use an ECF just for individual sign-offs.
+Note that ECFs apply to the whole Item 1 (the entire Flutter Course, 50% of the module). You cannot use an ECF just for individual sign-offs.
 
-Also note that if your ECF is approved, any sign-offs you already have will not be counted. Instead, you will be expected to take the deferral assessment in July and your Item 1 mark will come from that deferral coursework (not from [the original coursework](#coursework-55) or [sign-offs](#sign-offs-45)).
+Also note that if your ECF is approved, any sign-offs you already have will not be counted. Instead, you will be expected to take the deferral assessment in July and your Item 1 mark will come from that deferral coursework alone (not from [the original coursework](#coursework-55) or [sign-offs](#sign-offs-45)).
 
 If you do not have an ECF or it is not approved, you will receive all the sign-offs you have completed and your coursework mark depending on when you submit it (with late penalties if applicable).
 
