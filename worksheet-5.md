@@ -628,7 +628,7 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
     If you are using Copilot (or Gemini in Firebase), switch to Ask mode and write a prompt that explain what feature you want to implement (ideally with a use case/user story). Ask it to suggest a suitable Flutter widget to display this message on the screen. For each widget it suggests, ask it to explain why that widget is appropriate and how to implement it (ask it to provide code snippets). Take your time to understand each approach and decide which widget you want to use before switching back to Edit or Agent mode to implement it.
 
-    Alternatively, use a browser based AI assistant but provide it with sufficient context about your app and what you want to achieve or manually browse [the catalog of Flutter widgets](https://docs.flutter.dev/ui/widgets) to find a suitable widget for this task.
+    Alternatively, use a browser based AI assistant but provide it with sufficient context about your app and what you want to achieve or manually browse [the catalog of Flutter widgets](https://docs.flutter.dev/ui/widgets) to find a suitable widget for this task. You may instead consider using the desktop version of your AI tool or a CLI-based AI tool that can access your files directly. For more information on this, visit [worksheet 3](./worksheet-3.md).
 
     Remember not to implement a separate page or a permanent UI for the cart in the home page yet. We will do that in a later exercise. So far, we are only concerned with displaying the confirmation message. Once you are done, update the widget tests to reflect your changes.
 

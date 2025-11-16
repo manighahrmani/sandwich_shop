@@ -128,7 +128,9 @@ Take a moment to read this structure. Use your AI assistant to find out the answ
 - "What does the underscore prefix on `_OrderScreenState` and `_quantity` mean in Dart?"
 - "Why does the `<OrderScreen>` mean after the `State` class?"
 
-Remember if you are using a Large Language Model (LLM) on the browser, like ChatGPT, you need to provide the code snippets as well as your questions. Alternatively use Copilot which you can open in VS Code by selecting the code snippet and pressing **Ctrl + I** in Windows or **⌘ + I** in macOS.
+Remember if you are using a Large Language Model (LLM) on the browser, like ChatGPT, you need to provide the code snippets as well as your questions. Although the desktop versions of some LLMs can access your files directly, see for example [this article on how ChatGPT's desktop app can access files on macOS](https://help.openai.com/en/articles/10119604-work-with-apps-on-macos). There are also Command Line Interfaces (CLIs) for some LLMs that can access your files directly, for example [Claude Code](https://www.claude.com/product/claude-code), [Gemini CLI](https://geminicli.com) and [ChatGPT's Codex CLI](https://developers.openai.com/codex/cli/).
+
+Alternatively use Copilot which you can open in VS Code by selecting the code snippet and pressing **Ctrl + I** in Windows or **⌘ + I** in macOS.
 
 ### **Commit your changes (2)**
 
