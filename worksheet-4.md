@@ -530,6 +530,8 @@ Complete the exercises below. Remember to commit your changes after each exercis
    - A brief description of what your app does and its main features
    - Any screenshots you've taken of your app
 
+   Alternatively, use the desktop version of your AI tool or a CLI-based AI tool that can access your files directly. For more information on this, visit [worksheet 3](./worksheet-3.md).
+
    Once you have a generated README, carefully review it against the quality criteria mentioned in the last section of the worksheet. Is it accurate? Is it complete? Do the instructions work? Do you need to customise anything (feel free to ask the AI to refine the document further).
 
    ⚠️ **Show your README.md file to a member of staff** for a sign-off. If you do attempt any other exercises, remember to update the README accordingly.
