@@ -14,7 +14,7 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 | 03/11/2025 | 07/11/2025 | 14 | Worksheet 4 | 2, 3 | Coursework intro |
 | 10/11/2025 | 14/11/2025 | 15 | Worksheet 5 | 3, 4 | Test-Driven Development |
 | 17/11/2025 | 21/11/2025 | 16 | Worksheet 6 | 4, 5 | More AI-Driven Development |
-| 24/11/2025 | 28/11/2025 | 17 | Worksheet 7 | 5, 6 | Firebase |
+| 24/11/2025 | 28/11/2025 | 17 | Worksheet 7 | 5, 6 | Persistence, Firebase |
 | 01/12/2025 | 05/12/2025 | 18 | Worksheet 8 | 6, 7, Demo | Coursework support drop-in |
 | 08/12/2025 | 12/12/2025 | 19 | None | 7, 8, Demo | Coursework support drop-in |
 | 15/12/2025 | 19/12/2025 | 20 | None | 8, Demo | Coursework support drop-in |
