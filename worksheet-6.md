@@ -548,9 +548,9 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     By the end of this exercise, you should have created a `ProfileScreen` in a new `lib/views/profile_screen.dart` file. There's no need to perform any actual authentication or data persistence yet.
 
-    Make sure to write widget tests for your new profile screen.
+    Make sure to write widget tests for your new profile screen too.
 
-    ⚠️ **Show your working profile screen to a member of staff** for a sign-off.
+    ⚠️ **Show your working profile screen and associated test(s) to a member of staff** for a sign-off.
 
 2. Let's enhance our app's navigation by adding a `Drawer` menu. A `Drawer` is a panel that slides in from the edge of a `Scaffold` to show the app's main navigation options. You can read more about it in its [documentation page](https://api.flutter.dev/flutter/material/Drawer-class.html).
 
@@ -562,7 +562,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     As always, update your widget tests to cover the new navigation drawer functionality.
 
-    ⚠️ **Show your working navigation drawer to a member of staff** for a sign-off.
+    ⚠️ **Show your working navigation drawer and associated test(s) to a member of staff** for a sign-off.
 
 3. (Advanced) Configure your app to handle [deep links](https://docs.flutter.dev/ui/navigation/deep-linking) using `go_router`, which is the recommended approach for URL-based navigation in Flutter.
 
