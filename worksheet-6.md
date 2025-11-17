@@ -544,7 +544,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
 1. Add one new screen to your app. This can be a profile or sign-up/sign-in screen where users can enter and/or view their details. For now, you can add a link to this screen at the bottom of your order screen (we will fix this in the next exercise). There's no need to perform any actual authentication or data persistence yet.
 
-    As we did earlier in this worksheet, use your AI assistant to help you write a prompt for this feature.
+    As we did earlier in this worksheet, use your AI assistant and have it write you a prompt for this feature and update or append to the `requirements.md` file accordingly. Verify/update the changes in `requirements.md` before using it to implement the feature.
 
     Make sure to write widget tests for your new profile screen too.
 
@@ -552,13 +552,13 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
 2. Let's enhance our app's navigation by adding a `Drawer` menu. A `Drawer` is a panel that slides in from the edge of a `Scaffold` to show the app's main navigation options. You can read more about it in its [documentation page](https://api.flutter.dev/flutter/material/Drawer-class.html).
 
-    Ask your AI assistant to explain how `Drawer` widgets work and how they integrate with the `AppBar`. Could you make this drawer accessible from all screens in your app? Is there any way to reduce the redundant code that this creates?
+    Ask your AI assistant to explain how `Drawer` widgets work and how they integrate with the `AppBar`. Could you make this drawer accessible from all screens in your app? Is there any way to reduce the redundant code that this creates? As before, use your AI assistant to update the `requirements.md` with this new feature.
 
     As an extra challenge, make the navigation of your website responsive (different screen widths should make the navigation look and act differently). (Re)visit exercise 6 from [Worksheet 2](./worksheet-2.md) for a hint on how to make your app responsive. Try opening different websites and checking out how their nagivation changes when opened on mobile view versus a desktop view.
 
     As always, update your widget tests to cover the new navigation drawer (or generally, navigation) functionality.
 
-    ⚠️ **Show your working navigation and associated test(s) to a member of staff** for a sign-off.
+    ⚠️ **Show your `requirements.md`, working navigation and associated test(s) to a member of staff** for a sign-off.
 
 3. (Advanced) Configure your app to handle [deep links](https://docs.flutter.dev/ui/navigation/deep-linking) using `go_router`, which is the recommended approach for URL-based navigation in Flutter.
 
