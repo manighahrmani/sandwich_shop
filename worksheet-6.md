@@ -556,6 +556,8 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     As an extra challenge, make the navigation of your website responsive (different screen widths should make the navigation look and act differently). (Re)visit exercise 6 from [Worksheet 2](./worksheet-2.md) for a hint on how to make your app responsive. Try opening different websites and checking out how their nagivation changes when opened on mobile view versus a desktop view.
 
+    Make sure to add this new task to the `requirements.md` instead of creating a new one. The existing information and completed tasks should technically speed up the implementation of the new feature and make it more consistant.
+
     As always, update your widget tests to cover the new navigation drawer (or generally, navigation) functionality.
 
     ⚠️ **Show your `requirements.md`, working navigation and associated test(s) to a member of staff** for a sign-off.
