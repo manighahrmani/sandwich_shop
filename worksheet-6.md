@@ -542,27 +542,23 @@ Test this by running your app in a web browser and typing `localhost:PORT/#/abou
 
 Complete the exercises below. Remember to commit your changes after each exercise.
 
-1. Let's add a simple profile screen where users can enter their details. For now, you can add a link to this screen at the bottom of your order screen (we will improve this in the next exercise).
+1. Add one new screen to your app. This can be a profile or sign-up/sign-in screen where users can enter and/or view their details. For now, you can add a link to this screen at the bottom of your order screen (we will fix this in the next exercise). There's no need to perform any actual authentication or data persistence yet.
 
     As we did earlier in this worksheet, use your AI assistant to help you write a prompt for this feature.
 
-    By the end of this exercise, you should have created a `ProfileScreen` in a new `lib/views/profile_screen.dart` file. There's no need to perform any actual authentication or data persistence yet.
-
     Make sure to write widget tests for your new profile screen too.
 
-    ⚠️ **Show your working profile screen and associated test(s) to a member of staff** for a sign-off.
+    ⚠️ **Show your `requirements.md`, profile screen and associated test(s) to a member of staff** for a sign-off.
 
 2. Let's enhance our app's navigation by adding a `Drawer` menu. A `Drawer` is a panel that slides in from the edge of a `Scaffold` to show the app's main navigation options. You can read more about it in its [documentation page](https://api.flutter.dev/flutter/material/Drawer-class.html).
 
-    Implement a drawer that includes navigation to your order screen, cart view, and profile screen.
+    Ask your AI assistant to explain how `Drawer` widgets work and how they integrate with the `AppBar`. Could you make this drawer accessible from all screens in your app? Is there any way to reduce the redundant code that this creates?
 
-    Ask your AI assistant to explain how `Drawer` widgets work and how they integrate with the `AppBar`. Could you make this drawer accessible from all screens in your app?
+    As an extra challenge, make the navigation of your website responsive (different screen widths should make the navigation look and act differently). (Re)visit exercise 6 from [Worksheet 2](./worksheet-2.md) for a hint on how to make your app responsive. Try opening different websites and checking out how their nagivation changes when opened on mobile view versus a desktop view.
 
-    Consider how the drawer should behave when navigating. Ask your AI assistant about the difference between `Navigator.push()` and `Navigator.pushReplacement()` in this context.
+    As always, update your widget tests to cover the new navigation drawer (or generally, navigation) functionality.
 
-    As always, update your widget tests to cover the new navigation drawer functionality.
-
-    ⚠️ **Show your working navigation drawer and associated test(s) to a member of staff** for a sign-off.
+    ⚠️ **Show your working navigation and associated test(s) to a member of staff** for a sign-off.
 
 3. (Advanced) Configure your app to handle [deep links](https://docs.flutter.dev/ui/navigation/deep-linking) using `go_router`, which is the recommended approach for URL-based navigation in Flutter.
 
