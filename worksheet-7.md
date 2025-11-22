@@ -1208,7 +1208,9 @@ For more complex data that requires querying and relationships, use SQLite. This
 
 SQLite is similar to PostgreSQL but simpler. Like PostgreSQL, you create tables with columns and data types, but SQLite is embedded in your app rather than running as a separate server.
 
-In this section, which **is completely optional to do**, we will implement a simple order history feature using SQLite. For more information on SQLite, see the [official documentation](https://docs.flutter.dev/cookbook/persistence/sqlite).
+Note that the `sqflite` package works on Android, iOS, and macOS, but does not support web. For web applications, you would need to use `sqflite_common_ffi_web` or consider alternatives like `shared_preferences` for simple data (as covered in [Worksheet 6](worksheet-6.md)) or cloud-based solutions. For your coursework, which targets web, the ideal solution for complex data storage is Firebase, which we will cover in [Worksheet 8](worksheet-8.md).
+
+In this section, which **is completely optional to do**, we will implement a simple order history feature using SQLite. For more information on SQLite, see the [official documentation](https://docs.flutter.dev/cookbook/persistence/sqlite). There are cross-platform SQLite support provided through packages like [`sqflite_common_ffi`](https://pub.dev/packages/sqflite_common_ffi) and [`sqflite_common_ffi_web`](https://pub.dev/packages/sqflite_common_ffi_web) packages although we have not tried them (and nor do we recommend them for your coursework).
 
 Start by adding the required packages to your project with the following command. [`sqflite`](https://pub.dev/packages/sqflite) is the SQLite plugin for Flutter, and [`path`](https://pub.dev/packages/path) helps with the location of the database file:
 
