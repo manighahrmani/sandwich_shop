@@ -44,6 +44,121 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 
+  void _editItem(Sandwich sandwich) async {
+    SandwichType selectedType = sandwich.type;
+    bool isFootlong = sandwich.isFootlong;
+    BreadType selectedBread = sandwich.breadType;
+
+    String _sandwichName(SandwichType type) {
+      return Sandwich(
+        type: type,
+        isFootlong: true,
+        breadType: BreadType.white,
+      ).name;
+    }
+
+    final Sandwich? updated = await showModalBottomSheet<Sandwich>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
+          child: StatefulBuilder(
+            builder: (context, setModalState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Edit item', style: heading2),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<SandwichType>(
+                    value: selectedType,
+                    decoration:
+                        const InputDecoration(labelText: 'Sandwich type'),
+                    items: SandwichType.values
+                        .map(
+                          (type) => DropdownMenuItem(
+                            value: type,
+                            child: Text(_sandwichName(type)),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setModalState(() => selectedType = value);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Footlong'),
+                    value: isFootlong,
+                    onChanged: (value) =>
+                        setModalState(() => isFootlong = value),
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<BreadType>(
+                    value: selectedBread,
+                    decoration: const InputDecoration(labelText: 'Bread type'),
+                    items: BreadType.values
+                        .map(
+                          (bread) => DropdownMenuItem(
+                            value: bread,
+                            child: Text(bread.name),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setModalState(() => selectedBread = value);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                      const SizedBox(width: 12),
+                      ElevatedButton(
+                        onPressed: () {
+                          final updatedSandwich = Sandwich(
+                            type: selectedType,
+                            isFootlong: isFootlong,
+                            breadType: selectedBread,
+                          );
+                          Navigator.pop(context, updatedSandwich);
+                        },
+                        child: const Text('Save changes'),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+
+    if (!mounted || updated == null) return;
+
+    setState(() {
+      widget.cart.updateItem(sandwich, updated);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Updated ${sandwich.name} to ${updated.name}')),
+    );
+  }
+
   void _removeItem(Sandwich sandwich) {
     final removedQty = widget.cart.getQuantity(sandwich);
     if (removedQty == 0) return;
@@ -158,13 +273,21 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                             ],
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton.icon(
-                              onPressed: () => _removeItem(entry.key),
-                              icon: const Icon(Icons.delete_outline),
-                              label: const Text('Remove'),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton.icon(
+                                onPressed: () => _editItem(entry.key),
+                                icon: const Icon(Icons.edit_outlined),
+                                label: const Text('Edit'),
+                              ),
+                              const SizedBox(width: 8),
+                              TextButton.icon(
+                                onPressed: () => _removeItem(entry.key),
+                                icon: const Icon(Icons.delete_outline),
+                                label: const Text('Remove'),
+                              ),
+                            ],
                           ),
                         ],
                       ),

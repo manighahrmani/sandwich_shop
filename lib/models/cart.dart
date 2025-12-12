@@ -28,6 +28,21 @@ class Cart {
     }
   }
 
+  void updateItem(Sandwich oldSandwich, Sandwich newSandwich) {
+    if (!_items.containsKey(oldSandwich)) {
+      return;
+    }
+
+    final quantity = _items[oldSandwich]!;
+    _items.remove(oldSandwich);
+
+    if (_items.containsKey(newSandwich)) {
+      _items[newSandwich] = _items[newSandwich]! + quantity;
+    } else {
+      _items[newSandwich] = quantity;
+    }
+  }
+
   void setQuantity(Sandwich sandwich, int quantity) {
     if (quantity <= 0) {
       _items.remove(sandwich);
