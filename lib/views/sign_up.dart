@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'app_styles.dart';
+import 'about_screen.dart';
+import 'cart_screen.dart';
+import 'order_screen.dart';
+import 'checkout_screen.dart';
+import '../models/cart.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -77,6 +82,86 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Account'),
+      ),
+      drawer: Drawer(
+        child: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(color: Colors.green),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text('Sandwich Shop', style: heading1),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.person_add),
+                title: const Text('Sign Up'),
+                subtitle: const Text('Create your account'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  // Already on Sign Up; show hint
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('You are on Sign Up.')),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.login),
+                title: const Text('Login'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Navigate to Login (placeholder)')),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.info_outline),
+                title: const Text('About'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const AboutScreen()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.shopping_cart),
+                title: const Text('Cart'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => CartScreen(cart: Cart())),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.fastfood),
+                title: const Text('Order'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const OrderScreen()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.payment),
+                title: const Text('Checkout'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => CheckoutScreen(cart: Cart())),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

@@ -89,6 +89,12 @@
 - Users can update non-sensitive profile fields without re-auth.
 - Changing email or password requires re-auth and triggers appropriate flows.
 - All forms are accessible, localized-ready, and show clear validation.
+
+### Navigation (Drawer) to Sign Up
+- **Availability:** A drawer menu is accessible via the AppBar hamburger on main customer screens (e.g., Order, Cart, Checkout, About).
+- **Entry:** Drawer includes a “Sign Up” item that navigates to the Sign Up screen.
+- **Context awareness:** If already on Sign Up, tapping the item provides a non-destructive hint (e.g., toast/snackbar) instead of re-pushing.
+- **Persistence:** Drawer remains available across the listed screens so users can reach Sign Up at any time before checkout.
 Cart Modification Requirements
 
 Subtask 1: Feature Description & Purpose

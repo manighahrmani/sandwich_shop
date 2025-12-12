@@ -3,6 +3,7 @@ import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/views/cart_screen.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
+import 'app_drawer.dart';
 
 class OrderScreen extends StatefulWidget {
   final int maxQuantity;
@@ -123,18 +124,26 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: 100,
-            child: Image.asset('assets/images/logo.png'),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            tooltip: 'Menu',
           ),
         ),
-        title: const Text(
-          'Sandwich Counter',
-          style: heading1,
+        title: Row(
+          children: [
+            SizedBox(
+              height: 32,
+              width: 32,
+              child: Image.asset('assets/images/logo.png'),
+            ),
+            const SizedBox(width: 8),
+            const Text('Sandwich Counter', style: heading1),
+          ],
         ),
       ),
+      drawer: const AppDrawer(),
       body: Center(
         child: SingleChildScrollView(
           child: Column(

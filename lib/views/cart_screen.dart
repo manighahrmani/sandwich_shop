@@ -5,6 +5,7 @@ import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/pricing_repository.dart';
 import 'package:sandwich_shop/views/checkout_screen.dart';
+import 'app_drawer.dart';
 
 class CartScreen extends StatefulWidget {
   final Cart cart;
@@ -244,18 +245,26 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: 100,
-            child: Image.asset('assets/images/logo.png'),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            tooltip: 'Menu',
           ),
         ),
-        title: const Text(
-          'Cart View',
-          style: heading1,
+        title: Row(
+          children: [
+            SizedBox(
+              height: 32,
+              width: 32,
+              child: Image.asset('assets/images/logo.png'),
+            ),
+            const SizedBox(width: 8),
+            const Text('Cart View', style: heading1),
+          ],
         ),
       ),
+      drawer: const AppDrawer(),
       body: Center(
         child: SingleChildScrollView(
           child: Column(

@@ -269,6 +269,34 @@ void main() {
     });
   });
 
+  group('OrderScreen - Drawer navigation', () {
+    testWidgets('drawer shows Sign Up entry', (WidgetTester tester) async {
+      const OrderScreen orderScreen = OrderScreen();
+      const MaterialApp app = MaterialApp(home: orderScreen);
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.byTooltip('Menu'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sign Up'), findsOneWidget);
+    });
+
+    testWidgets('tapping Sign Up navigates to Sign Up screen',
+        (WidgetTester tester) async {
+      const OrderScreen orderScreen = OrderScreen();
+      const MaterialApp app = MaterialApp(home: orderScreen);
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.byTooltip('Menu'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Sign Up'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Create Account'), findsOneWidget);
+    });
+  });
+
   group('StyledButton', () {
     testWidgets('renders correctly with icon and label when enabled',
         (WidgetTester tester) async {
