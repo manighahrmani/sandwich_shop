@@ -1,3 +1,94 @@
+## User Signup & Profile Requirements
+
+- **Goal:** Enable new users to create an account quickly and manage a basic profile for ordering and tracking.
+
+### Signup
+- **Fields (required):** `email`, `password`, `firstName`, `lastName`.
+- **Fields (optional):** `phone`, `marketingOptIn` (boolean).
+- **Validation:**
+	- `email`: valid format, unique in system.
+	- `password`: minimum 8 chars, at least 1 letter and 1 number.
+	- `firstName`/`lastName`: 1–50 chars, alphabetic plus basic punctuation.
+	- `phone` (if provided): E.164 format or local format with country default.
+- **UX:**
+	- Real-time validation with inline error messages.
+	- Password visibility toggle.
+	- Link to Login and “Forgot password”.
+	- Submit disabled until valid; loading state on submit.
+- **Security:**
+	- Hash passwords using a strong algorithm (e.g., bcrypt/argon2).
+	- Rate-limit signup attempts to mitigate abuse.
+	- Email verification link required before first order; resend verification.
+	- CSRF protection for form posts.
+- **Privacy & Consent:**
+	- Show Terms of Service and Privacy Policy links.
+	- Explicit checkbox for marketingOptIn (unchecked by default).
+
+### Login (related)
+- **Fields:** `email`, `password`.
+- **Controls:** “Remember me” (30-day session), “Forgot password”.
+- **Security:** Account lockout after N failed attempts; device-based session tokens; secure cookie storage.
+
+### Profile
+- **View/Update:** `firstName`, `lastName`, `email` (read-only until verified), `phone`, `marketingOptIn`.
+- **Avatar (optional):** Upload JPG/PNG ≤ 2MB; square crop; stored in CDN/static bucket.
+- **Addresses (optional, if needed for orders):**
+	- Manage list of delivery addresses: `label`, `street`, `city`, `state`, `postalCode`, `country`.
+	- Set one address as default.
+- **Security:**
+	- Re-auth required to change sensitive fields (email, password).
+	- Email change triggers re-verification and disables orders until confirmed.
+
+### Password Management
+- **Change Password:** Current password + new password with same policy; success toast.
+- **Reset Password:** Email flow with time-limited token (15–60 min); single-use.
+
+### Verification
+- **Email Verification:**
+	- Send signed token with userId + expiry.
+	- Verification status displayed in profile; option to resend.
+	- Block checkout if unverified; allow browsing/cart.
+
+### Accessibility & i18n
+- **A11y:** Form labels, ARIA for errors, keyboard navigable.
+- **Localization:** Copy and validation errors translatable; phone formats per locale.
+
+### Telemetry & Analytics
+- **Events:** `SignupStarted`, `SignupCompleted`, `SignupFailed`, `EmailVerified`, `ProfileUpdated`, `PasswordChanged`.
+- **PII Handling:** Do not log raw email/phone; use hashed IDs where possible.
+
+### Error States
+- **Common Errors:** Duplicate email, weak password, invalid token, network failure.
+- **Handling:** Clear messages, non-destructive; allow retry; support contact link.
+
+### Non-Functional
+- **Performance:** Form submit round-trip < 1s on typical network.
+- **Scalability:** Support burst signups; background email delivery.
+- **Reliability:** Verification and reset tokens stored server-side with audit trail.
+
+### APIs (high level)
+- `POST /api/auth/signup`: create account; returns userId & verification status.
+- `POST /api/auth/login`: authenticate; returns session token.
+- `POST /api/auth/verify-email`: confirm via token.
+- `POST /api/auth/password/reset/request`: start reset.
+- `POST /api/auth/password/reset/confirm`: finalize reset.
+- `GET /api/profile`: get profile.
+- `PUT /api/profile`: update profile.
+- `GET /api/addresses`: list addresses.
+- `POST /api/addresses`: add address.
+- `PUT /api/addresses/{id}`: update address.
+- `DELETE /api/addresses/{id}`: remove address.
+
+### Data Model (simplified)
+- **User:** `id`, `email`, `passwordHash`, `firstName`, `lastName`, `phone?`, `emailVerifiedAt?`, `marketingOptIn` (bool), `createdAt`, `updatedAt`.
+- **Address:** `id`, `userId`, `label`, `street`, `city`, `state`, `postalCode`, `country`, `isDefault` (bool), `createdAt`, `updatedAt`.
+
+### Acceptance Criteria
+- User can create account with valid details and receives verification email.
+- Unverified users cannot complete checkout; verified users can.
+- Users can update non-sensitive profile fields without re-auth.
+- Changing email or password requires re-auth and triggers appropriate flows.
+- All forms are accessible, localized-ready, and show clear validation.
 Cart Modification Requirements
 
 Subtask 1: Feature Description & Purpose
