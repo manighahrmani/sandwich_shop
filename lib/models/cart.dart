@@ -1,11 +1,13 @@
-import 'sandwich.dart';
 import 'package:sandwich_shop/repositories/pricing_repository.dart';
+import 'sandwich.dart';
 
 class Cart {
   final Map<Sandwich, int> _items = {};
 
   // Returns a read-only copy of the items and their quantities
   Map<Sandwich, int> get items => Map.unmodifiable(_items);
+
+  bool contains(Sandwich sandwich) => _items.containsKey(sandwich);
 
   void add(Sandwich sandwich, {int quantity = 1}) {
     if (_items.containsKey(sandwich)) {
@@ -26,6 +28,18 @@ class Cart {
     }
   }
 
+  void setQuantity(Sandwich sandwich, int quantity) {
+    if (quantity <= 0) {
+      _items.remove(sandwich);
+      return;
+    }
+    _items[sandwich] = quantity;
+  }
+
+  void removeItem(Sandwich sandwich) {
+    _items.remove(sandwich);
+  }
+
   void clear() {
     _items.clear();
   }
@@ -43,6 +57,18 @@ class Cart {
     }
 
     return total;
+  }
+
+  double lineTotal(Sandwich sandwich) {
+    if (!_items.containsKey(sandwich)) {
+      return 0;
+    }
+    final pricingRepository = PricingRepository();
+    final quantity = _items[sandwich]!;
+    return pricingRepository.calculatePrice(
+      quantity: quantity,
+      isFootlong: sandwich.isFootlong,
+    );
   }
 
   bool get isEmpty => _items.isEmpty;

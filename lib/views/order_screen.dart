@@ -81,7 +81,7 @@ class _OrderScreenState extends State<OrderScreen> {
       MaterialPageRoute<void>(
         builder: (BuildContext context) => CartScreen(cart: _cart),
       ),
-    );
+    ).then((_) => setState(() {}));
   }
 
   List<DropdownMenuEntry<SandwichType>> _buildSandwichTypeEntries() {
