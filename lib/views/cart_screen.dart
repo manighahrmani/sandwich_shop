@@ -44,6 +44,31 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 
+  void _removeItem(Sandwich sandwich) {
+    final removedQty = widget.cart.getQuantity(sandwich);
+    if (removedQty == 0) return;
+
+    setState(() {
+      widget.cart.removeItem(sandwich);
+    });
+
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text('Removed $removedQty x ${sandwich.name} from your cart'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              widget.cart.add(sandwich, quantity: removedQty);
+            });
+          },
+        ),
+      ),
+    );
+  }
+
   String _getSizeText(bool isFootlong) {
     if (isFootlong) {
       return 'Footlong';
@@ -132,6 +157,14 @@ class _CartScreenState extends State<CartScreen> {
                                 style: heading2,
                               ),
                             ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton.icon(
+                              onPressed: () => _removeItem(entry.key),
+                              icon: const Icon(Icons.delete_outline),
+                              label: const Text('Remove'),
+                            ),
                           ),
                         ],
                       ),
