@@ -1,0 +1,13 @@
+{
+  "name": "Pre-push CI checks",
+  "version": "1.0.0",
+  "description": "Run spell check, markdown lint, Dart format, and Dart analyse before any push to ensure CI will pass.",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": ["shell"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "If the command being executed is a git push, first run the following checks and only proceed with the push if they all pass:\n1. cspell \"**/*.md\" \"**/*.dart\" --locale en-GB --config cspell.json\n2. markdownlint \"**/*.md\" --config .markdownlint.json\n3. dart format --set-exit-if-changed .\n4. flutter analyze\n5. flutter test\nIf any check fails, fix the issues before pushing."
+  }
+}
