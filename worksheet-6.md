@@ -554,7 +554,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     Ask your AI assistant to explain how `Drawer` widgets work and how they integrate with the `AppBar`. Could you make this drawer accessible from all screens in your app? Is there any way to reduce the redundant code that this creates? As an extra challenge, make the navigation of your website responsive (different screen widths should make the navigation look and act differently). (Re)visit exercise 6 from [Worksheet 2](./worksheet-2.md) for a hint.
 
-    Make sure to add this new task to the `requirements.md` instead of creating a new one. The existing information and completed tasks should technically speed up the implementation of the new feature and make it more consistant.
+    Make sure to add this new task to the `requirements.md` instead of creating a new one. The existing information and completed tasks should technically speed up the implementation of the new feature and make it more consistent.
 
     As always, update your widget tests to cover the new navigation drawer (or generally, navigation) functionality.
 

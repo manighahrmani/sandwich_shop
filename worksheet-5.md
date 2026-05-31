@@ -482,7 +482,7 @@ There are several ways to store data in general.
 
 Worksheet 7 will discuss structured data sources. As for the other two categories, a Flutter project will typically use one of the following:
 
-- **Plain text files** - Unstructure but simple
+- **Plain text files** - Unstructured but simple
 - **JSON files** - (Semi-)structured but easy to parse and widely used
 - **CSV files** - (Semi-)structured, good for tabular data, easy to edit
 - **YAML files** - (Semi-)structured, human-readable, good for configuration
