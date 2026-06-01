@@ -1,0 +1,29 @@
+#!/bin/sh
+# Enforces Conventional Commits format on the subject line.
+# Activate with: git config core.hooksPath .githooks
+#
+# Format:  type(scope): subject
+# Types:   feat | fix | docs | style | refactor | test | chore | ci
+# Scope:   optional, lowercase alphanumeric + hyphens, e.g. (ui) (worksheet-1)
+# Subject: non-empty, max 72 characters on the subject line
+
+subject=$(head -1 "$1")
+pattern='^(feat|fix|docs|style|refactor|test|chore|ci)(\([a-z][a-z0-9-]*\))?: .+'
+
+if ! echo "$subject" | grep -qE "$pattern"; then
+  printf '\n  Commit rejected: message must follow Conventional Commits.\n'
+  printf '  Format:   type(scope): subject\n'
+  printf '  Types:    feat  fix  docs  style  refactor  test  chore  ci\n'
+  printf '  Scope:    optional, e.g. (ui)  (worksheet-1)  (ci)\n\n'
+  printf '  Examples:\n'
+  printf '    feat(ui): add login screen\n'
+  printf '    fix: correct typo in worksheet-3\n'
+  printf '    docs(readme): update setup instructions\n\n'
+  printf '  Your message: %s\n\n' "$subject"
+  exit 1
+fi
+
+if [ ${#subject} -gt 72 ]; then
+  printf '\n  Commit rejected: subject line is %d chars (max 72).\n\n' "${#subject}"
+  exit 1
+fi
