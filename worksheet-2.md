@@ -276,7 +276,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     At any moment, you can hover your mouse over the `TextStyle` class to see what properties it accepts. Once you have found the properties you want to change, write them inside the `TextStyle` constructor (e.g., `TextStyle(property: value)`).
 
-    If you get stuck, try the shortcut **Ctrl + Space** on Windows or **⌘ + Space** on macOS to see suggestions for properties you can use. Below, we have for example found out that color is a property of `TextStyle` that accepts an instance of `Color` class. Try not to use an AI assistant to complete this task.
+    If you get stuck, try the shortcut **Ctrl + Space** on Windows or **⌘ + Space** on macOS to see suggestions for properties you can use. Below, we have for example found out that `color` is a property of `TextStyle` that accepts an instance of the `Color` class. Try not to use an AI assistant to complete this task.
 
     ![TextStyle Properties](images/screenshot_suggestion.jpg)
 
