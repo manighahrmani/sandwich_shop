@@ -7,44 +7,49 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-spellcheck:
+  pre-commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-python@v5
         with:
-          node-version: "20"
-
-      - name: Install cspell and markdownlint
-        run: npm install -g cspell markdownlint-cli
-
-      - name: Spell check (British English)
-        run: cspell "**/*.md" "**/*.dart" --locale en-GB --config cspell.json
-
-      - name: Lint Markdown
-        run: markdownlint "**/*.md" --config .markdownlint.json
+          python-version: "3.x"
+      - name: Install pre-commit
+        run: pip install pre-commit
+      - name: Run pre-commit hooks
+        run: pre-commit run --all-files
 
   dart-lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
-
+      - name: Check for pubspec.yaml
+        id: check_pubspec
+        run: |
+          if [ -f "pubspec.yaml" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Set up Flutter
+        if: steps.check_pubspec.outputs.exists == 'true'
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.x"
           channel: stable
-
       - name: Install dependencies
+        if: steps.check_pubspec.outputs.exists == 'true'
         run: flutter pub get
-
       - name: Check Dart formatting
+        if: steps.check_pubspec.outputs.exists == 'true'
         run: dart format --set-exit-if-changed .
-
       - name: Analyse Dart code
+        if: steps.check_pubspec.outputs.exists == 'true'
         run: flutter analyze
-
       - name: Run tests
+        if: steps.check_pubspec.outputs.exists == 'true'
         run: flutter test

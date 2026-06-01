@@ -521,7 +521,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
    Include: ...
    ```
 
-   Copilot has access to your entire codebase, so it can analyze your project structure, dependencies, and code to create accurate documentation. If this is not automatically and the output is generic and ambiguous, you need to manually attach (the `#` symbol) the files that you consider important for Copilot to read. Remember you can provide Copilot screenshots too.
+   Copilot has access to your entire codebase, so it can analyse your project structure, dependencies, and code to create accurate documentation. If this is not automatically and the output is generic and ambiguous, you need to manually attach (the `#` symbol) the files that you consider important for Copilot to read. Remember you can provide Copilot screenshots too.
 
    If you're using a browser-based AI, you'll need to provide context since it can't see your files. Gather the following information to share with the AI:
 

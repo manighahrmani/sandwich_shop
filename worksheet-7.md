@@ -1140,7 +1140,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 ```
 
-Next, we need to initialize the font size when the app starts. Update `lib/main.dart` to load the saved font size:
+Next, we need to initialise the font size when the app starts. Update `lib/main.dart` to load the saved font size:
 
 ```dart
 import 'package:flutter/material.dart';
