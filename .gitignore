@@ -1,3 +1,26 @@
+# macOS
 .DS_Store
+
+# VS Code
 .vscode/
+
+# Scratch / personal notes
 prompt.md
+
+# Python
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.venv/
+venv/
+
+# Flutter / Dart
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+*.g.dart
+
+# Node.js (used by markdownlint / cspell tooling)
+node_modules/
