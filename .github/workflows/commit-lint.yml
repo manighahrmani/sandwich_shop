@@ -26,7 +26,7 @@ jobs:
               echo "INVALID: $msg"
               failed=1
             fi
-          done < <(git log --format='%s' "origin/${{ github.base_ref }}..HEAD")
+          done < <(git log --format='%s' "origin/${{ github.base_ref }}..${{ github.event.pull_request.head.sha }}")
 
           if (( failed )); then
             echo ""
