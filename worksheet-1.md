@@ -332,13 +332,13 @@ Lastly, let's put our project on GitHub to track changes and back it up online.
 
 #### **Initialising the repository**
 
-You should ignore this step if you are using Firebase Studio as it already initializes a Git repository for you. Skip to [Making the first commit](#making-the-first-commit).
+You should ignore this step if you are using Firebase Studio as it already initialises a Git repository for you. Skip to [Making the first commit](#making-the-first-commit).
 
 In the Activity Bar on the left, click the Source Control icon. Click on `Initialize Repository` to set up Git for your project.
 
 ![Source Control Panel](images/screenshot_vscode_source_control.jpg)
 
-Alternatively, you can run the following command in the terminal to initialize Git:
+Alternatively, you can run the following command in the terminal to initialise Git:
 
 ```bash
 git init
