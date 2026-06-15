@@ -29,7 +29,7 @@ node_modules/
 union_shop/
 
 # Moodle Clone Coursework Template and Marking Tool
-moodle_clone/
+moodle/
 moodle_private/
 marking_tools/
 .marking_temp/
