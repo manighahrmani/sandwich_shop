@@ -24,3 +24,13 @@ build/
 
 # Node.js (used by markdownlint / cspell tooling)
 node_modules/
+
+# Cloned reference coursework
+union_shop/
+
+# Moodle Clone Coursework Template and Marking Tool
+moodle_clone/
+moodle_private/
+marking_tools/
+.marking_temp/
+marking_reports/
