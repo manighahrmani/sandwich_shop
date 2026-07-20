@@ -34,3 +34,7 @@ moodle_private/
 marking_tools/
 .marking_temp/
 marking_reports/
+
+# Southsea Cinema coursework templates
+southsea_cinema/
+southsea_cinema_private/
