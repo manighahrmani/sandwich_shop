@@ -10,6 +10,8 @@ execution and freeze the agent session. Examples of banned patterns:
 - Any command with `--watch` or `--interactive` flags
 - `vim`, `nano`, `less`, `more`, or any interactive editor
 - `python -m http.server` or similar persistent servers
+- Inline scripts via `python3 -c "..."` or `<<'EOF'` syntax. Write a temp
+  file instead and run it with `python3 /tmp/script.py`
 
 If a dev server or long-running process is needed, **tell the user the exact
 command to run in their own terminal**. Do not start it yourself.
