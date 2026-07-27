@@ -34,6 +34,10 @@ moodle_private/
 marking_tools/
 .marking_temp/
 marking_reports/
+moodle_submissions/
+
+# Sensitive marking steering (not for students)
+.kiro/steering/marking-workflow.md
 
 # Southsea Cinema coursework templates
 southsea_cinema/
