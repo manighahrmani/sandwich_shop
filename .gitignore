@@ -36,6 +36,9 @@ marking_tools/
 marking_reports/
 moodle_submissions/
 
+# Separate nested repo, contains student names/emails. Not part of this repo.
+sign-off-app/
+
 # Sensitive marking steering (not for students)
 .kiro/steering/marking-workflow.md
 
