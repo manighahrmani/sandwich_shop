@@ -42,6 +42,10 @@ sign-off-app/
 # Sensitive marking steering (not for students)
 .kiro/steering/marking-workflow.md
 
+# Root agent instructions: reference private marking tooling, local only.
+# Root-anchored so .agents/AGENTS.md is unaffected.
+/AGENTS.md
+
 # Southsea Cinema coursework templates
 southsea_cinema/
 southsea_cinema_private/
