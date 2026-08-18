@@ -16,3 +16,9 @@ This applies to code files, configuration files, test suites, and documentation.
    - For laboratory exercises and coursework evaluation, SQLite is executed in WebAssembly using `sqflite_common_ffi_web` with `databaseFactoryFfiWebNoWebWorker`.
    - **Active Session CRUD**: All standard SQL operations (`CREATE TABLE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`, transactions) execute live in-memory during the web session so students can verify and grade functional database operations.
    - **Cloud Persistence**: For persistent, cross-device data storage in advanced coursework, students are directed to use cloud solutions such as Firebase.
+
+## Response Style & Brevity
+
+- Keep replies to the absolute minimum.
+- Do not ramble, over-explain, or provide lengthy detailed outputs unless explicitly requested.
+- State findings, actions, and solutions directly and concisely.
