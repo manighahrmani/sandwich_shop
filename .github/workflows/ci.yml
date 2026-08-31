@@ -53,3 +53,19 @@ jobs:
       - name: Run tests
         if: steps.check_pubspec.outputs.exists == 'true'
         run: flutter test
+
+  link-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check markdown links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --accept 200,201,202,203,204,206,301,302,303,304,307,308,403,429,999
+            "**/*.md"
+          # TODO(#23): flip to true once the pre-existing broken links are fixed
+          fail: false

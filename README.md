@@ -4,27 +4,28 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 
 ## **Schedule**
 
-| Week Commencing | Week Ending | [CMIS](https://timetabling.port.ac.uk) Week | Worksheet | Sign-off Deadline | Lecture Topics (ish!) |
-|-----------------|-------------|-----------|-----------|-----------------------------|---------------------------------|
-| 29/09/2025 | 03/10/2025 | 9 | Worksheet 0 | | GitHub intro |
-| 06/10/2025 | 10/10/2025 | 10 | Worksheet 1 | 0 | Flutter intro |
-| 13/10/2025 | 17/10/2025 | 11 | Worksheet 2 | 0, 1 | Debugging and inspection |
-| 20/10/2025 | 24/10/2025 | 12 | Worksheet 3 | 1, 2 | AI-Driven Development |
-| 27/10/2025 | 31/10/2025 | 13 | **Consolidation week** | | |
-| 03/11/2025 | 07/11/2025 | 14 | Worksheet 4 | 2, 3 | Coursework intro |
-| 10/11/2025 | 14/11/2025 | 15 | Worksheet 5 | 3, 4 | Test-Driven Development |
-| 17/11/2025 | 21/11/2025 | 16 | Worksheet 6 | 4, 5 | More AI-Driven Development |
-| 24/11/2025 | 28/11/2025 | 17 | Worksheet 7 | 5, 6 | Persistence, Firebase |
-| 01/12/2025 | 05/12/2025 | 18 | Worksheet 8 | 6, 7, Demo | Coursework support drop-in |
-| 08/12/2025 | 12/12/2025 | 19 | None | 7, 8, Demo | Coursework support drop-in |
-| 15/12/2025 | 19/12/2025 | 20 | None | 8, Demo | Coursework support drop-in |
-| 22/12/2025 | 26/12/2025 | 21 | **Xmas Vacation** | | |
+| Week Commencing | Week Ending | Worksheet | Lecture | Demo |
+| --------------- | ----------- | --------- | ------- | ---- |
+| 14/09/2026 | 18/09/2026 | Worksheet 0 | Lecture 0 | Demo 1 |
+| 21/09/2026 | 25/09/2026 | Worksheet 1 | Lecture 1 | |
+| 28/09/2026 | 02/10/2026 | Worksheet 2 | Lecture 2 | |
+| 05/10/2026 | 09/10/2026 | Worksheet 3 | Lecture 3 | Demo 2 |
+| 12/10/2026 | 16/10/2026 | Worksheet 4 | Lecture 4 | |
+| 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo 3 |
+| 26/10/2026 | 30/10/2026 | **Reading Week** | | |
+| 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo 3 |
+| 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo 4 |
+| 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | |
+| 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo 5 |
+| 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | |
+
+Demo 3 has a two-week window (either side of Reading Week).
 
 ## **Teaching material**
 
-We only have worksheets for this part of the module. This is because there is no exam for this part of the module, so we do not have lecture slides.
+Each week has a worksheet (practical, applied) and a lecture (abstract, transferable skills). Lecture slides for the 2026-27 delivery are being prepared and will be added here.
 
-You should aim to complete the worksheets in the order they are presented below. Do not skip Worksheet 0 and it is fine if you cannot make it all the way to Worksheet 8.
+You should aim to complete the worksheets in the order they are presented below. Do not skip Worksheet 0.
 
 * [Worksheet 0: Introduction to Dart, Git and GitHub](./worksheet-0.md)
 * [Worksheet 1: Introduction to Flutter](./worksheet-1.md)
@@ -35,6 +36,8 @@ You should aim to complete the worksheets in the order they are presented below.
 * [Worksheet 6: AI-Driven Development and Navigation](./worksheet-6.md)
 * [Worksheet 7: State Management and Persistence](./worksheet-7.md)
 * [Worksheet 8: Integration Testing, Firebase, and Deployment](./worksheet-8.md)
+
+Worksheets 9 and 10 (and the restructured 2026-27 worksheet series) are in preparation.
 
 ## **Assessment**
 
