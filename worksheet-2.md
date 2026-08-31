@@ -244,7 +244,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     ![Flutter DevTools](images/screenshot_devtools.jpg)
 
-    ⚠️ **Show your running app and the widget inspector to a member of staff** for a sign-off. We need to make sure you can work your way around the widget inspector.
+    **Show your running app and the widget inspector to a member of staff** for a sign-off. We need to make sure you can work your way around the widget inspector.
 
 2. Wrap your `OrderItemDisplay` widget inside a `Container` widget. Use the documentation for the [Container widget](https://api.flutter.dev/flutter/widgets/Container-class.html) to learn how to use it.
 
@@ -256,7 +256,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     Update the `width` and `height` properties to see what happens if the `OrderItemDisplay`'s text is too big for the `Container`.
 
-    ⚠️ **Show your running app with the coloured container to a member of staff** for a sign-off.
+    **Show your running app with the coloured container to a member of staff** for a sign-off.
 
 3. Read about [layout widgets](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets) in the documentation pages.
 
@@ -268,7 +268,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     Resize the browser window. What happens if the `Row` is too wide for the screen? Use an LLM or the documentation to learn about layout "Constraints".
 
-    ⚠️ **Show your running app with the three widgets in a row or column to a member of staff** for a sign-off.
+    **Show your running app with the three widgets in a row or column to a member of staff** for a sign-off.
 
 4. We've already seen some of the Flutter styling options in the last worksheet. Go back to your `OrderItemDisplay` widget and apply a style to the `Text` widget.
 
