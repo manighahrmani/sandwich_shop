@@ -310,7 +310,7 @@ Next, look for any blue or yellow squiggly lines. These are hints from the Flutt
 
 ### **Commit Your Changes (7)**
 
-Make sure to have hot reload enabled by hitting the thunder (⚡️) icon in the toolbar or by typing `r` in the terminal if you are running the app there.
+Make sure to have hot reload enabled by hitting the thunder icon in the toolbar or by typing `r` in the terminal if you are running the app there.
 
 After verifying that the feature works as described in the user story, commit your work to source control. A good commit message would be `Add order notes field`.
 
@@ -320,7 +320,7 @@ As your app becomes more complex, you'll inevitably encounter bugs or unexpected
 
 ### **Using the VS Code debugger**
 
-The VS Code debugger is your primary tool for stepping through code and inspecting variables. To start debugging, click the bug icon (🪲) in the Activity Bar on the left side of VS Code. This opens the Debug panel with several useful sections.
+The VS Code debugger is your primary tool for stepping through code and inspecting variables. To start debugging, click the bug icon in the Activity Bar on the left side of VS Code. This opens the Debug panel with several useful sections.
 
 You can also access debugging tools through the Command Palette by pressing **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and typing `Flutter: Open Flutter DevTools`.
 
@@ -401,7 +401,7 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
    Keep hot reload active, use the widget inspector, refer to [the documentation page on layout widgets](https://docs.flutter.dev/ui/widgets/layout) to figure out how and where the extra space should be added.
 
-   ⚠️ **Show your running app with the newly styled buttons to a member of staff** for a sign-off.
+   **Show your running app with the newly styled buttons to a member of staff** for a sign-off.
 
 2. Currently, the user can press the "Add" button even when the maximum quantity is reached, and the "Remove" button when the quantity is zero. While our logic prevents the state from updating, the buttons themselves should appear disabled to provide better user feedback.
 
@@ -409,7 +409,7 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
    There are different ways to do this. You are required to explore all options and pick the one you find the easiest to understand. Feel free to think outside the box (you can even update other parts of the `_OrderScreenState` class if you find it necessary).
 
-   ⚠️ **Show your running app, demonstrating the disabled buttons at the quantity limits, to a member of staff** for a sign-off.
+   **Show your running app, demonstrating the disabled buttons at the quantity limits, to a member of staff** for a sign-off.
 
 3. Let's add another piece of state. The user should be able to switch between a 'Footlong' and a 'Six-inch' sandwich.
 
@@ -419,7 +419,7 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
    Note that you will need to update the `OrderItemDisplay` widget to display the selected sandwich type.
 
-   ⚠️ **Show your running app the ability to switch between sandwich types to a member of staff** for a sign-off.
+   **Show your running app the ability to switch between sandwich types to a member of staff** for a sign-off.
 
 4. For another piece of state, let the user choose the bread type for their sandwich. You need to show the selected bread type in the UI.
 

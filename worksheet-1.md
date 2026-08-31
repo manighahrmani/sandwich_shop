@@ -222,7 +222,7 @@ As an example, select a piece of code that you'd like to learn more about with y
 
 #### **Structuring your prompts effectively**
 
-Copilot (and similarly Gemini in Firebase Studio) should automatically add the relevant code context to your question. You can add more context by using the `#` (hash) symbol or the attach button (📎) to reference other parts of the code or files in your project.
+Copilot (and similarly Gemini in Firebase Studio) should automatically add the relevant code context to your question. You can add more context by using the `#` (hash) symbol or the attach button to reference other parts of the code or files in your project.
 
 However if you're using an LLM on the web (e.g., ChatGPT or Claude), you must provide the context manually.
 
@@ -320,7 +320,7 @@ In Firebase Studio, an Android emulator is usually available by default. If it i
 
 Hot reload is a powerful feature that lets you see code changes instantly without restarting the app.
 
-You can enable it by clicking the lightning bolt icon (⚡) at the top of VS Code while the app is running. If you are using the terminal, you can type `r` to trigger it.
+You can enable it by clicking the lightning bolt icon at the top of VS Code while the app is running. If you are using the terminal, you can type `r` to trigger it.
 
 ![Hot Reload Button](images/screenshot_vscode_hot_reload.jpg)
 
@@ -401,7 +401,7 @@ If you are new to programming and find it easier to watch a video tutorial, cons
 
 1. In [the "Setting up a GitHub repository"](#setting-up-a-github-repository) section, we walked you through creating a GitHub repository to back up the `sandwich_shop` project. Make sure you have completed this section and you are comfortable with the process of making commits and pushing them to GitHub.
 
-   ⚠️ **Show your GitHub repository to a member of staff** for a sign-off.
+   **Show your GitHub repository to a member of staff** for a sign-off.
 
 2. You have already modified the title of the `AppBar` widget. This is different from the title of the app itself, which you can see in the browser tab. This is highlighted in the image below:
 
@@ -411,7 +411,7 @@ If you are new to programming and find it easier to watch a video tutorial, cons
 
    Remember to view the changes live with hot reload and to commit your changes to GitHub.
 
-   ⚠️ **Show your running app with the updated browser tab title to a member of staff** for a sign-off.
+   **Show your running app with the updated browser tab title to a member of staff** for a sign-off.
 
 3. The default app displays a counter. Your task is to change this by finding the `Column` widget inside the `_MyHomePageState` in your `lib/main.dart` file.
 
@@ -423,7 +423,7 @@ If you are new to programming and find it easier to watch a video tutorial, cons
 
    Make sure that you understand what is happening at every step. On rare occasions, AI assistants may not provide a correct solution. More often, they provide an overly optimal solution that may be hard to understand for you. If you saw a syntax you are not familiar with for example, a ternary operator (`condition ? expr1 : expr2`), ask your AI assistant to explain it to you or use a simpler approach like an `if` statement.
 
-   ⚠️ **Show your running app with the new welcome message to a member of staff** for a sign-off.
+   **Show your running app with the new welcome message to a member of staff** for a sign-off.
 
 4. The `pubspec.yaml` file is the heart of your project's configuration, managing dependencies, fonts, and project metadata. Open this file and take a moment to read through it, using an LLM or the [official documentation on the pubspec file](https://dart.dev/tools/pub/pubspec) to understand each section.
 
@@ -455,7 +455,7 @@ If you are new to programming and find it easier to watch a video tutorial, cons
 
    After saving your changes, you must synchronise the dependencies. While VS Code and Firebase Studio often does this automatically, you should run `flutter pub get` in the terminal to ensure everything is up to date.
 
-   ⚠️ **Show your updated `pubspec.yaml` file to a member of staff** for a sign-off.
+   **Show your updated `pubspec.yaml` file to a member of staff** for a sign-off.
 
 5. Keeping your code tidy is crucial for readability and collaboration. Dart has a standard format that can be applied automatically.
 

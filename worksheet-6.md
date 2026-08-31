@@ -548,7 +548,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     Make sure to write widget tests for your new profile screen too.
 
-    ⚠️ **Show your `requirements.md`, profile screen and associated test(s) to a member of staff** for a sign-off.
+    **Show your `requirements.md`, profile screen and associated test(s) to a member of staff** for a sign-off.
 
 2. Let's enhance our app's navigation by adding a `Drawer` menu. A `Drawer` is a panel that slides in from the edge of a `Scaffold` to show the app's main navigation options. You can read more about it in its [documentation page](https://api.flutter.dev/flutter/material/Drawer-class.html).
 
@@ -558,7 +558,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
     As always, update your widget tests to cover the new navigation drawer (or generally, navigation) functionality.
 
-    ⚠️ **Show the updates to `requirements.md`, working navigation and associated test(s) to a member of staff** for a sign-off.
+    **Show the updates to `requirements.md`, working navigation and associated test(s) to a member of staff** for a sign-off.
 
 3. (Advanced) Configure your app to handle [deep links](https://docs.flutter.dev/ui/navigation/deep-linking) using `go_router`, which is the recommended approach for URL-based navigation in Flutter.
 
