@@ -389,7 +389,7 @@ Run these tests while the `order_repository_test.dart` is open in VS Code and cl
 
 ![Running tests in VS Code](images/screenshot_running_tests.png)
 
-Each green tick means that the test passed. On the other hand, a red cross (❌) would mean the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This feedback is crucial for understanding what has gone wrong in your code.
+Each green tick means that the test passed. On the other hand, a red cross would mean the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This feedback is crucial for understanding what has gone wrong in your code.
 
 You can also run all tests at once by opening a terminal and running `flutter test`. This command will execute all tests in your `test` folder, including both unit tests and widget tests. As you create more tests throughout this course, this becomes a convenient way to verify that all your code is working correctly.
 
@@ -534,7 +534,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    Once you have a generated README, carefully review it against the quality criteria mentioned in the last section of the worksheet. Is it accurate? Is it complete? Do the instructions work? Do you need to customise anything (feel free to ask the AI to refine the document further).
 
-   ⚠️ **Show your README.md file to a member of staff** for a sign-off. If you do attempt any other exercises, remember to update the README accordingly.
+   **Show your README.md file to a member of staff** for a sign-off. If you do attempt any other exercises, remember to update the README accordingly.
 
 2. Our widget tests currently cover tapping buttons and entering text. Let's expand our test coverage to other types of user interaction.
 
@@ -542,7 +542,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    Hint: `Switch` widgets are toggled by tapping on them like buttons.
 
-   ⚠️ **Show your new passing widget test to a member of staff** for a sign-off.
+   **Show your new passing widget test to a member of staff** for a sign-off.
 
 3. Let's add an option for the user to have their sandwich toasted. First, in `lib/main.dart`, add a new state variable to your `_OrderScreenState` class: `bool _isToasted = false;`.
 
@@ -570,7 +570,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    To solve this, refer to the [Finders documentation](https://docs.flutter.dev/cookbook/testing/widget/finders) and find a way to uniquely identify each `Switch` widget. (Hint: This is similar to giving an HTML element an `id` attribute.)
 
-   ⚠️ **Show your running app with the two switches and the updated, passing widget tests to a member of staff** for a sign-off.
+   **Show your running app with the two switches and the updated, passing widget tests to a member of staff** for a sign-off.
 
 4. Our app does not yet have a concept of price. Let's add a repository to manage the pricing logic. Suppose that a six-inch sandwich costs £7 and a footlong costs £11.
 
@@ -578,7 +578,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    Before integrating this new repository, create a new unit test file similar to  what we did for `OrderRepository`. Finally, use it in `OrderScreen` to calculate and display the total price of the order.
 
-   ⚠️ **Show your new pricing repository and its unit tests to a member of staff** for a sign-off.
+   **Show your new pricing repository and its unit tests to a member of staff** for a sign-off.
 
 5. (Advanced) Let's add functionality to save an order to a local file. This feature is only available on mobile and desktop platforms, so you will need to run your app on a compatible device.
 
