@@ -42,6 +42,8 @@
     "initState",
     "Kiro",
     "kiro",
+    "linted",
+    "lycheeverse",
     "localization",
     "localizations",
     "localize",
@@ -94,6 +96,7 @@
     "viewmodel",
     "viewmodels",
     "venv",
+    "vendored",
     "VoidCallback",
     "WidgetTester",
     "worksheets"
