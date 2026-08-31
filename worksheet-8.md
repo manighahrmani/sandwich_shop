@@ -414,13 +414,13 @@ Complete the exercises below to practice integration testing and explore deploym
 
    Use your AI assistant to help you identify edge cases and write thorough tests. Remember to test both happy paths (everything works correctly) and error scenarios.
 
-   ⚠️ **Show your updated integration tests to a member of staff and describe the changes made** for a sign-off.
+   **Show your updated integration tests to a member of staff and describe the changes made** for a sign-off.
 
 2. Create a release build of the sandwich app after you have tested it thoroughly.
 
    Compare the size and performance of your debug vs release builds. What differences do you notice?
 
-   ⚠️ **Show your release build running on a device and your updated README to a member of staff** for a sign-off.
+   **Show your release build running on a device and your updated README to a member of staff** for a sign-off.
 
 3. This exercise is optional but will prepare you for your coursework if you aim to use Firebase. Choose one or more of the following Firebase features and integrate it into the sandwich app:
 

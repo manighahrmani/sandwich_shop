@@ -11,19 +11,21 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 | 28/09/2026 | 02/10/2026 | Worksheet 2 | Lecture 2 | |
 | 05/10/2026 | 09/10/2026 | Worksheet 3 | Lecture 3 | Demo 2 |
 | 12/10/2026 | 16/10/2026 | Worksheet 4 | Lecture 4 | |
-| 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo 3 |
+| 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo 3 (opens) |
 | 26/10/2026 | 30/10/2026 | **Reading Week** | | |
-| 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo 3 |
+| 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo 3 (closes) |
 | 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo 4 |
 | 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | |
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo 5 |
 | 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | |
 
-Demo 3 has a two-week window (either side of Reading Week).
+Demo 3 is a single checkpoint with a two-week window either side of Reading Week.
 
 ## **Teaching material**
 
 Each week has a worksheet (practical, applied) and a lecture (abstract, transferable skills). Lecture slides for the 2026-27 delivery are being prepared and will be added here.
+
+Each worksheet advances the same mock Sandwich Shop app used to teach the module; the state of the app after each worksheet is kept as a numbered branch of this repository (see [branch 0](https://github.com/manighahrmani/sandwich_shop/tree/0) through [branch 8](https://github.com/manighahrmani/sandwich_shop/tree/8)). Students mirror the same development steps in their own Southsea Cinema coursework repository, so by the end of a worksheet their coursework app should be at an equivalent stage to the matching branch here.
 
 You should aim to complete the worksheets in the order they are presented below. Do not skip Worksheet 0.
 
@@ -37,45 +39,43 @@ You should aim to complete the worksheets in the order they are presented below.
 * [Worksheet 7: State Management and Persistence](./worksheet-7.md)
 * [Worksheet 8: Integration Testing, Firebase, and Deployment](./worksheet-8.md)
 
-Worksheets 9 and 10 (and the restructured 2026-27 worksheet series) are in preparation.
+Worksheets 9 and 10 (and a revised 2026-27 running order and content for worksheets 0-8, tracked in the planning issues on the repository) are in preparation.
 
 ## **Assessment**
 
-This part of the module which runs though Teaching Block 1 (TB1) is listed as Item 1 in the module specification. Item 1 is worth 50% of the overall module mark. Your mark for item 1 is made up of weekly sign-offs (45%) and a coursework (55%).
+This part of the module which runs though Teaching Block 1 (TB1) is listed as Item 1 in the module specification. Item 1 is worth 50% of the overall module mark and is assessed entirely through 5 demo checkpoints of your Southsea Cinema coursework (see the schedule above for dates). There is no separate sign-off or coursework submission for Item 1: the demos are continuous assessment of the same coursework you build throughout the term.
 
-### **Sign-offs (45%)**
+### **Demos (50%, 10% per demo)**
 
-Every worksheet ends with a handful of **exercises**.  After completing these exercises, show a member of staff your work for a **sign-off**. **Each sign-off is worth 5%** of the Flutter Course mark.
+At each demo, a member of staff checks your progress and asks you a few questions about your own code. Each demo is marked out of 10 (10% of the module):
 
-There are a total of nine sign-offs (one for each worksheet), and you have a two-week window to get each sign-off and the deadlines are shown in the schedule above. You can complete sign-offs early if you wish.
+* **Functionality (0-4)**: does the app implement the features expected by this point in the schedule? Extra marks are available if you have progressed further than expected.
+* **Quality (0-2)**: code quality on inspection (naming and formatting early on, structure and separation of concerns later).
+* **Understanding (0-4)**: your answers to a few questions about your own code and decisions.
 
-### **Coursework (55%)**
+The exact expectations for each demo are listed in the corresponding worksheet and in the demo issue on [the repository's Issues tab](https://github.com/manighahrmani/sandwich_shop/issues).
 
-Use [this link to access the coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EbM1UcwOHMRLmcKeI0btHqYBeZ3ADWjyN0EXBWdHLhsO_g?e=AvWfQe). The submission sections will open on Moodle soon and the on-time deadline for submission is 13:00 on Wednesday 3rd December 2025 (more information about late submissions can be found in the brief).
+If you use Firebase or another cloud service in your coursework, you must host the app live and provide the URL at the demo so it can be checked without needing your API keys (see the demo criteria for details).
 
-The mark for the coursework is made up of two components: the mark for the functionality of the application you are submitting (30%) and the mark for your software development practices used while developing this application (25%).
+### **Coursework brief**
 
-By software development practices, we are referring to the following: version control (GitHub), verification (testing), utilisation of cloud services (Firebase), and the application of AI tools (evidence of correct AI-driven development).
-
-See the diagram below for a visual breakdown of the marks.
-
-![Flutter Course Assessment Breakdown](./images/assessment-breakdown.png)
+Use [this link to access the coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EbM1UcwOHMRLmcKeI0btHqYBeZ3ADWjyN0EXBWdHLhsO_g?e=AvWfQe) for the full Southsea Cinema coursework specification.
 
 ### **Referral/Deferral Assessment**
 
 More information about what referral/deferral are will be provided later in Moodle. Referral/deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
 
-The referral/deferral assessment for this Flutter Course is a coursework that you need to complete during the referral/deferral period (see above). This coursework is **not** the same as [the coursework linked above](#coursework-55). It will be added to Moodle nearer the time.
+The referral/deferral assessment for this Flutter Course is a coursework that you need to complete during the referral/deferral period (see above). This coursework is **not** the same as [the coursework brief linked above](#coursework-brief). It will be added to Moodle nearer the time.
 
 ### **Extenuating Circumstances**
 
 If there are external reasons stopping you from engaging with the module, submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/exams/extenuating-circumstances) as soon as you can and notify me when your ECF is approved.
 
-Note that ECFs apply to the whole Item 1 (the entire Flutter Course, 50% of the module). You cannot use an ECF just for individual sign-offs.
+Note that ECFs apply to the whole Item 1 (the entire Flutter Course, 50% of the module). You cannot use an ECF just for individual demos.
 
-Also note that if your ECF is approved, any sign-offs you already have will not be counted. Instead, you will be expected to take the deferral assessment in July and your Item 1 mark will come from that deferral coursework alone (not from [the original coursework](#coursework-55) or [sign-offs](#sign-offs-45)).
+Also note that if your ECF is approved, any demo marks you already have will not be counted. Instead, you will be expected to take the deferral assessment in July and your Item 1 mark will come from that deferral coursework alone (not from the demos above).
 
-If you do not have an ECF or it is not approved, you will receive all the sign-offs you have completed and your coursework mark depending on when you submit it (with late penalties if applicable).
+If you do not have an ECF or it is not approved, you will receive all the demo marks you have completed.
 
 ## **Getting help**
 
@@ -89,7 +89,7 @@ If you notice any mistakes or would like any improvements, please open [the repo
 
 ## **Sign-offs Tracker**
 
-This [Excel sheet](https://portdotacdotuk-my.sharepoint.com/:x:/g/personal/mani_ghahremani_port_ac_uk/EU37A4NaOt5LrYCW2OJZgsoBr1rTjj-nLj1n9SrpVsIs2w?e=SxcJC3) allows you to track which sign-offs you have completed. Search for your UP number with **Ctrl + F** or **⌘ + F** to find your row quickly. If you cannot find your UP number, please let me know by messaging me on Discord.
+Your demo marks are recorded in the practical session sign-off app. If you believe a demo mark is missing or incorrect, message a member of staff on Discord with your UP number.
 
 <!-- ## **Temporary Embedded Document**
 

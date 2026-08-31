@@ -16,7 +16,7 @@ The following free courses from GitHub will get you up to speed:
 
 This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
 
-⚠️ **Note**: Use a personal email address (not your university email) to sign up for GitHub. If you already have a GitHub account with your university email, you need to change the primary email to a personal one.
+**Note**: Use a personal email address (not your university email) to sign up for GitHub. If you already have a GitHub account with your university email, you need to change the primary email to a personal one.
 
 ![GitHub Email Settings](images/screenshot_GitHub_emails.png)
 
@@ -33,7 +33,7 @@ Once you have done this, complete the following
 
 GitHub's AI can assist you with tasks such as explaining code, fixing bugs, and even writing code snippets. As a student, you're eligible for a free Copilot subscription through the [GitHub Student Developer Pack](https://education.github.com/pack).
 
-⚠️ **Note**: While signing up for GitHub for education, you need to be on-campus (or use the [VPN](https://myport.port.ac.uk/it-support/student-it-support/guide-to-the-virtual-private-network-vpn)) so that they can verify you are on the university campus.
+**Note**: While signing up for GitHub for education, you need to be on-campus (or use the [VPN](https://myport.port.ac.uk/it-support/student-it-support/guide-to-the-virtual-private-network-vpn)) so that they can verify you are on the university campus.
 
 #### The GitHub Copilot course you need to complete
 
@@ -81,7 +81,7 @@ Complete the exercises below and show your work to a member of staff present at 
     Include what skills you have and what roles you are interested in.
     And if you already know how to use GitHub, create repositories for the courseworks and projects that you have completed in the past.
 
-    ⚠️ **Show your GitHub profile to a member of staff** for feedback and a sign-off.
+    **Show your GitHub profile to a member of staff** for feedback and a sign-off.
 
 2. Follow the instructions on [this document](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ERXv27njJSZBsmQd5zCrGAMBvuuicqakKSQAk47e0IKf5g) to install Dart SDK and Visual Studio Code on your computer.
 
@@ -95,4 +95,4 @@ Complete the exercises below and show your work to a member of staff present at 
 
     Run this function from the `main` function and print the result to the integrated terminal of Visual Studio Code (refer to the [Getting started with Dart](#1---getting-started-with-dart) section).
 
-    ⚠️ **Show your Dart file to a member of staff** for a sign-off.
+    **Show your Dart file to a member of staff** for a sign-off.

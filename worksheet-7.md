@@ -30,7 +30,7 @@ Or manually ensure your code matches the repository. Run the app to make sure ev
 
 ## **Introduction to App State Management**
 
-⚠️ **Note**: This is a comprehensive worksheet covering advanced topics you do not have to use to be able to pass your coursework. Complete as much as you can, but do not worry if you cannot finish everything.
+**Note**: This is a comprehensive worksheet covering advanced topics you do not have to use to be able to pass your coursework. Complete as much as you can, but do not worry if you cannot finish everything.
 
 So far, we've been managing ephemeral state within individual widgets using `setState()`. This works well for simple apps, but as your app grows, you'll find that multiple screens need to share the same data. For example, both your order screen and cart screen need access to the cart data.
 
@@ -1596,7 +1596,7 @@ This week we have had a heavy worksheet so we will keep the exercises light. Com
 
    The goal of this exercise is to eliminate duplication, standardize the look of the app across all screens, and ideally add a more consistent navigation experience.
 
-   ⚠️ **Describe your changes and show the app to a staff member** for a sign-off (e.g., show them the file(s) containing the common widgets and how you have used them across the app).
+   **Describe your changes and show the app to a staff member** for a sign-off (e.g., show them the file(s) containing the common widgets and how you have used them across the app).
 
 2. (Advanced) Our database operations so far are only limited to creating a table, inserting and reading data. You are already familiar with SQL commands like `UPDATE` and `DELETE` from your previous database module.
 
