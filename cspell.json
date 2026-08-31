@@ -105,6 +105,7 @@
     "pubspec.yaml",
     "pubspec.lock",
     ".dart_tool",
-    "build"
+    "build",
+    ".github/skills"
   ]
 }
