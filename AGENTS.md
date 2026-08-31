@@ -7,7 +7,7 @@ These rules apply to all agents and sessions working anywhere in this repository
 Whenever changes are made to the `southsea_cinema` public/template repository (cloned under `southsea_cinema/`), the agent must immediately mirror those changes to the `southsea_cinema_private` model solution repository (cloned under `southsea_cinema_private/`) to keep them in sync.
 This applies to code files, configuration files, test suites, and documentation.
 
-Note: `southsea_cinema/`, `southsea_cinema_private/`, `southsea_cinema_sqlite_test/`, `flutter_vscode_package/`, `flutter_vscode_package_private/` and `sign-off-app/` are separate nested git repositories. They are gitignored here and must never be committed or pushed to this public `sandwich_shop` repository.
+Note: `southsea_cinema/`, `southsea_cinema_private/`, `flutter_vscode_package/`, `flutter_vscode_package_private/` and `sign-off-app/` are separate nested git repositories. They are gitignored here and must never be committed or pushed to this public `sandwich_shop` repository.
 
 ## Module Platform & Database Constraints
 

@@ -47,7 +47,6 @@ sign-off-app/
 # Southsea Cinema coursework templates
 southsea_cinema/
 southsea_cinema_private/
-southsea_cinema_sqlite_test/
 
 # Flutter portable package repos
 flutter_vscode_package/
