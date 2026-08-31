@@ -6,7 +6,7 @@ Canonical version: `AGENTS.md` at the repository root. If the two differ, the ro
 
 Any change to `southsea_cinema/` (public template) must be immediately mirrored to `southsea_cinema_private/` (model solution). Applies to code, config, tests, and documentation.
 
-The nested folders `southsea_cinema/`, `southsea_cinema_private/`, `southsea_cinema_sqlite_test/`, `flutter_vscode_package/`, `flutter_vscode_package_private/` and `sign-off-app/` are separate git repositories. Never commit or push them to this public `sandwich_shop` repository.
+The nested folders `southsea_cinema/`, `southsea_cinema_private/`, `flutter_vscode_package/`, `flutter_vscode_package_private/` and `sign-off-app/` are separate git repositories. Never commit or push them to this public `sandwich_shop` repository.
 
 ## Web-Only Platform Target
 
