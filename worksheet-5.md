@@ -16,7 +16,7 @@ To get support with this worksheet, join the [Discord channel](https://portdotac
 
 ## **Getting started**
 
-⚠️ Recall that the first exercise from worksheet 3 required you to create a README.md file for your project. Hopefully you have managed to finish this task. Before we begin, compare your README with [the model README file that we have provided in branch 4](https://github.com/manighahrmani/sandwich_shop/blob/4/README.md).
+Recall that the first exercise from worksheet 3 required you to create a README.md file for your project. Hopefully you have managed to finish this task. Before we begin, compare your README with [the model README file that we have provided in branch 4](https://github.com/manighahrmani/sandwich_shop/blob/4/README.md).
 
 For this worksheet, as an exception, start with the code from branch 5 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/5). You can either clone the repository and checkout branch 5:
 
@@ -632,13 +632,13 @@ Even though your AI assistant may suggest this, for now, try not to use any thir
 
     Remember not to implement a separate page or a permanent UI for the cart in the home page yet. We will do that in a later exercise. Once you are done, update the widget tests to reflect your changes.
 
-    ⚠️ **Show your running app displaying the confirmation message and the updated widget tests to a member of staff** for a sign-off.
+    **Show your running app displaying the confirmation message and the updated widget tests to a member of staff** for a sign-off.
 
 2. In addition of just showing a confirmation message when items are added, let's show th number of items in the cart and maybe the total price to the user.
 
     Similar to the previous exercise, there are several ways to do this. Try to do this in a way you understand. Maybe think about how popular (food) shopping apps display a summary of the user's cart when they are not in the cart page. Just make sure that when the "Add to Cart" button is pressed, this summary is updated. As always, make sure to write widget tests to verify that the cart summary updates correctly when items are added.
 
-    ⚠️ **Show your running app with the cart summary displaying the number of items and the updated widget tests to a member of staff** for a sign-off.
+    **Show your running app with the cart summary displaying the number of items and the updated widget tests to a member of staff** for a sign-off.
 
 3. (Advanced) So far, our app only has one screen (`main.dart`). Let's add a second screen to view the cart contents. This is a task which we will cover in more detail in the next worksheet, but let's give it a try now. Here's a [link to the Flutter documentation on navigation](https://docs.flutter.dev/cookbook/navigation/navigation-basics) to help you get started.
 

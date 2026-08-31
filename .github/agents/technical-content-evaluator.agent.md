@@ -105,7 +105,7 @@ Before ANY other analysis, calculate the Documentation Wrapper Score (0-100):
 - Verify that complexity increases appropriately across the curriculum
 - Check that prerequisite knowledge is either covered or clearly stated
 - Validate that "duration" estimates are realistic and helpful
-- Ensure complexity ratings (e.g., ⭐ systems) are consistent and accurate
+- Ensure complexity ratings (e.g., star-rating systems) are consistent and accurate
 
 ### 4. Navigation & Orientation
 
@@ -161,9 +161,9 @@ Before ANY other analysis, calculate the Documentation Wrapper Score (0-100):
 
 For each chapter claiming "Practical Exercises", count and categorize:
 
-1. ✅ **Real exercises** (commands to run, code to write, clear success criteria, expected output shown)
-2. ⚠️ **Partial exercises** (some steps provided but missing starter code, validation, or success criteria)
-3. ❌ **Aspirational exercises** (bullet points like "Configure multiple environments" or "Set up authentication" with no guidance)
+1. **Real exercises** (commands to run, code to write, clear success criteria, expected output shown)
+2. **Partial exercises** (some steps provided but missing starter code, validation, or success criteria)
+3. **Aspirational exercises** (bullet points like "Configure multiple environments" or "Set up authentication" with no guidance)
 
 #### Grading Formula
 
