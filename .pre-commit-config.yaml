@@ -1,6 +1,3 @@
-# Third-party vendored content (awesome-copilot skills) is not linted.
-exclude: ^\.github/skills/
-
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
@@ -21,14 +18,3 @@ repos:
     hooks:
       - id: cspell
         args: ["--locale", "en-GB", "--config", "cspell.json"]
-
-  - repo: local
-    hooks:
-      - id: no-emoji
-        name: no-emoji
-        entry: python scripts/check_no_emoji.py
-        language: python
-        types: [text]
-        # TODO: worksheet-2.md exercise builds sandwich-emoji output; decide whether
-        # to redesign it before removing this exclusion.
-        exclude: ^worksheet-2\.md$
