@@ -59,6 +59,8 @@ If you use Firebase or another cloud service in your coursework, you must host t
 
 ### **Coursework brief**
 
+A formal coursework brief document is being prepared for 2026-27 and will be linked here once it is ready. In the meantime, refer to the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) for the coursework starter code and instructions.
+
 Use [this link to access the coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EbM1UcwOHMRLmcKeI0btHqYBeZ3ADWjyN0EXBWdHLhsO_g?e=AvWfQe) for the full Southsea Cinema coursework specification.
 
 ### **Referral/Deferral Assessment**
