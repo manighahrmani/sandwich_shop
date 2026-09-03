@@ -4,7 +4,7 @@ If you're new to the Dart programming language or haven't used Git and GitHub be
 
 ## Getting help
 
-To get support with this worksheet, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
+To get support with this worksheet, follow [discord_flutter.pptx](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
 ## Introduction to Git and GitHub
 
@@ -44,31 +44,7 @@ Once you have access to Copilot, try completing the following
 
 Dart is the programming language developed by Google. It is a statically typed language, compiled to native code, language with C-style syntax. Even though it may not be as popular as languages like C or Java, it is the language of the Flutter framework which we will be using for cross-platform app development in this module.
 
-If you have not used Dart before or need a refresher, below are the resources from our first-year Programming module that will get you started.
-
-### 1 - Getting started with Dart
-
-- [Worksheet](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ESkq3xBzVgpPh8U0zkb3WXQB49yLKZjjC9QxM-f3V-PTiQ?e=p5ckav)
-- [Lecture](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EVmN28MeTSJArB6s17-KaMABMv9ODrV-UWmxrwp8Crysrg)
-- [GitHub Repository](https://github.com/Programming-M30299/week-15-dart-code)
-
-### 2 - Functions and control flow in Dart
-
-- [Worksheet](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EVXFsog_gS9LlAFbUTUMXj4BXbKfWxQj0WjyN0dk9mblLw)
-- [Lecture](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EYOxV2VhhS9Httce_NolwK0BygFbKPTvYluvAH5RjVSJyQ)
-- [GitHub Repository](https://github.com/Programming-M30299/week-16-dart-code)
-
-### 3 - Strings and collections in Dart
-
-- [Worksheet](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EV6lZOGcgydPuoR65cCrVfcBXW1SaRNSRgjqv3hzjd-EOA?e=o6d2EM)
-- [Lecture](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EUAY-sw2UGBDrkDQMtN7aR0BnMaKCoBDKOpvSTOahdmJPg)
-- [GitHub Repository](https://github.com/Programming-M30299/week-17-dart-code)
-
-### 4 - Object-oriented programming in Dart
-
-- [Worksheet](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ERG7VQKzCdVEsX0mc-s-nT4BLFUNsoR3lSpS3tLjSXYaLA)
-- [Lecture](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/ERgiWNc5RXdNlks_UYVQAA0BFiNclHexTJh5_aej4xs4LQ?e=myXE7c)
-- [GitHub Repository](https://github.com/Programming-M30299/week-18-dart-code)
+If you have not used Dart before or need a refresher, use [dart_software_and_resources.docx](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAV79u54yUmQbJkHecwqxgDASKKC6OcByCtGUZ6hjFucvc).
 
 ## Exercises
 
@@ -83,7 +59,7 @@ Complete the exercises below and show your work to a member of staff present at 
 
     **Show your GitHub profile to a member of staff** for feedback and a sign-off.
 
-2. Follow the instructions on [this document](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/ERXv27njJSZBsmQd5zCrGAMBvuuicqakKSQAk47e0IKf5g) to install Dart SDK and Visual Studio Code on your computer.
+2. Follow the instructions in [dart_software_and_resources.docx](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAV79u54yUmQbJkHecwqxgDASKKC6OcByCtGUZ6hjFucvc) to install Dart SDK and Visual Studio Code on your computer.
 
     Next, get [the GitHub for student pack](https://education.github.com/pack) and install the GitHub Copilot extension in Visual Studio Code. For more information, check out [this section](#introduction-to-git-and-github) of this worksheet.
 
@@ -93,6 +69,6 @@ Complete the exercises below and show your work to a member of staff present at 
     // Write a function that returns the sum of two integers
     ```
 
-    Run this function from the `main` function and print the result to the integrated terminal of Visual Studio Code (refer to the [Getting started with Dart](#1---getting-started-with-dart) section).
+    Run this function from the `main` function and print the result to the integrated terminal of Visual Studio Code (refer to the [Introduction to the Dart language](#introduction-to-the-dart-language) section).
 
     **Show your Dart file to a member of staff** for a sign-off.

@@ -61,7 +61,7 @@ If you use Firebase or another cloud service in your coursework, you must host t
 
 A formal coursework brief document is being prepared for 2026-27 and will be linked here once it is ready. In the meantime, refer to the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) for the coursework starter code and instructions.
 
-Use [this link to access the coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EbM1UcwOHMRLmcKeI0btHqYBeZ3ADWjyN0EXBWdHLhsO_g?e=AvWfQe) for the full Southsea Cinema coursework specification.
+Use [Flutter Coursework.docx](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQCzNVHMDhzES5nCniNG7R6mASJS04jwunBGiBE9sEcu8Fw?e=XcIy5m) for the full Southsea Cinema coursework specification.
 
 ### **Referral/Deferral Assessment**
 
@@ -81,7 +81,7 @@ If you do not have an ECF or it is not approved, you will receive all the demo m
 
 ## **Getting help**
 
-To get support with the worksheets, join the [Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
+To get support with the worksheets, follow [discord_flutter.pptx](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
 ## **Feedback**
 
@@ -92,9 +92,3 @@ If you notice any mistakes or would like any improvements, please open [the repo
 ## **Sign-offs Tracker**
 
 Your demo marks are recorded in the practical session sign-off app. If you believe a demo mark is missing or incorrect, message a member of staff on Discord with your UP number.
-
-<!-- ## **Temporary Embedded Document**
-
-Ignore this section. It is only here so that the IT department can test to see why the embedded documents doesn't work.
-
-<iframe width="700" height="900" frameborder="0" scrolling="no" src="https://portdotacdotuk-my.sharepoint.com/personal/mani_ghahremani_port_ac_uk/_layouts/15/Doc.aspx?sourceDoc={48d18991-9e20-43df-9a23-f30953f6de8b}&action=embedview&wdAllowInteractivity=False&Item=PublicData&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"></iframe>  -->
