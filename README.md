@@ -61,8 +61,6 @@ If you use Firebase or another cloud service in your coursework, you must host t
 
 A formal coursework brief document is being prepared for 2026-27 and will be linked here once it is ready. In the meantime, refer to the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) for the coursework starter code and instructions.
 
-Use [Flutter Coursework.docx](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQCzNVHMDhzES5nCniNG7R6mASJS04jwunBGiBE9sEcu8Fw?e=XcIy5m) for the full Southsea Cinema coursework specification.
-
 ### **Referral/Deferral Assessment**
 
 More information about what referral/deferral are will be provided later in Moodle. Referral/deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
