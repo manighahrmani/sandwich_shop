@@ -4,7 +4,7 @@ School of Computing
 
 | | |
 | --- | --- |
-| Module Title and Code | **USER EXPERIENCE DESIGN AND IMPLEMENTATION - M32605 - FHEQ 5** <br> **PROGRAMMING APPLICATIONS AND PROGRAMMING LANGUAGES - M30235 - FHEQ 5** |
+| Module Title and Code | **PROGRAMMING APPLICATIONS AND PROGRAMMING LANGUAGES - M30235 - FHEQ 5** <br> **USER EXPERIENCE DESIGN AND IMPLEMENTATION - M32605 - FHEQ 5** |
 | Module Coordinator | [mani.ghahremani@port.ac.uk](mailto:mani.ghahremani@port.ac.uk) |
 | Assessment Item number | Item 1 |
 | Assessment Title | Southsea Cinema — Flutter Coursework |
