@@ -190,24 +190,4 @@ If you do not have an approved ECF, you simply receive the marks for the demos y
 
 ## Help with Coursework
 
-### Support
-
 If you have questions or encounter issues while working on this coursework, use the [Discord guide](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) to find the dedicated Discord channel and ask for help. Before posting a new question, check the existing posts to see if your question has already been answered. You can also attend your timetabled practical sessions to get face-to-face support from teaching staff.
-
-### Tips
-
-Starting early is crucial for success in this coursework. The earlier you begin, the more time you have to learn, experiment, and seek help when needed. Work on the coursework alongside the worksheets rather than leaving everything until the end: as you complete each worksheet, implement the corresponding features in your coursework application.
-
-Version control is an essential part of this coursework. Commit your changes regularly to Git with clear, descriptive commit messages. Each commit should represent a small, meaningful unit of work rather than large batches of changes. To commit and push your changes, use:
-
-```bash
-git add .
-git commit -m "Brief description of what you changed"
-git push
-```
-
-If you make a mistake and need to revert to a previous commit, view your commit history with `git log --oneline`, find the commit hash where things were working (for example, `abc1234`), and revert to that commit with `git reset --hard abc1234`. If necessary, you can force push with `git push --force`.
-
-In extreme cases where your repository is completely broken and unrecoverable, you can start fresh by deleting your forked repository on GitHub (Settings → Danger Zone → Delete this repository), forking the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) again, and cloning your fresh fork.
-
-AI tools are valuable during development, and you are encouraged to use them. However, you must apply the best practices taught in the worksheets, particularly [Worksheet 6](https://manighahrmani.github.io/sandwich_shop/worksheet-6.html). AI-generated code should be reviewed, understood, and adapted to fit your application properly. Use AI as a learning aid and coding partner rather than a replacement for your own understanding and decision-making.
