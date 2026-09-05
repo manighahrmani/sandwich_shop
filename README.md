@@ -43,23 +43,25 @@ Worksheets 9 and 10 (and a revised 2026-27 running order and content for workshe
 
 ## **Assessment**
 
-This part of the module which runs though Teaching Block 1 (TB1) is listed as Item 1 in the module specification. Item 1 is worth 50% of the overall module mark and is assessed entirely through 5 demo checkpoints of your Southsea Cinema coursework (see the schedule above for dates). There is no separate sign-off or coursework submission for Item 1: the demos are continuous assessment of the same coursework you build throughout the term.
+This part of the module, which runs through Teaching Block 1 (TB1), is listed as Item 1 in the module specification. Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments; Item 1 is worth **50% of the overall module mark**. Item 1 is assessed as a **portfolio of live demos** of your Southsea Cinema coursework (see the schedule above for dates), which you build in **five stages**. There is no separate sign-off or coursework submission for Item 1: you submit the **link to your public GitHub repository on Moodle** and then demonstrate your work at the timetabled demo windows.
 
-### **Demos (50%, 10% per demo)**
+### **Demos: how the 50% is awarded**
 
-At each demo, a member of staff checks your progress and asks you a few questions about your own code. Each demo is marked out of 10 (10% of the module):
+There are **five demos**, but only your **best four count** towards Item 1 — so you can miss (or score poorly on) **one** demo without harming your mark. Each demo is worth **25% of Item 1** (12.5% of the module) and is assessed on three things:
 
-* **Functionality (0-4)**: does the app implement the features expected by this point in the schedule? Extra marks are available if you have progressed further than expected.
-* **Quality (0-2)**: code quality on inspection (naming and formatting early on, structure and separation of concerns later).
-* **Understanding (0-4)**: your answers to a few questions about your own code and decisions.
+* **Functionality (9% of Item 1)**: you run your app and show it implements the features expected by this stage. Progressing further can earn extra credit.
+* **Quality (8% of Item 1)**: code quality on inspection (naming and formatting early on, structure and separation of concerns later).
+* **Understanding (8% of Item 1)**: your answers to **two questions** about your own code and decisions.
 
-The exact expectations for each demo are listed in the corresponding worksheet and in the demo issue on [the repository's Issues tab](https://github.com/manighahrmani/sandwich_shop/issues).
+**Only one demo can take place per window.** If you miss a demo, you demonstrate the missed stage at the next window (losing that slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at **75% of Item 1** (37.5% of the module), and so on.
 
-If you use Firebase or another cloud service in your coursework, you must host the app live and provide the URL at the demo so it can be checked without needing your API keys (see the demo criteria for details).
+If you use Firebase or another cloud service in your coursework, you must host the app live and provide the URL at the demo so it can be checked without needing your API keys.
+
+📄 **For the full mark breakdown, the missed-demo rules, and how Extenuating Circumstances affect Item 1, read the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi).** The exact expectations for each demo are also listed in the corresponding worksheet and in the demo issue on [the repository's Issues tab](https://github.com/manighahrmani/sandwich_shop/issues).
 
 ### **Coursework brief**
 
-A formal coursework brief document is being prepared for 2026-27 and will be linked here once it is ready. In the meantime, refer to the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) for the coursework starter code and instructions.
+A formal coursework brief document is being prepared for 2026-27 and will be linked here once it is ready. In the meantime, refer to the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) for the coursework starter code and instructions, and see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi) for exactly how Item 1 is marked.
 
 ### **Referral/Deferral Assessment**
 
@@ -69,13 +71,13 @@ The referral/deferral assessment for this Flutter Course is a coursework that yo
 
 ### **Extenuating Circumstances**
 
-If there are external reasons stopping you from engaging with the module, submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/exams/extenuating-circumstances) as soon as you can and notify me when your ECF is approved.
+If there are external reasons stopping you from engaging with the module, submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/extenuating-circumstances) as soon as you can. **You must also tell me** so your Item 1 mark can be handled correctly.
 
-Note that ECFs apply to the whole Item 1 (the entire Flutter Course, 50% of the module). You cannot use an ECF just for individual demos.
+Note that ECFs apply to the whole Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
-Also note that if your ECF is approved, any demo marks you already have will not be counted. Instead, you will be expected to take the deferral assessment in July and your Item 1 mark will come from that deferral coursework alone (not from the demos above).
+If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are instead expected to take the deferral assessment in July; your Item 1 mark then comes from that deferral coursework alone (not from the demos above). However, if you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
 
-If you do not have an ECF or it is not approved, you will receive all the demo marks you have completed.
+If you do not have an approved ECF, you simply receive the marks for the demos you completed. For the full ECF rules, see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi).
 
 ## **Getting help**
 
