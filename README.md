@@ -43,21 +43,19 @@ Worksheets 9 and 10 (and a revised 2026-27 running order and content for workshe
 
 ## **Assessment**
 
-This part of the module, which runs through Teaching Block 1 (TB1), is listed as Item 1 in the module specification. Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments; Item 1 is worth **50% of the overall module mark**. Item 1 is assessed as a **portfolio of live demos** of your Southsea Cinema coursework (see the schedule above for dates), which you build in **five stages**. There is no separate sign-off or coursework submission for Item 1: you submit the **link to your public GitHub repository on Moodle** and then demonstrate your work at the timetabled demo windows.
+This part of the module, which runs through Teaching Block 1 (TB1), is listed as Item 1 in the module specification. Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments; Item 1 is worth **50% of the overall module mark**. Item 1 is assessed as a portfolio of live demos of your Southsea Cinema coursework (see the schedule above for dates), which you build in five stages. There is no separate sign-off or coursework submission for Item 1: you submit the link to your public GitHub repository on Moodle and then demonstrate your work at the timetabled demo windows.
 
 ### **Demos: how the 50% is awarded**
 
-There are **five demos**, but only your **best four count** towards Item 1 — so you can miss (or score poorly on) **one** demo without harming your mark. Each demo is worth **25% of Item 1** (12.5% of the module) and is assessed on three things:
+There are five demos, but only your best four count towards Item 1 — so you can miss (or score poorly on) one demo without harming your mark. Each demo is worth 25% of Item 1 (12.5% of the module) and is assessed on three things:
 
-* **Functionality (9% of Item 1)**: you run your app and show it implements the features expected by this stage. Progressing further can earn extra credit.
-* **Quality (8% of Item 1)**: code quality on inspection (naming and formatting early on, structure and separation of concerns later).
-* **Understanding (8% of Item 1)**: your answers to **two questions** about your own code and decisions.
+* Functionality (9% of Item 1): you run your app and show it implements the features expected by this stage. Progressing further can earn extra credit.
+* Quality (8% of Item 1): code quality on inspection (naming and formatting early on, structure and separation of concerns later).
+* Understanding (8% of Item 1): your answers to two questions about your own code and decisions.
 
-**Only one demo can take place per window.** If you miss a demo, you demonstrate the missed stage at the next window (losing that slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at **75% of Item 1** (37.5% of the module), and so on.
+Only one demo can take place per window. If you miss a demo, you demonstrate the missed stage at the next window (losing that slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at 75% of Item 1 (37.5% of the module), and so on.
 
-If you use Firebase or another cloud service in your coursework, you must host the app live and provide the URL at the demo so it can be checked without needing your API keys.
-
-📄 **For the full mark breakdown, the missed-demo rules, and how Extenuating Circumstances affect Item 1, read the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi).** The exact expectations for each demo are also listed in the corresponding worksheet and in the demo issue on [the repository's Issues tab](https://github.com/manighahrmani/sandwich_shop/issues).
+For the full mark breakdown, the missed-demo rules, and how Extenuating Circumstances affect Item 1, read the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi).
 
 ### **Coursework brief**
 
@@ -67,11 +65,11 @@ A formal coursework brief document is being prepared for 2026-27 and will be lin
 
 More information about what referral/deferral are will be provided later in Moodle. Referral/deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
 
-The referral/deferral assessment for this Flutter Course is a coursework that you need to complete during the referral/deferral period (see above). This coursework is **not** the same as [the coursework brief linked above](#coursework-brief). It will be added to Moodle nearer the time.
+The referral/deferral assessment for this Flutter Course is a coursework that you need to complete during the referral/deferral period (see above). This coursework is not the same as [the coursework brief linked above](#coursework-brief). It will be added to Moodle nearer the time.
 
 ### **Extenuating Circumstances**
 
-If there are external reasons stopping you from engaging with the module, submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/extenuating-circumstances) as soon as you can. **You must also tell me** so your Item 1 mark can be handled correctly.
+If there are external reasons stopping you from engaging with the module, submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/extenuating-circumstances) as soon as you can. You must also tell me so your Item 1 mark can be handled correctly.
 
 Note that ECFs apply to the whole Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
@@ -81,14 +79,8 @@ If you do not have an approved ECF, you simply receive the marks for the demos y
 
 ## **Getting help**
 
-To get support with the worksheets, follow [discord_flutter.pptx](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
+To get support with the worksheets, follow the [Discord guide](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
 ## **Feedback**
 
 To provide feedback on the organisation of the Flutter part of the module, complete this anonymous [feedback form](https://forms.office.com/e/88jd4UGAui). Note that you need to be logged into Microsoft with your student account to be able to access the form, but your username will not be collected.
-
-If you notice any mistakes or would like any improvements, please open [the repository](https://github.com/manighahrmani/sandwich_shop), go to the Issues tab and open a new issue describing the mistake. Provide as much detail as possible so that we can fix it quickly.
-
-## **Sign-offs Tracker**
-
-Your demo marks are recorded in the practical session sign-off app. If you believe a demo mark is missing or incorrect, message a member of staff on Discord with your UP number.
