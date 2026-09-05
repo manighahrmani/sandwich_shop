@@ -90,23 +90,22 @@ Once the app is running, open developer tools (right-click the page and choose *
 
 ## Assessment Structure
 
-Item 1 is worth 50% of the overall module mark and is assessed entirely through 5 demo checkpoints of your Southsea Cinema coursework. There is no separate sign-off or coursework submission for Item 1: the demos are continuous assessment of the same coursework you build throughout the term.
+Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments. This Southsea Cinema coursework is **Item 1**, worth **50% of the overall module mark**. Item 1 is assessed as a **portfolio of live demos**, not as a single submission: you build the app in **five stages** and demonstrate each stage to a member of staff during a timetabled demo window.
 
-⚠️ You will only receive marks if you attend your timetabled demo session and demonstrate your progress to a member of staff. Missing a demo without an approved ECF means a mark of 0 for that checkpoint.
+There is no separate sign-off or code submission for Item 1. You submit the **link to your public GitHub repository on Moodle** when instructed, then attend the demo windows to show your work. Marks are awarded **only at the demos**.
 
-For the overall assessment structure, dates, and worksheet schedule, visit the [Flutter Course homepage](https://manighahrmani.github.io/sandwich_shop/).
+**Summary of how the marks work:**
 
-### Demos (50%, 10% per demo)
+* There are **five demos**, but only your **best four count** towards Item 1. The fifth demo is a safety net, so you can miss (or do poorly on) **one** demo without harming your mark.
+* Each demo is worth **25% of Item 1** (12.5% of the module). At each demo a member of staff assesses **Functionality (9% of Item 1)** by watching you run your app, inspects **Code quality (8%)**, and asks you **two questions to test your understanding of your own code (8%)**.
+* **Only one demo can take place per window.** If you miss a demo, you demonstrate the missed stage at the next window (you lose that window's slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at **75% of Item 1** (37.5% of the module), and so on.
+* If you use Firebase or another cloud service, you must **host the app live** and provide the URL at the demo so it can be checked without your API keys.
 
-At each demo, a member of staff checks your progress and asks you a few questions about your own code. Each demo is marked out of 10 (10% of the module):
+⚠️ You will only receive marks if you attend your timetabled demo window and demonstrate your progress to a member of staff. Missing a demo without an approved ECF means you cannot recover that demo slot.
 
-* **Functionality (0-4)**: does the app implement the features expected by this point in the schedule? Extra marks are available if you have progressed further than expected.
-* **Quality (0-2)**: code quality on inspection (naming and formatting early on, structure and separation of concerns later).
-* **Understanding (0-4)**: your answers to a few questions about your own code and decisions.
+📄 **For the full details of how you are assessed — including the exact mark breakdown, the missed-demo rules, and how Extenuating Circumstances affect Item 1 — read the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi).**
 
-The exact expectations for each demo are listed in the corresponding worksheet and in the demo issue on [the sandwich_shop repository's Issues tab](https://github.com/manighahrmani/sandwich_shop/issues).
-
-If you use Firebase or another cloud service in your coursework, you must host the app live and provide the URL at the demo so it can be checked without needing your API keys.
+For the overall dates and worksheet schedule, visit the [Flutter Course homepage](https://manighahrmani.github.io/sandwich_shop/). The exact expectations for each demo are listed in the corresponding worksheet and in the demo issue on [the sandwich_shop repository's Issues tab](https://github.com/manighahrmani/sandwich_shop/issues).
 
 ## Submission
 
@@ -152,13 +151,13 @@ The referral/deferral assessment for this Flutter Course is a coursework that yo
 
 ## Extenuating Circumstances
 
-If there are external reasons stopping you from engaging with the module, submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/exams/extenuating-circumstances) as soon as you can and notify a member of staff when your ECF is approved.
+If there are external reasons stopping you from engaging with the module, submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/extenuating-circumstances) as soon as you can. **You must also tell a member of staff** so your Item 1 mark can be handled correctly.
 
-Note that ECFs apply to the whole Item 1 (the entire Flutter Course, 50% of the module). You cannot use an ECF just for individual demos.
+Note that ECFs apply to the whole of Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
-Also note that if your ECF is approved, any demo marks you already have will not be counted. Instead, you will be expected to take the deferral assessment in July and your Item 1 mark will come from that deferral coursework alone (not from the demos above).
+If you have an approved ECF, your Item 1 mark is recorded as **0** for the demo portfolio and you are instead expected to take the deferral assessment in July; your Item 1 mark then comes from that deferral coursework alone (not from the demos). However, **if you go on to attend demos and earn marks, those demo marks override the ECF** and you will be marked on your demos instead.
 
-If you do not have an ECF or it is not approved, you will receive all the demo marks you have completed.
+If you do not have an approved ECF, you simply receive the marks for the demos you completed. For the full ECF rules, see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi).
 
 ## Help with Coursework
 
