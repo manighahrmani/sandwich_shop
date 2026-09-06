@@ -8,15 +8,24 @@ School of Computing
 | Module Coordinator | [mani.ghahremani@port.ac.uk](mailto:mani.ghahremani@port.ac.uk) |
 | Assessment Item number | Item 1 |
 | Assessment Title | Southsea Cinema — Flutter Coursework |
-| Date Issued | TBC (2026-27 delivery) |
+| Date Issued | 2026-09-21 |
+
+## Schedule and Deliverables
+
+| Deliverable | Format | Value | Date of demos |
+| --- | --- | --- | --- |
+| GitHub Repository | Link to your repository submitted to Moodle | 100% | Demo 1 by 02/10/2026 <br> Demo 2 by 16/10/2026 <br> Demo 3 by 06/11/2026 <br> Demo 4 by 20/11/2026 <br> Demo 5 by 04/12/2026 |
+
+Demo: 10 minutes demo in your timetabled practical. All marks awarded in the demo.
 
 ## Notes and Advice
 
-* The [Extenuating Circumstances procedure](https://myport.port.ac.uk/my-course/extenuating-circumstances) is there to support you if you have had any circumstances that have been significant enough to prevent you from attending, completing or submitting an assessment on time. If you complete an Extenuating Circumstances Form (ECF) for this assessment, use the correct module code and item number given above.
-* [ASDAC](http://www2.port.ac.uk/additional-support-and-disability-advice-centre/) are available to any students who disclose a disability or require additional support for their academic studies, with a good set of resources on the [ASDAC moodle site](https://moodle.port.ac.uk/course/view.php?id=3012).
+* The [Extenuating Circumstances procedure](https://myport.port.ac.uk/my-course/extenuating-circumstances) is there to support you if you have had any circumstances that have been significant enough to prevent you from attending, completing or submitting an assessment on time. If you complete an Extenuating Circumstances Form (ECF) for this assessment, use the correct module code, item number and deadline (not the late deadline) given above.
+* [ASDAC](http://www2.port.ac.uk/additional-support-and-disability-advice-centre/) are available to any students who disclose a disability or require additional support for their academic studies.
 * The University takes any form of academic misconduct (such as plagiarism) seriously, so please make sure your work is your own. Please ensure you adhere to our [Student Conduct Policy](https://policies.docstore.port.ac.uk/policy-261.pdf) and watch the video on [Plagiarism](https://www.youtube.com/watch?v=2a0QJnCmfEs).
-* Any material included in your coursework should be fully cited and referenced in **APA 7** format. Detailed advice on referencing is available from the [library](https://library.port.ac.uk/w165.html) and [library.port.ac.uk/referencing](https://library.port.ac.uk/referencing).
-* If you need additional assistance, you can ask your personal tutor or your lecturers.
+* Any material included in your coursework should be fully cited and referenced in **APA 7** format. Detailed advice on referencing is available from the [library](https://library.port.ac.uk/w165.html), also see TECFAC 08 Plagiarism and [library.port.ac.uk/referencing](https://library.port.ac.uk/referencing).
+* Any material submitted that does not meet format or submission guidelines or falls outside of the submission deadline could be subject to a cap on your overall result or disqualification entirely.
+* If you need additional assistance, you can ask your personal tutor, student engagement officer [ana.baker@port.ac.uk](mailto:ana.baker@port.ac.uk) or your lecturers.
 * If you are concerned about your well-being, contact our [Well-being service](https://myport.port.ac.uk/guidance-and-support/health-and-wellbeing).
 
 ## Overview
@@ -25,7 +34,7 @@ Your task is to recreate a mobile-friendly version of the Southsea Cinema websit
 
 Reference website: [Southsea Cinema](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/)
 
-The starter app is deliberately minimal. It contains only a basic theme, an empty home page, a small drawer, and a default widget test. You are expected to add screens, widgets, data models, tests, persistence, and cloud services during the coursework.
+We have provided a starter app for this coursework which is deliberately minimal. It contains only a basic theme, an empty home page, a small drawer, and a default widget test. You are expected to add screens, widgets, data models, tests, persistence, and cloud services during the coursework.
 
 ## Getting Started
 
@@ -41,7 +50,7 @@ You have three development options:
 2. University Windows computers
 3. Your own computer
 
-Note that all the recommended development tools for this coursework, including AI assistants, are free. If you do not own a high-spec computer, you can use the university machines or a browser-based option. See [Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html) for details.
+Note that all the recommended development tools for this coursework are free. If you do not own a high-spec computer, you can use the university machines or a browser-based option.
 
 ### Fork the Repository
 
@@ -108,7 +117,7 @@ flutter run -d edge
 
 The app should open in your browser and show the Southsea Cinema starter home page:
 
-![Starter app running in Chrome](images/step4_run_app.png)
+![Starter app running in Edge](images/step4_run_app.png)
 
 To view it in mobile view, open developer tools (right-click the page and choose **Inspect**, or press F12), then click the **Toggle device toolbar** button:
 
@@ -122,7 +131,7 @@ Finally, choose a phone-sized device preset from the dropdown menu:
 
 Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments. This Southsea Cinema coursework is **Item 1**, worth **50% of the overall module mark**. Item 1 is assessed as a portfolio, not as a single submission: you build the app in five stages and demonstrate each stage to a member of staff during a timetabled demo window.
 
-There is no separate sign-off or code submission for Item 1. You submit the link to your public GitHub repository on Moodle when instructed, then attend the demo windows to show your work. Marks are awarded only at the demos.
+You must submit the link to your public GitHub repository on Moodle before the first demo, then attend your timetabled practical session to demo your work. Marks are awarded only at the demos.
 
 Summary of how the marks work:
 
@@ -130,7 +139,7 @@ Summary of how the marks work:
 * Each demo is worth 25% of Item 1 (12.5% of the module). At each demo a member of staff assesses Functionality (9% of Item 1) by watching you run your app, inspects Code quality (8%), and asks you two questions to test your understanding of your own code (8%).
 * Only one demo can take place per window. If you miss a demo, you demonstrate the missed stage at the next window (you lose that window's slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at 75% of Item 1 (37.5% of the module), and so on.
 
-⚠️ You will only receive marks if you attend your timetabled demo window and demonstrate your progress to a member of staff. Missing a demo without an approved ECF means you cannot recover that demo slot.
+⚠️ You will only receive marks if you attend your timetabled practical. You cannot get marks in practicals at a different time to what is shown on your timetable.
 
 For the full details of how you are assessed — including the exact mark breakdown, the missed-demo rules, and how Extenuating Circumstances affect Item 1 — read the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi).
 
@@ -138,7 +147,7 @@ For the overall dates and worksheet schedule, visit the [Flutter Course homepage
 
 ## Submission
 
-You will submit the link to your public forked repository on Moodle when instructed. You are not submitting a zip file or a copy of the source code.
+You need to submit the link to your public forked repository on Moodle before the first demo. You are not submitting a zip file or a copy of the source code.
 
 Make sure your repository is public. Test this by opening your repository link in a private/incognito browser window (you should not get a 404 error).
 
