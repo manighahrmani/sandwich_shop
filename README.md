@@ -71,7 +71,7 @@ The referral/deferral assessment for this Flutter Course is a different coursewo
 
 If there are external reasons stopping you from engaging with the module (for example mental or physical illness or problems with accommodation or family), submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/extenuating-circumstances) as soon as you can.
 
-⚠️ You must email me (mani.ghahremani@port.ac.uk) if your ECF is approved so your Item 1 mark can be handled correctly.
+⚠️ You must email me ([mani.ghahremani@port.ac.uk](mailto:mani.ghahremani@port.ac.uk)) if your ECF is approved so your Item 1 mark can be handled correctly.
 
 Note that ECFs apply to the whole Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
