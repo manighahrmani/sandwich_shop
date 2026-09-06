@@ -11,9 +11,9 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 | 28/09/2026 | 02/10/2026 | Worksheet 2 | Lecture 2 | Demo 1 |
 | 05/10/2026 | 09/10/2026 | Worksheet 3 | Lecture 3 | Demo 2 |
 | 12/10/2026 | 16/10/2026 | Worksheet 4 | Lecture 4 | Demo 2 |
-| 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo 3 (opens) |
-| 26/10/2026 | 30/10/2026 | **Break** | Break | Break |
-| 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo 3 (closes) |
+| 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo 3 |
+| 26/10/2026 | 30/10/2026 | **Break** | **Break** | **Break** |
+| 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo 3 |
 | 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo 4 |
 | 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo 4 |
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo 5 |
@@ -23,7 +23,7 @@ Demo 3 is a single checkpoint with a two-week window either side of Reading Week
 
 ## **Teaching material**
 
-Each week has a worksheet (practical, applied) and a lecture (abstract, transferable skills). Lecture slides for the 2026-27 delivery are being prepared and will be added here.
+Each week has a worksheet (practical, applied) and a lecture (abstract, transferable skills).
 
 Each worksheet advances the same mock Sandwich Shop app used to teach the module; the state of the app after each worksheet is kept as a numbered branch of this repository (see [branch 0](https://github.com/manighahrmani/sandwich_shop/tree/0) through [branch 8](https://github.com/manighahrmani/sandwich_shop/tree/8)). Students mirror the same development steps in their own Southsea Cinema coursework repository, so by the end of a worksheet their coursework app should be at an equivalent stage to the matching branch here.
 
@@ -39,13 +39,11 @@ You should aim to complete the worksheets in the order they are presented below.
 * [Worksheet 7: State Management and Persistence](./worksheet-7.md)
 * [Worksheet 8: Integration Testing, Firebase, and Deployment](./worksheet-8.md)
 
-Worksheets 9 and 10 (and a revised 2026-27 running order and content for worksheets 0-8, tracked in the planning issues on the repository) are in preparation.
-
 ## **Assessment**
 
 This part of the module, which runs through Teaching Block 1 (TB1), is listed as Item 1 in the module specification. Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments; Item 1 is worth **50% of the overall module mark**. Item 1 is assessed as a portfolio of live demos of your Southsea Cinema coursework (see the schedule above for dates), which you build in five stages. There is no separate sign-off or coursework submission for Item 1: you submit the link to your public GitHub repository on Moodle and then demonstrate your work at the timetabled demo windows.
 
-### **Demos: how the 50% is awarded**
+### **Demos**
 
 There are five demos, but only your best four count towards Item 1 — so you can miss (or score poorly on) one demo without harming your mark. Each demo is worth 25% of Item 1 (12.5% of the module) and is assessed on three things:
 
@@ -54,6 +52,8 @@ There are five demos, but only your best four count towards Item 1 — so you ca
 * Understanding (8% of Item 1): your answers to two questions about your own code and decisions.
 
 Only one demo can take place per window. If you miss a demo, you demonstrate the missed stage at the next window (losing that slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at 75% of Item 1 (37.5% of the module), and so on.
+
+⚠️ You will only receive marks if you attend your timetabled practical. You cannot get marks in practicals at a different time to what is shown on your timetable.
 
 For the full mark breakdown, the missed-demo rules, and how Extenuating Circumstances affect Item 1, read the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi).
 
@@ -65,11 +65,13 @@ The coursework brief can be found on [this page](https://manighahrmani.github.io
 
 More information about what referral/deferral are will be provided later in Moodle. Referral/deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
 
-The referral/deferral assessment for this Flutter Course is a coursework that you need to complete during the referral/deferral period (see above). This coursework is not the same as [the coursework brief linked above](#coursework-brief). It will be added to Moodle nearer the time.
+The referral/deferral assessment for this Flutter Course is a different coursework that you need to complete during the referral/deferral period (see above).
 
 ### **Extenuating Circumstances**
 
-If there are external reasons stopping you from engaging with the module, submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/extenuating-circumstances) as soon as you can. You must also tell me so your Item 1 mark can be handled correctly.
+If there are external reasons stopping you from engaging with the module (for example mental or physical illness or problems with accommodation or family), submit an [Extenuating Circumstances Form (ECF)](https://myport.port.ac.uk/my-course/extenuating-circumstances) as soon as you can.
+
+⚠️ You must email me (mani.ghahremani@port.ac.uk) if your ECF is approved so your Item 1 mark can be handled correctly.
 
 Note that ECFs apply to the whole Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
