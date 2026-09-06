@@ -4,20 +4,20 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 
 ## **Schedule**
 
-| Week Commencing | Week Ending | Worksheet | Lecture | Demo |
-| --------------- | ----------- | --------- | ------- | ---- |
+| Week Commencing | Week Ending | Worksheet | Lecture | Demo window |
+| --------------- | ----------- | --------- | ------- | ----------- |
 | 14/09/2026 | 18/09/2026 | Worksheet 0 | Lecture 0 | Demo 1 |
-| 21/09/2026 | 25/09/2026 | Worksheet 1 | Lecture 1 | |
-| 28/09/2026 | 02/10/2026 | Worksheet 2 | Lecture 2 | |
+| 21/09/2026 | 25/09/2026 | Worksheet 1 | Lecture 1 | Demo 1 |
+| 28/09/2026 | 02/10/2026 | Worksheet 2 | Lecture 2 | Demo 1 |
 | 05/10/2026 | 09/10/2026 | Worksheet 3 | Lecture 3 | Demo 2 |
-| 12/10/2026 | 16/10/2026 | Worksheet 4 | Lecture 4 | |
+| 12/10/2026 | 16/10/2026 | Worksheet 4 | Lecture 4 | Demo 2 |
 | 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo 3 (opens) |
-| 26/10/2026 | 30/10/2026 | **Reading Week** | | |
+| 26/10/2026 | 30/10/2026 | **Break** | Break | Break |
 | 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo 3 (closes) |
 | 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo 4 |
-| 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | |
+| 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo 4 |
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo 5 |
-| 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | |
+| 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | Demo 5 |
 
 Demo 3 is a single checkpoint with a two-week window either side of Reading Week.
 
@@ -59,7 +59,7 @@ For the full mark breakdown, the missed-demo rules, and how Extenuating Circumst
 
 ### **Coursework brief**
 
-A formal coursework brief document is being prepared for 2026-27 and will be linked here once it is ready. In the meantime, refer to the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) for the coursework starter code and instructions, and see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi) for exactly how Item 1 is marked.
+The coursework brief can be found on [this page](https://manighahrmani.github.io/sandwich_shop/southsea_cinema_coursework_brief.html). A copy is also available on [OneDrive](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw?e=gD920R). Also refer to the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) for the coursework starter code and instructions, and see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc?e=w7Yrgi) for exactly how Item 1 is marked.
 
 ### **Referral/Deferral Assessment**
 
