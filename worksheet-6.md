@@ -4,7 +4,7 @@
 
 Ensure that you have already completed the following:
 
-- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+- [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md).
 - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
 - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
 - [Worksheet 3 — Stateful widgets](./worksheet-3.md).
