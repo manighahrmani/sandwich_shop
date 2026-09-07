@@ -4,7 +4,7 @@
 
 Ensure that you have already completed the following:
 
-- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+- [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md).
 - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
 - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
 - [Worksheet 3 — Stateful widgets](./worksheet-3.md).
@@ -56,7 +56,7 @@ For a more in-depth explanation of these concepts, see [this page on app state m
 
 ### **Creating a Cart Model with ChangeNotifier**
 
-Let's refactor our `Cart` class to extend `ChangeNotifier` (feel free to revisit our [Object-Oriented Dart Worksheet](./worksheet-0.md#4---object-oriented-programming-in-dart) for a refresher). This will allow widgets to listen for changes and automatically rebuild when the cart is modified.
+Let's refactor our `Cart` class to extend `ChangeNotifier` (feel free to revisit the [Dart section in Worksheet 1](./worksheet-1.md#introduction-to-the-dart-language) for a refresher). This will allow widgets to listen for changes and automatically rebuild when the cart is modified.
 
 Open `lib/models/cart.dart` and update it to the following:
 

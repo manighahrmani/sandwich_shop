@@ -4,7 +4,7 @@
 
 Ensure that you have already completed the following:
 
-- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+- [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md).
 - [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
 - [Worksheet 2 — Stateless Widgets](./worksheet-2.md).
 
@@ -75,7 +75,7 @@ You may get some warning asking you not to invoke `print` in production code but
 
 Here, we've also used two `ElevatedButton` widgets. The most important property of them is `onPressed`. It takes a function that gets executed when the user taps the button. This is called an event handler or a **callback**. Some of you may remember event handlers from last year, they are functions that are invoked in response to an event, in this case, a button press.
 
-For now, our callback is an arrow function that just prints a message in the terminal (not on the UI) when they are pressed. (For more information on the arrow function syntax, check out the Dart worksheets on functions linked in [worksheets 0](https://manighahrmani.github.io/sandwich_shop/worksheet-0.html#introduction-to-the-dart-language)).
+For now, our callback is an arrow function that just prints a message in the terminal (not on the UI) when they are pressed. (For more information on the arrow function syntax, check out the Dart worksheets on functions linked in [Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html#introduction-to-the-dart-language)).
 
 To run the app, open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Terminal: Create New Terminal` and hit enter. In the terminal, run the command `flutter run`. You will see the buttons, and when you click them, messages will appear in the Terminal as shown below.
 

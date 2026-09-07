@@ -6,7 +6,6 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 
 | Week Commencing | Week Ending | Worksheet | Lecture | Demo window |
 | --------------- | ----------- | --------- | ------- | ----------- |
-| 14/09/2026 | 18/09/2026 | Worksheet 0 | Lecture 0 | Demo 1 |
 | 21/09/2026 | 25/09/2026 | Worksheet 1 | Lecture 1 | Demo 1 |
 | 28/09/2026 | 02/10/2026 | Worksheet 2 | Lecture 2 | Demo 1 |
 | 05/10/2026 | 09/10/2026 | Worksheet 3 | Lecture 3 | Demo 2 |
@@ -19,18 +18,15 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo 5 |
 | 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | Demo 5 |
 
-Demo 3 is a single checkpoint with a two-week window either side of Reading Week.
-
 ## **Teaching material**
 
 Each week has a worksheet (practical, applied) and a lecture (abstract, transferable skills).
 
 Each worksheet advances the same mock Sandwich Shop app used to teach the module; the state of the app after each worksheet is kept as a numbered branch of this repository (see [branch 0](https://github.com/manighahrmani/sandwich_shop/tree/0) through [branch 8](https://github.com/manighahrmani/sandwich_shop/tree/8)). Students mirror the same development steps in their own Southsea Cinema coursework repository, so by the end of a worksheet their coursework app should be at an equivalent stage to the matching branch here.
 
-You should aim to complete the worksheets in the order they are presented below. Do not skip Worksheet 0.
+You should aim to complete the worksheets in the order they are presented below.
 
-* [Worksheet 0: Introduction to Dart, Git and GitHub](./worksheet-0.md)
-* [Worksheet 1: Introduction to Flutter](./worksheet-1.md)
+* [Worksheet 1: Dart, Git, GitHub and Flutter](./worksheet-1.md)
 * [Worksheet 2: Stateless Widgets](./worksheet-2.md)
 * [Worksheet 3: Stateful Widgets](./worksheet-3.md)
 * [Worksheet 4: App Architecture, Testing, and README](./worksheet-4.md)

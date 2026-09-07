@@ -1,14 +1,57 @@
-# **Worksheet 1 — Introduction to Flutter**
+# **Worksheet 1 — Dart, Git, GitHub and Flutter**
 
 ## **What you need to know beforehand**
 
-Ensure that you have already completed the following:
-
-- [Worksheet 0 — Introduction to Dart, Git and GitHub](./worksheet-0.md).
+This worksheet combines the introductory Dart, Git, GitHub and Flutter material.
+Complete it before continuing to Worksheet 2.
 
 ## **Getting help**
 
 To get support with this worksheet, follow [discord_flutter.pptx](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
+
+## **Introduction to Git and GitHub**
+
+Git is the version control system we'll use to track changes in our code, while GitHub is the platform where we'll host our code online. Since your coursework must be submitted via GitHub, a solid understanding of both is necessary for this module.
+
+The following free courses from GitHub will get you up to speed:
+
+### 1 - Introduction to GitHub
+
+This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
+
+**Note**: Use a personal email address (not your university email) to sign up for GitHub. If you already have a GitHub account with your university email, you need to change the primary email to a personal one.
+
+![GitHub Email Settings](images/screenshot_GitHub_emails.png)
+
+Make sure to verify both email addresses in your GitHub account settings and enable two-factor authentication (2FA). We recommend using the GitHub mobile app for 2FA as shown below.
+
+![GitHub 2FA Settings](images/screenshot_GitHub_auth.png)
+
+#### The GitHub intro course you need to complete
+
+Once you have done this, complete the following [introduction course](https://github.com/skills/introduction-to-github).
+
+### 2 - Introduction to GitHub Copilot
+
+GitHub's AI can assist you with tasks such as explaining code, fixing bugs, and writing code snippets. As a student, you're eligible for a free Copilot subscription through the [GitHub Student Developer Pack](https://education.github.com/pack).
+
+**Note**: While signing up for GitHub for education, you need to be on-campus (or use the [VPN](https://myport.port.ac.uk/it-support/student-it-support/guide-to-the-virtual-private-network-vpn)) so that they can verify you are on the university campus.
+
+#### The GitHub Copilot course you need to complete
+
+Once you have access to Copilot, try completing the following [getting started course](https://github.com/skills/getting-started-with-github-copilot). If you get stuck, ask for help on the Discord channel or during your practical session.
+
+## **Introduction to the Dart language**
+
+Dart is the programming language developed by Google. It is a statically typed language used by the Flutter framework for cross-platform app development.
+
+If you have not used Dart before or need a refresher, use [dart_software_and_resources.docx](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani.ghahremani_port_ac_uk/IQAV79u54yUmQbJkHecwqxgDASKKC6OcByCtGUZ6hjFucvc).
+
+## **GitHub and Dart exercises**
+
+1. Personalise your GitHub profile with a profile picture and a short bio. Show it to a member of staff for feedback.
+
+2. Follow the [Dart and Visual Studio Code setup guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani.ghahremani_port_ac_uk/IQAV79u54yUmQbJkHecwqxgDASKKC6OcByCtGUZ6hjFucvc), install the GitHub Copilot extension, and create a small Dart file. Use Copilot to help write a function, run it from `main`, and print the result.
 
 ## **Set up your development environment**
 
@@ -84,7 +127,7 @@ In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Visual Studi
 
 #### **Opening the terminal on Windows**
 
-Open the `Start Menu` by pressing the `Windows` key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use [the university computers instead](https://www.google.com/search?q=%23university-computers).
+Open the `Start Menu` by pressing the `Windows` key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use [the university computers instead](#university-computers).
 
 #### **Installing the Chocolatey package manager**
 
