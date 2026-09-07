@@ -7,230 +7,79 @@ Complete it before continuing to Worksheet 2.
 
 ## **Getting help**
 
-To get support with this worksheet, follow [discord_flutter.pptx](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
+To get support with this worksheet, follow [discord_flutter](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
 ## **Introduction to Git and GitHub**
 
-Git is the version control system we'll use to track changes in our code, while GitHub is the platform where we'll host our code online. Since your coursework must be submitted via GitHub, a solid understanding of both is necessary for this module.
+Git is the version control system we'll use to track changes in our code. GitHub is the platform where we'll host our code online. Your coursework must be submitted via GitHub so you need a good understanding of it.
 
-The following free courses from GitHub will get you up to speed:
+### 0 - Sign up to GitHub
 
-### 1 - Introduction to GitHub
+Start by signing up for a GitHub account if you don't already have one: [GitHub Sign Up](https://github.com/signup)
 
-This course covers the basics of creating repositories, committing changes, working with branches, and using pull requests.
+⚠️ Use a personal email address (not your university one). Your university account will be deleted once you graduate.
 
-**Note**: Use a personal email address (not your university email) to sign up for GitHub. If you already have a GitHub account with your university email, you need to change the primary email to a personal one.
+If you already have a GitHub account with your university email, you need to change the primary email to a personal one.
 
 ![GitHub Email Settings](images/screenshot_GitHub_emails.png)
 
-Make sure to verify both email addresses in your GitHub account settings and enable two-factor authentication (2FA). We recommend using the GitHub mobile app for 2FA as shown below.
+Make sure to verify both email addresses in your GitHub account settings and enable two-factor authentication (2FA).
 
 ![GitHub 2FA Settings](images/screenshot_GitHub_auth.png)
 
-#### The GitHub intro course you need to complete
+### 1 - Introduction to GitHub
 
-Once you have done this, complete the following [introduction course](https://github.com/skills/introduction-to-github).
+Once you have a GitHub account, complete the following [introduction course](https://github.com/skills/introduction-to-github).
 
 ### 2 - Introduction to GitHub Copilot
 
-GitHub's AI can assist you with tasks such as explaining code, fixing bugs, and writing code snippets. As a student, you're eligible for a free Copilot subscription through the [GitHub Student Developer Pack](https://education.github.com/pack).
+GitHub's AI can assist you with tasks such as explaining code, fixing bugs, finding resources, and writing code snippets. As a student, you're eligible for a free Copilot subscription through the [GitHub Student Developer Pack](https://education.github.com/pack).
 
-**Note**: While signing up for GitHub for education, you need to be on-campus (or use the [VPN](https://myport.port.ac.uk/it-support/student-it-support/guide-to-the-virtual-private-network-vpn)) so that they can verify you are on the university campus.
+⚠️ While signing up for GitHub for education, you need your student ID and you need to be on-campus (or use the [VPN](https://myport.port.ac.uk/it-support/student-it-support/guide-to-the-virtual-private-network-vpn)) so that they can verify you are a student.
 
-#### The GitHub Copilot course you need to complete
-
-Once you have access to Copilot, try completing the following [getting started course](https://github.com/skills/getting-started-with-github-copilot). If you get stuck, ask for help on the Discord channel or during your practical session.
+Once you have access to Copilot, complete this [getting started course](https://github.com/skills/getting-started-with-github-copilot). If you get stuck, ask for help on the Discord channel or during your practical session.
 
 ## **Introduction to the Dart language**
 
 Dart is the programming language developed by Google. It is a statically typed language used by the Flutter framework for cross-platform app development.
 
-If you have not used Dart before or need a refresher, use [dart_software_and_resources.docx](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani.ghahremani_port_ac_uk/IQAV79u54yUmQbJkHecwqxgDASKKC6OcByCtGUZ6hjFucvc).
-
-## **GitHub and Dart exercises**
-
-1. Personalise your GitHub profile with a profile picture and a short bio. Show it to a member of staff for feedback.
-
-2. Follow the [Dart and Visual Studio Code setup guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani.ghahremani_port_ac_uk/IQAV79u54yUmQbJkHecwqxgDASKKC6OcByCtGUZ6hjFucvc), install the GitHub Copilot extension, and create a small Dart file. Use Copilot to help write a function, run it from `main`, and print the result.
+If you have not used Dart before or need a refresher, use [dart_software_and_resources](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAeCWXLehKuTou1gTpjrNKRAcCHcRGxPJSinskA7x1opXg?e=lfIK0S).
 
 ## **Set up your development environment**
 
-We first need to ensure all the necessary tools are installed on your computer. You can use Firebase Studio (a free browser-based IDE), the university computers, or your personal Mac or Windows computer. Skip to the section that matches your choice.
+The course provides a portable Flutter and VS Code package in the [`flutter_vscode_package`](./flutter_vscode_package) folder. Use this package on university Windows computers or any Windows computer where you do not want to install the tools globally.
 
-### **Firebase Studio**
+> **TODO:** Replace the old Firebase Studio instructions with GitHub Codespaces and a devcontainer workflow.
 
-This is a temporary solution in case the university computers are not working as expected or if you do not have your laptop. You can access it from anywhere using a web browser. You will need a personal Google account to log in, **not your university Google account**.
+### **Using the Flutter and VS Code package**
 
-Firebase Studio, previously known as Project IDX, provides a complete development environment in your browser, based on VS Code.
+Open the [`flutter_vscode_package`](./flutter_vscode_package) folder and double-click `DOUBLE_CLICK_ME_TO_START.bat`. The launcher prepares a workspace under `Downloads\flutter_vscode_package\workspace`, opens portable VS Code, and configures Flutter Web to use Edge.
 
-#### **Creating a Flutter Project**
+When the launcher asks for a repository URL, paste the URL of your forked coursework repository. It clones the repository into the workspace. If you leave the prompt empty, it creates a new Flutter Web starter project instead.
 
-Open [idx.google.com](https://idx.google.com) in any browser and sign in with your **personal Google account**.
+The launcher also runs `flutter pub get`, creates the VS Code Edge and Chrome launch configurations, and opens the project in VS Code. Use the repository URL for coursework; use the automatic starter option only when following the practice-project steps in this worksheet.
 
-Once you have agreed to the terms and conditions, you will see a screen similar to the one below.
-
-![Firebase Studio selection of template](images/screenshot_firebase_studio_template.png)
-
-Select Flutter from the list of templates (it is a blue icon that looks like a tilted "F"). Give your workspace a name, such as `sandwich_shop`, and create it.
-
-This will set up a complete Flutter project for you, ready to go. The interface will look very similar to VS Code, but it runs entirely in your browser.
-
-Running the app on Firebase studio is slightly different from a local VS Code setup. By default, your app should be running on both an Android emulator and a web browser. You can close the Android emulator as we will mainly be using web as our target device for most of the worksheets.
-
-![Firebase Studio interface](images/screenshot_firebase_studio_emulators.png)
-
-If it is not running, open the Command Palette with **Ctrl + Shift + P** (or **⌘ + Shift + P** on macOS) and type `Firebase Studio: Show Web Preview`. Select it to start the web version of your app.
-
-Continue with the rest of the worksheet as normal. The other minor difference is that instead of GitHub Copilot, Firebase Studio uses Google's AI assistant called Gemini (you can see it on the right-hand side). You can use it in a similar way to Copilot by selecting code and asking questions about it.
+If you need to install the package manually, follow the instructions in the package [README](./flutter_vscode_package/README.md).
 
 ### **University computers**
 
-#### **Logging in to AppsAnywhere**
+Use the package from the repository rather than installing Git, Flutter, or VS Code separately. The package is designed for Windows university computers and includes the required tools.
 
-Use the shortcut on the desktop or head to AppsAnywhere using this link: [appsanywhere.port.ac.uk](https://appsanywhere.port.ac.uk/sso). Once you have logged in, you will see a dialogue shown below. First, tick the box for "Always allow appsanywhere.port.ac.uk to open links of this type in the associated app" and then click on the "Open AppsAnywhere Launcher" button.
-
-![AppsAnywhere launcher](images/screenshot_appsanywhere_launcher.jpg)
-
-#### **Installing Git**
-
-In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Git` and click on launch. Do not select "GitHub Desktop".
-
-![Git in AppsAnywhere](images/screenshot_appsanywhere_git.png)
-
-To verify the installation, open the `Start Menu` by pressing the `Windows` key, type `Command Prompt` or `PowerShell`, and select it. Write the following command in the terminal and press Enter:
-
-```bash
-git --version
-```
-
-You should see a version number indicating that Git is installed successfully.
-
-#### **Installing the Flutter SDK**
-
-In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Flutter And Dart SDK` and click on launch.
-
-To verify the installation, enter the following in `Command Prompt` or `PowerShell`:
-
-```bash
-flutter doctor
-```
-
-This may take a while, but it should return a report of your Flutter installation status.
-
-![Flutter Doctor Report](images/screenshot_flutter_doctor.jpg)
-
-#### **Installing Visual Studio Code**
-
-In [AppsAnywhere](https://appsanywhere.port.ac.uk/sso), search for `Visual Studio Code` and launch it. It can take a while to load, so be patient.
-
-### **Personal Windows computer**
-
-#### **Opening the terminal on Windows**
-
-Open the `Start Menu` by pressing the `Windows` key, type `PowerShell`, and select `Run as Administrator`. You need administrator rights to install the package manager. If you don't have this permission, use [the university computers instead](#university-computers).
-
-#### **Installing the Chocolatey package manager**
-
-We will use a package manager called Chocolatey to easily install all the required tools. First, check if it's already installed by running `choco --version`. If you see a version number, you can skip to the next step.
-
-If it's not installed, go to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions. You should find a command similar to the one below:
-
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-```
-
-#### **Installing development tools on Windows**
-
-With Chocolatey installed, you can now install Git, Visual Studio Code, and the Flutter SDK. Run the following commands one by one in your PowerShell terminal with administrator rights:
-
-```powershell
-choco install git -y
-choco install vscode -y
-choco install flutter -y
-```
-
-If you get an error about Dart being already installed, you can first remove it with the following command then reinstall Flutter with `choco install flutter -y`.
-
-```bash
-choco uninstall dart -y
-```
-
-Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
-
-#### **Verifying the installation on Windows**
-
-Close your current terminal and open a new one, which doesn't need to be run as an administrator. Run the following to check your installations:
-
-```powershell
-flutter doctor
-```
-
-### **Personal macOS computer**
-
-#### **Opening the terminal on macOS**
-
-You can open the built-in Terminal app by pressing **⌘ + Space** to open Spotlight, typing `Terminal`, and pressing return.
-
-#### **Installing the Homebrew package manager**
-
-Homebrew is a package manager for macOS that simplifies installing software. To check if you have it installed, run `brew --version` in the terminal. If you see a version number, you can skip to the next step.
-
-If it is missing, visit the [Homebrew website](https://brew.sh/) and copy the installation command provided on the homepage. Paste it into your terminal and press return to install Homebrew. The command will look similar to this:
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-#### **Installing development tools on macOS**
-
-Once Homebrew is ready, you can install the necessary tools by running the following commands in your terminal:
-
-```bash
-brew install --cask visual-studio-code
-brew install --cask flutter
-```
-
-If you get an error about Dart being already installed, you can first remove it with the following command then reinstall Flutter with `brew install --cask flutter`.
-
-```bash
-brew uninstall dart
-```
-
-Make sure to read any prompts carefully before closing the terminal. You may be asked to run additional commands to add Flutter to your system's PATH variable.
-
-#### **Verifying the installation on macOS**
-
-Close your current terminal and open a new one. Run the following command to check your installations:
-
-```bash
-flutter doctor
-```
+On macOS, use the standard Flutter and VS Code installation instructions from the [Flutter documentation](https://docs.flutter.dev/get-started/install).
 
 ## **Your Flutter application**
 
-Now that our environment is set up, we can create our first Flutter project.
+After the launcher finishes, your project is open in portable VS Code. If you entered your fork URL, this is your coursework project. If you left the repository prompt empty, this is a new practice project.
 
-### **Setting up Visual Studio Code**
+### **Opening the generated project**
 
-To sync your VS Code settings, first open [GitHub](https://github.com/) in your browser and log in.
+The package includes portable VS Code and the required Flutter, Dart, Git, and extension configuration. It also sets Edge as the default Flutter Web target.
 
-Back in VS Code, click the Account icon in the bottom left corner and select `Backup and Sync Settings`. This should automatically sync your settings with your GitHub account.
+### **Using the generated project**
 
-![Visual Studio Code Account Icon](images/screenshot_vscode_account_icon.jpg)
+If you left the repository prompt empty, the launcher has already created a Flutter Web starter project and opened it in VS Code.
 
-If this is your first time using VS Code, you'll need to install [the Flutter extension](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter). Open the Extensions view by clicking the Extensions icon in the Activity Bar or by pressing **Ctrl + Shift + X** (Windows) or **⌘ + Shift + X** (macOS). In the search bar, type `Flutter` and install the official extension.
-
-![Flutter Extension](images/screenshot_flutter_extension.jpg)
-
-### **Creating a new Flutter project**
-
-In VS Code, open the Command Palette using **Ctrl + Shift + P** (Windows) or **⌘ + Shift + P** (macOS). In the palette, type `Flutter: New Project` and press Enter.
-
-![VS Code Command Palette](images/screenshot_vscode_command_palette.jpg)
-
-Select `Application` when prompted for a template. You will then be asked to choose a project location and name. Make a note of the location you choose.
-
-Choose a name for your project, such as `sandwich_shop`, and press Enter. VS Code will now create a new Flutter project and open it for you.
+For the Southsea Cinema coursework, paste your fork URL at the launcher prompt so it clones your coursework repository instead. The launcher runs `flutter pub get`, configures Edge and Chrome launch settings, and opens the project in VS Code.
 
 ### **Understanding the project structure**
 
