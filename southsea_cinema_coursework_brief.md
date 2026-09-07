@@ -42,7 +42,7 @@ We have provided a starter app for this coursework which is deliberately minimal
 
 ### Prerequisites
 
-You must already have a GitHub account to be able to start this coursework. If you have not done so, read and complete the exercises in [Worksheet 0](https://manighahrmani.github.io/sandwich_shop/worksheet-0.html) before continuing.
+You must already have a GitHub account to be able to start this coursework. If you have not done so, read and complete the introductory sections of [Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html) before continuing.
 
 You also need to be able to edit and run a Flutter project in your environment of choice, and to commit your changes to a GitHub repository. Both of these are explained in [Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html); complete it before continuing if you have not done so already.
 
