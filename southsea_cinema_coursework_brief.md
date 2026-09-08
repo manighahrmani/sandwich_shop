@@ -1,6 +1,6 @@
 # Southsea Cinema — Flutter Coursework
 
-School of Computing
+School of Computing, Mathematics and Physics 2026/27
 
 | | |
 | --- | --- |
@@ -12,7 +12,7 @@ School of Computing
 
 ## Schedule and Deliverables
 
-| Deliverable | Format | Value | Date of demos |
+| Deliverable | Format | Weight | Date of demos |
 | --- | --- | --- | --- |
 | GitHub Repository | Link to your repository submitted to Moodle | 100% | Demo 1 by 02/10/2026 <br> Demo 2 by 16/10/2026 <br> Demo 3 by 06/11/2026 <br> Demo 4 by 20/11/2026 <br> Demo 5 by 04/12/2026 |
 
@@ -22,11 +22,11 @@ Demo: 10 minutes demo in your timetabled practical. All marks awarded in the dem
 
 * The [Extenuating Circumstances procedure](https://myport.port.ac.uk/my-course/extenuating-circumstances) is there to support you if you have had any circumstances that have been significant enough to prevent you from attending, completing or submitting an assessment on time. If you complete an Extenuating Circumstances Form (ECF) for this assessment, use the correct module code, item number and deadline (not the late deadline) given above.
 * [ASDAC](http://www2.port.ac.uk/additional-support-and-disability-advice-centre/) are available to any students who disclose a disability or require additional support for their academic studies.
-* The University takes any form of academic misconduct (such as plagiarism) seriously, so please make sure your work is your own. Please ensure you adhere to our [Student Conduct Policy](https://policies.docstore.port.ac.uk/policy-261.pdf) and watch the video on [Plagiarism](https://www.youtube.com/watch?v=2a0QJnCmfEs).
+* The University takes any form of academic misconduct (such as plagiarism) seriously, so please make sure your work is your own. Please ensure you adhere to our [Student Conduct Policy](https://policies.docstore.port.ac.uk/policy-261.pdf) and watch the video on [Plagiarism.](https://www.youtube.com/watch?v=2a0QJnCmfEs)
 * Any material included in your coursework should be fully cited and referenced in **APA 7** format. Detailed advice on referencing is available from the [library](https://library.port.ac.uk/w165.html), also see TECFAC 08 Plagiarism and [library.port.ac.uk/referencing](https://library.port.ac.uk/referencing).
 * Any material submitted that does not meet format or submission guidelines or falls outside of the submission deadline could be subject to a cap on your overall result or disqualification entirely.
 * If you need additional assistance, you can ask your personal tutor, student engagement officer [ana.baker@port.ac.uk](mailto:ana.baker@port.ac.uk) or your lecturers.
-* If you are concerned about your well-being, contact our [Well-being service](https://myport.port.ac.uk/guidance-and-support/health-and-wellbeing).
+* If you are concerned about your well-being, contact our [Well-being service](https://myport.port.ac.uk/guidance-and-support/health-and-wellbeing)
 
 ## Overview
 
@@ -42,9 +42,9 @@ We have provided a starter app for this coursework which is deliberately minimal
 
 ### Prerequisites
 
-You must already have a GitHub account to be able to start this coursework. If you have not done so, read and complete the introductory sections of [Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html) before continuing.
+You must already have a GitHub account to be able to start this coursework. If you have not done so, read and complete the exercises in [Worksheet 0](https://manighahrmani.github.io/sandwich_shop/worksheet-0.html) before continuing.
 
-You also need to be able to edit and run a Flutter project in your environment of choice, and to commit your changes to a GitHub repository. Both of these are explained in [Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html); complete it before continuing if you have not done so already.
+You also need to be able to edit and run a Flutter project in your environment of choice and to commit your changes to a GitHub repository. Both of these are explained in [Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html); complete it before continuing if you have not done so already.
 
 You have three development options:
 
@@ -181,7 +181,7 @@ southsea_cinema/
 └── README.md                   # This file
 ```
 
-Note that this is the initial structure. You are expected to create additional files and directories as needed to complete the coursework, and you can reorganize the project structure as you see fit.
+Note that this is the initial structure. You are expected to create additional files and directories as needed to complete the coursework, and you can reorganise the project structure as you see fit.
 
 ## Referral/Deferral Assessment
 
@@ -195,7 +195,9 @@ If there are external reasons stopping you from engaging with the module, submit
 
 Note that ECFs apply to the whole of Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
-If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are instead expected to take the deferral assessment in the week beginning Monday 22 February 2027; your Item 1 mark then comes from that deferral coursework alone (not from the demos). However, if you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
+If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio, and you are instead expected to take the deferral assessment in the week beginning Monday 22 February 2027; your Item 1 mark then comes from that deferral coursework alone (not from the demos).
+
+If you go on to attend demos and earn marks, you will override the ECF.
 
 If you do not have an approved ECF, you simply receive the marks for the demos you completed. For the full ECF rules, see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc).
 
