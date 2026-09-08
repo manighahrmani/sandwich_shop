@@ -19,10 +19,17 @@ The schedule is also available as the [module schedule workbook](https://portdot
 | 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo 4 |
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo 5 |
 | 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | Demo 5 |
-| 07/12/2026 | 18/12/2026 | Referral Deferral Assessments | | |
 | 21/12/2026 | 08/01/2027 | Xmas Break | | |
 | 11/01/2027 | 15/01/2027 | Marking week | | |
-| 18/01/2027 | 21/03/2027 | Term 2 | | |
+| 18/01/2027 | 22/01/2027 | Term 2 | | |
+| 25/01/2027 | 29/01/2027 | | | |
+| 01/02/2027 | 05/02/2027 | | | |
+| 08/02/2027 | 12/02/2027 | | | |
+| 15/02/2027 | 19/02/2027 | | | |
+| 22/02/2027 | 26/02/2027 | Referral and Deferral Assessments (for Term 1) | | |
+| 01/03/2027 | 05/03/2027 | Term 2 | | |
+| 08/03/2027 | 12/03/2027 | | | |
+| 15/03/2027 | 19/03/2027 | | | |
 | 22/03/2027 | 09/04/2027 | Easter Break | | |
 | 12/04/2027 | 23/04/2027 | Term 2 | | |
 | 26/04/2027 | 04/06/2027 | Referral Deferral Assessments | | |
@@ -69,7 +76,7 @@ The coursework brief can be found on [this page](https://manighahrmani.github.io
 
 ### **Referral/Deferral Assessment**
 
-More information about what referral/deferral are will be provided later in Moodle. Referral/deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
+The Term 1 referral/deferral assessment takes place in the week beginning Monday 22 February 2027. More information about what referral/deferral are will be provided later in Moodle. Referral/deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
 
 The referral/deferral assessment for this Flutter Course is a different coursework that you need to complete during the referral/deferral period (see above).
 
@@ -81,7 +88,7 @@ If there are external reasons stopping you from engaging with the module (for ex
 
 Note that ECFs apply to the whole Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
-If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are instead expected to take the deferral assessment in July; your Item 1 mark then comes from that deferral coursework alone (not from the demos above). However, if you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
+If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are instead expected to take the deferral assessment in the week beginning Monday 22 February 2027; your Item 1 mark then comes from that deferral coursework alone (not from the demos above). However, if you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
 
 If you do not have an approved ECF, you simply receive the marks for the demos you completed. For the full ECF rules, see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc).
 
