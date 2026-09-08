@@ -195,7 +195,7 @@ If there are external reasons stopping you from engaging with the module, submit
 
 Note that ECFs apply to the whole of Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
-If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are instead expected to take the deferral assessment in July; your Item 1 mark then comes from that deferral coursework alone (not from the demos). However, if you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
+If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are instead expected to take the deferral assessment in the week beginning Monday 22 February 2027; your Item 1 mark then comes from that deferral coursework alone (not from the demos). However, if you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
 
 If you do not have an approved ECF, you simply receive the marks for the demos you completed. For the full ECF rules, see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc).
 
