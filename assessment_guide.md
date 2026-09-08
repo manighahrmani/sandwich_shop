@@ -78,10 +78,10 @@ of the module. You cannot submit an ECF for a single demo.
 
 ⚠️ If you submit an ECF, you must tell me (<mani.ghahremani@port.ac.uk>).
 
-When an approved ECF is in place, your Item 1 mark must be recorded as 0 and you
+When an approved ECF is in place, your Item 1 mark must be recorded as 0, and you
 are instead expected to take the deferral assessment in the week beginning
-Monday 22 February 2027, so your Item 1
-mark then comes solely from that deferral coursework and not from any demos.
+Monday 22 February 2027, so your Item 1 mark then comes solely from that deferral
+coursework and not from any demos.
 
 If you have an ECF but go on to attend demos and earn marks, those demo marks
 take precedence and your ECF is overwritten.
