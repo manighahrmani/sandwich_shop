@@ -83,7 +83,7 @@ Afterwards, select `Application` as the project type and select a location on th
 
 Once you have a new Flutter project, you should see the project's structure in the Explorer view on the left side of VS Code. The most important files for now are located in the `lib/` folder.
 
-This folder contains your Dart application code (source code) with the main entry point being `lib/main.dart` (this is the file that runs when you start your app).
+This folder contains your Dart application code (source code), with the main entry point in `main.dart` (this is the file that runs when you start your app).
 
 The term "root" of a project refers to its top-level directory, which contains all the other files and folders.
 
@@ -95,7 +95,7 @@ The screenshot below shows the `main.dart` and `pubspec.yaml` files in the start
 
 You don't need to understand the code at this moment but below is a brief overview.
 
-The default application is a simple counter app. The `lib/main.dart` file contains the entry point `void main() => runApp(const MyApp());`, which runs the root widget, `MyApp`. This `StatelessWidget` sets up the `MaterialApp` and defines the home screen, which is the `MyHomePage` widget. `MyHomePage` is a `StatefulWidget` because it manages the changing counter value. It contains the `_incrementCounter()` method, which uses `setState()` to rebuild the UI when the `_counter` variable changes.
+The default application's `main.dart` file contains the entry point `void main() => runApp(const MyApp());`, which runs the root widget, `MyApp`. This `StatelessWidget` sets up the `MaterialApp` and defines the home screen, which is the `MyHomePage` widget. `MyHomePage` is a `StatefulWidget` because it manages the changing counter value. It contains the `_incrementCounter()` method, which uses `setState()` to rebuild the UI when the `_counter` variable changes.
 
 ### **Using AI**
 
@@ -135,7 +135,7 @@ This command fetches and installs all the dependencies listed in the `pubspec.ya
 
 ### **Running the app**
 
-You can run the app in several ways, for example by pressing the F5 key, opening a new terminal and running `flutter run`, or clicking the "Run" button that appears above the `main` function in `lib/main.dart`.
+You can run the app in several ways, for example by pressing the F5 key, opening a new terminal and running `flutter run`, or clicking the "Run" button that appears above the `main` function in `main.dart`.
 
 You can also open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Terminal: Create New Terminal` to open a terminal, then run the following command:
 
@@ -181,6 +181,22 @@ git init
 
 #### **Making the first commit**
 
+If you used the Flutter and VS Code bundle, its launcher has already checked your Git author configuration. It displays your configured GitHub username and email address and lets you change them. You cannot continue until both values are set.
+
+If you installed Flutter and VS Code yourself, check your Git author configuration before committing:
+
+```bash
+git config --global --get user.name
+git config --global --get user.email
+```
+
+If either command does not return a value, configure your GitHub username and the email address associated with your GitHub account:
+
+```bash
+git config --global user.name "YOUR_GITHUB_USERNAME"
+git config --global user.email "YOUR_GITHUB_EMAIL"
+```
+
 You should now see all your project files listed in the Source Control panel. Hover over **Changes** and click the `+` icon to stage all files. Then, enter a commit message like `Initial commit` in the text box and click the **Commit** button to commit your changes.
 
 ![Commit Changes](images/screenshot_vscode_commit_changes.jpg)
@@ -201,13 +217,6 @@ Or `Sync Changes`:
 ![Sync Changes Button](images/screenshot_vscode_sync_changes.jpg)
 
 Click this to push your local repository to GitHub. You may be asked to allow VS Code to log in to your GitHub account.
-
-You may get an error message indicating that your git user name and email are not set. You can configure them by running the following commands in the terminal (remember to replace `"YOUR_USERNAME"` with your GitHub username and `"YOUREMAIL@example.com"` with the email associated with your GitHub account):
-
-```bash
-git config --global user.name "YOUR_USERNAME"
-git config --global user.email "YOUREMAIL@example.com"
-```
 
 Next, you will be asked to name your repository; enter `sandwich_shop`. Let this be a **public** repository and click `Publish Repository`.
 
@@ -235,14 +244,12 @@ Once you have clicked on commit and then sync changes, you should be able to see
 
 ## **Exercises**
 
-Complete these tasks using your Southsea Cinema coursework repository. Refer to the formal [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) if you need more information about the assessment.
+From this point onwards, the exercises in each worksheet direct you to work on your Southsea Cinema coursework. The exercises in this worksheet prepare you for Demo 1, which must be completed by Friday 2 October 2026. Refer to the formal [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) for the assessment requirements.
 
 1. Open the [Southsea Cinema starter repository](https://github.com/manighahrmani/southsea_cinema#fork-the-repository) and follow its README from **Fork the Repository** onwards. Fork the repository into your own GitHub account, then clone your fork onto your computer or a university machine.
 
 2. Follow the README instructions to install the project dependencies and run the app in Chrome or Edge. Open the browser's developer tools and use the device toolbar to display the app in a phone-sized mobile view.
 
-3. In `lib/main.dart`, find the `MaterialApp` widget and change its `title` to `Southsea Cinema & Arts Centre`. Save the file while the app is running, then use hot reload to see the updated title without restarting the app. Check the browser tab and confirm that the new title appears.
+3. In `main.dart`, find the `MaterialApp` widget and change its `title` to `Southsea Cinema & Arts Centre`. Save the file while the app is running, then use hot reload to see the updated title without restarting the app. Check the browser tab and confirm that the new title appears.
 
 4. Use VS Code's Source Control view to review and stage your change. Commit it with a clear message such as `Change webpage title`, then push the commit to your fork on GitHub. Open your fork in a browser and confirm that the new commit and code change are visible.
-
-Show your running app in mobile view and your updated GitHub fork to a member of staff at your next practical.
