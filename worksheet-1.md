@@ -47,46 +47,41 @@ If you have not used Dart before or need a refresher, use [dart_software_and_res
 
 ## **Set up your development environment**
 
-The course provides a portable Flutter and VS Code package in the [`flutter_vscode_package`](./flutter_vscode_package) folder. Use this package on university Windows computers or any Windows computer where you do not want to install the tools globally.
+Developing a Flutter application is demanding on the hardware of your computer. So if you have a capable device, you can install the flutter locally on your machine. Otherwise, use the university machines. Follow the guide below depending on your choice.
 
-> **TODO:** Replace the old Firebase Studio instructions with GitHub Codespaces and a devcontainer workflow.
+### **A - On your own device**
 
-### **Using the Flutter and VS Code package**
+Follow the [official Flutter installation guide](https://docs.flutter.dev/install/quick) to set up Flutter on your device.
 
-Open the [`flutter_vscode_package`](./flutter_vscode_package) folder and double-click `DOUBLE_CLICK_ME_TO_START.bat`. The launcher prepares a workspace under `Downloads\flutter_vscode_package\workspace`, opens portable VS Code, and configures Flutter Web to use Edge.
+### **B - Using the university machines on campus**
 
-When the launcher asks for a repository URL, paste the URL of your forked coursework repository. It clones the repository into the workspace. If you leave the prompt empty, it creates a new Flutter Web starter project instead.
+Log into GitHub on the university machine first and then open [the `flutter_vscode_package` repository](https://github.com/manighahrmani/flutter_vscode_package#setup).
 
-The launcher also runs `flutter pub get`, creates the VS Code Edge and Chrome launch configurations, and opens the project in VS Code. Use the repository URL for coursework; use the automatic starter option only when following the practice-project steps in this worksheet.
+Copy the PowerShell command from the repository's README, then paste it into PowerShell on the university computer and press Enter to execute it.
 
-If you need to install the package manually, follow the instructions in the package [README](./flutter_vscode_package/README.md).
+Pay attention to the terminal as it may ask you to select which repository you would like to use. The process takes up to 10 minutes to complete. And once it is done, you should see Visual Studio Code open where you need to log in using your GitHub account.
 
-### **University computers**
+Once Visual Studio Code is open, follow the instructions [on the official Flutter website](https://docs.flutter.dev/install/quick#test-drive). Skip the first step as it is already handled by the launcher.
 
-Use the package from the repository rather than installing Git, Flutter, or VS Code separately. The package is designed for Windows university computers and includes the required tools.
+### **C - Using the university machines while not on campus**
 
-On macOS, use the standard Flutter and VS Code installation instructions from the [Flutter documentation](https://docs.flutter.dev/get-started/install).
+[Guide to remote computer access](https://myport.port.ac.uk/it-support/student-it-support/guide-to-remote-computer-access) provides instructions on how to access university computers remotely. You need to install the university VPN as well as a remote desktop client.
 
-## **Your Flutter application**
+Once you have followed the guide above, refer to [the on-campus guide above](#b---using-the-university-machines-on-campus) to set up and use the Flutter and VS Code package remotely.
 
-After the launcher finishes, your project is open in portable VS Code. If you entered your fork URL, this is your coursework project. If you left the repository prompt empty, this is a new practice project.
-
-### **Opening the generated project**
-
-The package includes portable VS Code and the required Flutter, Dart, Git, and extension configuration. It also sets Edge as the default Flutter Web target.
-
-### **Using the generated project**
+## **Using the generated project**
 
 If you left the repository prompt empty, the launcher has already created a Flutter Web starter project and opened it in VS Code.
 
-For the Southsea Cinema coursework, paste your fork URL at the launcher prompt so it clones your coursework repository instead. The launcher runs `flutter pub get`, configures Edge and Chrome launch settings, and opens the project in VS Code.
+You should see a new folder structure in the Explorer view on the left side of VS Code. The most important files for now are located in the `lib/` folder.
 
-### **Understanding the project structure**
+This folder contains your Dart application code (source code) with the main entry point being `lib/main.dart` (this is the file that runs when you start your app).
 
-You should see a new folder structure in the Explorer view on the left side of VS Code. You are encouraged to explore the files and folders, but the most important files for now are located in the `lib/` folder. This folder contains your Dart application code with the main entry point being `lib/main.dart` (this is the file that runs when you start your app).
+The term "root" of a project refers to the top-level directory of a project. The root contains all the other files and folders. In this case.
 
-The term root of the project refers to the top-level directory of your project, which contains all the other files and folders. In this case, it's the `sandwich_shop` folder.
-There is a file called `pubspec.yaml` in the root directory, which is a configuration file for managing your project's dependencies and assets.
+In the root of all Flutter projects, there must be a file called `pubspec.yaml`. This is a configuration file for managing your project's dependencies and assets.
+
+The screenshot below shows the `main.dart` and `pubspec.yaml` files in the starter project.
 
 ![Project Structure](images/screenshot_flutter_project_structure.jpg)
 
@@ -112,63 +107,7 @@ As an example, select a piece of code that you'd like to learn more about with y
 
 ![Copilot Example](images/screenshot_copilot_example.jpg)
 
-#### **Structuring your prompts effectively**
-
-Copilot (and similarly Gemini in Firebase Studio) should automatically add the relevant code context to your question. You can add more context by using the `#` (hash) symbol or the attach button to reference other parts of the code or files in your project.
-
-However if you're using an LLM on the web (e.g., ChatGPT or Claude), you must provide the context manually.
-
-A good way to structure your prompts, especially when using online LLMs, is to clearly separate your instructions from your code. This helps the AI understand exactly what you are asking about.
-
-You can do this using **code blocks**. A code block is created by enclosing your code within three **backticks** (\`\`\`). It is also good practice to specify the programming language, like `dart`, after the opening backticks to enable correct syntax highlighting and improve the AI's understanding.
-
-Be careful not to confuse the backtick character (\` ) with a single quote ('). The backtick key is usually located at the top-left of a UK keyboard, below the `Esc` key on a Windows keyboard, or next to the left `Shift` key on a Mac keyboard.
-
-Here is an example of a well-structured prompt:
-
-````md
-I am new to Flutter and trying to understand the code below from the default counter app.
-Can you explain what the `build` method does in short and simple terms?
-
-Here is the code I want you to explain:
-
-```dart
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      title: Text(widget.title),
-    ),
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text(
-            'You have pushed the button this many times:',
-          ),
-          Text(
-            '$_counter',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-        ],
-      ),
-    ),
-    floatingActionButton: FloatingActionButton(
-      onPressed: _incrementCounter,
-      tooltip: 'Increment',
-      child: const Icon(Icons.add),
-    ),
-  );
-}
-```
-````
-
 ### **Selecting a target device**
-
-In Firebase Studio, your app should already be running in a web browser. If it is not, open the Command Palette with **Ctrl + Shift + P** (or **⌘ + Shift + P** on macOS) and type `Firebase Studio: Show Web Preview`. You can also open this as a separate tab by clicking on the "Open in New Window" icon as shown below. You need to trust the domain to allow pop-ups.
-
-![Firebase Studio web preview](images/screenshot_firebase_open_separate_tab.png)
 
 On VS Code, you need to select a target device to run your app. At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like Edge or Chrome. Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Flutter: Select Device`. Then select your browser from the list.
 
@@ -206,8 +145,6 @@ A more accurate way to test is by using an emulator, which simulates a physical 
 
 In VS Code, you can launch an emulator by clicking the device name in the status bar at the bottom right and selecting a configured emulator, or choosing `Start Android Emulator` (and on macOS, `Start iOS Simulator`). This requires a more detailed setup, which typically involves installing Android Studio or Xcode, for more information refer to the final exercise in this worksheet.
 
-In Firebase Studio, an Android emulator is usually available by default. If it is not running, you can launch/show it from the Command Palette with **Ctrl + Shift + P** (or **⌘ + Shift + P** on macOS) and typing `Firebase Studio: Show Android Emulator Preview`.
-
 ### **Using hot reload**
 
 Hot reload is a powerful feature that lets you see code changes instantly without restarting the app.
@@ -223,8 +160,6 @@ As an example, while the app is running, enable hot reload and change the `color
 Lastly, let's put our project on GitHub to track changes and back it up online.
 
 #### **Initialising the repository**
-
-You should ignore this step if you are using Firebase Studio as it already initialises a Git repository for you. Skip to [Making the first commit](#making-the-first-commit).
 
 In the Activity Bar on the left, click the Source Control icon. Click on `Initialize Repository` to set up Git for your project.
 
@@ -253,13 +188,11 @@ You might see a pop-up asking to stage all changes and commit them directly; you
 
 The `Commit` button will now say `Publish Branch`:
 
-![Publish Branch Button](images/screenshot_firebase_studio_publish_branch.png)
-
 Or `Sync Changes`:
 
 ![Sync Changes Button](images/screenshot_vscode_sync_changes.jpg)
 
-Click this to push your local repository to GitHub. You may be asked to allow VS Code (or Firebase Studio) to log in to your GitHub account.
+Click this to push your local repository to GitHub. You may be asked to allow VS Code to log in to your GitHub account.
 
 Next, you will be asked to name your repository; enter `sandwich_shop`. Let this be a **public** repository and click `Publish Repository`.
 
@@ -299,7 +232,7 @@ If you are new to programming and find it easier to watch a video tutorial, cons
 
    ![Browser Tab Title](images/screenshot_apptitle.png)
 
-   As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate, like "Sandwich Shop App". Hint: VS Code and Firebase Studio have a search feature that you can access by pressing **Ctrl + Shift + F** (or **⌘ + Shift + F** on macOS). You can use this to search for the current title of the app.
+    As a simple exercise, find out what determines the title of the app in the code and change it to something more appropriate, like "Sandwich Shop App". Hint: VS Code has a search feature that you can access by pressing **Ctrl + Shift + F** (or **⌘ + Shift + F** on macOS). You can use this to search for the current title of the app.
 
    Remember to view the changes live with hot reload and to commit your changes to GitHub.
 
@@ -345,7 +278,7 @@ If you are new to programming and find it easier to watch a video tutorial, cons
      uses-material-design: true
    ```
 
-   After saving your changes, you must synchronise the dependencies. While VS Code and Firebase Studio often does this automatically, you should run `flutter pub get` in the terminal to ensure everything is up to date.
+    After saving your changes, run `flutter pub get` in the terminal to ensure everything is up to date.
 
    **Show your updated `pubspec.yaml` file to a member of staff** for a sign-off.
 

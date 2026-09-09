@@ -72,7 +72,7 @@ For the full mark breakdown, the missed-demo rules, and how Extenuating Circumst
 
 ### **Coursework brief**
 
-The coursework brief can be found on [this page](https://manighahrmani.github.io/sandwich_shop/southsea_cinema_coursework_brief.html). A copy is also available on [OneDrive](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw?e=gD920R). Also refer to the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) for the coursework starter code and instructions, and see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc) for exactly how Item 1 is marked.
+The coursework brief can be found on [this page](https://manighahrmani.github.io/sandwich_shop/southsea_cinema_coursework_brief.html). The formal Word copy is also available on [OneDrive](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw?e=gD920R). See the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc) for exactly how Item 1 is marked.
 
 ### **Referral/Deferral Assessment**
 
