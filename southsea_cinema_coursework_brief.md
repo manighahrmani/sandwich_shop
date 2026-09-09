@@ -46,13 +46,13 @@ You must already have a GitHub account to be able to start this coursework. If y
 
 You also need to be able to edit and run a Flutter project in your environment of choice and to commit your changes to a GitHub repository. Both of these are explained in [Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html); complete it before continuing if you have not done so already.
 
-You have three development options:
+You need:
 
-1. GitHub Codespaces (browser-based, no local install required)
-2. University Windows computers
-3. Your own computer
+* A GitHub account
+* A way to edit and run Flutter projects
+* Git installed and connected to your GitHub account
 
-Note that all the recommended development tools for this coursework are free. If you do not own a high-spec computer, you can use the university machines or a browser-based option.
+Follow the [development environment instructions in Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html). You can use your own device or access the university machines remotely.
 
 ### Fork the Repository
 
