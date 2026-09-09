@@ -22,18 +22,8 @@ The schedule is also available as the [module schedule workbook](https://portdot
 | 21/12/2026 | 08/01/2027 | Xmas Break | | |
 | 11/01/2027 | 15/01/2027 | Marking week | | |
 | 18/01/2027 | 22/01/2027 | Term 2 | | |
-| 25/01/2027 | 29/01/2027 | | | |
-| 01/02/2027 | 05/02/2027 | | | |
-| 08/02/2027 | 12/02/2027 | | | |
-| 15/02/2027 | 19/02/2027 | | | |
+| 25/01/2027 | 19/02/2027 | Term 2 | | |
 | 22/02/2027 | 26/02/2027 | Referral and Deferral Assessments (for Term 1) | | |
-| 01/03/2027 | 05/03/2027 | Term 2 | | |
-| 08/03/2027 | 12/03/2027 | | | |
-| 15/03/2027 | 19/03/2027 | | | |
-| 22/03/2027 | 09/04/2027 | Easter Break | | |
-| 12/04/2027 | 23/04/2027 | Term 2 | | |
-| 26/04/2027 | 04/06/2027 | Referral Deferral Assessments | | |
-| 07/06/2027 | 11/06/2027 | Board week | | |
 
 ## **Teaching material**
 
