@@ -2,6 +2,20 @@
 
 This is the homepage for the Flutter Course which is the first half of the Programming Applications and Programming Languages (M30235) and User Experience Design and Implementation (M32605) modules. (It is called "sandwich_shop" because the worksheets build an app for a sandwich shop.)
 
+## Table of contents
+
+- [Schedule](#schedule)
+- [Teaching material](#teaching-material)
+- [Assessment](#assessment)
+  - [Demos](#demos)
+  - [Coursework brief](#coursework-brief)
+  - [Referral/Deferral Assessment](#referraldeferral-assessment)
+  - [Extenuating Circumstances](#extenuating-circumstances)
+- [Getting help](#getting-help)
+- [Feedback](#feedback)
+
+> Update this table of contents whenever you add, remove, or rename a heading in this README.
+
 ## **Schedule**
 
 The schedule is also available as the [module schedule Excel sheet](https://portdotacdotuk-my.sharepoint.com/:x:/g/personal/mani_ghahremani_port_ac_uk/IQC8DyK0ZlSkR7uSwgFVkGV7ARzRdonJIGnHeeGAZJr7ad0?e=ZxoyaH).
