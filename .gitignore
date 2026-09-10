@@ -25,24 +25,13 @@ build/
 # Node.js (used by markdownlint / cspell tooling)
 node_modules/
 
-# Cloned reference coursework
+# Reference-only, stale coursework clones (never updated)
 union_shop/
-
-# Moodle Clone Coursework Template and Marking Tool
 moodle/
 moodle_private/
-marking_tools/
-.marking_temp/
-marking_reports/
-moodle_submissions/
 
 # Separate nested repo, contains student names/emails. Not part of this repo.
 sign-off-app/
-
-# Sensitive marking steering (not for students)
-.kiro/steering/marking-workflow.md
-
-# Root AGENTS.md is the canonical, public agent instruction file and is tracked.
 
 # Southsea Cinema coursework templates
 southsea_cinema/

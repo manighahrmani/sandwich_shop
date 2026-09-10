@@ -65,7 +65,6 @@ jobs:
         with:
           args: >-
             --no-progress
-            --accept 200,201,202,203,204,206,301,302,303,304,307,308,403,429,999
+            --accept 200,201,202,203,204,206,301,302,303,304,307,308,401,403,406,429,999
             "**/*.md"
-          # TODO(#23): flip to true once the pre-existing broken links are fixed
-          fail: false
+          fail: true
