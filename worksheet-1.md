@@ -13,7 +13,9 @@
   - [B - Using the university machines on campus](#b---using-the-university-machines-on-campus)
   - [C - Using the university machines while not on campus](#c---using-the-university-machines-while-not-on-campus)
 - [Using the generated project](#using-the-generated-project)
-  - [Opening the project on VS Code](#opening-the-project-on-vs-code)
+  - [A - If the project is open on VS Code](#a---if-the-project-is-open-on-vs-code)
+  - [B - If the project did not open in VS Code](#b---using-the-university-machines-on-campus)
+  - [Understanding the project structure](#understanding-the-project-structure)
   - [Using AI](#using-ai)
   - [Selecting a target device](#selecting-a-target-device)
   - [Installing dependencies](#installing-dependencies)
@@ -92,11 +94,13 @@ Once you have followed the guide above, refer to [the on-campus guide above](#b-
 
 ## Using the generated project
 
-### Opening the project on VS Code
+### A - If the project is open on VS Code
 
 If you left the repository prompt empty, the launcher has already created a Flutter Web starter project and opened it in VS Code.
 
 ![The starter app open in VS Code after the Flutter and VS Code bundle script finishes](images/starter_app_screenshot_once_vscode_bundle_script_finished.png)
+
+### B - If the project did not open in VS Code
 
 If it is not open, create a new project by first opening the Command Palette by pressing **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. See the screenshot below for reference.
 
@@ -107,6 +111,8 @@ If you don't see this, make sure you have the Flutter and Dart extensions instal
 ![Creating a new Flutter project in VS Code](images/screenshot_flutter_new_project.png)
 
 Afterwards, select `Application` as the project type and select a location on the computer that is not synced to cloud (e.g., Downloads folder) as the project location.
+
+### Understanding the project structure
 
 Once you have a new Flutter project, you should see the project's structure in the Explorer view on the left side of VS Code. The most important files for now are located in the `lib/` folder.
 
