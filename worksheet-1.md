@@ -26,8 +26,6 @@
   - [Making another commit](#making-another-commit)
 - [Exercises](#exercises)
 
-> Update this table of contents whenever you add, remove, or rename a heading in this worksheet.
-
 ## What you need to know beforehand
 
 This worksheet combines the introductory Dart, Git, GitHub and Flutter material.
