@@ -21,8 +21,7 @@ The schedule is also available as the [module schedule workbook](https://portdot
 | 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | Demo 5 |
 | 21/12/2026 | 08/01/2027 | Xmas Break | | |
 | 11/01/2027 | 15/01/2027 | Marking week | | |
-| 18/01/2027 | 22/01/2027 | Term 2 | | |
-| 25/01/2027 | 19/02/2027 | Term 2 | | |
+| 18/01/2027 | 19/02/2027 | Term 2 | | |
 | 22/02/2027 | 26/02/2027 | Referral and Deferral Assessments (for Term 1) | | |
 
 ## **Teaching material**
