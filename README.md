@@ -13,7 +13,7 @@ The schedule is also available as the [module schedule workbook](https://portdot
 | 05/10/2026 | 09/10/2026 | Worksheet 3 | Lecture 3 | Demo 2 |
 | 12/10/2026 | 16/10/2026 | Worksheet 4 | Lecture 4 | Demo 2 |
 | 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo 3 |
-| 26/10/2026 | 30/10/2026 | **Break** | **Break** | **Break** |
+| 26/10/2026 | 30/10/2026 | Reading week (break) | | |
 | 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo 3 |
 | 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo 4 |
 | 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo 4 |
