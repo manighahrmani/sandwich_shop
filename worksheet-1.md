@@ -13,6 +13,7 @@
   - [B - Using the university machines on campus](#b---using-the-university-machines-on-campus)
   - [C - Using the university machines while not on campus](#c---using-the-university-machines-while-not-on-campus)
 - [Using the generated project](#using-the-generated-project)
+  - [Opening the project on VS Code](#opening-the-project-on-vs-code)
   - [Using AI](#using-ai)
   - [Selecting a target device](#selecting-a-target-device)
   - [Installing dependencies](#installing-dependencies)
@@ -90,6 +91,8 @@ Once Visual Studio Code is open, follow the instructions [on the official Flutte
 Once you have followed the guide above, refer to [the on-campus guide above](#b---using-the-university-machines-on-campus) to set up and use the Flutter and VS Code package remotely.
 
 ## Using the generated project
+
+### Opening the project on VS Code
 
 If you left the repository prompt empty, the launcher has already created a Flutter Web starter project and opened it in VS Code.
 
