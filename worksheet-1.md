@@ -1,19 +1,47 @@
-# **Worksheet 1 — Dart, Git, GitHub and Flutter**
+# Worksheet 1 — Dart, Git, GitHub and Flutter
 
-## **What you need to know beforehand**
+## Table of contents
+
+- [What you need to know beforehand](#what-you-need-to-know-beforehand)
+- [Getting help](#getting-help)
+- [Introduction to Git and GitHub](#introduction-to-git-and-github)
+  - [0 - Sign up to GitHub](#0---sign-up-to-github)
+  - [1 - Introduction to GitHub](#1---introduction-to-github)
+  - [2 - Introduction to GitHub Copilot](#2---introduction-to-github-copilot)
+- [Introduction to the Dart language](#introduction-to-the-dart-language)
+- [Set up your development environment](#set-up-your-development-environment)
+  - [A - On your own device](#a---on-your-own-device)
+  - [B - Using the university machines on campus](#b---using-the-university-machines-on-campus)
+  - [C - Using the university machines while not on campus](#c---using-the-university-machines-while-not-on-campus)
+- [Using the generated project](#using-the-generated-project)
+  - [Using AI](#using-ai)
+  - [Selecting a target device](#selecting-a-target-device)
+  - [Installing dependencies](#installing-dependencies)
+  - [Running the app](#running-the-app)
+  - [Viewing the app as a mobile app](#viewing-the-app-as-a-mobile-app)
+  - [Using hot reload](#using-hot-reload)
+  - [Initialising a GitHub repository](#initialising-a-github-repository)
+  - [Making the first commit](#making-the-first-commit)
+  - [Verifying the repository on GitHub](#verifying-the-repository-on-github)
+  - [Making another commit](#making-another-commit)
+- [Exercises](#exercises)
+
+> Update this table of contents whenever you add, remove, or rename a heading in this worksheet.
+
+## What you need to know beforehand
 
 This worksheet combines the introductory Dart, Git, GitHub and Flutter material.
 Complete it before continuing to Worksheet 2.
 
-## **Getting help**
+## Getting help
 
 To get support with this worksheet, follow the [Discord guide](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-## **Introduction to Git and GitHub**
+## Introduction to Git and GitHub
 
 Git is the version control system we'll use to track changes in our code. GitHub is the platform where we'll host our code online. Your coursework must be submitted via GitHub so you need a good understanding of it.
 
-### **0 - Sign up to GitHub**
+### 0 - Sign up to GitHub
 
 Start by signing up for a GitHub account if you don't already have one: [GitHub Sign Up](https://github.com/signup)
 
@@ -27,11 +55,11 @@ Make sure to verify both email addresses in your GitHub account settings and ena
 
 ![GitHub 2FA Settings](images/screenshot_GitHub_auth.png)
 
-### **1 - Introduction to GitHub**
+### 1 - Introduction to GitHub
 
 Once you have a GitHub account, complete the following [introduction course](https://github.com/skills/introduction-to-github).
 
-### **2 - Introduction to GitHub Copilot**
+### 2 - Introduction to GitHub Copilot
 
 GitHub's AI can assist you with tasks such as explaining code, fixing bugs, finding resources, and writing code snippets. As a student, you're eligible for a free Copilot subscription through the [GitHub Student Developer Pack](https://education.github.com/pack).
 
@@ -39,43 +67,47 @@ GitHub's AI can assist you with tasks such as explaining code, fixing bugs, find
 
 Once you have access to Copilot, complete this [getting started course](https://github.com/skills/getting-started-with-github-copilot). If you get stuck, ask for help on the Discord channel or during your practical session.
 
-## **Introduction to the Dart language**
+## Introduction to the Dart language
 
 Dart is the programming language developed by Google. It is a statically typed language used by the Flutter framework for cross-platform app development.
 
 If you have not used Dart before or need a refresher, use the [Dart software and resources guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAeCWXLehKuTou1gTpjrNKRAcCHcRGxPJSinskA7x1opXg?e=lfIK0S).
 
-## **Set up your development environment**
+## Set up your development environment
 
 Developing a Flutter application can be demanding on your computer. If you have a capable device, you can install Flutter locally. Otherwise, use the university machines. Follow the appropriate guide below.
 
-### **A - On your own device**
+### A - On your own device
 
 Follow the [official Flutter installation guide](https://docs.flutter.dev/install/quick) to set up Flutter on your device.
 
-### **B - Using the university machines on campus**
+### B - Using the university machines on campus
 
 Log into GitHub on the university machine, then open [the `flutter_vscode_package` repository](https://github.com/manighahrmani/flutter_vscode_package#setup).
 
-Copy the PowerShell command from the repository's README, then paste it into PowerShell on the university computer and press Enter to execute it.
+Copy the PowerShell command from the repository's README, then paste it into PowerShell on the university computer and press **Enter** to execute it.
 
 Pay attention to the terminal as it may ask you to select which repository you would like to use. The process takes up to 10 minutes to complete. And once it is done, you should see Visual Studio Code open where you need to log in using your GitHub account.
 
 Once Visual Studio Code is open, follow the instructions [on the official Flutter website](https://docs.flutter.dev/install/quick#test-drive). Skip the first step as it is already handled by the launcher.
 
-### **C - Using the university machines while not on campus**
+### C - Using the university machines while not on campus
 
 [Guide to remote computer access](https://myport.port.ac.uk/it-support/student-it-support/guide-to-remote-computer-access) provides instructions on how to access university computers remotely. You need to install the university VPN as well as a remote desktop client.
 
 Once you have followed the guide above, refer to [the on-campus guide above](#b---using-the-university-machines-on-campus) to set up and use the Flutter and VS Code package remotely.
 
-## **Using the generated project**
+## Using the generated project
 
-If you left the repository prompt empty, the launcher has already created a Flutter Web starter project and opened it in VS Code. Otherwise, create a new project by first opening the Command Palette by pressing **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. See the screenshot below for reference.
+If you left the repository prompt empty, the launcher has already created a Flutter Web starter project and opened it in VS Code.
+
+![The starter app open in VS Code after the Flutter and VS Code bundle script finishes](images/starter_app_screenshot_once_vscode_bundle_script_finished.png)
+
+If it is not open, create a new project by first opening the Command Palette by pressing **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. See the screenshot below for reference.
 
 ![Opening the Command Palette in VS Code](images/screenshot_open_command_palette.png)
 
-If you don't see this, make sure you have the Flutter and Dart extensions installed in VS Code. You can install them from the Extensions view by searching for "Flutter" and "Dart". When the Command Palette is open, you can type what you want to do. In this case, you should type `Flutter: New Project` to create a new Flutter project as shown below.
+If you don't see this, make sure you have the Flutter and Dart extensions installed in VS Code. You can install them from the Extensions view by searching for `Flutter` and `Dart`. When the Command Palette is open, you can type what you want to do. In this case, you should type `Flutter: New Project` to create a new Flutter project as shown below.
 
 ![Creating a new Flutter project in VS Code](images/screenshot_flutter_new_project.png)
 
@@ -85,7 +117,7 @@ Once you have a new Flutter project, you should see the project's structure in t
 
 This folder contains your Dart application code (source code), with the main entry point in `main.dart` (this is the file that runs when you start your app).
 
-The term "root" of a project refers to its top-level directory, which contains all the other files and folders.
+The term `root` of a project refers to its top-level directory, which contains all the other files and folders.
 
 In the root of all Flutter projects, there must be a file called `pubspec.yaml`. This is a configuration file for managing your project's dependencies and assets.
 
@@ -97,7 +129,7 @@ You don't need to understand the code at this moment but below is a brief overvi
 
 The default application's `main.dart` file contains the entry point `void main() => runApp(const MyApp());`, which runs the root widget, `MyApp`. This `StatelessWidget` sets up the `MaterialApp` and defines the home screen, which is the `MyHomePage` widget. `MyHomePage` is a `StatefulWidget` because it manages the changing counter value. It contains the `_incrementCounter()` method, which uses `setState()` to rebuild the UI when the `_counter` variable changes.
 
-### **Using AI**
+### Using AI
 
 One of the learning outcomes of this module is "Design and implement the user interface, database and application logic of an interactive software application". In essence, you need to understand the codebase that you will be working with. And although later in the module you will learn to use AI to speed up and branch out your development process, you must always be able to explain the code that you are submitting as part of this module.
 
@@ -109,15 +141,15 @@ As an example, select a piece of code that you'd like to learn more about with y
 
 ![Copilot Example](images/screenshot_copilot_example.jpg)
 
-### **Selecting a target device**
+### Selecting a target device
 
 In VS Code, you need to select a target device to run your app. The university computers are not configured with the Android or iOS development tools, so use a web browser as the target device.
 
-At the bottom right of the VS Code window is the status bar. Click on the device name (it might say "No Device") to open the device selector. For now, choose a browser like Edge or Chrome. Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Flutter: Select Device`. Then select your browser from the list.
+At the bottom right of the VS Code window is the status bar. Click on the device name (it might say `No Device`) to open the device selector. For now, choose a browser like Edge or Chrome. Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Flutter: Select Device`. Then select your browser from the list.
 
 ![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
 
-### **Installing dependencies**
+### Installing dependencies
 
 Every app depends on various external packages and libraries to function correctly. The `pubspec.yaml` lists the dependencies required as mentioned before. And if your dependencies are not installed, you will most likely see red underlines in your `main.dart` file or other parts of your code.
 
@@ -125,7 +157,7 @@ VS Code may install the dependencies automatically when you open the project or 
 
 ![VS Code Install Dependencies](images/screenshot_vscode_install_dependencies.png)
 
-If the dependencies are not installed automatically, open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**), type `Terminal: Create New Terminal` and press Enter. Then run:
+If the dependencies are not installed automatically, open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**), type `Terminal: Create New Terminal` and press **Enter**. Then run this in the VS Code terminal:
 
 ```bash
 flutter pub get
@@ -133,11 +165,11 @@ flutter pub get
 
 This command fetches and installs all the dependencies listed in the `pubspec.yaml` file, ensuring that your project has everything it needs to run correctly.
 
-### **Running the app**
+### Running the app
 
-You can run the app in several ways, for example by pressing the F5 key, opening a new terminal and running `flutter run`, or clicking the "Run" button that appears above the `main` function in `main.dart`.
+You can run the app in several ways, for example by pressing the **F5** key, opening a new terminal and running `flutter run`, or clicking the `Run` button that appears above the `main` function in `main.dart`.
 
-You can also open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Terminal: Create New Terminal` to open a terminal, then run the following command:
+You can also open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Terminal: Create New Terminal` to open a terminal, then run the following command in the VS Code terminal:
 
 ```bash
 flutter run
@@ -145,7 +177,9 @@ flutter run
 
 VS Code will build and run your application, which should open in a browser window. Click the `+` button to see the counter increase.
 
-### **Viewing the app as a mobile app**
+![The starter app running in the browser](images/running_the_starter_app.png)
+
+### Viewing the app as a mobile app
 
 For the purpose of this module, you will primarily be developing applications designed for mobile devices. To see your app in a mobile layout, you can either use your browser's developer tools or run a device emulator (more on the emulator setup is provided in later worksheets).
 
@@ -157,15 +191,15 @@ In the developer tools panel, look for an icon that looks like a phone and table
 
 You can then use the dropdown menu at the top of the screen to select different device presets, such as an iPhone or a Pixel, to see how your app looks and behaves on various screen sizes.
 
-### **Using hot reload**
+### Using hot reload
 
-Hot reload is a feature that lets you see code changes instantly without restarting the app. You can enable it by clicking the lightning bolt icon at the top of VS Code while the app is running. If you are using the terminal, you can type `r` to trigger it.
+Hot reload is a feature that lets you see code changes instantly without restarting the app. You can enable it by clicking the lightning bolt icon at the top of VS Code while the app is running. If you are using the terminal, you can press the **r** key to trigger it.
 
 ![Hot Reload Button](images/screenshot_vscode_hot_reload.jpg)
 
 As an example, while the app is running, enable hot reload and change the `colorSchemeSeed` property inside the `ThemeData` widget in `main.dart` from `Colors.deepPurple` to `Colors.orange` and save the file. You should see the UI update in the browser instantly.
 
-### **Initialising a GitHub repository**
+### Initialising a GitHub repository
 
 Lastly, let's put our project on GitHub to track changes and back it up online.
 
@@ -173,22 +207,24 @@ In the Activity Bar on the left, click the Source Control icon. Click on `Initia
 
 ![Source Control Panel](images/screenshot_vscode_source_control.jpg)
 
-Alternatively, you can run the following command in the terminal to initialise Git:
+Alternatively, you can run the following command in the VS Code terminal to initialise Git:
 
 ```bash
 git init
 ```
 
-#### **Making the first commit**
+### Making the first commit
 
 If you used the Flutter and VS Code bundle, its launcher has already checked your Git author configuration. It displays your configured GitHub username and email address and lets you change them. You cannot continue until both values are set.
 
-If you installed Flutter and VS Code yourself, check your Git author configuration before committing:
+If you installed Flutter and VS Code yourself, check your Git author configuration before committing by running these in the VS Code terminal:
 
 ```bash
 git config --global --get user.name
 git config --global --get user.email
 ```
+
+Each command prints the configured value, or nothing if it has not been set yet.
 
 If either command does not return a value, configure your GitHub username and the email address associated with your GitHub account:
 
@@ -197,11 +233,11 @@ git config --global user.name "YOUR_GITHUB_USERNAME"
 git config --global user.email "YOUR_GITHUB_EMAIL"
 ```
 
-You should now see all your project files listed in the Source Control panel. Hover over **Changes** and click the `+` icon to stage all files. Then, enter a commit message like `Initial commit` in the text box and click the **Commit** button to commit your changes.
+You should now see all your project files listed in the Source Control panel. Hover over `Changes` and click the `+` icon to stage all files. Then, enter a commit message like `Initial commit` in the text box and click the `Commit` button to commit your changes.
 
 ![Commit Changes](images/screenshot_vscode_commit_changes.jpg)
 
-Alternatively, you can run the following commands in the terminal:
+Alternatively, you can run the following commands in the VS Code terminal:
 
 ```bash
 git add .
@@ -218,11 +254,11 @@ Or `Sync Changes`:
 
 Click this to push your local repository to GitHub. You may be asked to allow VS Code to log in to your GitHub account.
 
-Next, you will be asked to name your repository; enter `sandwich_shop`. Let this be a **public** repository and click `Publish Repository`.
+Next, you will be asked to name your repository; enter `sandwich_shop`. Let this be a public repository and click `Publish Repository`.
 
 ![Create GitHub Repository](images/screenshot_vscode_create_github_repo.png)
 
-#### **Verifying the repository on GitHub**
+### Verifying the repository on GitHub
 
 You can verify that the project was published by navigating to your GitHub account in a web browser. You should see the newly created `sandwich_shop` repository.
 
@@ -230,9 +266,9 @@ You can verify that the project was published by navigating to your GitHub accou
 
 The link will look like `https://github.com/YOUR_USERNAME/sandwich_shop` where `YOUR_USERNAME` is your GitHub username.
 
-#### **Making another commit**
+### Making another commit
 
-Let's make another commit. In `main.dart`, change the text in the `AppBar` widget from `Flutter Demo Home Page` to `My Sandwich Shop`. Save the file (**Ctrl + S** or **⌘ + S**) or better yet, enable auto-save by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing `Auto Save`, then press Enter to select `Toggle Auto Save`.
+Let's make another commit. In `main.dart`, change the text in the `AppBar` widget from `Flutter Demo Home Page` to `My Sandwich Shop`. Save the file (**Ctrl + S** on Windows or **⌘ + S** on macOS) or better yet, enable auto-save by opening the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and typing `Auto Save`, then press **Enter** to select `Toggle Auto Save`.
 
 Go back to the Source Control panel (use the Command Palette and enter `Focus on Source Control View` if you can't see it), stage the changes, and commit them with a message like `Change AppBar title`. Remember to always write meaningful commit messages that describe what changes you made. The commit message should ideally be written in the imperative mood, like `Add new feature` or `Fix bug`.
 
@@ -242,11 +278,11 @@ Before you click on commit, you can also click on the changed files below the `C
 
 Once you have clicked on commit and then sync changes, you should be able to see the changes to the file in your GitHub repository.
 
-## **Exercises**
+## Exercises
 
 From this point onwards, the exercises in each worksheet direct you to work on your Southsea Cinema coursework. The exercises in this worksheet prepare you for Demo 1, which must be completed by Friday 2 October 2026. Refer to the formal [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) for the assessment requirements.
 
-1. Open the [Southsea Cinema starter repository](https://github.com/manighahrmani/southsea_cinema#fork-the-repository) and follow its README from **Fork the Repository** onwards. Fork the repository into your own GitHub account, then clone your fork onto your computer or a university machine.
+1. Open the [Southsea Cinema starter repository](https://github.com/manighahrmani/southsea_cinema#fork-the-repository) and follow its README from Fork the Repository onwards. Fork the repository into your own GitHub account, then clone your fork onto your computer or a university machine.
 
 2. Follow the README instructions to install the project dependencies and run the app in Chrome or Edge. Open the browser's developer tools and use the device toolbar to display the app in a phone-sized mobile view.
 
