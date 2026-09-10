@@ -2,7 +2,6 @@
 
 ## Table of contents
 
-- [What you need to know beforehand](#what-you-need-to-know-beforehand)
 - [Getting help](#getting-help)
 - [Introduction to Git and GitHub](#introduction-to-git-and-github)
   - [0 - Sign up to GitHub](#0---sign-up-to-github)
@@ -25,11 +24,6 @@
   - [Verifying the repository on GitHub](#verifying-the-repository-on-github)
   - [Making another commit](#making-another-commit)
 - [Exercises](#exercises)
-
-## What you need to know beforehand
-
-This worksheet combines the introductory Dart, Git, GitHub and Flutter material.
-Complete it before continuing to Worksheet 2.
 
 ## Getting help
 
