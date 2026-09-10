@@ -227,7 +227,7 @@ git config --global --get user.email
 
 Each command prints the configured value, or nothing if it has not been set yet.
 
-If either command does not return a value, configure your GitHub username and the email address associated with your GitHub account:
+If either command does not return a value or if the outputted value does not match your GitHub username or email, reset them by entering the following commands in the terminal. Remember to replace `YOUR_GITHUB_USERNAME` and `YOUR_GITHUB_EMAIL` with your GitHub username and the email address associated with your GitHub account:
 
 ```bash
 git config --global user.name "YOUR_GITHUB_USERNAME"
