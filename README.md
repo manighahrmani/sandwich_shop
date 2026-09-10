@@ -4,7 +4,7 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 
 ## **Schedule**
 
-The schedule is also available as the [module schedule workbook](https://portdotacdotuk-my.sharepoint.com/:x:/g/personal/mani_ghahremani_port_ac_uk/IQC8DyK0ZlSkR7uSwgFVkGV7ARzRdonJIGnHeeGAZJr7ad0?e=ZxoyaH).
+The schedule is also available as the [module schedule Excel sheet](https://portdotacdotuk-my.sharepoint.com/:x:/g/personal/mani_ghahremani_port_ac_uk/IQC8DyK0ZlSkR7uSwgFVkGV7ARzRdonJIGnHeeGAZJr7ad0?e=ZxoyaH).
 
 | Week Commencing | Week Ending | Worksheet | Lecture | Demo window |
 | --------------- | ----------- | --------- | ------- | ----------- |
@@ -26,11 +26,7 @@ The schedule is also available as the [module schedule workbook](https://portdot
 
 ## **Teaching material**
 
-Each week has a worksheet (practical, applied) and a lecture (abstract, transferable skills).
-
-Each worksheet advances the same mock Sandwich Shop app used to teach the module; the state of the app after each worksheet is kept as a numbered branch of this repository (see [branch 0](https://github.com/manighahrmani/sandwich_shop/tree/0) through [branch 8](https://github.com/manighahrmani/sandwich_shop/tree/8)). Students mirror the same development steps in their own Southsea Cinema coursework repository, so by the end of a worksheet their coursework app should be at an equivalent stage to the matching branch here.
-
-You should aim to complete the worksheets in the order they are presented below.
+Each week has a worksheet and a lecture. You should aim to complete the worksheets in the order they are presented below.
 
 * [Worksheet 1: Dart, Git, GitHub and Flutter](./worksheet-1.md)
 * [Worksheet 2: Stateless Widgets](./worksheet-2.md)
@@ -43,25 +39,27 @@ You should aim to complete the worksheets in the order they are presented below.
 
 ## **Assessment**
 
-This part of the module, which runs through Teaching Block 1 (TB1), is listed as Item 1 in the module specification. Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments; Item 1 is worth **50% of the overall module mark**. Item 1 is assessed as a portfolio of live demos of your Southsea Cinema coursework (see the schedule above for dates), which you build in five stages. There is no separate sign-off or coursework submission for Item 1: you submit the link to your public GitHub repository on Moodle and then demonstrate your work at the timetabled demo windows.
+This part of the module, which runs through Teaching Block 1 (TB1), is listed as Item 1 in the module specification. Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments; Item 1 is worth **50% of the overall module mark**.
+
+Item 1 is assessed as series of live demos of your coursework (see the schedule above for dates), which you build in stages. You submit the link to your public GitHub repository on Moodle and then demonstrate your work at the timetabled demo windows.
 
 ### **Demos**
 
 There are five demos, but only your best four count towards Item 1 — so you can miss (or score poorly on) one demo without harming your mark. Each demo is worth 25% of Item 1 (12.5% of the module) and is assessed on three things:
 
-* Functionality (9% of Item 1): you run your app and show it implements the features expected by this stage. Progressing further can earn extra credit.
-* Quality (8% of Item 1): code quality on inspection (naming and formatting early on, structure and separation of concerns later).
+* Functionality (9% of Item 1): you run your app and show it implements the features expected by this stage stated in the worksheets.
+* Quality (8% of Item 1): code quality on inspection (naming, formatting, refactoring, structuring and so on).
 * Understanding (8% of Item 1): your answers to two questions about your own code and decisions.
 
 Only one demo can take place per window. If you miss a demo, you demonstrate the missed stage at the next window (losing that slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at 75% of Item 1 (37.5% of the module), and so on.
 
 ⚠️ You will only receive marks if you attend your timetabled practical. You cannot get marks in practicals at a different time to what is shown on your timetable.
 
-For the full mark breakdown, the missed-demo rules, and how Extenuating Circumstances affect Item 1, read the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc).
+For the full detailed explanation of the assessment read the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc).
 
 ### **Coursework brief**
 
-The coursework brief can be found on [this page](https://manighahrmani.github.io/sandwich_shop/southsea_cinema_coursework_brief.html). The formal Word copy is also available on [OneDrive](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw?e=gD920R). See the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc) for exactly how Item 1 is marked.
+The coursework brief can be found on [this page](https://manighahrmani.github.io/sandwich_shop/southsea_cinema_coursework_brief.html). A Word copy can be downloaded from [here on OneDrive](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw?e=gD920R).
 
 ### **Referral/Deferral Assessment**
 
@@ -77,7 +75,7 @@ If there are external reasons stopping you from engaging with the module (for ex
 
 Note that ECFs apply to the whole Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
-If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are instead expected to take the deferral assessment in the week beginning Monday 22 February 2027; your Item 1 mark then comes from that deferral coursework alone (not from the demos above). However, if you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
+If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are instead expected to take the deferral assessment (see above). Your Item 1 mark then comes from that deferral coursework alone (not from the demos above). However, if you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
 
 If you do not have an approved ECF, you simply receive the marks for the demos you completed. For the full ECF rules, see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc).
 
