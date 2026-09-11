@@ -54,6 +54,8 @@ Make sure to verify both email addresses in your GitHub account settings and ena
 
 Once you have a GitHub account, complete the following [introduction course](https://github.com/skills/introduction-to-github).
 
+We also recommend reading the [Hello World guide](https://docs.github.com/en/get-started/using-github/hello-world) for a basic introduction to git and GitHub.
+
 ### 2 - Introduction to GitHub Copilot
 
 GitHub's AI can assist you with tasks such as explaining code, fixing bugs, finding resources, and writing code snippets. As a student, you're eligible for a free Copilot subscription through the [GitHub Student Developer Pack](https://education.github.com/pack).
