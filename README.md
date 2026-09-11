@@ -14,8 +14,6 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 - [Getting help](#getting-help)
 - [Feedback](#feedback)
 
-> Update this table of contents whenever you add, remove, or rename a heading in this README.
-
 ## **Schedule**
 
 The schedule is also available as the [module schedule Excel sheet](https://portdotacdotuk-my.sharepoint.com/:x:/g/personal/mani_ghahremani_port_ac_uk/IQC8DyK0ZlSkR7uSwgFVkGV7ARzRdonJIGnHeeGAZJr7ad0?e=ZxoyaH).
