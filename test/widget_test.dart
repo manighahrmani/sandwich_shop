@@ -1,30 +1,81 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:sandwich_shop/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('App widget', () {
+    testWidgets('App sets OrderScreen as home', (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      expect(find.byType(OrderScreen), findsOneWidget);
+    });
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  group('OrderScreen interaction tests', () {
+    testWidgets(
+        '"Sandwich Counter" text and initial sandwich quantity are displayed',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
+      expect(find.text('Sandwich Counter'), findsOneWidget);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    testWidgets('Tapping add button increases quantity',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
+      await tester.pump();
+      expect(find.text('1 Footlong sandwich(es): 🥪'), findsOneWidget);
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    testWidgets('Tapping remove button decreases quantity',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
+      await tester.pump();
+      expect(find.text('1 Footlong sandwich(es): 🥪'), findsOneWidget);
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Remove'));
+      await tester.pump();
+      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
+    });
+
+    testWidgets('Quantity does not go below zero', (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Remove'));
+      await tester.pump();
+      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
+    });
+
+    testWidgets('Quantity does not exceed maxQuantity',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      for (int i = 0; i < 10; i++) {
+        await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
+        await tester.pump();
+      }
+      expect(find.text('5 Footlong sandwich(es): 🥪🥪🥪🥪🥪'), findsOneWidget);
+    });
+  });
+
+  group('OrderItemDisplay widget', () {
+    testWidgets('Displays the correct text for 0 sandwiches',
+        (WidgetTester tester) async {
+      const widgetToBeTested = OrderItemDisplay(0, 'Footlong');
+      const testApp = MaterialApp(
+        home: Scaffold(body: widgetToBeTested),
+      );
+      await tester.pumpWidget(testApp);
+      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
+    });
+
+    testWidgets('Displays the correct text and emoji for 3 sandwiches',
+        (WidgetTester tester) async {
+      const widgetToBeTested = OrderItemDisplay(3, 'Footlong');
+      const testApp = MaterialApp(
+        home: Scaffold(body: widgetToBeTested),
+      );
+      await tester.pumpWidget(testApp);
+      expect(find.text('3 Footlong sandwich(es): 🥪🥪🥪'), findsOneWidget);
+    });
   });
 }
