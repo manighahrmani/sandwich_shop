@@ -42,14 +42,14 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 
 Each week has a worksheet and a lecture. You should aim to complete the worksheets in the order they are presented below.
 
-* [Worksheet 1: Dart, Git, GitHub and Flutter](./worksheet-1.md)
-* [Worksheet 2: Stateless Widgets](./worksheet-2.md)
-* [Worksheet 3: Stateful Widgets](./worksheet-3.md)
-* [Worksheet 4: App Architecture, Testing, and README](./worksheet-4.md)
-* [Worksheet 5: Data Models and Assets](./worksheet-5.md)
-* [Worksheet 6: AI-Driven Development and Navigation](./worksheet-6.md)
-* [Worksheet 7: State Management and Persistence](./worksheet-7.md)
-* [Worksheet 8: Integration Testing, Firebase, and Deployment](./worksheet-8.md)
+- [Worksheet 1: Dart, Git, GitHub and Flutter](./worksheet-1.md)
+- Worksheet 2: Stateless and Stateful Widgets (under revision)
+- Worksheet 3: App Architecture, Testing, and README (under revision)
+- Worksheet 4: Unit and Widget Testing (under revision)
+- Worksheet 5: Data Models and Assets (under revision)
+- Worksheet 6: AI-Driven Development and Navigation (under revision)
+- Worksheet 7: State Management and Persistence (under revision)
+- Worksheet 8: Integration Testing, Firebase, and Deployment (under revision)
 
 ## **Assessment**
 
@@ -61,9 +61,9 @@ Item 1 is assessed as series of live demos of your coursework (see the schedule 
 
 There are five demos, but only your best four count towards Item 1 — so you can miss (or score poorly on) one demo without harming your mark. Each demo is worth 25% of Item 1 (12.5% of the module) and is assessed on three things:
 
-* Functionality (9% of Item 1): you run your app and show it implements the features expected by this stage stated in the worksheets.
-* Quality (8% of Item 1): code quality on inspection (naming, formatting, refactoring, structuring and so on).
-* Understanding (8% of Item 1): your answers to two questions about your own code and decisions.
+- Functionality (9% of Item 1): you run your app and show it implements the features expected by this stage stated in the worksheets.
+- Quality (8% of Item 1): code quality on inspection (naming, formatting, refactoring, structuring and so on).
+- Understanding (8% of Item 1): your answers to two questions about your own code and decisions.
 
 Only one demo can take place per window. If you miss a demo, you demonstrate the missed stage at the next window (losing that slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at 75% of Item 1 (37.5% of the module), and so on.
 
