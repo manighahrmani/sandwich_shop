@@ -44,11 +44,11 @@ Start by signing up for a GitHub account if you don't already have one: [GitHub 
 
 If you already have a GitHub account with your university email, you need to change the primary email to a personal one.
 
-![GitHub Email Settings](images/screenshot_GitHub_emails.png)
+![GitHub Email Settings](images/1/screenshot_GitHub_emails.png)
 
 Make sure to verify both email addresses in your GitHub account settings and enable two-factor authentication (2FA).
 
-![GitHub 2FA Settings](images/screenshot_GitHub_auth.png)
+![GitHub 2FA Settings](images/1/screenshot_GitHub_auth.png)
 
 ### 1 - Introduction to GitHub
 
@@ -100,17 +100,17 @@ Once you have followed the guide above, refer to [the on-campus guide above](#b-
 
 If you left the repository prompt empty, the launcher has already created a Flutter Web starter project and opened it in VS Code.
 
-![The starter app open in VS Code after the Flutter and VS Code bundle script finishes](images/starter_app_screenshot_once_vscode_bundle_script_finished.png)
+![The starter app open in VS Code after the Flutter and VS Code bundle script finishes](images/1/starter_app_screenshot_once_vscode_bundle_script_finished.png)
 
 ### B - If the project did not open in VS Code
 
 If it is not open, create a new project by first opening the Command Palette by pressing **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. See the screenshot below for reference.
 
-![Opening the Command Palette in VS Code](images/screenshot_open_command_palette.png)
+![Opening the Command Palette in VS Code](images/1/screenshot_open_command_palette.png)
 
 If you don't see this, make sure you have the Flutter and Dart extensions installed in VS Code. You can install them from the Extensions view by searching for `Flutter` and `Dart`. When the Command Palette is open, you can type what you want to do. In this case, you should type `Flutter: New Project` to create a new Flutter project as shown below.
 
-![Creating a new Flutter project in VS Code](images/screenshot_flutter_new_project.png)
+![Creating a new Flutter project in VS Code](images/1/screenshot_flutter_new_project.png)
 
 Afterwards, select `Application` as the project type and select a location on the computer that is not synced to cloud (e.g., Downloads folder) as the project location.
 
@@ -126,7 +126,7 @@ In the root of all Flutter projects, there must be a file called `pubspec.yaml`.
 
 The screenshot below shows the `main.dart` and `pubspec.yaml` files in the starter project.
 
-![Project Structure](images/screenshot_flutter_project_structure.jpg)
+![Project Structure](images/1/screenshot_flutter_project_structure.jpg)
 
 You don't need to understand the code at this moment but below is a brief overview.
 
@@ -138,11 +138,11 @@ One of the learning outcomes of this module is "Design and implement the user in
 
 If you have signed up for GitHub Education, you can access GitHub Copilot for free, which is an AI assistant integrated into VS Code. At this moment, you should ensure that the Copilot extension is installed and enabled in your VS Code environment. See the screenshot below.
 
-![Copilot Extension](images/screenshot_copilot_extension.png)
+![Copilot Extension](images/1/screenshot_copilot_extension.png)
 
 As an example, select a piece of code that you'd like to learn more about with your mouse. Then use the Copilot extension (**Ctrl + I** on Windows or **⌘ + I** on macOS) to ask the AI questions like: "I am new to Flutter, what does the selected code do? Give me a brief and simple explanation".
 
-![Copilot Example](images/screenshot_copilot_example.jpg)
+![Copilot Example](images/1/screenshot_copilot_example.jpg)
 
 ### Selecting a target device
 
@@ -150,7 +150,7 @@ In VS Code, you need to select a target device to run your app. The university c
 
 At the bottom right of the VS Code window is the status bar. Click on the device name (it might say `No Device`) to open the device selector. For now, choose a browser like Edge or Chrome. Alternatively, you can open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) and type `Flutter: Select Device`. Then select your browser from the list.
 
-![VS Code Device Selector](images/screenshot_vscode_device_selector.jpg)
+![VS Code Device Selector](images/1/screenshot_vscode_device_selector.jpg)
 
 ### Installing dependencies
 
@@ -158,7 +158,7 @@ Every app depends on various external packages and libraries to function correct
 
 VS Code may install the dependencies automatically when you open the project or display a popup prompting you to install them, as shown below.
 
-![VS Code Install Dependencies](images/screenshot_vscode_install_dependencies.png)
+![VS Code Install Dependencies](images/1/screenshot_vscode_install_dependencies.png)
 
 If the dependencies are not installed automatically, open the Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**), type `Terminal: Create New Terminal` and press **Enter**. Then run this in the VS Code terminal:
 
@@ -180,7 +180,7 @@ flutter run
 
 VS Code will build and run your application, which should open in a browser window. Click the `+` button to see the counter increase.
 
-![The starter app running in the browser](images/running_the_starter_app.png)
+![The starter app running in the browser](images/1/running_the_starter_app.png)
 
 ### Viewing the app as a mobile app
 
@@ -190,7 +190,7 @@ When your app is running in the browser (Chrome, Edge or a similar browser, but 
 
 In the developer tools panel, look for an icon that looks like a phone and tablet, often called the `Toggle device toolbar`. Click it to switch to a mobile device view. Below is an example of how it looks in Chrome.
 
-![Chrome Developer Tools](images/screenshot_chrome_developer_tools.png)
+![Chrome Developer Tools](images/1/screenshot_chrome_developer_tools.png)
 
 You can then use the dropdown menu at the top of the screen to select different device presets, such as an iPhone or a Pixel, to see how your app looks and behaves on various screen sizes.
 
@@ -198,7 +198,7 @@ You can then use the dropdown menu at the top of the screen to select different 
 
 Hot reload is a feature that lets you see code changes instantly without restarting the app. You can enable it by clicking the lightning bolt icon at the top of VS Code while the app is running. If you are using the terminal, you can press the **r** key to trigger it.
 
-![Hot Reload Button](images/screenshot_vscode_hot_reload.jpg)
+![Hot Reload Button](images/1/screenshot_vscode_hot_reload.jpg)
 
 As an example, while the app is running, enable hot reload and change the `colorSchemeSeed` property inside the `ThemeData` widget in `main.dart` from `Colors.deepPurple` to `Colors.orange` and save the file. You should see the UI update in the browser instantly.
 
@@ -208,7 +208,7 @@ Lastly, let's put our project on GitHub to track changes and back it up online.
 
 In the Activity Bar on the left, click the Source Control icon. Click on `Initialize Repository` to set up Git for your project.
 
-![Source Control Panel](images/screenshot_vscode_source_control.jpg)
+![Source Control Panel](images/1/screenshot_vscode_source_control.jpg)
 
 Alternatively, you can run the following command in the VS Code terminal to initialise Git:
 
@@ -238,7 +238,7 @@ git config --global user.email "YOUR_GITHUB_EMAIL"
 
 You should now see all your project files listed in the Source Control panel. Hover over `Changes` and click the `+` icon to stage all files. Then, enter a commit message like `Initial commit` in the text box and click the `Commit` button to commit your changes.
 
-![Commit Changes](images/screenshot_vscode_commit_changes.jpg)
+![Commit Changes](images/1/screenshot_vscode_commit_changes.jpg)
 
 Alternatively, you can run the following commands in the VS Code terminal:
 
@@ -253,19 +253,19 @@ The `Commit` button will now say `Publish Branch`:
 
 Or `Sync Changes`:
 
-![Sync Changes Button](images/screenshot_vscode_sync_changes.jpg)
+![Sync Changes Button](images/1/screenshot_vscode_sync_changes.jpg)
 
 Click this to push your local repository to GitHub. You may be asked to allow VS Code to log in to your GitHub account.
 
 Next, you will be asked to name your repository; enter `sandwich_shop`. Let this be a public repository and click `Publish Repository`.
 
-![Create GitHub Repository](images/screenshot_vscode_create_github_repo.png)
+![Create GitHub Repository](images/1/screenshot_vscode_create_github_repo.png)
 
 ### Verifying the repository on GitHub
 
 You can verify that the project was published by navigating to your GitHub account in a web browser. You should see the newly created `sandwich_shop` repository.
 
-![GitHub Repository](images/screenshot_github_repository.jpg)
+![GitHub Repository](images/1/screenshot_github_repository.jpg)
 
 The link will look like `https://github.com/YOUR_USERNAME/sandwich_shop` where `YOUR_USERNAME` is your GitHub username.
 
@@ -277,7 +277,7 @@ Go back to the Source Control panel (use the Command Palette and enter `Focus on
 
 Before you click on commit, you can also click on the changed files below the `Changes` section to see the differences (diff) between the current version and the last committed version.
 
-![Second Commit](images/screenshot_vscode_second_commit.jpg)
+![Second Commit](images/1/screenshot_vscode_second_commit.jpg)
 
 Once you have clicked on commit and then sync changes, you should be able to see the changes to the file in your GitHub repository.
 

@@ -47,7 +47,7 @@ Instead of jumping straight into coding, let's start by using AI to help us writ
 
 Run the app and add a few sandwiches to your cart. You should see a snack bar confirming the addition. You will also see that we have implemented a second screen, `CartScreen` in `lib/views/cart_screen.dart`, that displays the items in the cart. You can navigate to this screen from the order screen by pressing the "View Cart" button. This is what the cart page should look like:
 
-![Initial Cart Page](images/screenshot_initial_cart_page.png)
+![Initial Cart Page](images/6/screenshot_initial_cart_page.png)
 
 Let's say we want to enhance our cart functionality. Instead of immediately asking for code, we'll first ask our AI assistant to help us create a prompt. Here's a sample prompt you can use (if you are using Copilot, set it to "Ask" mode):
 
@@ -118,12 +118,12 @@ Remember, when using Copilot, you can set it to "Edit" mode to let it modify you
 
 Notice how you can pause after each subtask to review the changes. It is an important part of the PDD process to read, test, and commit each change separately. This allows you to ensure the AI is producing code that meets your requirements and adheres to best practices.
 
-![Using Copilot to implement cart modifications](images/screenshot_pdd_implementation_step.png)
+![Using Copilot to implement cart modifications](images/6/screenshot_pdd_implementation_step.png)
 Once you have completed all the subtasks, test your app to ensure everything works as expected. As before, update the widget tests for the cart screen in `test/views/cart_screen_test.dart` to cover the new functionality.
 
 Here is a screenshot of our cart page after implementing the modifications:
 
-![Updated Cart Page](images/screenshot_final_cart_page.png)
+![Updated Cart Page](images/6/screenshot_final_cart_page.png)
 
 As before, remember to update the widget tests for the `cart_screen.dart` in `test/views/cart_screen_test.dart` to cover the new functionality you have added.
 

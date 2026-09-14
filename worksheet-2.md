@@ -4,8 +4,7 @@
 
 Ensure that you have already completed the following:
 
-- [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md).
-- [Worksheet 1 — Introduction to Flutter](./worksheet-1.md).
+- [Worksheet 1](./worksheet-1.md).
 
 ## **Getting help**
 
@@ -13,7 +12,7 @@ To get support with this worksheet, follow [discord_flutter.pptx](https://portdo
 
 ## **Getting started**
 
-For this worksheet, you can start with the code from branch 1 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/1) which should be similar to what you'd have at the end of worksheet 1. You can either clone the repository and checkout branch 1 by running the following in the terminal (skip to the `checkout` if you have already cloned our repository):
+For this worksheet, you can start with the code from branch 1 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/1) which should be similar to what you'd have at the end of worksheet 1. You can either clone the repository and checkout branch 1 by running the following in the terminal (the `checkout` command switches to the specified branch, in this case branch 1):
 
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
@@ -21,11 +20,7 @@ cd sandwich_shop
 git checkout 1
 ```
 
-Alternatively, you can continue with the Flutter project you created in Worksheet 1. This project should already be a repository in your GitHub account.
-
-## **Set up the project**
-
-We will start to incrementally build the "Sandwich Counter" application.
+Alternatively, you can continue with the Flutter project you created in Worksheet 1. You should already have a repository in your GitHub account for this project (e.g., `github.com/your-username/sandwich_shop`).
 
 ## **Import the Material Design library**
 
@@ -34,6 +29,10 @@ Open `lib/main.dart` and ensure that you have the correct `import` statement for
 ```dart
 import 'package:flutter/material.dart';
 ```
+
+The top of your file should look like this:
+
+![Import Material Design library](images/2/import_material_design.png)
 
 **Material Design** is a design system from Google. The `package:flutter/material.dart` library gives you access to its pre-built User Interface (UI) components, called **widgets**. We will use these widgets to build our user interface.
 
@@ -49,16 +48,19 @@ For completeness, below are some general categories of fundamental building bloc
 
 ### **Clean the default code**
 
-Locate the `main()` function in `lib/main.dart`, which is the entry point of your app. Let's clear out the default `MyApp` class and other related classes from the app.
+Locate the `main()` function in `lib/main.dart`, which is the entry point of your app. You can do this with the "Go to Symbol" feature in VS Code by pressing **Ctrl + Shift + O** on Windows or **⌘ + Shift + O** on macOS and selecting `main`. Let's clear out the default `MyApp` class and other related classes from the app.
 
-Comment out or remove this line for now. You can comment a line in VS Code by selecting it with your mouse and pressing **Ctrl + /** on Windows or **⌘ + /** on macOS.
-The (uncommented) code in your `lib/main.dart` file should now look like this:
+Comment out or remove this line for now. You can comment a line in VS Code by selecting it with your mouse and pressing **Ctrl + /** on Windows or **⌘ + /** on macOS. The (uncommented) code in your `lib/main.dart` file should now look like this:
 
 ```dart
 import 'package:flutter/material.dart';
 
 void main() {}
 ```
+
+Make sure your file looks like this now:
+
+![Cleaned main.dart file](images/2/cleaned_main_dart.png)
 
 ### **Commit your changes (1)**
 
@@ -90,9 +92,20 @@ class App extends StatelessWidget {
 }
 ```
 
-This `App` class is a `StatelessWidget`, meaning its state and properties can't change once it's built. All widgets must have a `build` method, which describes the widget's part of the user interface.
+After you've added the `App` class, optionally fold the rest of the classes and ignore them as shown in this screenshot:
 
-For now, it returns an empty `Container`, which is like a blank `div` in HTML. To understand this code better, select the entire class and ask Copilot by pressing **Ctrl + I** on Windows or **⌘ + I** on macOS: "Explain what this `StatelessWidget` does, line by line. What is build and why do we need it? What does the override do? What about the super.key?"
+![Folded classes screenshot](images/2/folded_classes.png)
+
+Hopefully you are familiar with the syntax (refer to the Dart worksheets in [worksheet 1](worksheet-1.md) for a refresher). We are defining a subclass of `StatelessWidget` class called `App`. `App` is going to be the stateless widget that serves as the main entry point for our application's UI.
+
+If a class extends `StatelessWidget`, it means its state and properties can't change once it's built. All widgets must have a `build` method, which describes the widget's part of the user interface (what it should look like and how it should behave).
+
+For now, the `build` method returns an empty `Container`, which is like a blank `div` tag in HTML. To understand this code better, select the entire class and ask Copilot the following questions by pressing **Ctrl + I** on Windows or **⌘ + I** on macOS:
+
+- Explain what this `StatelessWidget` does.
+- Ask it what the build does and why do we need it?
+- What does the override keyword do?
+- What about the super.key?
 
 ### **Use the `App` widget**
 
@@ -103,6 +116,10 @@ void main() {
   runApp(const App());
 }
 ```
+
+Check that your `main()` function now looks like this:
+
+![Main function screenshot](images/2/main_function.png)
 
 The `runApp()` function takes our `App` widget and makes it the root of the widget tree, displaying it on the screen. If you run the app now, you will just see a blank screen.
 
@@ -133,6 +150,10 @@ Widget build(BuildContext context) {
 }
 ```
 
+Your `App` widget should now look like this:
+
+![App widget screenshot](images/2/app_widget.png)
+
 Here, we've created a "widget tree". `MaterialApp` is the root (parent), providing core app functionality. `Scaffold` provides the basic screen layout, including an `AppBar` (the top bar) and a `body`. The body contains a `Center` widget, which in turn holds our `Text` widget.
 
 As before, for a deeper understanding of this structure, use Copilot to explain each widget's role.
@@ -141,9 +162,9 @@ As before, for a deeper understanding of this structure, use Copilot to explain 
 
 Make sure you have a device selected (e.g., Chrome or Edge from the bottom status bar). You can also open the Command Palette by pressing **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and type "Flutter: Select Device" to choose a device.
 
-With a device selected run the app by pressing F5. You should see an application with an app bar titled "Sandwich Counter" and "Welcome to the Sandwich Shop\!" centred on the screen.
+With a device selected run the app by pressing **F5** (depending on your keyboard, you may have to press **Fn + F5**). You should see an application with an app bar titled "Sandwich Counter" and "Welcome to the Sandwich Shop\!" centred on the screen.
 
-![Welcome to the Sandwich Shop](images/screenshot_welcome_to_sandwich_shop.jpg)
+![Welcome to the Sandwich Shop](images/2/screenshot_welcome_to_sandwich_shop.jpg)
 
 ### **Commit your changes (3)**
 
@@ -162,7 +183,7 @@ class OrderItemDisplay extends StatelessWidget {
   final String itemType;
   final int quantity;
 
-  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
+  OrderItemDisplay(this.quantity, this.itemType, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +192,9 @@ class OrderItemDisplay extends StatelessWidget {
 }
 ```
 
-You may need to auto-fix any warnings by hovering over the squiggly lines and clicking on the lightbulb icon or pressing **Ctrl + .** on Windows or **⌘ + .** on macOS.
+You may need to auto-fix any warnings by hovering over the squiggly lines and clicking on the lightbulb icon or pressing **Ctrl + .** on Windows or **⌘ + .** on macOS. See the screenshot below:
+
+![Auto-fix warnings screenshot](images/2/auto_fix_warnings.png)
 
 This `StatelessWidget` has two `final` instance variables, `itemType` and `quantity`, which are set by its constructor. `final` means they cannot be changed after the widget is created.
 
@@ -180,6 +203,8 @@ Running the app at this stage won't show any visual changes yet, as we haven't a
 ### **Commit your changes (4)**
 
 Commit your new widget with the message `Define OrderItemDisplay custom widget`.
+
+<!-- TODO: Done till here -->
 
 ### **Implement the `build` method of `OrderItemDisplay`**
 
@@ -225,7 +250,7 @@ Widget build(BuildContext context) {
 
 Run the app. You should now see "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" displayed in the centre of the screen.
 
-![Sandwich Counter](images/screenshot_sandwich_counter.jpg)
+![Sandwich Counter](images/2/screenshot_sandwich_counter.jpg)
 
 ### **Commit your changes (6)**
 
@@ -242,7 +267,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     Familiarise yourself with this tool by watching this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and reviewing its [official documentation](https://docs.flutter.dev/tools/devtools/inspector). Use it to observe the relationship between the widgets in your app.
 
-    ![Flutter DevTools](images/screenshot_devtools.jpg)
+    ![Flutter DevTools](images/2/screenshot_devtools.jpg)
 
     **Show your running app and the widget inspector to a member of staff** for a sign-off. We need to make sure you can work your way around the widget inspector.
 
@@ -252,7 +277,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     This is what it should look like:
 
-    ![Container](images/screenshot_container.jpg)
+    ![Container](images/2/screenshot_container.jpg)
 
     Update the `width` and `height` properties to see what happens if the `OrderItemDisplay`'s text is too big for the `Container`.
 
@@ -264,7 +289,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     The image below shows an example of a `Row` with three `OrderItemDisplay` widgets. (Note that we have skipped the previous exercise, your implementation should still have the coloured container from the last exercise.)
 
-    ![Layout](images/screenshot_layout.jpg)
+    ![Layout](images/2/screenshot_layout.jpg)
 
     Resize the browser window. What happens if the `Row` is too wide for the screen? Use an LLM or the documentation to learn about layout "Constraints".
 
@@ -278,7 +303,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     If you get stuck, try the shortcut **Ctrl + Space** on Windows or **⌘ + Space** on macOS to see suggestions for properties you can use. Below, we have for example found out that `color` is a property of `TextStyle` that accepts an instance of the `Color` class. Try not to use an AI assistant to complete this task.
 
-    ![TextStyle Properties](images/screenshot_suggestion.jpg)
+    ![TextStyle Properties](images/2/screenshot_suggestion.jpg)
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
@@ -290,7 +315,7 @@ Your main guide for the rest of the exercises is the [Flutter layout documentati
 
     Refer to the [debugging layout](https://docs.flutter.dev/get-started/fundamentals/layout#devtools-and-debugging-layout) documentation if needed.
 
-    ![Overflow](images/screenshot_overflow.jpg)
+    ![Overflow](images/2/screenshot_overflow.jpg)
 
     This task is **optional** and there's no need to show it to a member of staff for a sign-off.
 
