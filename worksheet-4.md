@@ -25,7 +25,7 @@ For this worksheet, we will be following the simple Model-View-ViewModel (MVVM) 
 - **Services**: These are the classes that are responsible for fetching data from external sources, such as cloud services or a database.
 
 Here is a diagram that shows how these layers interact with each other:
-![A simple app architecture diagram](images/app-architecture.png)
+![A simple app architecture diagram](images/4/app-architecture.png)
 
 If you would like to learn more about app architecture, you can read the [official Flutter documentation](https://docs.flutter.dev/app-architecture/guide).
 
@@ -387,7 +387,7 @@ Once again, make sure that you have committed your changes.
 
 Run these tests while the `order_repository_test.dart` is open in VS Code and click on the `Run` link above the `main` function. You should see the test results in the terminal panel at the bottom of VS Code as shown below:
 
-![Running tests in VS Code](images/screenshot_running_tests.png)
+![Running tests in VS Code](images/4/screenshot_running_tests.png)
 
 Each green tick means that the test passed. On the other hand, a red cross would mean the test failed, and you will see a detailed error message explaining what went wrong—for example, `Expected: <1>, Actual: <0>`. This feedback is crucial for understanding what has gone wrong in your code.
 

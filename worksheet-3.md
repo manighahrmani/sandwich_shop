@@ -79,7 +79,7 @@ For now, our callback is an arrow function that just prints a message in the ter
 
 To run the app, open the Command Palette in VS Code with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. In there, type `Terminal: Create New Terminal` and hit enter. In the terminal, run the command `flutter run`. You will see the buttons, and when you click them, messages will appear in the Terminal as shown below.
 
-![Output of button presses](images/screenshot_eventhandler.png)
+![Output of button presses](images/3/screenshot_eventhandler.png)
 
 ### **Commit your changes (1)**
 
@@ -298,7 +298,7 @@ See below an example of how we have provided a rich prompt to Copilot. You can o
 
 This way, `main.dart` is already included in the context of Copilot. Remember that while Copilot can access your codebase, LLMs like ChatGPT require you to provide the code snippet (in this case the `OrderScreen` and `_OrderScreenState` classes) for context.
 
-![Example of rich prompt](images/screenshot_copilot_feature_user_story.jpg)
+![Example of rich prompt](images/3/screenshot_copilot_feature_user_story.jpg)
 
 The `Add Context` button can be used to include additional files, screenshots, instructions or other resources. We encourage you to explore other models and modes (e.g., Agent and Edit).
 
@@ -344,7 +344,7 @@ void _increaseQuantity() {
 
 Now, let's set a breakpoint. Click in the left margin next to the line `_quantity++;` in your `_increaseQuantity` method. You should see a red dot appear, indicating a breakpoint.
 
-![Setting a breakpoint](images/screenshot_debug_breakpoint.png)
+![Setting a breakpoint](images/3/screenshot_debug_breakpoint.png)
 
 Start your app in debug mode by pressing **F5** or clicking the play button with a bug icon in the top toolbar. When you click the "Add" button in your running app, the debugger will pause execution at your breakpoint.
 
@@ -360,7 +360,7 @@ Next, try this simple debugging exercise: temporarily change your `maxQuantity` 
 
 After clicking the add button, may need to use the "Step Into" button (the down arrow, **F11**) to enter the `setState` method and see how `_quantity` is updated. In the Variables panel, you should see `_quantity` listed under the "Local" section, as one of the instance variables of the `_OrderScreenState` class. There may be a lot more variables listed as well, so a handy tip is to add the variable's name (e.g., `_quantity`) in the "Watch" section to track it more easily.
 
-![Debugging exercise](images/screenshot_debug_panel.png)
+![Debugging exercise](images/3/screenshot_debug_panel.png)
 
 Remember to remove the temporary `print` statement and reset your `maxQuantity` to `5` when you're done experimenting.
 
@@ -397,7 +397,7 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
    VS Code has a useful feature called Refactor. You can use it by right-clicking on the name of the widgets (for example the `ElevatedButton`) and selecting `Refactor...`. You can do the same thing with the shortcut **Ctrl + Shift + R** on Windows or **⌘ + Shift + R** on macOS. This will open a menu where you can select `Wrap with Expanded` or `Wrap with SizeBox` as shown below.
 
-   ![Refactor Menu](images/screenshot_refactor.jpg)
+  ![Refactor Menu](images/3/screenshot_refactor.jpg)
 
    Keep hot reload active, use the widget inspector, refer to [the documentation page on layout widgets](https://docs.flutter.dev/ui/widgets/layout) to figure out how and where the extra space should be added.
 
@@ -450,6 +450,6 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
    Your task is to fix them. You can run the tests by clicking on the `Run` link above the `main()` function in `test/widget_test.dart` and you should get output similar to the shown below.
 
-   ![Introduction to widget testing](images/screenshot_widget_test_intro.jpg)
+  ![Introduction to widget testing](images/3/screenshot_widget_test_intro.jpg)
 
    This task is **optional** and there's no need to show it to a member of staff for a sign-off.

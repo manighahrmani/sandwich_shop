@@ -60,7 +60,7 @@ Ensure that your app runs by opening a terminal (**Ctrl + \`** on Windows or **�
 flutter run -d chrome
 ```
 
-![Placeholder: Screenshot of the default Flutter counter application running in Chrome](images/placeholder_default_counter_running.png)
+![Placeholder: Screenshot of the default Flutter counter application running in Chrome](images/2/placeholder_default_counter_running.png)
 
 ### Understanding the main entry point and runApp
 
@@ -123,7 +123,7 @@ void main() {
 
 Trigger hot restart by pressing **Shift + F5** or pressing **R** in your terminal. You should see a clean dark or light bar with the title "Sandwich Counter" and a centred welcome message.
 
-![Placeholder: Screenshot of the cleaned App widget running with a basic Scaffold AppBar](images/placeholder_clean_app_scaffold.png)
+![Placeholder: Screenshot of the cleaned App widget running with a basic Scaffold AppBar](images/2/placeholder_clean_app_scaffold.png)
 
 Commit your changes in VS Code or via the terminal:
 
@@ -210,7 +210,7 @@ Save the file and check your browser. The screen now displays:
 5 Footlong sandwich(es): 🥪🥪🥪🥪🥪
 ```
 
-![Placeholder: Screenshot of OrderItemDisplay rendering 5 Footlong sandwiches with emojis](images/placeholder_order_item_display.png)
+![Placeholder: Screenshot of OrderItemDisplay rendering 5 Footlong sandwiches with emojis](images/2/placeholder_order_item_display.png)
 
 Commit your changes:
 
@@ -278,7 +278,7 @@ Flutter provides Developer Tools (DevTools) directly inside VS Code for inspecti
 3. Click the **Widget Inspector** tab.
 4. Click on elements in the visual tree to view their rendered dimensions, padding, and layout constraints.
 
-![Placeholder: Screenshot of Flutter DevTools Widget Inspector showing the widget tree and layout properties](images/placeholder_flutter_devtools_inspector.png)
+![Placeholder: Screenshot of Flutter DevTools Widget Inspector showing the widget tree and layout properties](images/2/placeholder_flutter_devtools_inspector.png)
 
 ## Stateful widgets and interactivity
 
@@ -441,7 +441,7 @@ Save the file and test the app in your browser:
 3. Click **Remove**: the counter decrements until it reaches 0.
 4. Click **Add** past 5: the quantity will not exceed `maxQuantity: 5`.
 
-![Placeholder: Screenshot of the interactive OrderScreen with Add and Remove buttons running](images/placeholder_order_screen_interactive.png)
+![Placeholder: Screenshot of the interactive OrderScreen with Add and Remove buttons running](images/2/placeholder_order_screen_interactive.png)
 
 Commit your changes:
 
@@ -475,7 +475,7 @@ Open and examine the starter files:
 - `lib/views/home_view.dart`: The starter home screen with an `AppBar`, `NavDrawer`, and placeholder text.
 - `lib/widgets/nav_drawer.dart`: A minimal navigation drawer with drawer tiles.
 
-![Placeholder: Screenshot of the Southsea Cinema starter app in Chrome DevTools mobile view](images/placeholder_southsea_cinema_starter.png)
+![Placeholder: Screenshot of the Southsea Cinema starter app in Chrome DevTools mobile view](images/2/placeholder_southsea_cinema_starter.png)
 
 ### 2 - Create a custom Stateless ticket information card
 
@@ -548,7 +548,7 @@ class TicketInfoCard extends StatelessWidget {
 
 Add an instance of `TicketInfoCard` to `lib/views/home_view.dart` inside the body `Column`.
 
-![Placeholder: Screenshot of TicketInfoCard rendered inside Southsea Cinema HomeView](images/placeholder_ticket_info_card.png)
+![Placeholder: Screenshot of TicketInfoCard rendered inside Southsea Cinema HomeView](images/2/placeholder_ticket_info_card.png)
 
 ### 3 - Build a Stateful ticket quantity selector with interactive buttons
 
@@ -644,7 +644,7 @@ class _TicketSelectorState extends State<TicketSelector> {
 
 Add `TicketSelector` to `lib/views/home_view.dart` underneath the `TicketInfoCard`.
 
-![Placeholder: Screenshot of the interactive TicketSelector running in Southsea Cinema](images/placeholder_southsea_cinema_ticket_selector.png)
+![Placeholder: Screenshot of the interactive TicketSelector running in Southsea Cinema](images/2/placeholder_southsea_cinema_ticket_selector.png)
 
 ### 4 - Inspect and debug your coursework app in mobile view
 

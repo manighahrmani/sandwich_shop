@@ -1211,7 +1211,7 @@ The easiest way to fix these is to open the Problems panel in VS Code (in Comman
 
 See below what this should look like:
 
-![Problems View Screenshot](images/screenshot_fixing_problems.png)
+![Problems View Screenshot](images/7/screenshot_fixing_problems.png)
 
 This would change:
 
