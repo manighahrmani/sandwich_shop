@@ -32,7 +32,7 @@ Demo: 10 minutes demo in your timetabled practical. All marks awarded in the dem
 
 Your task is to recreate a mobile-friendly version of the Southsea Cinema website using Flutter. You must not start from scratch: begin by forking the [southsea_cinema starter repository](https://github.com/manighahrmani/southsea_cinema), then build your own version of the app step by step as you work through the weekly worksheets on the [Flutter Course homepage](https://manighahrmani.github.io/sandwich_shop/).
 
-![Southsea Cinema website](images/southsea_cinema.png)
+![Southsea Cinema website](images/5/southsea_cinema.png)
 
 Reference website: [Southsea Cinema](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/)
 
@@ -56,11 +56,11 @@ Follow the [development environment instructions in Worksheet 1](https://manigha
 
 Open the [southsea_cinema repository](https://github.com/manighahrmani/southsea_cinema) and click **Fork** (or use [this link](https://github.com/manighahrmani/southsea_cinema/fork)):
 
-![Clicking the Fork button on GitHub](images/step1_fork_button.png)
+![Clicking the Fork button on GitHub](images/1/step1_fork_button.png)
 
 On the "Create a new fork" page, leave the default options as they are (do not change the repository name) and click **Create fork**:
 
-![Creating a new fork on GitHub](images/step1_create_fork.png)
+![Creating a new fork on GitHub](images/1/step1_create_fork.png)
 
 Your fork must be named `southsea_cinema` (if you already have a repository with this name, rename it beforehand) and should have a URL like:
 
@@ -72,11 +72,11 @@ https://github.com/YOUR-USERNAME/southsea_cinema
 
 On your forked repository page, click the green **Code** button and copy the HTTPS URL:
 
-![Copying the clone URL from GitHub](images/step2_clone_repository.png)
+![Copying the clone URL from GitHub](images/1/step2_clone_repository.png)
 
 If you are using VS Code, open the Source Control panel and click **Clone Repository** (or open the Command Palette with `Ctrl+Shift+P` / `Cmd+Shift+P` and choose "Git: Clone"), then paste the URL you copied:
 
-![Cloning the repository from VS Code](images/step2_open_in_vscode.png)
+![Cloning the repository from VS Code](images/1/step2_open_in_vscode.png)
 
 Alternatively, if you are using a terminal, run:
 
@@ -91,7 +91,7 @@ Replace `YOUR-USERNAME` with your GitHub username.
 
 When you open the project, VS Code may show a popup asking if you want to fetch missing packages. If you see it, click **Run 'pub get'**:
 
-![VS Code prompting to run pub get](images/step3_flutter_pub_get_better.png)
+![VS Code prompting to run pub get](images/1/step3_flutter_pub_get_better.png)
 
 If you do not see this popup, open a terminal and run the command manually:
 
@@ -99,7 +99,7 @@ If you do not see this popup, open a terminal and run the command manually:
 flutter pub get
 ```
 
-![Running flutter pub get in the terminal](images/step3_flutter_pub_get.png)
+![Running flutter pub get in the terminal](images/1/step3_flutter_pub_get.png)
 
 ### Run the Application
 
@@ -117,15 +117,15 @@ flutter run -d edge
 
 The app should open in your browser and show the Southsea Cinema starter home page:
 
-![Starter app running in Edge](images/step4_run_app.png)
+![Starter app running in Edge](images/1/step4_run_app.png)
 
 To view it in mobile view, open developer tools (right-click the page and choose **Inspect**, or press F12), then click the **Toggle device toolbar** button:
 
-![Toggle device toolbar button in Chrome DevTools](images/step5_open_devtools.png)
+![Toggle device toolbar button in Chrome DevTools](images/1/step5_open_devtools.png)
 
 Finally, choose a phone-sized device preset from the dropdown menu:
 
-![Selecting a mobile device preset](images/step5_mobile_view.png)
+![Selecting a mobile device preset](images/1/step5_mobile_view.png)
 
 ## Assessment Structure
 
