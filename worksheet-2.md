@@ -1,18 +1,42 @@
-# **Worksheet 2 — Stateless widgets**
+# Worksheet 2 — Stateless widgets
 
-## **What you need to know beforehand**
+## Table of contents
 
-Ensure that you have already completed the following:
+- [What you need to know beforehand](#what-you-need-to-know-beforehand)
+- [Getting help](#getting-help)
+- [Getting started](#getting-started)
+- [Import the Material Design library](#import-the-material-design-library)
+  - [Clean the default code](#clean-the-default-code)
+  - [Commit your changes (1)](#commit-your-changes-1)
+- [Define the main app widget: App](#define-the-main-app-widget-app)
+  - [Use the App widget](#use-the-app-widget)
+  - [Commit your changes (2)](#commit-your-changes-2)
+- [Define the UI inside App](#define-the-ui-inside-app)
+  - [Redefine the build method](#redefine-the-build-method)
+  - [Run the application](#run-the-application)
+  - [Commit your changes (3)](#commit-your-changes-3)
+- [Create the custom OrderItemDisplay widget](#create-the-custom-orderitemdisplay-widget)
+  - [Define the OrderItemDisplay widget](#define-the-orderitemdisplay-widget)
+  - [Commit your changes (4)](#commit-your-changes-4)
+  - [Implement the build method of OrderItemDisplay](#implement-the-build-method-of-orderitemdisplay)
+  - [Commit your changes (5)](#commit-your-changes-5)
+- [Use OrderItemDisplay in App](#use-orderitemdisplay-in-app)
+  - [Replace the placeholder in App](#replace-the-placeholder-in-app)
+  - [Run the application again](#run-the-application-again)
+  - [Commit your changes (6)](#commit-your-changes-6)
+- [Exercises](#exercises)
 
-- [Worksheet 1](./worksheet-1.md).
+## What you need to know beforehand
 
-## **Getting help**
+Ensure that you have already completed [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md).
 
-To get support with this worksheet, follow [discord_flutter.pptx](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
+## Getting help
 
-## **Getting started**
+To get support with this worksheet, follow the [Discord guide](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
 
-For this worksheet, you can start with the code from branch 1 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/1) which should be similar to what you'd have at the end of worksheet 1. You can either clone the repository and checkout branch 1 by running the following in the terminal (the `checkout` command switches to the specified branch, in this case branch 1):
+## Getting started
+
+For this worksheet, you can start with the code from branch 1 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/1) which should be similar to what you'd have at the end of Worksheet 1. You can either clone the repository and checkout branch 1 by running the following in the terminal (the `checkout` command switches to the specified branch, in this case branch 1):
 
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
@@ -22,7 +46,7 @@ git checkout 1
 
 Alternatively, you can continue with the Flutter project you created in Worksheet 1. You should already have a repository in your GitHub account for this project (e.g., `github.com/your-username/sandwich_shop`).
 
-## **Import the Material Design library**
+## Import the Material Design library
 
 Open `lib/main.dart` and ensure that you have the correct `import` statement for Material Design components:
 
@@ -46,7 +70,7 @@ For completeness, below are some general categories of fundamental building bloc
 - Input widgets like `TextField` (for text entry) and `Checkbox` (for boolean input).
 - Layout widgets like `Row`, `Column`, `Stack`, and `Card` that help you arrange other widgets.
 
-### **Clean the default code**
+### Clean the default code
 
 Locate the `main()` function in `lib/main.dart`, which is the entry point of your app. You can do this with the "Go to Symbol" feature in VS Code by pressing **Ctrl + Shift + O** on Windows or **⌘ + Shift + O** on macOS and selecting `main`. Let's clear out the default `MyApp` class and other related classes from the app.
 
@@ -62,7 +86,7 @@ Make sure your file looks like this now:
 
 ![Cleaned main.dart file](images/2/cleaned_main_dart.png)
 
-### **Commit your changes (1)**
+### Commit your changes (1)
 
 Now is a good time to commit your changes. In VS Code, go to the Source Control panel. You can open this from `View > Source Control`. Alternatively, you can open the Command Palette by pressing **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and enter `Source Control`, which will open the Source Control panel.
 You should see `main.dart` listed under changes. Type a descriptive commit message, such as `Set Up the Project`, and click the `Commit` button, followed by `Sync Changes`.
@@ -75,7 +99,7 @@ git commit -m "Set Up the Project"
 git push
 ```
 
-## **Define the main app widget: `App`**
+## Define the main app widget: App
 
 We will now define the main widget for our application.
 
@@ -96,7 +120,7 @@ After you've added the `App` class, optionally fold the rest of the classes and 
 
 ![Folded classes screenshot](images/2/folded_classes.png)
 
-Hopefully you are familiar with the syntax (refer to the Dart worksheets in [worksheet 1](worksheet-1.md) for a refresher). We are defining a subclass of `StatelessWidget` class called `App`. `App` is going to be the stateless widget that serves as the main entry point for our application's UI.
+Hopefully you are familiar with the syntax (refer to the Dart worksheets in [Worksheet 1](./worksheet-1.md) for a refresher). We are defining a subclass of `StatelessWidget` class called `App`. `App` is going to be the stateless widget that serves as the main entry point for our application's UI.
 
 If a class extends `StatelessWidget`, it means its state and properties can't change once it's built. All widgets must have a `build` method, which describes the widget's part of the user interface (what it should look like and how it should behave).
 
@@ -107,7 +131,7 @@ For now, the `build` method returns an empty `Container`, which is like a blank 
 - What does the override keyword do?
 - What about the super.key?
 
-### **Use the `App` widget**
+### Use the App widget
 
 Next, update the `main()` function to run our new `App` widget:
 
@@ -123,15 +147,15 @@ Check that your `main()` function now looks like this:
 
 The `runApp()` function takes our `App` widget and makes it the root of the widget tree, displaying it on the screen. If you run the app now, you will just see a blank screen.
 
-### **Commit your changes (2)**
+### Commit your changes (2)
 
 Commit your work with a meaningful message, such as `Define the Main App Widget: App`.
 
-## **Define the UI inside `App`**
+## Define the UI inside App
 
 Let's give our `App` widget some structure and content.
 
-### **Redefine the `build` method**
+### Redefine the build method
 
 Modify the `build` method within the `App` class as follows:
 
@@ -158,7 +182,7 @@ Here, we've created a "widget tree". `MaterialApp` is the root (parent), providi
 
 As before, for a deeper understanding of this structure, use Copilot to explain each widget's role.
 
-### **Run the application**
+### Run the application
 
 Make sure you have a device selected (e.g., Chrome or Edge from the bottom status bar). You can also open the Command Palette by pressing **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and type "Flutter: Select Device" to choose a device.
 
@@ -166,15 +190,15 @@ With a device selected run the app by pressing **F5** (depending on your keyboar
 
 ![Welcome to the Sandwich Shop](images/2/screenshot_welcome_to_sandwich_shop.jpg)
 
-### **Commit your changes (3)**
+### Commit your changes (3)
 
 Commit your work with a message like `Define the UI inside App`.
 
-## **Create the custom `OrderItemDisplay` widget**
+## Create the custom OrderItemDisplay widget
 
 You can create your own reusable widgets by combining existing ones. We will create a custom widget to display a single sandwich order.
 
-### **Define the `OrderItemDisplay` widget**
+### Define the OrderItemDisplay widget
 
 Add the definition for `OrderItemDisplay` in `lib/main.dart`, placing it below the `App` class:
 
@@ -196,19 +220,17 @@ You may need to auto-fix any warnings by hovering over the squiggly lines and cl
 
 ![Auto-fix warnings screenshot](images/2/auto_fix_warnings.png)
 
-This `StatelessWidget` has two `final` instance variables, `itemType` and `quantity`, which are set by its constructor. `final` means they cannot be changed after the widget is created.
+This `StatelessWidget` has two `final` instance variables, `itemType` and `quantity`, which are set by its constructor (whenever an instance of `OrderItemDisplay` is created, the value for `itemType` and `quantity` must be provided but `key` is optional hence it is written in curly braces). `final` means they cannot be changed after the widget is created.
 
 Running the app at this stage won't show any visual changes yet, as we haven't actually used the `OrderItemDisplay` widget in our `App`.
 
-### **Commit your changes (4)**
+### Commit your changes (4)
 
 Commit your new widget with the message `Define OrderItemDisplay custom widget`.
 
-<!-- TODO: Done till here -->
+### Implement the build method of OrderItemDisplay
 
-### **Implement the `build` method of `OrderItemDisplay`**
-
-Now, let's update the `build` method of `OrderItemDisplay` to show the sandwich type and quantity with emojis. We want it to display something like: "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪".
+Now, let's update the `build` method of `OrderItemDisplay` to show the sandwich type and quantity with emojis. We want it to display something like: "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪". (Hopefully you are familiar with the syntax used for string interpolation in Dart, if not, refer to the worksheet on Strings in Dart linked in [Worksheet 1](./worksheet-1.md).)
 
 Update the `build` method inside your `OrderItemDisplay` so it looks like this:
 
@@ -219,17 +241,25 @@ Widget build(BuildContext context) {
 }
 ```
 
-### **Commit your changes (5)**
+### Commit your changes (5)
 
 Commit this update with a message like `Implement dynamic text in OrderItemDisplay`.
 
-## **Use `OrderItemDisplay` in `App`**
+## Use OrderItemDisplay in App
 
 Now we can use our new custom widget inside the main `App`.
 
-### **Replace the placeholder in `App`**
+### Replace the placeholder in App
 
-Find the `build` method of the `App` class and locate the `Center` widget within the `Scaffold`'s `body`. Then replace the placeholder `Text` widget in the `body` of the `Scaffold` with an instance of our new `OrderItemDisplay` widget as shown below:
+Find the `build` method of the `App` class with the shortcut (**Ctrl + Shift + F** on Windows or **⌘ + Shift + F** on macOS) as shown below:
+
+![Find build method screenshot](images/2/find_build_method.png)
+
+Inside there, locate the `Center` widget within the `Scaffold`'s `body`. Select the `Center` widget's child (the `Text` widget) as shown below:
+
+![Select Center widget screenshot](images/2/select_center_widget.png)
+
+Then replace the placeholder `Text` widget in the `body` of the `Scaffold` with an instance of our new `OrderItemDisplay` widget. Your code must match the one shown below:
 
 ```dart
 @override
@@ -246,17 +276,19 @@ Widget build(BuildContext context) {
 }
 ```
 
-### **Run the application again**
+### Run the application again
 
 Run the app. You should now see "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" displayed in the centre of the screen.
 
 ![Sandwich Counter](images/2/screenshot_sandwich_counter.jpg)
 
-### **Commit your changes (6)**
+### Commit your changes (6)
 
 Commit your final changes for this section with the message `Use OrderItemDisplay in App`.
 
 At this stage, your code should look like our code as shown on [the GitHub repository](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart).
+
+<!-- TODO: Done till here -->
 
 ## **Exercises**
 
