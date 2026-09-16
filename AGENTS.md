@@ -1,5 +1,20 @@
 # Repository Guidance
 
+This file is the single, centralised source of agent instructions for this
+this file rather than duplicate rules.
+
+## Chat replies must be minimal
+
+- Reply in chat with the fewest words possible. State only what the user must
+  know or must act on. Nothing else.
+- Do not explain reasoning, background, alternatives, next-step suggestions,
+  or instructions the user did not ask for.
+- When a task is done, say it is done and give only essential results (e.g. a
+  pushed commit range, a URL). No summaries, no recaps.
+- Do not ask the user questions when the task is clear. Make reasonable
+  decisions and act. Only ask if truly blocked by missing information that
+  cannot be inferred.
+
 ## Reference-only directories — do not read or modify unless the user asks
 
 These directories are gitignored and are separate/nested repositories. Do not
