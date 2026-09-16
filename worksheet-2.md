@@ -1,4 +1,4 @@
-# Worksheet 2 — Stateless widgets
+# Worksheet 2 — Stateless and Stateful Widgets
 
 ## Table of contents
 
@@ -21,9 +21,25 @@
   - [Implement the build method of OrderItemDisplay](#implement-the-build-method-of-orderitemdisplay)
   - [Commit your changes (5)](#commit-your-changes-5)
 - [Use OrderItemDisplay in App](#use-orderitemdisplay-in-app)
-  - [Replace the placeholder in App](#replace-the-placeholder-in-app)
-  - [Run the application again](#run-the-application-again)
+  - [Replace the placeholder in App to use OrderItemDisplay](#replace-the-placeholder-in-app-to-use-orderitemdisplay)
+  - [Run the application again to see OrderItemDisplay in action](#run-the-application-again-to-see-orderitemdisplay-in-action)
   - [Commit your changes (6)](#commit-your-changes-6)
+- [Inspecting the Scaffold with the Widget Inspector](#inspecting-the-scaffold-with-the-widget-inspector)
+  - [Open the Widget Inspector](#open-the-widget-inspector)
+  - [Read the widget tree of your app](#read-the-widget-tree-of-your-app)
+  - [Experiment with the parts of the Scaffold](#experiment-with-the-parts-of-the-scaffold)
+  - [Commit your changes (7)](#commit-your-changes-7)
+- [Making the app interactive with Stateful widgets](#making-the-app-interactive-with-stateful-widgets)
+  - [Stateless versus Stateful](#stateless-versus-stateful)
+  - [Add Add and Remove buttons](#add-add-and-remove-buttons)
+  - [Commit your changes (8)](#commit-your-changes-8)
+  - [Define the OrderScreen stateful widget](#define-the-orderscreen-stateful-widget)
+  - [Commit your changes (9)](#commit-your-changes-9)
+  - [Build the UI for OrderScreen](#build-the-ui-for-orderscreen)
+  - [Use OrderScreen inside App](#use-orderscreen-inside-app)
+  - [Commit your changes (10)](#commit-your-changes-10)
+  - [Add and remove emojis with setState](#add-and-remove-emojis-with-setstate)
+  - [Commit your changes (11)](#commit-your-changes-11)
 - [Exercises](#exercises)
 
 ## What you need to know beforehand
@@ -249,7 +265,7 @@ Commit this update with a message like `Implement dynamic text in OrderItemDispl
 
 Now we can use our new custom widget inside the main `App`.
 
-### Replace the placeholder in App
+### Replace the placeholder in App to use OrderItemDisplay
 
 Find the `build` method of the `App` class with the shortcut (**Ctrl + Shift + F** on Windows or **⌘ + Shift + F** on macOS) as shown below:
 
@@ -276,7 +292,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-### Run the application again
+### Run the application again to see OrderItemDisplay in action
 
 Run the app. You should now see "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" displayed in the centre of the screen.
 
@@ -287,6 +303,291 @@ Run the app. You should now see "5 Footlong sandwich(es): 🥪🥪🥪🥪🥪" 
 Commit your final changes for this section with the message `Use OrderItemDisplay in App`.
 
 At this stage, your code should look like our code as shown on [the GitHub repository](https://github.com/manighahrmani/sandwich_shop/blob/2/lib/main.dart).
+
+## Inspecting the Scaffold with the Widget Inspector
+
+The Widget Inspector is a tool that comes with the Flutter SDK and lets you examine the widget tree of your running app, see the properties of each widget, and understand how your UI is structured.
+
+### Open the Widget Inspector
+
+Make sure your app is still running (if not, press **F5** to start it). Open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS, type `Flutter: Open DevTools` and press **Enter**. It will then ask you where you want to open DevTools. Choose either your web browser or inside VS Code (in its Widget Inspector page) as shown below:
+
+![Open DevTools in VS Code](images/2/screenshot_open_devtools_in_vscode.png)
+
+For a short walkthrough of this tool, watch this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and skim its [official documentation](https://docs.flutter.dev/tools/devtools/inspector). Make sure you watch the whole video and try using the Widget Inspector yourself on your running app.
+
+![The Flutter Widget Inspector open in VS Code](images/2/screenshot_devtools.jpg)
+
+### Read the widget tree of your app
+
+In the Widget Inspector, enable "Select Widget Mode" (the mouse pointer icon at the top of the inspector) and then click on the sandwich emojis in your running app. The inspector highlights that widget and expands the tree to show it. You should see something similar to this:
+
+![The widget tree with the sandwich text selected](images/2/screenshot_inspector_tree_sandwich_text.png)
+
+Take a moment to trace the tree from the top down. At the root you have the `MaterialApp` which provides the overall app, then the `Scaffold` which provides the page layout, then the `AppBar` holding the `Text` title "Sandwich Counter", then the `Center` which centres its child, and finally your own `OrderItemDisplay` which contains a `Text`. Click on each of these in turn and watch the browser running the app to see how each widget is placed on the screen. When a widget is selected, the panels on the right show its size, padding and constraints. Notice how the `Center` takes up the whole body but its child only takes the space it needs.
+
+![The widget tree with the app bar selected](images/2/screenshot_inspector_tree_app_bar.png)
+
+As you explore, keep the [Scaffold documentation](https://api.flutter.dev/flutter/material/Scaffold-class.html) and the [AppBar documentation](https://api.flutter.dev/flutter/material/AppBar-class.html) open so you can connect what you see in the inspector to the properties in your code.
+
+### Experiment with the parts of the Scaffold
+
+Now let's change a few parts of the `Scaffold` and use the inspector to see the effect. Keep hot reload enabled (the lightning bolt icon while the app runs, or press **r** in the terminal) so your changes appear instantly. Make one change at a time in your `App` widget's `build` method.
+
+Start with the `AppBar`. Change its title from `'Sandwich Counter'` to something else, such as `'My Sandwich Shop'`, and give it a background colour at the same time:
+
+```dart
+appBar: AppBar(
+  title: const Text('My Sandwich Shop'),
+  backgroundColor: Colors.orange,
+),
+```
+
+Save the file (**Ctrl + S** on Windows or **⌘ + S** on macOS), then select the `AppBar` in the inspector and confirm the new title and colour appear in the running app and in the tree.
+
+Both `title` and `backgroundColor` are properties of the `AppBar` widget. You can view all the properties of a widget in VS Code by hovering your mouse over its name in the code. In the popup below, scroll down to find `Color? backgroundColor`, which shows that `backgroundColor` accepts a nullable `Color` value:
+
+![The AppBar properties shown on hover in VS Code](images/2/screenshot_app_bar_properties.png)
+
+Next, add a `floatingActionButton` to the `Scaffold`. Put your cursor just after the `body` property, add a comma, then start typing `floating`. You should get an autocomplete suggestion for `floatingActionButton`. Select it and press **Enter** to add it to your code:
+
+![The floatingActionButton autocomplete suggestion](images/2/screenshot_floating_action_button.png)
+
+As the value of the `floatingActionButton` property, start typing `Floating` and select `FloatingActionButton` from the suggestions. Leave its `onPressed` property as an empty function (`() {}`). The `onPressed` property specifies the callback function that runs when the button is pressed, and `() {}` is a function that takes no parameters (`()`) and has an empty body (`{}`), so pressing the button does nothing for now. Your code should look like this:
+
+![The FloatingActionButton with an empty onPressed callback](images/2/screenshot_floating_action_button_onpressed.png)
+
+Lastly, add a `child` property inside the `FloatingActionButton`. Type `Icons` followed by a dot (`.`) to see the list of available icons, then find the `add` icon and press **Enter** to select it:
+
+![Selecting the add icon for the FloatingActionButton child](images/2/screenshot_floating_action_button_child_icon.png)
+
+Your completed `Scaffold` should now include the `floatingActionButton`:
+
+```dart
+body: const Center(
+  child: OrderItemDisplay(5, 'Footlong'),
+),
+floatingActionButton: FloatingActionButton(
+  onPressed: () {},
+  child: const Icon(Icons.add),
+),
+```
+
+A round button now appears in the bottom right corner. Select it in the inspector and notice that it sits in the tree separately from the `body`.
+
+As a final test, temporarily delete the `Center` so the `body` is just the `OrderItemDisplay`, and observe how the text jumps to the top left of the body:
+
+![The OrderItemDisplay positioned at the top left with no Center](images/2/screenshot_order_item_display_top_left.png)
+
+Put the `Center` back afterwards (you can undo with **Ctrl + Z** on Windows or **⌘ + Z** on macOS). Once you are done, return your `App` widget to the version at the end of [Use OrderItemDisplay in App](#use-orderitemdisplay-in-app), with a plain `AppBar`, a `Center` and no floating action button.
+
+### Commit your changes (7)
+
+Commit any tidy-up with a message like `Restore Center after inspecting the Scaffold`.
+
+## Making the app interactive with Stateful widgets
+
+So far every widget we have written has been a `StatelessWidget`. That is fine for a fixed display, but a real app needs to respond to the user. In this section we will let the user add and remove sandwiches by pressing buttons, so the number of 🥪 emojis on the screen goes up and down.
+
+### Stateless versus Stateful
+
+State is simply data that can change while the app is running. A `StatelessWidget` is immutable, which means that once it is built its properties cannot change. It is like a photograph: a snapshot of the user interface at one moment. Our `OrderItemDisplay` is stateless because it only ever shows the values passed into its constructor. A `StatefulWidget`, on the other hand, can hold data that changes over time and rebuilds itself to show the new data.
+
+The kind of state we use here is called ephemeral state, which is data that lives inside a single widget, such as the current number of sandwiches in the order. In a later worksheet we will meet app state, which is shared across many widgets, such as the login information of a user.
+
+If you would like a short explanation before coding, read the [StatelessWidget documentation](https://api.flutter.dev/flutter/widgets/StatelessWidget-class.html) and the [StatefulWidget documentation](https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html), and watch the Flutter team's short videos on [StatelessWidget](https://youtu.be/wE7khGHVkYY) and [StatefulWidget](https://youtu.be/AqCMFXEmf3w). Optionally, check out Flutter's [guide to adding interactivity](https://docs.flutter.dev/ui/interactivity).
+
+<!-- TODO done till here -->
+
+### Add Add and Remove buttons
+
+First, let's add two buttons below the sandwich display. Update the `body` of the `Scaffold` in your `App` widget to use a `Column` containing the `OrderItemDisplay` and a `Row` of two buttons. You met `Column` and `Row` in the exercises: a `Column` stacks its children vertically and a `Row` lays them out horizontally.
+
+```dart
+body: Center(
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      const OrderItemDisplay(5, 'Footlong'),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () => print('Add button pressed!'),
+            child: const Text('Add'),
+          ),
+          ElevatedButton(
+            onPressed: () => print('Remove button pressed!'),
+            child: const Text('Remove'),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
+```
+
+You may see a warning about calling `print` in production code; ignore it for now. To fix any indentation, open the Command Palette and run `Format Document`.
+
+The important property of an [`ElevatedButton`](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) is `onPressed`. It takes a function that runs when the button is tapped, which is called an event handler or a callback. For now our callbacks are arrow functions that just print a message to the terminal rather than the UI. Run the app with `flutter run` and click the buttons; the messages should appear in the terminal.
+
+![Button presses placeholder: Screenshot of Add and Remove buttons with print output in the terminal](images/2/placeholder_button_presses.png)
+
+### Commit your changes (8)
+
+Commit your work with a message like `Add Add and Remove buttons`.
+
+### Define the OrderScreen stateful widget
+
+The quantity in `OrderItemDisplay(5, 'Footlong')` is hardcoded, so it can never change. To make it interactive we need a widget that can hold a changing value. That is what a `StatefulWidget` is for.
+
+We will create a new `StatefulWidget` called `OrderScreen`. Add the following two classes to `lib/main.dart`, below the `App` class and above `OrderItemDisplay`:
+
+```dart
+class OrderScreen extends StatefulWidget {
+  final int maxQuantity;
+
+  const OrderScreen({super.key, this.maxQuantity = 10});
+
+  @override
+  State<OrderScreen> createState() {
+    return _OrderScreenState();
+  }
+}
+
+class _OrderScreenState extends State<OrderScreen> {
+  int _quantity = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+```
+
+You may see a warning that `_quantity` is unused or could be `final`. Ignore it for now.
+
+This looks unusual because we have two classes for one widget, but this is how Flutter separates the immutable configuration from the mutable state. The `OrderScreen` class is the `StatefulWidget` and holds the configuration that does not change, such as `maxQuantity`, and it has a `createState()` method. The `_OrderScreenState` class is the `State` and holds the data that does change (`_quantity`) along with the `build` method. The underscore in `_OrderScreenState` and `_quantity` makes them private to the file.
+
+To understand this structure, select it in your editor and ask Copilot (**Ctrl + I** on Windows or **⌘ + I** on macOS) questions such as what the difference is between a `StatefulWidget` and a `State` object, why the `build` method lives inside the `State` class rather than the `StatefulWidget` class, and what the underscore prefix on `_OrderScreenState` and `_quantity` means in Dart.
+
+### Commit your changes (9)
+
+Commit your work with a message like `Define OrderScreen stateful widget`.
+
+### Build the UI for OrderScreen
+
+Now let's move the UI into `_OrderScreenState`. Replace the `Placeholder()` in its `build` method with the `Scaffold` we built earlier. This should look familiar:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Sandwich Counter'),
+    ),
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          OrderItemDisplay(
+            _quantity,
+            'Footlong',
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => print('Add button pressed!'),
+                child: const Text('Add'),
+              ),
+              ElevatedButton(
+                onPressed: () => print('Remove button pressed!'),
+                child: const Text('Remove'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+```
+
+Notice that we now pass `_quantity` (which starts at `0`) into `OrderItemDisplay` instead of the hardcoded `5`. The `State` object can read its own variables directly.
+
+### Use OrderScreen inside App
+
+Update the `App` widget to use `OrderScreen` as its `home`. `App` no longer needs its own `Scaffold`, so it becomes very short:
+
+```dart
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Sandwich Shop App',
+      home: OrderScreen(maxQuantity: 5),
+    );
+  }
+}
+```
+
+`maxQuantity` is a named parameter with a default of `10`, so we could also write `OrderScreen()`. Here we set it to `5`.
+
+Run the app. You should see "0 Footlong sandwich(es):" with no emojis yet, and two buttons that print to the terminal but do not change the display. That is the problem we fix next.
+
+![OrderScreen placeholder: Screenshot of OrderScreen showing zero sandwiches and the two buttons](images/2/placeholder_order_screen_zero.png)
+
+### Commit your changes (10)
+
+Commit your work with a message like `Use OrderScreen in App`.
+
+### Add and remove emojis with setState
+
+The last step is to make the buttons actually change `_quantity`. Add these two methods inside `_OrderScreenState`, above the `build` method and below `_quantity`:
+
+```dart
+void _increaseQuantity() {
+  if (_quantity < widget.maxQuantity) {
+    setState(() => _quantity++);
+  }
+}
+
+void _decreaseQuantity() {
+  if (_quantity > 0) {
+    setState(() => _quantity--);
+  }
+}
+```
+
+There are two things to notice here. The first is `widget.maxQuantity`, which lets the `State` read the `maxQuantity` from its `OrderScreen`. The `State` reaches its widget through the built-in `widget` property (see the [State.widget documentation](https://api.flutter.dev/flutter/widgets/State/widget.html)). The second, and the most important, is `setState()`. You call it to tell Flutter that a value has changed, and Flutter then runs `build()` again and redraws the UI with the new `_quantity`. If you wrote `_quantity++` without wrapping it in `setState()`, the number would change in memory but the screen would not update.
+
+Now connect the buttons to these methods. Replace the two `onPressed` callbacks in your `build` method so they call the new functions instead of printing:
+
+```dart
+ElevatedButton(
+  onPressed: _increaseQuantity,
+  child: const Text('Add'),
+),
+ElevatedButton(
+  onPressed: _decreaseQuantity,
+  child: const Text('Remove'),
+),
+```
+
+Run the app and try it. It starts at "0 Footlong sandwich(es):" with no emojis. Each time you press Add the count goes up and a 🥪 appears, and each time you press Remove the count goes down and a 🥪 disappears, stopping at 0. If you keep pressing Add past 5 nothing happens, because we set `maxQuantity` to 5.
+
+![Interactive counter placeholder: Screenshot of OrderScreen after pressing Add several times, showing emojis](images/2/placeholder_order_screen_interactive.png)
+
+As a small challenge, can you explain why the buttons stop working at 0 and at 5? Trace the `if` conditions in `_increaseQuantity` and `_decreaseQuantity`. In VS Code you can jump to a method by holding **Ctrl** on Windows or **⌘** on macOS and clicking its name.
+
+At this stage, your code should match branch 3 in the [sandwich shop repository](https://github.com/manighahrmani/sandwich_shop/blob/3/lib/main.dart).
+
+### Commit your changes (11)
+
+Commit your final changes with a message like `Add interactivity with setState`.
 
 <!-- TODO: Done till here -->
 
