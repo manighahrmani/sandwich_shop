@@ -18,3 +18,16 @@ repos:
     hooks:
       - id: cspell
         args: ["--locale", "en-GB", "--config", "cspell.json"]
+
+  - repo: local
+    hooks:
+      - id: vale
+        name: vale
+        description: >-
+          Enforce the worksheet writing style with Vale. Scoped to the files
+          that have been migrated to the house style; add worksheets here as
+          they are revised.
+        entry: vale
+        language: system
+        files: ^(worksheet-1\.md|worksheet-2\.md|README\.md)$
+        require_serial: true

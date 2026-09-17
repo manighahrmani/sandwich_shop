@@ -1,0 +1,14 @@
+extends: existence
+message: "Remove the decorative emoji '%s'. Only ⚠️ (warnings) and emojis that are part of the app's own code or output are allowed."
+level: error
+nonword: true
+tokens:
+  - '[\x{1F300}-\x{1F969}]'
+  - '[\x{1F96B}-\x{1FAFF}]'
+  - '[\x{2600}-\x{269F}]'
+  - '[\x{26A1}-\x{27BF}]'
+  - '[\x{1F000}-\x{1F2FF}]'
+  - '[\x{2190}-\x{21FF}]'
+  - '\x{2B50}'
+  - '\x{2705}'
+  - '\x{274C}'
