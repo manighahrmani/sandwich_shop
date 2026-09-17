@@ -41,7 +41,7 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 Each week has a worksheet and a lecture. You should aim to complete the worksheets in the order they are presented below.
 
 - [Worksheet 1: Dart, Git, GitHub and Flutter](./worksheet-1.md)
-- Worksheet 2: Stateless and Stateful Widgets (under revision)
+- [Worksheet 2: Stateless and Stateful Widgets](./worksheet-2.md)
 - Worksheet 3: App Architecture, Testing, and README (under revision)
 - Worksheet 4: Unit and Widget Testing (under revision)
 - Worksheet 5: Data Models and Assets (under revision)

@@ -1,0 +1,9 @@
+extends: existence
+message: "Headings must be plain text. Remove the bold or italic markers (** or _) from the heading."
+level: error
+scope: heading
+nonword: true
+tokens:
+  - '\*\*'
+  - '(?:^|\s)_\S'
+  - '\S_(?:\s|$)'

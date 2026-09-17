@@ -1,0 +1,8 @@
+extends: existence
+message: "Replace this placeholder with a real screenshot and descriptive alt text; do not ship 'placeholder' in image alt text or file names."
+level: error
+scope: raw
+nonword: true
+tokens:
+  - '!\[[^\]]*[Pp]laceholder[^\]]*\]'
+  - '\]\(images/[^)]*placeholder[^)]*\)'

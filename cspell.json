@@ -119,6 +119,8 @@
     "pubspec.lock",
     ".dart_tool",
     "build",
-    ".github/skills"
+    ".github/skills",
+    ".vale/**",
+    ".vale.ini"
   ]
 }

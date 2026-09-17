@@ -1,0 +1,7 @@
+extends: substitution
+message: "Use '%s' instead of '%s' for consistent terminology across the worksheets."
+level: warning
+ignorecase: true
+scope: text
+swap:
+  console: terminal

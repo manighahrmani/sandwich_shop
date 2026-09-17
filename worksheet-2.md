@@ -31,7 +31,7 @@
   - [Commit your changes (7)](#commit-your-changes-7)
 - [Making the app interactive with Stateful widgets](#making-the-app-interactive-with-stateful-widgets)
   - [Stateless versus Stateful](#stateless-versus-stateful)
-  - [Add Add and Remove buttons](#add-add-and-remove-buttons)
+  - [Add the Add and Remove buttons](#add-the-add-and-remove-buttons)
   - [Commit your changes (8)](#commit-your-changes-8)
   - [Define the OrderScreen stateful widget](#define-the-orderscreen-stateful-widget)
   - [Commit your changes (9)](#commit-your-changes-9)
@@ -399,9 +399,33 @@ If you would like a short explanation before coding, read the [StatelessWidget d
 
 <!-- TODO done till here -->
 
-### Add Add and Remove buttons
+### Add the Add and Remove buttons
 
-First, let's add two buttons below the sandwich display. Update the `body` of the `Scaffold` in your `App` widget to use a `Column` containing the `OrderItemDisplay` and a `Row` of two buttons. You met `Column` and `Row` in the exercises: a `Column` stacks its children vertically and a `Row` lays them out horizontally.
+Let's add two buttons below the sandwich display. Jump to your `App` widget in `main.dart` (use **Ctrl + Shift + O** on Windows or **⌘ + Shift + O** on macOS, then search for `App`). Select the current content of the `body` property of the `Scaffold` (it should be set to `Center(child: OrderItemDisplay(...))`).
+
+Delete it and start typing `Column`, press enter to select a `Column` widget from the suggestions. Inside the brackets, type `main` and select `mainAxisAlignment` from the dropdown, as shown in the image below:
+
+![Main Axis Alignment](images/2/main_axis_alignment.png)
+
+This property, used in `Row` and `Column` widgets, determines how the children are aligned along the main axis. In a `Column`, the main axis runs vertically, and in a `Row`, it runs horizontally. The values of `mainAxisAlignment` are set to `MainAxisAlignment` constants, such as `MainAxisAlignment.start`, `MainAxisAlignment.center`, and `MainAxisAlignment.end`. Set it to `MainAxisAlignment.center` as shown in the image below:
+
+![Main Axis Alignment Center](images/2/main_axis_alignment_center.png)
+
+You should get comfortable with this feature of VS Code and always select what you need from the suggestions instead of typing it out, as it helps you write code quickly. Next, add a `children` property to the `Column`. Inside its square brackets (`[]`), place two children: an instance of `OrderItemDisplay` followed by a `Row` widget. The children are items in a list, so separate them with a comma.
+
+![Column with Children](images/2/column_with_children.png)
+
+Inside the `Row`, add another list of `children` (`[]`) to hold the buttons. Each button is an instance of `ElevatedButton`, and they should be separated by a comma. Your code should look like this:
+
+![Row with Buttons](images/2/row_with_buttons.png)
+
+An `ElevatedButton` typically contains a `Text` widget for its label. We want two of them, "Add" and "Remove". Each also takes an `onPressed` callback that handles user interactions; for now we simply print a message to the terminal when the button is pressed. Update your code so it looks like this:
+
+![Elevated Buttons](images/2/elevated_buttons.png)
+
+Ignore the warning about calling `print` in production code for now. Your completed `body` should look like this:
+
+![Column with Row and Buttons](images/2/column_with_row_and_buttons.png)
 
 ```dart
 body: Center(
@@ -427,11 +451,9 @@ body: Center(
 ),
 ```
 
-You may see a warning about calling `print` in production code; ignore it for now. To fix any indentation, open the Command Palette and run `Format Document`.
+To fix any indentation, open the Command Palette and run `Format Document`, or run `Preferences: Open Settings (UI)` and enable "format on save" so this happens automatically.
 
-The important property of an [`ElevatedButton`](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) is `onPressed`. It takes a function that runs when the button is tapped, which is called an event handler or a callback. For now our callbacks are arrow functions that just print a message to the terminal rather than the UI. Run the app with `flutter run` and click the buttons; the messages should appear in the terminal.
-
-![Button presses placeholder: Screenshot of Add and Remove buttons with print output in the terminal](images/2/placeholder_button_presses.png)
+The important property of an [`ElevatedButton`](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) is `onPressed`. It takes a function that runs when the button is tapped, which is called an event handler or a callback. Our callbacks are arrow functions that print a message to the terminal rather than changing the UI. Run the app with `flutter run` and click the buttons; the messages should appear in the terminal.
 
 ### Commit your changes (8)
 
@@ -441,7 +463,39 @@ Commit your work with a message like `Add Add and Remove buttons`.
 
 The quantity in `OrderItemDisplay(5, 'Footlong')` is hardcoded, so it can never change. To make it interactive we need a widget that can hold a changing value. That is what a `StatefulWidget` is for.
 
-We will create a new `StatefulWidget` called `OrderScreen`. Add the following two classes to `lib/main.dart`, below the `App` class and above `OrderItemDisplay`:
+Use the fold buttons to fold `App` and `OrderItemDisplay`. Put your cursor between them and type `class`. Select the boilerplate for a new class and replace its name `ClassName` with `OrderScreen`.
+
+![Folding App and OrderItemDisplay](images/2/folding_app_and_orderitemdisplay.png)
+
+After the name of the class (`OrderScreen`), add the `extends StatefulWidget` part to indicate that this is a subclass of the `StatefulWidget` class (Simply put, we want to say that `OrderScreen` is a widget that will have mutable state).
+
+Next, write a `maxQuantity` instance variable for the `OrderScreen` widget. This variable, which should be an int, will hold the maximum quantity of the order item that can be selected. It should be marked as `final` because it will not change after the widget is created.
+
+Write a constructor for the `OrderScreen` widget too that takes an optional `maxQuantity` parameter (inside curly braces `{}`). Give this parameter a default value of 10 (`{this.maxQuantity = 10}`). Constructors for widgets also need an optional parameter `super.key` to pass the key to the parent class (you don't need to worry about this for now).
+
+Your code should look like this:
+
+![OrderScreen widget boilerplate](images/2/order_screen_widget_boilerplate.png)
+
+Fix the blue squiggly lines (info warnings) by adding the `const` keyword. The red squiggly lines (errors) indicate that every `StatefulWidget` must have a `createState` method. Feel free to click on the Explain button to have Copilot explain the error for you:
+
+![OrderScreen createState error](images/2/order_screen_create_state_error.png)
+
+Hover your mouse over the error to see the suggested fix (or use **Ctrl + .** on Windows or **⌘ + .** on macOS to apply it). Your code should look like this now:
+
+![OrderScreen createState fixed](images/2/order_screen_create_state_fixed.png)
+
+Every `StatefulWidget` must implement the `createState` method that returns a `State` object. It is basically a way to tell Flutter which state class is associated with this widget. And yes, we need a separate `State` class.
+
+So put your mouse outside of the curly braces of the `OrderScreen` class and type `class`. Call it `_OrderScreenState` (this is a private state class, hence the `_` prefix) and make it extend `State<OrderScreen>`. Add a private integer instance variable called `_quantity` (again, the `_` indicates that it is private member and should not be accessed directly from outside the class). Our `_quantity` variable will be in there to hold the current quantity of the order item. Your code should look like this:
+
+![OrderScreen state class boilerplate](images/2/order_screen_state_class_boilerplate.png)
+
+You should see an error indicating that the build method is missing in the `_OrderScreenState` class. This is expected because every `State` class must implement the `build` method to describe how to display the widget. Use the Quick Fix options to generate the `build` method, so your code should look like this:
+
+![OrderScreen build method fixed](images/2/order_screen_build_method_fixed.png)
+
+Remove the to do comment and the `throw UnimplementedError();` line from the `createState` method of `OrderScreen` and replace it with `return _OrderScreenState();` (we want to return an instance of the state class). And remove the `throw UnimplementedError();` line from the `build` method of `_OrderScreenState` as well and replace it with a `Placeholder` widget (or your actual UI later). This is what your code should look like now:
 
 ```dart
 class OrderScreen extends StatefulWidget {
@@ -477,7 +531,7 @@ Commit your work with a message like `Define OrderScreen stateful widget`.
 
 ### Build the UI for OrderScreen
 
-Now let's move the UI into `_OrderScreenState`. Replace the `Placeholder()` in its `build` method with the `Scaffold` we built earlier. This should look familiar:
+Now let's move the UI into `_OrderScreenState`. Replace the `Placeholder()` in its `build` method with the `Scaffold` we built earlier (copy and paste the code inside the `build` method of the `App` widget), the code is shown below for completeness. This should look familiar:
 
 ```dart
 @override
@@ -514,11 +568,19 @@ Widget build(BuildContext context) {
 }
 ```
 
+Your code should look like this now:
+
+![OrderScreen UI: Screenshot of OrderScreen showing the scaffold with the app bar and buttons](images/2/order_screen_ui.png)
+
 Notice that we now pass `_quantity` (which starts at `0`) into `OrderItemDisplay` instead of the hardcoded `5`. The `State` object can read its own variables directly.
 
 ### Use OrderScreen inside App
 
-Update the `App` widget to use `OrderScreen` as its `home`. `App` no longer needs its own `Scaffold`, so it becomes very short:
+Update the `App` widget to use `OrderScreen` as its `home`. In VS Code, you can click on the opening round bracket of the `Scaffold` in the `App` widget to select the whole widget and see where it ends (see the screenshot below, all of this needs to be replaced with `OrderScreen(maxQuantity: 5)`.
+
+![Select Scaffold in VS Code: Screenshot showing how to select the entire Scaffold widget in VS Code](images/2/select_scaffold_vscode.png)
+
+Your `App` widget should now look like this:
 
 ```dart
 class App extends StatelessWidget {
@@ -534,11 +596,11 @@ class App extends StatelessWidget {
 }
 ```
 
-`maxQuantity` is a named parameter with a default of `10`, so we could also write `OrderScreen()`. Here we set it to `5`.
+`maxQuantity` is an optional named parameter with a default of `10`, so we could also write `OrderScreen()`. Here we set it to `5`.
 
-Run the app. You should see "0 Footlong sandwich(es):" with no emojis yet, and two buttons that print to the terminal but do not change the display. That is the problem we fix next.
+Run the app. You should see "0 Footlong sandwich(es):" with no emojis yet, and two buttons that print to the terminal but do not change the display. That is the problem we fix next. This is what your app should look like now:
 
-![OrderScreen placeholder: Screenshot of OrderScreen showing zero sandwiches and the two buttons](images/2/placeholder_order_screen_zero.png)
+![Screenshot of OrderScreen showing zero sandwiches and the two buttons](images/2/screenshot_order_screen_zero.png)
 
 ### Commit your changes (10)
 
@@ -546,7 +608,15 @@ Commit your work with a message like `Use OrderScreen in App`.
 
 ### Add and remove emojis with setState
 
-The last step is to make the buttons actually change `_quantity`. Add these two methods inside `_OrderScreenState`, above the `build` method and below `_quantity`:
+The last step is to make the buttons actually change `_quantity`. Put your cursor inside the curly braces of the `_OrderScreenState` class, you may want to fold the `build` method to make it easier to see. Type in `fun` and VS Code will suggest `function` snippets and the boilerplate for a method will appear as shown below:
+
+![Function snippet in VS Code: Screenshot showing the function snippet for adding a new method in VS Code](images/2/function_snippet_vscode.png)
+
+Change `name` to `_increaseQuantity` for the first method and make a second method called `_decreaseQuantity` right below it. Remove the `params` from both methods as we don't want our methods to take any arguments. Keep `void` as it is (our methods will not return any value). Then put your cursor inside the curly braces of `increaseQuantity` and write `if` to start an if-statement as show below:
+
+![If snippet in VS Code: Screenshot showing the if-statement snippet for adding a new method in VS Code](images/2/if_snippet_vscode.png)
+
+Update the code so that you check that `_quantity` is less than `widget.maxQuantity` in `_increaseQuantity` and greater than `0` in `_decreaseQuantity`. If these conditions are met, call `setState` method of the `_OrderScreenState` class to update the UI. Update the code so it matches what is shown below:
 
 ```dart
 void _increaseQuantity() {
@@ -562,9 +632,13 @@ void _decreaseQuantity() {
 }
 ```
 
-There are two things to notice here. The first is `widget.maxQuantity`, which lets the `State` read the `maxQuantity` from its `OrderScreen`. The `State` reaches its widget through the built-in `widget` property (see the [State.widget documentation](https://api.flutter.dev/flutter/widgets/State/widget.html)). The second, and the most important, is `setState()`. You call it to tell Flutter that a value has changed, and Flutter then runs `build()` again and redraws the UI with the new `_quantity`. If you wrote `_quantity++` without wrapping it in `setState()`, the number would change in memory but the screen would not update.
+There are two things to notice here. The first is `widget.maxQuantity`, which lets the `State` read the `maxQuantity` from its `OrderScreen`. The `State` reaches its widget through the built-in `widget` property (see the [State.widget documentation](https://api.flutter.dev/flutter/widgets/State/widget.html)). To verify this, hold **Ctrl** on Windows or **⌘** on macOS and click on `maxQuantity` in the if-statement of `_increaseQuantity` to jump to its declaration in the `OrderScreen` class:
 
-Now connect the buttons to these methods. Replace the two `onPressed` callbacks in your `build` method so they call the new functions instead of printing:
+![Max quantity declaration: Screenshot showing the maxQuantity declaration in the OrderScreen class](images/2/max_quantity_declaration.png)
+
+The second, and the most important, is `setState()`. You call it to tell Flutter that a value has changed, and Flutter then runs `build()` again and redraws the UI with the new `_quantity`. If you wrote `_quantity++` without wrapping it in `setState()`, the number would change in memory but the screen would not update.
+
+Now connect the buttons to these methods. Replace the two `onPressed` callbacks in the `build` method of `_OrderScreenState` so they call the new functions instead of printing:
 
 ```dart
 ElevatedButton(
@@ -579,11 +653,7 @@ ElevatedButton(
 
 Run the app and try it. It starts at "0 Footlong sandwich(es):" with no emojis. Each time you press Add the count goes up and a 🥪 appears, and each time you press Remove the count goes down and a 🥪 disappears, stopping at 0. If you keep pressing Add past 5 nothing happens, because we set `maxQuantity` to 5.
 
-![Interactive counter placeholder: Screenshot of OrderScreen after pressing Add several times, showing emojis](images/2/placeholder_order_screen_interactive.png)
-
-As a small challenge, can you explain why the buttons stop working at 0 and at 5? Trace the `if` conditions in `_increaseQuantity` and `_decreaseQuantity`. In VS Code you can jump to a method by holding **Ctrl** on Windows or **⌘** on macOS and clicking its name.
-
-At this stage, your code should match branch 3 in the [sandwich shop repository](https://github.com/manighahrmani/sandwich_shop/blob/3/lib/main.dart).
+![Screenshot of OrderScreen after pressing Add several times, showing emojis](images/2/order_screen_interactive.png)
 
 ### Commit your changes (11)
 
