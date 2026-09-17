@@ -397,7 +397,7 @@ Remember to commit your changes and use VS Code's tools as describing in [this s
 
    VS Code has a useful feature called Refactor. You can use it by right-clicking on the name of the widgets (for example the `ElevatedButton`) and selecting `Refactor...`. You can do the same thing with the shortcut **Ctrl + Shift + R** on Windows or **⌘ + Shift + R** on macOS. This will open a menu where you can select `Wrap with Expanded` or `Wrap with SizeBox` as shown below.
 
-  ![Refactor Menu](images/3/screenshot_refactor.jpg)
+   ![Refactor Menu](images/3/screenshot_refactor.jpg)
 
    Keep hot reload active, use the widget inspector, refer to [the documentation page on layout widgets](https://docs.flutter.dev/ui/widgets/layout) to figure out how and where the extra space should be added.
 
