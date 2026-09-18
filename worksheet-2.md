@@ -681,11 +681,21 @@ As in Worksheet 1, these exercises apply to your Southsea Cinema coursework and,
 
 The template's `lib/views` folder contains two pages. `home_view.dart` is the home page shown when the app starts, and `movie_listing.dart` is the movie listing page you will build. When the app runs, you reach the listing page from the home page through the navigation drawer (the menu icon in the app bar). We will cover navigation and multiple pages properly in a later worksheet, so for now you only need to work on the listing page.
 
+The template already includes an empty `movie_listing.dart` page. When you run the app it looks like this:
+
+![Placeholder: the starting movie listing page in the template](images/2/placeholder_movie_listing_start.png)
+
+You reach it from the navigation drawer, by opening the menu in the app bar and choosing "Movie Listing":
+
+![Placeholder: opening the movie listing page from the navigation drawer](images/2/placeholder_movie_listing_navigate.png)
+
 Your task is to update `movie_listing.dart` to show a single film. Use this [example listing](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/TSelectItems.waSelectItemsPrompt.TcsWebMenuItem_687.TcsWebTab_688.TcsProgramme_26436) as a reference point:
 
 ![The example film listing on the Southsea Cinema website](images/2/southsea_cinema_listing_example.png)
 
-The exercises below help you prepare for the task of Demo 1. In short, you need to build the same kind of page. Replace Dracula with your own favourite film. Give it a title, runtime, age rating, and other descriptive text. You need to also have the ticket-type dropdowns and a booking button. You need to run your app on a phone-sized view, as you did in Worksheet 1.
+The exercises below help you prepare for the task of Demo 1. In short, you need to build the same kind of page. Replace Dracula with your own favourite film. Give it a title, runtime, age rating, and other descriptive text. You need to also have a ticket quantity dropdown and a booking button. You need to run your app on a phone-sized view, as you did in Worksheet 1.
+
+Make a separate commit for each exercise below, and commit more often than that if you can. Small, frequent commits with clear messages are part of the quality mark at your demo.
 
 1. Add the film title and a short description as `Text` widgets, wrapped in a `Container` widget. A `Container` holds a single child and can give it a size, a colour, a border and more.
 
@@ -716,30 +726,33 @@ The exercises below help you prepare for the task of Demo 1. In short, you need 
 
     For more information, check out the [layout tutorial on the Flutter website](https://docs.flutter.dev/learn/pathway/tutorial/layout) which explains how to position children in a row and a column.
 
-3. Let the user choose how many tickets they want with a `DropdownMenu`. You should try to match the screenshot shown above. Store the selected value in state and update it inside `setState`, just as the sandwich counter did. A minimal dropdown offering the quantities 0 to 3 looks like this:
+3. Let the user choose how many tickets they want with a single `DropdownMenu`, offering quantities up to 5. You should try to match the screenshot shown above.
+
+    Store the selected value in state and update it inside `setState`, just as the sandwich counter did. To see how a `DropdownMenu` works, try this example in your sandwich shop app first. Here each entry is a sandwich type, and the value behind it is that item's price, so selecting an entry sets `_totalPrice`:
 
     ```dart
     DropdownMenu<int>(
-      initialSelection: 0,
+      initialSelection: 10,
       onSelected: (int? value) {
         if (value != null) {
           setState(() {
-            _quantity = value;
+            _totalPrice = value;
           });
         }
       },
       dropdownMenuEntries: [
-        DropdownMenuEntry(value: 0, label: '0'),
-        DropdownMenuEntry(value: 1, label: '1'),
-        DropdownMenuEntry(value: 2, label: '2'),
-        DropdownMenuEntry(value: 3, label: '3'),
+        DropdownMenuEntry(value: 10, label: 'Footlong'),
+        DropdownMenuEntry(value: 6, label: 'Six-inch'),
+        DropdownMenuEntry(value: 4, label: 'Nachos'),
       ],
     ),
     ```
 
+    The type in `onSelected: (int? value)` is `int?`, not `int`. The `?` means the value can be an integer or `null` (nothing selected yet), which is why we check `if (value != null)` before using it. If you are unsure about nullable types, see the section on data types in the [Dart software and resources guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAeCWXLehKuTou1gTpjrNKRAcCHcRGxPJSinskA7x1opXg?e=lfIK0S).
+
     The [DropdownMenu documentation](https://api.flutter.dev/flutter/material/DropdownMenu-class.html) has more details and examples on the widget.
 
-4. Add an "Add to order" button, that gives the user feedback when pressed. There is no basket yet, so it only needs to show some visual feedback (e.g., state the total number of tickets added to the order).
+4. Add an "Add to order" button that gives the user feedback when pressed. There is no basket yet, so it only needs to show some visual feedback (for example, state how many tickets were added to the order).
 
 5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does. The [text and typography documentation](https://docs.flutter.dev/ui/design/text) covers styling text.
 
