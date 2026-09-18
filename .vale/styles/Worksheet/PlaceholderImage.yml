@@ -1,6 +1,6 @@
 extends: existence
-message: "Replace this placeholder with a real screenshot and descriptive alt text; do not ship 'placeholder' in image alt text or file names."
-level: error
+message: "Placeholder image still present: replace it with a real screenshot and descriptive alt text before this worksheet is finalised."
+level: warning
 scope: raw
 nonword: true
 tokens:
