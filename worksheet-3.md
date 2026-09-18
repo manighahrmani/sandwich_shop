@@ -270,6 +270,90 @@ To learn more about `StatefulWidget`s, **watch this [YouTube video from the Flut
 
 Commit your final changes with a message like `Implement counter functionality with setState`.
 
+## **Choosing a sandwich type and total price**
+
+So far the user can only change the quantity. Let's also let them choose the type of item, and show the total price based on the type and the quantity.
+
+### **Add a dropdown for the sandwich type**
+
+We will use a `DropdownMenu` for the item type. Each entry shows a label (the item name) and carries a value behind it (that item's unit price in pounds). Add two fields to your `_OrderScreenState` class, above the `build` method:
+
+```dart
+int _unitPrice = 10;
+int _totalPrice = 0;
+```
+
+Then add the `DropdownMenu` inside the `Column` of your `build` method, above the `Row` of buttons:
+
+```dart
+DropdownMenu<int>(
+  initialSelection: 10,
+  onSelected: (int? value) {
+    if (value != null) {
+      setState(() {
+        _unitPrice = value;
+      });
+    }
+  },
+  dropdownMenuEntries: [
+    DropdownMenuEntry(value: 10, label: 'Footlong'),
+    DropdownMenuEntry(value: 6, label: 'Six-inch'),
+    DropdownMenuEntry(value: 4, label: 'Nachos'),
+  ],
+),
+```
+
+The type in `onSelected: (int? value)` is `int?`, not `int`. The `?` means the value can be an integer or `null` (nothing selected yet), which is why we check `if (value != null)` before using it. For a refresher on nullable types, see the section on data types in the [Dart software and resources guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAeCWXLehKuTou1gTpjrNKRAcCHcRGxPJSinskA7x1opXg?e=lfIK0S).
+
+### **Calculate and show the total price**
+
+The total price is the unit price multiplied by the quantity. Update `_increaseQuantity` and `_decreaseQuantity` so they recalculate `_totalPrice` whenever the quantity changes:
+
+```dart
+void _increaseQuantity() {
+  if (_quantity < widget.maxQuantity) {
+    setState(() {
+      _quantity++;
+      _totalPrice = _unitPrice * _quantity;
+    });
+  }
+}
+
+void _decreaseQuantity() {
+  if (_quantity > 0) {
+    setState(() {
+      _quantity--;
+      _totalPrice = _unitPrice * _quantity;
+    });
+  }
+}
+```
+
+Do the same in the dropdown's `onSelected` so changing the type also updates the total:
+
+```dart
+onSelected: (int? value) {
+  if (value != null) {
+    setState(() {
+      _unitPrice = value;
+      _totalPrice = _unitPrice * _quantity;
+    });
+  }
+},
+```
+
+Finally, show the total in the `Column`, below the buttons:
+
+```dart
+Text('Total price: £$_totalPrice'),
+```
+
+Run the app. Changing the type or the quantity should update the total price on the screen.
+
+### **Commit your changes (7)**
+
+Commit your changes with a message like `Add sandwich type dropdown and total price`.
+
 ## **Adding Custom Notes to an Order**
 
 Let's add some more interactivity to our app. We would like to allow users to add custom notes to their sandwich orders. This could be special requests like "no onions" or "extra pickles".
@@ -308,7 +392,7 @@ As you add new widgets, your code can become messy. First, ensure your code is w
 
 Next, look for any blue or yellow squiggly lines. These are hints from the Flutter analyser. For example, if you added an `InputDecoration` to your `TextField`, you might see a blue squiggly line underneath it. Hover over it with your mouse, and a message will likely suggest adding a `const` modifier. You can click **Quick Fix...** or press **Ctrl + .** on Windows or **⌘ + .** on macOS to apply the suggestion automatically.
 
-### **Commit Your Changes (7)**
+### **Commit Your Changes (8)**
 
 Make sure to have hot reload enabled by hitting the thunder icon in the toolbar or by typing `r` in the terminal if you are running the app there.
 
