@@ -103,6 +103,20 @@ enforcement section at the end).
 - Store worksheet images under `images/<worksheet-number>/` and name files
   descriptively in lower snake case.
 
+### Exercises section
+
+- Every worksheet's `## Exercises` section opens the same way as Worksheet 1:
+  a short paragraph that says the exercises apply to the Southsea Cinema
+  coursework, states which demo they prepare the reader for, links the formal
+  coursework brief, and reminds the reader to commit after each exercise.
+- Do not use the older boilerplate opening ("Complete the exercises below and
+  show your work to a member of staff present at your next practical for a
+  sign-off. Your main guide for the rest of the exercises is the Flutter
+  layout documentation."). Follow the Worksheet 1 wording instead.
+- Number the exercises, write each as prose, and end the ones that require a
+  sign-off with a bold instruction to show the running app to a member of
+  staff, matching the existing worksheets.
+
 ### Emojis
 
 - Do not add decorative emojis to prose, headings or lists.

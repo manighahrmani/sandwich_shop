@@ -455,6 +455,22 @@ To fix any indentation, open the Command Palette and run `Format Document`, or r
 
 The important property of an [`ElevatedButton`](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) is `onPressed`. It takes a function that runs when the button is tapped, which is called an event handler or a callback. Our callbacks are arrow functions that print a message to the terminal rather than changing the UI. Run the app with `flutter run` and click the buttons; the messages should appear in the terminal.
 
+The two buttons currently sit right next to each other. To add a gap between them, place a `SizedBox` with a fixed width between the two `ElevatedButton` widgets in the `Row`:
+
+```dart
+ElevatedButton(
+  onPressed: () => print('Add button pressed!'),
+  child: const Text('Add'),
+),
+const SizedBox(width: 16),
+ElevatedButton(
+  onPressed: () => print('Remove button pressed!'),
+  child: const Text('Remove'),
+),
+```
+
+A `SizedBox` is an empty box of a fixed size, so it is a simple way to space widgets apart. Try changing the width to see the gap grow and shrink. You can remove this `SizedBox` again afterwards, as the rest of the worksheet does not depend on it.
+
 ### Commit your changes (8)
 
 Commit your work with a message like `Add Add and Remove buttons`.
@@ -659,91 +675,109 @@ Run the app and try it. It starts at "0 Footlong sandwich(es):" with no emojis. 
 
 Commit your final changes with a message like `Add interactivity with setState`.
 
-<!-- TODO: Done till here -->
+## Exercises
 
-## **Exercises**
+As in Worksheet 1, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 1 exercises, prepare you for Demo 1 (by Friday 2 October 2026). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. You must demonstrate your work for a sign-off during your own timetabled practical session; not all sessions are on a Friday, so check your timetable.
 
-Complete the exercises below and show your work to a member of staff present at your next practical for **a sign-off**.
-Your main guide for the rest of the exercises is the [Flutter layout documentation](https://docs.flutter.dev/get-started/fundamentals/layout). Remember to commit your changes after each exercise.
+The template's `lib/views` folder contains two pages. `home_view.dart` is the home page shown when the app starts, and `movie_listing.dart` is the movie listing page you will build. When the app runs, you reach the listing page from the home page through the navigation drawer (the menu icon in the app bar). We will cover navigation and multiple pages properly in a later worksheet, so for now you only need to work on the listing page.
 
-1. The `Flutter Inspector` is a tool for visualising the widget tree and debugging layout issues. Access it from the VS Code Command Palette (**Ctrl + Shift + P** or **⌘ + Shift + P**) by typing `Flutter: Open Flutter DevTools` and selecting the "Widget Inspector" option.
+Your task is to update `movie_listing.dart` to show a single film. Use this [example listing](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/TSelectItems.waSelectItemsPrompt.TcsWebMenuItem_687.TcsWebTab_688.TcsProgramme_26436) as a reference point:
 
-    Familiarise yourself with this tool by watching this [YouTube video on the Widget Inspector](https://www.youtube.com/watch?v=_EYk-E29edo&t=172s) and reviewing its [official documentation](https://docs.flutter.dev/tools/devtools/inspector). Use it to observe the relationship between the widgets in your app.
+![The example film listing on the Southsea Cinema website](images/2/southsea_cinema_listing_example.png)
 
-    ![Flutter DevTools](images/2/screenshot_devtools.jpg)
+The exercises below help you prepare for the task of Demo 1. In short, you need to build the same kind of page. Replace Dracula with your own favourite film. Give it a title, runtime, age rating, and other descriptive text. You need to also have the ticket-type dropdowns and a booking button. You need to run your app on a phone-sized view, as you did in Worksheet 1.
 
-    **Show your running app and the widget inspector to a member of staff** for a sign-off. We need to make sure you can work your way around the widget inspector.
+1. Add the film title and a short description as `Text` widgets, wrapped in a `Container` widget. A `Container` holds a single child and can give it a size, a colour, a border and more.
 
-2. Wrap your `OrderItemDisplay` widget inside a `Container` widget. Use the documentation for the [Container widget](https://api.flutter.dev/flutter/widgets/Container-class.html) to learn how to use it.
-
-    Give the `Container` a fixed `width` and `height` and a `color` (e.g., `Colors.blue`) to make it visible. See what happens when the `OrderItemDisplay`'s text is too big for the `Container`.
-
-    This is what it should look like:
-
-    ![Container](images/2/screenshot_container.jpg)
-
-    Update the `width` and `height` properties to see what happens if the `OrderItemDisplay`'s text is too big for the `Container`.
-
-    **Show your running app with the coloured container to a member of staff** for a sign-off.
-
-3. Read about [layout widgets](https://docs.flutter.dev/get-started/fundamentals/layout#layout-widgets) in the documentation pages.
-
-    Your task is to use a `Column` or a `Row` to display three `OrderItemDisplay` widgets in instead of one in the `Container` where the current `OrderItemDisplay` is. Experiment with the `mainAxisAlignment` and `crossAxisAlignment` properties to align them.
-
-    The image below shows an example of a `Row` with three `OrderItemDisplay` widgets. (Note that we have skipped the previous exercise, your implementation should still have the coloured container from the last exercise.)
-
-    ![Layout](images/2/screenshot_layout.jpg)
-
-    Resize the browser window. What happens if the `Row` is too wide for the screen? Use an LLM or the documentation to learn about layout "Constraints".
-
-    **Show your running app with the three widgets in a row or column to a member of staff** for a sign-off.
-
-4. We've already seen some of the Flutter styling options in the last worksheet. Go back to your `OrderItemDisplay` widget and apply a style to the `Text` widget.
-
-    Inside the `build` method of `OrderItemDisplay`, use the `style` property of the `Text` widget, which accepts a `TextStyle`. Use this to make the text green, bold and larger.
-
-    At any moment, you can hover your mouse over the `TextStyle` class to see what properties it accepts. Once you have found the properties you want to change, write them inside the `TextStyle` constructor (e.g., `TextStyle(property: value)`).
-
-    If you get stuck, try the shortcut **Ctrl + Space** on Windows or **⌘ + Space** on macOS to see suggestions for properties you can use. Below, we have for example found out that `color` is a property of `TextStyle` that accepts an instance of the `Color` class. Try not to use an AI assistant to complete this task.
-
-    ![TextStyle Properties](images/2/screenshot_suggestion.jpg)
-
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
-    Refer to the [official documentation on text and typography](https://docs.flutter.dev/ui/design/text) to learn more about external (Google) fonts.
-
-5. (Advanced) Use a `Column` to display 20 `OrderItemDisplay` widgets this time. You will likely see an overflow error because the content is taller than the screen.
-
-    To fix this, wrap the `Column` in a `SingleChildScrollView` widget, or replace the `Column` with a `ListView` widget. Use the documentation for [SingleChildScrollView](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) and [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) to understand how they work.
-
-    Refer to the [debugging layout](https://docs.flutter.dev/get-started/fundamentals/layout#devtools-and-debugging-layout) documentation if needed.
-
-    ![Overflow](images/2/screenshot_overflow.jpg)
-
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
-6. (Advanced) Read the documentation on creating [adaptive layouts](https://docs.flutter.dev/get-started/fundamentals/layout#adaptive-layouts). Wrap your UI in a `LayoutBuilder`. Inside its `builder` function, check the `constraints.maxWidth`.
-
-    If the width is less than or equal to 600 pixels, display your `OrderItemDisplay` widgets in a `Column`. Otherwise, display them in a `Row`. Observe the changes by resizing your browser window.
-
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
-7. (Advanced) You may have already thought about a way not to create a separate `OrderItemDisplay` class. This could equally be achieved by defining a helper method in the `App` class, like this:
+    As an example, in your sandwich shop app you could wrap the `Row` of buttons in a `Container` with its own colour:
 
     ```dart
-    Widget _buildOrderItemDisplay(int quantity, String itemType) {
-      return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}')
-    }
-    ```
-
-    You would then call this method in the `body` of the `Scaffold` of the `App` widget like this:
-
-    ```dart
-    body: const Center(
-      child: _buildOrderItemDisplay(5, 'Footlong'),
+    Container(
+      color: Colors.red,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: _increaseQuantity,
+            child: const Text('Add'),
+          ),
+          ElevatedButton(
+            onPressed: _decreaseQuantity,
+            child: const Text('Remove'),
+          ),
+        ],
+      ),
     ),
     ```
 
-    Watch this [YouTube video](https://youtu.be/IOyq-eTRhvo) to learn more about this approach and why it is not recommended albeit sounding like a simpler solution.
+    The [widget fundamentals tutorial](https://docs.flutter.dev/learn/pathway/tutorial/widget-fundamentals) has a nice walkthrough on `Container`, `BoxDecoration` (for borders and background colours) and passing a `child`. Complete it before attempting this exercise. You may optionally also check out the [Container documentation](https://api.flutter.dev/flutter/widgets/Container-class.html).
 
-    This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+2. Arrange the title, the description and the rest of the widgets you will add later in the next exercises using `Column` and `Row` widgets
+
+    For more information, check out the [layout tutorial on the Flutter website](https://docs.flutter.dev/learn/pathway/tutorial/layout) which explains how to position children in a row and a column.
+
+3. Let the user choose how many tickets they want with a `DropdownMenu`. You should try to match the screenshot shown above. Store the selected value in state and update it inside `setState`, just as the sandwich counter did. A minimal dropdown offering the quantities 0 to 3 looks like this:
+
+    ```dart
+    DropdownMenu<int>(
+      initialSelection: 0,
+      onSelected: (int? value) {
+        if (value != null) {
+          setState(() {
+            _quantity = value;
+          });
+        }
+      },
+      dropdownMenuEntries: [
+        DropdownMenuEntry(value: 0, label: '0'),
+        DropdownMenuEntry(value: 1, label: '1'),
+        DropdownMenuEntry(value: 2, label: '2'),
+        DropdownMenuEntry(value: 3, label: '3'),
+      ],
+    ),
+    ```
+
+    The [DropdownMenu documentation](https://api.flutter.dev/flutter/material/DropdownMenu-class.html) has more details and examples on the widget.
+
+4. Add an "Add to order" button, that gives the user feedback when pressed. There is no basket yet, so it only needs to show some visual feedback (e.g., state the total number of tickets added to the order).
+
+5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does. The [text and typography documentation](https://docs.flutter.dev/ui/design/text) covers styling text.
+
+6. (Advanced) Make your page adapt to the width of the window. A `LayoutBuilder` gives you the available width, so you can show a different layout on narrow and wide windows. For example, in your sandwich shop app you could show the buttons in a `Row` on wide windows and a `Column` on narrow ones:
+
+    ```dart
+    LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth > 600) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: _increaseQuantity,
+                child: const Text('Add'),
+              ),
+              ElevatedButton(
+                onPressed: _decreaseQuantity,
+                child: const Text('Remove'),
+              ),
+            ],
+          );
+        } else {
+          return Column(
+            children: [
+              ElevatedButton(
+                onPressed: _increaseQuantity,
+                child: const Text('Add'),
+              ),
+              ElevatedButton(
+                onPressed: _decreaseQuantity,
+                child: const Text('Remove'),
+              ),
+            ],
+          );
+        }
+      },
+    ),
+    ```
+
+    The [adaptive layout tutorial](https://docs.flutter.dev/learn/pathway/tutorial/adaptive-layout) walks through this approach with `LayoutBuilder`. Resize the browser window to see the layout change.
