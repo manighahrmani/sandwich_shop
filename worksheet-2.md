@@ -677,25 +677,27 @@ Commit your final changes with a message like `Add interactivity with setState`.
 
 ## Exercises
 
-As in Worksheet 1, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 1 exercises, prepare you for Demo 1 (by Friday 2 October 2026). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. You must demonstrate your work for a sign-off during your own timetabled practical session; not all sessions are on a Friday, so check your timetable.
+As in Worksheet 1, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 1 exercises, prepare you for Demo 1 (by Friday 2 October 2026). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
-The template's `lib/views` folder contains two pages. `home_view.dart` is the home page shown when the app starts, and `movie_listing.dart` is the movie listing page you will build. When the app runs, you reach the listing page from the home page through the navigation drawer (the menu icon in the app bar). We will cover navigation and multiple pages properly in a later worksheet, so for now you only need to work on the listing page.
+The fork of the `southsea_cinema` repo that you have already made (in Worksheet 1) has a `lib/views` folder. This folder contains two pages. `home_view.dart` is the home page shown when the app starts, and `movie_listing.dart` is the movie listing page you will build.
 
-The template already includes an empty `movie_listing.dart` page. When you run the app it looks like this:
+When the app runs, you reach the listing page from the home page through the navigation drawer (the menu icon in the app bar). We will cover navigation and multiple pages properly in a later worksheet, so for now you only need to work on the listing page.
 
-![Placeholder: the starting movie listing page in the template](images/2/placeholder_movie_listing_start.png)
+The `movie_listing.dart` page should look like this:
 
-You reach it from the navigation drawer, by opening the menu in the app bar and choosing "Movie Listing":
+![The starting movie listing page in the template](images/2/movie_listing_start.png)
 
-![Placeholder: opening the movie listing page from the navigation drawer](images/2/placeholder_movie_listing_navigate.png)
+You can reach this page from the navigation drawer, by opening the menu in the app bar and choosing "Movie Listing":
+
+![Opening the movie listing page from the navigation drawer](images/2/movie_listing_navigate.png)
 
 Your task is to update `movie_listing.dart` to show a single film. Use this [example listing](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/TSelectItems.waSelectItemsPrompt.TcsWebMenuItem_687.TcsWebTab_688.TcsProgramme_26436) as a reference point:
 
 ![The example film listing on the Southsea Cinema website](images/2/southsea_cinema_listing_example.png)
 
-The exercises below help you prepare for the task of Demo 1. In short, you need to build the same kind of page. Replace Dracula with your own favourite film. Give it a title, runtime, age rating, and other descriptive text. You need to also have a ticket quantity dropdown and a booking button. You need to run your app on a phone-sized view, as you did in Worksheet 1.
+The exercises below help you prepare for Demo 1. In short, you need to build the same kind of page. Replace Dracula with your own favourite film. Give it a title, runtime, age rating, and other descriptive text. You need to also have a ticket quantity dropdown and a booking button. You need to run your app on a phone-sized view, as you did in Worksheet 1.
 
-Make a separate commit for each exercise below, and commit more often than that if you can. Small, frequent commits with clear messages are part of the quality mark at your demo.
+Be sure to make a separate commit for each exercise below, and commit more often than that if you can. Small, frequent commits with clear messages are part of the quality mark at your demo.
 
 1. Add the film title and a short description as `Text` widgets, wrapped in a `Container` widget. A `Container` holds a single child and can give it a size, a colour, a border and more.
 
