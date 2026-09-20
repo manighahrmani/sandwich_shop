@@ -8,9 +8,20 @@
 
 Lecture 2:
 
+- Tech news
 - Everything is a widget
 - Declarative UI
 - Stateless vs stateful
+
+---
+
+## Tech news
+
+I need tech news from you! I will provide some of my own.
+
+- GitHub Trending: [github.com/trending](https://github.com/trending)
+- Widget of the Week: [youtube.com/playlist](https://youtube.com/playlist?list=PLjxrf2q8roU23XGwz3Km7sQZFTdB996iG)
+- Flutter blog: [medium.com/flutter](https://medium.com/flutter)
 
 ---
 

@@ -23,7 +23,7 @@ I need tech news from you!
 
 To get started:
 
-- Flutter blog: [medium.com/flutter](https://medium.com/flutter)
+- VS Code intro: [youtube.com/watch?v=f8_uF_IDV50](https://youtube.com/watch?v=f8_uF_IDV50)
 - GitHub Trending: [github.com/trending](https://github.com/trending)
 - Widget of the Week: [youtube.com/playlist](https://youtube.com/playlist?list=PLjxrf2q8roU23XGwz3Km7sQZFTdB996iG)
 
