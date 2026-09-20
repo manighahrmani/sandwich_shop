@@ -8,20 +8,20 @@
 
 Lecture 2:
 
-- Tech news
 - Everything is a widget
 - Declarative UI
 - Stateless vs stateful
 
 ---
 
-## Tech news
+## Everything is a widget — tech news
 
 I need tech news from you! I will provide some of my own.
 
-- GitHub Trending: [github.com/trending](https://github.com/trending)
+- Git branches, visually and interactively: [learngitbranching.js.org](https://learngitbranching.js.org)
+- Resolving merge conflicts in VS Code: [code.visualstudio.com/docs/sourcecontrol/merge-conflicts](https://code.visualstudio.com/docs/sourcecontrol/merge-conflicts)
+- How Flutter hot reload works: [docs.flutter.dev/tools/hot-reload](https://docs.flutter.dev/tools/hot-reload)
 - Widget of the Week: [youtube.com/playlist](https://youtube.com/playlist?list=PLjxrf2q8roU23XGwz3Km7sQZFTdB996iG)
-- Flutter blog: [medium.com/flutter](https://medium.com/flutter)
 
 ---
 

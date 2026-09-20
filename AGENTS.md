@@ -145,6 +145,31 @@ enforcement section at the end).
 - Keep counts and lists accurate: if the prose says there are three children,
   the code and the following list must contain three.
 
+### Lecture files
+
+Every `lecture-N.md` mirrors its `lecture-N.pptx` and follows the same fixed
+structure. When you create or edit a lecture, enforce all of the following.
+
+- Start with a `## Overview` slide that lists exactly three major, abstract
+  sections for that lecture (for example, Lecture 1 is Welcome, Preamble,
+  Assessment; Lecture 2 is Everything is a widget, Declarative UI, Stateless
+  vs stateful). Every other content slide belongs under one of those three
+  sections.
+- Include a tech news slide. It is not its own section: it lives as a slide
+  inside the first section. It invites students to bring tech news, offers a
+  few of the lecturer's own, and links a small number of useful individual
+  topics (for example Git branches, merge conflicts, a Flutter feature, or a
+  Widget of the Week video). Vary the recommendations between lectures rather
+  than repeating the same links.
+- Include a live demo. Add a "Live demo guide (for the lecturer)" section at
+  the end with step-by-step instructions the lecturer can run during the
+  lecture. The demo must use the sandwich shop app (starting from the state at
+  the end of the relevant worksheet) and must not mention the coursework or
+  Southsea Cinema; any coursework or demo reminder is a short footnote only.
+- Keep slides minimal: short bullets and links, with the detail left to what
+  the lecturer says and to the worksheets. Follow the same house writing style
+  as the worksheets (plain headings, British spelling, no decorative emojis).
+
 ### Style enforcement
 
 Style is enforced automatically and runs in pre-commit and CI:
