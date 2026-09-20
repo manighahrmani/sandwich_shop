@@ -114,8 +114,8 @@ Create an app, run it in Chrome, switch devices, commit, and push to GitHub.
 
 VS Code features:
 
-- IntelliSense
-- Member/completion after dot, seeing suggestions (autocomplete)
+- IntelliSense: the completion dropdown that lists types, methods and parameters after you type a dot. It reads the code and needs a language extension for some languages (Dart and Flutter here).
+- Ghost text: the greyed-out AI suggestion that predicts whole lines. It is not IntelliSense; it needs you signed into VS Code with GitHub Copilot (free through GitHub Education).
 - Parameter hints (signature help) and hover / quick info (docs on hover)
 - Rename symbol (F2)
 - Quick fix / lightbulb (Cmd .)

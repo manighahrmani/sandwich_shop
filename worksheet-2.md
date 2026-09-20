@@ -349,7 +349,7 @@ Both `title` and `backgroundColor` are properties of the `AppBar` widget. You ca
 
 ![The AppBar properties shown on hover in VS Code](images/2/screenshot_app_bar_properties.png)
 
-Next, add a `floatingActionButton` to the `Scaffold`. Put your cursor just after the `body` property, add a comma, then start typing `floating`. You should get an autocomplete suggestion for `floatingActionButton`. Select it and press **Enter** to add it to your code:
+Next, add a `floatingActionButton` to the `Scaffold`. Put your cursor just after the `body` property, add a comma, then start typing `floating`. VS Code's IntelliSense (the completion dropdown that lists types, methods and properties) should suggest `floatingActionButton`. Select it and press **Enter** to add it to your code:
 
 ![The floatingActionButton autocomplete suggestion](images/2/screenshot_floating_action_button.png)
 
@@ -403,7 +403,7 @@ If you would like a short explanation before coding, read the [StatelessWidget d
 
 Let's add two buttons below the sandwich display. Jump to your `App` widget in `main.dart` (use **Ctrl + Shift + O** on Windows or **⌘ + Shift + O** on macOS, then search for `App`). Select the current content of the `body` property of the `Scaffold` (it should be set to `Center(child: OrderItemDisplay(...))`).
 
-Delete it and start typing `Column`, press enter to select a `Column` widget from the suggestions. Inside the brackets, type `main` and select `mainAxisAlignment` from the dropdown, as shown in the image below:
+Delete it and start typing `Column`, press enter to select a `Column` widget from the IntelliSense dropdown (the completion list that shows types, methods and properties). Inside the brackets, type `main` and select `mainAxisAlignment` from the dropdown, as shown in the image below:
 
 ![Main Axis Alignment](images/2/main_axis_alignment.png)
 
@@ -411,7 +411,7 @@ This property, used in `Row` and `Column` widgets, determines how the children a
 
 ![Main Axis Alignment Center](images/2/main_axis_alignment_center.png)
 
-You should get comfortable with this feature of VS Code and always select what you need from the suggestions instead of typing it out, as it helps you write code quickly. Next, add a `children` property to the `Column`. Inside its square brackets (`[]`), place two children: an instance of `OrderItemDisplay` followed by a `Row` widget. The children are items in a list, so separate them with a comma.
+You should get comfortable with IntelliSense and always select what you need from the dropdown instead of typing it out, as it helps you write code quickly. Next, add a `children` property to the `Column`. Inside its square brackets (`[]`), place two children: an instance of `OrderItemDisplay` followed by a `Row` widget. The children are items in a list, so separate them with a comma.
 
 ![Column with Children](images/2/column_with_children.png)
 
