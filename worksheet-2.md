@@ -353,7 +353,7 @@ Next, add a `floatingActionButton` to the `Scaffold`. Put your cursor just after
 
 ![The floatingActionButton autocomplete suggestion](images/2/screenshot_floating_action_button.png)
 
-There are two kinds of suggestion in VS Code and it is worth knowing the difference. IntelliSense is the dropdown you just used: it reads your code and offers real types, methods and properties, and it needs a language extension (the Dart and Flutter extensions provide it here). Ghost text is the greyed-out AI suggestion that predicts whole lines as you type; it comes from GitHub Copilot, which needs you signed into VS Code with a Copilot subscription (free through GitHub Education). For now, use IntelliSense and pick from its dropdown, so you learn the widgets and their properties yourself.
+There are two kinds of suggestion in VS Code. IntelliSense is the dropdown you just used: it reads your code and offers real types, methods and properties, and it needs a language extension (the Dart and Flutter extensions provide it here). Ghost text is the greyed-out AI suggestion that predicts whole lines as you type; it comes from GitHub Copilot, which needs you signed into VS Code with a Copilot subscription (free through GitHub Education). For now, please use IntelliSense only.
 
 As the value of the `floatingActionButton` property, start typing `Floating` and select `FloatingActionButton` from the suggestions. Leave its `onPressed` property as an empty function (`() {}`). The `onPressed` property specifies the callback function that runs when the button is pressed, and `() {}` is a function that takes no parameters (`()`) and has an empty body (`{}`), so pressing the button does nothing for now. Your code should look like this:
 
