@@ -29,6 +29,10 @@ explicitly names them in the request:
 
 Never `git add -A` / `git add .` from the workspace root; stage files by name.
 
+## Branch mapping rule
+
+Branch `x` in this repository and in coursework repositories must always contain the code students would end up with when they have finished Worksheet `x`. For example, branch `1` contains the state after completing Worksheet 1, and branch `2` contains the state after completing Worksheet 2. Do not use numeric branches for intermediate or mid-worksheet checkpoints.
+
 ## Writing style for worksheets and teaching material
 
 These rules define the house writing style for all Markdown teaching material
