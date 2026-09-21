@@ -42,7 +42,7 @@ Each week has a worksheet and a lecture. You should aim to complete the workshee
 
 - [Worksheet 1: Dart, Git, GitHub and Flutter](./worksheet-1.md)
 - [Worksheet 2: Stateless and Stateful Widgets](./worksheet-2.md)
-- Worksheet 3: App Architecture, Testing, and README (under revision)
+- Worksheet 3: Data Models, Repositories, Assets, and In-Page Navigation (under revision)
 - Worksheet 4: Unit and Widget Testing (under revision)
 - Worksheet 5: Data Models and Assets (under revision)
 - Worksheet 6: AI-Driven Development and Navigation (under revision)
