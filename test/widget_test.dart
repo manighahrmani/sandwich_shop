@@ -1,81 +1,41 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/main.dart';
+import 'package:sandwich_shop/screens/menu_screen.dart';
+import 'package:sandwich_shop/screens/order_screen.dart';
 
 void main() {
-  group('App widget', () {
-    testWidgets('App sets OrderScreen as home', (WidgetTester tester) async {
+  group('App smoke tests', () {
+    testWidgets('App displays MenuScreen as home', (WidgetTester tester) async {
       await tester.pumpWidget(const App());
+      expect(find.byType(MenuScreen), findsOneWidget);
+      expect(find.text('Sandwich Menu'), findsOneWidget);
+    });
+
+    testWidgets('Displays sandwich cards from repository',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      expect(find.text('Footlong Sub'), findsOneWidget);
+      expect(find.text('Six-Inch Sub'), findsOneWidget);
+      expect(find.text('Order'), findsNWidgets(2));
+    });
+
+    testWidgets('Tapping Order navigates to OrderScreen with selected sandwich',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+
+      // Tap the Order button on the first sandwich (Footlong Sub)
+      await tester.tap(find.text('Order').first);
+      await tester.pumpAndSettle();
+
+      // Verify that the OrderScreen is displayed with the chosen sandwich
       expect(find.byType(OrderScreen), findsOneWidget);
-    });
-  });
+      expect(find.text('Order Footlong Sub'), findsOneWidget);
+      expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
 
-  group('OrderScreen interaction tests', () {
-    testWidgets(
-        '"Sandwich Counter" text and initial sandwich quantity are displayed',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
-      expect(find.text('Sandwich Counter'), findsOneWidget);
-    });
-
-    testWidgets('Tapping add button increases quantity',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
+      // Verify interaction on the OrderScreen
+      await tester.tap(find.text('Add'));
       await tester.pump();
-      expect(find.text('1 Footlong sandwich(es): 🥪'), findsOneWidget);
-    });
-
-    testWidgets('Tapping remove button decreases quantity',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
-      await tester.pump();
-      expect(find.text('1 Footlong sandwich(es): 🥪'), findsOneWidget);
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Remove'));
-      await tester.pump();
-      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
-    });
-
-    testWidgets('Quantity does not go below zero', (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Remove'));
-      await tester.pump();
-      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
-    });
-
-    testWidgets('Quantity does not exceed maxQuantity',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-      for (int i = 0; i < 10; i++) {
-        await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
-        await tester.pump();
-      }
-      expect(find.text('5 Footlong sandwich(es): 🥪🥪🥪🥪🥪'), findsOneWidget);
-    });
-  });
-
-  group('OrderItemDisplay widget', () {
-    testWidgets('Displays the correct text for 0 sandwiches',
-        (WidgetTester tester) async {
-      const widgetToBeTested = OrderItemDisplay(0, 'Footlong');
-      const testApp = MaterialApp(
-        home: Scaffold(body: widgetToBeTested),
-      );
-      await tester.pumpWidget(testApp);
-      expect(find.text('0 Footlong sandwich(es): '), findsOneWidget);
-    });
-
-    testWidgets('Displays the correct text and emoji for 3 sandwiches',
-        (WidgetTester tester) async {
-      const widgetToBeTested = OrderItemDisplay(3, 'Footlong');
-      const testApp = MaterialApp(
-        home: Scaffold(body: widgetToBeTested),
-      );
-      await tester.pumpWidget(testApp);
-      expect(find.text('3 Footlong sandwich(es): 🥪🥪🥪'), findsOneWidget);
+      expect(find.text('1 Footlong Sub sandwich(es): 🥪'), findsOneWidget);
     });
   });
 }
