@@ -1,45 +1,42 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
+# macOS
 .DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
+# VS Code
+.vscode/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Scratch / personal notes
+prompt.md
 
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
+# Python
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.venv/
+venv/
+
+# Flutter / Dart
+build/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
+.packages
+*.g.dart
 
-# Symbolication related
-app.*.symbols
+# Node.js (used by markdownlint / cspell tooling)
+node_modules/
 
-# Obfuscation related
-app.*.map.json
+# Reference-only, stale coursework clones (never updated)
+union_shop/
+moodle/
+moodle_private/
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# Separate nested repo, contains student names/emails. Not part of this repo.
+sign-off-app/
+
+# Southsea Cinema coursework templates
+southsea_cinema/
+southsea_cinema_private/
+
+# Flutter portable package repos
+flutter_vscode_package/
+flutter_vscode_package_private/
