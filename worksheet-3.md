@@ -16,7 +16,7 @@
   - [Commit your changes (2)](#commit-your-changes-2)
 - [Abstract data access with a repository](#abstract-data-access-with-a-repository)
   - [Understand the repository pattern](#understand-the-repository-pattern)
-  - [Create the SandwichRepository class](#create-the-sandwich-repository-class)
+  - [Create the SandwichRepository class](#create-the-sandwichrepository-class)
   - [Return mock sandwich items](#return-mock-sandwich-items)
   - [Commit your changes (3)](#commit-your-changes-3)
 - [Build the menu interface](#build-the-menu-interface)
@@ -110,6 +110,10 @@ class Sandwich {
 
 The `const` constructor enables Flutter to create compile-time constants when fixed values are used, which reduces memory allocations. If you need a reminder on Dart constructor syntax, refer to the [official Dart classes documentation](https://dart.dev/language/classes) and the module [Dart software and resources guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAeCWXLehKuTou1gTpjrNKRAcCHcRGxPJSinskA7x1opXg?e=lfIK0S).
 
+Your `lib/models/sandwich.dart` file should look like this in VS Code:
+
+![The Sandwich model class defined in lib/models/sandwich.dart](images/3/sandwich_model_code.png)
+
 ### Commit your changes (1)
 
 Save your new file. In the Source Control panel, stage `lib/models/sandwich.dart` and commit your changes with the message `Add Sandwich data model`.
@@ -153,6 +157,10 @@ flutter:
 ```
 
 YAML files are sensitive to indentation. Ensure that `assets:` is indented by two spaces beneath `flutter:`, and the list dash is indented by four spaces. Listing the directory with a trailing slash tells Flutter to include every file inside `assets/images/`.
+
+The `pubspec.yaml` assets configuration should look like this:
+
+![The assets declaration in pubspec.yaml with two-space indentation](images/3/pubspec_assets_indentation.png)
 
 Save the file and run `flutter pub get` in your terminal to update your project configuration.
 
@@ -218,6 +226,10 @@ class SandwichRepository {
 ```
 
 Notice that each sandwich specifies its own `name`, `price`, and `imagePath`. This repository is now the single source of truth for menu data in our app.
+
+Your `lib/repositories/sandwich_repository.dart` file should look like this:
+
+![The SandwichRepository class returning mock menu items](images/3/sandwich_repository_code.png)
 
 ### Commit your changes (3)
 
@@ -311,6 +323,10 @@ class SandwichCard extends StatelessWidget {
 
 Notice the use of `Image.asset(sandwich.imagePath)`. This widget loads the image from the bundle using the path specified in our model. `toStringAsFixed(2)` formats the price to two decimal places.
 
+Your `lib/widgets/sandwich_card.dart` file should look like this:
+
+![The SandwichCard widget build method](images/3/sandwich_card_widget.png)
+
 ### Commit your changes (4)
 
 Stage `lib/widgets/sandwich_card.dart` and commit your changes with the message `Create SandwichCard widget`.
@@ -379,7 +395,9 @@ class App extends StatelessWidget {
 }
 ```
 
-Run your app with `flutter run -d chrome`. You should see the Sandwich Menu screen showing cards for the Footlong Sub and the Six-Inch Sub, complete with images and formatted prices.
+Run your app with `flutter run -d chrome`. You should see the Sandwich Menu screen showing cards for the Footlong Sub and the Six-Inch Sub, complete with images and formatted prices as shown below:
+
+![The Sandwich Menu screen in Chrome showing sub cards with images and prices](images/3/sandwich_menu_screen.png)
 
 ### Commit your changes (5)
 
@@ -493,6 +511,10 @@ class OrderItemDisplay extends StatelessWidget {
 
 Notice that the app bar title now uses `widget.sandwich.name`, and `OrderItemDisplay` displays the selected sandwich name next to the counter.
 
+Your `lib/screens/order_screen.dart` file should look like this:
+
+![The OrderScreen widget configured to accept a Sandwich parameter](images/3/order_screen_widget.png)
+
 ### Commit your changes (6)
 
 Stage `lib/screens/order_screen.dart` and commit your changes with the message `Refactor OrderScreen to receive a Sandwich model`.
@@ -534,6 +556,10 @@ Run your app in Chrome. When the menu appears:
 3. Tap the back arrow in the top left of the app bar. The order screen pops off the stack and you return to the menu.
 4. Tap **Order** on the Six-Inch Sub card. You arrive at an order screen specifically configured for the six-inch sub, with an independent counter starting at zero.
 
+The order screen for the Footlong Sub should look like this after navigation:
+
+![The OrderScreen displayed in Chrome after navigating from the menu](images/3/order_screen_navigation.png)
+
 ### Commit your changes (7)
 
 Stage `lib/widgets/sandwich_card.dart` and commit your work with the message `Implement in-page navigation from SandwichCard to OrderScreen`.
@@ -552,6 +578,14 @@ In Worksheet 2, you built a hardcoded movie listing page for Dracula. For Demo 2
 
 4. Create a reusable `MovieCard` widget in `lib/widgets/movie_card.dart`. Display the title with age rating, the poster image using `Image.asset`, the synopsis, and the screening time. Add a **BOOK NOW** button styled with `cinemaBrand` background and white text. Commit your changes with the message `Create MovieCard widget`.
 
-5. Update `lib/views/home_view.dart` to retrieve movies from `MovieRepository` and render them in a scrollable list using `ListView.builder`. Commit your changes with the message `Display movie cards on HomeView`.
+5. Update `lib/views/home_view.dart` to retrieve movies from `MovieRepository` and render them in a scrollable list using `ListView.builder`. Your home screen should display film cards with poster images and booking buttons as shown below:
 
-6. Refactor `lib/views/movie_listing.dart` so its constructor requires a `Movie` instance (`final Movie movie;`). Replace all hardcoded Dracula details with the fields from `widget.movie`. Connect the **BOOK NOW** button in `MovieCard` to call `Navigator.push()` with `MaterialPageRoute`, passing the selected `movie` into `MovieListing`. Commit your changes with the message `Enable in-page navigation from HomeView to MovieListing`.
+    ![Southsea Cinema home screen showing film cards with poster images and booking buttons](images/3/southsea_cinema_home_view.png)
+
+    Commit your changes with the message `Display movie cards on HomeView`.
+
+6. Refactor `lib/views/movie_listing.dart` so its constructor requires a `Movie` instance (`final Movie movie;`). Replace all hardcoded Dracula details with the fields from `widget.movie`. Connect the **BOOK NOW** button in `MovieCard` to call `Navigator.push()` with `MaterialPageRoute`, passing the selected `movie` into `MovieListing`. When you click **BOOK NOW** on a film card, the dynamic listing page should open as shown below:
+
+    ![Southsea Cinema dynamic film listing page](images/3/southsea_cinema_dynamic_listing.png)
+
+    Commit your changes with the message `Enable in-page navigation from HomeView to MovieListing`.

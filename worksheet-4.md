@@ -127,6 +127,10 @@ void main() {
 
 Notice how clean unit tests are. They run pure Dart code without needing to build any UI widgets.
 
+Your `test/sandwich_repository_test.dart` file should look like this in VS Code:
+
+![Unit tests for SandwichRepository in VS Code](images/4/sandwich_repository_unit_tests.png)
+
 ### Run unit tests from the terminal
 
 Open your terminal and execute `flutter test` targeting your new test file:
@@ -142,6 +146,10 @@ You should see output similar to the following, confirming that both tests passe
 00:00 +1: SandwichRepository unit tests getSandwiches contains valid Footlong and Six-Inch subs
 00:00 +2: All tests passed!
 ```
+
+Your terminal output should look like this:
+
+![Terminal output showing passing unit tests](images/4/unit_tests_terminal_output.png)
 
 ### Commit your changes (1)
 
@@ -197,7 +205,9 @@ void main() {
 
 The `find.text()` finder searches the rendered tree for specific strings, while `find.byType()` checks for specific widget classes. `findsOneWidget` and `findsNWidgets(2)` assert the number of matches.
 
-Run your tests with `flutter test test/widget_test.dart`. Both tests should pass.
+Run your tests with `flutter test test/widget_test.dart`. Both tests should pass. Your test file should look like this:
+
+![Widget tests for initial menu rendering in VS Code](images/4/widget_tests_initial_rendering.png)
 
 ### Commit your changes (2)
 
@@ -246,6 +256,10 @@ testWidgets('Tapping Order navigates to OrderScreen with selected sandwich',
 Ensure that you import `package:sandwich_shop/screens/order_screen.dart` at the top of `test/widget_test.dart`.
 
 Run `flutter test test/widget_test.dart`. Notice how the test runner verifies navigation, argument passing, and state updates in under a second.
+
+Your test file should look like this:
+
+![Widget test simulating user tap and verifying navigation in VS Code](images/4/widget_tests_navigation_interaction.png)
 
 ### Commit your changes (3)
 
@@ -320,7 +334,9 @@ Run all tests across the entire project by executing `flutter test` without argu
 flutter test
 ```
 
-All unit and widget tests across both test files should pass cleanly.
+All unit and widget tests across both test files should pass cleanly as shown below:
+
+![Terminal output showing all automated unit and widget tests passing](images/4/all_tests_passed_terminal.png)
 
 ### Commit your changes (4)
 
@@ -355,6 +371,10 @@ Analyzing lib, test...
 No issues found!
 ```
 
+Your terminal output should look like this:
+
+![Terminal output showing zero issues from the Dart analyser](images/4/dart_analyze_output.png)
+
 If any warnings or lints appear, resolve them before demonstrating your coursework.
 
 ### Commit your changes (5)
@@ -371,7 +391,9 @@ In Worksheet 3, you refactored the Southsea Cinema application to show movie car
 
 2. Open `test/widget_test.dart` in your `southsea_cinema` fork. Write a widget test named `Home page displays movie cards and navigates to listing page` using `testWidgets()`. Pump `SouthseaCinemaApp`, verify that the app title and both movie titles appear, find the **BOOK NOW** buttons, tap the first button with `tester.tap()`, and call `tester.pumpAndSettle()`. Assert that the movie listing page opened displaying the chosen film title and ticket pricing. Commit your changes with the message `Add widget tests for HomeView and navigation`.
 
-3. Run `flutter test` from the root of your `southsea_cinema` project. Ensure that all unit and widget tests pass without failures.
+3. Run `flutter test` from the root of your `southsea_cinema` project. Ensure that all unit and widget tests pass without failures as shown below:
+
+    ![Southsea Cinema automated unit and widget tests passing in terminal](images/4/southsea_cinema_tests_passing.png)
 
 4. Run `dart analyze` and `dart format --output=none --set-exit-if-changed .` across your project. Ensure that there are zero analyser issues and that all code is formatted according to standard Dart conventions. Commit any formatting changes with the message `Format coursework code`.
 
