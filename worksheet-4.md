@@ -61,7 +61,7 @@ Automated tests let you describe your expectations in code once. Whenever you ru
 2. **Widget tests:** medium-speed tests that render widgets in a simulated environment to verify layout, text, and gestures.
 3. **Integration tests:** comprehensive tests that run the whole application on a device or in a browser.
 
-In this worksheet we focus on the first two tiers. For the wider picture, skim the [testing overview in the Flutter documentation](https://docs.flutter.dev/testing/overview) and, if you prefer video, the [How to write tests](https://www.youtube.com/watch?v=bjynsttFF2I) episode from the official [Flutter YouTube channel](https://www.youtube.com/@flutterdev).
+In this worksheet we focus on the first two tiers. For the wider picture, skim the [testing overview in the Flutter documentation](https://docs.flutter.dev/testing/overview) and, if you prefer video, browse the [official Flutter video collection](https://docs.flutter.dev/resources/videos) or the [Flutter YouTube channel](https://www.youtube.com/@flutterdev).
 
 ## Unit testing with flutter test
 
