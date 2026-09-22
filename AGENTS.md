@@ -32,7 +32,18 @@ Never `git add -A` / `git add .` from the workspace root; stage files by name.
 
 ## Branch mapping rule
 
-Branch `x` in this repository and in coursework repositories must always contain the code students would end up with when they have finished Worksheet `x`. For example, branch `1` contains the state after completing Worksheet 1, and branch `2` contains the state after completing Worksheet 2. Do not use numeric branches for intermediate or mid-worksheet checkpoints.
+Use `dev` for authoring. Agent instructions, source documents, site files,
+continuous integration and writing-quality tooling belong only on `dev`.
+
+The `main` branch contains only published student-facing Markdown and images.
+Do not add authoring configuration, hooks, generated documents or source
+documents to `main`.
+
+Branch `x` in this repository and in coursework repositories must contain only
+the Sandwich Shop application and the code students would have after finishing
+Worksheet `x`. For example, branch `1` contains the state after completing
+Worksheet 1, and branch `2` contains the state after completing Worksheet 2.
+Do not use numeric branches for intermediate or mid-worksheet checkpoints.
 
 ## Writing style for worksheets and teaching material
 
