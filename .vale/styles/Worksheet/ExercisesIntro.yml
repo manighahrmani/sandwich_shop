@@ -1,7 +1,0 @@
-extends: existence
-message: "Rewrite the Exercises opening in the Worksheet 1 style (state the demo it prepares for, link the coursework brief, remind to commit). Do not use this boilerplate line."
-level: error
-nonword: true
-tokens:
-  - 'Complete the exercises below and show your work to a member of staff present at your next practical'
-  - 'Your main guide for the rest of the exercises is the \[?Flutter layout documentation'

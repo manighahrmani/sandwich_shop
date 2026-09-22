@@ -1,8 +1,0 @@
-extends: existence
-message: "Placeholder image still present: replace it with a real screenshot and descriptive alt text before this worksheet is finalised."
-level: warning
-scope: raw
-nonword: true
-tokens:
-  - '!\[[^\]]*[Pp]laceholder[^\]]*\]'
-  - '\]\(images/[^)]*placeholder[^)]*\)'

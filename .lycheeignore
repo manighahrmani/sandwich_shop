@@ -1,3 +1,0 @@
-# URLs excluded from the CI link check.
-# This university host is valid but frequently times out in CI.
-http://www2.port.ac.uk/additional-support-and-disability-advice-centre/
