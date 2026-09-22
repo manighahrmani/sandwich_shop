@@ -1,7 +1,8 @@
 # Repository Guidance
 
 This file is the single, centralised source of agent instructions for this
-this file rather than duplicate rules.
+repository. It applies to every AI agent used in this folder. Other agent
+config files must defer to this file rather than duplicate rules.
 
 ## Chat replies must be minimal
 
