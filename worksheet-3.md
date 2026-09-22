@@ -8,7 +8,8 @@
 - [The need for structured data](#the-need-for-structured-data)
 - [Define the Sandwich data model](#define-the-sandwich-data-model)
   - [Create the model class](#create-the-model-class)
-  - [Implement the Sandwich constructor](#implement-the-sandwich-constructor)
+  - [Add the fields](#add-the-fields)
+  - [Add the constructor](#add-the-constructor)
   - [Commit your changes (1)](#commit-your-changes-1)
 - [Add asset images to the project](#add-asset-images-to-the-project)
   - [Create the assets folder](#create-the-assets-folder)
@@ -21,13 +22,16 @@
   - [Commit your changes (3)](#commit-your-changes-3)
 - [Build the menu interface](#build-the-menu-interface)
   - [Create the SandwichCard widget](#create-the-sandwichcard-widget)
+  - [Lay out the image and text](#lay-out-the-image-and-text)
+  - [Add the price and order button](#add-the-price-and-order-button)
   - [Commit your changes (4)](#commit-your-changes-4)
   - [Build the MenuScreen widget](#build-the-menuscreen-widget)
   - [Set MenuScreen as the home screen](#set-menuscreen-as-the-home-screen)
   - [Commit your changes (5)](#commit-your-changes-5)
 - [Navigate between screens and pass data](#navigate-between-screens-and-pass-data)
   - [Understand stack-based navigation](#understand-stack-based-navigation)
-  - [Update OrderScreen to accept a Sandwich](#update-orderscreen-to-accept-a-sandwich)
+  - [Move OrderScreen into its own file](#move-orderscreen-into-its-own-file)
+  - [Accept a Sandwich in OrderScreen](#accept-a-sandwich-in-orderscreen)
   - [Commit your changes (6)](#commit-your-changes-6)
   - [Connect SandwichCard to OrderScreen](#connect-sandwichcard-to-orderscreen)
   - [Test the complete navigation flow](#test-the-complete-navigation-flow)
@@ -36,7 +40,7 @@
 
 ## What you need to know beforehand
 
-Ensure that you have completed [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md) and [Worksheet 2 — Stateless and Stateful Widgets](./worksheet-2.md). You should be familiar with creating `StatelessWidget` and `StatefulWidget` classes, calling `setState()` to update user interfaces, and managing basic layout widgets like `Row`, `Column`, and `Scaffold`.
+Ensure that you have completed [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md) and [Worksheet 2 — Stateless and Stateful Widgets](./worksheet-2.md). You should be comfortable creating `StatelessWidget` and `StatefulWidget` classes, calling `setState()` to update the user interface (UI), and arranging widgets with `Row`, `Column`, and `Scaffold`. You met `Image.asset` briefly in the Worksheet 2 exercises; we use it properly here.
 
 ## Getting help
 
@@ -50,29 +54,37 @@ You can continue directly with the repository you updated in Worksheet 2. Altern
 git checkout 2
 ```
 
-Ensure that your working tree is clean before starting. If you have uncommitted changes from earlier exercises, commit or stash them first.
+Ensure that your working tree is clean before starting. If you have uncommitted changes from earlier exercises, commit or stash them first. You can open the Source Control panel at any time with **Ctrl + Shift + G** on Windows or **⌃ + Shift + G** on macOS to review your changes.
 
 ## The need for structured data
 
-At the end of Worksheet 2, the Sandwich Shop app displayed a single counter on a single screen. The word "Footlong" and the maximum order quantity were hardcoded directly into the widgets. In a real application, a shop offers multiple items with distinct names, descriptions, prices, and photographs.
+At the end of Worksheet 2, the Sandwich Shop app displayed a single counter on a single screen. The word "Footlong" and the maximum order quantity were written directly into the widgets. A real shop offers several items, each with its own name, description, price, and photograph.
 
-Putting all of this information directly inside widget build methods creates code that is difficult to read and maintain. If you change a price or add a new sandwich, you should not need to rewrite your user interface widgets. To solve this, we separate our application into distinct layers:
+Putting all of that information inside widget `build` methods makes the code hard to read and maintain. If you change a price or add a new sandwich, you should not have to rewrite your UI widgets. To avoid this, we separate the app into layers:
 
-1. **Models:** Plain Dart classes that define the structure of our data.
-2. **Repositories:** Classes responsible for fetching and providing data to the application.
-3. **Views and Widgets:** User interface classes that display the data and respond to user gestures.
+- Models: plain Dart classes that define the shape of our data.
+- Repositories: classes responsible for fetching and providing that data.
+- Views and widgets: the UI that displays the data and responds to the user.
 
-This principle is known as separation of concerns. In this worksheet, we will refactor our app to follow this structure and introduce navigation between screens.
+This idea is called separation of concerns. In this worksheet we refactor the app to follow it, and we add navigation between two screens. For a wider tour of the concepts used here, keep the [Flutter learning pathway](https://docs.flutter.dev/learn/pathway) open as you work.
 
 ## Define the Sandwich data model
 
-A data model is a class that represents a business concept in your application. For our sandwich shop, we need a model that holds the details of an individual sandwich.
+A data model is a class that represents a real-world concept in your app. For the sandwich shop, we need a model that holds the details of one sandwich. We will build it up field by field rather than pasting the whole class at once.
 
 ### Create the model class
 
-Create a new directory called `lib/models/`. Inside it, create a new file named `sandwich.dart`.
+In the VS Code Explorer, create a new folder `lib/models/`, and inside it a new file named `sandwich.dart`. You can create a folder by right-clicking the `lib` folder and choosing **New Folder**, then right-clicking the new folder and choosing **New File**.
 
-Every sandwich on our menu needs an identifier, a display name, a descriptive text summary, a price, and a path to an image file. Open `lib/models/sandwich.dart` and define the class with five `final` fields:
+Start with an empty class:
+
+```dart
+class Sandwich {}
+```
+
+### Add the fields
+
+Every sandwich on our menu needs an identifier, a display name, a description, a price, and a path to an image file. Add five `final` fields inside the class:
 
 ```dart
 class Sandwich {
@@ -84,11 +96,11 @@ class Sandwich {
 }
 ```
 
-Marking fields as `final` ensures that once a `Sandwich` instance is created, its attributes cannot be accidentally modified. This immutability prevents unexpected side effects across your app.
+Marking each field `final` means that once a `Sandwich` is created, its values cannot change. This immutability prevents accidental edits elsewhere in the app. Note that `price` is a `double` because it holds pennies as well as pounds.
 
-### Implement the Sandwich constructor
+### Add the constructor
 
-Now add a constructor so you can create instances of `Sandwich`. We use named arguments marked with the `required` keyword so that anyone creating a sandwich must explicitly supply every attribute:
+VS Code will show a red squiggly line because the `final` fields are never assigned. Add a constructor to set them. We use named parameters (inside curly braces) marked `required`, so that whoever creates a `Sandwich` must supply every value:
 
 ```dart
 class Sandwich {
@@ -108,27 +120,25 @@ class Sandwich {
 }
 ```
 
-The `const` constructor enables Flutter to create compile-time constants when fixed values are used, which reduces memory allocations. If you need a reminder on Dart constructor syntax, refer to the [official Dart classes documentation](https://dart.dev/language/classes) and the module [Dart software and resources guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAeCWXLehKuTou1gTpjrNKRAcCHcRGxPJSinskA7x1opXg?e=lfIK0S).
+The `const` constructor lets Flutter treat fixed sandwiches as compile-time constants, which is efficient. For a refresher on Dart classes and constructors, see the [official Dart classes documentation](https://dart.dev/language/classes) and the module [Dart software and resources guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAeCWXLehKuTou1gTpjrNKRAcCHcRGxPJSinskA7x1opXg?e=lfIK0S).
 
-Your `lib/models/sandwich.dart` file should look like this in VS Code:
+Your `lib/models/sandwich.dart` file should now look like this:
 
 ![The Sandwich model class defined in lib/models/sandwich.dart](images/3/sandwich_model_code.png)
 
 ### Commit your changes (1)
 
-Save your new file. In the Source Control panel, stage `lib/models/sandwich.dart` and commit your changes with the message `Add Sandwich data model`.
+Save the file (**Ctrl + S** on Windows or **⌘ + S** on macOS). In the Source Control panel, stage `lib/models/sandwich.dart` and commit with the message `Add Sandwich data model`.
 
 ## Add asset images to the project
 
-Mobile and web applications frequently bundle image assets alongside source code, such as product photos and icons. In Flutter, static assets must be stored in your project directory and declared in `pubspec.yaml`.
+Apps often bundle images alongside their code, such as product photos and icons. In Flutter, these static files are called assets. They must live in your project directory and be declared in `pubspec.yaml`.
 
 ### Create the assets folder
 
-Create a new folder in the root of your project called `assets/images/`.
+Create a new folder `assets/images/` in the root of your project (at the same level as `lib` and `test`, not inside `lib`).
 
-Place two image files inside this directory: one for a footlong sandwich called `footlong.png` and one for a six-inch sandwich called `six_inch.png`. You can use your own image files or download sample sandwich illustrations.
-
-Your project folder structure should look like this:
+Place two image files inside it: `footlong.png` and `six_inch.png`. You can use your own illustrations or download sample sandwich images. Your project structure should look like this:
 
 ```text
 sandwich_shop/
@@ -145,9 +155,9 @@ sandwich_shop/
 
 ### Register assets in pubspec
 
-Flutter does not include files in your app bundle automatically. You must register the assets folder in `pubspec.yaml` so Flutter knows to package them.
+Flutter does not bundle files automatically; you must register the folder in `pubspec.yaml`. This file uses YAML, a text format that is sensitive to indentation, so take care with spaces.
 
-Open `pubspec.yaml`. Scroll down to the `flutter:` section at the bottom of the file and add an `assets:` entry:
+Open `pubspec.yaml`, find the `flutter:` section near the bottom, and add an `assets:` entry beneath it:
 
 ```yaml
 flutter:
@@ -156,33 +166,37 @@ flutter:
     - assets/images/
 ```
 
-YAML files are sensitive to indentation. Ensure that `assets:` is indented by two spaces beneath `flutter:`, and the list dash is indented by four spaces. Listing the directory with a trailing slash tells Flutter to include every file inside `assets/images/`.
-
-The `pubspec.yaml` assets configuration should look like this:
+The `assets:` key is indented by two spaces under `flutter:`, and the list item by four spaces. Listing the folder with a trailing slash includes every file inside it. The result should look like this:
 
 ![The assets declaration in pubspec.yaml with two-space indentation](images/3/pubspec_assets_indentation.png)
 
-Save the file and run `flutter pub get` in your terminal to update your project configuration.
+Save the file, then open a terminal (**Ctrl + backtick** on Windows or **⌘ + backtick** on macOS) and run `flutter pub get` so Flutter picks up the change:
+
+```bash
+flutter pub get
+```
+
+Read the [official guide to adding assets and images](https://docs.flutter.dev/ui/assets/assets-and-images) if you would like more detail.
 
 ### Commit your changes (2)
 
-Stage your two image files and the modified `pubspec.yaml`. Commit your work with the message `Register sandwich image assets in pubspec`.
+Stage your two image files and the modified `pubspec.yaml`, then commit with the message `Register sandwich image assets in pubspec`.
 
 ## Abstract data access with a repository
 
-Now that we have a model and images, we need a place to store and retrieve our menu items.
+Now that we have a model and images, we need somewhere to store and hand out the menu items.
 
 ### Understand the repository pattern
 
-A repository is a class that acts as a boundary between your application data and your user interface. It provides high-level methods to read and write data.
+A repository is a class that sits between your data and your UI. It exposes simple methods to read and write data, and hides where that data actually comes from.
 
-In this worksheet, our repository returns a fixed list of mock sandwiches. Later in the module, you will replace mock data with local database queries and cloud network requests. Because the widgets only interact with the repository, you will not have to rewrite your UI when your data source changes.
+For now our repository returns a fixed list of sandwiches written into the code (mock data). Later in the module you will swap that for a local database and cloud requests. Because the widgets only ever talk to the repository, none of the UI has to change when the data source does.
 
 ### Create the SandwichRepository class
 
-Create a new directory called `lib/repositories/`. Inside it, create a new file named `sandwich_repository.dart`.
+Create a new folder `lib/repositories/`, and inside it a file named `sandwich_repository.dart`.
 
-Import your `Sandwich` model at the top of the file, then declare the `SandwichRepository` class:
+Import your `Sandwich` model and declare the class with a method that returns an empty list for now:
 
 ```dart
 import 'package:sandwich_shop/models/sandwich.dart';
@@ -196,7 +210,7 @@ class SandwichRepository {
 
 ### Return mock sandwich items
 
-Update the `getSandwiches()` method to return a list containing two sandwiches, using the asset image paths you registered earlier:
+Now fill `getSandwiches()` with two sandwiches, using the asset paths you registered earlier:
 
 ```dart
 import 'package:sandwich_shop/models/sandwich.dart';
@@ -225,27 +239,23 @@ class SandwichRepository {
 }
 ```
 
-Notice that each sandwich specifies its own `name`, `price`, and `imagePath`. This repository is now the single source of truth for menu data in our app.
-
-Your `lib/repositories/sandwich_repository.dart` file should look like this:
+Each sandwich carries its own `name`, `price`, and `imagePath`. This repository is now the single source of truth for menu data. Your file should look like this:
 
 ![The SandwichRepository class returning mock menu items](images/3/sandwich_repository_code.png)
 
 ### Commit your changes (3)
 
-Stage `lib/repositories/sandwich_repository.dart` and commit your changes with the message `Create SandwichRepository with mock menu data`.
+Stage `lib/repositories/sandwich_repository.dart` and commit with the message `Create SandwichRepository with mock menu data`.
 
 ## Build the menu interface
 
-With data and images ready, we can construct a menu screen that displays each sandwich.
+With data and images ready, we can build a card to show one sandwich, then a screen that lists them.
 
 ### Create the SandwichCard widget
 
-Create a new directory called `lib/widgets/`. Inside it, create a file named `sandwich_card.dart`.
+Create a new folder `lib/widgets/`, and inside it a file named `sandwich_card.dart`. This widget presents a single sandwich: its image, name, description, price, and an **Order** button, all inside a [`Card`](https://api.flutter.dev/flutter/material/Card-class.html) (a Material surface with rounded corners and a shadow).
 
-This widget is responsible for presenting one sandwich item. It displays the sandwich image, name, description, price, and an **Order** button inside a `Card` widget.
-
-Add the following code to `lib/widgets/sandwich_card.dart`:
+Start with the outer `Card` and `Padding`, taking a `Sandwich` through the constructor:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -264,56 +274,7 @@ class SandwichCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  sandwich.imagePath,
-                  width: 80,
-                  height: 80,
-                  fit: BoxFit.cover,
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        sandwich.name,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        sandwich.description,
-                        style: const TextStyle(color: Colors.black54),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '£${sandwich.price.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Order'),
-                ),
-              ],
-            ),
-          ],
+          children: [],
         ),
       ),
     );
@@ -321,23 +282,81 @@ class SandwichCard extends StatelessWidget {
 }
 ```
 
-Notice the use of `Image.asset(sandwich.imagePath)`. This widget loads the image from the bundle using the path specified in our model. `toStringAsFixed(2)` formats the price to two decimal places.
+### Lay out the image and text
 
-Your `lib/widgets/sandwich_card.dart` file should look like this:
+The first child of the `Column` is a `Row` holding the image on the left and the name and description on the right. Add this `Row` to the `children` list:
+
+```dart
+Row(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Image.asset(
+      sandwich.imagePath,
+      width: 80,
+      height: 80,
+      fit: BoxFit.cover,
+    ),
+    const SizedBox(width: 16),
+    Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            sandwich.name,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            sandwich.description,
+            style: const TextStyle(color: Colors.black54),
+          ),
+        ],
+      ),
+    ),
+  ],
+),
+```
+
+`Image.asset(sandwich.imagePath)` loads the bundled image from the path in the model. The [`Expanded`](https://api.flutter.dev/flutter/widgets/Expanded-class.html) widget makes the text column take the remaining width of the row, so a long description wraps instead of overflowing.
+
+### Add the price and order button
+
+Below the `Row`, add a spacer and a second `Row` that puts the price and an **Order** button at opposite ends. Add these two items to the outer `Column`'s `children`, after the first `Row`:
+
+```dart
+const SizedBox(height: 16),
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Text(
+      '£${sandwich.price.toStringAsFixed(2)}',
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    ElevatedButton(
+      onPressed: () {},
+      child: const Text('Order'),
+    ),
+  ],
+),
+```
+
+`toStringAsFixed(2)` formats the price with exactly two decimal places, so `7.5` shows as `7.50`. The **Order** button does nothing yet; we wire it up later. Your completed widget should look like this:
 
 ![The SandwichCard widget build method](images/3/sandwich_card_widget.png)
 
 ### Commit your changes (4)
 
-Stage `lib/widgets/sandwich_card.dart` and commit your changes with the message `Create SandwichCard widget`.
+Stage `lib/widgets/sandwich_card.dart` and commit with the message `Create SandwichCard widget`.
 
 ### Build the MenuScreen widget
 
-Create a new directory called `lib/screens/`. Inside it, create a file named `menu_screen.dart`.
-
-`MenuScreen` instantiates our `SandwichRepository`, fetches the sandwich list, and uses a `ListView.builder` to display a `SandwichCard` for each item.
-
-Add the following code to `lib/screens/menu_screen.dart`:
+Create a new folder `lib/screens/`, and inside it a file named `menu_screen.dart`. `MenuScreen` creates a `SandwichRepository`, fetches the list, and shows a `SandwichCard` for each item using [`ListView.builder`](https://api.flutter.dev/flutter/widgets/ListView/ListView.builder.html):
 
 ```dart
 import 'package:flutter/material.dart';
@@ -368,11 +387,11 @@ class MenuScreen extends StatelessWidget {
 }
 ```
 
-`ListView.builder` is a performant scrolling widget. It builds children on demand as they scroll into view rather than creating them all at once.
+`ListView.builder` is an efficient scrolling list: it builds each row only as it scrolls into view, rather than all at once. To see how lists work in more depth, watch [Widget of the Week: ListView](https://www.youtube.com/watch?v=KJpkjHGiI5A).
 
 ### Set MenuScreen as the home screen
 
-Open `lib/main.dart`. Update your `App` widget so that its `home:` property points to `MenuScreen()` instead of `OrderScreen()`:
+Open `lib/main.dart`. Import `menu_screen.dart` and point the `App` widget's `home:` at `MenuScreen()`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -395,31 +414,38 @@ class App extends StatelessWidget {
 }
 ```
 
-Run your app with `flutter run -d chrome`. You should see the Sandwich Menu screen showing cards for the Footlong Sub and the Six-Inch Sub, complete with images and formatted prices as shown below:
+Run the app with `flutter run -d chrome`. You should see the Sandwich Menu with a card for each sub, complete with images and formatted prices:
 
 ![The Sandwich Menu screen in Chrome showing sub cards with images and prices](images/3/sandwich_menu_screen.png)
 
 ### Commit your changes (5)
 
-Stage `lib/screens/menu_screen.dart` and `lib/main.dart`. Commit your changes with the message `Display menu items using MenuScreen and ListView.builder`.
+Stage `lib/screens/menu_screen.dart` and `lib/main.dart`, then commit with the message `Display menu items using MenuScreen and ListView.builder`.
 
 ## Navigate between screens and pass data
 
-Now when you tap **Order**, nothing happens. We need to navigate from `MenuScreen` to an order screen and pass along the selected sandwich.
+Tapping **Order** does nothing so far. We now navigate from `MenuScreen` to an order screen, carrying the chosen sandwich with us.
 
 ### Understand stack-based navigation
 
-Flutter handles multi-page navigation using a stack data structure managed by the `Navigator` widget. When you navigate to a new screen, you push a route onto the top of the stack. When the user taps the back button or pops the screen, the top route is removed, revealing the previous screen underneath.
+Flutter manages multiple screens with a stack, handled by the `Navigator`. Moving to a new screen pushes a route onto the top of the stack; pressing the back button pops the top route off, revealing the screen underneath.
 
-To navigate, we call `Navigator.push()` with a `BuildContext` and a `PageRoute`. In Flutter Material apps, we use `MaterialPageRoute`, which creates a standard platform transition animation.
+We move to a new screen by calling `Navigator.push()` with the current `BuildContext` and a `MaterialPageRoute`, which provides the standard platform transition animation. Read the [stack-based navigation tutorial](https://docs.flutter.dev/learn/pathway/tutorial/navigation) in the learning pathway and the [send data to a new screen recipe](https://docs.flutter.dev/cookbook/navigation/passing-data) in the Flutter cookbook.
 
-For more details on stack navigation, review the [Stack-based navigation tutorial](https://docs.flutter.dev/learn/pathway/tutorial/navigation) in the Flutter learning pathway and the [Send data to a new screen recipe](https://docs.flutter.dev/cookbook/navigation/passing-data) in the Flutter cookbook.
+### Move OrderScreen into its own file
 
-### Update OrderScreen to accept a Sandwich
+At the end of Worksheet 2, `OrderScreen` and `OrderItemDisplay` lived in `lib/main.dart`. Each screen belongs in its own file, so create `lib/screens/order_screen.dart` and move both classes into it. Cut them from `main.dart` and paste them into the new file, then add the import at the top:
 
-We need our ordering screen to know which sandwich the customer wants to buy. Rather than hardcoding the item name, we pass the selected `Sandwich` model into its constructor.
+```dart
+import 'package:flutter/material.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
+```
 
-Create a new file `lib/screens/order_screen.dart`. Move `OrderScreen` and `OrderItemDisplay` from `lib/main.dart` into this file, updating `OrderScreen` to require a `Sandwich` parameter:
+VS Code shows errors wherever the moved classes were used; we fix them as we go. You already wrote the counter logic in Worksheet 2, so the `setState` methods below should be familiar.
+
+### Accept a Sandwich in OrderScreen
+
+Rather than a hardcoded name, `OrderScreen` should know which sandwich the customer chose. Add a `final Sandwich sandwich;` field and require it in the constructor, then use it in the app bar title and the display. Your `order_screen.dart` should read:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -509,25 +535,23 @@ class OrderItemDisplay extends StatelessWidget {
 }
 ```
 
-Notice that the app bar title now uses `widget.sandwich.name`, and `OrderItemDisplay` displays the selected sandwich name next to the counter.
-
-Your `lib/screens/order_screen.dart` file should look like this:
+The app bar title and `OrderItemDisplay` now read from `widget.sandwich.name`. Your file should look like this:
 
 ![The OrderScreen widget configured to accept a Sandwich parameter](images/3/order_screen_widget.png)
 
 ### Commit your changes (6)
 
-Stage `lib/screens/order_screen.dart` and commit your changes with the message `Refactor OrderScreen to receive a Sandwich model`.
+Stage `lib/screens/order_screen.dart` and `lib/main.dart`, then commit with the message `Refactor OrderScreen to receive a Sandwich model`.
 
 ### Connect SandwichCard to OrderScreen
 
-Now connect the **Order** button in `SandwichCard` to navigate to `OrderScreen`. Open `lib/widgets/sandwich_card.dart`. Add an import for `order_screen.dart` at the top of the file:
+Now make the **Order** button open `OrderScreen` for the chosen sandwich. Open `lib/widgets/sandwich_card.dart` and add the import at the top:
 
 ```dart
 import 'package:sandwich_shop/screens/order_screen.dart';
 ```
 
-Then update the `onPressed` callback of the `ElevatedButton`:
+Then replace the empty `onPressed: () {}` on the **Order** button with a call to `Navigator.push()`:
 
 ```dart
 ElevatedButton(
@@ -545,46 +569,44 @@ ElevatedButton(
 ),
 ```
 
-When the user taps **Order**, `Navigator.push()` pushes `OrderScreen` onto the navigation stack, passing the specific `sandwich` object represented by that card.
+Tapping **Order** pushes an `OrderScreen` onto the stack, passing that card's specific `sandwich`.
 
 ### Test the complete navigation flow
 
-Run your app in Chrome. When the menu appears:
+Run the app in Chrome and try the full flow:
 
-1. Tap **Order** on the Footlong Sub card. The app transitions to the order screen with the title "Order Footlong Sub".
-2. Tap **Add** several times to increment the sandwich counter and watch the emojis appear.
-3. Tap the back arrow in the top left of the app bar. The order screen pops off the stack and you return to the menu.
-4. Tap **Order** on the Six-Inch Sub card. You arrive at an order screen specifically configured for the six-inch sub, with an independent counter starting at zero.
-
-The order screen for the Footlong Sub should look like this after navigation:
+1. Tap **Order** on the Footlong Sub card. The app slides to an order screen titled "Order Footlong Sub".
+2. Tap **Add** a few times to increase the count and watch the emojis appear.
+3. Tap the back arrow in the app bar. The order screen pops off and you return to the menu.
+4. Tap **Order** on the Six-Inch Sub card. You reach an order screen for the six-inch sub, with its own counter starting at zero.
 
 ![The OrderScreen displayed in Chrome after navigating from the menu](images/3/order_screen_navigation.png)
 
 ### Commit your changes (7)
 
-Stage `lib/widgets/sandwich_card.dart` and commit your work with the message `Implement in-page navigation from SandwichCard to OrderScreen`.
+Stage `lib/widgets/sandwich_card.dart` and commit with the message `Implement in-page navigation from SandwichCard to OrderScreen`.
 
 ## Exercises
 
 As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 4 exercises, prepare you for Demo 2 (by Friday 16 October 2026). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
-In Worksheet 2, you built a hardcoded movie listing page for Dracula. For Demo 2, your cinema application must present a browseable home page with cards for currently screening films, and clicking a booking button must navigate directly to the listing page for that film.
+In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2, your cinema app must show a browseable home page with cards for films that are screening, and a booking button on each card must open the listing page for that film.
 
 1. Create a `Movie` data model in `lib/models/movie.dart` inside your `southsea_cinema` fork. Include `id`, `title`, `ageRating`, `synopsis`, `imagePath`, `screeningTime`, and `ticketPrice` as `final` fields, with a `const` constructor. Commit your changes with the message `Add Movie data model`.
 
-2. Create an `assets/images/` folder in your `southsea_cinema` project. Download the poster images for *The Phantom of the Opera* and *Halloween 1978* from the Southsea Cinema website and place them in this folder. Register `assets/images/` under the `flutter:` section of your `pubspec.yaml`. Commit your changes with the message `Add movie poster assets`.
+2. Create an `assets/images/` folder in your `southsea_cinema` project. Download the poster images for *The Phantom of the Opera* and *Halloween 1978* from the Southsea Cinema website and place them in this folder. Register `assets/images/` under the `flutter:` section of your `pubspec.yaml`, then run `flutter pub get`. Commit your changes with the message `Add movie poster assets`.
 
-3. Create a `MovieRepository` in `lib/repositories/movie_repository.dart`. Implement a `getMovies()` method that returns mock `Movie` instances for *The Phantom of the Opera* (12A) and *Halloween 1978* (15) with their screening times, descriptions, and poster paths. Commit your changes with the message `Create MovieRepository with mock screening data`.
+3. Create a `MovieRepository` in `lib/repositories/movie_repository.dart`. Give it a `getMovies()` method that returns mock `Movie` instances for *The Phantom of the Opera* (12A) and *Halloween 1978* (15), with their screening times, descriptions, and poster paths. Commit your changes with the message `Create MovieRepository with mock screening data`.
 
-4. Create a reusable `MovieCard` widget in `lib/widgets/movie_card.dart`. Display the title with age rating, the poster image using `Image.asset`, the synopsis, and the screening time. Add a **BOOK NOW** button styled with `cinemaBrand` background and white text. Commit your changes with the message `Create MovieCard widget`.
+4. Create a reusable `MovieCard` widget in `lib/widgets/movie_card.dart`. Display the title with age rating, the poster image with `Image.asset`, the synopsis, and the screening time. Add a **BOOK NOW** button styled with the `cinemaBrand` background and white text from `lib/constants.dart`. Commit your changes with the message `Create MovieCard widget`.
 
-5. Update `lib/views/home_view.dart` to retrieve movies from `MovieRepository` and render them in a scrollable list using `ListView.builder`. Your home screen should display film cards with poster images and booking buttons as shown below:
+5. Update `lib/views/home_view.dart` to fetch movies from `MovieRepository` and show them in a scrollable list with `ListView.builder`. Your home page should display film cards with poster images and booking buttons as shown below:
 
     ![Southsea Cinema home screen showing film cards with poster images and booking buttons](images/3/southsea_cinema_home_view.png)
 
     Commit your changes with the message `Display movie cards on HomeView`.
 
-6. Refactor `lib/views/movie_listing.dart` so its constructor requires a `Movie` instance (`final Movie movie;`). Replace all hardcoded Dracula details with the fields from `widget.movie`. Connect the **BOOK NOW** button in `MovieCard` to call `Navigator.push()` with `MaterialPageRoute`, passing the selected `movie` into `MovieListing`. When you click **BOOK NOW** on a film card, the dynamic listing page should open as shown below:
+6. Refactor `lib/views/movie_listing.dart` so its constructor requires a `Movie` (`final Movie movie;`). Replace the hardcoded Dracula details with the fields from `widget.movie`. Connect the **BOOK NOW** button in `MovieCard` to call `Navigator.push()` with a `MaterialPageRoute`, passing the selected `movie` into `MovieListing`. Tapping **BOOK NOW** on a card should open the dynamic listing page as shown below:
 
     ![Southsea Cinema dynamic film listing page](images/3/southsea_cinema_dynamic_listing.png)
 
