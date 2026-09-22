@@ -20,13 +20,13 @@ Demo: 10 minutes demo in your timetabled practical. All marks awarded in the dem
 
 ## Notes and Advice
 
-* The [Extenuating Circumstances procedure](https://myport.port.ac.uk/my-course/extenuating-circumstances) is there to support you if you have had any circumstances that have been significant enough to prevent you from attending, completing or submitting an assessment on time. If you complete an Extenuating Circumstances Form (ECF) for this assessment, use the correct module code, item number and deadline (not the late deadline) given above.
-* [ASDAC](http://www2.port.ac.uk/additional-support-and-disability-advice-centre/) are available to any students who disclose a disability or require additional support for their academic studies.
-* The University takes any form of academic misconduct (such as plagiarism) seriously, so please make sure your work is your own. Please ensure you adhere to our [Student Conduct Policy](https://policies.docstore.port.ac.uk/policy-261.pdf) and watch the video on [Plagiarism.](https://www.youtube.com/watch?v=2a0QJnCmfEs)
-* Any material included in your coursework should be fully cited and referenced in **APA 7** format. Detailed advice on referencing is available from the [library](https://library.port.ac.uk/w165.html), also see TECFAC 08 Plagiarism and [library.port.ac.uk/referencing](https://library.port.ac.uk/referencing).
-* Any material submitted that does not meet format or submission guidelines or falls outside of the submission deadline could be subject to a cap on your overall result or disqualification entirely.
-* If you need additional assistance, you can ask your personal tutor, student engagement officer [ana.baker@port.ac.uk](mailto:ana.baker@port.ac.uk) or your lecturers.
-* If you are concerned about your well-being, contact our [Well-being service](https://myport.port.ac.uk/guidance-and-support/health-and-wellbeing)
+- The [Extenuating Circumstances procedure](https://myport.port.ac.uk/my-course/extenuating-circumstances) is there to support you if you have had any circumstances that have been significant enough to prevent you from attending, completing or submitting an assessment on time. If you complete an Extenuating Circumstances Form (ECF) for this assessment, use the correct module code, item number and deadline (not the late deadline) given above.
+- [ASDAC](http://www2.port.ac.uk/additional-support-and-disability-advice-centre/) are available to any students who disclose a disability or require additional support for their academic studies.
+- The University takes any form of academic misconduct (such as plagiarism) seriously, so please make sure your work is your own. Please ensure you adhere to our [Student Conduct Policy](https://policies.docstore.port.ac.uk/policy-261.pdf) and watch the video on [Plagiarism.](https://www.youtube.com/watch?v=2a0QJnCmfEs)
+- Any material included in your coursework should be fully cited and referenced in **APA 7** format. Detailed advice on referencing is available from the [library](https://library.port.ac.uk/w165.html), also see TECFAC 08 Plagiarism and [library.port.ac.uk/referencing](https://library.port.ac.uk/referencing).
+- Any material submitted that does not meet format or submission guidelines or falls outside of the submission deadline could be subject to a cap on your overall result or disqualification entirely.
+- If you need additional assistance, you can ask your personal tutor, student engagement officer [ana.baker@port.ac.uk](mailto:ana.baker@port.ac.uk) or your lecturers.
+- If you are concerned about your well-being, contact our [Well-being service](https://myport.port.ac.uk/guidance-and-support/health-and-wellbeing)
 
 ## Overview
 
@@ -46,9 +46,9 @@ You must already have a GitHub account to be able to start this coursework, and 
 
 You need:
 
-* A GitHub account
-* A way to edit and run Flutter projects
-* Git installed and connected to your GitHub account
+- A GitHub account
+- A way to edit and run Flutter projects
+- Git installed and connected to your GitHub account
 
 Follow the [development environment instructions in Worksheet 1](https://manighahrmani.github.io/sandwich_shop/worksheet-1.html). You can use your own device or access the university machines remotely.
 
@@ -127,17 +127,19 @@ Finally, choose a phone-sized device preset from the dropdown menu:
 
 ![Selecting a mobile device preset](images/1/step5_mobile_view.png)
 
-## Assessment Structure
+## Assessment structure
 
-Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments. This Southsea Cinema coursework is **Item 1**, worth **50% of the overall module mark**. Item 1 is assessed as a portfolio, not as a single submission: you build the app in five stages and demonstrate each stage to a member of staff during a timetabled demo window.
+Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments. This Southsea Cinema coursework is Item 1, worth 50% of the overall module mark. Item 1 is assessed as a portfolio, not as a single submission: you build the app in five stages and demonstrate each stage to a member of staff during a timetabled demo window in your practical session.
 
-You must submit the link to your public GitHub repository on Moodle before the first demo, then attend your timetabled practical session to demo your work. Marks are awarded only at the demos.
+You develop your coursework by completing the exercises at the end of each weekly worksheet. Every two worksheets prepare you for one demo (for example, Worksheets 1 and 2 prepare you for Demo 1). You submit the link to your public GitHub repository on Moodle before the first demo, then attend your practical to demonstrate your work. Marks are awarded only at the demos.
 
-Summary of how the marks work:
+There are five demos across the term, but only your best four demo marks count towards Item 1. Each counted demo is worth 25% of Item 1 (12.5% of the overall module mark). At each demo a member of staff assesses functionality (9% of Item 1) by watching you run your app, inspects code quality (8%), and asks two questions to test your understanding of your own code (8%).
 
-* There are five demos, but only your best four count towards Item 1. The fifth demo is a safety net, so you can miss (or do poorly on) one demo without harming your mark.
-* Each demo is worth 25% of Item 1 (12.5% of the module). At each demo a member of staff assesses Functionality (9% of Item 1) by watching you run your app, inspects Code quality (8%), and asks you two questions to test your understanding of your own code (8%).
-* Only one demo can take place per window. If you miss a demo, you demonstrate the missed stage at the next window (you lose that window's slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at 75% of Item 1 (37.5% of the module), and so on.
+Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks 3 and 4, Weeks 5 and 6, Weeks 7 and 8, and Weeks 9 and 10). Three rules apply:
+
+- You can perform at most one demo in any demo window.
+- Demos must be completed in order. You cannot skip ahead to a later demo if you have missed an earlier one, because each stage builds on the previous codebase.
+- Missing one demo window carries no mark penalty because only your best four demo marks count. Missing two or more windows reduces the number of demos you can complete.
 
 ⚠️ You will only receive marks if you attend your timetabled practical. You cannot get marks in practicals at a different time to what is shown on your timetable.
 
@@ -160,7 +162,7 @@ flutter pub get
 flutter run -d chrome
 ```
 
-## Project Structure
+## Project structure
 
 The starter repository is intentionally small:
 
@@ -170,7 +172,8 @@ southsea_cinema/
 │   ├── constants.dart          # Shared colours, text styles, and app title
 │   ├── main.dart               # Main app and route setup
 │   ├── views/
-│   │   └── home_view.dart      # Starter home page
+│   │   ├── home_view.dart      # Starter home page
+│   │   └── movie_listing.dart  # Empty movie listing page
 │   └── widgets/
 │       └── nav_drawer.dart     # Minimal starter drawer
 ├── test/

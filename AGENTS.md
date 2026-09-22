@@ -174,6 +174,15 @@ structure. When you create or edit a lecture, enforce all of the following.
   the lecturer says and to the worksheets. Follow the same house writing style
   as the worksheets (plain headings, British spelling, no decorative emojis).
 
+### Canonical external links
+
+Only use these canonical links when linking to module documents or services:
+
+- Discord guide presentation: `https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU`
+  Never use any older or alternate SharePoint link for the Discord guide.
+- Assessment guide document: `https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc`
+- Southsea Cinema coursework brief document: `https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw`
+
 ### Style enforcement
 
 Style is enforced automatically and runs in pre-commit and CI:

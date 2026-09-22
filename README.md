@@ -20,17 +20,17 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 
 | Week Commencing | Week Ending | Worksheet | Lecture | Demo window |
 | --------------- | ----------- | --------- | ------- | ----------- |
-| 21/09/2026 | 25/09/2026 | [Worksheet 1](./worksheet-1.md) | [Lecture 1](https://docs.google.com/presentation/d/1pyvggQEIMmAbENbYI8Z2-79JraSurikkEBGXT8QdxRs/edit?usp=sharing) | Demo 1 |
-| 28/09/2026 | 02/10/2026 | [Worksheet 2](./worksheet-2.md) | [Lecture 2](https://docs.google.com/presentation/d/1K2GpWchPcWoec_GMyueHftuglxOU9aHjnAF1eO4Sfys/edit?usp=sharing) | Demo 1 |
-| 05/10/2026 | 09/10/2026 | Worksheet 3 | Lecture 3 | Demo 2 |
-| 12/10/2026 | 16/10/2026 | Worksheet 4 | Lecture 4 | Demo 2 |
-| 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo 3 |
+| 21/09/2026 | 25/09/2026 | [Worksheet 1](./worksheet-1.md) | [Lecture 1](https://docs.google.com/presentation/d/1pyvggQEIMmAbENbYI8Z2-79JraSurikkEBGXT8QdxRs/edit?usp=sharing) | Demo Window 1 |
+| 28/09/2026 | 02/10/2026 | [Worksheet 2](./worksheet-2.md) | [Lecture 2](https://docs.google.com/presentation/d/1K2GpWchPcWoec_GMyueHftuglxOU9aHjnAF1eO4Sfys/edit?usp=sharing) | Demo Window 1 |
+| 05/10/2026 | 09/10/2026 | Worksheet 3 | Lecture 3 | Demo Window 2 |
+| 12/10/2026 | 16/10/2026 | Worksheet 4 | Lecture 4 | Demo Window 2 |
+| 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo Window 3 |
 | 26/10/2026 | 30/10/2026 | Reading week (break) | | |
-| 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo 3 |
-| 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo 4 |
-| 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo 4 |
-| 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo 5 |
-| 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | Demo 5 |
+| 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo Window 3 |
+| 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo Window 4 |
+| 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo Window 4 |
+| 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo Window 5 |
+| 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | Demo Window 5 |
 | 21/12/2026 | 08/01/2027 | Xmas Break | | |
 | 11/01/2027 | 15/01/2027 | Marking week | | |
 | 18/01/2027 | 19/02/2027 | Term 2 | | |
@@ -53,17 +53,17 @@ Each week has a worksheet and a lecture. You should aim to complete the workshee
 
 This part of the module, which runs through Teaching Block 1 (TB1), is listed as Item 1 in the module specification. Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has two assessments; Item 1 is worth **50% of the overall module mark**.
 
-Item 1 is assessed as series of live demos of your coursework (see the schedule above for dates), which you build in stages. You submit the link to your public GitHub repository on Moodle and then demonstrate your work at the timetabled demo windows.
+Item 1 is assessed as a portfolio of five live in-person demos of your coursework app. You build the app progressively by completing the exercises at the end of each weekly worksheet. Every two worksheets prepare you for one demo (for example, Worksheets 1 and 2 prepare you for Demo 1). You submit the link to your public GitHub repository on Moodle and then demonstrate your work in class during your timetabled practical sessions.
 
 ### **Demos**
 
-There are five demos, but only your best four count towards Item 1 — so you can miss (or score poorly on) one demo without harming your mark. Each demo is worth 25% of Item 1 (12.5% of the module) and is assessed on three things:
+There are five demos across the term, but only your best four demo marks count towards Item 1. Each counted demo is worth 25% of Item 1 (12.5% of the overall module mark). Each demo is assessed on functionality (9% of Item 1), code quality (8%), and your understanding through two questions about your own code (8%).
 
-- Functionality (9% of Item 1): you run your app and show it implements the features expected by this stage stated in the worksheets.
-- Quality (8% of Item 1): code quality on inspection (naming, formatting, refactoring, structuring and so on).
-- Understanding (8% of Item 1): your answers to two questions about your own code and decisions.
+Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks 3 and 4, Weeks 5 and 6, Weeks 7 and 8, and Weeks 9 and 10). Three rules apply:
 
-Only one demo can take place per window. If you miss a demo, you demonstrate the missed stage at the next window (losing that slot). Missing one demo does not harm your mark; missing two caps your Item 1 mark at 75% of Item 1 (37.5% of the module), and so on.
+- You can perform at most one demo in any demo window.
+- Demos must be completed in order. You cannot skip ahead to a later demo if you have missed an earlier one, because each stage builds on the previous codebase.
+- Missing one demo window carries no mark penalty because only your best four demo marks count. Missing two or more windows reduces the number of demos you can complete.
 
 ⚠️ You will only receive marks if you attend your timetabled practical. You cannot get marks in practicals at a different time to what is shown on your timetable.
 
@@ -71,7 +71,7 @@ For the full detailed explanation of the assessment read the [Assessment Guide](
 
 ### **Coursework brief**
 
-The coursework brief can be found on [this page](https://manighahrmani.github.io/sandwich_shop/southsea_cinema_coursework_brief.html). A Word copy can be downloaded from [here on OneDrive](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw?e=gD920R).
+The coursework brief can be downloaded as a Word document from [OneDrive](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw?e=gD920R).
 
 ### **Referral/Deferral Assessment**
 

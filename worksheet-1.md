@@ -283,7 +283,7 @@ Once you have clicked on commit and then sync changes, you should be able to see
 
 ## Exercises
 
-From this point onwards, the exercises in each worksheet direct you to work on your Southsea Cinema coursework. The exercises in this worksheet prepare you for Demo 1 (by Friday 2 October 2026). Refer to the formal [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) for the assessment requirements. You must demonstrate your work for a sign-off during your own timetabled practical session; not all sessions are on a Friday, so check your timetable.
+From this point onwards, the exercises in each worksheet direct you to work on your Southsea Cinema coursework. The exercises in this worksheet prepare you for Demo 1 (during Demo Window 1). Refer to the formal [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) for the assessment requirements. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
 1. Open the [Southsea Cinema starter repository](https://github.com/manighahrmani/southsea_cinema#fork-the-repository) and follow its README from Fork the Repository onwards. Fork the repository into your own GitHub account, then clone your fork onto your computer or a university machine.
 

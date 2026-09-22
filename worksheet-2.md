@@ -679,7 +679,7 @@ Commit your final changes with a message like `Add interactivity with setState`.
 
 ## Exercises
 
-As in Worksheet 1, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 1 exercises, prepare you for Demo 1 (by Friday 2 October 2026). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. You must demonstrate your work for a sign-off during your own timetabled practical session.
+As in Worksheet 1, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 1 exercises, prepare you for Demo 1 (during Demo Window 1). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
 The fork of the `southsea_cinema` repo that you have already made (in Worksheet 1) has a `lib/views` folder. This folder contains two pages. `home_view.dart` is the home page shown when the app starts, and `movie_listing.dart` is the movie listing page you will build.
 

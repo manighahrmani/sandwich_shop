@@ -7,8 +7,11 @@ Item 1, and it is worth 50% of the overall module mark. The other 50% (Item 2)
 is assessed separately and is not covered by this guide.
 
 Item 1 is not a single submission. It is a portfolio in which you build the
-Southsea Cinema app in five stages across the teaching block. You demonstrate
-each stage to a member of staff during your timetabled practical session.
+Southsea Cinema app in five stages across the teaching block by completing the
+exercises at the end of each weekly worksheet. Every two worksheets prepare you
+for one demo (for example, Worksheets 1 and 2 prepare you for Demo 1). You
+demonstrate each stage to a member of staff during your timetabled practical
+session.
 
 There are two things you must do.
 
@@ -31,40 +34,30 @@ The app is built in five demos. However, only your best four demo marks count
 towards Item 1.
 
 Each demo is worth 25% of Item 1, which is 12.5% of the overall module. The
-fifth demo is effectively a safety net: it means you will be ok if you can miss
-one, or score poorly in one.
+fifth demo is effectively a safety net: it means you can miss one, or score
+poorly in one, without harming your mark.
 
 At each demo you run your app and a member of staff assesses three things. The
-percentages below are shares of Item 1.
+percentages below are shares of Item 1:
 
 - Functionality is worth 9%: you run your app and show that it implements the
-  features expected for this stage.
+  features expected for this stage from the worksheet exercises.
 - Code quality is worth 8%: a member of staff inspects your code, looking at
-  naming and formatting early on, and structure and separation of concerns
-  later.
+  naming, formatting, structure, and separation of concerns.
 - Understanding is worth 8%: you answer two questions about your own code and
   the decisions behind it.
 
-## Missing a demo
+## Demo windows and missing a demo
 
-Each stage must be demonstrated in its own window, and only one demo can take
-place per window for a given student. You cannot catch up by doing two demos in
-a single window.
+Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks
+3 and 4, Weeks 5 and 6, Weeks 7 and 8, and Weeks 9 and 10). Three rules apply:
 
-If you miss one demo, then at the next window you demonstrate the demo you
-missed rather than the demo that window would normally cover. In effect you
-lose the chance to do one demo, but because only your top four of five demos
-count, missing a single demo does not harm your Item 1 mark, since you can
-still complete four demos.
-
-If you miss a second demo, you have now missed the windows for two demos, and
-because you can only do one demo per window, you cannot recover both. You will
-be able to complete at most three demos. Your Item 1 mark is therefore capped
-at three times 25%, which is 75% of Item 1, or a maximum of 37.5% of the
-overall module.
-
-Each further missed demo reduces the number of demos you can complete, and
-therefore your maximum Item 1 mark, in the same way.
+- You can perform at most one demo in any demo window.
+- Demos must be completed in order. You cannot skip ahead to a later demo if you
+  have missed an earlier one, because each stage builds on the previous codebase.
+- Missing one demo window carries no mark penalty because only your best four demo
+  marks count. Missing two or more windows reduces the number of demos you can
+  complete.
 
 ## Extenuating Circumstances (ECF)
 

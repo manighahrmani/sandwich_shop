@@ -75,7 +75,7 @@ Each 25% demo has a mark for:
 
 Full detail: Assessment Guide.
 
-- Demo 1 window: complete by Friday 2 October 2026.
+- Demo 1 window: Weeks 1 and 2.
 - Extenuating Circumstances: submit an ECF early; email me if approved.
 
 ---
