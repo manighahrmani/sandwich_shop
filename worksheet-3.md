@@ -5,6 +5,10 @@
 - [What you need to know beforehand](#what-you-need-to-know-beforehand)
 - [Getting help](#getting-help)
 - [Getting started](#getting-started)
+  - [Continue from Worksheet 2](#continue-from-worksheet-2)
+  - [Clone the Sandwich Shop repository](#clone-the-sandwich-shop-repository)
+  - [Clean your working tree](#clean-your-working-tree)
+  - [Switch to branch 2](#switch-to-branch-2)
 - [The need for structured data](#the-need-for-structured-data)
 - [Define the Sandwich data model](#define-the-sandwich-data-model)
   - [Create the model class](#create-the-model-class)
@@ -48,13 +52,47 @@ To get support with this worksheet, follow the [Discord guide](https://portdotac
 
 ## Getting started
 
-You can continue directly with the repository you updated in Worksheet 2. Alternatively, switch to branch `2` of the [Sandwich Shop repository](https://github.com/manighahrmani/sandwich_shop/tree/2), which holds the complete solution from Worksheet 2:
+### Continue from Worksheet 2
+
+You can continue directly with the Sandwich Shop project you made in Worksheet 2. Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
+
+### Clone the Sandwich Shop repository
+
+If you do not have the project from Worksheet 2, clone the [Sandwich Shop repository](https://github.com/manighahrmani/sandwich_shop). Open a terminal and move to a folder that is not synchronised to cloud storage, such as your `Downloads` folder:
+
+```bash
+cd ~/Downloads
+git clone https://github.com/manighahrmani/sandwich_shop
+cd sandwich_shop
+```
+
+The `cd` command changes the current folder in the terminal. The first command moves to `Downloads`, and the final command moves into the cloned `sandwich_shop` folder. Open that folder in VS Code with **File > Open Folder**.
+
+You can also clone the repository without typing terminal commands. Open the Source Control panel, select **Clone Repository**, enter `https://github.com/manighahrmani/sandwich_shop`, choose where to save it, then open the cloned folder, as shown below:
+
+![Cloning the repository from the Source Control panel in VS Code](images/3/clone_from_source_control.png)
+
+### Clean your working tree
+
+This repository opens on the `main` branch, which contains the worksheets rather than the Flutter application. For this worksheet, you need branch `2`, which contains the Sandwich Shop app as it should look after Worksheet 2.
+
+Before switching branches, open the Source Control panel with **Ctrl + Shift + G** on Windows or **⌃ + Shift + G** on macOS and check that there are no uncommitted changes. Commit any work that you want to keep. If you do not want to keep a change, discard it from the Source Control panel, as shown below:
+
+![Discarding uncommitted changes from the Source Control panel in VS Code](images/3/discard_uncommitted_changes.png)
+
+### Switch to branch 2
+
+You can switch branches from the status bar at the bottom of VS Code. Click the current branch name, then select branch `2`, as shown below:
+
+![Selecting branch 2 from the branch menu in the VS Code status bar](images/3/switching_branches.png)
+
+Alternatively, open the integrated terminal from the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS, run **Terminal: Create New Integrated Terminal**, then run:
 
 ```bash
 git checkout 2
 ```
 
-Ensure that your working tree is clean before starting. If you have uncommitted changes from earlier exercises, commit or stash them first. You can open the Source Control panel at any time with **Ctrl + Shift + G** on Windows or **⌃ + Shift + G** on macOS to review your changes.
+The `checkout` command replaces the files in your working folder with the files from branch `2`. Check the status bar now says `2` before continuing. If Git refuses to switch branches, return to the Source Control panel and commit or discard your uncommitted changes first.
 
 ## The need for structured data
 
@@ -579,6 +617,8 @@ Run the app in Chrome and try the full flow:
 2. Tap **Add** a few times to increase the count and watch the emojis appear.
 3. Tap the back arrow in the app bar. The order screen pops off and you return to the menu.
 4. Tap **Order** on the Six-Inch Sub card. You reach an order screen for the six-inch sub, with its own counter starting at zero.
+
+The completed navigation flow should look like this:
 
 ![The OrderScreen displayed in Chrome after navigating from the menu](images/3/order_screen_navigation.png)
 
