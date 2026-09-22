@@ -5,6 +5,10 @@
 - [What you need to know beforehand](#what-you-need-to-know-beforehand)
 - [Getting help](#getting-help)
 - [Getting started](#getting-started)
+  - [Continue from Worksheet 1](#continue-from-worksheet-1)
+  - [Clone the Sandwich Shop repository](#clone-the-sandwich-shop-repository)
+  - [Clean your working tree](#clean-your-working-tree)
+  - [Switch to branch 1](#switch-to-branch-1)
 - [Import the Material Design library](#import-the-material-design-library)
   - [Clean the default code](#clean-the-default-code)
   - [Commit your changes (1)](#commit-your-changes-1)
@@ -52,15 +56,53 @@ To get support with this worksheet, follow the [Discord guide](https://portdotac
 
 ## Getting started
 
-For this worksheet, you can start with the code from branch 1 of our [GitHub repository](https://github.com/manighahrmani/sandwich_shop/tree/1) which should be similar to what you'd have at the end of Worksheet 1. You can either clone the repository and checkout branch 1 by running the following in the terminal (the `checkout` command switches to the specified branch, in this case branch 1):
+### Continue from Worksheet 1
+
+If you completed Worksheet 1 on this computer, you can continue with the Sandwich Shop project you created. Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
+
+### Clone the Sandwich Shop repository
+
+If you do not have the project from Worksheet 1, clone the [Sandwich Shop repository](https://github.com/manighahrmani/sandwich_shop). Open a terminal and move to a folder that is not synchronised to cloud storage, such as your `Downloads` folder:
 
 ```bash
-git clone https://github.com/manighahrmani/sandwich_shop.git
+cd ~/Downloads
+git clone https://github.com/manighahrmani/sandwich_shop
 cd sandwich_shop
+```
+
+The `cd` command changes the current folder in the terminal. The first command moves to `Downloads`, and the final command moves into the cloned `sandwich_shop` folder. Open that folder in VS Code with **File > Open Folder**.
+
+You can also clone the repository without typing terminal commands. Open the Source Control panel, select **Clone Repository**, enter `https://github.com/manighahrmani/sandwich_shop`, choose where to save it, then open the cloned folder, as shown below:
+
+![Cloning the repository from the Source Control panel in VS Code](images/2/clone_from_source_control.png)
+
+### Clean your working tree
+
+GitHub repositories can have different branches. Think of branches as different versions of the project. This repository opens on the `main` branch, which contains the worksheets rather than the Flutter application. For this worksheet, you need branch `1`, which contains the Sandwich Shop app as it should look after Worksheet 1.
+
+Before switching branches, open the Source Control panel with **Ctrl + Shift + G** on Windows or **⌃ + Shift + G** on macOS and check that there are no uncommitted changes. If you have no uncommitted changes, your Source Control panel should look like this:
+
+![Source Control panel with no uncommitted changes in VS Code](images/2/source_control_no_changes.png)
+
+If you have uncommitted changes, commit any work that you want to keep. If you do not want to keep a change, discard it from the Source Control panel, as shown below:
+
+![Discarding uncommitted changes from the Source Control panel in VS Code](images/2/discard_uncommitted_changes.png)
+
+### Switch to branch 1
+
+You can switch branches from the status bar at the bottom of VS Code. Click the current branch name, then select branch `1`, as shown below:
+
+![Selecting branch 1 from the branch menu in the VS Code status bar](images/2/switching_to_branch_1.png)
+
+Alternatively, open the integrated terminal from the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS, run **Terminal: Create New Integrated Terminal**, then run:
+
+```bash
 git checkout 1
 ```
 
-Alternatively, you can continue with the Flutter project you created in Worksheet 1. You should already have a repository in your GitHub account for this project (e.g., `github.com/your-username/sandwich_shop`).
+The `checkout` command replaces the files in your working folder with the files from branch `1`. After it finishes, VS Code should show the Flutter project folders, including `lib` and `web`.
+
+Check the status bar now says `1` before continuing. If Git refuses to switch branches, return to the Source Control panel and commit or discard your uncommitted changes first.
 
 ## Import the Material Design library
 
