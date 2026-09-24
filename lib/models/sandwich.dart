@@ -5,7 +5,7 @@ class Sandwich {
   final double price;
   final String imagePath;
 
-  Sandwich({
+  const Sandwich({
     required this.id,
     required this.name,
     required this.description,
