@@ -21,8 +21,8 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 | Week Commencing | Week Ending | Worksheet | Lecture | Demo window |
 | --------------- | ----------- | --------- | ------- | ----------- |
 | 21/09/2026 | 25/09/2026 | [Worksheet 1](./worksheet-1.md) | [Lecture 1](https://docs.google.com/presentation/d/1pyvggQEIMmAbENbYI8Z2-79JraSurikkEBGXT8QdxRs/edit?usp=sharing) | Demo Window 1 |
-| 28/09/2026 | 02/10/2026 | [Worksheet 2](./worksheet-2.md) | [Lecture 2](https://docs.google.com/presentation/d/1K2GpWchPcWoec_GMyueHftuglxOU9aHjnAF1eO4Sfys/edit?usp=sharing) | Demo Window 1 |
-| 05/10/2026 | 09/10/2026 | [Worksheet 3](./worksheet-3.md) | Lecture 3 | Demo Window 2 |
+| 28/09/2026 | 02/10/2026 | [Worksheet 2](./worksheet-2.md) | [Lecture 2](https://docs.google.com/presentation/d/1HyWI8me8idDz5ixpSXtOs8UvoPlhnZg3Kl6OjnB5_oI/edit?usp=sharing) | Demo Window 1 |
+| 05/10/2026 | 09/10/2026 | [Worksheet 3](./worksheet-3.md) | [Lecture 3](https://docs.google.com/presentation/d/1K2GpWchPcWoec_GMyueHftuglxOU9aHjnAF1eO4Sfys/edit?usp=sharing) | Demo Window 2 |
 | 12/10/2026 | 16/10/2026 | Worksheet 4 | Lecture 4 | Demo Window 2 |
 | 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo Window 3 |
 | 26/10/2026 | 30/10/2026 | Reading week (break) | | |
