@@ -666,16 +666,18 @@ As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema
 
 In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2, your cinema app must show a browseable home page with cards for films that are screening, and a booking button on each card must open the listing page for that film.
 
-1. Create a `Movie` data model in `lib/models/movie.dart` inside your `southsea_cinema` fork. Refer to the [example listing page on the Southsea Cinema website](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/TSelectItems.waSelectItemsPrompt.TcsWebMenuItem_687.TcsWebTab_688.TcsProgramme_26436) (or the movie listing page you built in Worksheet 2) to see what properties a movie needs (such as its title, age rating, synopsis, image, screening time, and price). Define these as `final` fields and provide a constructor with named, `required` parameters.
+1. Create a `Movie` data model in `lib/models/movie.dart` inside your `southsea_cinema` fork. Refer to the [example listing page on the Southsea Cinema website](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/TSelectItems.waSelectItemsPrompt.TcsWebMenuItem_687.TcsWebTab_688.TcsProgramme_26436) (or the movie listing page you built in Worksheet 2) to see what properties a movie needs. Define these as `final` fields and provide a constructor with named, `required` parameters.
 
-2. Create an `assets/images/` folder in your `southsea_cinema` project if you have not already done so. Obtain poster images for the movies you wish to showcase (such as from the Southsea Cinema website or your own favourite films) and place them in this folder. Register `assets/images/` under the `flutter:` section of your `pubspec.yaml`, then run `flutter pub get`.
+2. Download poster images for at least two of your favourite films and place them in `assets/images/`. Remember to register your images in `pubspec.yaml` and run `flutter pub get`.
 
-3. Create a `MovieRepository` class in `lib/repositories/movie_repository.dart`. Add a method that returns a list of mock `Movie` instances populated with sample details and image paths matching the assets you added.
+3. Create a `MovieRepository` that returns a list of `Movie` instances. You should have at least two movies, one for each of your favourite films. Make sure each movie is populated with details and image paths matching the assets you added in the previous question.
 
-4. Create a reusable `MovieCard` widget in `lib/widgets/movie_card.dart`. Display the movie title with age rating, poster image, synopsis, and screening time. Add a booking button and style the card to match the Southsea Cinema website, using the colours and text styles from `lib/constants.dart`.
+4. Create a `MovieCard` that displays the movie and its details similar to how [this page](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/) lists the movies showing in the Southsea Cinema. Add a booking button to each card, and make sure its style matches the Southsea Cinema website (try to use the colours and text styles that are already defined in our fork).
 
-5. Update `lib/views/home_view.dart` to fetch movies from `MovieRepository` and display them in a scrollable list with `ListView.builder`. Your home page should display film cards with poster images and booking buttons as shown below:
+5. Update `lib/views/home_view.dart` to fetch movies from the repository you made in question 3 and display them in a scrollable list with `ListView.builder`. Your home page should look similar to what is shown below (obviously replace the movies shown below with your own favourite films):
 
     ![Southsea Cinema home screen showing film cards with poster images and booking buttons](images/3/southsea_cinema_home_view.png)
 
-6. Refactor `lib/views/movie_listing.dart` to accept a `Movie` object in its constructor and display that movie's details. Connect the booking button in `MovieCard` to navigate to `MovieListing` using `Navigator.push()` with a `MaterialPageRoute`, passing the selected `movie`.
+    Make sure you replace the existing movies (The Phantom of the Opera and Halloween) with your own favourite films, and ensure there are at least two cards leading to their own listing page.
+
+6. Refactor `lib/views/movie_listing.dart` to accept a `Movie` object in its constructor and display that movie's details. When the user taps the booking button on a `MovieCard`, it should navigate to `MovieListing` using `Navigator.push()` with a `MaterialPageRoute`, passing the selected movie so that its details are shown. **Show the running application to a member of staff at your practical session for your sign-off.**
