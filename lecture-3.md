@@ -71,7 +71,7 @@ I need tech news from you! I will provide some of my own.
 ## Demo 2 (footnote)
 
 - Union of Worksheet 3 and Worksheet 4 exercises: home view with movie cards and navigation to dynamic listing.
-- Demonstrate in your own timetabled practical session during Demo Window 2.
+- Demonstrate in your own timetabled practical session.
 - Marked on functionality, code quality, and understanding through two random questions.
 - Commit regularly: frequent, descriptive commits are evaluated as part of your demo quality mark.
 

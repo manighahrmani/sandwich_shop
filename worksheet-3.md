@@ -662,7 +662,7 @@ In the Source Control panel, stage `lib/widgets/sandwich_card.dart` and commit w
 
 ## Exercises
 
-As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 4 exercises, prepare you for Demo 2 (during Demo Window 2). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Be sure to commit your changes regularly as you work through each exercise; small, frequent commits with clear messages are assessed as part of your demo quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
+As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 4 exercises, prepare you for Demo 2. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Be sure to commit your changes regularly as you work through each exercise; small, frequent commits with clear messages are assessed as part of your demo quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
 In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2, your cinema app must show a browseable home page with cards for films that are screening, and a booking button on each card must open the listing page for that film.
 
