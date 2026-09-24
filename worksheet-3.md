@@ -680,4 +680,4 @@ In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2,
 
     Make sure you replace the existing movies (The Phantom of the Opera and Halloween) with your own favourite films, and ensure there are at least two cards leading to their own listing page.
 
-6. Refactor `lib/views/movie_listing.dart` to accept a `Movie` object in its constructor and display that movie's details. When the user taps the booking button on a `MovieCard`, it should navigate to `MovieListing` using `Navigator.push()` with a `MaterialPageRoute`, passing the selected movie so that its details are shown. **Show the running application to a member of staff at your practical session for your sign-off.**
+6. Make each movie card interactive so that clicking or tapping its booking button navigates to that movie's listing page, displaying the details for the selected film.
