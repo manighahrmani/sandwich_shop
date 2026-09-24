@@ -283,7 +283,7 @@ Once you have clicked on commit and then sync changes, you should be able to see
 
 ## Exercises
 
-From this point onwards, the exercises in each worksheet direct you to work on your Southsea Cinema coursework. The exercises in this worksheet prepare you for Demo 1 (during Demo Window 1). Refer to the formal [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) for the assessment requirements. You must demonstrate your work for a sign-off during your own timetabled practical session.
+From this point onwards, the exercises in each worksheet direct you to work on your Southsea Cinema coursework. The exercises in this worksheet prepare you for Demo 1 (during Demo Window 1). Refer to the formal [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) for the assessment requirements. Commit after each exercise. Small, frequent commits with clear messages are required for your demos and form part of your code quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
 1. Open the [Southsea Cinema starter repository](https://github.com/manighahrmani/southsea_cinema#fork-the-repository) and follow its README from Fork the Repository onwards. Fork the repository into your own GitHub account, then clone your fork onto your computer or a university machine.
 
@@ -291,4 +291,4 @@ From this point onwards, the exercises in each worksheet direct you to work on y
 
 3. In `main.dart`, find the `MaterialApp` widget and change its `title` to `Southsea Cinema & Arts Centre`. Save the file while the app is running, then use hot reload to see the updated title without restarting the app. Check the browser tab and confirm that the new title appears.
 
-4. Use VS Code's Source Control view to review and stage your change. Commit it with a clear message such as `Change webpage title`, then push the commit to your fork on GitHub. Open your fork in a browser and confirm that the new commit and code change are visible.
+4. Use VS Code's Source Control view to review and stage your change. Commit it with a clear message such as `Change webpage title`, then push the commit to your fork on GitHub. Open your fork in a browser and confirm that the new commit and code change are visible. Demonstrating a regular commit history with descriptive messages is assessed as part of your demo.
