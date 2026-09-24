@@ -721,7 +721,7 @@ Commit your final changes with a message like `Add interactivity with setState`.
 
 ## Exercises
 
-As in Worksheet 1, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 1 exercises, prepare you for Demo 1 (during Demo Window 1). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. You must demonstrate your work for a sign-off during your own timetabled practical session.
+As in Worksheet 1, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 1 exercises, prepare you for Demo 1 (during Demo Window 1). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. Small, frequent commits with clear messages are required for your demos and form part of your code quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
 The fork of the `southsea_cinema` repo that you have already made (in Worksheet 1) has a `lib/views` folder. This folder contains two pages. `home_view.dart` is the home page shown when the app starts, and `movie_listing.dart` is the movie listing page you will build.
 
@@ -766,11 +766,11 @@ Be sure to make a separate commit for each exercise below, and commit more often
     ),
     ```
 
-    The [widget fundamentals tutorial](https://docs.flutter.dev/learn/pathway/tutorial/widget-fundamentals) has a nice walkthrough on `Container`, `BoxDecoration` (for borders and background colours) and passing a `child`. Complete it before attempting this exercise. You may optionally also check out the [Container documentation](https://api.flutter.dev/flutter/widgets/Container-class.html).
+    The [widget fundamentals tutorial](https://docs.flutter.dev/learn/pathway/tutorial/widget-fundamentals) has a nice walkthrough on `Container`, `BoxDecoration` (for borders and background colours) and passing a `child`. Complete it before attempting this exercise. You may optionally also check out the [Container documentation](https://api.flutter.dev/flutter/widgets/Container-class.html). Commit your changes with the message `Add film title and description container`.
 
 2. Arrange the title, the description and the rest of the widgets you will add later in the next exercises using `Column` and `Row` widgets
 
-    For more information, check out the [layout tutorial on the Flutter website](https://docs.flutter.dev/learn/pathway/tutorial/layout) which explains how to position children in a row and a column.
+    For more information, check out the [layout tutorial on the Flutter website](https://docs.flutter.dev/learn/pathway/tutorial/layout) which explains how to position children in a row and a column. Commit your changes with the message `Arrange movie listing layout with Column and Row`.
 
 3. Let the user choose how many tickets they want with a single `DropdownMenu`, offering quantities up to 5. You should try to match the screenshot shown above.
 
@@ -796,11 +796,11 @@ Be sure to make a separate commit for each exercise below, and commit more often
 
     The type in `onSelected: (int? value)` is `int?`, not `int`. The `?` means the value can be an integer or `null` (nothing selected yet), which is why we check `if (value != null)` before using it. If you are unsure about nullable types, see the section on data types in the [Dart software and resources guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAeCWXLehKuTou1gTpjrNKRAcCHcRGxPJSinskA7x1opXg?e=lfIK0S).
 
-    The [DropdownMenu documentation](https://api.flutter.dev/flutter/material/DropdownMenu-class.html) has more details and examples on the widget.
+    The [DropdownMenu documentation](https://api.flutter.dev/flutter/material/DropdownMenu-class.html) has more details and examples on the widget. Commit your changes with the message `Add ticket quantity dropdown menu`.
 
-4. Add an "Add to order" button that gives the user feedback when pressed. There is no basket yet, so it only needs to show some visual feedback (for example, state how many tickets were added to the order).
+4. Add an "Add to order" button that gives the user feedback when pressed. There is no basket yet, so it only needs to show some visual feedback (for example, state how many tickets were added to the order). Commit your changes with the message `Add booking feedback button`.
 
-5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does. The [text and typography documentation](https://docs.flutter.dev/ui/design/text) covers styling text.
+5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does. The [text and typography documentation](https://docs.flutter.dev/ui/design/text) covers styling text. Commit your changes with the message `Style movie listing to match brand constants`.
 
 6. (Advanced) Make your page adapt to the width of the window. A `LayoutBuilder` gives you the available width, so you can show a different layout on narrow and wide windows. For example, in your sandwich shop app you could show the buttons in a `Row` on wide windows and a `Column` on narrow ones:
 
@@ -839,4 +839,4 @@ Be sure to make a separate commit for each exercise below, and commit more often
     ),
     ```
 
-    The [adaptive layout tutorial](https://docs.flutter.dev/learn/pathway/tutorial/adaptive-layout) walks through this approach with `LayoutBuilder`. Resize the browser window to see the layout change.
+    The [adaptive layout tutorial](https://docs.flutter.dev/learn/pathway/tutorial/adaptive-layout) walks through this approach with `LayoutBuilder`. Resize the browser window to see the layout change. Commit your changes with the message `Make movie listing layout adaptive`. Show the running application to a member of staff at your practical session for your Demo 1 sign-off.

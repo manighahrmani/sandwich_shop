@@ -415,7 +415,7 @@ If you made any formatting fixes, stage the updated files and commit them with t
 
 ## Exercises
 
-As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 3 exercises, prepare you for Demo 2 (during Demo Window 2). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. You must demonstrate your work for a sign-off during your own timetabled practical session.
+As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 3 exercises, prepare you for Demo 2 (during Demo Window 2). See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. Small, frequent commits with clear messages are required for your demos and form part of your code quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
 In Worksheet 3 you refactored the Southsea Cinema application to show movie cards on the home page and navigate to the movie listing page. For Demo 2 you must demonstrate that your codebase is backed by passing automated tests and clean static analysis.
 
