@@ -5,32 +5,47 @@
 - [What you need to know beforehand](#what-you-need-to-know-beforehand)
 - [Getting help](#getting-help)
 - [Getting started](#getting-started)
+  - [Continue from Worksheet 3](#continue-from-worksheet-3)
+  - [Clone the Sandwich Shop repository](#clone-the-sandwich-shop-repository)
+  - [Clean your working tree](#clean-your-working-tree)
+  - [Switch to branch 3](#switch-to-branch-3)
 - [Why automated testing matters](#why-automated-testing-matters)
-- [Unit testing with flutter test](#unit-testing-with-flutter-test)
+- [Unit testing data models](#unit-testing-data-models)
   - [Understand unit tests](#understand-unit-tests)
-  - [Create the repository test file](#create-the-repository-test-file)
-  - [Write your first assertion](#write-your-first-assertion)
-  - [Add a second test for the sandwich data](#add-a-second-test-for-the-sandwich-data)
+  - [Add a formatted price getter to the sandwich model](#add-a-formatted-price-getter-to-the-sandwich-model)
+  - [Create the model test file](#create-the-model-test-file)
+  - [Test model property assignment](#test-model-property-assignment)
+  - [Test the formatted price getter](#test-the-formatted-price-getter)
   - [Run unit tests without leaving the editor](#run-unit-tests-without-leaving-the-editor)
   - [Commit your changes (1)](#commit-your-changes-1)
+- [Unit testing repositories](#unit-testing-repositories)
+  - [Create the repository test file](#create-the-repository-test-file)
+  - [Verify sandwich list length](#verify-sandwich-list-length)
+  - [Verify sandwich items and attributes](#verify-sandwich-items-and-attributes)
+  - [Add getSandwichById to SandwichRepository](#add-getsandwichbyid-to-sandwichrepository)
+  - [Test getSandwichById with existing and missing identifiers](#test-getsandwichbyid-with-existing-and-missing-identifiers)
+  - [Commit your changes (2)](#commit-your-changes-2)
 - [Widget testing in Flutter](#widget-testing-in-flutter)
   - [Understand widget tests](#understand-widget-tests)
   - [Prepare the widget test file](#prepare-the-widget-test-file)
-  - [Test initial UI rendering](#test-initial-ui-rendering)
-  - [Commit your changes (2)](#commit-your-changes-2)
-- [Simulating user interaction in tests](#simulating-user-interaction-in-tests)
-  - [Tap buttons with tester tap](#tap-buttons-with-tester-tap)
-  - [Verify state updates and navigation](#verify-state-updates-and-navigation)
+  - [Test OrderItemDisplay in isolation](#test-orderitemdisplay-in-isolation)
   - [Commit your changes (3)](#commit-your-changes-3)
-- [Testing boundary conditions and isolation](#testing-boundary-conditions-and-isolation)
-  - [Test widgets in isolation](#test-widgets-in-isolation)
-  - [Test the minimum and maximum limits](#test-the-minimum-and-maximum-limits)
-  - [Run the whole suite from the Test Explorer](#run-the-whole-suite-from-the-test-explorer)
+  - [Test initial menu screen rendering](#test-initial-menu-screen-rendering)
+  - [Update SandwichCard to use formattedPrice](#update-sandwichcard-to-use-formattedprice)
   - [Commit your changes (4)](#commit-your-changes-4)
-- [Code formatting and static analysis](#code-formatting-and-static-analysis)
+- [Simulating user interaction and navigation](#simulating-user-interaction-and-navigation)
+  - [Test navigating to the order screen](#test-navigating-to-the-order-screen)
+  - [Test adding and removing sandwich items](#test-adding-and-removing-sandwich-items)
+  - [Commit your changes (5)](#commit-your-changes-5)
+- [Testing boundary conditions and isolated screens](#testing-boundary-conditions-and-isolated-screens)
+  - [Test minimum boundary on OrderScreen](#test-minimum-boundary-on-orderscreen)
+  - [Test maximum boundary with maxQuantity](#test-maximum-boundary-with-maxquantity)
+  - [Commit your changes (6)](#commit-your-changes-6)
+- [Running test suites and static analysis](#running-test-suites-and-static-analysis)
+  - [Run the whole suite from the Test Explorer](#run-the-whole-suite-from-the-test-explorer)
   - [Format your code with dart format](#format-your-code-with-dart-format)
   - [Analyse your code with the Dart analyser](#analyse-your-code-with-the-dart-analyser)
-  - [Commit your changes (5)](#commit-your-changes-5)
+  - [Commit your changes (7)](#commit-your-changes-7)
 - [Exercises](#exercises)
 
 ## What you need to know beforehand
@@ -43,13 +58,51 @@ To get support with this worksheet, follow the [Discord guide](https://portdotac
 
 ## Getting started
 
-You can continue directly with the repository you updated in Worksheet 3. Alternatively, switch to branch `3` of the [Sandwich Shop repository](https://github.com/manighahrmani/sandwich_shop/tree/3), which holds the complete solution from Worksheet 3:
+### Continue from Worksheet 3
+
+You can continue directly with the Sandwich Shop project you updated in Worksheet 3. Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
+
+### Clone the Sandwich Shop repository
+
+If you do not have the project from Worksheet 3, clone the [Sandwich Shop repository](https://github.com/manighahrmani/sandwich_shop). Open a terminal and move to a folder that is not synchronised to cloud storage, such as your `Downloads` folder:
+
+```bash
+cd ~/Downloads
+git clone https://github.com/manighahrmani/sandwich_shop
+cd sandwich_shop
+```
+
+The `cd` command changes the current folder in the terminal. The first command moves to `Downloads`, and the final command moves into the cloned `sandwich_shop` folder. Open that folder in VS Code with **File > Open Folder**.
+
+You can also clone the repository without typing terminal commands. Open the Source Control panel, select **Clone Repository**, enter `https://github.com/manighahrmani/sandwich_shop`, choose where to save it, then open the cloned folder, as shown below:
+
+![Cloning the repository from the Source Control panel in VS Code](images/3/clone_from_source_control.png)
+
+### Clean your working tree
+
+This repository opens on the `main` branch, which contains the worksheets rather than the Flutter application. For this worksheet, you need branch `3`, which contains the Sandwich Shop app as it should look after Worksheet 3.
+
+Before switching branches, open the Source Control panel with **Ctrl + Shift + G** on Windows or **⌃ + Shift + G** on macOS and check that there are no uncommitted changes. Commit any work that you want to keep. If you do not want to keep a change, discard it from the Source Control panel, as shown below:
+
+![Discarding uncommitted changes from the Source Control panel in VS Code](images/3/discard_uncommitted_changes.png)
+
+### Switch to branch 3
+
+You can switch branches from the status bar at the bottom of VS Code. Click the current branch name, then select branch `3`, as shown below:
+
+![Selecting branch 2 from the branch menu in the VS Code status bar](images/3/switching_branches.png)
+
+Alternatively, open the integrated terminal from the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS, run **Terminal: Create New Integrated Terminal**, then run:
 
 ```bash
 git checkout 3
 ```
 
-Ensure that your working tree is clean before starting. If you have uncommitted changes from earlier exercises, commit or stash them first. As a reminder, you can open the Source Control panel with **Ctrl + Shift + G** on Windows or **⌃ + Shift + G** on macOS, and open a terminal with **Ctrl + backtick** on either platform.
+The `checkout` command replaces the files in your working folder with the files from branch `3`. Check the status bar now says `3` before continuing. If Git refuses to switch branches, return to the Source Control panel and commit or discard your uncommitted changes first.
+
+This is what you should see when you run your app now:
+
+![The Sandwich Shop app running on branch 3](images/4/app_running_branch_3.png)
 
 ## Why automated testing matters
 
@@ -61,11 +114,11 @@ Automated tests let you describe your expectations in code once. Whenever you ru
 2. **Widget tests:** medium-speed tests that render widgets in a simulated environment to verify layout, text, and gestures.
 3. **Integration tests:** comprehensive tests that run the whole application on a device or in a browser.
 
-In this worksheet we focus on the first two tiers. For the wider picture, skim the [testing overview in the Flutter documentation](https://docs.flutter.dev/testing/overview) and, if you prefer video, browse the [official Flutter video collection](https://docs.flutter.dev/resources/videos) or the [Flutter YouTube channel](https://www.youtube.com/@flutterdev).
+In this worksheet we focus on unit and widget tests. For a broader overview of testing concepts and recipes, read the [testing overview in the Flutter documentation](https://docs.flutter.dev/testing/overview) and browse the [Flutter testing cookbook](https://docs.flutter.dev/cookbook/testing).
 
-## Unit testing with flutter test
+## Unit testing data models
 
-Unit tests verify that non-UI classes behave correctly. In our application, `SandwichRepository` supplies the menu data, so we should confirm it returns valid data before any widget tries to display it.
+Unit tests verify that non-UI classes behave correctly. Data models define the shape of your application data and often include formatting or conversion methods. Testing models early guarantees that the data contracts your screens rely on are sound.
 
 ### Understand unit tests
 
@@ -73,9 +126,132 @@ Flutter re-exports the Dart `test()` function from `package:flutter_test/flutter
 
 To learn more about test structure and matchers, read the [unit testing guide](https://docs.flutter.dev/cookbook/testing/unit/introduction) in the Flutter cookbook.
 
-### Create the repository test file
+### Add a formatted price getter to the sandwich model
+
+In Worksheet 3 we created the `Sandwich` model in `lib/models/sandwich.dart`. At the moment, widgets format the price manually by calling `toStringAsFixed(2)`. Moving that formatting logic into the model itself avoids duplicating code across multiple screens and widgets.
+
+Open `lib/models/sandwich.dart` and add a `formattedPrice` getter to the `Sandwich` class:
+
+```dart
+String get formattedPrice => '£${price.toStringAsFixed(2)}';
+```
+
+Your `lib/models/sandwich.dart` file should now look like this:
+
+```dart
+class Sandwich {
+  final String id;
+  final String name;
+  final String description;
+  final double price;
+  final String imagePath;
+
+  const Sandwich({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.imagePath,
+  });
+
+  String get formattedPrice => '£${price.toStringAsFixed(2)}';
+}
+```
+
+The updated model should look like this in VS Code:
+
+![The Sandwich model with the formattedPrice getter in VS Code](images/4/sandwich_model_code.png)
+
+### Create the model test file
 
 Test files live in the `test/` directory at the root of your project, and their names end with `_test.dart`. The Flutter test runner discovers them automatically by that suffix.
+
+Create a new file named `test/sandwich_model_test.dart`. Start with the imports and an empty `main()`:
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
+
+void main() {}
+```
+
+The `main()` function is the entry point the test runner executes.
+
+### Test model property assignment
+
+Inside `main()`, use `group()` to bundle related tests under one heading, then add a single `test()` that creates a `Sandwich` instance and checks that its constructor assigns each field correctly:
+
+```dart
+void main() {
+  group('Sandwich model tests', () {
+    test('creates Sandwich instance with given properties', () {
+      const sandwich = Sandwich(
+        id: 'veggie',
+        name: 'Veggie Sub',
+        description: 'Loaded with fresh vegetables.',
+        price: 5.25,
+        imagePath: 'assets/images/six_inch.jpeg',
+      );
+
+      expect(sandwich.id, 'veggie');
+      expect(sandwich.name, 'Veggie Sub');
+      expect(sandwich.description, 'Loaded with fresh vegetables.');
+      expect(sandwich.price, 5.25);
+      expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
+    });
+  });
+}
+```
+
+When you pass a literal value such as `'veggie'` or `5.25` to `expect()`, it performs an equality check against the actual value.
+
+### Test the formatted price getter
+
+Now add a second `test()` inside the same group to verify that `formattedPrice` correctly prefixes the price with a pound sign and formats the number to two decimal places:
+
+```dart
+    test(
+        'formattedPrice returns price prefixed with pound sign and two decimals',
+        () {
+      const sandwich = Sandwich(
+        id: 'footlong',
+        name: 'Footlong Sub',
+        description: 'Test description',
+        price: 7.5,
+        imagePath: 'assets/images/footlong.jpeg',
+      );
+
+      expect(sandwich.formattedPrice, '£7.50');
+    });
+```
+
+Because `7.5` only specifies one decimal place, this test confirms that `formattedPrice` correctly pads the price to two decimal places (`£7.50`).
+
+### Run unit tests without leaving the editor
+
+When the Dart and Flutter extensions are installed, a small **Run** and **Debug** CodeLens link appears directly above every `main()`, `group()`, and `test()`. Click **Run** above the group to run all tests in the file. The results appear in the **Test Results** panel with a green tick beside each passing test:
+
+![The Run and Debug CodeLens above a test, and the Test Results panel](images/4/screenshot_running_tests.png)
+
+You can also run the file from the integrated terminal with `flutter test` (open a terminal with **Ctrl + backtick**):
+
+```bash
+flutter test test/sandwich_model_test.dart
+```
+
+Your terminal output should look like this:
+
+![Unit tests for Sandwich model passing in VS Code](images/4/sandwich_model_unit_tests.png)
+
+### Commit your changes (1)
+
+In the Source Control panel, stage `lib/models/sandwich.dart` and `test/sandwich_model_test.dart`, then commit with the message `Add formattedPrice getter to Sandwich model and unit tests`.
+
+## Unit testing repositories
+
+Repositories supply data to the rest of the application. In our project, `SandwichRepository` provides the sandwich menu, so we should confirm it returns valid items and supports querying items by identifier before any widget displays the data.
+
+### Create the repository test file
 
 Create a new file named `test/sandwich_repository_test.dart`. Start with the imports and an empty `main()`:
 
@@ -87,11 +263,9 @@ import 'package:sandwich_shop/repositories/sandwich_repository.dart';
 void main() {}
 ```
 
-The `main()` function is the entry point the test runner executes.
+### Verify sandwich list length
 
-### Write your first assertion
-
-Inside `main()`, use `group()` to bundle related tests under one heading, then add a single `test()` that checks the repository returns two sandwiches:
+Inside `main()`, declare a test group and write a test checking that `getSandwiches()` returns a list with two items:
 
 ```dart
 void main() {
@@ -106,26 +280,13 @@ void main() {
 }
 ```
 
-Here `2` is used as a matcher directly. When you pass a plain value to `expect`, it is treated as an equality check, so this asserts that the list length equals two.
+This verifies that the repository returns the expected number of items.
 
-### Add a second test for the sandwich data
+### Verify sandwich items and attributes
 
-A count on its own does not prove the data is correct. Add a second `test()` inside the same group that inspects the two sandwiches and verifies their identifiers, names, and prices:
+A count on its own does not confirm the data is correct. Add a second `test()` inside the group that inspects the two sandwiches and verifies their identifiers, names, prices, and image paths:
 
 ```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/repositories/sandwich_repository.dart';
-
-void main() {
-  group('SandwichRepository unit tests', () {
-    test('getSandwiches returns two sandwiches', () {
-      final SandwichRepository repository = SandwichRepository();
-      final List<Sandwich> sandwiches = repository.getSandwiches();
-
-      expect(sandwiches.length, 2);
-    });
-
     test('getSandwiches contains valid Footlong and Six-Inch subs', () {
       final SandwichRepository repository = SandwichRepository();
       final List<Sandwich> sandwiches = repository.getSandwiches();
@@ -142,57 +303,90 @@ void main() {
       expect(sixInch.price, 4.50);
       expect(sixInch.imagePath, isNotEmpty);
     });
-  });
-}
 ```
 
-The `isNotEmpty` matcher is one of many named matchers Flutter provides; it passes when the string has at least one character. These tests run pure Dart, so they never build a widget.
+The `isNotEmpty` matcher is provided by `package:flutter_test/flutter_test.dart`; it passes when the string has at least one character.
 
-Your `test/sandwich_repository_test.dart` file should look like this in VS Code:
+### Add getSandwichById to SandwichRepository
 
-![Unit tests for SandwichRepository in VS Code](images/4/sandwich_repository_unit_tests.png)
+Applications often need to look up a specific item by its identifier. Let's add a `getSandwichById()` method to `SandwichRepository`.
 
-### Run unit tests without leaving the editor
+Open `lib/repositories/sandwich_repository.dart`. Inside the `SandwichRepository` class, add the following method below `getSandwiches()`:
 
-You can run tests from the terminal, but VS Code gives you faster feedback. When the Dart and Flutter extensions are installed, a small **Run** and **Debug** pair of links (a CodeLens) appears directly above every `main()`, `group()`, and `test()`. Click **Run** above the group to run just that group, or above a single `test()` to run only that case. The results appear in the **Test Results** panel with a green tick beside each passing test:
+```dart
+  Sandwich? getSandwichById(String id) {
+    for (final sandwich in getSandwiches()) {
+      if (sandwich.id == id) {
+        return sandwich;
+      }
+    }
+    return null;
+  }
+```
 
-![The Run and Debug CodeLens above a test, and the Test Results panel](images/4/screenshot_running_tests.png)
+The return type `Sandwich?` indicates that the method may return `null` if no sandwich matches the provided identifier.
 
-For the equivalent in the terminal, execute `flutter test` targeting your new file (open a terminal with **Ctrl + backtick**):
+### Test getSandwichById with existing and missing identifiers
+
+Now return to `test/sandwich_repository_test.dart` and add two new tests to verify both the successful search and the missing item cases:
+
+```dart
+    test('getSandwichById returns matching sandwich when id exists', () {
+      final SandwichRepository repository = SandwichRepository();
+      final Sandwich? sandwich = repository.getSandwichById('footlong');
+
+      expect(sandwich, isNotNull);
+      expect(sandwich?.name, 'Footlong Sub');
+      expect(sandwich?.price, 7.50);
+    });
+
+    test('getSandwichById returns null when id does not exist', () {
+      final SandwichRepository repository = SandwichRepository();
+      final Sandwich? sandwich = repository.getSandwichById('non-existent');
+
+      expect(sandwich, isNull);
+    });
+```
+
+The `isNotNull` and `isNull` matchers confirm that optional return values match the expected presence or absence of data.
+
+Run the repository unit tests from the terminal:
 
 ```bash
 flutter test test/sandwich_repository_test.dart
 ```
 
-You should see output confirming that both tests passed:
+You should see output confirming that all four repository tests passed:
 
 ```text
 00:00 +0: SandwichRepository unit tests getSandwiches returns two sandwiches
 00:00 +1: SandwichRepository unit tests getSandwiches contains valid Footlong and Six-Inch subs
-00:00 +2: All tests passed!
+00:00 +2: SandwichRepository unit tests getSandwichById returns matching sandwich when id exists
+00:00 +3: SandwichRepository unit tests getSandwichById returns null when id does not exist
+00:00 +4: All tests passed!
 ```
 
 Your terminal output should look like this:
 
 ![Terminal output showing passing unit tests](images/4/unit_tests_terminal_output.png)
 
-### Commit your changes (1)
+### Commit your changes (2)
 
-Stage `test/sandwich_repository_test.dart` and commit your changes with the message `Add unit tests for SandwichRepository`.
+In the Source Control panel, stage `lib/repositories/sandwich_repository.dart` and `test/sandwich_repository_test.dart`, then commit with the message `Add getSandwichById method and unit tests for SandwichRepository`.
 
 ## Widget testing in Flutter
 
-While unit tests check data and logic, widget tests verify that widgets look and behave as expected.
+While unit tests check data models and repository methods, widget tests verify that widgets look and behave as expected.
 
 ### Understand widget tests
 
 Widget tests use `testWidgets()` instead of `test()`. The test callback receives a `WidgetTester` object that can render widgets, search the widget tree for elements, simulate taps, and advance time frame by frame.
 
-For an overview of the concepts, read the [widget testing guide](https://docs.flutter.dev/cookbook/testing/widget/introduction) in the Flutter cookbook.
+For a detailed introduction, read the [widget testing guide](https://docs.flutter.dev/cookbook/testing/widget/introduction) and the [finding widgets in a test](https://docs.flutter.dev/cookbook/testing/widget/finders) recipe in the Flutter documentation.
 
 ### Prepare the widget test file
 
-Open the existing `test/widget_test.dart`. It still contains the counter test generated when the project was created. Replace its entire contents with the imports we need and an empty `main()`:
+Open the existing `test/widget_test.dart`. Replace its entire contents with the imports we need and an empty `main()`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -205,18 +399,70 @@ import 'package:sandwich_shop/screens/order_screen.dart';
 void main() {}
 ```
 
-We import `package:flutter/material.dart` because a later test wraps a screen in a `MaterialApp`, and we import the model and both screens because the tests reference them by type. Adding every import now means we do not have to interrupt the flow later.
+We import `package:flutter/material.dart` so we can wrap individual widgets in a `MaterialApp`, and we import our screens and models so tests can reference them by type.
 
-### Test initial UI rendering
+### Test OrderItemDisplay in isolation
 
-The `tester.pumpWidget()` method tells Flutter to build and render a widget into the test environment. Because rendering is asynchronous, you must `await` it. Add a `group()` with two tests that confirm the app opens on `MenuScreen` and shows both sandwich cards:
+A key advantage of widget testing is that you do not need to launch the entire application to test an individual widget. You can pump any widget directly inside a `MaterialApp` and `Scaffold`.
+
+Let's test `OrderItemDisplay` from `lib/screens/order_screen.dart` in isolation. Add a test group with two tests verifying that zero sandwiches show no emoji and three sandwiches display three emojis:
 
 ```dart
 void main() {
+  group('OrderItemDisplay widget tests', () {
+    testWidgets('displays zero sandwiches with no emoji',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: OrderItemDisplay(0, 'Footlong Sub'),
+          ),
+        ),
+      );
+
+      expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
+    });
+
+    testWidgets('displays three sandwiches with three emojis',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: OrderItemDisplay(3, 'Footlong Sub'),
+          ),
+        ),
+      );
+
+      expect(find.text('3 Footlong Sub sandwich(es): 🥪🥪🥪'), findsOneWidget);
+    });
+  });
+}
+```
+
+The `tester.pumpWidget()` method renders the widget hierarchy in the test environment. Because rendering is asynchronous, you must `await` it.
+
+Run the test file from the terminal or using the CodeLens link above the group:
+
+```bash
+flutter test test/widget_test.dart
+```
+
+Both isolated tests should pass, as shown below:
+
+![Widget tests for OrderItemDisplay in VS Code](images/4/order_item_display_widget_tests.png)
+
+### Commit your changes (3)
+
+In the Source Control panel, stage `test/widget_test.dart` and commit your changes with the message `Add isolated widget tests for OrderItemDisplay`.
+
+### Test initial menu screen rendering
+
+Now let's test the main menu screen when the entire application launches. Add a second test group named `App smoke tests` inside `main()` with two tests:
+
+```dart
   group('App smoke tests', () {
     testWidgets('App displays MenuScreen as home', (WidgetTester tester) async {
       await tester.pumpWidget(const App());
-
       expect(find.byType(MenuScreen), findsOneWidget);
       expect(find.text('Sandwich Menu'), findsOneWidget);
     });
@@ -224,7 +470,6 @@ void main() {
     testWidgets('Displays sandwich cards with names and prices',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
-
       expect(find.text('Footlong Sub'), findsOneWidget);
       expect(find.text('£7.50'), findsOneWidget);
       expect(find.text('Six-Inch Sub'), findsOneWidget);
@@ -232,165 +477,203 @@ void main() {
       expect(find.text('Order'), findsNWidgets(2));
     });
   });
-}
 ```
 
-The `find.text()` finder searches the rendered tree for a string, while `find.byType()` searches for a widget class. The matchers `findsOneWidget` and `findsNWidgets(2)` assert how many matches are expected.
+The `find.text()` finder searches the rendered tree for specific text, while `find.byType()` searches for a widget by its class. The matchers `findsOneWidget` and `findsNWidgets(2)` assert the exact number of matching elements.
 
-Run the file with the **Run** CodeLens above the group, or from the terminal with `flutter test test/widget_test.dart`. Both tests should pass. Your test file should look like this:
+### Update SandwichCard to use formattedPrice
+
+Earlier we added `formattedPrice` to `Sandwich`. Open `lib/widgets/sandwich_card.dart` and replace `Text('£${sandwich.price.toStringAsFixed(2)}')` with `sandwich.formattedPrice`:
+
+```dart
+Text(
+  sandwich.formattedPrice,
+  style: const TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  ),
+),
+```
+
+Run `flutter test test/widget_test.dart` to verify that both tests still pass. Your test results should look like this:
 
 ![Widget tests for initial menu rendering in VS Code](images/4/widget_tests_initial_rendering.png)
 
-### Commit your changes (2)
+### Commit your changes (4)
 
-Stage `test/widget_test.dart` and commit your changes with the message `Add widget tests for MenuScreen and sandwich cards`.
+In the Source Control panel, stage `lib/widgets/sandwich_card.dart` and `test/widget_test.dart`, then commit with the message `Add widget tests for MenuScreen and sandwich cards`.
 
-## Simulating user interaction in tests
+## Simulating user interaction and navigation
 
-Widget testing is at its most useful when you simulate user actions such as tapping buttons and then verify what changed on the screen.
+Widget testing is particularly valuable when you simulate user actions such as tapping buttons and verify how the interface responds.
 
-### Tap buttons with tester tap
+The `tester.tap()` method simulates a touch on any widget located by a finder. After triggering an interaction that calls `setState()` or initiates navigation, you must pump a new frame so the changes render.
 
-The `tester.tap()` method simulates a touch on any widget matched by a finder. After a tap that changes state or navigates, you must pump at least one new frame so the change is rendered.
+Two methods pump frames:
 
-Two methods pump frames. `tester.pump()` renders a single frame, which is enough after a `setState()` call. `tester.pumpAndSettle()` keeps rendering frames until all animations, transitions, and timers finish; you need it after `Navigator.push()` because the route transition animates over several frames.
+- `tester.pump()`: renders a single frame, which is sufficient after calling `setState()`.
+- `tester.pumpAndSettle()`: repeatedly renders frames until all animations, route transitions, and timers finish. You must use `pumpAndSettle()` after calling `Navigator.push()` because route transitions animate over multiple frames.
 
-### Verify state updates and navigation
+For more details on gesture simulation, review the [handling taps and gestures](https://docs.flutter.dev/cookbook/testing/widget/tap-drag) recipe in the Flutter documentation.
 
-Add a third `testWidgets()` inside the same group. It taps the first **Order** button, confirms the order screen opens with the chosen sandwich, and exercises the **Add** and **Remove** buttons:
+### Test navigating to the order screen
+
+Add a third test inside the `App smoke tests` group that taps the **Order** button on the first sandwich card and confirms navigation:
 
 ```dart
-testWidgets('Tapping Order navigates to OrderScreen with selected sandwich',
-    (WidgetTester tester) async {
-  await tester.pumpWidget(const App());
+    testWidgets('Tapping Order navigates to OrderScreen with selected sandwich',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
 
-  // Tap the Order button on the first card, then let the route settle.
-  await tester.tap(find.text('Order').first);
-  await tester.pumpAndSettle();
+      await tester.tap(find.text('Order').first);
+      await tester.pumpAndSettle();
 
-  // The OrderScreen opened with the Footlong Sub details.
-  expect(find.byType(OrderScreen), findsOneWidget);
-  expect(find.text('Order Footlong Sub'), findsOneWidget);
-  expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
-
-  // Add increments the counter; a single pump is enough after setState.
-  await tester.tap(find.text('Add'));
-  await tester.pump();
-  expect(find.text('1 Footlong Sub sandwich(es): 🥪'), findsOneWidget);
-
-  // Remove decrements it again.
-  await tester.tap(find.text('Remove'));
-  await tester.pump();
-  expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
-});
+      expect(find.byType(OrderScreen), findsOneWidget);
+      expect(find.text('Order Footlong Sub'), findsOneWidget);
+      expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
+    });
 ```
 
-Because you imported `OrderScreen` when you prepared the file, this test needs no new imports. Run the file again and notice the runner verifies navigation, argument passing, and state updates in under a second.
+Because `find.text('Order')` finds two buttons (one per card), `.first` selects the button on the first card. `await tester.pumpAndSettle()` ensures the slide animation completes before assertions run.
 
-Your test file should look like this:
+### Test adding and removing sandwich items
+
+Now expand that same test to tap the **Add** and **Remove** buttons on `OrderScreen`, verifying that the quantity and emojis update accordingly:
+
+```dart
+    testWidgets('Tapping Order navigates to OrderScreen with selected sandwich',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+
+      await tester.tap(find.text('Order').first);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(OrderScreen), findsOneWidget);
+      expect(find.text('Order Footlong Sub'), findsOneWidget);
+      expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
+
+      await tester.tap(find.text('Add'));
+      await tester.pump();
+      expect(find.text('1 Footlong Sub sandwich(es): 🥪'), findsOneWidget);
+
+      await tester.tap(find.text('Remove'));
+      await tester.pump();
+      expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
+    });
+```
+
+Here `tester.pump()` renders the frame immediately following each button tap.
+
+Your test file should look like this in VS Code:
 
 ![Widget test simulating user tap and verifying navigation in VS Code](images/4/widget_tests_navigation_interaction.png)
 
-### Commit your changes (3)
+### Commit your changes (5)
 
-Stage `test/widget_test.dart` and commit your work with the message `Test navigation and order counter interactions`.
+In the Source Control panel, stage `test/widget_test.dart` and commit your changes with the message `Test navigation and order counter interactions`.
 
-## Testing boundary conditions and isolation
+## Testing boundary conditions and isolated screens
 
-Good tests verify not only the normal path but also the edges: the smallest and largest values a feature must handle.
+Reliable test suites verify edge cases as well as standard flows. In our app, sandwich quantities must never drop below zero and must never exceed `maxQuantity`.
 
-### Test widgets in isolation
+### Test minimum boundary on OrderScreen
 
-You do not have to launch the whole app to test one screen. You can pump any widget on its own inside a `MaterialApp`, which is why we imported `package:flutter/material.dart` earlier. Isolating the screen also lets you pass in specific configuration, such as a small `maxQuantity`, to reach a boundary quickly.
-
-### Test the minimum and maximum limits
-
-Add two more `testWidgets()` cases inside the group. The first confirms the quantity never drops below zero; the second supplies `maxQuantity: 3` and taps **Add** five times to confirm it never climbs past the ceiling:
+We can test `OrderScreen` in isolation by supplying a sample `Sandwich` directly without loading the full menu. Add a test inside `App smoke tests` confirming that tapping **Remove** when the counter is zero does not drop the quantity into negative numbers:
 
 ```dart
-testWidgets('OrderScreen quantity does not drop below zero',
-    (WidgetTester tester) async {
-  const sandwich = Sandwich(
-    id: 'test',
-    name: 'Test Sub',
-    description: 'Test description',
-    price: 5.0,
-    imagePath: 'assets/images/footlong.png',
-  );
+    testWidgets('OrderScreen quantity does not drop below zero',
+        (WidgetTester tester) async {
+      const sandwich = Sandwich(
+        id: 'test',
+        name: 'Test Sub',
+        description: 'Test description',
+        price: 5.0,
+        imagePath: 'assets/images/footlong.jpeg',
+      );
 
-  await tester.pumpWidget(
-    const MaterialApp(
-      home: OrderScreen(sandwich: sandwich),
-    ),
-  );
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: OrderScreen(sandwich: sandwich),
+        ),
+      );
 
-  await tester.tap(find.text('Remove'));
-  await tester.pump();
-  expect(find.text('0 Test Sub sandwich(es): '), findsOneWidget);
-});
-
-testWidgets('OrderScreen quantity does not exceed maxQuantity',
-    (WidgetTester tester) async {
-  const sandwich = Sandwich(
-    id: 'test',
-    name: 'Test Sub',
-    description: 'Test description',
-    price: 5.0,
-    imagePath: 'assets/images/footlong.png',
-  );
-
-  await tester.pumpWidget(
-    const MaterialApp(
-      home: OrderScreen(sandwich: sandwich, maxQuantity: 3),
-    ),
-  );
-
-  for (int i = 0; i < 5; i++) {
-    await tester.tap(find.text('Add'));
-    await tester.pump();
-  }
-
-  expect(find.text('3 Test Sub sandwich(es): 🥪🥪🥪'), findsOneWidget);
-});
+      await tester.tap(find.text('Remove'));
+      await tester.pump();
+      expect(find.text('0 Test Sub sandwich(es): '), findsOneWidget);
+    });
 ```
 
-Constructing a `Sandwich` here uses the `Sandwich` model you imported when you prepared the file, so again no new import is needed.
+### Test maximum boundary with maxQuantity
+
+Next, add a test that sets `maxQuantity: 3` and taps **Add** five times to verify that the counter caps at three items:
+
+```dart
+    testWidgets('OrderScreen quantity does not exceed maxQuantity',
+        (WidgetTester tester) async {
+      const sandwich = Sandwich(
+        id: 'test',
+        name: 'Test Sub',
+        description: 'Test description',
+        price: 5.0,
+        imagePath: 'assets/images/footlong.jpeg',
+      );
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: OrderScreen(sandwich: sandwich, maxQuantity: 3),
+        ),
+      );
+
+      for (int i = 0; i < 5; i++) {
+        await tester.tap(find.text('Add'));
+        await tester.pump();
+      }
+
+      expect(find.text('3 Test Sub sandwich(es): 🥪🥪🥪'), findsOneWidget);
+    });
+```
+
+The `for` loop simulates five consecutive taps, while the assertion verifies that only three emojis appear.
+
+Your test file should look like this in VS Code:
+
+![Widget tests for boundary conditions in VS Code](images/4/widget_tests_boundary_conditions.png)
+
+### Commit your changes (6)
+
+In the Source Control panel, stage `test/widget_test.dart` and commit your changes with the message `Add isolated boundary tests for OrderScreen`.
+
+## Running test suites and static analysis
+
+Before committing your work or presenting it for a sign-off, always check the entire test suite, code formatting, and static analysis.
 
 ### Run the whole suite from the Test Explorer
 
-VS Code collects every test in the project into the **Testing** view. Open it from the flask icon in the Activity Bar on the left, or with the Command Palette (**Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS) by running **Test: Focus on Test Explorer View**. From there you can run or debug the entire tree with one click and see green ticks or red crosses beside each test, just like the **Test Results** panel you saw earlier.
+VS Code collects every test in the project into the **Testing** view. Open it from the flask icon in the Activity Bar on the left, or with the Command Palette (**Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS) by running **Test: Focus on Test Explorer View**. From there you can run or debug the entire tree with one click and see green ticks beside each test.
 
-For the terminal equivalent, run every test in the project by calling `flutter test` with no arguments:
+To run every test in the project from the terminal, execute `flutter test` with no arguments:
 
 ```bash
 flutter test
 ```
 
-All unit and widget tests across both files should pass, as shown below:
+All unit and widget tests across all test files should pass, as shown below:
 
 ![Terminal output showing all automated unit and widget tests passing](images/4/all_tests_passed_terminal.png)
 
-### Commit your changes (4)
-
-Stage `test/widget_test.dart` and commit your changes with the message `Add isolated boundary tests for OrderScreen`.
-
-## Code formatting and static analysis
-
-Before you commit your work or present it for a sign-off, always check formatting and static analysis. The continuous integration (CI) pipeline that runs on GitHub checks both, so fixing them locally first saves a failed build.
-
 ### Format your code with dart format
 
-Dart ships an official formatter that enforces consistent spacing, indentation, and trailing commas. Run it across your source and test folders to reformat the files in place:
+Dart includes an official formatter that enforces consistent spacing, indentation, and line breaks. Run it across your source and test folders:
 
 ```bash
 dart format lib/ test/
 ```
 
-If the formatter changed any files, stage and commit them. The CI pipeline runs the same formatter in a check-only mode, `dart format --output=none --set-exit-if-changed .`, which changes nothing but fails if any file is not already formatted. You will use that check form in the exercises.
+If the formatter changed any files, stage and commit them.
 
 ### Analyse your code with the Dart analyser
 
-The Dart analyser flags likely bugs, dead code, missing imports, and violations of the rules in `analysis_options.yaml`. Run it across your source and test folders:
+The Dart analyser checks your project for syntax errors, type mismatches, unused imports, and style violations configured in `analysis_options.yaml`. Run it across your source and test folders:
 
 ```bash
 dart analyze lib/ test/
@@ -407,26 +690,30 @@ Your terminal output should look like this:
 
 ![Terminal output showing zero issues from the Dart analyser](images/4/dart_analyze_output.png)
 
-If any warnings or lints appear, resolve them before demonstrating your coursework. To read more about the analyser and how to configure it, see [Customising static analysis](https://dart.dev/tools/analysis) on dart.dev.
+If any warnings or lints appear, resolve them before demonstrating your coursework. To read more about configuring rules, see [customising static analysis](https://dart.dev/tools/analysis) on dart.dev.
 
-### Commit your changes (5)
+### Commit your changes (7)
 
-If you made any formatting fixes, stage the updated files and commit them with the message `Format code with dart format`.
+If you made any formatting fixes, stage the updated files and commit them with the message `Format code and verify static analysis`.
 
 ## Exercises
 
-As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 3 exercises, prepare you for Demo 2. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. Small, frequent commits with clear messages are required for your demos and form part of your code quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
+As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 3 exercises, prepare you for Demo 2. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Be sure to commit your changes regularly as you work through each exercise; small, frequent commits with clear messages are assessed as part of your demo quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
-In Worksheet 3 you refactored the Southsea Cinema application to show movie cards on the home page and navigate to the movie listing page. For Demo 2 you must demonstrate that your codebase is backed by passing automated tests and clean static analysis.
+In Worksheet 3 you refactored the Southsea Cinema application to show movie cards on the home page and navigate to the dynamic listing page. For Demo 2 you must demonstrate that your codebase is backed by passing automated tests and clean static analysis.
 
-1. Create a unit test file named `test/movie_repository_test.dart` inside your `southsea_cinema` fork. Using `group()`, `test()`, and `expect()`, verify that `MovieRepository.getMovies()` returns a list containing the two expected movies (*The Phantom of the Opera* and *Halloween 1978*), that their titles match, and that their ticket prices are positive numbers. Commit your changes with the message `Add unit tests for MovieRepository`.
+1. Create a unit test file named `test/movie_repository_test.dart` inside your `southsea_cinema` fork. Using `group()`, `test()`, and `expect()`, write unit tests that verify `MovieRepository.getMovies()` returns a list containing at least two movies, and that each movie has a non-empty title, a valid age rating, and a ticket price greater than zero.
 
-2. Open `test/widget_test.dart` in your `southsea_cinema` fork and replace its contents. Write a widget test named `Home page displays movie cards and navigates to listing page` using `testWidgets()`. Pump `SouthseaCinemaApp`, verify that the app title and both movie titles appear, find the **BOOK NOW** buttons, tap the first with `tester.tap()`, and call `tester.pumpAndSettle()`. Assert that the movie listing page opened showing the chosen film title and its ticket price. Commit your changes with the message `Add widget tests for HomeView and navigation`.
+2. Create a unit test file named `test/movie_model_test.dart` in your `southsea_cinema` project. Write unit tests verifying that an instantiated `Movie` correctly assigns all fields supplied to its constructor. If your model contains any helper methods or computed properties (such as formatting screening details or prices), add assertions to verify their return values.
 
-3. Run the whole suite from the Test Explorer, or `flutter test` from the root of your `southsea_cinema` project. Ensure that all unit and widget tests pass without failures, as shown below:
+3. In `test/widget_test.dart`, write an isolated widget test for your `MovieCard` widget. Pump the widget inside a `MaterialApp` and `Scaffold`, passing a sample `Movie` instance into it. Verify that the card displays the movie title, age rating, screening time, and the booking button.
+
+4. Expand `test/widget_test.dart` to test the full navigation flow from the home page. Pump `SouthseaCinemaApp`, wait for the widget tree to settle with `tester.pumpAndSettle()`, and verify that the cinema title and film cards appear. Simulate tapping the booking button for one of your films with `tester.tap()`, call `tester.pumpAndSettle()`, and assert that the movie listing page opened displaying the chosen film details.
+
+5. Add an interaction test for the movie listing page that simulates selecting a ticket quantity or adding tickets to an order. Verify that the interface responds as expected (for example, displaying the updated ticket quantity or order message) and test edge cases such as the default initial selection.
+
+6. Run your entire test suite from the terminal with `flutter test` or using the VS Code Test Explorer. Ensure that all unit and widget tests pass with zero failures:
 
     ![Southsea Cinema automated unit and widget tests passing in terminal](images/4/southsea_cinema_tests_passing.png)
 
-4. Run `dart analyze` and the CI check form of the formatter, `dart format --output=none --set-exit-if-changed .`, across your project. Ensure there are zero analyser issues and that the formatter reports no changes. If the formatter does report changes, run `dart format lib/ test/` to fix them, then commit with the message `Format coursework code`.
-
-5. Run your application with `flutter run -d chrome`. Check that the movie cards display their poster images and that tapping **BOOK NOW** opens the dynamic listing page. Show the running application and your passing test suite to a member of staff at your practical session for your Demo 2 sign-off.
+    Run `dart analyze` and `dart format --output=none --set-exit-if-changed .` across your project to confirm that your codebase has zero analyser issues and matches formatting standards. Run your app in Chrome with `flutter run -d chrome`. **Show your running application and passing test suite to a member of staff** for your Demo 2 sign-off.
