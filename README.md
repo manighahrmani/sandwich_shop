@@ -45,9 +45,9 @@ Each week has a worksheet and a lecture. You should aim to complete the workshee
 - [Worksheet 3: Data Models, Repositories, Assets, and In-Page Navigation](./worksheet-3.md)
 - Worksheet 4: Unit and Widget Testing (under revision)
 - Worksheet 5: SQL (under revision)
-- Worksheet 6: AI-Driven Development, App state and Navigation (under revision)
-- Worksheet 7: External services (under revision)
-- Worksheet 8: DevOps (under revision)
+- Worksheet 6: AI-Driven Development, App State and Navigation (under revision)
+- Worksheet 7: External Services (under revision)
+- Worksheet 8: DevOps and Automated/Integration Testing (under revision)
 
 ## **Assessment**
 
