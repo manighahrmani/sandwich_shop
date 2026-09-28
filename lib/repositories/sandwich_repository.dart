@@ -7,17 +7,17 @@ class SandwichRepository {
         id: 'footlong',
         name: 'Footlong Sub',
         description:
-            'A freshly baked 12-inch sandwich filled with savoury ingredients and fresh salad.',
+            'A freshly baked 12-inch sandwich filled with savoury ingredients.',
         price: 7.50,
-        imagePath: 'assets/images/footlong.png',
+        imagePath: 'assets/images/footlong.jpeg',
       ),
       Sandwich(
         id: 'six-inch',
         name: 'Six-Inch Sub',
         description:
-            'A lighter 6-inch sandwich made to order with your favourite toppings.',
+            'A light 6-inch sandwich made with your favourite toppings.',
         price: 4.50,
-        imagePath: 'assets/images/six_inch.png',
+        imagePath: 'assets/images/six_inch.jpeg',
       ),
     ];
   }
