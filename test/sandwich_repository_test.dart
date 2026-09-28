@@ -27,5 +27,21 @@ void main() {
       expect(sixInch.price, 4.50);
       expect(sixInch.imagePath, isNotEmpty);
     });
+
+    test('getSandwichById returns matching sandwich when id exists', () {
+      final SandwichRepository repository = SandwichRepository();
+      final Sandwich? sandwich = repository.getSandwichById('footlong');
+
+      expect(sandwich, isNotNull);
+      expect(sandwich?.name, 'Footlong Sub');
+      expect(sandwich?.price, 7.50);
+    });
+
+    test('getSandwichById returns null when id does not exist', () {
+      final SandwichRepository repository = SandwichRepository();
+      final Sandwich? sandwich = repository.getSandwichById('non-existent');
+
+      expect(sandwich, isNull);
+    });
   });
 }

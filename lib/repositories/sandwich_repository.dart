@@ -21,4 +21,13 @@ class SandwichRepository {
       ),
     ];
   }
+
+  Sandwich? getSandwichById(String id) {
+    for (final sandwich in getSandwiches()) {
+      if (sandwich.id == id) {
+        return sandwich;
+      }
+    }
+    return null;
+  }
 }
