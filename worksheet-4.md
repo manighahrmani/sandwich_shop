@@ -90,7 +90,7 @@ Before switching branches, open the Source Control panel with **Ctrl + Shift + G
 
 You can switch branches from the status bar at the bottom of VS Code. Click the current branch name, then select branch `3`, as shown below:
 
-![Selecting branch 2 from the branch menu in the VS Code status bar](images/3/switching_branches.png)
+![Selecting branch 3 from the branch menu in the VS Code status bar](images/4/switching_branches.png)
 
 Alternatively, open the integrated terminal from the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS, run **Terminal: Create New Integrated Terminal**, then run:
 
@@ -100,65 +100,71 @@ git checkout 3
 
 The `checkout` command replaces the files in your working folder with the files from branch `3`. Check the status bar now says `3` before continuing. If Git refuses to switch branches, return to the Source Control panel and commit or discard your uncommitted changes first.
 
-This is what you should see when you run your app now:
+This is what you should see when you run your app now (note that the images can be different to ours):
 
 ![The Sandwich Shop app running on branch 3](images/4/app_running_branch_3.png)
 
+The order buttons should also take you to the screen that displays the selected sandwich and allows you to add or remove items. See below the order screen for the 6-inch sub:
+
+![The Sandwich Shop order screen for the 6-inch sub](images/4/order_screen.png)
+
 ## Why automated testing matters
 
-As your application grows, manually checking every button and screen after every edit becomes slow and error-prone. A small change to a model or repository can quietly break a screen you forgot to inspect.
+As your application grows, manually checking every button and screen after every edit becomes slow and error-prone (you may also forget to check some). Even a small change to a model or repository can break a screen you forgot to inspect.
 
-Automated tests let you describe your expectations in code once. Whenever you run the tests, the machine verifies every expectation in seconds. Flutter divides tests into three tiers:
+Automated tests let you describe your expectations from your code. Whenever you run the tests, you can verify your code's behaviour in seconds. Flutter divides tests into three tiers:
 
-1. **Unit tests:** fast tests that verify individual functions, methods, or classes in isolation, without starting the Flutter engine.
+1. **Unit tests:** fast tests that verify individual functions, methods, or classes on their own.
 2. **Widget tests:** medium-speed tests that render widgets in a simulated environment to verify layout, text, and gestures.
-3. **Integration tests:** comprehensive tests that run the whole application on a device or in a browser.
+3. **Integration tests:** comprehensive tests that run the whole application and simulate user flows across multiple screens.
 
 In this worksheet we focus on unit and widget tests. For a broader overview of testing concepts and recipes, read the [testing overview in the Flutter documentation](https://docs.flutter.dev/testing/overview) and browse the [Flutter testing cookbook](https://docs.flutter.dev/cookbook/testing).
 
 ## Unit testing data models
 
-Unit tests verify that non-UI classes behave correctly. Data models define the shape of your application data and often include formatting or conversion methods. Testing models early guarantees that the data contracts your screens rely on are sound.
+Unit tests verify that non-UI classes behave correctly. This includes the data models and repositories you created in Worksheet 3.
 
 ### Understand unit tests
 
-Flutter re-exports the Dart `test()` function from `package:flutter_test/flutter_test.dart`. Each test makes one or more assertions with `expect(actual, matcher)`. If the actual value matches the expectation, the test passes; if not, it fails with a diagnostic that names the difference.
+A unit test runs a small piece of code and checks that it produces the result you expect.
 
-To learn more about test structure and matchers, read the [unit testing guide](https://docs.flutter.dev/cookbook/testing/unit/introduction) in the Flutter cookbook.
+```dart
+test('two plus two is four', () {
+  final int result = 2 + 2;
+  expect(result, 4);
+});
+```
+
+In the above code snippet, we have defined a test called "two plus two is four". Inside the test, we calculate `2 + 2` and store the result in a variable `result`. We then use `expect()` to verify that the result equals `4`.
+
+Every test uses the `test()` function. The first argument is a description of what the test checks. The second argument is a function containing the code you want to run.
+
+Inside the test, you use `expect()` to verify a value. The first argument is the actual value your code calculated, and the second argument is the expected value:
+
+```dart
+expect(actual, expected);
+```
+
+If both values match, the test passes. If they do not match, the test fails and reports the difference:
+
+```text
+Expected: 4
+  Actual: 5
+```
+
+Flutter provides `test()` and `expect()` through the `package:flutter_test/flutter_test.dart` library (you need to import it). To learn more about test structure and matchers, read the [unit testing guide](https://docs.flutter.dev/cookbook/testing/unit/introduction) in the Flutter cookbook.
 
 ### Add a formatted price getter to the sandwich model
 
 In Worksheet 3 we created the `Sandwich` model in `lib/models/sandwich.dart`. At the moment, widgets format the price manually by calling `toStringAsFixed(2)`. Moving that formatting logic into the model itself avoids duplicating code across multiple screens and widgets.
 
-Open `lib/models/sandwich.dart` and add a `formattedPrice` getter to the `Sandwich` class:
+Open `lib/models/sandwich.dart` and add a `formattedPrice` getter to the `Sandwich` class. Recall that getters are methods defined without parentheses that return a value. They use the `get` keyword, as shown below. Hopefully you recall how string interpolation works in Dart from [Worksheet 1](worksheet-1.md#introduction-to-the-dart-language):
 
 ```dart
 String get formattedPrice => '£${price.toStringAsFixed(2)}';
 ```
 
 Your `lib/models/sandwich.dart` file should now look like this:
-
-```dart
-class Sandwich {
-  final String id;
-  final String name;
-  final String description;
-  final double price;
-  final String imagePath;
-
-  const Sandwich({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.imagePath,
-  });
-
-  String get formattedPrice => '£${price.toStringAsFixed(2)}';
-}
-```
-
-The updated model should look like this in VS Code:
 
 ![The Sandwich model with the formattedPrice getter in VS Code](images/4/sandwich_model_code.png)
 
@@ -175,11 +181,23 @@ import 'package:sandwich_shop/models/sandwich.dart';
 void main() {}
 ```
 
+Your test file should look like this (pay attention to where it is located in the project tree, it must not be inside the `lib/` folder):
+
+![The sandwich_model_test.dart file in the test folder of the Sandwich Shop project](images/4/sandwich_model_test_file.png)
+
 The `main()` function is the entry point the test runner executes.
 
 ### Test model property assignment
 
-Inside `main()`, use `group()` to bundle related tests under one heading, then add a single `test()` that creates a `Sandwich` instance and checks that its constructor assigns each field correctly:
+Inside `main()`, use `group()` to bundle related tests under one heading:
+
+```dart
+void main() {
+  group('Sandwich model tests', () {});
+}
+```
+
+Open the curly braces of the group and add a single `test()` that creates a `Sandwich` instance:
 
 ```dart
 void main() {
@@ -192,20 +210,34 @@ void main() {
         price: 5.25,
         imagePath: 'assets/images/six_inch.jpeg',
       );
-
-      expect(sandwich.id, 'veggie');
-      expect(sandwich.name, 'Veggie Sub');
-      expect(sandwich.description, 'Loaded with fresh vegetables.');
-      expect(sandwich.price, 5.25);
-      expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
     });
   });
 }
 ```
 
+Now below the `Sandwich` constructor, add the following `expect()` statements to verify that each property was assigned correctly:
+
+```dart
+expect(sandwich.id, 'veggie');
+expect(sandwich.name, 'Veggie Sub');
+expect(sandwich.description, 'Loaded with fresh vegetables.');
+expect(sandwich.price, 5.25);
+expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
+```
+
+This is what your test file should look like now:
+
+![The Sandwich model unit test verifying property assignment in VS Code](images/4/sandwich_model_unit_test.png)
+
+Click on the play button next to the `group()` to run the test. The results will appear in the **Test Results** panel at the bottom of the editor. If the test passes, you will see a green tick next to the test name. If it fails, you will see a red cross and an error message indicating what went wrong. You can also inspect all your tests in the **Testing** view by clicking the flask icon in the Activity Bar on the left.
+
+![The Test Results panel showing a passing unit test in VS Code](images/4/sandwich_model_unit_test_results.png)
+
 When you pass a literal value such as `'veggie'` or `5.25` to `expect()`, it performs an equality check against the actual value.
 
 ### Test the formatted price getter
+
+<!-- TODO: Done till here -->
 
 Now add a second `test()` inside the same group to verify that `formattedPrice` correctly prefixes the price with a pound sign and formats the number to two decimal places:
 
