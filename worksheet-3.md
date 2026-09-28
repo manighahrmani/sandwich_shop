@@ -539,7 +539,7 @@ Think of screens like a stack of plates:
 - When you navigate to a new screen, `Navigator.push()` places that new route on top of the stack. The top route is what the user sees.
 - When the user presses the back button, `Navigator.pop()` removes the top screen from the stack, uncovering the screen underneath.
 
-`MaterialPageRoute` is a modal route that provides platform-appropriate transitions (such as sliding across from the right) and automatically adds a back button to the `AppBar`.
+`MaterialPageRoute` is a modal route that provides platform-appropriate transitions (such as sliding across from the right). You do not need to write code for the back button yourself: the `AppBar` in `OrderScreen` automatically detects when an earlier route exists on the stack, inserts a back arrow icon button, and calls `Navigator.pop()` when tapped.
 
 To read more about navigation, see the [stack-based navigation tutorial](https://docs.flutter.dev/learn/pathway/tutorial/navigation) and the [send data to a new screen recipe](https://docs.flutter.dev/cookbook/navigation/passing-data).
 
@@ -645,7 +645,7 @@ This is what your `SandwichCard` should look like after adding the navigation lo
 
 ![The SandwichCard widget with the Order button navigating to OrderScreen](images/3/sandwich_card_navigation.png)
 
-Make sure you have hot reload enabled so that your changes are reflected immediately in the running application. When the Order button is tapped, `Navigator.push()` pushes a `MaterialPageRoute` onto the navigation stack using the current `BuildContext`. The `builder` function constructs an `OrderScreen`, passing this card's `sandwich` into it.
+Make sure you have hot reload enabled so that your changes are reflected immediately in the running application. When the Order button is tapped, `Navigator.push()` pushes a `MaterialPageRoute` onto the navigation stack using the current `BuildContext`. The `builder` function constructs an `OrderScreen`, passing this card's `sandwich` into it. Notice how the `AppBar` on the new screen displays a back arrow automatically; tapping it calls `Navigator.pop()` to take you back to the menu.
 
 ### Test the complete navigation flow
 
