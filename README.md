@@ -44,10 +44,10 @@ Each week has a worksheet and a lecture. You should aim to complete the workshee
 - [Worksheet 2: Stateless and Stateful Widgets](./worksheet-2.md)
 - [Worksheet 3: Data Models, Repositories, Assets, and In-Page Navigation](./worksheet-3.md)
 - Worksheet 4: Unit and Widget Testing (under revision)
-- Worksheet 5: Data Models and Assets (under revision)
-- Worksheet 6: AI-Driven Development and Navigation (under revision)
-- Worksheet 7: State Management and Persistence (under revision)
-- Worksheet 8: Integration Testing, Firebase, and Deployment (under revision)
+- Worksheet 5: SQL (under revision)
+- Worksheet 6: AI-Driven Development, App state and Navigation (under revision)
+- Worksheet 7: External services (under revision)
+- Worksheet 8: DevOps (under revision)
 
 ## **Assessment**
 
