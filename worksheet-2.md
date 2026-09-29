@@ -743,7 +743,7 @@ The exercises below help you prepare for Demo 1. In short, you need to build the
 
 Be sure to make a separate commit for each exercise below, and commit more often than that if you can. Small, frequent commits with clear messages are part of the quality mark at your demo.
 
-1. Add the film title and a short description as `Text` widgets, wrapped in a `Container` widget. A `Container` holds a single child and can give it a size, a colour, a border and more.
+1. Add the film title and a short description as `Text` widgets, wrapped in a `Container` widget. Place the `Container` in the `body` property of the `Scaffold` widget inside `lib/views/movie_listing.dart`, replacing the placeholder content. A `Container` holds a single child and can give it a size, a colour, a border and more.
 
     As an example, in your sandwich shop app you could wrap the `Row` of buttons in a `Container` with its own colour:
 
@@ -774,7 +774,7 @@ Be sure to make a separate commit for each exercise below, and commit more often
 
 3. Let the user choose how many tickets they want with a single `DropdownMenu`, offering quantities up to 5. You should try to match the screenshot shown above.
 
-    Store the selected value in state and update it inside `setState`, just as the sandwich counter did. To see how a `DropdownMenu` works, try this example in your sandwich shop app first. Here each entry is a sandwich type, and the value behind it is that item's price, so selecting an entry sets `_totalPrice`:
+    Store the selected value in state and update it inside `setState`, just as the sandwich counter did. To see how a `DropdownMenu` works, you can try this snippet in your sandwich shop app first. In `lib/main.dart`, declare `int _totalPrice = 10;` inside `_OrderScreenState` and place the `DropdownMenu` directly inside the `Column` widget's `children` list in `build`, above or below `OrderItemDisplay`. Here each entry is a sandwich type, and the value behind it is that item's price, so selecting an entry sets `_totalPrice`:
 
     ```dart
     DropdownMenu<int>(
@@ -798,7 +798,7 @@ Be sure to make a separate commit for each exercise below, and commit more often
 
     The [DropdownMenu documentation](https://api.flutter.dev/flutter/material/DropdownMenu-class.html) has more details and examples on the widget. Commit your changes with the message `Add ticket quantity dropdown menu`.
 
-4. Add an "Add to order" button that gives the user feedback when pressed. There is no basket yet, so it only needs to show some visual feedback (for example, state how many tickets were added to the order). Commit your changes with the message `Add booking feedback button`.
+4. Add an "Add to order" button that gives the user feedback when pressed. There is no basket yet, so the feedback should be adding a new `Text` widget or updating an existing one below the button (for example, displaying a message that states how many tickets were added to the order). Commit your changes with the message `Add booking feedback button`.
 
 5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does. The [text and typography documentation](https://docs.flutter.dev/ui/design/text) covers styling text. Commit your changes with the message `Style movie listing to match brand constants`.
 
