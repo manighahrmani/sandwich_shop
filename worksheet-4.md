@@ -486,11 +486,9 @@ Both tests should pass, as shown below:
 
 In the Source Control panel, stage `test/widget_test.dart` and commit your changes with the message `Add isolated widget tests for OrderItemDisplay`.
 
-<!-- TODO: Done till here -->
-
 ### Test initial menu screen rendering
 
-Now let's test the main menu screen when the entire application launches. Add a second test group named `App smoke tests` inside `main()` with two tests:
+Now let's test the main menu screen when the entire application launches. Add a second test group named `App smoke tests` inside `main()` function of `test/widget_test.dart`. Inside that group, add a test that pumps the entire `App()` and verifies that the `MenuScreen` is displayed with the expected title and two sandwich cards.  Smoke tests are a quick way to verify that the application launches and displays the expected initial screen.
 
 ```dart
   group('App smoke tests', () {
@@ -514,6 +512,16 @@ Now let's test the main menu screen when the entire application launches. Add a 
 
 The `find.text()` finder searches the rendered tree for specific text, while `find.byType()` searches for a widget by its class. The matchers `findsOneWidget` and `findsNWidgets(2)` assert the exact number of matching elements.
 
+Run the widget tests using the play button above the group or from the terminal with:
+
+```bash
+flutter test test/widget_test.dart
+```
+
+Here is a screenshot of our tests passing in VS Code:
+
+![Widget tests for smoke testing the initial menu rendering in VS Code](images/4/widget_tests_initial_rendering_passed.png)
+
 ### Update SandwichCard to use formattedPrice
 
 Earlier we added `formattedPrice` to `Sandwich`. Open `lib/widgets/sandwich_card.dart` and replace `Text('£${sandwich.price.toStringAsFixed(2)}')` with `sandwich.formattedPrice`:
@@ -528,9 +536,11 @@ Text(
 ),
 ```
 
-Run `flutter test test/widget_test.dart` to verify that both tests still pass. Your test results should look like this:
+This is what `lib/widgets/sandwich_card.dart` should look like now:
 
-![Widget tests for initial menu rendering in VS Code](images/4/widget_tests_initial_rendering.png)
+![The SandwichCard widget using formattedPrice in VS Code](images/4/sandwich_card_formatted_price.png)
+
+Run `flutter test test/widget_test.dart` again to verify that both tests still pass.
 
 ### Commit your changes (4)
 
@@ -668,7 +678,11 @@ Next, add a test that sets `maxQuantity: 3` and taps **Add** five times to verif
 
 The `for` loop simulates five consecutive taps, while the assertion verifies that only three emojis appear.
 
-Your test file should look like this in VS Code:
+Your test file should look like this in VS Code. Make sure to run the tests again to confirm that all tests pass:
+
+```bash
+flutter test test/widget_test.dart
+```
 
 ![Widget tests for boundary conditions in VS Code](images/4/widget_tests_boundary_conditions.png)
 
@@ -678,7 +692,7 @@ In the Source Control panel, stage `test/widget_test.dart` and commit your chang
 
 ## Running test suites and static analysis
 
-Before committing your work or presenting it for a sign-off, always check the entire test suite, code formatting, and static analysis.
+Before committing your work or presenting it for a demo, always check the entire test suite, code formatting, and static analysis.
 
 ### Run the whole suite from the Test Explorer
 
@@ -702,7 +716,7 @@ Dart includes an official formatter that enforces consistent spacing, indentatio
 dart format lib/ test/
 ```
 
-You can also check whether your files conform to the style guide without overwriting them by adding `--output=none --set-exit-if-changed`:
+You can also check whether your files conform to the style guide without changing them by adding `--output=none --set-exit-if-changed`:
 
 ```bash
 dart format --output=none --set-exit-if-changed lib/ test/
@@ -712,6 +726,10 @@ This returns exit code 0 when all files are properly formatted, or prints unform
 
 If the formatter changed any files, stage and commit them.
 
+As a pro tip, you can enable auto save in VS Code by opening the Command Palette (**Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS) and running **File: Auto Save**. This automatically saves files after a short delay, which triggers the formatter if you have it enabled in your settings.
+
+Next enable the Dart extension's **Format on Save** feature in VS Code. Open the Command Palette and run **Preferences: Open Settings (UI)**. Search for `dart format` and check **Dart: Format On Save**. This way, every time you save a file, the Dart formatter will automatically run and ensure your code adheres to the style guide.
+
 ### Analyse your code with the Dart analyser
 
 The Dart analyser checks your project for syntax errors, type mismatches, unused imports, and style violations configured in `analysis_options.yaml`. Run it across your source and test folders:
@@ -720,14 +738,7 @@ The Dart analyser checks your project for syntax errors, type mismatches, unused
 dart analyze lib/ test/
 ```
 
-You should see:
-
-```text
-Analyzing lib, test...
-No issues found!
-```
-
-Your terminal output should look like this:
+You should see something like this:
 
 ![Terminal output showing zero issues from the Dart analyser](images/4/dart_analyze_output.png)
 
