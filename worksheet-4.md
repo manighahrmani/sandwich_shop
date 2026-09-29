@@ -16,7 +16,6 @@
   - [Create the model test file](#create-the-model-test-file)
   - [Test model property assignment](#test-model-property-assignment)
   - [Test the formatted price getter](#test-the-formatted-price-getter)
-  - [Run unit tests without leaving the editor](#run-unit-tests-without-leaving-the-editor)
   - [Commit your changes (1)](#commit-your-changes-1)
 - [Unit testing repositories](#unit-testing-repositories)
   - [Create the repository test file](#create-the-repository-test-file)
@@ -237,35 +236,19 @@ When you pass a literal value such as `'veggie'` or `5.25` to `expect()`, it per
 
 ### Test the formatted price getter
 
-<!-- TODO: Done till here -->
+Now add a second `test()` inside the same group to verify that `formattedPrice` correctly prefixes the price with a pound sign and formats the number to two decimal places. Recall that to call a getter, you do not use parentheses (i.e., `sandwich.formattedPrice` instead of `sandwich.formattedPrice()`).
 
-Now add a second `test()` inside the same group to verify that `formattedPrice` correctly prefixes the price with a pound sign and formats the number to two decimal places:
+Your test should look like this now:
 
-```dart
-    test(
-        'formattedPrice returns price prefixed with pound sign and two decimals',
-        () {
-      const sandwich = Sandwich(
-        id: 'footlong',
-        name: 'Footlong Sub',
-        description: 'Test description',
-        price: 7.5,
-        imagePath: 'assets/images/footlong.jpeg',
-      );
+![The Sandwich model unit test verifying the formattedPrice getter in VS Code](images/4/sandwich_model_formatted_price_test.png)
 
-      expect(sandwich.formattedPrice, '£7.50');
-    });
-```
+Once again, run the test file and confirm that both tests pass. The **Test Results** panel should show two green ticks:
 
-Because `7.5` only specifies one decimal place, this test confirms that `formattedPrice` correctly pads the price to two decimal places (`£7.50`).
+![The Test Results panel showing two passing unit tests in VS Code](images/4/sandwich_model_unit_tests_passed.png)
 
-### Run unit tests without leaving the editor
+Note that you can click **Run** above the group to run all tests in the file. Or you can click **Run** above an individual test to run just that test.
 
-When the Dart and Flutter extensions are installed, a small **Run** and **Debug** CodeLens link appears directly above every `main()`, `group()`, and `test()`. Click **Run** above the group to run all tests in the file. The results appear in the **Test Results** panel with a green tick beside each passing test:
-
-![The Run and Debug CodeLens above a test, and the Test Results panel](images/4/screenshot_running_tests.png)
-
-You can also run the file from the integrated terminal with `flutter test` (open a terminal with **Ctrl + backtick**):
+You can also run the file from the integrated terminal with `flutter test` (open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS, then run **Terminal: Create New Integrated Terminal**). Run the following command:
 
 ```bash
 flutter test test/sandwich_model_test.dart
@@ -273,7 +256,7 @@ flutter test test/sandwich_model_test.dart
 
 Your terminal output should look like this:
 
-![Unit tests for Sandwich model passing in VS Code](images/4/sandwich_model_unit_tests.png)
+![Unit tests for Sandwich model passing in VS Code](images/4/sandwich_model_unit_tests_terminal.png)
 
 ### Commit your changes (1)
 
@@ -337,7 +320,17 @@ A count on its own does not confirm the data is correct. Add a second `test()` i
     });
 ```
 
-The `isNotEmpty` matcher is provided by `package:flutter_test/flutter_test.dart`; it passes when the string has at least one character.
+The `isNotEmpty` matcher is provided by `package:flutter_test/flutter_test.dart`; it passes when the string has at least one character (it passes regardless of what the string contains, so it does not check for a valid file path).
+
+Run the repository unit tests using the **Run** button above the group or from the terminal with:
+
+```bash
+flutter test test/sandwich_repository_test.dart
+```
+
+You should see this:
+
+![Unit tests for SandwichRepository passing in VS Code](images/4/sandwich_repository_unit_tests_passed.png)
 
 ### Add getSandwichById to SandwichRepository
 
@@ -357,6 +350,10 @@ Open `lib/repositories/sandwich_repository.dart`. Inside the `SandwichRepository
 ```
 
 The return type `Sandwich?` indicates that the method may return `null` if no sandwich matches the provided identifier.
+
+This is what the `lib/repositories/sandwich_repository.dart` file should look like now (note that we have folded the `getSandwiches()` method in VS Code to show only the new method):
+
+![The SandwichRepository with the new getSandwichById method in VS Code](images/4/sandwich_repository_get_by_id.png)
 
 ### Test getSandwichById with existing and missing identifiers
 
@@ -388,19 +385,9 @@ Run the repository unit tests from the terminal:
 flutter test test/sandwich_repository_test.dart
 ```
 
-You should see output confirming that all four repository tests passed:
+Your test file should now look like this (see the green ticks next to each test):
 
-```text
-00:00 +0: SandwichRepository unit tests getSandwiches returns two sandwiches
-00:00 +1: SandwichRepository unit tests getSandwiches contains valid Footlong and Six-Inch subs
-00:00 +2: SandwichRepository unit tests getSandwichById returns matching sandwich when id exists
-00:00 +3: SandwichRepository unit tests getSandwichById returns null when id does not exist
-00:00 +4: All tests passed!
-```
-
-Your terminal output should look like this:
-
-![Terminal output showing passing unit tests](images/4/unit_tests_terminal_output.png)
+![Unit tests for SandwichRepository passing in VS Code](images/4/sandwich_repository_all_unit_tests_passed.png)
 
 ### Commit your changes (2)
 
@@ -414,7 +401,7 @@ While unit tests check data models and repository methods, widget tests verify t
 
 Widget tests use `testWidgets()` instead of `test()`. The test callback receives a `WidgetTester` object that can render widgets, search the widget tree for elements, simulate taps, and advance time frame by frame.
 
-For a detailed introduction, read the [widget testing guide](https://docs.flutter.dev/cookbook/testing/widget/introduction) and the [finding widgets in a test](https://docs.flutter.dev/cookbook/testing/widget/finders) recipe in the Flutter documentation.
+For a detailed introduction, read the [widget testing guide](https://docs.flutter.dev/cookbook/testing/widget/introduction) in the Flutter documentation.
 
 ### Prepare the widget test file
 
@@ -437,7 +424,7 @@ We import `package:flutter/material.dart` so we can wrap individual widgets in a
 
 A key advantage of widget testing is that you do not need to launch the entire application to test an individual widget. You can pump any widget directly inside a `MaterialApp` and `Scaffold`.
 
-Let's test `OrderItemDisplay` from `lib/screens/order_screen.dart` in isolation. Add a test group with two tests verifying that zero sandwiches show no emoji and three sandwiches display three emojis:
+Let's test `OrderItemDisplay` from `lib/screens/order_screen.dart` in isolation. Add a test group with a widget test verifying that zero sandwiches:
 
 ```dart
 void main() {
@@ -454,7 +441,29 @@ void main() {
 
       expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
     });
+  });
+}
+```
 
+There are a few things to explain above. `tester.pumpWidget()` renders the widget hierarchy in the test environment. Because rendering is asynchronous (it may take a few frames to complete), you must `await` it. Functions that have `await` in their body must be marked `async`, as shown above. In simple terms, we are saying that this function will run asynchronously and may pause at certain points (the `await` keyword) until the awaited operation completes.
+
+Once `pumpWidget` completes, it would have rendered the `OrderItemDisplay` widget with a quantity of zero sandwiches. The `find.text()` finder searches the rendered tree for specific text, while the matcher `findsOneWidget` asserts that exactly one matching element exists.
+
+There are different ways you can find a widget, for more information, read the [finding widgets in a test](https://docs.flutter.dev/cookbook/testing/widget/finders) recipe in the Flutter documentation.
+
+Run your test using the play button above the group or from the terminal with:
+
+```bash
+flutter test test/widget_test.dart
+```
+
+You should see something like this:
+
+![Widget test for OrderItemDisplay passing in VS Code](images/4/order_item_display_widget_test_passed.png)
+
+Next, let's add a second test that verifies that three sandwiches show no emoji and three sandwiches display three emojis. Add this below the first test inside the same group:
+
+```dart
     testWidgets('displays three sandwiches with three emojis',
         (WidgetTester tester) async {
       await tester.pumpWidget(
@@ -467,25 +476,17 @@ void main() {
 
       expect(find.text('3 Footlong Sub sandwich(es): 🥪🥪🥪'), findsOneWidget);
     });
-  });
-}
 ```
 
-The `tester.pumpWidget()` method renders the widget hierarchy in the test environment. Because rendering is asynchronous, you must `await` it.
+Both tests should pass, as shown below:
 
-Run the test file from the terminal or using the CodeLens link above the group:
-
-```bash
-flutter test test/widget_test.dart
-```
-
-Both isolated tests should pass, as shown below:
-
-![Widget tests for OrderItemDisplay in VS Code](images/4/order_item_display_widget_tests.png)
+![Widget tests for OrderItemDisplay in VS Code](images/4/order_item_display_widget_tests_passed.png)
 
 ### Commit your changes (3)
 
 In the Source Control panel, stage `test/widget_test.dart` and commit your changes with the message `Add isolated widget tests for OrderItemDisplay`.
+
+<!-- TODO: Done till here -->
 
 ### Test initial menu screen rendering
 
@@ -701,6 +702,14 @@ Dart includes an official formatter that enforces consistent spacing, indentatio
 dart format lib/ test/
 ```
 
+You can also check whether your files conform to the style guide without overwriting them by adding `--output=none --set-exit-if-changed`:
+
+```bash
+dart format --output=none --set-exit-if-changed lib/ test/
+```
+
+This returns exit code 0 when all files are properly formatted, or prints unformatted file names and exits with code 1 if formatting changes are required.
+
 If the formatter changed any files, stage and commit them.
 
 ### Analyse your code with the Dart analyser
@@ -730,22 +739,18 @@ If you made any formatting fixes, stage the updated files and commit them with t
 
 ## Exercises
 
-As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 3 exercises, prepare you for Demo 2. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Be sure to commit your changes regularly as you work through each exercise; small, frequent commits with clear messages are assessed as part of your demo quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
+As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 3 exercises, prepare you for Demo 2. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Remember to commit your changes regularly as you work through each exercise; small, frequent commits are assessed as part of your demo quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
 In Worksheet 3 you refactored the Southsea Cinema application to show movie cards on the home page and navigate to the dynamic listing page. For Demo 2 you must demonstrate that your codebase is backed by passing automated tests and clean static analysis.
 
-1. Create a unit test file named `test/movie_repository_test.dart` inside your `southsea_cinema` fork. Using `group()`, `test()`, and `expect()`, write unit tests that verify `MovieRepository.getMovies()` returns a list containing at least two movies, and that each movie has a non-empty title, a valid age rating, and a ticket price greater than zero.
+1. Create a unit test file named `test/movie_repository_test.dart` inside your `southsea_cinema` fork, following the approach in [Unit testing repositories](#unit-testing-repositories). Write tests with `group()`, `test()`, and `expect()` that verify your movie repository returns a list containing at least two movies, and that each movie has a non-empty title, an age rating, and a ticket price greater than zero.
 
-2. Create a unit test file named `test/movie_model_test.dart` in your `southsea_cinema` project. Write unit tests verifying that an instantiated `Movie` correctly assigns all fields supplied to its constructor. If your model contains any helper methods or computed properties (such as formatting screening details or prices), add assertions to verify their return values.
+2. In `test/widget_test.dart`, write a widget test that pumps `SouthseaCinemaApp` and waits for the widget tree to settle with `tester.pumpAndSettle()`, as in [Test initial menu screen rendering](#test-initial-menu-screen-rendering). Verify that the home page displays the app title, the movie titles, and the booking buttons.
 
-3. In `test/widget_test.dart`, write an isolated widget test for your `MovieCard` widget. Pump the widget inside a `MaterialApp` and `Scaffold`, passing a sample `Movie` instance into it. Verify that the card displays the movie title, age rating, screening time, and the booking button.
+3. Run `dart format` and `dart analyze` across your project, as described in [Running test suites and static analysis](#running-test-suites-and-static-analysis). Confirm that your codebase has zero analyser issues and follows formatting conventions.
 
-4. Expand `test/widget_test.dart` to test the full navigation flow from the home page. Pump `SouthseaCinemaApp`, wait for the widget tree to settle with `tester.pumpAndSettle()`, and verify that the cinema title and film cards appear. Simulate tapping the booking button for one of your films with `tester.tap()`, call `tester.pumpAndSettle()`, and assert that the movie listing page opened displaying the chosen film details.
+4. (Advanced) Create a unit test file named `test/movie_model_test.dart` following [Unit testing data models](#unit-testing-data-models). Write unit tests verifying that an instantiated `Movie` correctly assigns all constructor fields.
 
-5. Add an interaction test for the movie listing page that simulates selecting a ticket quantity or adding tickets to an order. Verify that the interface responds as expected (for example, displaying the updated ticket quantity or order message) and test edge cases such as the default initial selection.
+5. (Advanced) Expand `test/widget_test.dart` to test the full navigation flow from the home page to the listing page, following the steps in [Test navigating to the order screen](#test-navigating-to-the-order-screen). Simulate tapping a booking button with `tester.tap()`, call `tester.pumpAndSettle()`, and assert that the movie listing page opened with the selected film's details.
 
-6. Run your entire test suite from the terminal with `flutter test` or using the VS Code Test Explorer. Ensure that all unit and widget tests pass with zero failures:
-
-    ![Southsea Cinema automated unit and widget tests passing in terminal](images/4/southsea_cinema_tests_passing.png)
-
-    Run `dart analyze` and `dart format --output=none --set-exit-if-changed .` across your project to confirm that your codebase has zero analyser issues and matches formatting standards. Run your app in Chrome with `flutter run -d chrome`. **Show your running application and passing test suite to a member of staff** for your Demo 2 sign-off.
+6. (Advanced) Add interaction tests for the movie listing page that simulate selecting ticket quantities or pressing the booking button, as in [Test adding and removing sandwich items](#test-adding-and-removing-sandwich-items). Note that this exercise requires an interactive listing page with state management (such as the ticket quantity dropdown and booking feedback button from the Worksheet 2 exercises). If you have not yet completed those interactive features, you must implement them on your listing page before writing these tests.

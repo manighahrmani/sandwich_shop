@@ -662,22 +662,22 @@ In the Source Control panel, stage `lib/widgets/sandwich_card.dart` and commit w
 
 ## Exercises
 
-As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 4 exercises, prepare you for Demo 2. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Be sure to commit your changes regularly as you work through each exercise; small, frequent commits with clear messages are assessed as part of your demo quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
+As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 4 exercises, prepare you for Demo 2. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Remember to commit your changes regularly as you work through each exercise; small, frequent commits are assessed as part of your demo quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
 
-In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2, your cinema app must show a browseable home page with cards for films that are screening, and a booking button on each card must open the listing page for that film.
+In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2, your cinema app must show a browsable home page with cards for films that are screening, and a booking button on each card must open the listing page for that film.
 
-1. Create a `Movie` data model in `lib/models/movie.dart` inside your `southsea_cinema` fork. Refer to the [example listing page on the Southsea Cinema website](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/TSelectItems.waSelectItemsPrompt.TcsWebMenuItem_687.TcsWebTab_688.TcsProgramme_26436) (or the movie listing page you built in Worksheet 2) to see what properties a movie needs. Define these as `final` fields and provide a constructor with named, `required` parameters.
+1. Create a movie data model inside your `southsea_cinema` fork, following the pattern from [Define the Sandwich data model](#define-the-sandwich-data-model). Look back at the movie listing page you built in Worksheet 2 to identify which film properties need to be represented. Define these as `final` fields with a constructor using named, `required` parameters.
 
-2. Download poster images for at least two of your favourite films and place them in `assets/images/`. Remember to register your images in `pubspec.yaml` and run `flutter pub get`.
+2. Download poster images for at least two of your favourite films and place them in `assets/images/`. Follow the steps from [Add asset images to the project](#add-asset-images-to-the-project) to register the folder in `pubspec.yaml` and run `flutter pub get`.
 
-3. Create a `MovieRepository` that returns a list of `Movie` instances. You should have at least two movies, one for each of your favourite films. Make sure each movie is populated with details and image paths matching the assets you added in the previous question.
+3. Create a movie repository that returns a list of movie instances, following the repository pattern from [Abstract data access with a repository](#abstract-data-access-with-a-repository). Populate it with mock data and asset paths for at least two of your favourite films.
 
-4. Create a `MovieCard` that displays the movie and its details similar to how [this page](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/) lists the movies showing in the Southsea Cinema. Add a booking button to each card, and make sure its style matches the Southsea Cinema website (try to use the colours and text styles that are already defined in our fork).
+4. Create a movie card widget similar to [`SandwichCard`](#create-the-sandwichcard-widget). It should display the film's poster, title, age rating, synopsis, screening time, and a booking button. Use the brand colours and text styles defined in `lib/constants.dart`.
 
-5. Update `lib/views/home_view.dart` to fetch movies from the repository you made in question 3 and display them in a scrollable list with `ListView.builder`. Your home page should look similar to what is shown below (obviously replace the movies shown below with your own favourite films):
+5. (Advanced) Update your home page to retrieve movies from the repository and display them in a scrollable list with `ListView.builder`, as we did in [Build the MenuScreen widget](#build-the-menuscreen-widget). Your home page should display film cards with poster images and booking buttons as shown below:
 
     ![Southsea Cinema home screen showing film cards with poster images and booking buttons](images/3/southsea_cinema_home_view.png)
 
-    Make sure you replace the existing movies (The Phantom of the Opera and Halloween) with your own favourite films, and ensure there are at least two cards leading to their own listing page.
+    Make sure you replace the example movies (The Phantom of the Opera and Halloween) with your own favourite films, and ensure there are at least two cards in the list.
 
-6. Make each movie card interactive so that clicking the booking button navigates to that movie's listing page, displaying the details for the selected film similar to how it works in the Southsea Cinema website.
+6. (Advanced) Make each movie card interactive so that tapping its booking button navigates to that film's listing page and dynamically displays the details of the selected film, following the navigation and data passing approach from [Navigate between screens and pass data](#navigate-between-screens-and-pass-data).
