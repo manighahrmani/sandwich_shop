@@ -72,9 +72,11 @@ of the module. You cannot submit an ECF for a single demo.
 ⚠️ If you submit an ECF, you must tell me (<mani.ghahremani@port.ac.uk>).
 
 When an approved ECF is in place, your Item 1 mark must be recorded as 0, and you
-are instead expected to take the deferral assessment in the week beginning
-Monday 22 February 2027, so your Item 1 mark then comes solely from that deferral
-coursework and not from any demos.
+are instead expected to take the deferral assessment during the referral/deferral
+period, so your Item 1 mark then comes solely from that deferral coursework and
+not from any demos. If you would prefer to use the retrieval of failure period in
+February instead, email me (<mani.ghahremani@port.ac.uk>) or contact me on
+Discord to arrange this.
 
 If you have an ECF but go on to attend demos and earn marks, those demo marks
 take precedence and your ECF is overwritten.
@@ -82,10 +84,17 @@ take precedence and your ECF is overwritten.
 When completing an ECF, use the correct module code and item number (Item 1) as
 given in the coursework brief.
 
+## Retrieval of failure
+
+The retrieval of failure period for Term 1 takes place in the week beginning
+Monday 22 February 2027. If you did not pass Item 1 during the term, you have
+the opportunity to complete your coursework and demonstrate it during this
+period. You do not need to start a new coursework; you continue and finish the
+same Southsea Cinema coursework and demo it with me.
+
 ## Referral and deferral
 
 If you are referred or deferred, the referral and deferral assessment for this
-Flutter Coursework is a separate coursework completed during the referral and
-deferral period. It is not the same as the coursework brief, and it will be
-added to Moodle nearer the time. Referral and deferral dates are on the
-University Key Dates page at <https://www.port.ac.uk/about-us/key-dates>.
+Flutter Coursework is a separate coursework. It will be added to Moodle nearer
+the time. Referral and deferral dates are on the University Key Dates page at
+<https://www.port.ac.uk/about-us/key-dates>.
