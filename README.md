@@ -9,7 +9,8 @@ This is the homepage for the Flutter Course which is the first half of the Progr
 - [Assessment](#assessment)
   - [Demos](#demos)
   - [Coursework brief](#coursework-brief)
-  - [Referral/Deferral Assessment](#referraldeferral-assessment)
+  - [Retrieval of failure](#retrieval-of-failure)
+  - [Referral/deferral assessment](#referraldeferral-assessment)
   - [Extenuating Circumstances](#extenuating-circumstances)
 - [Getting help](#getting-help)
 - [Feedback](#feedback)
@@ -34,7 +35,7 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 | 21/12/2026 | 08/01/2027 | Xmas Break | | |
 | 11/01/2027 | 15/01/2027 | Marking week | | |
 | 18/01/2027 | 19/02/2027 | Term 2 | | |
-| 22/02/2027 | 26/02/2027 | Referral and Deferral Assessments (for Term 1) | | |
+| 22/02/2027 | 26/02/2027 | Retrieval of Failure (for Term 1) | | |
 
 ## **Teaching material**
 
@@ -73,11 +74,13 @@ For the full detailed explanation of the assessment read the [Assessment Guide](
 
 The coursework brief can be downloaded as a Word document from [OneDrive](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw?e=gD920R).
 
-### **Referral/Deferral Assessment**
+### **Retrieval of failure**
 
-The Term 1 referral/deferral assessment takes place in the week beginning Monday 22 February 2027. More information about what referral/deferral are will be provided later in Moodle. Referral/deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
+The retrieval of failure period for Term 1 takes place in the week beginning Monday 22 February 2027. If you did not pass Item 1 during the term, you have the opportunity to complete your coursework and demonstrate it during this period. You do not need to start a new coursework; you continue and finish the same Southsea Cinema coursework and demo it with me.
 
-The referral/deferral assessment for this Flutter Course is a different coursework that you need to complete during the referral/deferral period (see above).
+### **Referral/deferral assessment**
+
+If you are referred or deferred, the referral and deferral assessment is a separate coursework. It will be added to Moodle nearer the time. Referral and deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
 
 ### **Extenuating Circumstances**
 
@@ -87,7 +90,7 @@ If there are external reasons stopping you from engaging with the module (for ex
 
 Note that ECFs apply to the whole Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
-If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are instead expected to take the deferral assessment (see above). Your Item 1 mark then comes from that deferral coursework alone (not from the demos above). However, if you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
+If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio and you are expected to take the deferral assessment during the referral/deferral period. Your Item 1 mark then comes from that deferral coursework alone (not from the demos above). If you would prefer to use the retrieval of failure period in February instead, email me at [mani.ghahremani@port.ac.uk](mailto:mani.ghahremani@port.ac.uk) or contact me on Discord to arrange this. If you go on to attend demos and earn marks, those demo marks override the ECF and you will be marked on your demos instead.
 
 If you do not have an approved ECF, you simply receive the marks for the demos you completed. For the full ECF rules, see the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc).
 

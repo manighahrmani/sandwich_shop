@@ -184,11 +184,13 @@ southsea_cinema/
 
 Note that this is the initial structure. You are expected to create additional files and directories as needed to complete the coursework, and you can reorganise the project structure as you see fit.
 
+## Retrieval of failure
+
+The retrieval of failure period for Term 1 takes place in the week beginning Monday 22 February 2027. If you did not pass Item 1 during the term, you have the opportunity to complete your coursework and demonstrate it during this period. You do not need to start a new coursework; you continue and finish the same Southsea Cinema coursework and demo it with me.
+
 ## Referral/Deferral Assessment
 
-More information about what referral/deferral are will be provided later in Moodle. Referral/deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
-
-The referral/deferral assessment for this Flutter Course is a coursework that you need to complete during the referral/deferral period. This coursework is not the same as the coursework brief above. It will be added to Moodle nearer the time.
+If you are referred or deferred, the referral and deferral assessment is a separate coursework. It will be added to Moodle nearer the time. Referral and deferral dates are on [the University Key Dates page](https://www.port.ac.uk/about-us/key-dates).
 
 ## Extenuating Circumstances
 
@@ -196,7 +198,7 @@ If there are external reasons stopping you from engaging with the module, submit
 
 Note that ECFs apply to the whole of Item 1 (the entire Flutter Coursework, 50% of the module). You cannot use an ECF just for individual demos.
 
-If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio, and you are instead expected to take the deferral assessment in the week beginning Monday 22 February 2027; your Item 1 mark then comes from that deferral coursework alone (not from the demos).
+If you have an approved ECF, your Item 1 mark is recorded as 0 for the demo portfolio, and you are instead expected to take the deferral assessment during the referral/deferral period; your Item 1 mark then comes from that deferral coursework alone (not from the demos). If you would prefer to use the retrieval of failure period in February instead, email a member of staff or contact them on Discord to arrange this.
 
 If you go on to attend demos and earn marks, you will override the ECF.
 
