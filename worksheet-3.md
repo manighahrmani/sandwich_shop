@@ -138,7 +138,7 @@ class Sandwich {}
 
 ### Add the fields
 
-Every sandwich on our menu needs an identifier, a display name, a description, a price, and a path to an image file. Add five `final` fields inside the class. String fields for `id`, `name`, `description`, and `imagePath`, and a double field for `price`. Your code should look like this now:
+Every sandwich on our menu needs an identifier, a display name, a description, a price, and a path to an image file. An identifier (ID) is a unique text key (such as `'footlong'` or `'six-inch'`) used to distinguish one specific record from all others in the application. Every model entity needs an ID so repositories, databases, and navigation routes can reliably query, locate, and pass that exact item without relying on human-facing titles, which might contain spaces, change over time, or have duplicate names. Add five `final` fields inside the class: `String` fields for `id`, `name`, `description`, and `imagePath`, and a `double` field for `price`. Your code should look like this now:
 
 ![The Sandwich model class with fields defined](images/3/sandwich_model_fields.png)
 
@@ -666,7 +666,7 @@ As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema
 
 In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2, your cinema app must show a browsable home page with cards for films that are screening, and a booking button on each card must open the listing page for that film.
 
-1. Create a movie data model inside your `southsea_cinema` fork, following the pattern from [Define the Sandwich data model](#define-the-sandwich-data-model). Look back at the movie listing page you built in Worksheet 2 to identify which film properties need to be represented. Define these as `final` fields with a constructor using named, `required` parameters.
+1. Create a movie data model inside your `southsea_cinema` fork, following the pattern from [Define the Sandwich data model](#define-the-sandwich-data-model). Be sure to include a unique `id` field (such as `'phantom-of-the-opera'`); every film needs an ID so that repository lookups and navigation routes can find that exact movie without relying on titles. Look back at the movie listing page you built in Worksheet 2 to identify which film properties need to be represented. Define these as `final` fields with a constructor using named, `required` parameters.
 
 2. Download poster images for at least two of your favourite films and place them in `assets/images/`. Follow the steps from [Add asset images to the project](#add-asset-images-to-the-project) to register the folder in `pubspec.yaml` and run `flutter pub get`.
 
