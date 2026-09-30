@@ -161,6 +161,25 @@ enforcement section at the end).
 - Keep counts and lists accurate: if the prose says there are three children,
   the code and the following list must contain three.
 
+### Code simplicity and readability
+
+All code across teaching materials, application branches, and coursework model
+answers (including Southsea Cinema and Southsea Cinema Private) must prioritise
+clarity, expressiveness, and ease of understanding for students:
+
+- Avoid compact shorthands, arrow syntax (`=>`), or dense one-liners where
+  verbose block syntax, explicit statements, and explicit return types or
+  keywords are clearer for beginners.
+- Declare variables and types explicitly rather than relying heavily on type
+  inference or chained inline expressions when introducing concepts.
+- Repetition and verbosity are preferred if they make the logic transparent
+  and easier for newcomers to follow and debug.
+- Critical constraint: never refactor or simplify worksheet code snippets or
+  application code at the expense of breaking existing screenshots or
+  instructions in the worksheets. If an existing screenshot displays shorthand
+  or arrow syntax, keep the exact snippet in the worksheet so it matches the
+  screenshot, and explain the verbose block alternative in prose.
+
 ### Lecture files
 
 Every `lecture-N.md` mirrors its `lecture-N.pptx` and follows the same fixed

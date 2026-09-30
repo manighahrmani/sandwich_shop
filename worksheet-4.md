@@ -113,9 +113,9 @@ As your application grows, manually checking every button and screen after every
 
 Automated tests let you describe your expectations from your code. Whenever you run the tests, you can verify your code's behaviour in seconds. Flutter divides tests into three tiers:
 
-1. **Unit tests:** fast tests that verify individual functions, methods, or classes on their own.
-2. **Widget tests:** medium-speed tests that render widgets in a simulated environment to verify layout, text, and gestures.
-3. **Integration tests:** comprehensive tests that run the whole application and simulate user flows across multiple screens.
+1. Unit tests: fast tests that verify individual functions, methods, or classes on their own.
+2. Widget tests: medium-speed tests that render widgets in a simulated environment to verify layout, text, and gestures.
+3. Integration tests: comprehensive tests that run the whole application and simulate user flows across multiple screens.
 
 In this worksheet we focus on unit and widget tests. For a broader overview of testing concepts and recipes, read the [testing overview in the Flutter documentation](https://docs.flutter.dev/testing/overview) and browse the [Flutter testing cookbook](https://docs.flutter.dev/cookbook/testing).
 
@@ -157,11 +157,26 @@ Flutter provides `test()` and `expect()` through the `package:flutter_test/flutt
 
 In Worksheet 3 we created the `Sandwich` model in `lib/models/sandwich.dart`. At the moment, widgets format the price manually by calling `toStringAsFixed(2)`. Moving that formatting logic into the model itself avoids duplicating code across multiple screens and widgets.
 
-Open `lib/models/sandwich.dart` and add a `formattedPrice` getter to the `Sandwich` class. Recall that getters are methods defined without parentheses that return a value. They use the `get` keyword, as shown below. Hopefully you recall how string interpolation works in Dart from [Worksheet 1](worksheet-1.md#introduction-to-the-dart-language):
+Open `lib/models/sandwich.dart` and add a `formattedPrice` getter to the `Sandwich` class:
 
 ```dart
 String get formattedPrice => '£${price.toStringAsFixed(2)}';
 ```
+
+In Dart, a getter is a special method that retrieves the value of a property. You declare a getter using the `get` keyword followed by the property name, without parameter parentheses.
+
+The `=>` symbol (known as arrow syntax or fat arrow) is shorthand for a function or getter whose body contains only a single return expression. Writing `=> '£${price.toStringAsFixed(2)}';` is equivalent to writing the verbose block syntax:
+
+```dart
+String get formattedPrice {
+  final String formattedValue = price.toStringAsFixed(2);
+  return '£$formattedValue';
+}
+```
+
+In the verbose version, you define an intermediate variable `formattedValue` of type `String` and explicitly return the result. In the shorthand arrow syntax shown in the screenshot, the body is condensed into a single return expression directly following `=>`.
+
+Callers access getters using standard property notation without parentheses (for example, `sandwich.formattedPrice` rather than `sandwich.formattedPrice()`). To learn more, read the [getters and setters](https://dart.dev/language/methods#getters-and-setters) and [arrow syntax](https://dart.dev/language/functions#arrow-syntax) sections in the Dart language guide.
 
 Your `lib/models/sandwich.dart` file should now look like this:
 
@@ -236,7 +251,7 @@ When you pass a literal value such as `'veggie'` or `5.25` to `expect()`, it per
 
 ### Test the formatted price getter
 
-Now add a second `test()` inside the same group to verify that `formattedPrice` correctly prefixes the price with a pound sign and formats the number to two decimal places. Recall that to call a getter, you do not use parentheses (i.e., `sandwich.formattedPrice` instead of `sandwich.formattedPrice()`).
+Now add a second `test()` inside the same group to verify that `formattedPrice` correctly prefixes the price with a pound sign and formats the number to two decimal places. Remember that callers access getters without parentheses (`sandwich.formattedPrice`).
 
 Your test should look like this now:
 
@@ -248,7 +263,7 @@ Once again, run the test file and confirm that both tests pass. The **Test Resul
 
 Note that you can click **Run** above the group to run all tests in the file. Or you can click **Run** above an individual test to run just that test.
 
-You can also run the file from the integrated terminal with `flutter test` (open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS, then run **Terminal: Create New Integrated Terminal**). Run the following command:
+You can also run the test file directly from the integrated terminal:
 
 ```bash
 flutter test test/sandwich_model_test.dart
@@ -320,7 +335,7 @@ A count on its own does not confirm the data is correct. Add a second `test()` i
     });
 ```
 
-The `isNotEmpty` matcher is provided by `package:flutter_test/flutter_test.dart`; it passes when the string has at least one character (it passes regardless of what the string contains, so it does not check for a valid file path).
+The `isNotEmpty` matcher is provided by `package:flutter_test/flutter_test.dart`. A matcher is a helper function passed to `expect()` that tests whether a value satisfies a specific condition. Here, `isNotEmpty` passes when the string contains at least one character (it does not check whether the file exists on disk). To explore other available matchers, see the [Matcher class documentation](https://api.flutter.dev/flutter/package-matcher_matcher/Matcher-class.html).
 
 Run the repository unit tests using the **Run** button above the group or from the terminal with:
 
@@ -334,7 +349,7 @@ You should see this:
 
 ### Add getSandwichById to SandwichRepository
 
-Applications often need to look up a specific item by its identifier. Let's add a `getSandwichById()` method to `SandwichRepository`.
+Applications often need to look up a specific item by its identifier. An identifier (ID) is a unique text key (such as `'footlong'` or `'phantom-of-the-opera'`) that distinguishes one record from all others in a collection. By using an ID instead of a display name or title, queries remain stable even if names contain spaces, special characters, or change over time. Every model entity needs a unique ID so repositories, widgets, and navigation routes can reference and pass items without ambiguity. Let's add a `getSandwichById()` method to `SandwichRepository`.
 
 Open `lib/repositories/sandwich_repository.dart`. Inside the `SandwichRepository` class, add the following method below `getSandwiches()`:
 
@@ -349,7 +364,25 @@ Open `lib/repositories/sandwich_repository.dart`. Inside the `SandwichRepository
   }
 ```
 
-The return type `Sandwich?` indicates that the method may return `null` if no sandwich matches the provided identifier.
+The return type `Sandwich?` indicates that the method may return `null` if no sandwich matches the provided identifier. Dart uses sound null safety, which means variables cannot contain `null` unless explicitly declared as nullable. Adding a question mark (`?`) after the type name creates a nullable type that can hold either a `Sandwich` instance or `null`. The keyword `null` represents the absence of a value. For more details, consult the [Dart null safety guide](https://dart.dev/null-safety).
+
+The `for-in` loop iterates sequentially through each item in the list returned by `getSandwiches()`. On each iteration, Dart assigns the current item to the variable `sandwich`. When `sandwich.id == id`, the method immediately returns that sandwich. If the loop completes without finding a matching identifier, execution reaches the final line and returns `null`. Read more about iteration in the [Dart loop documentation](https://dart.dev/language/loops#for-loops).
+
+You can also write this method using explicit variables and types for each step:
+
+```dart
+  Sandwich? getSandwichById(String id) {
+    final List<Sandwich> allSandwiches = getSandwiches();
+    for (final Sandwich sandwich in allSandwiches) {
+      if (sandwich.id == id) {
+        return sandwich;
+      }
+    }
+    return null;
+  }
+```
+
+In this verbose form, `final List<Sandwich> allSandwiches = getSandwiches();` explicitly stores the list in a typed variable, and `final Sandwich sandwich` defines the type of the iteration variable on each step.
 
 This is what the `lib/repositories/sandwich_repository.dart` file should look like now (note that we have folded the `getSandwiches()` method in VS Code to show only the new method):
 
@@ -377,6 +410,8 @@ Now return to `test/sandwich_repository_test.dart` and add two new tests to veri
     });
 ```
 
+Because `sandwich` has the nullable type `Sandwich?`, Dart prevents calling properties directly on it in case it is `null`. The null-aware access operator (`?.`) conditionally reads a property only when the object is not `null`. If `sandwich` is `null`, `sandwich?.name` evaluates safely to `null` without throwing an error. See the [Dart operators documentation](https://dart.dev/language/operators#other-operators).
+
 The `isNotNull` and `isNull` matchers confirm that optional return values match the expected presence or absence of data.
 
 Run the repository unit tests from the terminal:
@@ -399,7 +434,7 @@ While unit tests check data models and repository methods, widget tests verify t
 
 ### Understand widget tests
 
-Widget tests use `testWidgets()` instead of `test()`. The test callback receives a `WidgetTester` object that can render widgets, search the widget tree for elements, simulate taps, and advance time frame by frame.
+Widget tests use `testWidgets()` instead of `test()`. The test callback receives a `WidgetTester` object that can render widgets, search the widget tree for elements, simulate taps, and advance time frame by frame. To learn about all tester capabilities, see the [WidgetTester documentation](https://api.flutter.dev/flutter/flutter_test/WidgetTester-class.html).
 
 For a detailed introduction, read the [widget testing guide](https://docs.flutter.dev/cookbook/testing/widget/introduction) in the Flutter documentation.
 
@@ -424,7 +459,7 @@ We import `package:flutter/material.dart` so we can wrap individual widgets in a
 
 A key advantage of widget testing is that you do not need to launch the entire application to test an individual widget. You can pump any widget directly inside a `MaterialApp` and `Scaffold`.
 
-Let's test `OrderItemDisplay` from `lib/screens/order_screen.dart` in isolation. Add a test group with a widget test verifying that zero sandwiches:
+Let's test `OrderItemDisplay` from `lib/screens/order_screen.dart` in isolation. Add a test group with a widget test verifying that zero sandwiches display no emojis:
 
 ```dart
 void main() {
@@ -445,11 +480,13 @@ void main() {
 }
 ```
 
-There are a few things to explain above. `tester.pumpWidget()` renders the widget hierarchy in the test environment. Because rendering is asynchronous (it may take a few frames to complete), you must `await` it. Functions that have `await` in their body must be marked `async`, as shown above. In simple terms, we are saying that this function will run asynchronously and may pause at certain points (the `await` keyword) until the awaited operation completes.
+There are several new concepts in the code above:
 
-Once `pumpWidget` completes, it would have rendered the `OrderItemDisplay` widget with a quantity of zero sandwiches. The `find.text()` finder searches the rendered tree for specific text, while the matcher `findsOneWidget` asserts that exactly one matching element exists.
+In Dart, operations that take time to complete—such as building widget trees, animating transitions, or reading files—are asynchronous. An asynchronous operation returns a `Future`, which represents a value or action that will complete later.
 
-There are different ways you can find a widget, for more information, read the [finding widgets in a test](https://docs.flutter.dev/cookbook/testing/widget/finders) recipe in the Flutter documentation.
+The `await` keyword pauses execution within the function until that `Future` completes. Any function containing the `await` keyword must include the `async` modifier before the function body. Because `tester.pumpWidget()` renders the widget hierarchy asynchronously, you must `await` it before performing assertions. For a complete tutorial, read the [asynchronous programming guide](https://dart.dev/libraries/async/async-await) on dart.dev.
+
+Once `pumpWidget` completes, it has rendered `OrderItemDisplay` with a quantity of zero sandwiches. The `find.text()` finder searches the rendered widget tree for matching text, while the matcher `findsOneWidget` asserts that exactly one matching widget exists. For more finder patterns, read the [finding widgets recipe](https://docs.flutter.dev/cookbook/testing/widget/finders) in the Flutter documentation.
 
 Run your test using the play button above the group or from the terminal with:
 
@@ -461,7 +498,7 @@ You should see something like this:
 
 ![Widget test for OrderItemDisplay passing in VS Code](images/4/order_item_display_widget_test_passed.png)
 
-Next, let's add a second test that verifies that three sandwiches show no emoji and three sandwiches display three emojis. Add this below the first test inside the same group:
+Next, add a second test verifying that three sandwiches display three emojis. Add this below the first test inside the same group:
 
 ```dart
     testWidgets('displays three sandwiches with three emojis',
@@ -488,7 +525,7 @@ In the Source Control panel, stage `test/widget_test.dart` and commit your chang
 
 ### Test initial menu screen rendering
 
-Now let's test the main menu screen when the entire application launches. Add a second test group named `App smoke tests` inside `main()` function of `test/widget_test.dart`. Inside that group, add a test that pumps the entire `App()` and verifies that the `MenuScreen` is displayed with the expected title and two sandwich cards.  Smoke tests are a quick way to verify that the application launches and displays the expected initial screen.
+Now let's test the main menu screen when the entire application launches. Add a second test group named `App smoke tests` inside `main()` function of `test/widget_test.dart`. Inside that group, add a test that pumps the entire `App()` and verifies that the `MenuScreen` is displayed with the expected title and two sandwich cards. Smoke tests are a quick way to verify that the application launches and displays the expected initial screen.
 
 ```dart
   group('App smoke tests', () {
@@ -577,7 +614,9 @@ Add a third test inside the `App smoke tests` group that taps the **Order** butt
     });
 ```
 
-Because `find.text('Order')` finds two buttons (one per card), `.first` selects the button on the first card. `await tester.pumpAndSettle()` ensures the slide animation completes before assertions run.
+Because `find.text('Order')` matches two buttons (one on each sandwich card), calling `tester.tap()` on the finder directly would throw an error because Flutter cannot determine which widget you intended to tap. Adding `.first` instructs the test runner to select the first matching widget.
+
+Calling `await tester.pumpAndSettle()` repeatedly renders frames until all animations and transitions finish, ensuring the route transition completes before assertions run. Read more about settling frames in the [pumpAndSettle documentation](https://api.flutter.dev/flutter/flutter_test/WidgetTester/pumpAndSettle.html).
 
 ### Test adding and removing sandwich items
 
@@ -676,7 +715,7 @@ Next, add a test that sets `maxQuantity: 3` and taps **Add** five times to verif
     });
 ```
 
-The `for` loop simulates five consecutive taps, while the assertion verifies that only three emojis appear.
+The standard `for` loop repeats a code block a specific number of times. Inside the parentheses, `int i = 0` initialises a counter variable, `i < 5` defines the condition that keeps the loop running, and `i++` increments the counter after each iteration. Read more in the [Dart loop documentation](https://dart.dev/language/loops#for-loops).
 
 Your test file should look like this in VS Code. Make sure to run the tests again to confirm that all tests pass:
 
@@ -754,14 +793,14 @@ As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema
 
 In Worksheet 3 you refactored the Southsea Cinema application to show movie cards on the home page and navigate to the dynamic listing page. For Demo 2 you must demonstrate that your codebase is backed by passing automated tests and clean static analysis.
 
-1. Create a unit test file named `test/movie_repository_test.dart` inside your `southsea_cinema` fork, following the approach in [Unit testing repositories](#unit-testing-repositories). Write tests with `group()`, `test()`, and `expect()` that verify your movie repository returns a list containing at least two movies, and that each movie has a non-empty title, an age rating, and a ticket price greater than zero.
+1. Open `lib/models/movie.dart` in your `southsea_cinema` fork. Following the pattern from [Add a formatted price getter to the sandwich model](#add-a-formatted-price-getter-to-the-sandwich-model), add a `formattedPrice` getter that returns the ticket price prefixed with `£` and formatted to two decimal places (for example `'£6.00'`). In addition, add helper getters to check age rating suitability: an `isChildFriendly` getter that returns `true` if `ageRating` is `'U'` or `'PG'` and `false` otherwise, and an `isAdultOnly` getter that returns `true` if `ageRating` is `'18'` and `false` otherwise. Update your movie card and listing widgets to use `movie.formattedPrice`.
 
-2. In `test/widget_test.dart`, write a widget test that pumps `SouthseaCinemaApp` and waits for the widget tree to settle with `tester.pumpAndSettle()`, as in [Test initial menu screen rendering](#test-initial-menu-screen-rendering). Verify that the home page displays the app title, the movie titles, and the booking buttons.
+2. Create a unit test file named `test/movie_model_test.dart`, following the steps in [Unit testing data models](#unit-testing-data-models). Write unit tests using `group()`, `test()`, and `expect()` that verify constructor property assignment, the `formattedPrice` getter, and your age rating suitability methods (`isChildFriendly` and `isAdultOnly`) across different age ratings.
 
-3. Run `dart format` and `dart analyze` across your project, as described in [Running test suites and static analysis](#running-test-suites-and-static-analysis). Confirm that your codebase has zero analyser issues and follows formatting conventions.
+3. In `lib/repositories/movie_repository.dart`, add a `getMovieById(String id)` method that searches the list of films and returns the matching `Movie`, or `null` if no film matches the identifier, following the pattern from [Add getSandwichById to SandwichRepository](#add-getsandwichbyid-to-sandwichrepository). In addition, add helper query methods such as `getMoviesByAgeRating(String rating)` and `getMoviesUnderPrice(double maxPrice)` to filter the film collection. Then create a unit test file named `test/movie_repository_test.dart`, following [Unit testing repositories](#unit-testing-repositories). Write tests with `group()`, `test()`, and `expect()` that verify your movie repository returns a list containing at least two movies, that each movie has a non-empty unique `id`, a non-empty title, an age rating, and a ticket price greater than zero, and that `getMovieById()` returns the correct movie when given an existing identifier and returns `null` for a missing identifier. Add test cases verifying that `getMoviesByAgeRating()` and `getMoviesUnderPrice()` return only the films matching the filter criteria.
 
-4. (Advanced) Create a unit test file named `test/movie_model_test.dart` following [Unit testing data models](#unit-testing-data-models). Write unit tests verifying that an instantiated `Movie` correctly assigns all constructor fields.
+4. In `test/widget_test.dart`, write a widget test that pumps `SouthseaCinemaApp` and waits for the widget tree to settle with `tester.pumpAndSettle()`, as in [Test initial menu screen rendering](#test-initial-menu-screen-rendering). Verify that the home page displays the app title, the movie titles, and the booking buttons.
 
-5. (Advanced) Expand `test/widget_test.dart` to test the full navigation flow from the home page to the listing page, following the steps in [Test navigating to the order screen](#test-navigating-to-the-order-screen). Simulate tapping a booking button with `tester.tap()`, call `tester.pumpAndSettle()`, and assert that the movie listing page opened with the selected film's details.
+5. Run `dart format` and `dart analyze` across your project, as described in [Running test suites and static analysis](#running-test-suites-and-static-analysis). Confirm that your codebase has zero analyser issues and follows formatting conventions.
 
-6. (Advanced) Add interaction tests for the movie listing page that simulate selecting ticket quantities or pressing the booking button, as in [Test adding and removing sandwich items](#test-adding-and-removing-sandwich-items). Note that this exercise requires an interactive listing page with state management (such as the ticket quantity dropdown and booking feedback button from the Worksheet 2 exercises). If you have not yet completed those interactive features, you must implement them on your listing page before writing these tests.
+6. (Advanced) Expand `test/widget_test.dart` to test the full navigation flow from the home page to the movie listing page, following the steps in [Test navigating to the order screen](#test-navigating-to-the-order-screen). Simulate tapping a booking button with `tester.tap()`, call `tester.pumpAndSettle()`, and assert that the movie listing page opened with the selected film's details. If your listing page contains a booking feedback button, simulate tapping the button and assert that the confirmation message appears. **Show your passing test suite and running application to a member of staff** for your Demo 2 sign-off.
