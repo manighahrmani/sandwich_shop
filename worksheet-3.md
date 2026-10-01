@@ -255,6 +255,8 @@ Then declare a class called `SandwichRepository`. Inside this class, create a me
 
 Now fill `getSandwiches()` with two (`const`) instances of the `Sandwich` class that you made in `lib/models/sandwich.dart`. Create an ID for them, give them a name, a description, a price, and an image path. Note that the image paths must match the files you placed in `assets/images/`, for example `assets/images/footlong.jpeg`.
 
+Use these exact values so that your app matches the screenshots and the tests you will write in Worksheet 4. The first sandwich has the ID `'footlong'`, the name `'Footlong Sub'`, the description `'A freshly baked 12-inch sandwich filled with savoury ingredients.'`, the price `7.50`, and the image path `'assets/images/footlong.jpeg'`. The second sandwich has the ID `'six-inch'`, the name `'Six-Inch Sub'`, the description `'A light 6-inch sandwich made with your favourite toppings.'`, the price `4.50`, and the image path `'assets/images/six_inch.jpeg'`.
+
 This is what our repository looks like after adding the mock data:
 
 ![The SandwichRepository class after adding mock sandwich items](images/3/sandwich_repository_mock_data.png)
@@ -473,7 +475,7 @@ This is what our screen should ideally look like. Yours may differ slightly base
 
 ![The MenuScreen widget build method](images/3/menu_screen_widget.png)
 
-Return a `Scaffold` widget with an `AppBar` set to a `Text` widget (e.g., set to "Sandwich Shop Menu") and a `ListView.builder` as the body. `ListView.builder` must have a `itemBuilder` set to a function that takes `context` and `index` and returns what each row should display. In our case, the `itemBuilder` should return a `SandwichCard` configured with `sandwiches[index]`.
+Return a `Scaffold` widget with an `AppBar` set to a `Text` widget (e.g., set to "Sandwich Menu") and a `ListView.builder` as the body. `ListView.builder` must have a `itemBuilder` set to a function that takes `context` and `index` and returns what each row should display. In our case, the `itemBuilder` should return a `SandwichCard` configured with `sandwiches[index]`.
 
 `ListView.builder` also needs an `itemCount` property to specify the total number of items in the list. This helps Flutter determine how many times to call the `itemBuilder` function. In our case, let's set it to `sandwiches.length`.
 
