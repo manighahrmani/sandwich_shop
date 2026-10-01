@@ -7,6 +7,9 @@
 # Scratch / personal notes
 prompt.md
 
+# Agent working artifacts
+.agents/
+
 # Python
 __pycache__/
 *.py[cod]
