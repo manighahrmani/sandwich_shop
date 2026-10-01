@@ -9,7 +9,7 @@
 Lecture 3:
 
 - Data models and separation of concerns
-- Repositories and asset management
+- Repositories and assets
 - In-page navigation
 
 ---
@@ -18,9 +18,8 @@ Lecture 3:
 
 I need tech news from you! I will provide some of my own.
 
-- Dart constructors and class syntax: [dart.dev/language/constructors](https://dart.dev/language/constructors)
-- Flutter app architecture guide: [docs.flutter.dev/app-architecture/guide](https://docs.flutter.dev/app-architecture/guide)
-- Widget of the Week — ListView: [Flutter YouTube channel](https://youtube.com/watch?v=KJpkjHGiI5A)
+- Google Cloud for Education: [cloud.google.com/edu/students](https://cloud.google.com/edu/students)
+- Google One AI Premium for students: [one.google.com/ai-student](https://one.google.com/ai-student)
 
 ---
 
@@ -30,7 +29,7 @@ Some feedback to address:
 
 | Feedback | Response |
 | --- | --- |
-| "Giving us more time to complete worksheets and prepare for demos, taking into consideration our timetables and how some of us have a lot less time to complete them than others." | There is a retrieval of failure week in February in addition to ref/def (ref/def is in the summer). You can also do Demo 1 next week (and Demo 2 in the next demo window and so on). Drop-in session available. |
+| "Giving us more time to complete worksheets and prepare for demos, taking into consideration our timetables and how some of us have a lot less time to complete them than others." | "Fail retrieval" week in February in addition to Ref/def (Ref/def is Summer). Can do Demo 1 next week (and Demo 2 in the next demo window and so on). Drop-in session. |
 | "Please start caring about students' emotions." | See above. |
 | "Explain all the terms we need to learn and all the concepts for the coursework following everything we've learned from the worksheets." | Have you read the worksheet? Should the worksheets be more verbose? Should I do anything in the lecture? |
 | "Keep more educated teacher." | What? |
@@ -51,7 +50,7 @@ Some feedback to address:
 - We need models. Models are plain Dart classes defining the shape and properties of real-world entities.
 - Models roughly translate to SQL tables; they are essentially Python classes.
 - Models can introduce immutability with `final` fields (it prevents accidental modification across the app).
-- `const` constructors enable compile-time constants and efficient widget rebuilds.
+- Or `const` constructors enable compile-time constants and efficient widget rebuilds.
 
 ---
 
@@ -65,7 +64,7 @@ Some feedback to address:
 
 ---
 
-## Repositories and asset management
+## Repositories and assets — repositories
 
 - The term "repository" here is different from a GitHub repository.
 - In Flutter, a repository abstracts data retrieval behind simple, testable methods.
@@ -74,7 +73,7 @@ Some feedback to address:
 
 ---
 
-## Assets and efficient lists
+## Repositories and assets — assets
 
 - Static assets (images, videos, icons, fonts) are declared in `pubspec.yaml` under `assets:`.
 - They must be registered before they can be used.
@@ -86,9 +85,10 @@ Some feedback to address:
 
 ## In-page navigation
 
-- Navigation means moving between pages. You can navigate using the index (for example URL to apps), or you can implement in-page navigation.
+- Navigation means moving between tabs.
+- You can navigate using the index (for example URL to apps), or you can implement in-page navigation.
 - This method of navigation in Flutter is stack-based. Stack like a stack of books or plates.
-- Navigation is managed by the `Navigator` class.
+- This type of navigation is managed by the `Navigator` class.
 - `Navigator.push()` places a new route on top of the stack.
 - `Navigator.pop()` removes the top route, revealing the previous screen underneath.
 - `MaterialPageRoute` provides platform-appropriate transitions and automatic app bar back buttons.
@@ -97,7 +97,8 @@ Some feedback to address:
 
 ## Demo 2 (footnote)
 
-- Union of Worksheet 3 and Worksheet 4 exercises: home view with movie cards and navigation to dynamic listing. Also unit tests and widget tests covering almost all of your codebase.
+- Union of Worksheet 3 and Worksheet 4 exercises: home view with movie cards and navigation to dynamic listing.
+- Also unit tests and widget tests covering almost all of your codebase.
 - Demonstrate in your own timetabled practical session.
 - You can only do one demo in each window.
 - More information on the web page: [manighahrmani.github.io/sandwich_shop](https://manighahrmani.github.io/sandwich_shop/)

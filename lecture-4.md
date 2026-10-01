@@ -8,28 +8,38 @@
 
 Lecture 4:
 
-- Why automated testing matters
+- Automated testing
 - Unit testing
 - Widget testing
 
 ---
 
-## Why automated testing matters — tech news
+## Automated testing — tech news
 
 I need tech news from you! I will provide some of my own.
 
-- Flutter testing overview: [docs.flutter.dev/testing/overview](https://docs.flutter.dev/testing/overview)
-- Dart testing library: [pub.dev/packages/test](https://pub.dev/packages/test)
-- Widget of the Week — Golden tests: [youtube.com/playlist](https://youtube.com/playlist?list=PLjxrf2q8roU23XGwz3Km7sQZFTdB996iG)
+- AWS Educate (Amazon's cloud): [aws.amazon.com/education/awseducate](https://aws.amazon.com/education/awseducate)
+- Azure for Students (Microsoft's cloud): [azure.microsoft.com/en-us/free/students](https://azure.microsoft.com/en-us/free/students)
 
 ---
 
-## Why automated testing matters
+## Automated testing
 
-- Manual testing is slow and error-prone. You click through the app, check the screen, and repeat after every change.
-- Automated tests run in seconds and catch regressions before they reach users.
-- Tests document expected behaviour: a new team member reads the tests to understand what the code should do.
+- Manual testing, testing an application by hand, is slow and error-prone.
+- You click through the app, check the screen, and repeat after every change.
+- Automated tests run in seconds and, if they are designed well, can catch bugs early on.
+- Tests also document expected behaviour: a new team member reads the tests to understand what the code should do.
+- (That is in addition to documentation which we will learn about later.)
+
+---
+
+## Testing strategies
+
 - The testing pyramid: many fast unit tests at the base, fewer widget tests in the middle, very few integration tests at the top.
+- Release and application tests correspond to integration tests on builds (more on this later).
+- Feature and component testing correspond to widget testing in Flutter.
+- We will learn about unit and widget testing now.
+- Image source: "Testing strategies", Android Developers, Google. Available at: [developer.android.com/training/testing/fundamentals/strategies](https://developer.android.com/training/testing/fundamentals/strategies)
 
 ---
 
@@ -38,7 +48,9 @@ I need tech news from you! I will provide some of my own.
 - A unit test exercises a single function, method, or class in isolation.
 - No Flutter widgets, no UI rendering, no device needed.
 - Use the `test` package: `test()`, `expect()`, matchers like `equals`, `isTrue`, `throwsA`.
+- See examples here: [pub.dev/packages/test](https://pub.dev/packages/test)
 - Group related tests with `group()` for readability.
+- Also group related tests into a file (ideally a test file corresponding to a unit).
 - Good tests are independent, repeatable, and fast.
 
 ---
@@ -58,21 +70,23 @@ I need tech news from you! I will provide some of my own.
 - Use `testWidgets()`, `WidgetTester`, and finders like `find.text()`, `find.byType()`.
 - `pumpWidget()` builds the widget tree; `pump()` triggers a rebuild after state changes.
 - `tester.tap()` simulates user interaction; follow it with `pump()` to see the result.
+- Check the documentation page to learn the basics: [An introduction to widget testing](https://docs.flutter.dev/cookbook/testing/widget/introduction)
 
 ---
 
-## Widget testing — what to test
+## Widget testing — behaviours to test
 
 - Does the widget display the correct text and icons for a given model?
 - Does tapping a button update the UI as expected?
 - Does navigation push the right screen when a list item is tapped?
-- Keep widget tests focused on one behaviour per test.
+- Keep widget tests focused on one behaviour per test (they can be grouped into files or groups just like unit tests).
 
 ---
 
 ## Demo 2 (footnote)
 
-- Union of Worksheet 3 and Worksheet 4 exercises: home view with movie cards and navigation to dynamic listing. Also unit tests and widget tests covering almost all of your codebase.
+- Union of Worksheet 3 and Worksheet 4 exercises: home view with movie cards and navigation to dynamic listing.
+- Also unit tests and widget tests covering almost all of your codebase.
 - Demonstrate in your own timetabled practical session.
 - You can only do one demo in each window.
 - More information on the web page: [manighahrmani.github.io/sandwich_shop](https://manighahrmani.github.io/sandwich_shop/)
@@ -94,7 +108,15 @@ Run this live during the lecture to teach Git merge conflict resolution. This co
 
 ### Setup
 
-1. Create a fresh throwaway repository (or reuse the one from the Lecture 3 demo):
+1. Conflicts are normal and not something to fear. They happen when two people (or two branches) edit the same line.
+2. The tooling in VS Code makes resolution straightforward.
+3. Avoiding conflicts in practice:
+    - Pull before you push. Fetch and merge (or rebase) regularly.
+    - Keep branches short-lived. Merge back to `main` often.
+    - Communicate with your team about who is working on which files.
+    - Use meaningful commit messages so the merge history is readable.
+
+4. Create a fresh throwaway repository (or reuse the one from the Lecture 3 demo):
 
     ```bash
     mkdir conflict-demo && cd conflict-demo
@@ -150,13 +172,6 @@ Run this live during the lecture to teach Git merge conflict resolution. This co
     ```bash
     git log --oneline --graph --all
     ```
-
-### Part 3 — Avoiding conflicts in practice
-
-1. Pull before you push. Fetch and merge (or rebase) regularly.
-2. Keep branches short-lived. Merge back to `main` often.
-3. Communicate with your team about who is working on which files.
-4. Use meaningful commit messages so the merge history is readable.
 
 ### Wrap-up
 
