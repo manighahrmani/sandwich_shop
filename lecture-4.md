@@ -43,6 +43,24 @@ I need tech news from you! I will provide some of my own.
 
 ---
 
+## Integration testing
+
+- Integration tests verify how multiple units work together or test the full application on a real device or browser.
+- Simulates complete user journeys end-to-end, such as navigating screens, submitting forms, and saving data.
+- Slower than unit and widget tests, but provides the highest confidence before releasing.
+- We will cover it later, but for more info on integration testing, check the documentation: [docs.flutter.dev/testing/integration-tests](https://docs.flutter.dev/testing/integration-tests)
+
+---
+
+## Test coverage
+
+- Test coverage measures the proportion of your codebase executed while running automated tests.
+- Helps identify untested branches, missing edge cases, and dead code.
+- Run `flutter test --coverage` to generate coverage data in `coverage/lcov.info`.
+- Visualise coverage directly in your editor using coverage extensions.
+
+---
+
 ## Unit testing
 
 - A unit test exercises a single function, method, or class in isolation.
@@ -52,15 +70,6 @@ I need tech news from you! I will provide some of my own.
 - Group related tests with `group()` for readability.
 - Also group related tests into a file (ideally a test file corresponding to a unit).
 - Good tests are independent, repeatable, and fast.
-
----
-
-## Unit testing — what to test
-
-- Model property assignment and computed getters (for example a formatted price).
-- Repository methods returning the expected data.
-- Edge cases: empty lists, null-safe fields, boundary values.
-- Do not test Flutter framework code or third-party packages; test your own logic.
 
 ---
 
