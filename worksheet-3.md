@@ -682,4 +682,17 @@ In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2,
 
     Make sure you replace the example movies (The Phantom of the Opera and Halloween) with your own favourite films, and ensure there are at least two cards in the list.
 
-6. (Advanced) Make each movie card interactive so that tapping its booking button navigates to that film's listing page and dynamically displays the details of the selected film, following the navigation and data passing approach from [Navigate between screens and pass data](#navigate-between-screens-and-pass-data).
+6. (Advanced) Make each movie card interactive so that tapping its booking button navigates to that film's listing page and dynamically displays the details of the selected film, following the navigation and data passing approach from [Navigate between screens and pass data](#navigate-between-screens-and-pass-data). The behaviour you are after is that pressing the booking button opens the listing page for that specific card's film, so the listing page now needs the selected film passed to it when it is opened, just as `OrderScreen` receives a `Sandwich`.
+
+    Once the listing page needs a film passed in, it can no longer be opened without one. In `lib/main.dart`, change the listing part of your routes so that the home page is the only route, and remove the listing page import that is no longer used:
+
+    ```dart
+    initialRoute: '/',
+    routes: {
+      '/': (BuildContext context) {
+        return const HomeView();
+      },
+    },
+    ```
+
+    This also affects your navigation drawer, which previously offered a direct link to the listing page. A drawer link cannot choose a film to show, so remove that link and leave only the home link. The listing page is now reached only through a film's booking button.
