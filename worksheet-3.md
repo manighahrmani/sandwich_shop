@@ -684,7 +684,13 @@ In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2,
 
 6. (Advanced) Make each movie card interactive so that tapping its booking button navigates to that film's listing page and dynamically displays the details of the selected film, following the navigation and data passing approach from [Navigate between screens and pass data](#navigate-between-screens-and-pass-data). The behaviour you are after is that pressing the booking button opens the listing page for that specific card's film, so the listing page now needs the selected film passed to it when it is opened, just as `OrderScreen` receives a `Sandwich`.
 
-    Once the listing page needs a film passed in, it can no longer be opened without one. In `lib/main.dart`, change the listing part of your routes so that the home page is the only route, and remove the listing page import that is no longer used:
+    Once the listing page needs a film passed in, it can no longer be opened without one. In `lib/main.dart`, comment out the listing page import near the top of the file so it is no longer used, leaving the line in place as a reminder of what changed:
+
+    ```dart
+    // import 'package:southsea_cinema/views/movie_listing.dart';
+    ```
+
+    Then comment out the `'/listing'` route further down so that the home page is the only route left:
 
     ```dart
     initialRoute: '/',
@@ -692,7 +698,17 @@ In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2,
       '/': (BuildContext context) {
         return const HomeView();
       },
+      // '/listing': (BuildContext context) {
+      //   return const MovieListing();
+      // },
     },
     ```
 
-    This also affects your navigation drawer, which previously offered a direct link to the listing page. A drawer link cannot choose a film to show, so remove that link and leave only the home link. The listing page is now reached only through a film's booking button.
+    This also affects your navigation drawer in the `lib/widgets` folder. It previously offered a direct link to the listing page through a `DrawerTile` pointing at the `'/listing'` route, which no longer exists. A drawer link cannot choose which film to show, so comment out that tile and leave only the home tile:
+
+    ```dart
+    const DrawerTile(title: 'Home', route: '/'),
+    // const DrawerTile(title: 'Movie Listing', route: '/listing'),
+    ```
+
+    The listing page is now reached only through a film's booking button.
