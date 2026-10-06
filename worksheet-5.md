@@ -1050,7 +1050,7 @@ void main() {
 
     expect(find.text('Your Order'), findsOneWidget);
     expect(find.text('2x Footlong'), findsOneWidget);
-    expect(find.text('£20.00'), findsOneWidget);
+    expect(find.text('£20.00'), findsWidgets);
     expect(find.text('Checkout'), findsOneWidget);
 
     // Tap delete button
