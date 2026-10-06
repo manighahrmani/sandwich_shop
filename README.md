@@ -25,9 +25,9 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 | 28/09/2026 | 02/10/2026 | [Worksheet 2](./worksheet-2.md) | [Lecture 2](https://docs.google.com/presentation/d/1HyWI8me8idDz5ixpSXtOs8UvoPlhnZg3Kl6OjnB5_oI/edit?usp=sharing) | Demo Window 1 |
 | 05/10/2026 | 09/10/2026 | [Worksheet 3](./worksheet-3.md) | [Lecture 3](https://docs.google.com/presentation/d/1K2GpWchPcWoec_GMyueHftuglxOU9aHjnAF1eO4Sfys/edit?usp=sharing) | Demo Window 2 |
 | 12/10/2026 | 16/10/2026 | [Worksheet 4](./worksheet-4.md) | [Lecture 4](https://docs.google.com/presentation/d/1ldcbaYmn0MFEeIaLUbZQ2HXiUi45aSVD5z3VxUB7g4k/edit?usp=sharing) | Demo Window 2 |
-| 19/10/2026 | 23/10/2026 | Worksheet 5 | Lecture 5 | Demo Window 3 |
+| 19/10/2026 | 23/10/2026 | [Worksheet 5](./worksheet-5.md) | Lecture 5 | Demo Window 3 |
 | 26/10/2026 | 30/10/2026 | Reading week (break) | | |
-| 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo Window 3 |
+| 02/11/2026 | 06/11/2026 | [Worksheet 6](./worksheet-6.md) | Lecture 6 | Demo Window 3 |
 | 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo Window 4 |
 | 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo Window 4 |
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo Window 5 |
@@ -45,8 +45,8 @@ Each week has a worksheet and a lecture. You should aim to complete the workshee
 - [Worksheet 2: Stateless and Stateful Widgets](./worksheet-2.md)
 - [Worksheet 3: Data Models, Repositories, Assets, and In-Page Navigation](./worksheet-3.md)
 - [Worksheet 4: Unit and Widget Testing](./worksheet-4.md)
-- Worksheet 5: Data Models, Multi-Screen UI, and Asynchronous Views (under revision)
-- Worksheet 6: Persistence with SQLite (under revision)
+- [Worksheet 5: Navigation Drawer, Basket Management, and Forms](./worksheet-5.md)
+- [Worksheet 6: Local Persistence with SQLite](./worksheet-6.md)
 - Worksheet 7: Navigation and State Management (under revision)
 - Worksheet 8: AI-Driven Development (under revision)
 - Worksheet 9: Web Services and Integration Testing (under revision)
