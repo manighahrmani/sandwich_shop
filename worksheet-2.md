@@ -766,7 +766,21 @@ Be sure to make a separate commit for each exercise below, and commit more often
     ),
     ```
 
-    The [widget fundamentals tutorial](https://docs.flutter.dev/learn/pathway/tutorial/widget-fundamentals) has a nice walkthrough on `Container`, `BoxDecoration` (for borders and background colours) and passing a `child`. Complete it before attempting this exercise. You may optionally also check out the [Container documentation](https://api.flutter.dev/flutter/widgets/Container-class.html). Commit your changes with the message `Add film title and description container`.
+    The [widget fundamentals tutorial](https://docs.flutter.dev/learn/pathway/tutorial/widget-fundamentals) has a nice walkthrough on `Container`, `BoxDecoration` (for borders and background colours) and passing a `child`. Complete it before attempting this exercise. You may optionally also check out the [Container documentation](https://api.flutter.dev/flutter/widgets/Container-class.html).
+
+    Optionally, you can adjust the font size, font weight, or colour of your text by passing a `TextStyle` to the `style` property of a `Text` widget. For example, in your sandwich shop app you could enlarge a heading and make it bold:
+
+    ```dart
+    Text(
+      'Welcome to the Sandwich Shop!',
+      style: const TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    ```
+
+    The [text and typography documentation](https://docs.flutter.dev/ui/design/text) and the [TextStyle documentation](https://api.flutter.dev/flutter/painting/TextStyle-class.html) cover font styling options. Commit your changes with the message `Add film title and description container`.
 
 2. Arrange the title, the description and the rest of the widgets you will add later in the next exercises using `Column` and `Row` widgets
 
@@ -798,9 +812,44 @@ Be sure to make a separate commit for each exercise below, and commit more often
 
     The [DropdownMenu documentation](https://api.flutter.dev/flutter/material/DropdownMenu-class.html) has more details and examples on the widget. Commit your changes with the message `Add ticket quantity dropdown menu`.
 
-4. Add an "Add to order" button that gives the user feedback when pressed. There is no basket yet, so the feedback should be adding a new `Text` widget or updating an existing one below the button (for example, displaying a message that states how many tickets were added to the order). Commit your changes with the message `Add booking feedback button`.
+4. Add an "Add to order" button that gives the user feedback when pressed. There is no basket yet, so the feedback should be adding a new `Text` widget or updating an existing one below the button (for example, displaying a message that states how many tickets were added to the order).
 
-5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does. The [text and typography documentation](https://docs.flutter.dev/ui/design/text) covers styling text. Commit your changes with the message `Style movie listing to match brand constants`.
+    Optionally, you can style the button to customise its background colour, text colour, and shape using `ElevatedButton.styleFrom()`. For example, in your sandwich shop app you could style the Add button with custom colours:
+
+    ```dart
+    ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.teal,
+        foregroundColor: Colors.white,
+      ),
+      onPressed: _increaseQuantity,
+      child: const Text('Add'),
+    ),
+    ```
+
+    The [ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) and [ButtonStyle documentation](https://api.flutter.dev/flutter/material/ButtonStyle-class.html) explain button appearance in more detail. Commit your changes with the message `Add booking feedback button`.
+
+5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does.
+
+    For example, you can apply `cinemaHeaderStyle` directly to your title `Text` widget (`style: cinemaHeaderStyle`), or define custom text styles using colours such as `cinemaFontWhite` and `cinemaFontMuted`.
+
+    Optionally, you can also style your booking button to match the brand aesthetic of the cinema. Southsea Cinema buttons use squared corners rather than rounded edges. You can apply the brand colour and square the corners by configuring the `shape` property with `BorderRadius.zero`:
+
+    ```dart
+    ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: cinemaBrand,
+        foregroundColor: cinemaFontWhite,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+      ),
+      onPressed: _addToOrder,
+      child: const Text('Add to order'),
+    ),
+    ```
+
+    Commit your changes with the message `Style movie listing to match brand constants`.
 
 6. (Advanced) Make your page adapt to the width of the window. A `LayoutBuilder` gives you the available width, so you can show a different layout on narrow and wide windows. For example, in your sandwich shop app you could show the buttons in a `Row` on wide windows and a `Column` on narrow ones:
 
