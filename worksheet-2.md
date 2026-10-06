@@ -2,7 +2,6 @@
 
 ## Table of contents
 
-- [What you need to know beforehand](#what-you-need-to-know-beforehand)
 - [Getting help](#getting-help)
 - [Getting started](#getting-started)
   - [Continue from Worksheet 1](#continue-from-worksheet-1)
@@ -45,10 +44,6 @@
   - [Add and remove emojis with setState](#add-and-remove-emojis-with-setstate)
   - [Commit your changes (11)](#commit-your-changes-11)
 - [Exercises](#exercises)
-
-## What you need to know beforehand
-
-Ensure that you have already completed [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md).
 
 ## Getting help
 
