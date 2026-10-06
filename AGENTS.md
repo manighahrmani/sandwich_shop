@@ -173,12 +173,27 @@ clarity, expressiveness, and ease of understanding for students:
 - Declare variables and types explicitly rather than relying heavily on type
   inference or chained inline expressions when introducing concepts.
 - Repetition and verbosity are preferred if they make the logic transparent
-  and easier for newcomers to follow and debug.
+  and easier for newcomers to follow and debug. Code should always be longer
+  and easier to read than compact: use typed variables, visible named functions,
+  descriptive variable names, and simple `if` statements or procedural loops
+  over shortcuts.
+- Curriculum progression constraints across teaching branches and worksheets:
+  - Worksheets 1 & 2 concepts used: `StatelessWidget`, `StatefulWidget`,
+    `setState`, explicit types (`int`, `double`, `String`, `bool`), `Container`,
+    `SizedBox`, `ElevatedButton`, `IconButton`, `ListView.builder`, and
+    `DropdownMenu`.
+  - Worksheets 3 & 4 concepts used: Class definitions, repository pattern,
+    explicit procedural `for-in` loops (no arrow syntax or functional chained
+    methods), and unit/widget tests (`test`, `expect`, `testWidgets`).
 - Critical constraint: never refactor or simplify worksheet code snippets or
   application code at the expense of breaking existing screenshots or
   instructions in the worksheets. If an existing screenshot displays shorthand
   or arrow syntax, keep the exact snippet in the worksheet so it matches the
   screenshot, and explain the verbose block alternative in prose.
+- Southsea Cinema button standardisation: buttons must always be squared
+  without rounded corners (`shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)`),
+  matching the live Southsea Cinema site design. Never use default Material 3
+  rounded or stadium buttons in Demo 3 and onwards.
 
 ### Lecture files
 

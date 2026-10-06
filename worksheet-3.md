@@ -711,4 +711,6 @@ In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2,
     // const DrawerTile(title: 'Movie Listing', route: '/listing'),
     ```
 
-    The listing page is now reached only through a film's booking button.
+    The listing page is now reached only through a film's booking button. So for example, if the user clicked on the Phantom of the Opera's booking button, the user should be navigated to the `MovieListing` page with the Phantom of the Opera's details as shown below:
+
+    ![The MovieListing page with the Phantom of the Opera's details](images/3/southsea_cinema_movie_listing.png)
