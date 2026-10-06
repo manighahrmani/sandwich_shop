@@ -2,7 +2,6 @@
 
 ## Table of contents
 
-- [What you need to know beforehand](#what-you-need-to-know-beforehand)
 - [Getting help](#getting-help)
 - [Getting started](#getting-started)
   - [Continue from Worksheet 2](#continue-from-worksheet-2)
@@ -41,10 +40,6 @@
   - [Test the complete navigation flow](#test-the-complete-navigation-flow)
   - [Commit your changes (7)](#commit-your-changes-7)
 - [Exercises](#exercises)
-
-## What you need to know beforehand
-
-Ensure that you have completed [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md) and [Worksheet 2 — Stateless and Stateful Widgets](./worksheet-2.md). You should be comfortable creating `StatelessWidget` and `StatefulWidget` classes, calling `setState()` to update the user interface (UI), and arranging widgets with `Row`, `Column`, and `Scaffold`. You met `Image.asset` briefly in the Worksheet 2 exercises; we use it properly here.
 
 ## Getting help
 

@@ -2,7 +2,6 @@
 
 ## Table of contents
 
-- [What you need to know beforehand](#what-you-need-to-know-beforehand)
 - [Getting help](#getting-help)
 - [Getting started](#getting-started)
   - [Continue from Worksheet 3](#continue-from-worksheet-3)
@@ -46,10 +45,6 @@
   - [Analyse your code with the Dart analyser](#analyse-your-code-with-the-dart-analyser)
   - [Commit your changes (7)](#commit-your-changes-7)
 - [Exercises](#exercises)
-
-## What you need to know beforehand
-
-Ensure that you have completed [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md), [Worksheet 2 — Stateless and Stateful Widgets](./worksheet-2.md), and [Worksheet 3 — Data Models, Repositories, Assets and In-Page Navigation](./worksheet-3.md). You should have an application separated into models, repositories, and widgets, with stack-based navigation using `Navigator.push` (introduced in the [Navigate between screens and pass data](./worksheet-3.md#navigate-between-screens-and-pass-data) section of Worksheet 3).
 
 ## Getting help
 

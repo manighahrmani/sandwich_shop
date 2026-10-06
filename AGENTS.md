@@ -55,6 +55,21 @@ adding emphasis, structure, or explanation the style forbids. Much of this is
 enforced automatically by Vale, markdownlint and cspell (see the Style
 enforcement section at the end).
 
+### Commit guidance by worksheet
+
+The amount of Git hand-holding a worksheet gives decreases as the module
+progresses, so that students build the habit of committing on their own.
+
+- From Worksheet 5 onwards, worksheets must not specify commit-message text
+  anywhere, neither in the body nor in the exercises. You may still remind
+  students to commit and may show the `git add` and `git commit` commands, but
+  never dictate the message with `git commit -m "..."`. Instead, tell the
+  student to write their own short, descriptive message.
+- From Worksheet 7 onwards, worksheets must not instruct students to commit at
+  all. Remove the "Commit your changes" subsections and any "remember to
+  commit" reminders. By this point the habit is assumed and students manage
+  their own version control without prompting.
+
 ### Document structure
 
 - Start every worksheet with a single level-1 title in the form

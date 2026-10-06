@@ -2,7 +2,6 @@
 
 ## Table of contents
 
-- [What you need to know beforehand](#what-you-need-to-know-beforehand)
 - [Getting help](#getting-help)
 - [Getting started](#getting-started)
   - [Continue from Worksheet 5](#continue-from-worksheet-5)
@@ -14,7 +13,7 @@
   - [Commit your changes (1)](#commit-your-changes-1)
 - [Creating the database helper](#creating-the-database-helper)
   - [Define the database singleton](#define-the-database-singleton)
-  - [Initialize database tables](#initialize-database-tables)
+  - [Initialise database tables](#initialise-database-tables)
   - [Commit your changes (2)](#commit-your-changes-2)
 - [Persisting and retrieving order transactions](#persisting-and-retrieving-order-transactions)
   - [Define the OrderTransaction model](#define-the-ordertransaction-model)
@@ -34,10 +33,6 @@
   - [Test database transactions](#test-database-transactions)
   - [Commit your changes (6)](#commit-your-changes-6)
 - [Exercises](#exercises)
-
-## What you need to know beforehand
-
-Ensure that you have completed [Worksheet 1 — Dart, Git, GitHub and Flutter](./worksheet-1.md), [Worksheet 2 — Stateless and Stateful Widgets](./worksheet-2.md), [Worksheet 3 — Data Models, Repositories, Assets and In-Page Navigation](./worksheet-3.md), [Worksheet 4 — Unit and Widget Testing](./worksheet-4.md), and [Worksheet 5 — Navigation Drawer, Basket Management, and Forms](./worksheet-5.md). You should be comfortable building navigation drawers, managing in-memory repositories, and implementing form controllers.
 
 ## Getting help
 
@@ -95,12 +90,7 @@ flutter pub get
 
 ### Commit your changes (1)
 
-Stage and commit `pubspec.yaml` and `pubspec.lock`:
-
-```bash
-git add pubspec.yaml pubspec.lock
-git commit -m "Add SQLite database dependencies"
-```
+Stage and commit `pubspec.yaml` and `pubspec.lock`.
 
 ## Creating the database helper
 
@@ -108,7 +98,9 @@ We manage database connections through a dedicated helper class named `SandwichD
 
 ### Define the database singleton
 
-Create a new file named `lib/database/sandwich_db.dart`. We implement a singleton pattern so that all screens share a single open connection:
+Create a new file named `lib/database/sandwich_db.dart`. We build the helper in stages so each new piece is explained before the next appears.
+
+Start with the imports and the singleton shell. This is the same singleton pattern you built for `CartRepository` in Worksheet 5: a private `._internal()` constructor and one `static final instance`:
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -121,7 +113,14 @@ class SandwichDatabase {
   SandwichDatabase._internal();
 
   static final SandwichDatabase instance = SandwichDatabase._internal();
+}
+```
 
+The two `sqflite_common_ffi` imports give us the database engine and the types we use below, such as `Database`, `DatabaseFactory`, and `OpenDatabaseOptions`. The `package:flutter/foundation.dart` import gives us `kIsWeb`, which we use in a moment.
+
+Now add the field that caches the open connection, a method to set it (used by tests), and a getter that opens the database on first use:
+
+```dart
   static Database? _database;
 
   void setDatabase(Database? db) {
@@ -136,7 +135,13 @@ class SandwichDatabase {
     _database = db;
     return db;
   }
+```
 
+`_database` is a nullable `Database?` that starts as `null`. A `Database` is the open connection the `sqflite` packages give us. The `database` getter is `async` and returns a `Future<Database>` (the asynchronous pattern from Worksheet 4): it returns the cached connection if one exists, otherwise it opens one with `_initDB`, caches it, and returns it. The `setDatabase` method lets our tests supply their own in-memory connection.
+
+Now add the `_initDB` method that opens the connection. We take it in two parts. First, choose the right database engine for the platform:
+
+```dart
   Future<Database> _initDB(String filePath) async {
     final DatabaseFactory dbFactory;
     if (kIsWeb) {
@@ -145,7 +150,13 @@ class SandwichDatabase {
       sqfliteFfiInit();
       dbFactory = databaseFactoryFfi;
     }
+```
 
+A `DatabaseFactory` is the object that opens databases. The right one depends on where the app runs. `kIsWeb` is a compile-time boolean that is `true` when the app runs in a web browser; when it is `true` we use `databaseFactoryFfiWebNoWebWorker`, the web engine from `sqflite_common_ffi_web`. Otherwise we call `sqfliteFfiInit()` once to prepare the desktop engine and use `databaseFactoryFfi` from `sqflite_common_ffi`. You do not need to memorise these names; just know they come from the two packages and provide the engine.
+
+Now finish the method by choosing where the database lives and opening it:
+
+```dart
     final OpenDatabaseOptions options = OpenDatabaseOptions(
       version: 1,
       onCreate: _createDB,
@@ -165,11 +176,13 @@ class SandwichDatabase {
   }
 ```
 
-Notice the check `kIsWeb`: if running on the web, it selects `databaseFactoryFfiWebNoWebWorker`. Otherwise, it initializes desktop FFI. In automated tests, it resolves to `inMemoryDatabasePath`.
+`OpenDatabaseOptions` sets the schema version and the `onCreate` callback, which we point at `_createDB` (written next) so our tables are created the first time the database is made. The expression `const bool.fromEnvironment('FLUTTER_TEST')` is `true` while a `flutter test` run is in progress; when it is, we open `inMemoryDatabasePath`, a special path that keeps the database in memory so tests leave no file behind. Otherwise we open the real file. Finally `dbFactory.openDatabase(...)` opens the connection and returns it.
 
-### Initialize database tables
+### Initialise database tables
 
-Within the same `SandwichDatabase` class, define `_createDB` to create the `transactions` and `settings` tables:
+Within the same `SandwichDatabase` class, define `_createDB`. The database engine calls this method once, through the `onCreate` callback we set above, the first time the database is created. We build it in stages.
+
+Start the method and create the `transactions` table:
 
 ```dart
   Future<void> _createDB(Database db, int version) async {
@@ -182,36 +195,78 @@ Within the same `SandwichDatabase` class, define `_createDB` to create the `tran
         total_price REAL NOT NULL
       )
     ''');
+```
 
+The `db.execute` method runs a raw SQL statement that does not return rows, which is exactly what we need to create a table. The SQL `CREATE TABLE IF NOT EXISTS transactions (...)` makes a table called `transactions` only if it does not already exist. Inside the brackets, each line names a column and its type: `INTEGER` for whole numbers, `TEXT` for strings, and `REAL` for decimal numbers. `PRIMARY KEY` marks the `id` column as the unique identifier for each row, and `AUTOINCREMENT` tells SQLite to fill it in automatically with the next number, so we never set it ourselves. `NOT NULL` means a column must always have a value. The triple-quoted string (`'''`) simply lets the SQL span several lines.
+
+Next, still inside `_createDB`, create the `settings` table the same way:
+
+```dart
     await db.execute('''
       CREATE TABLE IF NOT EXISTS settings (
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL,
         address TEXT NOT NULL,
         email TEXT NOT NULL,
+        customer_id TEXT NOT NULL,
         receive_news INTEGER NOT NULL
       )
     ''');
+```
 
+SQLite has no dedicated boolean type, so the `receive_news` preference is stored as an `INTEGER` that holds `1` for true or `0` for false.
+
+Now seed a short list of past orders so the history screen has something to show. Build the list of maps, then loop over it:
+
+```dart
+    // Seed a short list of past orders so the history screen has data to show
+    final List<Map<String, dynamic>> seedOrders = <Map<String, dynamic>>[
+      <String, dynamic>{
+        'transaction_number': 1001,
+        'summary': '2 items ordered',
+        'date': '14/9/2026',
+        'total_price': 16.50,
+      },
+      <String, dynamic>{
+        'transaction_number': 1002,
+        'summary': '1 item ordered',
+        'date': '21/9/2026',
+        'total_price': 6.00,
+      },
+      <String, dynamic>{
+        'transaction_number': 1003,
+        'summary': '3 items ordered',
+        'date': '28/9/2026',
+        'total_price': 24.00,
+      },
+    ];
+    for (final Map<String, dynamic> order in seedOrders) {
+      await db.insert('transactions', order);
+    }
+```
+
+Each seed order is a `Map<String, dynamic>` (the map type from Worksheet 5) whose keys match the column names. The `db.insert` method adds one row to a named table from such a map: `db.insert('transactions', order)` inserts `order` into the `transactions` table. We use a `for-in` loop to insert each seed order in turn. Because `_createDB` runs only when the database is first created, this seeding happens once, so the order history screen has something to show the first time a student opens it. The coursework asks you to seed your own account history in the same way.
+
+Finally, insert one default settings row so the settings screen always has something to load, then close the method:
+
+```dart
     // Insert default user settings record
     await db.insert('settings', <String, dynamic>{
       'id': 1,
       'name': 'Student User',
       'address': 'University of Portsmouth\nPortsmouth\nPO1 2UP',
       'email': 'student@port.ac.uk',
+      'customer_id': 'SS-1024',
       'receive_news': 1,
     });
   }
 ```
 
+We give this row a fixed `id` of `1` so there is always exactly one settings record to read and update.
+
 ### Commit your changes (2)
 
-Stage and commit `sandwich_db.dart`:
-
-```bash
-git add lib/database/sandwich_db.dart
-git commit -m "Create SQLite database helper and initialize tables"
-```
+Stage and commit `sandwich_db.dart`.
 
 ## Persisting and retrieving order transactions
 
@@ -219,7 +274,7 @@ Next, we define an order transaction data model to represent completed purchases
 
 ### Define the OrderTransaction model
 
-Create a new file named `lib/models/order_transaction.dart`:
+Create a new file named `lib/models/order_transaction.dart`. Start with the fields and the `const` constructor:
 
 ```dart
 class OrderTransaction {
@@ -236,7 +291,14 @@ class OrderTransaction {
     required this.date,
     required this.totalPrice,
   });
+}
+```
 
+The `id` field has the nullable type `int?` and is not `required`. That is because a transaction we have just built in memory does not have an `id` yet: SQLite assigns it when the row is inserted (through the `AUTOINCREMENT` column). So `id` is `null` before saving and holds a number after.
+
+This model needs to convert to and from a database row, just as `Sandwich` converted to and from JSON in Worksheet 5. The database equivalent of `toJson`/`fromJson` is a pair named `toMap`/`fromMap`, which produce and read the `Map<String, dynamic>` of column names to values that the `db.*` methods expect. Add `toMap` first:
+
+```dart
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = <String, dynamic>{
       'transaction_number': transactionNumber,
@@ -249,7 +311,13 @@ class OrderTransaction {
     }
     return map;
   }
+```
 
+Each map key matches a column in the `transactions` table. We add the `id` entry only when `id` is not `null`, so a brand-new transaction leaves `id` out and lets SQLite fill it in.
+
+Now add the `fromMap` constructor, which reads a row map back into an `OrderTransaction`. It is a `factory` constructor, the kind you met in Worksheet 5:
+
+```dart
   factory OrderTransaction.fromMap(Map<String, dynamic> map) {
     final dynamic idVal = map['id'];
     final int? id = idVal is int ? idVal : null;
@@ -270,9 +338,11 @@ class OrderTransaction {
 }
 ```
 
+As in Worksheet 5, we read each value out of the map and use `as` to assert its type, reading the price as a `num` and calling `.toDouble()`. The `id` might be missing, so we check `idVal is int` and keep it only when it really is an integer.
+
 ### Insert completed orders
 
-In `lib/database/sandwich_db.dart`, add methods to insert transactions and calculate sequential transaction numbers:
+In `lib/database/sandwich_db.dart`, add a method that inserts one transaction:
 
 ```dart
   Future<int> insertTransaction(OrderTransaction tx) async {
@@ -280,7 +350,13 @@ In `lib/database/sandwich_db.dart`, add methods to insert transactions and calcu
     final int id = await db.insert('transactions', tx.toMap());
     return id;
   }
+```
 
+It opens the connection through the `database` getter, then calls `db.insert('transactions', tx.toMap())`, which inserts the row map from `toMap` and returns the new row's auto-generated `id`.
+
+Now add a method that works out the next transaction number by reading the current highest one:
+
+```dart
   Future<int> getNextTransactionNumber() async {
     final Database db = await database;
     final List<Map<String, dynamic>> records = await db.rawQuery(
@@ -294,9 +370,11 @@ In `lib/database/sandwich_db.dart`, add methods to insert transactions and calcu
   }
 ```
 
+Here `db.rawQuery` runs a SQL query that returns rows, giving us back a `List<Map<String, dynamic>>` where each map is one row. The SQL `SELECT MAX(transaction_number) as max_num FROM transactions` asks SQLite for the largest `transaction_number` and labels that result `max_num`. If a value comes back we add one to it; if the table is empty we start at `1001`.
+
 ### Query order history
 
-Add a method to query all transactions ordered with the newest first:
+Add a method that reads every transaction, newest first:
 
 ```dart
   Future<List<OrderTransaction>> getAllTransactions() async {
@@ -313,14 +391,11 @@ Add a method to query all transactions ordered with the newest first:
   }
 ```
 
+The `db.query` method reads rows from a named table and is simpler than writing raw SQL for everyday reads. The `orderBy: 'transaction_number DESC'` argument sorts the rows by transaction number in descending order (`DESC`), so the newest order comes first. We then loop over the row maps with a `for-in` loop, turning each into an `OrderTransaction` with `fromMap`.
+
 ### Commit your changes (3)
 
-Stage and commit `order_transaction.dart` and `sandwich_db.dart`:
-
-```bash
-git add lib/models/order_transaction.dart lib/database/sandwich_db.dart
-git commit -m "Implement order transaction model and database CRUD methods"
-```
+Stage and commit `order_transaction.dart` and `sandwich_db.dart`.
 
 ## Building the order history screen
 
@@ -328,7 +403,9 @@ Now let us build an `OrderHistoryScreen` to display past orders stored in the SQ
 
 ### Create the OrderHistoryScreen widget
 
-Create a new file named `lib/screens/order_history_screen.dart`:
+Create a new file named `lib/screens/order_history_screen.dart`. We build it in stages.
+
+Start with the imports, the `StatefulWidget` shell, and the one piece of state, a list of orders:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -347,7 +424,12 @@ class OrderHistoryScreen extends StatefulWidget {
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   List<OrderTransaction> _orders = [];
+}
+```
 
+Now add `initState` (from Worksheet 5) to kick off loading as soon as the screen appears, and the asynchronous loader it calls:
+
+```dart
   @override
   void initState() {
     super.initState();
@@ -365,7 +447,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       }
     } catch (_) {}
   }
+```
 
+Reading from a database can fail, so the loader wraps its work in a `try`/`catch`. The code inside `try { ... }` runs normally, but if it throws an error, execution jumps to the `catch` block instead of crashing the app. Here `catch (_) {}` catches any error and ignores it (the underscore means we do not need the error object), leaving the list empty.
+
+The `if (mounted)` check is also new. After an `await`, time has passed and the user may have left this screen, which disposes its `State`. Calling `setState` on a disposed `State` is an error, so we first check `mounted`, which is `true` only while the `State` is still part of the screen. We only call `setState` when it is safe.
+
+Next, add the empty-state helper, shown when there are no orders:
+
+```dart
   Widget _buildEmptyState() {
     return const Center(
       child: Padding(
@@ -377,7 +467,11 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       ),
     );
   }
+```
 
+Now add the method that builds one `Card` per order. It uses the same procedural `List<Widget>` and `for-in` loop pattern from Worksheet 5:
+
+```dart
   Widget _buildOrdersList() {
     final List<Widget> cards = [];
     for (final OrderTransaction tx in _orders) {
@@ -423,7 +517,11 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       children: cards,
     );
   }
+```
 
+Finally, add the `build` method. It chooses between the empty state and the list, then puts the result in the scrollable scaffold:
+
+```dart
   @override
   Widget build(BuildContext context) {
     final Widget content;
@@ -501,14 +599,15 @@ Open `lib/screens/cart_screen.dart`. When the user taps **Checkout**, save the o
   }
 ```
 
+The method reads the next transaction number, then builds the receipt date from `DateTime.now()`, which returns the current date and time. Its `.day`, `.month`, and `.year` properties give the parts we format into a short date string. After saving the transaction and clearing the basket, it checks `mounted` before navigating, for the same reason as the loader above, then uses `pushReplacementNamed` (from Worksheet 5) to move to the history screen.
+
+Your order history screen, showing the seeded orders and any you place, should look like this:
+
+<!-- TODO screenshot: images/6/order_history_screen.png — show the OrderHistoryScreen listing past orders as cards with order number, summary, date, and total paid -->
+
 ### Commit your changes (4)
 
-Stage and commit `order_history_screen.dart`, `cart_screen.dart`, and updated routes:
-
-```bash
-git add lib/screens/order_history_screen.dart lib/screens/cart_screen.dart lib/widgets/nav_drawer.dart lib/main.dart
-git commit -m "Connect checkout to SQLite transaction persistence and add order history view"
-```
+Stage and commit `order_history_screen.dart`, `cart_screen.dart`, and your updated routes.
 
 ## Persisting user settings in SQLite
 
@@ -516,7 +615,7 @@ Now let us update `lib/screens/settings_screen.dart` so that settings persist to
 
 ### Add settings database operations
 
-In `lib/database/sandwich_db.dart`, add methods to retrieve and update settings:
+In `lib/database/sandwich_db.dart`, add a method to read the single settings row:
 
 ```dart
   Future<UserSettings> getSettings() async {
@@ -532,6 +631,7 @@ In `lib/database/sandwich_db.dart`, add methods to retrieve and update settings:
         name: row['name'] as String,
         address: row['address'] as String,
         email: row['email'] as String,
+        customerId: row['customer_id'] as String,
         receiveNewsEmail: (row['receive_news'] as int) == 1,
       );
     }
@@ -539,10 +639,17 @@ In `lib/database/sandwich_db.dart`, add methods to retrieve and update settings:
       name: 'Student User',
       address: 'University of Portsmouth\nPortsmouth\nPO1 2UP',
       email: 'student@port.ac.uk',
+      customerId: 'SS-1024',
       receiveNewsEmail: true,
     );
   }
+```
 
+This uses `db.query` with two new arguments. The `where: 'id = ?'` argument is a filter: the `?` is a placeholder, and `whereArgs: [1]` supplies the value that fills it, so together they read only the row whose `id` is `1`. Using a placeholder rather than building the string yourself is the safe way to pass values into SQL. If a row comes back we rebuild a `UserSettings` from its columns, remembering that `receive_news` is stored as `1` or `0`; if the table is somehow empty we return a sensible default.
+
+Now add the method that saves changes back:
+
+```dart
   Future<int> updateSettings(UserSettings settings) async {
     final Database db = await database;
     final int rows = await db.update(
@@ -551,6 +658,7 @@ In `lib/database/sandwich_db.dart`, add methods to retrieve and update settings:
         'name': settings.name,
         'address': settings.address,
         'email': settings.email,
+        'customer_id': settings.customerId,
         'receive_news': settings.receiveNewsEmail ? 1 : 0,
       },
       where: 'id = ?',
@@ -560,9 +668,13 @@ In `lib/database/sandwich_db.dart`, add methods to retrieve and update settings:
   }
 ```
 
+The `db.update` method changes existing rows: it takes the table name, a map of the new column values, and the same `where`/`whereArgs` filter so it updates only row `1`. It returns how many rows were changed.
+
 ### Load and save settings from SQLite
 
-Update `_SettingsScreenState` in `lib/screens/settings_screen.dart` to load saved settings in `initState` and persist updates on save:
+We change `_SettingsScreenState` in `lib/screens/settings_screen.dart` so it loads saved settings when it opens and persists them on save. We make three changes in turn.
+
+First, add one line to the existing `initState` so it starts loading from the database after creating the controllers:
 
 ```dart
   @override
@@ -570,10 +682,15 @@ Update `_SettingsScreenState` in `lib/screens/settings_screen.dart` to load save
     super.initState();
     _addressController = TextEditingController(text: _settings.address);
     _emailController = TextEditingController(text: _settings.email);
+    _customerIdController = TextEditingController(text: _settings.customerId);
     _receiveNewsEmail = _settings.receiveNewsEmail;
     _loadSettingsFromDatabase();
   }
+```
 
+Next, add the loader it calls. It follows the same `try`/`catch` and `mounted` pattern as the history screen, reading the saved settings and copying them into the controllers:
+
+```dart
   Future<void> _loadSettingsFromDatabase() async {
     try {
       final UserSettings loaded =
@@ -583,16 +700,22 @@ Update `_SettingsScreenState` in `lib/screens/settings_screen.dart` to load save
           _settings = loaded;
           _addressController.text = loaded.address;
           _emailController.text = loaded.email;
+          _customerIdController.text = loaded.customerId;
           _receiveNewsEmail = loaded.receiveNewsEmail;
         });
       }
     } catch (_) {}
   }
+```
 
+Finally, replace the Worksheet 5 `_saveSettings` method with an `async` version that writes the change to the database before leaving edit mode:
+
+```dart
   Future<void> _saveSettings() async {
     final UserSettings updated = _settings.copyWith(
       address: _addressController.text.trim(),
       email: _emailController.text.trim(),
+      customerId: _customerIdController.text.trim(),
       receiveNewsEmail: _receiveNewsEmail,
     );
 
@@ -607,14 +730,11 @@ Update `_SettingsScreenState` in `lib/screens/settings_screen.dart` to load save
   }
 ```
 
+It builds the updated settings with `copyWith` (from Worksheet 5), saves them with `updateSettings` inside a `try`/`catch`, then calls `setState` to store the new values and leave edit mode.
+
 ### Commit your changes (5)
 
-Stage and commit your settings persistence changes:
-
-```bash
-git add lib/database/sandwich_db.dart lib/screens/settings_screen.dart
-git commit -m "Persist user settings and preferences in SQLite"
-```
+Stage and commit your settings persistence changes.
 
 ## Testing database operations
 
@@ -622,9 +742,9 @@ We test our database operations using SQLite's in-memory mode, ensuring that aut
 
 ### Set up in-memory database testing
 
-In `setUpAll` of your test file, call `sqfliteFfiInit()` and set `databaseFactory = databaseFactoryFfi`.
+We use two setup functions here. `setUpAll` runs its callback once, before all the tests in the file, which suits one-off initialisation. That contrasts with `setUp` from Worksheet 5, which runs before each test. In `setUpAll` we call `sqfliteFfiInit()` and set `databaseFactory = databaseFactoryFfi` once to prepare the engine.
 
-In `setUp`, open an in-memory database with `databaseFactoryFfi.openDatabase(inMemoryDatabasePath, ...)` and pass it to `SandwichDatabase.instance.setDatabase(db)`.
+In `setUp`, which runs before every test, open a fresh in-memory database with `databaseFactoryFfi.openDatabase(inMemoryDatabasePath, ...)` and pass it to `SandwichDatabase.instance.setDatabase(db)`, so each test starts from a clean database.
 
 ### Test database transactions
 
@@ -691,27 +811,22 @@ flutter test
 
 ### Commit your changes (6)
 
-Stage and commit your database test file:
-
-```bash
-git add test/sandwich_db_test.dart
-git commit -m "Add automated unit tests for SQLite database operations"
-```
+Stage and commit your database test file.
 
 ## Exercises
 
 The exercises below apply the concepts from this worksheet to the Southsea Cinema coursework application. They prepare you for Demo 3 of your coursework. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Remember to commit your changes to Git after each exercise.
 
-1. In your Southsea Cinema fork, add `sqflite_common_ffi` and `sqflite_common_ffi_web` to `pubspec.yaml`, matching [Add database dependencies](#add-database-dependencies).
+1. In your Southsea Cinema fork, add `sqflite_common_ffi` and `sqflite_common_ffi_web` to the `dependencies:` section of `pubspec.yaml`, matching [Add database dependencies](#add-database-dependencies), and run `flutter pub get`.
 
-2. Create `lib/database/cinema_db.dart` with a `CinemaDatabase` singleton. Create `transactions` and `settings` tables, following [Creating the database helper](#creating-the-database-helper). Seed default past transactions matching your cinema booking account history.
+2. Create `lib/database/cinema_db.dart` with a `CinemaDatabase` singleton that opens the database and creates `transactions` and `settings` tables, following [Creating the database helper](#creating-the-database-helper). Seed a short list of past transactions matching your own cinema booking account history, as shown in [Initialise database tables](#initialise-database-tables).
 
-3. In `lib/models/ticket_transaction.dart`, create a `TicketTransaction` model containing `transactionNumber`, `saleSummary`, `saleDate`, and `totalPrice`, with `toMap` and `fromMap` methods.
+3. Add a `TicketTransaction` model in `lib/models/ticket_transaction.dart` with `toMap` and `fromMap` methods, mirroring the `OrderTransaction` model. Decide which fields a cinema ticket sale needs to record.
 
-4. Connect `BasketView` in `lib/views/basket_view.dart` so that clicking the purchase button creates a new `TicketTransaction`, inserts it into `CinemaDatabase.instance`, clears the basket, and navigates to the tickets page.
+4. Connect your basket so that confirming a purchase saves a `TicketTransaction` to `CinemaDatabase.instance`, clears the basket, and takes the patron to their tickets page, following [Connect checkout to database persistence](#connect-checkout-to-database-persistence).
 
-5. Build `MyTicketsView` in `lib/views/my_tickets_view.dart`, following [Building the order history screen](#building-the-order-history-screen). Query `CinemaDatabase.instance.getAllTransactions()` and display the tickets on clean cards without pop-up dialogues or horizontal dividers.
+5. Build a My Tickets view that reads the stored transactions and presents each past booking. Choose how to lay out a booking so it reads cleanly, drawing on [Building the order history screen](#building-the-order-history-screen).
 
-6. Update `SettingsView` in `lib/views/settings_view.dart` to persist address, email, patron number, and email preferences in the `settings` SQLite table.
+6. Make the patron's settings survive a restart by saving and loading them from the `settings` table. Decide which details to persist and keep the display and edit modes working.
 
-7. Write automated tests for `TicketTransaction`, `CinemaDatabase`, `BasketView`, `MyTicketsView`, and `SettingsView`. Verify that all tests pass and `dart analyze` reports zero warnings. **Show your running application with live SQLite ticket persistence to a member of staff** for your Demo 3 sign-off.
+7. Decide what matters most about your Demo 3 experience and prove it works: cover the behaviour you care about with automated tests, and make sure `dart analyze` and `flutter test` both pass cleanly. **Show your running application with live SQLite ticket persistence to a member of staff** for your Demo 3 sign-off.
