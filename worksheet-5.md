@@ -12,28 +12,36 @@
   - [Application navigation drawer](#application-navigation-drawer)
   - [Named routes in MaterialApp](#named-routes-in-materialapp)
 - [Building the navigation drawer](#building-the-navigation-drawer)
+  - [Define shared app constants](#define-shared-app-constants)
   - [Create the NavDrawer widget](#create-the-navdrawer-widget)
-  - [Configure named routes](#configure-named-routes)
-  - [Connect the drawer to the app bar](#connect-the-drawer-to-the-app-bar)
+  - [Configure named routes and theme](#configure-named-routes-and-theme)
+  - [Connect the drawer across screens](#connect-the-drawer-across-screens)
   - [Commit your changes (1)](#commit-your-changes-1)
+- [Loading menu data from JSON](#loading-menu-data-from-json)
+  - [Create the JSON asset file](#create-the-json-asset-file)
+  - [Register the asset in pubspec](#register-the-asset-in-pubspec)
+  - [Add JSON serialisation to Sandwich model](#add-json-serialisation-to-sandwich-model)
+  - [Load JSON data in SandwichRepository](#load-json-data-in-sandwichrepository)
+  - [Commit your changes (2)](#commit-your-changes-2)
 - [Managing an order basket](#managing-an-order-basket)
   - [Define the CartItem model](#define-the-cartitem-model)
   - [Create the CartRepository singleton](#create-the-cartrepository-singleton)
   - [Add items from the order screen](#add-items-from-the-order-screen)
-  - [Commit your changes (2)](#commit-your-changes-2)
+  - [Commit your changes (3)](#commit-your-changes-3)
 - [Building the basket screen](#building-the-basket-screen)
   - [Create the CartScreen widget](#create-the-cartscreen-widget)
-  - [Commit your changes (3)](#commit-your-changes-3)
+  - [Commit your changes (4)](#commit-your-changes-4)
 - [Handling user input and forms](#handling-user-input-and-forms)
   - [Understand forms and text controllers](#understand-forms-and-text-controllers)
   - [Define the UserSettings model](#define-the-usersettings-model)
   - [Build the SettingsScreen widget](#build-the-settingsscreen-widget)
-  - [Commit your changes (4)](#commit-your-changes-4)
+  - [Commit your changes (5)](#commit-your-changes-5)
 - [Testing the basket and settings screens](#testing-the-basket-and-settings-screens)
+  - [Unit test JSON serialisation](#unit-test-json-serialisation)
   - [Unit test the CartRepository](#unit-test-the-cartrepository)
   - [Widget test the CartScreen](#widget-test-the-cartscreen)
   - [Widget test the SettingsScreen](#widget-test-the-settingsscreen)
-  - [Commit your changes (5)](#commit-your-changes-5)
+  - [Commit your changes (6)](#commit-your-changes-6)
 - [Exercises](#exercises)
 
 ## What you need to know beforehand
@@ -71,25 +79,47 @@ Run `flutter test` to ensure that all automated tests pass before continuing.
 
 ## The need for multi-screen architecture
 
-In Worksheet 3 we introduced stack-based navigation using `Navigator.push`. As an application expands to include shopping baskets, account profiles, and order receipts, opening every screen strictly through linear button taps becomes difficult to manage.
+In Worksheet 3 we introduced stack-based navigation using `Navigator.push`. By default in Flutter, pushing a new route places it on top of a history stack and displays a back arrow (`<-`) in the app bar.
 
-A multi-screen architecture gives users a consistent navigation structure. In this worksheet we introduce two standard patterns: a sliding navigation drawer accessible from any primary app bar, and centralized named routes registered in `MaterialApp`.
+While a back button makes sense for simple linear flows, it can cause problems when users want to switch between main areas of an application, such as viewing their basket or editing their settings. Stacking screens indefinitely clutters history and causes inconsistencies across headers.
+
+A consistent multi-screen architecture solves this by providing:
+
+1. A unified top app bar displaying the application title across every view.
+2. A sliding navigation drawer accessible from any primary screen.
+3. Centralized named routes registered in `MaterialApp` using `Navigator.pushReplacementNamed`, keeping each section at the top level without unwanted back arrows.
 
 ### Application navigation drawer
 
 A drawer is a panel that slides in horizontally from the edge of a `Scaffold` to show navigation links. Flutter provides the `Drawer` widget, which works directly with the `drawer` property of `Scaffold`.
 
-When a `Scaffold` contains a `Drawer`, Flutter automatically adds a hamburger menu button to the leading side of the `AppBar`. Tapping this button or swiping from the edge slides the drawer into view.
+When a `Scaffold` contains a `Drawer`, Flutter automatically provides a hamburger menu button (`☰`) in the `AppBar`. Tapping this button slides the drawer into view.
 
 ### Named routes in MaterialApp
 
 Instead of writing `MaterialPageRoute` every time you navigate, you can assign unique string paths to screens, such as `'/'`, `'/cart'`, and `'/settings'`.
 
-You register these paths inside the `routes` map of `MaterialApp`. Once registered, any widget can navigate to a destination using `Navigator.pushNamed(context, '/cart')`.
+You register these paths inside the `routes` map of `MaterialApp`. Once registered, any widget can navigate to a destination using `Navigator.pushReplacementNamed(context, '/cart')`.
 
 ## Building the navigation drawer
 
-Let us build a reusable navigation drawer widget that can be attached to any screen in the application.
+Let us build a reusable navigation drawer widget and a consistent app bar that can be attached to any screen in the application.
+
+### Define shared app constants
+
+Create a new file named `lib/constants.dart`. This centralizes the title and styling across all views:
+
+```dart
+import 'package:flutter/material.dart';
+
+const String appTitle = 'Sandwich Shop';
+const Color shopBrand = Colors.brown;
+const Color shopWhite = Colors.white;
+const TextStyle shopHeaderStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  letterSpacing: 1.1,
+);
+```
 
 ### Create the NavDrawer widget
 
@@ -97,6 +127,7 @@ Create a new file named `lib/widgets/nav_drawer.dart`. Add the following code:
 
 ```dart
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/constants.dart';
 
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key});
@@ -111,20 +142,23 @@ class NavDrawer extends StatelessWidget {
             Container(
               height: 60,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              color: Colors.brown,
+              color: shopBrand,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Sandwich Shop',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  const Expanded(
+                    child: Text(
+                      appTitle,
+                      style: TextStyle(
+                        color: shopWhite,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white),
+                    icon: const Icon(Icons.close, color: shopWhite),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -160,7 +194,7 @@ class DrawerTile extends StatelessWidget {
         Navigator.pop(context);
         final String currentRoute = ModalRoute.of(context)?.settings.name ?? '';
         if (currentRoute != route) {
-          Navigator.pushNamed(context, route);
+          Navigator.pushReplacementNamed(context, route);
         }
       },
     );
@@ -168,16 +202,15 @@ class DrawerTile extends StatelessWidget {
 }
 ```
 
-Notice how `DrawerTile` closes the drawer first with `Navigator.pop(context)` before navigating to the requested route. This ensures the drawer is closed when the user returns to the previous screen.
+Notice the call `Navigator.pushReplacementNamed(context, route)`. By replacing the current route rather than pushing on top, the app never stacks pages or displays a back button when switching between primary sections. The hamburger menu remains consistent across the whole application.
 
-### Configure named routes
+### Configure named routes and theme
 
-Open `lib/main.dart`. We need to register the routes in `MaterialApp` and define the placeholder screens.
-
-Update `lib/main.dart` to match the following code:
+Open `lib/main.dart`. We register the routes in `MaterialApp` and configure a theme that applies our brand colour to the app bar:
 
 ```dart
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/screens/cart_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
@@ -192,7 +225,18 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sandwich Shop App',
+      title: appTitle,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: shopBrand,
+          primary: shopBrand,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: shopBrand,
+          foregroundColor: shopWhite,
+          elevation: 0,
+        ),
+      ),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) {
@@ -210,12 +254,13 @@ class App extends StatelessWidget {
 }
 ```
 
-### Connect the drawer to the app bar
+### Connect the drawer across screens
 
-Open `lib/screens/menu_screen.dart`. Import `nav_drawer.dart` and add `drawer: const NavDrawer()` to the `Scaffold`:
+Open `lib/screens/menu_screen.dart`. Update it to use `appTitle` and include `drawer: const NavDrawer()`:
 
 ```dart
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/sandwich_repository.dart';
 import 'package:sandwich_shop/widgets/nav_drawer.dart';
@@ -231,38 +276,225 @@ class MenuScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sandwich Menu'),
+        title: const Text(appTitle, style: shopHeaderStyle),
+        backgroundColor: shopBrand,
+        foregroundColor: shopWhite,
+        elevation: 0,
       ),
       drawer: const NavDrawer(),
-      body: ListView.builder(
-        itemCount: sandwiches.length,
-        itemBuilder: (BuildContext context, int index) {
-          return SandwichCard(sandwich: sandwiches[index]);
-        },
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Sandwich Menu',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: sandwiches.length,
+              itemBuilder: (BuildContext context, int index) {
+                return SandwichCard(sandwich: sandwiches[index]);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 ```
 
-Run the application with `flutter run -d chrome`. Notice the menu icon in the top left corner of the app bar. Tapping it slides out the navigation drawer.
-
 ### Commit your changes (1)
 
 Stage your new files and commit your changes:
 
 ```bash
-git add lib/widgets/nav_drawer.dart lib/screens/menu_screen.dart
-git commit -m "Add navigation drawer and configure menu screen"
+git add lib/constants.dart lib/widgets/nav_drawer.dart lib/main.dart lib/screens/menu_screen.dart
+git commit -m "Add shared constants, navigation drawer, and route configuration"
+```
+
+## Loading menu data from JSON
+
+Hardcoding items inside Dart files means every menu update requires recompiling source code. In production applications, catalogues are stored in external data files such as JSON.
+
+### Create the JSON asset file
+
+Create a new folder named `assets/data/`. Inside it, create `sandwiches.json`:
+
+```json
+[
+  {
+    "id": "footlong",
+    "name": "Footlong Sub",
+    "description": "A freshly baked 12-inch sandwich filled with savoury ingredients.",
+    "price": 7.50,
+    "imagePath": "assets/images/footlong.jpeg"
+  },
+  {
+    "id": "six-inch",
+    "name": "Six-Inch Sub",
+    "description": "A light 6-inch sandwich made with your favourite toppings.",
+    "price": 4.50,
+    "imagePath": "assets/images/six_inch.jpeg"
+  }
+]
+```
+
+### Register the asset in pubspec
+
+Open `pubspec.yaml`. Under `flutter:` and `assets:`, add `- assets/data/`:
+
+```yaml
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/data/
+```
+
+### Add JSON serialisation to Sandwich model
+
+Open `lib/models/sandwich.dart`. We add a factory constructor named `fromJson` and a `toJson` method:
+
+```dart
+class Sandwich {
+  final String id;
+  final String name;
+  final String description;
+  final double price;
+  final String imagePath;
+
+  const Sandwich({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.imagePath,
+  });
+
+  String get formattedPrice {
+    return '£${price.toStringAsFixed(2)}';
+  }
+
+  factory Sandwich.fromJson(Map<String, dynamic> json) {
+    final String id = json['id'] as String;
+    final String name = json['name'] as String;
+    final String description = json['description'] as String;
+    final num priceNumber = json['price'] as num;
+    final double price = priceNumber.toDouble();
+    final String imagePath = json['imagePath'] as String;
+
+    return Sandwich(
+      id: id,
+      name: name,
+      description: description,
+      price: price,
+      imagePath: imagePath,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
+      'imagePath': imagePath,
+    };
+    return data;
+  }
+}
+```
+
+### Load JSON data in SandwichRepository
+
+Open `lib/repositories/sandwich_repository.dart`. We add a `loadSandwichesFromAsset()` method that reads the file string using `rootBundle.loadString()` and parses it with `jsonDecode()`:
+
+```dart
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
+
+class SandwichRepository {
+  List<Sandwich>? _cachedSandwiches;
+
+  Future<List<Sandwich>> loadSandwichesFromAsset({
+    String assetPath = 'assets/data/sandwiches.json',
+  }) async {
+    final String jsonString = await rootBundle.loadString(assetPath);
+    final dynamic decodedData = jsonDecode(jsonString);
+    final List<dynamic> jsonList = decodedData as List<dynamic>;
+
+    final List<Sandwich> loadedSandwiches = [];
+    for (final dynamic item in jsonList) {
+      final Map<String, dynamic> itemMap = item as Map<String, dynamic>;
+      final Sandwich sandwich = Sandwich.fromJson(itemMap);
+      loadedSandwiches.add(sandwich);
+    }
+
+    _cachedSandwiches = loadedSandwiches;
+    return loadedSandwiches;
+  }
+
+  List<Sandwich> getSandwiches() {
+    if (_cachedSandwiches != null) {
+      return _cachedSandwiches!;
+    }
+    return const [
+      Sandwich(
+        id: 'footlong',
+        name: 'Footlong Sub',
+        description:
+            'A freshly baked 12-inch sandwich filled with savoury ingredients.',
+        price: 7.50,
+        imagePath: 'assets/images/footlong.jpeg',
+      ),
+      Sandwich(
+        id: 'six-inch',
+        name: 'Six-Inch Sub',
+        description:
+            'A light 6-inch sandwich made with your favourite toppings.',
+        price: 4.50,
+        imagePath: 'assets/images/six_inch.jpeg',
+      ),
+    ];
+  }
+
+  Sandwich? getSandwichById(String id) {
+    for (final sandwich in getSandwiches()) {
+      if (sandwich.id == id) {
+        return sandwich;
+      }
+    }
+    return null;
+  }
+}
+```
+
+Notice that `getSandwiches()` returns `_cachedSandwiches` if loaded, falling back to mock sandwiches synchronously so existing views remain simple and responsive.
+
+### Commit your changes (2)
+
+Stage your JSON assets, model, and repository:
+
+```bash
+git add assets/data/sandwiches.json pubspec.yaml lib/models/sandwich.dart lib/repositories/sandwich_repository.dart
+git commit -m "Add JSON menu asset and parsing methods"
 ```
 
 ## Managing an order basket
 
-Now that users can navigate between screens, we need a mechanism to hold sandwiches added to an order.
+Now that users can navigate between screens and view menu items, we need a mechanism to hold sandwiches added to an order.
 
 ### Define the CartItem model
 
-Create a new file named `lib/models/cart_item.dart`. This model holds the sandwich details, the chosen quantity, and calculates the total price for that line item:
+Create a new file named `lib/models/cart_item.dart`:
 
 ```dart
 class CartItem {
@@ -285,8 +517,6 @@ class CartItem {
 ```
 
 ### Create the CartRepository singleton
-
-We need a repository to store items added to the basket while the user navigates across the application.
 
 A singleton ensures that every screen accesses the exact same in-memory repository instance. Create a new file named `lib/repositories/cart_repository.dart`:
 
@@ -347,19 +577,17 @@ class CartRepository {
 }
 ```
 
-Notice the explicit `for` loops used in `getTotalItems()` and `getSubtotal()`. Procedural loops make the calculation steps transparent and easy to debug.
-
 ### Add items from the order screen
 
-Open `lib/screens/order_screen.dart`. We will update the screen to add the selected sandwiches directly to `CartRepository.instance`.
-
-Update `_OrderScreenState` in `lib/screens/order_screen.dart` to match the following:
+Open `lib/screens/order_screen.dart`. We will update the screen to use the consistent top bar with hamburger menu, and add sandwiches directly to `CartRepository.instance`:
 
 ```dart
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/widgets/nav_drawer.dart';
 
 class OrderScreen extends StatefulWidget {
   final Sandwich sandwich;
@@ -378,7 +606,7 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  int _quantity = 1;
+  int _quantity = 0;
   String _confirmationMessage = '';
 
   void _increaseQuantity() {
@@ -390,7 +618,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   void _decreaseQuantity() {
-    if (_quantity > 1) {
+    if (_quantity > 0) {
       setState(() {
         _quantity--;
       });
@@ -398,30 +626,59 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   void _addToBasket() {
-    final CartItem item = CartItem(
-      id: widget.sandwich.id,
-      name: widget.sandwich.name,
-      price: widget.sandwich.price,
-      quantity: _quantity,
-    );
-    CartRepository.instance.addItem(item);
-    setState(() {
-      _confirmationMessage = 'Added $_quantity ${widget.sandwich.name} to basket';
-    });
+    if (_quantity > 0) {
+      final CartItem item = CartItem(
+        id: widget.sandwich.id,
+        name: widget.sandwich.name,
+        price: widget.sandwich.price,
+        quantity: _quantity,
+      );
+      CartRepository.instance.addItem(item);
+      setState(() {
+        _confirmationMessage =
+            'Added $_quantity ${widget.sandwich.name} to basket';
+      });
+    } else {
+      setState(() {
+        _confirmationMessage = 'Please select at least 1 sandwich';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order ${widget.sandwich.name}'),
+        title: const Text(appTitle, style: shopHeaderStyle),
+        backgroundColor: shopBrand,
+        foregroundColor: shopWhite,
+        elevation: 0,
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
       ),
+      drawer: const NavDrawer(),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                'Order ${widget.sandwich.name}',
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
               OrderItemDisplay(
                 _quantity,
                 widget.sandwich.name,
@@ -472,7 +729,9 @@ class OrderItemDisplay extends StatelessWidget {
 }
 ```
 
-### Commit your changes (2)
+Notice the `leading` property in `AppBar`: by providing a `Builder` that calls `Scaffold.of(context).openDrawer()`, the top bar maintains the exact same hamburger menu appearance on `OrderScreen`.
+
+### Commit your changes (3)
 
 Stage your model, repository, and updated order screen:
 
@@ -487,10 +746,11 @@ Now let us build `CartScreen` to display items in the basket, allow removing ite
 
 ### Create the CartScreen widget
 
-Create a new file named `lib/screens/cart_screen.dart`. We will implement it with explicit helper methods:
+Create a new file named `lib/screens/cart_screen.dart`. We implement it with explicit helper methods:
 
 ```dart
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/widgets/nav_drawer.dart';
@@ -520,7 +780,6 @@ class _CartScreenState extends State<CartScreen> {
   Widget _buildCartList(CartRepository cart, List<CartItem> items) {
     final List<Widget> children = [];
 
-    // Header
     children.add(
       const Text(
         'Your Order',
@@ -529,7 +788,6 @@ class _CartScreenState extends State<CartScreen> {
     );
     children.add(const SizedBox(height: 16));
 
-    // Item rows
     for (int index = 0; index < items.length; index++) {
       final CartItem item = items[index];
       children.add(
@@ -566,7 +824,6 @@ class _CartScreenState extends State<CartScreen> {
 
     children.add(const SizedBox(height: 16));
 
-    // Subtotal
     children.add(
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -578,7 +835,6 @@ class _CartScreenState extends State<CartScreen> {
     );
     children.add(const SizedBox(height: 8));
 
-    // Delivery Fee
     children.add(
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -590,7 +846,6 @@ class _CartScreenState extends State<CartScreen> {
     );
     children.add(const SizedBox(height: 8));
 
-    // Total Due
     children.add(
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -608,7 +863,6 @@ class _CartScreenState extends State<CartScreen> {
     );
     children.add(const SizedBox(height: 24));
 
-    // Checkout button
     children.add(
       SizedBox(
         width: double.infinity,
@@ -646,7 +900,10 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Basket'),
+        title: const Text(appTitle, style: shopHeaderStyle),
+        backgroundColor: shopBrand,
+        foregroundColor: shopWhite,
+        elevation: 0,
       ),
       drawer: const NavDrawer(),
       body: SingleChildScrollView(
@@ -658,9 +915,9 @@ class _CartScreenState extends State<CartScreen> {
 }
 ```
 
-Notice how `_buildCartList` builds a `List<Widget>` procedurally using `children.add()`. This avoids dense spread operators and complex expressions inside widget trees, keeping every layout line clear for beginners.
+Notice how `_buildCartList` builds a `List<Widget>` procedurally using `children.add()`. This avoids spread operators and keeps every layout step transparent.
 
-### Commit your changes (3)
+### Commit your changes (4)
 
 Stage and commit `cart_screen.dart`:
 
@@ -671,13 +928,13 @@ git commit -m "Build cart screen with order summary and remove functionality"
 
 ## Handling user input and forms
 
-Next, we need a settings screen where users can configure their contact information and delivery preferences. This introduces two foundational input widgets: `TextField` and `Switch`.
+Next, we build a settings screen where users configure contact details and preferences using `TextField` and `Switch`.
 
 ### Understand forms and text controllers
 
 In Flutter, you manage the content of a `TextField` using a `TextEditingController`.
 
-A `TextEditingController` holds the current string value of an input field. You create the controller inside `initState`, pass it to the `controller` parameter of `TextField`, and dispose of it inside `dispose` to prevent memory leaks.
+A `TextEditingController` holds the current string value of an input field. You create the controller inside `initState`, pass it to `TextField`, and dispose of it inside `dispose` to prevent memory leaks.
 
 ### Define the UserSettings model
 
@@ -715,10 +972,11 @@ class UserSettings {
 
 ### Build the SettingsScreen widget
 
-Create a new file named `lib/screens/settings_screen.dart`. We will provide two distinct states: a clean display mode when viewing settings, and an edit mode when changing fields.
+Create a new file named `lib/screens/settings_screen.dart`. We provide two distinct states: display mode and edit mode:
 
 ```dart
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/user_settings.dart';
 import 'package:sandwich_shop/widgets/nav_drawer.dart';
 
@@ -899,7 +1157,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Settings'),
+        title: const Text(appTitle, style: shopHeaderStyle),
+        backgroundColor: shopBrand,
+        foregroundColor: shopWhite,
+        elevation: 0,
       ),
       drawer: const NavDrawer(),
       body: SingleChildScrollView(
@@ -921,20 +1182,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 ```
 
-Now update `lib/main.dart` if needed so that all imports resolve cleanly.
-
-### Commit your changes (4)
+### Commit your changes (5)
 
 Stage and commit `user_settings.dart` and `settings_screen.dart`:
 
 ```bash
-git add lib/models/user_settings.dart lib/screens/settings_screen.dart lib/main.dart
+git add lib/models/user_settings.dart lib/screens/settings_screen.dart
 git commit -m "Implement user settings screen with view and edit form modes"
 ```
 
 ## Testing the basket and settings screens
 
-In Worksheet 4 you wrote unit and widget tests for models and repository classes. Now we add tests verifying our basket calculations and screens.
+In Worksheet 4 you wrote automated tests for models and repository classes. Now we add tests verifying our JSON serialisation, basket calculations, and screens.
+
+### Unit test JSON serialisation
+
+Open `test/sandwich_model_test.dart` and add tests for `fromJson` and `toJson`:
+
+```dart
+    test('fromJson creates a Sandwich instance from valid JSON map', () {
+      final Map<String, dynamic> jsonMap = <String, dynamic>{
+        'id': 'veggie-delight',
+        'name': 'Veggie Delight',
+        'description': 'Crisp garden vegetables on fresh bread.',
+        'price': 5.50,
+        'imagePath': 'assets/images/six_inch.jpeg',
+      };
+
+      final Sandwich sandwich = Sandwich.fromJson(jsonMap);
+
+      expect(sandwich.id, 'veggie-delight');
+      expect(sandwich.name, 'Veggie Delight');
+      expect(sandwich.price, 5.50);
+      expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
+    });
+
+    test('toJson serialises a Sandwich instance into a JSON map', () {
+      const Sandwich sandwich = Sandwich(
+        id: 'meatball',
+        name: 'Meatball Marinara',
+        description: 'Italian meatballs in rich marinara sauce.',
+        price: 8.00,
+        imagePath: 'assets/images/footlong.jpeg',
+      );
+
+      final Map<String, dynamic> jsonMap = sandwich.toJson();
+
+      expect(jsonMap['id'], 'meatball');
+      expect(jsonMap['name'], 'Meatball Marinara');
+      expect(jsonMap['price'], 8.00);
+      expect(jsonMap['imagePath'], 'assets/images/footlong.jpeg');
+    });
+```
 
 ### Unit test the CartRepository
 
@@ -1053,7 +1352,6 @@ void main() {
     expect(find.text('£20.00'), findsWidgets);
     expect(find.text('Checkout'), findsOneWidget);
 
-    // Tap delete button
     await tester.tap(find.byIcon(Icons.delete_outline));
     await tester.pump();
 
@@ -1085,7 +1383,6 @@ void main() {
     expect(find.text('Edit Settings'), findsOneWidget);
     expect(find.byType(TextField), findsNothing);
 
-    // Switch to edit mode
     await tester.tap(find.text('Edit Settings'));
     await tester.pump();
 
@@ -1094,7 +1391,6 @@ void main() {
     expect(find.text('Cancel'), findsOneWidget);
     expect(find.text('Save Settings'), findsOneWidget);
 
-    // Cancel edit mode
     await tester.tap(find.text('Cancel'));
     await tester.pump();
 
@@ -1110,12 +1406,12 @@ Run `flutter test` in your terminal to ensure all tests pass:
 flutter test
 ```
 
-### Commit your changes (5)
+### Commit your changes (6)
 
 Stage and commit your tests:
 
 ```bash
-git add test/cart_repository_test.dart test/cart_screen_test.dart test/settings_screen_test.dart
+git add test/sandwich_model_test.dart test/cart_repository_test.dart test/cart_screen_test.dart test/settings_screen_test.dart
 git commit -m "Add unit and widget tests for cart repository, cart screen, and settings screen"
 ```
 
@@ -1123,14 +1419,16 @@ git commit -m "Add unit and widget tests for cart repository, cart screen, and s
 
 The exercises below apply the concepts from this worksheet to the Southsea Cinema coursework application. They prepare you for Demo 3 of your coursework. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Remember to commit your changes to Git after each exercise.
 
-1. Open your Southsea Cinema fork. Following the pattern from [Create the NavDrawer widget](#create-the-navdrawer-widget), build a `NavDrawer` widget in `lib/widgets/nav_drawer.dart`. Add navigation tiles for `'Home'`, `'My Basket'`, and `'My Settings'`. Connect the drawer to the app bar across your main views.
+1. Open your Southsea Cinema fork. Following [Define shared app constants](#define-shared-app-constants) and [Create the NavDrawer widget](#create-the-navdrawer-widget), create `lib/constants.dart` and `lib/widgets/nav_drawer.dart`. Ensure every primary screen uses the consistent `appTitle` ('Southsea Cinema') in its app bar and attaches `drawer: const NavDrawer()`. Use `Navigator.pushReplacementNamed` in drawer navigation tiles to avoid stacking screens or displaying default back arrows.
 
-2. In `lib/models/basket_item.dart`, define a `BasketItem` model containing `movieId`, `movieTitle`, `ageRating`, `screeningTime`, `ticketPrice`, and `quantity`, with a `totalPrice` getter. Then build a `BasketRepository` singleton in `lib/repositories/basket_repository.dart` that stores basket items, calculates the service charge, and calculates the total due, matching [Create the CartRepository singleton](#create-the-cartrepository-singleton).
+2. In `assets/data/movies.json`, create a JSON file with film listings, matching [Create the JSON asset file](#create-the-json-asset-file). Register `- assets/data/` in `pubspec.yaml`. Add `Movie.fromJson` and `Movie.toJson` to `lib/models/movie.dart`, and add `loadMoviesFromAsset()` in `lib/repositories/movie_repository.dart`.
 
-3. Update your movie listing screen so that choosing ticket quantities adds the item to `BasketRepository.instance.addItem()`.
+3. In `lib/models/basket_item.dart`, define a `BasketItem` model containing `movieId`, `movieTitle`, `ageRating`, `screeningTime`, `ticketPrice`, and `quantity`, with a `totalPrice` getter. Build a `BasketRepository` singleton in `lib/repositories/basket_repository.dart` that stores basket items, calculates the service charge, and calculates the total due, matching [Create the CartRepository singleton](#create-the-cartrepository-singleton).
 
-4. Build `BasketView` in `lib/views/basket_view.dart`, following [Building the basket screen](#building-the-basket-screen). Present order items with film titles, screening times, ticket quantities, and line totals. Include buttons to remove items and display an empty message when the basket is empty. Ensure all buttons use squared corners with `shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)`.
+4. Update your movie listing screen so that choosing ticket quantities adds the item to `BasketRepository.instance.addItem()`.
 
-5. Build `SettingsView` in `lib/views/settings_view.dart`, following [Handling user input and forms](#handling-user-input-and-forms). Include address and email text fields with `TextEditingController`, and a `Switch` widget for email newsletter preferences. Provide display and edit modes.
+5. Build `BasketView` in `lib/views/basket_view.dart`, following [Building the basket screen](#building-the-basket-screen). Present order items with film titles, screening times, ticket quantities, and line totals. Include buttons to remove items and display an empty message when the basket is empty. Ensure all buttons use squared corners with `shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)`.
 
-6. Write unit tests for `BasketRepository` and widget tests for `BasketView` and `SettingsView`. Run `dart analyze` and `flutter test` to verify zero analyser warnings and passing tests. **Show your running drawer, basket, and settings views to a member of staff** for your Demo 3 practical checkpoint.
+6. Build `SettingsView` in `lib/views/settings_view.dart`, following [Handling user input and forms](#handling-user-input-and-forms). Include address and email text fields with `TextEditingController`, and a `Switch` widget for email newsletter preferences. Provide display and edit modes.
+
+7. Write unit tests for `BasketRepository` and widget tests for `BasketView` and `SettingsView`. Run `dart analyze` and `flutter test` to verify zero analyser warnings and passing tests. **Show your running drawer, basket, and settings views to a member of staff** for your Demo 3 practical checkpoint.

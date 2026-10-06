@@ -435,7 +435,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order History'),
+        title: const Text(appTitle, style: shopHeaderStyle),
+        backgroundColor: shopBrand,
+        foregroundColor: shopWhite,
+        elevation: 0,
       ),
       drawer: const NavDrawer(),
       body: SingleChildScrollView(
