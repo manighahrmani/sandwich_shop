@@ -1,5 +1,4 @@
 import 'package:sandwich_shop/models/cart_item.dart';
-import 'package:sandwich_shop/models/order_options.dart';
 
 class CartRepository {
   CartRepository._internal();
@@ -7,18 +6,9 @@ class CartRepository {
   static final CartRepository instance = CartRepository._internal();
 
   final List<CartItem> _items = [];
-  OrderOptions _options = const OrderOptions();
 
   List<CartItem> getItems() {
     return List<CartItem>.unmodifiable(_items);
-  }
-
-  OrderOptions getOptions() {
-    return _options;
-  }
-
-  void setOptions(OrderOptions options) {
-    _options = options;
   }
 
   void addItem(CartItem item) {
@@ -60,6 +50,5 @@ class CartRepository {
 
   void clear() {
     _items.clear();
-    _options = const OrderOptions();
   }
 }

@@ -50,44 +50,40 @@ class SandwichDatabase {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         order_number INTEGER NOT NULL,
         items_summary TEXT NOT NULL,
-        kitchen_note TEXT NOT NULL,
-        nut_free INTEGER NOT NULL,
-        gluten_free INTEGER NOT NULL,
-        no_onions INTEGER NOT NULL,
+        note TEXT NOT NULL,
+        toasted INTEGER NOT NULL,
+        vegan INTEGER NOT NULL,
         total_price REAL NOT NULL,
         date TEXT NOT NULL
       )
     ''');
 
-    // Seed a few past orders so the history screen has content on first run.
+    // Seed a few past orders so the orders screen has content on first run.
     await db.insert('orders', <String, dynamic>{
       'order_number': 1003,
-      'items_summary': '2 x Italian B.M.T. Footlong',
-      'kitchen_note': 'Extra napkins please',
-      'nut_free': 0,
-      'gluten_free': 0,
-      'no_onions': 1,
-      'total_price': 13.50,
+      'items_summary': '2 x Footlong Sub',
+      'note': 'Extra napkins please',
+      'toasted': 1,
+      'vegan': 0,
+      'total_price': 15.00,
       'date': '18 Apr 2026 12:45',
     });
     await db.insert('orders', <String, dynamic>{
       'order_number': 1002,
-      'items_summary': '1 x Veggie Delight Six Inch',
-      'kitchen_note': '',
-      'nut_free': 0,
-      'gluten_free': 1,
-      'no_onions': 0,
+      'items_summary': '1 x Six-Inch Sub',
+      'note': '',
+      'toasted': 0,
+      'vegan': 1,
       'total_price': 4.50,
       'date': '2 Mar 2026 18:10',
     });
     await db.insert('orders', <String, dynamic>{
       'order_number': 1001,
-      'items_summary': '3 x Tuna Melt Footlong',
-      'kitchen_note': 'Toasted',
-      'nut_free': 1,
-      'gluten_free': 0,
-      'no_onions': 0,
-      'total_price': 19.50,
+      'items_summary': '3 x Footlong Sub',
+      'note': 'No onions',
+      'toasted': 1,
+      'vegan': 0,
+      'total_price': 22.50,
       'date': '11 Jan 2026 13:02',
     });
   }

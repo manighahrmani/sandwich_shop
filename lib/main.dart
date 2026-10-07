@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
-import 'package:sandwich_shop/screens/cart_screen.dart';
-import 'package:sandwich_shop/screens/customise_order_screen.dart';
+import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
-import 'package:sandwich_shop/screens/order_history_screen.dart';
+import 'package:sandwich_shop/screens/orders_screen.dart';
 
 void main() {
   runApp(const App());
@@ -33,14 +32,11 @@ class App extends StatelessWidget {
         '/': (BuildContext context) {
           return const MenuScreen();
         },
-        '/cart': (BuildContext context) {
-          return const CartScreen();
+        '/basket': (BuildContext context) {
+          return const BasketScreen();
         },
-        '/customise': (BuildContext context) {
-          return const CustomiseOrderScreen();
-        },
-        '/history': (BuildContext context) {
-          return const OrderHistoryScreen();
+        '/orders': (BuildContext context) {
+          return const OrdersScreen();
         },
       },
     );

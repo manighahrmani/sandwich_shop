@@ -2,93 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
-import 'package:sandwich_shop/models/order_options.dart';
 import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
-import 'package:sandwich_shop/widgets/nav_drawer.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+class BasketScreen extends StatefulWidget {
+  const BasketScreen({super.key});
 
   @override
-  State<CartScreen> createState() {
-    return _CartScreenState();
+  State<BasketScreen> createState() {
+    return _BasketScreenState();
   }
 }
 
-class _CartScreenState extends State<CartScreen> {
-  Future<void> _checkout() async {
-    final CartRepository cart = CartRepository.instance;
-    final List<CartItem> items = cart.getItems();
-    if (items.isEmpty) {
-      return;
-    }
-
-    int nextOrderNumber = 1001;
-    try {
-      nextOrderNumber = await SandwichDatabase.instance.getNextOrderNumber();
-    } catch (_) {}
-
-    final int totalItems = cart.getTotalItems();
-    final String firstItemName = items[0].name;
-    final String summary;
-    if (items.length == 1) {
-      summary = '$totalItems x $firstItemName';
-    } else {
-      summary = '$totalItems items - $firstItemName and more';
-    }
-
-    final DateTime now = DateTime.now();
-    const List<String> monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    final String minuteString = now.minute.toString().padLeft(2, '0');
-    final String hourString = now.hour.toString().padLeft(2, '0');
-    final String formattedDate =
-        '${now.day} ${monthNames[now.month - 1]} ${now.year} $hourString:$minuteString';
-
-    final OrderOptions options = cart.getOptions();
-    final OrderRecord newOrder = OrderRecord(
-      orderNumber: nextOrderNumber,
-      itemsSummary: summary,
-      kitchenNote: options.kitchenNote,
-      nutFree: options.nutFree ? 1 : 0,
-      glutenFree: options.glutenFree ? 1 : 0,
-      noOnions: options.noOnions ? 1 : 0,
-      totalPrice: cart.getTotalDue(),
-      date: formattedDate,
-    );
-
-    try {
-      await SandwichDatabase.instance.insertOrder(newOrder);
-    } catch (_) {}
-    cart.clear();
-
-    if (mounted) {
-      Navigator.pushReplacementNamed(context, '/history');
-    }
-  }
-
+class _BasketScreenState extends State<BasketScreen> {
   Widget _buildEmptyState() {
     return const Center(
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 32.0),
         child: Text(
-          'Nothing in your basket yet',
+          'Your basket is empty',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
+      ),
+    );
+  }
+
+  Widget _buildOptionsText(CartItem item) {
+    final List<String> parts = [];
+    if (item.toasted) {
+      parts.add('Toasted');
+    }
+    if (item.vegan) {
+      parts.add('Vegan');
+    }
+    if (item.note.isNotEmpty) {
+      parts.add('Note: ${item.note}');
+    }
+
+    if (parts.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 4.0),
+      child: Text(
+        parts.join(' • '),
+        style: const TextStyle(fontSize: 12, color: Colors.black54),
       ),
     );
   }
@@ -118,9 +78,15 @@ class _CartScreenState extends State<CartScreen> {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              item.name,
-              style: const TextStyle(fontWeight: FontWeight.w600),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.name,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                _buildOptionsText(item),
+              ],
             ),
           ),
           Text('£${item.totalPrice.toStringAsFixed(2)}'),
@@ -157,7 +123,86 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget _buildCartList(CartRepository cart, List<CartItem> items) {
+  String _buildItemsSummary(List<CartItem> items) {
+    final List<String> parts = [];
+    for (final CartItem item in items) {
+      parts.add('${item.quantity} x ${item.name}');
+    }
+    return parts.join(', ');
+  }
+
+  String _collectNote(List<CartItem> items) {
+    final List<String> notes = [];
+    for (final CartItem item in items) {
+      if (item.note.isNotEmpty) {
+        notes.add(item.note);
+      }
+    }
+    return notes.join('; ');
+  }
+
+  int _anyToasted(List<CartItem> items) {
+    for (final CartItem item in items) {
+      if (item.toasted) {
+        return 1;
+      }
+    }
+    return 0;
+  }
+
+  int _anyVegan(List<CartItem> items) {
+    for (final CartItem item in items) {
+      if (item.vegan) {
+        return 1;
+      }
+    }
+    return 0;
+  }
+
+  String _formatDate(DateTime now) {
+    final List<String> months = <String>[
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    final String day = now.day.toString();
+    final String month = months[now.month - 1];
+    final String year = now.year.toString();
+    final String hour = now.hour.toString().padLeft(2, '0');
+    final String minute = now.minute.toString().padLeft(2, '0');
+    return '$day $month $year $hour:$minute';
+  }
+
+  Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
+    final int orderNumber =
+        await SandwichDatabase.instance.getNextOrderNumber();
+    final OrderRecord record = OrderRecord(
+      orderNumber: orderNumber,
+      itemsSummary: _buildItemsSummary(items),
+      note: _collectNote(items),
+      toasted: _anyToasted(items),
+      vegan: _anyVegan(items),
+      totalPrice: cart.getTotalDue(),
+      date: _formatDate(DateTime.now()),
+    );
+    await SandwichDatabase.instance.insertOrder(record);
+    cart.clear();
+    if (!mounted) {
+      return;
+    }
+    Navigator.pushNamed(context, '/orders');
+  }
+
+  Widget _buildBasketList(CartRepository cart, List<CartItem> items) {
     final List<Widget> children = [];
 
     children.add(const Text('Your basket', style: shopSectionTitleStyle));
@@ -194,9 +239,9 @@ class _CartScreenState extends State<CartScreen> {
       SizedBox(
         width: double.infinity,
         child: PrimaryButton(
-          label: 'Place order',
-          onPressed: () async {
-            await _checkout();
+          label: 'Checkout',
+          onPressed: () {
+            _checkout(cart, items);
           },
         ),
       ),
@@ -217,12 +262,13 @@ class _CartScreenState extends State<CartScreen> {
     if (items.isEmpty) {
       content = _buildEmptyState();
     } else {
-      content = _buildCartList(cart, items);
+      content = _buildBasketList(cart, items);
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text(appTitle, style: shopHeaderStyle)),
-      drawer: const NavDrawer(),
+      appBar: AppBar(
+        title: const Text(appTitle, style: shopHeaderStyle),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: content,

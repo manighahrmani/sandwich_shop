@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/order_record.dart';
-import 'package:sandwich_shop/widgets/nav_drawer.dart';
 
-class OrderHistoryScreen extends StatefulWidget {
-  const OrderHistoryScreen({super.key});
+class OrdersScreen extends StatefulWidget {
+  const OrdersScreen({super.key});
 
   @override
-  State<OrderHistoryScreen> createState() {
-    return _OrderHistoryScreenState();
+  State<OrdersScreen> createState() {
+    return _OrdersScreenState();
   }
 }
 
-class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
+class _OrdersScreenState extends State<OrdersScreen> {
   List<OrderRecord> _orders = [];
 
   @override
@@ -23,15 +22,13 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   }
 
   Future<void> _loadOrders() async {
-    try {
-      final List<OrderRecord> loaded =
-          await SandwichDatabase.instance.getAllOrders();
-      if (mounted) {
-        setState(() {
-          _orders = loaded;
-        });
-      }
-    } catch (_) {}
+    final List<OrderRecord> loaded =
+        await SandwichDatabase.instance.getAllOrders();
+    if (mounted) {
+      setState(() {
+        _orders = loaded;
+      });
+    }
   }
 
   Widget _buildEmptyState() {
@@ -118,13 +115,12 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
       ),
-      drawer: const NavDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Order history', style: shopSectionTitleStyle),
+            const Text('Your orders', style: shopSectionTitleStyle),
             const SizedBox(height: 16),
             bodyContent,
           ],
