@@ -38,7 +38,7 @@ void main() {
     );
 
     expect(find.text('Your basket'), findsOneWidget);
-    expect(find.text('Footlong'), findsOneWidget);
+    expect(find.text('2 x Footlong'), findsOneWidget);
     expect(find.text('£20.00'), findsWidgets);
     expect(find.text('Checkout'), findsOneWidget);
 
@@ -48,7 +48,8 @@ void main() {
     expect(find.text('Your basket is empty'), findsOneWidget);
   });
 
-  testWidgets('BasketScreen checkout clears basket and shows inline '
+  testWidgets(
+      'BasketScreen checkout clears basket and shows inline '
       'confirmation', (WidgetTester tester) async {
     const CartItem item = CartItem(
       id: 'footlong',

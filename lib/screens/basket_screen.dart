@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 
 class BasketScreen extends StatefulWidget {
@@ -54,35 +55,16 @@ class _BasketScreenState extends State<BasketScreen> {
   }
 
   Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8.0),
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: shopWhite,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: shopAccent,
-              shape: BoxShape.circle,
-            ),
-            child: Text(
-              '${item.quantity}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.name,
+                  '${item.quantity} x ${item.name}',
                   style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 _buildOptionsText(item),
@@ -134,7 +116,7 @@ class _BasketScreenState extends State<BasketScreen> {
       children.add(_buildLineItem(cart, item, index));
     }
 
-    children.add(const Divider(height: 32));
+    children.add(const SizedBox(height: 24));
     children.add(
       _buildTotalRow(
         'Items subtotal',
@@ -216,6 +198,7 @@ class _BasketScreenState extends State<BasketScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
+        actions: const [BasketButton()],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

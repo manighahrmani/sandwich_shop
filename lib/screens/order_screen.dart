@@ -3,6 +3,7 @@ import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -52,18 +53,6 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
-  List<DropdownMenuEntry<int>> _buildQuantityEntries() {
-    final List<DropdownMenuEntry<int>> entries = [];
-    for (int value = 0; value <= widget.maxQuantity; value++) {
-      final DropdownMenuEntry<int> entry = DropdownMenuEntry<int>(
-        value: value,
-        label: value.toString(),
-      );
-      entries.add(entry);
-    }
-    return entries;
-  }
-
   void _addToBasket() {
     if (_quantity > 0) {
       final String note = _noteController.text.trim();
@@ -91,7 +80,10 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(appTitle, style: shopHeaderStyle)),
+      appBar: AppBar(
+        title: const Text(appTitle, style: shopHeaderStyle),
+        actions: const [BasketButton()],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -117,20 +109,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   child: const Text('Add'),
                 ),
               ],
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: DropdownMenu<int>(
-                initialSelection: _quantity,
-                onSelected: (int? value) {
-                  if (value != null) {
-                    setState(() {
-                      _quantity = value;
-                    });
-                  }
-                },
-                dropdownMenuEntries: _buildQuantityEntries(),
-              ),
             ),
             const SizedBox(height: 24),
             Row(

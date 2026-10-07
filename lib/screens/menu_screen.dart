@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/sandwich_repository.dart';
+import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/sandwich_card.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -15,14 +16,7 @@ class MenuScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_basket),
-            onPressed: () {
-              Navigator.pushNamed(context, '/basket');
-            },
-          ),
-        ],
+        actions: const [BasketButton()],
       ),
       body: ListView.builder(
         itemCount: sandwiches.length,
