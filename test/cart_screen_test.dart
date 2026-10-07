@@ -17,7 +17,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Your basket is empty'), findsOneWidget);
+    expect(find.text('Nothing in your basket yet'), findsOneWidget);
     expect(find.text('Checkout'), findsNothing);
   });
 
@@ -37,14 +37,38 @@ void main() {
       ),
     );
 
-    expect(find.text('Your Order'), findsOneWidget);
-    expect(find.text('2x Footlong'), findsOneWidget);
+    expect(find.text('Your basket'), findsOneWidget);
+    expect(find.text('Footlong'), findsOneWidget);
     expect(find.text('£20.00'), findsWidgets);
     expect(find.text('Checkout'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.delete_outline));
     await tester.pump();
 
-    expect(find.text('Your basket is empty'), findsOneWidget);
+    expect(find.text('Nothing in your basket yet'), findsOneWidget);
+  });
+
+  testWidgets('CartScreen checkout clears basket and shows inline confirmation',
+      (WidgetTester tester) async {
+    const CartItem item = CartItem(
+      id: 'footlong',
+      name: 'Footlong',
+      price: 10.0,
+      quantity: 1,
+    );
+    CartRepository.instance.addItem(item);
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: CartScreen(),
+      ),
+    );
+
+    await tester.tap(find.text('Checkout'));
+    await tester.pump();
+
+    expect(find.text('Thanks, your order is on its way'), findsOneWidget);
+    expect(find.text('Nothing in your basket yet'), findsOneWidget);
+    expect(find.byType(SnackBar), findsNothing);
   });
 }

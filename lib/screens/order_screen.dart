@@ -4,6 +4,7 @@ import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/widgets/nav_drawer.dart';
+import 'package:sandwich_shop/widgets/primary_button.dart';
 
 class OrderScreen extends StatefulWidget {
   final Sandwich sandwich;
@@ -74,9 +75,6 @@ class _OrderScreenState extends State<OrderScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        backgroundColor: shopBrand,
-        foregroundColor: shopWhite,
-        elevation: 0,
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -132,9 +130,9 @@ class _OrderScreenState extends State<OrderScreen> {
                 dropdownMenuEntries: _buildQuantityEntries(),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
+              PrimaryButton(
+                label: 'Add to Basket',
                 onPressed: _addToBasket,
-                child: const Text('Add to Basket'),
               ),
               const SizedBox(height: 12),
               Text(

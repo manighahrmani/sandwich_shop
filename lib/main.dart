@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/screens/cart_screen.dart';
+import 'package:sandwich_shop/screens/customise_order_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
-import 'package:sandwich_shop/screens/settings_screen.dart';
 
 void main() {
   runApp(const App());
@@ -20,6 +20,7 @@ class App extends StatelessWidget {
           seedColor: shopBrand,
           primary: shopBrand,
         ),
+        scaffoldBackgroundColor: shopBackground,
         appBarTheme: const AppBarTheme(
           backgroundColor: shopBrand,
           foregroundColor: shopWhite,
@@ -34,8 +35,8 @@ class App extends StatelessWidget {
         '/cart': (BuildContext context) {
           return const CartScreen();
         },
-        '/settings': (BuildContext context) {
-          return const SettingsScreen();
+        '/customise': (BuildContext context) {
+          return const CustomiseOrderScreen();
         },
       },
     );
