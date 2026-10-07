@@ -1,44 +1,47 @@
-enum BreadType { white, wheat, wholemeal }
-
-enum SandwichType {
-  veggieDelight,
-  chickenTeriyaki,
-  tunaMelt,
-  meatballMarinara,
-}
-
 class Sandwich {
-  final SandwichType type;
-  final bool isFootlong;
-  final BreadType breadType;
+  final String id;
+  final String name;
+  final String description;
+  final double price;
+  final String imagePath;
 
-  Sandwich({
-    required this.type,
-    required this.isFootlong,
-    required this.breadType,
+  const Sandwich({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.imagePath,
   });
 
-  String get name {
-    switch (type) {
-      case SandwichType.veggieDelight:
-        return 'Veggie Delight';
-      case SandwichType.chickenTeriyaki:
-        return 'Chicken Teriyaki';
-      case SandwichType.tunaMelt:
-        return 'Tuna Melt';
-      case SandwichType.meatballMarinara:
-        return 'Meatball Marinara';
-    }
+  String get formattedPrice {
+    return '£${price.toStringAsFixed(2)}';
   }
 
-  String get image {
-    String typeString = type.name;
-    String sizeString = '';
-    if (isFootlong) {
-      sizeString = 'footlong';
-    } else {
-      sizeString = 'six_inch';
-    }
-    return 'assets/images/${typeString}_$sizeString.png';
+  factory Sandwich.fromJson(Map<String, dynamic> json) {
+    final String id = json['id'] as String;
+    final String name = json['name'] as String;
+    final String description = json['description'] as String;
+    final num priceNumber = json['price'] as num;
+    final double price = priceNumber.toDouble();
+    final String imagePath = json['imagePath'] as String;
+
+    return Sandwich(
+      id: id,
+      name: name,
+      description: description,
+      price: price,
+      imagePath: imagePath,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
+      'imagePath': imagePath,
+    };
+    return data;
   }
 }
