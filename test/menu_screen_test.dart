@@ -1,40 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/widgets/sandwich_card.dart';
 
 void main() {
-  testWidgets('MenuScreen shows the sandwich list open by default',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: MenuScreen(),
-      ),
-    );
+  testWidgets('MenuScreen shows the sandwich list and a basket button', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: MenuScreen()));
 
-    expect(find.text('Sandwich Menu'), findsOneWidget);
     expect(find.byType(SandwichCard), findsWidgets);
-    expect(find.byIcon(Icons.expand_less), findsOneWidget);
+    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
   });
 
-  testWidgets('Tapping the header hides and shows the sandwich list',
-      (WidgetTester tester) async {
+  testWidgets('Tapping the basket button navigates to BasketScreen', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
-      const MaterialApp(
-        home: MenuScreen(),
+      MaterialApp(
+        initialRoute: '/',
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) {
+            return const MenuScreen();
+          },
+          '/basket': (BuildContext context) {
+            return const BasketScreen();
+          },
+        },
       ),
     );
 
-    await tester.tap(find.text('Sandwich Menu'));
-    await tester.pump();
+    await tester.tap(find.byIcon(Icons.shopping_basket));
+    await tester.pumpAndSettle();
 
-    expect(find.byType(SandwichCard), findsNothing);
-    expect(find.byIcon(Icons.expand_more), findsOneWidget);
-
-    await tester.tap(find.text('Sandwich Menu'));
-    await tester.pump();
-
-    expect(find.byType(SandwichCard), findsWidgets);
-    expect(find.byIcon(Icons.expand_less), findsOneWidget);
+    expect(find.byType(BasketScreen), findsOneWidget);
   });
 }

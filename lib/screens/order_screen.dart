@@ -3,7 +3,6 @@ import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
-import 'package:sandwich_shop/widgets/nav_drawer.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -20,7 +19,22 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
+  bool _toasted = false;
+  bool _vegan = false;
+  late TextEditingController _noteController;
   String _confirmationMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _noteController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
+  }
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
@@ -52,11 +66,15 @@ class _OrderScreenState extends State<OrderScreen> {
 
   void _addToBasket() {
     if (_quantity > 0) {
+      final String note = _noteController.text.trim();
       final CartItem item = CartItem(
         id: widget.sandwich.id,
         name: widget.sandwich.name,
         price: widget.sandwich.price,
         quantity: _quantity,
+        toasted: _toasted,
+        vegan: _vegan,
+        note: note,
       );
       CartRepository.instance.addItem(item);
       setState(() {
@@ -73,52 +91,36 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(appTitle, style: shopHeaderStyle),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-      ),
-      drawer: const NavDrawer(),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Order ${widget.sandwich.name}',
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+      appBar: AppBar(title: const Text(appTitle, style: shopHeaderStyle)),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Order ${widget.sandwich.name}',
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            OrderItemDisplay(_quantity, widget.sandwich.name),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _decreaseQuantity,
+                  child: const Text('Remove'),
                 ),
-              ),
-              const SizedBox(height: 16),
-              OrderItemDisplay(_quantity, widget.sandwich.name),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: _decreaseQuantity,
-                    child: const Text('Remove'),
-                  ),
-                  const SizedBox(width: 12),
-                  ElevatedButton(
-                    onPressed: _increaseQuantity,
-                    child: const Text('Add'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              DropdownMenu<int>(
+                const SizedBox(width: 12),
+                ElevatedButton(
+                  onPressed: _increaseQuantity,
+                  child: const Text('Add'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: DropdownMenu<int>(
                 initialSelection: _quantity,
                 onSelected: (int? value) {
                   if (value != null) {
@@ -129,18 +131,58 @@ class _OrderScreenState extends State<OrderScreen> {
                 },
                 dropdownMenuEntries: _buildQuantityEntries(),
               ),
-              const SizedBox(height: 20),
-              PrimaryButton(
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                const Expanded(child: Text('Toasted')),
+                Switch(
+                  value: _toasted,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _toasted = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Expanded(child: Text('Vegan')),
+                Switch(
+                  value: _vegan,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _vegan = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _noteController,
+              maxLines: 3,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Note for the kitchen',
+                hintText: 'Add any notes for this order',
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: PrimaryButton(
                 label: 'Add to Basket',
                 onPressed: _addToBasket,
               ),
-              const SizedBox(height: 12),
-              Text(
-                _confirmationMessage,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              _confirmationMessage,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
       ),
     );

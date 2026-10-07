@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
-import 'package:sandwich_shop/widgets/nav_drawer.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+class BasketScreen extends StatefulWidget {
+  const BasketScreen({super.key});
 
   @override
-  State<CartScreen> createState() {
-    return _CartScreenState();
+  State<BasketScreen> createState() {
+    return _BasketScreenState();
   }
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _BasketScreenState extends State<BasketScreen> {
   String _confirmationMessage = '';
 
   Widget _buildEmptyState() {
@@ -22,9 +21,34 @@ class _CartScreenState extends State<CartScreen> {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 32.0),
         child: Text(
-          'Nothing in your basket yet',
+          'Your basket is empty',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
+      ),
+    );
+  }
+
+  Widget _buildOptionsText(CartItem item) {
+    final List<String> parts = [];
+    if (item.toasted) {
+      parts.add('Toasted');
+    }
+    if (item.vegan) {
+      parts.add('Vegan');
+    }
+    if (item.note.isNotEmpty) {
+      parts.add('Note: ${item.note}');
+    }
+
+    if (parts.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 4.0),
+      child: Text(
+        parts.join(' • '),
+        style: const TextStyle(fontSize: 12, color: Colors.black54),
       ),
     );
   }
@@ -54,9 +78,15 @@ class _CartScreenState extends State<CartScreen> {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              item.name,
-              style: const TextStyle(fontWeight: FontWeight.w600),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.name,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                _buildOptionsText(item),
+              ],
             ),
           ),
           Text('£${item.totalPrice.toStringAsFixed(2)}'),
@@ -93,7 +123,7 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget _buildCartList(CartRepository cart, List<CartItem> items) {
+  Widget _buildBasketList(CartRepository cart, List<CartItem> items) {
     final List<Widget> children = [];
 
     children.add(const Text('Your basket', style: shopSectionTitleStyle));
@@ -180,14 +210,13 @@ class _CartScreenState extends State<CartScreen> {
         content = _buildEmptyState();
       }
     } else {
-      content = _buildCartList(cart, items);
+      content = _buildBasketList(cart, items);
     }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
       ),
-      drawer: const NavDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: content,
