@@ -3,6 +3,8 @@ import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/widgets/basket_button.dart';
+import 'package:sandwich_shop/widgets/orders_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,16 +46,17 @@ class _OrderScreenState extends State<OrderScreen> {
 
   Future<void> _loadSavedOptions() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool savedToasted = prefs.getBool(prefToasted) ?? false;
-    final bool savedVegan = prefs.getBool(prefVegan) ?? false;
-    final String savedNote = prefs.getString(prefNote) ?? '';
-    if (mounted) {
-      setState(() {
-        _toasted = savedToasted;
-        _vegan = savedVegan;
-        _noteController.text = savedNote;
-      });
+    final bool toasted = prefs.getBool(prefToasted) ?? false;
+    final bool vegan = prefs.getBool(prefVegan) ?? false;
+    final String note = prefs.getString(prefNote) ?? '';
+    if (!mounted) {
+      return;
     }
+    setState(() {
+      _toasted = toasted;
+      _vegan = vegan;
+      _noteController.text = note;
+    });
   }
 
   Future<void> _saveOptions() async {
@@ -77,18 +80,6 @@ class _OrderScreenState extends State<OrderScreen> {
         _quantity--;
       });
     }
-  }
-
-  List<DropdownMenuEntry<int>> _buildQuantityEntries() {
-    final List<DropdownMenuEntry<int>> entries = [];
-    for (int value = 0; value <= widget.maxQuantity; value++) {
-      final DropdownMenuEntry<int> entry = DropdownMenuEntry<int>(
-        value: value,
-        label: value.toString(),
-      );
-      entries.add(entry);
-    }
-    return entries;
   }
 
   void _addToBasket() {
@@ -119,7 +110,10 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(appTitle, style: shopHeaderStyle)),
+      appBar: AppBar(
+        title: const Text(appTitle, style: shopHeaderStyle),
+        actions: const [BasketButton(), OrdersButton()],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -145,20 +139,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   child: const Text('Add'),
                 ),
               ],
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: DropdownMenu<int>(
-                initialSelection: _quantity,
-                onSelected: (int? value) {
-                  if (value != null) {
-                    setState(() {
-                      _quantity = value;
-                    });
-                  }
-                },
-                dropdownMenuEntries: _buildQuantityEntries(),
-              ),
             ),
             const SizedBox(height: 24),
             Row(
@@ -193,9 +173,6 @@ class _OrderScreenState extends State<OrderScreen> {
             TextField(
               controller: _noteController,
               maxLines: 3,
-              onChanged: (String value) {
-                _saveOptions();
-              },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Note for the kitchen',

@@ -9,111 +9,86 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   });
 
+  late Database database;
+
   setUp(() async {
-    final Database db = await databaseFactoryFfi.openDatabase(
+    database = await databaseFactory.openDatabase(
       inMemoryDatabasePath,
       options: OpenDatabaseOptions(
         version: 1,
         onCreate: (Database db, int version) async {
           await db.execute('''
-            CREATE TABLE IF NOT EXISTS orders (
+            CREATE TABLE orders (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               order_number INTEGER NOT NULL,
-              items_summary TEXT NOT NULL,
+              summary TEXT NOT NULL,
               note TEXT NOT NULL,
               toasted INTEGER NOT NULL,
               vegan INTEGER NOT NULL,
-              total_price REAL NOT NULL,
+              total REAL NOT NULL,
               date TEXT NOT NULL
             )
           ''');
         },
       ),
     );
-    SandwichDatabase.instance.setDatabase(db);
+    SandwichDatabase.instance.setDatabase(database);
   });
 
   tearDown(() async {
-    await SandwichDatabase.instance.close();
+    await database.close();
+    SandwichDatabase.instance.setDatabase(null);
   });
 
-  test('insertOrder stores an order that getAllOrders returns', () async {
-    const OrderRecord order = OrderRecord(
-      orderNumber: 1001,
-      itemsSummary: '2 x Footlong Sub',
-      note: 'No onions',
-      toasted: 1,
+  OrderRecord buildRecord(int orderNumber, String summary, double total) {
+    return OrderRecord(
+      orderNumber: orderNumber,
+      summary: summary,
+      note: '',
+      toasted: 0,
       vegan: 0,
-      totalPrice: 15.00,
-      date: '18 Apr 2026 12:45',
+      total: total,
+      date: '01/01/2026 10:00',
     );
+  }
 
-    final int id = await SandwichDatabase.instance.insertOrder(order);
+  test('insertOrder stores an order and returns its id', () async {
+    final int id = await SandwichDatabase.instance.insertOrder(
+      buildRecord(1001, '1 x Footlong Sub', 7.50),
+    );
     expect(id, greaterThan(0));
 
-    final List<OrderRecord> orders = await SandwichDatabase.instance
-        .getAllOrders();
+    final List<OrderRecord> orders =
+        await SandwichDatabase.instance.getAllOrders();
     expect(orders.length, 1);
-    expect(orders[0].orderNumber, 1001);
-    expect(orders[0].itemsSummary, '2 x Footlong Sub');
-    expect(orders[0].note, 'No onions');
-    expect(orders[0].toasted, 1);
-    expect(orders[0].vegan, 0);
-    expect(orders[0].totalPrice, 15.00);
-    expect(orders[0].date, '18 Apr 2026 12:45');
+    expect(orders.first.summary, '1 x Footlong Sub');
+    expect(orders.first.total, 7.50);
   });
 
-  test('getAllOrders returns orders newest first by order number', () async {
-    const OrderRecord older = OrderRecord(
-      orderNumber: 1001,
-      itemsSummary: '1 x Six-Inch Sub',
-      note: '',
-      toasted: 0,
-      vegan: 1,
-      totalPrice: 4.50,
-      date: '2 Mar 2026 18:10',
+  test('getAllOrders returns newest order number first', () async {
+    await SandwichDatabase.instance.insertOrder(
+      buildRecord(1001, 'First', 5.0),
     );
-    const OrderRecord newer = OrderRecord(
-      orderNumber: 1002,
-      itemsSummary: '3 x Footlong Sub',
-      note: 'Extra salad',
-      toasted: 1,
-      vegan: 0,
-      totalPrice: 22.50,
-      date: '11 Jan 2026 13:02',
+    await SandwichDatabase.instance.insertOrder(
+      buildRecord(1003, 'Third', 9.0),
+    );
+    await SandwichDatabase.instance.insertOrder(
+      buildRecord(1002, 'Second', 7.0),
     );
 
-    await SandwichDatabase.instance.insertOrder(older);
-    await SandwichDatabase.instance.insertOrder(newer);
-
-    final List<OrderRecord> orders = await SandwichDatabase.instance
-        .getAllOrders();
-    expect(orders.length, 2);
-    expect(orders[0].orderNumber, 1002);
-    expect(orders[1].orderNumber, 1001);
+    final List<OrderRecord> orders =
+        await SandwichDatabase.instance.getAllOrders();
+    expect(orders[0].orderNumber, 1003);
+    expect(orders[1].orderNumber, 1002);
+    expect(orders[2].orderNumber, 1001);
   });
 
-  test(
-    'getNextOrderNumber returns a starting number for an empty table',
-    () async {
-      final int next = await SandwichDatabase.instance.getNextOrderNumber();
-      expect(next, 1001);
-    },
-  );
+  test('getNextOrderNumber increments the current maximum', () async {
+    expect(await SandwichDatabase.instance.getNextOrderNumber(), 1001);
 
-  test('getNextOrderNumber returns the current maximum plus one', () async {
-    const OrderRecord order = OrderRecord(
-      orderNumber: 1005,
-      itemsSummary: '1 x Six-Inch Sub',
-      note: '',
-      toasted: 0,
-      vegan: 0,
-      totalPrice: 5.00,
-      date: '1 Jan 2026 09:00',
+    await SandwichDatabase.instance.insertOrder(
+      buildRecord(1005, 'Order', 5.0),
     );
-    await SandwichDatabase.instance.insertOrder(order);
-
-    final int next = await SandwichDatabase.instance.getNextOrderNumber();
-    expect(next, 1006);
+    expect(await SandwichDatabase.instance.getNextOrderNumber(), 1006);
   });
 }

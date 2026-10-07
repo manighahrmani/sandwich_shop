@@ -14,19 +14,16 @@ const Sandwich testSandwich = Sandwich(
   imagePath: 'assets/images/footlong.jpeg',
 );
 
-// The quantity DropdownMenu renders its own TextField, so match the note
-// field by its label rather than by widget type alone.
+// Match the note field by its label.
 final Finder noteFieldFinder = find.byWidgetPredicate((Widget widget) {
   return widget is TextField &&
       widget.decoration?.labelText == 'Note for the kitchen';
 });
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   setUp(() {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
     CartRepository.instance.clear();
+    SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
   testWidgets('OrderScreen shows two switches and one note field', (

@@ -1,59 +1,59 @@
 class OrderRecord {
   final int? id;
   final int orderNumber;
-  final String itemsSummary;
+  final String summary;
   final String note;
   final int toasted;
   final int vegan;
-  final double totalPrice;
+  final double total;
   final String date;
 
   const OrderRecord({
     this.id,
     required this.orderNumber,
-    required this.itemsSummary,
+    required this.summary,
     required this.note,
     required this.toasted,
     required this.vegan,
-    required this.totalPrice,
+    required this.total,
     required this.date,
   });
 
-  Map<String, dynamic> toMap() {
-    final Map<String, dynamic> map = <String, dynamic>{
+  Map<String, Object?> toMap() {
+    final Map<String, Object?> data = <String, Object?>{
       'order_number': orderNumber,
-      'items_summary': itemsSummary,
+      'summary': summary,
       'note': note,
       'toasted': toasted,
       'vegan': vegan,
-      'total_price': totalPrice,
+      'total': total,
       'date': date,
     };
     if (id != null) {
-      map['id'] = id;
+      data['id'] = id;
     }
-    return map;
+    return data;
   }
 
-  factory OrderRecord.fromMap(Map<String, dynamic> map) {
-    final int? recordId = map['id'] as int?;
-    final int recordNumber = map['order_number'] as int;
-    final String recordSummary = map['items_summary'] as String;
-    final String recordNote = map['note'] as String;
-    final int recordToasted = map['toasted'] as int;
-    final int recordVegan = map['vegan'] as int;
-    final double recordPrice = (map['total_price'] as num).toDouble();
-    final String recordDate = map['date'] as String;
+  factory OrderRecord.fromMap(Map<String, Object?> map) {
+    final int orderNumber = map['order_number'] as int;
+    final String summary = map['summary'] as String;
+    final String note = map['note'] as String;
+    final int toasted = map['toasted'] as int;
+    final int vegan = map['vegan'] as int;
+    final num totalNumber = map['total'] as num;
+    final double total = totalNumber.toDouble();
+    final String date = map['date'] as String;
 
     return OrderRecord(
-      id: recordId,
-      orderNumber: recordNumber,
-      itemsSummary: recordSummary,
-      note: recordNote,
-      toasted: recordToasted,
-      vegan: recordVegan,
-      totalPrice: recordPrice,
-      date: recordDate,
+      id: map['id'] as int?,
+      orderNumber: orderNumber,
+      summary: summary,
+      note: note,
+      toasted: toasted,
+      vegan: vegan,
+      total: total,
+      date: date,
     );
   }
 }

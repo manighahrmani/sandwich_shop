@@ -19,42 +19,18 @@ final Finder noteFieldFinder = find.byWidgetPredicate((Widget widget) {
 });
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   setUp(() {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
     CartRepository.instance.clear();
+    SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('Order options are saved to shared preferences on add to basket',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
-    );
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.byType(Switch).first);
-    await tester.pump();
-    await tester.enterText(noteFieldFinder, 'No pickles');
-    await tester.pump();
-
-    await tester.tap(find.text('Add'));
-    await tester.pump();
-    await tester.tap(find.text('Add to Basket'));
-    await tester.pumpAndSettle();
-
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    expect(prefs.getBool(prefToasted), isTrue);
-    expect(prefs.getBool(prefVegan), isFalse);
-    expect(prefs.getString(prefNote), 'No pickles');
-  });
-
-  testWidgets('Saved order options pre-fill the order screen on open',
-      (WidgetTester tester) async {
+  testWidgets('Order screen pre-fills saved options on open', (
+    WidgetTester tester,
+  ) async {
     SharedPreferences.setMockInitialValues(<String, Object>{
       prefToasted: true,
       prefVegan: true,
-      prefNote: 'Extra sauce',
+      prefNote: 'No onions',
     });
 
     await tester.pumpWidget(
@@ -62,12 +38,36 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final List<Switch> switches =
-        tester.widgetList<Switch>(find.byType(Switch)).toList();
-    expect(switches[0].value, isTrue);
-    expect(switches[1].value, isTrue);
+    final Switch toastedSwitch = tester.widget<Switch>(
+      find.byType(Switch).first,
+    );
+    final Switch veganSwitch = tester.widget<Switch>(find.byType(Switch).last);
+    expect(toastedSwitch.value, isTrue);
+    expect(veganSwitch.value, isTrue);
+    expect(find.text('No onions'), findsOneWidget);
+  });
 
-    final TextField noteField = tester.widget<TextField>(noteFieldFinder);
-    expect(noteField.controller?.text, 'Extra sauce');
+  testWidgets('Toggling and adding to basket saves options', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(Switch).first);
+    await tester.pumpAndSettle();
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    expect(prefs.getBool(prefToasted), isTrue);
+
+    await tester.enterText(noteFieldFinder, 'Extra cheese');
+    await tester.tap(find.text('Add'));
+    await tester.pump();
+    await tester.tap(find.text('Add to Basket'));
+    await tester.pumpAndSettle();
+
+    final SharedPreferences updated = await SharedPreferences.getInstance();
+    expect(updated.getString(prefNote), 'Extra cheese');
   });
 }

@@ -7,63 +7,59 @@ import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-Future<Database> _openTestDatabase() async {
-  return databaseFactoryFfi.openDatabase(
-    inMemoryDatabasePath,
-    options: OpenDatabaseOptions(
-      version: 1,
-      onCreate: (Database db, int version) async {
-        await db.execute('''
-          CREATE TABLE IF NOT EXISTS orders (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            order_number INTEGER NOT NULL,
-            items_summary TEXT NOT NULL,
-            note TEXT NOT NULL,
-            toasted INTEGER NOT NULL,
-            vegan INTEGER NOT NULL,
-            total_price REAL NOT NULL,
-            date TEXT NOT NULL
-          )
-        ''');
-      },
-    ),
-  );
-}
-
-Widget _buildApp() {
-  return MaterialApp(
-    initialRoute: '/basket',
-    routes: <String, WidgetBuilder>{
-      '/basket': (BuildContext context) {
-        return const BasketScreen();
-      },
-      '/orders': (BuildContext context) {
-        return const OrdersScreen();
-      },
-    },
-  );
-}
-
 void main() {
   setUpAll(() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   });
 
+  late Database database;
+
   setUp(() async {
     CartRepository.instance.clear();
-    final Database db = await _openTestDatabase();
-    SandwichDatabase.instance.setDatabase(db);
+    database = await databaseFactory.openDatabase(
+      inMemoryDatabasePath,
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (Database db, int version) async {
+          await db.execute('''
+            CREATE TABLE orders (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              order_number INTEGER NOT NULL,
+              summary TEXT NOT NULL,
+              note TEXT NOT NULL,
+              toasted INTEGER NOT NULL,
+              vegan INTEGER NOT NULL,
+              total REAL NOT NULL,
+              date TEXT NOT NULL
+            )
+          ''');
+        },
+      ),
+    );
+    SandwichDatabase.instance.setDatabase(database);
   });
 
   tearDown(() async {
-    await SandwichDatabase.instance.close();
+    await database.close();
+    SandwichDatabase.instance.setDatabase(null);
   });
+
+  Widget buildApp() {
+    return MaterialApp(
+      home: const BasketScreen(),
+      routes: <String, WidgetBuilder>{
+        '/orders': (BuildContext context) {
+          return const OrdersScreen();
+        },
+      },
+    );
+  }
 
   testWidgets('BasketScreen displays empty message when basket has no items', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
+    await tester.pumpWidget(buildApp());
 
     expect(find.text('Your basket is empty'), findsOneWidget);
     expect(find.text('Checkout'), findsNothing);
@@ -80,10 +76,10 @@ void main() {
       );
       CartRepository.instance.addItem(item);
 
-      await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
+      await tester.pumpWidget(buildApp());
 
       expect(find.text('Your basket'), findsOneWidget);
-      expect(find.text('Footlong'), findsOneWidget);
+      expect(find.text('2 x Footlong'), findsOneWidget);
       expect(find.text('£20.00'), findsWidgets);
       expect(find.text('Checkout'), findsOneWidget);
 
@@ -94,31 +90,35 @@ void main() {
     },
   );
 
-  testWidgets('BasketScreen checkout stores the order and shows the orders '
-      'screen', (WidgetTester tester) async {
-    const CartItem item = CartItem(
-      id: 'footlong',
-      name: 'Footlong',
-      price: 10.0,
-      quantity: 1,
-      toasted: true,
-      note: 'No onions',
-    );
-    CartRepository.instance.addItem(item);
+  testWidgets(
+    'BasketScreen checkout stores the order and navigates to orders',
+    (WidgetTester tester) async {
+      const CartItem item = CartItem(
+        id: 'footlong',
+        name: 'Footlong',
+        price: 10.0,
+        quantity: 1,
+      );
+      CartRepository.instance.addItem(item);
 
-    await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(buildApp());
 
-    await tester.tap(find.text('Checkout'));
-    for (int i = 0; i < 15; i++) {
+      late List<Map<String, Object?>> rows;
       await tester.runAsync(() async {
-        await Future<void>.delayed(const Duration(milliseconds: 20));
+        await tester.tap(find.text('Checkout'));
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        await tester.pumpAndSettle();
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        await tester.pump();
+        rows = await database.query('orders');
       });
       await tester.pump();
-    }
 
-    expect(find.byType(OrdersScreen), findsOneWidget);
-    expect(find.text('1 x Footlong'), findsOneWidget);
-    expect(CartRepository.instance.getItems(), isEmpty);
-    expect(find.byType(SnackBar), findsNothing);
-  });
+      expect(find.byType(OrdersScreen), findsOneWidget);
+      expect(CartRepository.instance.getItems(), isEmpty);
+      expect(rows.length, 1);
+      expect(rows.first['summary'], '1 x Footlong');
+      expect(find.byType(SnackBar), findsNothing);
+    },
+  );
 }

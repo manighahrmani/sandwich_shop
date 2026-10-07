@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/order_record.dart';
+import 'package:sandwich_shop/widgets/basket_button.dart';
+import 'package:sandwich_shop/widgets/orders_button.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -14,6 +16,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   List<OrderRecord> _orders = [];
+  bool _loading = true;
 
   @override
   void initState() {
@@ -22,110 +25,104 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Future<void> _loadOrders() async {
-    final List<OrderRecord> loaded =
-        await SandwichDatabase.instance.getAllOrders();
-    if (mounted) {
-      setState(() {
-        _orders = loaded;
-      });
+    final List<OrderRecord> orders = await SandwichDatabase.instance
+        .getAllOrders();
+    if (!mounted) {
+      return;
     }
+    setState(() {
+      _orders = orders;
+      _loading = false;
+    });
   }
 
-  Widget _buildEmptyState() {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 32.0),
-        child: Text(
-          'No orders yet',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
+  Widget _buildOptionsText(OrderRecord order) {
+    final List<String> parts = [];
+    if (order.toasted == 1) {
+      parts.add('Toasted');
+    }
+    if (order.vegan == 1) {
+      parts.add('Vegan');
+    }
+    if (order.note.isNotEmpty) {
+      parts.add('Note: ${order.note}');
+    }
+
+    if (parts.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 4.0),
+      child: Text(
+        parts.join(' • '),
+        style: const TextStyle(fontSize: 12, color: Colors.black54),
       ),
     );
   }
 
   Widget _buildOrderCard(OrderRecord order) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12.0),
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: shopWhite,
-        borderRadius: BorderRadius.circular(8.0),
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Order #${order.orderNumber}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('£${order.total.toStringAsFixed(2)}'),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(order.summary),
+            _buildOptionsText(order),
+            const SizedBox(height: 4),
+            Text(
+              order.date,
+              style: const TextStyle(fontSize: 12, color: Colors.black54),
+            ),
+          ],
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Order ${order.orderNumber}',
-            style: const TextStyle(
-              color: shopBrand,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            order.itemsSummary,
-            style: const TextStyle(
-              color: shopText,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            order.date,
-            style: const TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Total paid: £${order.totalPrice.toStringAsFixed(2)}',
-            style: const TextStyle(
-              color: shopBrand,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildOrdersList() {
-    final List<Widget> cards = [];
-    for (final OrderRecord order in _orders) {
-      cards.add(_buildOrderCard(order));
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: cards,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final Widget bodyContent;
-    if (_orders.isEmpty) {
-      bodyContent = _buildEmptyState();
+    final Widget body;
+    if (_loading) {
+      body = const SizedBox.shrink();
+    } else if (_orders.isEmpty) {
+      body = const Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 32.0),
+          child: Text(
+            'No orders yet',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+        ),
+      );
     } else {
-      bodyContent = _buildOrdersList();
+      body = ListView.builder(
+        itemCount: _orders.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _buildOrderCard(_orders[index]);
+        },
+      );
     }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
+        actions: const [BasketButton(), OrdersButton()],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Your orders', style: shopSectionTitleStyle),
-            const SizedBox(height: 16),
-            bodyContent,
-          ],
-        ),
-      ),
+      body: body,
     );
   }
 }

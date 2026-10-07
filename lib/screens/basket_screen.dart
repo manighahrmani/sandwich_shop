@@ -4,6 +4,8 @@ import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/widgets/basket_button.dart';
+import 'package:sandwich_shop/widgets/orders_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 
 class BasketScreen extends StatefulWidget {
@@ -16,6 +18,70 @@ class BasketScreen extends StatefulWidget {
 }
 
 class _BasketScreenState extends State<BasketScreen> {
+  String _buildSummary(List<CartItem> items) {
+    final List<String> lines = [];
+    for (final CartItem item in items) {
+      lines.add('${item.quantity} x ${item.name}');
+    }
+    return lines.join(', ');
+  }
+
+  bool _anyToasted(List<CartItem> items) {
+    for (final CartItem item in items) {
+      if (item.toasted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _anyVegan(List<CartItem> items) {
+    for (final CartItem item in items) {
+      if (item.vegan) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  String _buildNote(List<CartItem> items) {
+    final List<String> notes = [];
+    for (final CartItem item in items) {
+      if (item.note.isNotEmpty) {
+        notes.add(item.note);
+      }
+    }
+    return notes.join('; ');
+  }
+
+  String _formatDate(DateTime now) {
+    final String day = now.day.toString().padLeft(2, '0');
+    final String month = now.month.toString().padLeft(2, '0');
+    final String hour = now.hour.toString().padLeft(2, '0');
+    final String minute = now.minute.toString().padLeft(2, '0');
+    return '$day/$month/${now.year} $hour:$minute';
+  }
+
+  Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
+    final SandwichDatabase database = SandwichDatabase.instance;
+    final int orderNumber = await database.getNextOrderNumber();
+    final OrderRecord record = OrderRecord(
+      orderNumber: orderNumber,
+      summary: _buildSummary(items),
+      note: _buildNote(items),
+      toasted: _anyToasted(items) ? 1 : 0,
+      vegan: _anyVegan(items) ? 1 : 0,
+      total: cart.getTotalDue(),
+      date: _formatDate(DateTime.now()),
+    );
+    await database.insertOrder(record);
+    cart.clear();
+    if (!mounted) {
+      return;
+    }
+    Navigator.pushNamed(context, '/orders');
+  }
+
   Widget _buildEmptyState() {
     return const Center(
       child: Padding(
@@ -54,35 +120,16 @@ class _BasketScreenState extends State<BasketScreen> {
   }
 
   Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8.0),
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: shopWhite,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: shopAccent,
-              shape: BoxShape.circle,
-            ),
-            child: Text(
-              '${item.quantity}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.name,
+                  '${item.quantity} x ${item.name}',
                   style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 _buildOptionsText(item),
@@ -123,85 +170,6 @@ class _BasketScreenState extends State<BasketScreen> {
     );
   }
 
-  String _buildItemsSummary(List<CartItem> items) {
-    final List<String> parts = [];
-    for (final CartItem item in items) {
-      parts.add('${item.quantity} x ${item.name}');
-    }
-    return parts.join(', ');
-  }
-
-  String _collectNote(List<CartItem> items) {
-    final List<String> notes = [];
-    for (final CartItem item in items) {
-      if (item.note.isNotEmpty) {
-        notes.add(item.note);
-      }
-    }
-    return notes.join('; ');
-  }
-
-  int _anyToasted(List<CartItem> items) {
-    for (final CartItem item in items) {
-      if (item.toasted) {
-        return 1;
-      }
-    }
-    return 0;
-  }
-
-  int _anyVegan(List<CartItem> items) {
-    for (final CartItem item in items) {
-      if (item.vegan) {
-        return 1;
-      }
-    }
-    return 0;
-  }
-
-  String _formatDate(DateTime now) {
-    final List<String> months = <String>[
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    final String day = now.day.toString();
-    final String month = months[now.month - 1];
-    final String year = now.year.toString();
-    final String hour = now.hour.toString().padLeft(2, '0');
-    final String minute = now.minute.toString().padLeft(2, '0');
-    return '$day $month $year $hour:$minute';
-  }
-
-  Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
-    final int orderNumber =
-        await SandwichDatabase.instance.getNextOrderNumber();
-    final OrderRecord record = OrderRecord(
-      orderNumber: orderNumber,
-      itemsSummary: _buildItemsSummary(items),
-      note: _collectNote(items),
-      toasted: _anyToasted(items),
-      vegan: _anyVegan(items),
-      totalPrice: cart.getTotalDue(),
-      date: _formatDate(DateTime.now()),
-    );
-    await SandwichDatabase.instance.insertOrder(record);
-    cart.clear();
-    if (!mounted) {
-      return;
-    }
-    Navigator.pushNamed(context, '/orders');
-  }
-
   Widget _buildBasketList(CartRepository cart, List<CartItem> items) {
     final List<Widget> children = [];
 
@@ -213,7 +181,7 @@ class _BasketScreenState extends State<BasketScreen> {
       children.add(_buildLineItem(cart, item, index));
     }
 
-    children.add(const Divider(height: 32));
+    children.add(const SizedBox(height: 24));
     children.add(
       _buildTotalRow(
         'Items subtotal',
@@ -268,6 +236,7 @@ class _BasketScreenState extends State<BasketScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
+        actions: const [BasketButton(), OrdersButton()],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

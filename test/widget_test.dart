@@ -4,15 +4,8 @@ import 'package:sandwich_shop/main.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/order_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
-  });
-
   group('OrderItemDisplay widget tests', () {
     testWidgets('displays zero sandwiches with no emoji', (
       WidgetTester tester,
