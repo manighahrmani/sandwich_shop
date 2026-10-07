@@ -18,8 +18,14 @@ Lecture 4:
 
 I need tech news from you! I will provide some of my own.
 
-- AWS Educate (Amazon's cloud): [aws.amazon.com/education/awseducate](https://aws.amazon.com/education/awseducate)
-- Azure for Students (Microsoft's cloud): [azure.microsoft.com/en-us/free/students](https://azure.microsoft.com/en-us/free/students)
+- Become a Course Representative:
+  - Represent your cohort's voice in school meetings to shape teaching and assessment.
+  - Gain CV-ready experience in leadership, advocacy, and public speaking through Students' Union training.
+  - Open across undergraduate and postgraduate cohorts; contact your course leader via the [staff directory](https://soc.port.ac.uk/staff/) (Computer Science students can contact their course leader directly), or register on the [Portsmouth Students' Union Course Rep Portal](https://upsu.net/course-reps/become-a-course-rep).
+- Santander Brighter Futures Grants:
+  - Ten University of Portsmouth students will each receive a £1,000 cash grant to spend freely on rent, bills, or study materials.
+  - Open to all current undergraduate and postgraduate students (aged 18+, no Santander account required); 5-minute application.
+  - Applications close 3 December 2026; apply on the [Santander Open Academy](https://app.santanderopenacademy.com/en/program/santander-brighter-futures-grants-2026), or read more on [MyPort](https://myport.port.ac.uk/my-course/careers-support/santander-universities-partnership).
 
 ---
 

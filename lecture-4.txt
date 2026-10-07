@@ -1,0 +1,195 @@
+Unit testing
+PAPL (M30235) UXDI (M32605)
+
+
+Lecture 4
+
+Testing
+Automated Testing
+Widget testing
+
+Automated Testing
+
+News?
+
+Become a Course Representative:
+- Represent your cohort's voice in school meetings to shape teaching and assessment.
+- Gain CV-ready experience in leadership, advocacy, and public speaking through Students' Union training.
+- Open to all undergraduate and postgraduate cohorts; contact your course leader (Computer Science students can DM directly) or register online.
+- Portsmouth Students' Union Course Rep Portal: upsu.net/course-reps/become-a-course-rep
+- Staff directory: soc.port.ac.uk/staff
+
+Santander Brighter Futures Grants (£1,000):
+- Ten University of Portsmouth students will each receive a £1,000 cash grant to spend freely on rent, bills, or study materials.
+- Open to all current undergraduate and postgraduate students (aged 18+, no Santander account required); 5-minute application.
+- Applications close 3 December 2026 at 11:59pm UK time.
+- Apply on Santander Open Academy: app.santanderopenacademy.com/en/program/santander-brighter-futures-grants-2026
+- Partnership details on MyPort: myport.port.ac.uk/my-course/careers-support/santander-universities-partnership
+
+
+
+Testing
+
+Testing
+What’s automated testing
+
+Manual testing, testing an application by hand, is slow and error-prone.
+You click through the app, check the screen, and repeat after every change.
+
+Automated tests run in seconds and, if they are designed well, can catch bugs early on.
+
+Tests also document expected behaviour: a new team member reads the tests to understand what the code should do.
+(That’s in addition to documentation which we will learn about later.)
+
+Testing strategies
+
+The testing pyramid: many fast unit tests at the base, fewer widget tests in the middle, very few integration tests at the top.
+Release and Application tests correspond to integration tests on builds (more on this later).
+Feature and Component testing correspond to widget testing in Flutter.
+We’ll learn about Unit and Widget testing now.
+Image Source: "Testing strategies", Android Developers, Google. Available at: developer.android.com/training/testing/fundamentals/strategies
+
+Testing
+
+Integration testing
+
+Integration tests verify how multiple units work together or test the full application on a real device or browser.
+Simulates complete user journeys end-to-end, such as navigating screens, submitting forms, and saving data.
+
+Slower than unit and widget tests, but provides the highest confidence before releasing.
+We will cover it later, but for more info on the integration testing, check the documentation: https://docs.flutter.dev/testing/integration-tests
+Testing
+
+Test coverage
+
+Test coverage measures the proportion of your codebase executed while running automated tests.
+Helps identify untested branches, missing edge cases, and dead code.
+
+Run flutter test --coverage to generate coverage data in coverage/lcov.info.
+Visualise coverage directly in your editor using coverage extensions.
+Testing
+
+Unit testing
+
+Unit testing
+Unit testing
+A unit test exercises a single function, method, or class in isolation.
+
+No Flutter widgets, no UI rendering, no device needed.
+Use the test package: test(), expect(), matchers like equals, isTrue, throwsA.
+See examples here: pub.dev/packages/test
+
+Group related tests with group() for readability.
+Also group related tests into a file (ideally a test file corresponding to a unit).
+
+Good tests are independent, repeatable, and fast.
+
+Widget testing
+
+A widget test renders a widget in a test environment and verifies its behaviour.
+
+Use testWidgets(), WidgetTester, and finders like find.text(), find.byType().
+pumpWidget() builds the widget tree; pump() triggers a rebuild after state changes.
+tester.tap() simulates user interaction; follow it with pump() to see the result.
+
+You need to check the documentation page to learn the basics for this one:
+An introduction to widget testing
+Widget testing
+Widget testing
+
+
+A widget test renders a widget in a test environment and verifies its behaviour.
+
+Behaviours like:
+Does the widget display the correct text and icons for a given model?
+Does tapping a button update the UI as expected?
+Does navigation push the right screen when a list item is tapped?
+
+Keep widget tests focused on one behaviour per test (they can be grouped into files or groups just like unit tests).
+Widget testing
+Widget testing
+
+
+Live coding
+Conflicts are normal and not something to fear. They happen when two people (or two branches) edit the same line.
+The tooling in VS Code makes resolution straightforward.
+
+Avoiding conflicts in practice:
+Pull before you push. Fetch and merge (or rebase) regularly.
+Keep branches short-lived. Merge back to main often.
+Communicate with your team about who is working on which files.
+Use meaningful commit messages so the merge history is readable.
+Create a new repository on GitHub (named `conflict-demo`). In VS Code, press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS), select `Git: Clone`, paste the repository URL, and open the cloned folder. In Explorer, create a file named `greeting.txt` with the initial text. In Source Control (`Ctrl+Shift+G`), stage the file with `+`, enter `docs: add greeting`, click `Commit`, and then click `Sync Changes` (or `Publish Branch`).
+
+```bash
+git clone https://github.com/<your-username>/conflict-demo.git
+cd conflict-demo
+echo "line 1: hello" > greeting.txt
+git add greeting.txt
+git commit -m "docs: add greeting"
+git push origin main
+
+```
+
+Click the current branch name (`main`) in the bottom-left status bar, select `Create new branch...`, and name it `experiment`. Open `greeting.txt`, update the text, then in Source Control stage the change, enter `feat: update greeting on experiment`, click `Commit`, and click `Publish Branch`.
+
+```bash
+git checkout -b experiment
+echo "line 1: hello from experiment" > greeting.txt
+git add greeting.txt
+git commit -m "feat: update greeting on experiment"
+git push -u origin experiment
+
+```
+
+Click the branch name in the status bar at the bottom-left and switch back to `main`. Open `greeting.txt`, change line 1 to a different message, then stage and commit this change in Source Control and click `Sync Changes` to push to GitHub.
+
+```bash
+git checkout main
+echo "line 1: hello from main" > greeting.txt
+git add greeting.txt
+git commit -m "feat: update greeting on main"
+git push origin main
+
+```
+
+In GitHub, open a pull request from `experiment` into `main`. GitHub will warn that the branch has conflicts that must be resolved. To resolve it locally in VS Code, open the built-in terminal (`Ctrl+\`` or ``Cmd+\```) while on `main` and run the merge command.
+
+```bash
+git merge experiment
+git status
+
+```
+
+Open `greeting.txt` in VS Code. VS Code automatically highlights the conflict and provides clickable CodeLens actions above the conflict region: `Accept Current Change` keeps the version from `main`, `Accept Incoming Change` uses the version from `experiment`, `Accept Both Changes` keeps both lines, and `Compare Changes` opens a side-by-side diff. Alternatively, click `Resolve in Merge Editor` in the bottom-right corner to review incoming versus current changes side by side.
+
+Select your preferred resolution (such as accepting both or editing the text manually to combine them), then save the file. In Source Control, click `+` next to `greeting.txt` to mark it as resolved, enter a commit message like `fix: resolve greeting conflict`, click `Commit`, and click `Sync Changes` to update GitHub.
+
+```bash
+git add greeting.txt
+git commit -m "fix: resolve greeting conflict"
+git push origin main
+
+```
+
+Inspect the merge history visually by opening the built-in terminal and running the graph log command, or by opening the Command Palette and selecting `Git: View Graph`.
+
+```bash
+git log --oneline --graph --all
+
+```
+
+Demo 2
+Union of Worksheet 3 and Worksheet 4 exercises: home view with movie cards and navigation to dynamic listing.
+Also unit tests and widget tests covering almost all of your codebase.
+
+Demonstrate in your own timetabled practical session.
+You can only do one demo in each window.
+More information on the web page: manighahrmani.github.io/sandwich_shop/
+
+
+Module feedback
+Give us your feedback, comments, criticisms, or insults by filling out the following form.
+It’s anonymous; you need to sign in via your student account, but your details aren’t recorded.
+Use this link or the QR code: forms.cloud.microsoft/e/88jd4UGAui
+
