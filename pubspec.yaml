@@ -11,6 +11,10 @@ dependencies:
   shared_preferences: ^2.2.0
   sqflite_common_ffi: ^2.3.0
   sqflite_common_ffi_web: ^0.4.0
+  # Pinned so the committed web/sqlite3.wasm (the sqlite3-3.5.2 build) matches
+  # the sqlite3 version the app resolves, otherwise the browser fails to load
+  # the WebAssembly module.
+  sqlite3: "3.5.2"
 dev_dependencies:
   flutter_test:
     sdk: flutter
