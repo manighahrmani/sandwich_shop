@@ -18,6 +18,8 @@ class BasketScreen extends StatefulWidget {
 }
 
 class _BasketScreenState extends State<BasketScreen> {
+  String _confirmationMessage = '';
+
   String _buildSummary(List<CartItem> items) {
     final List<String> lines = [];
     for (final CartItem item in items) {
@@ -63,23 +65,39 @@ class _BasketScreenState extends State<BasketScreen> {
   }
 
   Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
-    final SandwichDatabase database = SandwichDatabase.instance;
-    final int orderNumber = await database.getNextOrderNumber();
-    final OrderRecord record = OrderRecord(
-      orderNumber: orderNumber,
-      summary: _buildSummary(items),
-      note: _buildNote(items),
-      toasted: _anyToasted(items) ? 1 : 0,
-      vegan: _anyVegan(items) ? 1 : 0,
-      total: cart.getTotalDue(),
-      date: _formatDate(DateTime.now()),
-    );
-    await database.insertOrder(record);
-    cart.clear();
-    if (!mounted) {
-      return;
+    setState(() {
+      _confirmationMessage = 'Saving your order...';
+    });
+
+    try {
+      final SandwichDatabase database = SandwichDatabase.instance;
+      final int orderNumber = await database.getNextOrderNumber();
+      final OrderRecord record = OrderRecord(
+        orderNumber: orderNumber,
+        summary: _buildSummary(items),
+        note: _buildNote(items),
+        toasted: _anyToasted(items) ? 1 : 0,
+        vegan: _anyVegan(items) ? 1 : 0,
+        total: cart.getTotalDue(),
+        date: _formatDate(DateTime.now()),
+      );
+      await database.insertOrder(record);
+      cart.clear();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _confirmationMessage = 'Order $orderNumber saved';
+      });
+      Navigator.pushNamed(context, '/orders');
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _confirmationMessage = 'Could not save your order: $error';
+      });
     }
-    Navigator.pushNamed(context, '/orders');
   }
 
   Widget _buildEmptyState() {
@@ -214,6 +232,16 @@ class _BasketScreenState extends State<BasketScreen> {
         ),
       ),
     );
+
+    if (_confirmationMessage.isNotEmpty) {
+      children.add(const SizedBox(height: 12));
+      children.add(
+        Text(
+          _confirmationMessage,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
