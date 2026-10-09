@@ -9,6 +9,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.0
   shared_preferences: ^2.2.0
+  sqflite: ^2.3.0
+  path: ^1.8.0
   sqflite_common_ffi: ^2.3.0
   sqflite_common_ffi_web: ^0.4.0
   # Pinned so the committed web/sqlite3.wasm (the sqlite3-3.5.2 build) matches

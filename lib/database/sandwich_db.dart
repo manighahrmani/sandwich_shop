@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
 import 'package:sandwich_shop/models/order_record.dart';
+import 'package:sqflite/sqflite.dart' as sqflite_plugin;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
@@ -23,25 +25,67 @@ class SandwichDatabase {
     return db;
   }
 
-  Future<Database> _initDB(String filePath) async {
-    final DatabaseFactory dbFactory;
-    if (kIsWeb) {
-      dbFactory = databaseFactoryFfiWebNoWebWorker;
-    } else {
-      sqfliteFfiInit();
-      dbFactory = databaseFactoryFfi;
-    }
+  Future<Database> _initDB(String fileName) async {
     final OpenDatabaseOptions options = OpenDatabaseOptions(
       version: 1,
       onCreate: _createDB,
     );
-    final String resolvedPath;
-    if (const bool.fromEnvironment('FLUTTER_TEST')) {
-      resolvedPath = inMemoryDatabasePath;
-    } else {
-      resolvedPath = filePath;
+
+    // Tests run with the FLUTTER_TEST environment flag set. In that case we
+    // keep the fast, isolated in-memory FFI database so the existing tests
+    // behave exactly as before.
+    const bool runningInTest = bool.fromEnvironment('FLUTTER_TEST');
+    if (runningInTest) {
+      sqfliteFfiInit();
+      final DatabaseFactory testFactory = databaseFactoryFfi;
+      final Database testDatabase = await testFactory.openDatabase(
+        inMemoryDatabasePath,
+        options: options,
+      );
+      return testDatabase;
     }
-    return await dbFactory.openDatabase(resolvedPath, options: options);
+
+    // On the web we use the WebAssembly build of SQLite through the dedicated
+    // web factory. The database name is enough here because the browser stores
+    // the data for us, so there is no file path to build.
+    if (kIsWeb) {
+      final DatabaseFactory webFactory = databaseFactoryFfiWebNoWebWorker;
+      final Database webDatabase = await webFactory.openDatabase(
+        fileName,
+        options: options,
+      );
+      return webDatabase;
+    }
+
+    // On Android and iOS the standard sqflite plugin owns the SQLite engine.
+    // A bare file name cannot be opened on a phone (it fails with "unable to
+    // open database file"), so we build a full path inside the folder the
+    // plugin gives us with getDatabasesPath().
+    final TargetPlatform platform = defaultTargetPlatform;
+    final bool runningOnMobile =
+        platform == TargetPlatform.android || platform == TargetPlatform.iOS;
+    if (runningOnMobile) {
+      final DatabaseFactory mobileFactory = sqflite_plugin.databaseFactory;
+      final String databasesFolder = await sqflite_plugin.getDatabasesPath();
+      final String mobilePath = join(databasesFolder, fileName);
+      final Database mobileDatabase = await mobileFactory.openDatabase(
+        mobilePath,
+        options: options,
+      );
+      return mobileDatabase;
+    }
+
+    // On desktop (Windows, macOS, Linux) we keep the FFI engine, but we still
+    // open a real file in a writable folder rather than a bare file name.
+    sqfliteFfiInit();
+    final DatabaseFactory desktopFactory = databaseFactoryFfi;
+    final String desktopFolder = await sqflite_plugin.getDatabasesPath();
+    final String desktopPath = join(desktopFolder, fileName);
+    final Database desktopDatabase = await desktopFactory.openDatabase(
+      desktopPath,
+      options: options,
+    );
+    return desktopDatabase;
   }
 
   Future<void> _createDB(Database db, int version) async {
