@@ -33,6 +33,7 @@
     "dropdown",
     "DropdownMenu",
     "DropdownMenuEntry",
+    "defaultTargetPlatform",
     "ElevatedButton",
     "FHEQ",
     "Firebase",
@@ -40,6 +41,7 @@
     "Flutter",
     "footlong",
     "fromJson",
+    "getDatabasesPath",
     "Ghahremani",
     "Gradcracker",
     "hairscarf",
@@ -98,6 +100,7 @@
     "subosito",
     "synchronize",
     "synchronized",
+    "TargetPlatform",
     "TECFAC",
     "testWidgets",
     "TextEditingController",
@@ -110,9 +113,11 @@
     "viewmodel",
     "viewmodels",
     "VoidCallback",
+    "WebAssembly",
     "Wellfound",
     "WidgetTester",
-    "worksheets"
+    "worksheets",
+    "writable"
   ],
   "ignorePaths": [
     "node_modules",

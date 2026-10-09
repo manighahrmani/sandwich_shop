@@ -34,6 +34,7 @@
   - [Register the orders route](#register-the-orders-route)
   - [Commit your changes (6)](#commit-your-changes-6)
 - [Testing persistence](#testing-persistence)
+  - [Running on the Android emulator](#running-on-the-android-emulator)
   - [Test the shared preferences flow](#test-the-shared-preferences-flow)
   - [Set up an in-memory database](#set-up-an-in-memory-database)
   - [Test inserting and reading orders](#test-inserting-and-reading-orders)
@@ -76,7 +77,7 @@ Both kinds of persistence come from packages we add to the project.
 
 ### Add the persistence packages
 
-Open `pubspec.yaml` in your project root. Under `dependencies:`, add the three packages below. The two `sqflite_common_ffi` packages give us SQLite on desktop, test, and web, and `shared_preferences` gives us the key-value store:
+Open `pubspec.yaml` in your project root. Under `dependencies:`, add the five packages below. `shared_preferences` gives us the key-value store. The database packages are split by platform: `sqflite` is the standard plugin that opens SQLite on Android and iOS, `path` lets us build a file path that works on any platform, and the two `sqflite_common_ffi` packages give us SQLite on desktop, test, and web:
 
 ```yaml
 dependencies:
@@ -84,6 +85,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.0
   shared_preferences: ^2.2.0
+  sqflite: ^2.3.0
+  path: ^1.8.0
   sqflite_common_ffi: ^2.3.0
   sqflite_common_ffi_web: ^0.4.0
 ```
@@ -311,7 +314,9 @@ Start with the imports and the class with its private constructor and shared ins
 
 ```dart
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
 import 'package:sandwich_shop/models/order_record.dart';
+import 'package:sqflite/sqflite.dart' as sqflite_plugin;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
@@ -328,7 +333,7 @@ class SandwichDatabase {
 }
 ```
 
-This is the same singleton pattern you built for `CartRepository` in Worksheet 5. The private constructor `SandwichDatabase._internal()` cannot be called from outside this file, and the one shared instance is exposed through `static final SandwichDatabase instance`, so every screen talks to the same database helper and no other code can create a second one. The two `sqflite_common_ffi` imports give us the engine and the types we use below, such as `Database`, `DatabaseFactory`, and `OpenDatabaseOptions`. The `package:flutter/foundation.dart` import gives us `kIsWeb`, used shortly. The `_database` field caches the open connection, a `Database`, and starts as `null`. The `setDatabase` method lets our tests supply their own connection.
+This is the same singleton pattern you built for `CartRepository` in Worksheet 5. The private constructor `SandwichDatabase._internal()` cannot be called from outside this file, and the one shared instance is exposed through `static final SandwichDatabase instance`, so every screen talks to the same database helper and no other code can create a second one. The two `sqflite_common_ffi` imports give us the FFI engine and the types we use below, such as `Database`, `DatabaseFactory`, and `OpenDatabaseOptions`. The `package:sqflite/sqflite.dart` import brings in the standard plugin we use on a phone; we give it the prefix `sqflite_plugin` so it is clear which package each name comes from. The `package:path/path.dart` import gives us `join`, which builds a file path safely, and `package:flutter/foundation.dart` gives us `kIsWeb` and `defaultTargetPlatform`, both used shortly. The `_database` field caches the open connection, a `Database`, and starts as `null`. The `setDatabase` method lets our tests supply their own connection.
 
 Now add the getter that opens the database on first use:
 
@@ -345,41 +350,80 @@ Now add the getter that opens the database on first use:
 
 The `database` getter is `async` and returns a `Future<Database>`: it returns the cached connection if one exists, otherwise opens one with `_initDB`, caches it, and returns it.
 
-Now add `_initDB`, which opens the connection. We take it in two parts. First, choose the right engine for the platform:
+Now add `_initDB`, which opens the connection. A database must be opened differently on each platform, so we handle the four cases one at a time. Start the method with the shared options, then handle a test run:
 
 ```dart
-  Future<Database> _initDB(String filePath) async {
-    final DatabaseFactory dbFactory;
-    if (kIsWeb) {
-      dbFactory = databaseFactoryFfiWebNoWebWorker;
-    } else {
-      sqfliteFfiInit();
-      dbFactory = databaseFactoryFfi;
-    }
-```
-
-A `DatabaseFactory` is the object that opens databases, and the right one depends on where the app runs. `kIsWeb` is a compile-time boolean that is `true` in a web browser; when it is, we use `databaseFactoryFfiWebNoWebWorker` from `sqflite_common_ffi_web`. Otherwise we call `sqfliteFfiInit()` once to prepare the desktop engine and use `databaseFactoryFfi`. You do not need to memorise these names; just know they come from the two packages and provide the engine.
-
-Now finish the method by choosing where the database lives and opening it:
-
-```dart
+  Future<Database> _initDB(String fileName) async {
     final OpenDatabaseOptions options = OpenDatabaseOptions(
       version: 1,
       onCreate: _createDB,
     );
 
-    final String resolvedPath;
-    if (const bool.fromEnvironment('FLUTTER_TEST')) {
-      resolvedPath = inMemoryDatabasePath;
-    } else {
-      resolvedPath = filePath;
+    const bool runningInTest = bool.fromEnvironment('FLUTTER_TEST');
+    if (runningInTest) {
+      sqfliteFfiInit();
+      final DatabaseFactory testFactory = databaseFactoryFfi;
+      final Database testDatabase = await testFactory.openDatabase(
+        inMemoryDatabasePath,
+        options: options,
+      );
+      return testDatabase;
     }
+```
 
-    return await dbFactory.openDatabase(resolvedPath, options: options);
+`OpenDatabaseOptions` sets the schema `version` and the `onCreate` callback, which we point at `_createDB` (written next) so our table is created the first time the database is made. The expression `bool.fromEnvironment('FLUTTER_TEST')` is `true` while a `flutter test` run is in progress; when it is, we call `sqfliteFfiInit()` to prepare the FFI engine and open `inMemoryDatabasePath`, a special path that keeps the database in memory so tests run quickly and leave no file behind.
+
+Next handle the web. In a browser the data is stored for us, so a bare database name is all we need:
+
+```dart
+    if (kIsWeb) {
+      final DatabaseFactory webFactory = databaseFactoryFfiWebNoWebWorker;
+      final Database webDatabase = await webFactory.openDatabase(
+        fileName,
+        options: options,
+      );
+      return webDatabase;
+    }
+```
+
+`kIsWeb` is a compile-time boolean that is `true` in a web browser. When it is, we use `databaseFactoryFfiWebNoWebWorker` from `sqflite_common_ffi_web`, which loads the WebAssembly build of SQLite, and open the database by its name.
+
+Now handle a phone. On Android and iOS the standard `sqflite` plugin owns the SQLite engine, and it cannot open a bare file name. If you pass just `sandwich_data.db`, the app fails at checkout with the error "unable to open database file", because the phone gives each app its own private folder and will not let it write just anywhere. We ask the plugin where that folder is with `getDatabasesPath()` and build a full path to the file with `join`:
+
+```dart
+    final TargetPlatform platform = defaultTargetPlatform;
+    final bool runningOnMobile =
+        platform == TargetPlatform.android || platform == TargetPlatform.iOS;
+    if (runningOnMobile) {
+      final DatabaseFactory mobileFactory = sqflite_plugin.databaseFactory;
+      final String databasesFolder = await sqflite_plugin.getDatabasesPath();
+      final String mobilePath = join(databasesFolder, fileName);
+      final Database mobileDatabase = await mobileFactory.openDatabase(
+        mobilePath,
+        options: options,
+      );
+      return mobileDatabase;
+    }
+```
+
+`defaultTargetPlatform` tells us which platform the app runs on, and we treat `TargetPlatform.android` and `TargetPlatform.iOS` as a phone. We use this value rather than checking the operating system directly, because the usual way of doing that does not compile for the web. On a phone we take the plugin's own `databaseFactory`, ask it for the writable folder, join the file name onto that folder, and open the real file there. This is the fix for the "unable to open database file" error.
+
+Finally handle the desktop (Windows, macOS, and Linux). There we keep the FFI engine, but we still open a real file in a writable folder rather than a bare name:
+
+```dart
+    sqfliteFfiInit();
+    final DatabaseFactory desktopFactory = databaseFactoryFfi;
+    final String desktopFolder = await sqflite_plugin.getDatabasesPath();
+    final String desktopPath = join(desktopFolder, fileName);
+    final Database desktopDatabase = await desktopFactory.openDatabase(
+      desktopPath,
+      options: options,
+    );
+    return desktopDatabase;
   }
 ```
 
-`OpenDatabaseOptions` sets the schema `version` and the `onCreate` callback, which we point at `_createDB` (written next) so our table is created the first time the database is made. The expression `const bool.fromEnvironment('FLUTTER_TEST')` is `true` while a `flutter test` run is in progress; when it is, we open `inMemoryDatabasePath`, a special path that keeps the database in memory so tests leave no file behind. Otherwise we open the real file. Finally `dbFactory.openDatabase(...)` opens the connection and returns it.
+If the code reaches this point it is not a test, not the web, and not a phone, so it must be the desktop. We call `sqfliteFfiInit()` to prepare the FFI engine, use `databaseFactoryFfi`, and build a full path the same way as on a phone. Each of the four cases returns an opened `Database`, so the right engine and the right path are always paired together.
 
 ### Create the orders table and seed past orders
 
@@ -880,6 +924,20 @@ Stage your new `orders_screen.dart` and the updated `main.dart`, then commit you
 
 We test both kinds of persistence. The shared preferences test uses a mock store so no real device storage is touched, and the database tests use SQLite's in-memory mode so they run quickly and leave no file behind.
 
+### Running on the Android emulator
+
+Because the database now opens through the `sqflite` plugin on a phone, it is worth running the app on an Android emulator to see the orders persist on a mobile device. The emulator is a virtual phone that runs on your computer.
+
+Launch the emulator first and wait for its home screen to finish booting before you try to run the app. The device only exists while it is running, so a device id such as `emulator-5554` appears while the emulator is booted and disappears once you close it. Run `flutter devices` in the terminal to confirm the emulator is listed:
+
+```bash
+flutter devices
+```
+
+Once the emulator shows up in that list, pick it as the target device in the bottom-right of the VS Code status bar, then run the app as usual. You can also run `flutter run` in the terminal and choose the emulator when it asks which device to use. If `flutter devices` does not list the emulator, it has not finished booting yet; give it a moment and run the command again.
+
+Check out an order on the emulator and open the orders screen to see it saved. If you try to run the app without launching the emulator first, the device id will not be found.
+
 ### Test the shared preferences flow
 
 Create a new file named `test/order_options_prefs_test.dart`. Shared preferences offers `setMockInitialValues`, which fills the store with test data (or clears it) so a test runs without a real device:
@@ -1080,7 +1138,7 @@ Stage your test files and commit your changes with a message of your own.
 
 The exercises below apply the concepts from this worksheet to the Southsea Cinema coursework application. They prepare you for Demo 3 of your coursework. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Remember to commit your changes to Git after each exercise.
 
-1. Following [Adding the dependencies](#adding-the-dependencies), add `sqflite_common_ffi`, `sqflite_common_ffi_web`, and `shared_preferences` to your Southsea Cinema fork's `pubspec.yaml`, and run `flutter pub get`.
+1. Following [Adding the dependencies](#adding-the-dependencies), add `shared_preferences`, `sqflite`, `path`, `sqflite_common_ffi`, and `sqflite_common_ffi_web` to your Southsea Cinema fork's `pubspec.yaml`, and run `flutter pub get`.
 
 2. Following [Remembering order options with shared preferences](#remembering-order-options-with-shared-preferences), make your booking screen remember the patron's last option choices with shared preferences, loading them in `initState` and saving them when they change. Decide which small options are worth remembering.
 
