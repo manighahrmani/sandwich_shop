@@ -33,8 +33,11 @@
   - [Create the orders screen](#create-the-orders-screen)
   - [Register the orders route](#register-the-orders-route)
   - [Commit your changes (6)](#commit-your-changes-6)
+- [Running the app on a mobile emulator](#running-the-app-on-a-mobile-emulator)
+  - [Lab machines: the Android emulator beta bundle](#lab-machines-the-android-emulator-beta-bundle)
+  - [Your own Windows or Mac laptop: Android Studio](#your-own-windows-or-mac-laptop-android-studio)
+  - [Mac only: the iOS simulator](#mac-only-the-ios-simulator)
 - [Testing persistence](#testing-persistence)
-  - [Running on the Android emulator](#running-on-the-android-emulator)
   - [Test the shared preferences flow](#test-the-shared-preferences-flow)
   - [Set up an in-memory database](#set-up-an-in-memory-database)
   - [Test inserting and reading orders](#test-inserting-and-reading-orders)
@@ -920,23 +923,93 @@ import 'package:sandwich_shop/screens/orders_screen.dart';
 
 Stage your new `orders_screen.dart` and the updated `main.dart`, then commit your changes with a message of your own.
 
-## Testing persistence
+## Running the app on a mobile emulator
 
-We test both kinds of persistence. The shared preferences test uses a mock store so no real device storage is touched, and the database tests use SQLite's in-memory mode so they run quickly and leave no file behind.
+Every earlier worksheet ran the app in a web browser on Chrome or Edge, and it still runs there exactly as before. The browser is fine for most of what we do, but it hides one thing this worksheet is about: the on-disk SQLite file. In the browser the database lives in storage the browser manages for us, so you cannot watch a real file survive a full close and reopen the way it would on a phone.
 
-### Running on the Android emulator
+A mobile emulator is a virtual Android phone that runs on your computer, and a simulator is the same idea for iOS on a Mac. Running the app on one of these lets you place an order, close the app completely, reopen it, and see the saved orders still there, because the SQLite database is a genuine file in the device's private folder. The emulator is not a hard requirement; the app runs on the web just as it did before, and the emulator is only there to show native persistence.
 
-Because the database now opens through the `sqflite` plugin on a phone, it is worth running the app on an Android emulator to see the orders persist on a mobile device. The emulator is a virtual phone that runs on your computer.
+There are three routes to the same outcome, and you only need one. On a university lab machine, use the emulator beta bundle. On your own Windows or Mac laptop, install Android Studio. On a Mac, you can instead use the iOS simulator. Pick the route that matches your machine and follow it.
 
-Launch the emulator first and wait for its home screen to finish booting before you try to run the app. The device only exists while it is running, so a device id such as `emulator-5554` appears while the emulator is booted and disappears once you close it. Run `flutter devices` in the terminal to confirm the emulator is listed:
+### Lab machines: the Android emulator beta bundle
+
+Earlier worksheets set up the lab machines with a portable Flutter and VS Code bundle. That standard bundle does not include the Android SDK, so it cannot run an emulator. A separate experimental build of the bundle adds everything an emulator needs. You can find it in the Experimental section of the bundle README at [the flutter_vscode_package repository](https://github.com/manighahrmani/flutter_vscode_package), listed as the Android emulator beta release.
+
+On top of the normal portable environment, the beta bundle ships a JDK, a command-line Android SDK, and a pre-made virtual device, an AVD named `flutter_emulator`. Like the main script, it finishes by opening VS Code on your cloned project, so you land in the same place as before with the extra tooling in place. The beta is experimental and needs hardware acceleration enabled on the machine, which the lab machines already have.
+
+Install it by running the beta script in a terminal:
+
+```bash
+irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/install-android-beta.ps1 | iex
+```
+
+Let the script finish and open VS Code on your project. Then open a new terminal and launch the pre-made emulator:
+
+```bash
+flutter emulators --launch flutter_emulator
+```
+
+Wait for the Android home screen to appear. A black screen for a minute or two is normal, as the virtual phone is still booting. Once it has booted, confirm it is listed as a device:
 
 ```bash
 flutter devices
 ```
 
-Once the emulator shows up in that list, pick it as the target device in the bottom-right of the VS Code status bar, then run the app as usual. You can also run `flutter run` in the terminal and choose the emulator when it asks which device to use. If `flutter devices` does not list the emulator, it has not finished booting yet; give it a moment and run the command again.
+The emulator's id, such as `emulator-5554`, only exists while the emulator is booted and disappears when you close it. If `flutter devices` does not list it yet, give it another moment and run the command again.
 
-Check out an order on the emulator and open the orders screen to see it saved. If you try to run the app without launching the emulator first, the device id will not be found.
+With the emulator booted, pick it as the target device in the status bar device selector in the bottom-right (or through the Command Palette entry **Flutter: Select Device**), then start the app with **F5** or Run.
+
+<!-- screenshot: images/6/device_selector.png — the VS Code status bar device selector listing the booted emulator -->
+
+The emulator shows its home screen once booting has finished, as shown below.
+
+<!-- screenshot: images/6/emulator_home_screen.png — the Android emulator showing its home screen once booting has finished -->
+
+Alternatively, run `flutter run` in the terminal and choose the emulator when it asks which device to use. Either way, the app launches inside the emulator.
+
+<!-- screenshot: images/6/app_running_on_emulator.png — the Sandwich Shop app running inside the Android emulator -->
+
+Now place an order, check out, and confirm it appears on the orders page. Then fully close the app and reopen it: the order is still there, because SQLite saved it to a real file in the emulator's private folder.
+
+<!-- screenshot: images/6/orders_page_on_emulator.png — the orders page on the emulator showing the order that persisted after closing and reopening the app -->
+
+### Your own Windows or Mac laptop: Android Studio
+
+If you have admin rights on your own machine, install [Android Studio](https://developer.android.com/studio) to get the Android SDK and an emulator. During setup, open the SDK Manager and install the Android SDK and a system image, then open the Device Manager and create a virtual device, which is the AVD you will run. The [Flutter install guide](https://docs.flutter.dev/get-started/install) has the full platform setup steps if you need them.
+
+VS Code can set up the toolchain for you as well. Run `flutter doctor`, which checks the Android toolchain and reports anything missing:
+
+```bash
+flutter doctor
+```
+
+Accept the Android licences when it asks:
+
+```bash
+flutter doctor --android-licenses
+```
+
+Once an AVD exists, launching and running it is the same as on the lab machines: launch the emulator with `flutter emulators --launch`, pick it in the device selector, and run.
+
+### Mac only: the iOS simulator
+
+On a Mac you can use the iOS simulator instead of an Android emulator. The simulator is Mac-only, as it depends on Apple's developer tools. Install [Xcode](https://docs.flutter.dev/get-started/install/macos) from the App Store, then start the simulator from a terminal:
+
+```bash
+open -a Simulator
+```
+
+You can also list devices with `flutter emulators` or pick the simulator in the VS Code device selector. With the simulator running, run the app and choose it as the target:
+
+```bash
+flutter run
+```
+
+The per-platform database open you wrote earlier already covers iOS through the same `sqflite` plugin branch (`TargetPlatform.iOS`), so no code changes are needed to see the same on-disk persistence on the simulator.
+
+## Testing persistence
+
+We test both kinds of persistence. The shared preferences test uses a mock store so no real device storage is touched, and the database tests use SQLite's in-memory mode so they run quickly and leave no file behind. These tests run with `flutter test` just as before, and do not need an emulator; the emulator in [Running the app on a mobile emulator](#running-the-app-on-a-mobile-emulator) is only for seeing the saved file persist by hand.
 
 ### Test the shared preferences flow
 
