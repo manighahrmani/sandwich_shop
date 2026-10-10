@@ -38,9 +38,13 @@
   - [Your own Windows or Mac laptop: Android Studio](#your-own-windows-or-mac-laptop-android-studio)
   - [Mac only: the iOS simulator](#mac-only-the-ios-simulator)
 - [Testing persistence](#testing-persistence)
+  - [Update existing order screen tests](#update-existing-order-screen-tests)
   - [Test the shared preferences flow](#test-the-shared-preferences-flow)
   - [Set up an in-memory database](#set-up-an-in-memory-database)
   - [Test inserting and reading orders](#test-inserting-and-reading-orders)
+  - [Update the basket screen tests](#update-the-basket-screen-tests)
+  - [Test the orders screen](#test-the-orders-screen)
+  - [Test the app bar navigation actions](#test-the-app-bar-navigation-actions)
   - [Commit your changes (7)](#commit-your-changes-7)
 - [Exercises](#exercises)
 
@@ -80,7 +84,7 @@ Both kinds of persistence come from packages we add to the project.
 
 ### Add the persistence packages
 
-Open `pubspec.yaml` in your project root. Under `dependencies:`, add the five packages below. `shared_preferences` gives us the key-value store. The database packages are split by platform: `sqflite` is the standard plugin that opens SQLite on Android and iOS, `path` lets us build a file path that works on any platform, and the two `sqflite_common_ffi` packages give us SQLite on desktop, test, and web:
+Open `pubspec.yaml` in your project root. Under `dependencies:`, add the packages below. `shared_preferences` gives us the key-value store. The database packages are split by platform: `sqflite` is the standard plugin that opens SQLite on Android and iOS, `path` lets us build a file path that works on any platform, and the two `sqflite_common_ffi` packages give us SQLite on desktop, test, and web. We also pin `sqlite3` to version `3.5.2` so web builds match the compiled WebAssembly binary in `web/sqlite3.wasm`:
 
 ```yaml
 dependencies:
@@ -92,6 +96,10 @@ dependencies:
   path: ^1.8.0
   sqflite_common_ffi: ^2.3.0
   sqflite_common_ffi_web: ^0.4.0
+  # Pinned so the committed web/sqlite3.wasm (the sqlite3-3.5.2 build) matches
+  # the sqlite3 version the app resolves, otherwise the browser fails to load
+  # the WebAssembly module.
+  sqlite3: "3.5.2"
 ```
 
 Run `flutter pub get` in your terminal to download the packages:
@@ -937,7 +945,7 @@ Earlier worksheets set up the lab machines with a portable Flutter and VS Code b
 
 On top of the normal portable environment, the beta bundle ships a JDK, a command-line Android SDK, and a pre-made virtual device, an AVD named `flutter_emulator`. Like the main script, it finishes by opening VS Code on your cloned project, so you land in the same place as before with the extra tooling in place. The beta is experimental and needs hardware acceleration enabled on the machine, which the lab machines already have.
 
-Install it by running the beta script in a terminal:
+Install it by running the beta script in a PowerShell terminal on Windows:
 
 ```bash
 irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/install-android-beta.ps1 | iex
@@ -1011,6 +1019,23 @@ The per-platform database open you wrote earlier already covers iOS through the 
 
 We test both kinds of persistence. The shared preferences test uses a mock store so no real device storage is touched, and the database tests use SQLite's in-memory mode so they run quickly and leave no file behind. These tests run with `flutter test` just as before, and do not need an emulator; the emulator in [Running the app on a mobile emulator](#running-the-app-on-a-mobile-emulator) is only for seeing the saved file persist by hand.
 
+### Update existing order screen tests
+
+In Worksheet 5, we created `test/order_screen_test.dart`. Because `OrderScreen` now reads and writes shared preferences, open `test/order_screen_test.dart`, import `shared_preferences`, and initialise the mock key-value store in its `setUp` block:
+
+```dart
+import 'package:shared_preferences/shared_preferences.dart';
+```
+
+```dart
+  setUp(() {
+    CartRepository.instance.clear();
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+  });
+```
+
+This ensures any tests running against `OrderScreen` have a clean, mocked preferences instance.
+
 ### Test the shared preferences flow
 
 Create a new file named `test/order_options_prefs_test.dart`. Shared preferences offers `setMockInitialValues`, which fills the store with test data (or clears it) so a test runs without a real device:
@@ -1037,42 +1062,18 @@ final Finder noteFieldFinder = find.byWidgetPredicate((Widget widget) {
 });
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   setUp(() {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
     CartRepository.instance.clear();
+    SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('Order options are saved to shared preferences on add to basket',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
-    );
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.byType(Switch).first);
-    await tester.pump();
-    await tester.enterText(noteFieldFinder, 'No pickles');
-    await tester.pump();
-
-    await tester.tap(find.text('Add'));
-    await tester.pump();
-    await tester.tap(find.text('Add to Basket'));
-    await tester.pumpAndSettle();
-
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    expect(prefs.getBool(prefToasted), isTrue);
-    expect(prefs.getBool(prefVegan), isFalse);
-    expect(prefs.getString(prefNote), 'No pickles');
-  });
-
-  testWidgets('Saved order options pre-fill the order screen on open',
-      (WidgetTester tester) async {
+  testWidgets('Order screen pre-fills saved options on open', (
+    WidgetTester tester,
+  ) async {
     SharedPreferences.setMockInitialValues(<String, Object>{
       prefToasted: true,
       prefVegan: true,
-      prefNote: 'Extra sauce',
+      prefNote: 'No onions',
     });
 
     await tester.pumpWidget(
@@ -1080,18 +1081,42 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final List<Switch> switches =
-        tester.widgetList<Switch>(find.byType(Switch)).toList();
-    expect(switches[0].value, isTrue);
-    expect(switches[1].value, isTrue);
+    final Switch toastedSwitch = tester.widget<Switch>(
+      find.byType(Switch).first,
+    );
+    final Switch veganSwitch = tester.widget<Switch>(find.byType(Switch).last);
+    expect(toastedSwitch.value, isTrue);
+    expect(veganSwitch.value, isTrue);
+    expect(find.text('No onions'), findsOneWidget);
+  });
 
-    final TextField noteField = tester.widget<TextField>(noteFieldFinder);
-    expect(noteField.controller?.text, 'Extra sauce');
+  testWidgets('Toggling and adding to basket saves options', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(Switch).first);
+    await tester.pumpAndSettle();
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    expect(prefs.getBool(prefToasted), isTrue);
+
+    await tester.enterText(noteFieldFinder, 'Extra cheese');
+    await tester.tap(find.text('Add'));
+    await tester.pump();
+    await tester.tap(find.text('Add to Basket'));
+    await tester.pumpAndSettle();
+
+    final SharedPreferences updated = await SharedPreferences.getInstance();
+    expect(updated.getString(prefNote), 'Extra cheese');
   });
 }
 ```
 
-The `setUp` clears the mock store and the basket before each test. The first test flips the toasted switch, types a note, adds to the basket, then reads the store back and checks the three values were saved. The second test seeds the store with saved options before the screen opens, then checks the switches and note field start pre-filled.
+The `setUp` clears the mock store and the basket before each test. The first test seeds the store with saved options before the screen opens and verifies the switches and note field pre-fill. The second test flips the toasted switch, enters a note, taps Add to Basket, and verifies the updated options are saved to `SharedPreferences`.
 
 ### Set up an in-memory database
 
@@ -1197,6 +1222,375 @@ void main() {
 
 The `setUp` opens an in-memory database with the same orders table and injects it with `setDatabase`, and `tearDown` closes it and clears the injected connection. The small `buildRecord` helper keeps each test short. The three tests check that an inserted order comes back from `getAllOrders` with the right summary and total, that orders return newest first by order number, and that `getNextOrderNumber` starts at `1001` on an empty table and returns one more than the current highest after an insert.
 
+### Update the basket screen tests
+
+In Worksheet 5, `test/basket_screen_test.dart` tested the old checkout behaviour that cleared the basket and printed an inline confirmation. In this worksheet, checkout inserts the order into the SQLite database and navigates to the orders screen.
+
+Update `test/basket_screen_test.dart` to initialise the in-memory SQLite database and test that checkout stores the order record and navigates to `OrdersScreen`:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/database/sandwich_db.dart';
+import 'package:sandwich_shop/models/cart_item.dart';
+import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/screens/basket_screen.dart';
+import 'package:sandwich_shop/screens/orders_screen.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+void main() {
+  setUpAll(() {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  });
+
+  late Database database;
+
+  setUp(() async {
+    CartRepository.instance.clear();
+    database = await databaseFactory.openDatabase(
+      inMemoryDatabasePath,
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (Database db, int version) async {
+          await db.execute('''
+            CREATE TABLE orders (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              order_number INTEGER NOT NULL,
+              summary TEXT NOT NULL,
+              note TEXT NOT NULL,
+              toasted INTEGER NOT NULL,
+              vegan INTEGER NOT NULL,
+              total REAL NOT NULL,
+              date TEXT NOT NULL
+            )
+          ''');
+        },
+      ),
+    );
+    SandwichDatabase.instance.setDatabase(database);
+  });
+
+  tearDown(() async {
+    await database.close();
+    SandwichDatabase.instance.setDatabase(null);
+  });
+
+  Widget buildApp() {
+    return MaterialApp(
+      home: const BasketScreen(),
+      routes: <String, WidgetBuilder>{
+        '/orders': (BuildContext context) {
+          return const OrdersScreen();
+        },
+      },
+    );
+  }
+
+  testWidgets('BasketScreen displays empty message when basket has no items', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(buildApp());
+
+    expect(find.text('Your basket is empty'), findsOneWidget);
+    expect(find.text('Checkout'), findsNothing);
+  });
+
+  testWidgets(
+    'BasketScreen renders items and removes item when delete pressed',
+    (WidgetTester tester) async {
+      const CartItem item = CartItem(
+        id: 'footlong',
+        name: 'Footlong',
+        price: 10.0,
+        quantity: 2,
+      );
+      CartRepository.instance.addItem(item);
+
+      await tester.pumpWidget(buildApp());
+
+      expect(find.text('Your basket'), findsOneWidget);
+      expect(find.text('2 x Footlong'), findsOneWidget);
+      expect(find.text('£20.00'), findsWidgets);
+      expect(find.text('Checkout'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.delete_outline));
+      await tester.pump();
+
+      expect(find.text('Your basket is empty'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'BasketScreen checkout stores the order and navigates to orders',
+    (WidgetTester tester) async {
+      const CartItem item = CartItem(
+        id: 'footlong',
+        name: 'Footlong',
+        price: 10.0,
+        quantity: 1,
+      );
+      CartRepository.instance.addItem(item);
+
+      await tester.pumpWidget(buildApp());
+
+      late List<Map<String, Object?>> rows;
+      await tester.runAsync(() async {
+        await tester.tap(find.text('Checkout'));
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        await tester.pumpAndSettle();
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        await tester.pump();
+        rows = await database.query('orders');
+      });
+      await tester.pump();
+
+      expect(find.byType(OrdersScreen), findsOneWidget);
+      expect(CartRepository.instance.getItems(), isEmpty);
+      expect(rows.length, 1);
+      expect(rows.first['summary'], '1 x Footlong');
+      expect(find.byType(SnackBar), findsNothing);
+    },
+  );
+}
+```
+
+### Test the orders screen
+
+Create a new file named `test/orders_screen_test.dart` to verify that `OrdersScreen` displays past orders newest first and shows an empty state when no orders have been placed:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/database/sandwich_db.dart';
+import 'package:sandwich_shop/models/order_record.dart';
+import 'package:sandwich_shop/screens/orders_screen.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+void main() {
+  setUpAll(() {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  });
+
+  Future<Database> openDatabaseForTest() async {
+    final Database database = await databaseFactory.openDatabase(
+      inMemoryDatabasePath,
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (Database db, int version) async {
+          await db.execute('''
+            CREATE TABLE orders (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              order_number INTEGER NOT NULL,
+              summary TEXT NOT NULL,
+              note TEXT NOT NULL,
+              toasted INTEGER NOT NULL,
+              vegan INTEGER NOT NULL,
+              total REAL NOT NULL,
+              date TEXT NOT NULL
+            )
+          ''');
+        },
+      ),
+    );
+    SandwichDatabase.instance.setDatabase(database);
+    return database;
+  }
+
+  testWidgets('OrdersScreen lists seeded orders newest-first', (
+    WidgetTester tester,
+  ) async {
+    await tester.runAsync(() async {
+      final Database database = await openDatabaseForTest();
+      await SandwichDatabase.instance.insertOrder(
+        const OrderRecord(
+          orderNumber: 1001,
+          summary: '1 x Six-Inch Sub',
+          note: '',
+          toasted: 0,
+          vegan: 0,
+          total: 4.50,
+          date: '01/01/2026 10:00',
+        ),
+      );
+      await SandwichDatabase.instance.insertOrder(
+        const OrderRecord(
+          orderNumber: 1002,
+          summary: '2 x Footlong Sub',
+          note: '',
+          toasted: 0,
+          vegan: 0,
+          total: 15.00,
+          date: '02/01/2026 11:00',
+        ),
+      );
+
+      await tester.pumpWidget(const MaterialApp(home: OrdersScreen()));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await database.close();
+      SandwichDatabase.instance.setDatabase(null);
+    });
+    await tester.pump();
+
+    expect(find.text('Order #1002'), findsOneWidget);
+    expect(find.text('Order #1001'), findsOneWidget);
+    expect(find.text('2 x Footlong Sub'), findsOneWidget);
+    expect(find.byType(Divider), findsNothing);
+  });
+
+  testWidgets('OrdersScreen shows an empty state when there are no orders', (
+    WidgetTester tester,
+  ) async {
+    await tester.runAsync(() async {
+      final Database database = await openDatabaseForTest();
+      await tester.pumpWidget(const MaterialApp(home: OrdersScreen()));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await database.close();
+      SandwichDatabase.instance.setDatabase(null);
+    });
+    await tester.pump();
+
+    expect(find.text('No orders yet'), findsOneWidget);
+  });
+}
+```
+
+### Test the app bar navigation actions
+
+Create a new file named `test/widgets/app_bar_actions_test.dart` to verify that both app bar buttons appear across the screens and that tapping the orders action navigates to the orders screen:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/database/sandwich_db.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/screens/basket_screen.dart';
+import 'package:sandwich_shop/screens/menu_screen.dart';
+import 'package:sandwich_shop/screens/order_screen.dart';
+import 'package:sandwich_shop/screens/orders_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+const Sandwich testSandwich = Sandwich(
+  id: 'test',
+  name: 'Test Sub',
+  description: 'Test description',
+  price: 5.0,
+  imagePath: 'assets/images/footlong.jpeg',
+);
+
+void main() {
+  setUpAll(() {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  });
+
+  setUp(() {
+    CartRepository.instance.clear();
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+  });
+
+  Future<Database> openDatabaseForTest() async {
+    final Database database = await databaseFactory.openDatabase(
+      inMemoryDatabasePath,
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (Database db, int version) async {
+          await db.execute('''
+            CREATE TABLE orders (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              order_number INTEGER NOT NULL,
+              summary TEXT NOT NULL,
+              note TEXT NOT NULL,
+              toasted INTEGER NOT NULL,
+              vegan INTEGER NOT NULL,
+              total REAL NOT NULL,
+              date TEXT NOT NULL
+            )
+          ''');
+        },
+      ),
+    );
+    SandwichDatabase.instance.setDatabase(database);
+    return database;
+  }
+
+  Widget wrap(Widget home) {
+    return MaterialApp(
+      home: home,
+      routes: <String, WidgetBuilder>{
+        '/orders': (BuildContext context) {
+          return const OrdersScreen();
+        },
+      },
+    );
+  }
+
+  testWidgets('Menu screen shows both basket and orders actions', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(wrap(const MenuScreen()));
+
+    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
+    expect(find.byIcon(Icons.receipt_long), findsOneWidget);
+  });
+
+  testWidgets('Order screen shows both basket and orders actions', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(wrap(const OrderScreen(sandwich: testSandwich)));
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
+    expect(find.byIcon(Icons.receipt_long), findsOneWidget);
+  });
+
+  testWidgets('Basket screen shows both basket and orders actions', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(wrap(const BasketScreen()));
+
+    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
+    expect(find.byIcon(Icons.receipt_long), findsOneWidget);
+  });
+
+  testWidgets('Orders screen shows both basket and orders actions', (
+    WidgetTester tester,
+  ) async {
+    await tester.runAsync(() async {
+      final Database database = await openDatabaseForTest();
+      await tester.pumpWidget(wrap(const OrdersScreen()));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await database.close();
+      SandwichDatabase.instance.setDatabase(null);
+    });
+    await tester.pump();
+
+    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
+    expect(find.byIcon(Icons.receipt_long), findsOneWidget);
+  });
+
+  testWidgets('Tapping the orders action navigates to the orders screen', (
+    WidgetTester tester,
+  ) async {
+    await tester.runAsync(() async {
+      final Database database = await openDatabaseForTest();
+      await tester.pumpWidget(wrap(const MenuScreen()));
+      await tester.tap(find.byIcon(Icons.receipt_long));
+      await tester.pump();
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await database.close();
+      SandwichDatabase.instance.setDatabase(null);
+    });
+    await tester.pump();
+
+    expect(find.byType(OrdersScreen), findsOneWidget);
+  });
+}
+```
+
 Run your test suite with `flutter test` to confirm everything passes:
 
 ```bash
@@ -1205,7 +1599,7 @@ flutter test
 
 ### Commit your changes (7)
 
-Stage your test files and commit your changes with a message of your own.
+Stage your test files, including the updated `order_screen_test.dart` and `basket_screen_test.dart`, and commit your changes with a message of your own.
 
 ## Exercises
 

@@ -16,11 +16,12 @@
 - [Reusable widgets and navigation](#reusable-widgets-and-navigation)
   - [Build the primary button](#build-the-primary-button)
   - [Widget test the primary button](#widget-test-the-primary-button)
+  - [Use the primary button in the sandwich card](#use-the-primary-button-in-the-sandwich-card)
   - [Extract a reusable basket button](#extract-a-reusable-basket-button)
-  - [Widget test the basket button](#widget-test-the-basket-button)
   - [Register named routes](#register-named-routes)
   - [Add the basket button to the menu app bar](#add-the-basket-button-to-the-menu-app-bar)
   - [Widget test the menu screen](#widget-test-the-menu-screen)
+  - [Update the app smoke tests](#update-the-app-smoke-tests)
   - [Commit your changes (2)](#commit-your-changes-2)
 - [Building the order form](#building-the-order-form)
   - [Recap the quantity controls](#recap-the-quantity-controls)
@@ -180,7 +181,7 @@ class App extends StatelessWidget {
 
 The `theme` property takes a `ThemeData`, the object that holds the app's default colours and styles. `ColorScheme.fromSeed` builds a full set of matching colours from one seed colour, here our `shopBrand` green. `scaffoldBackgroundColor: shopBackground` paints every screen's background with the off-white. The `appBarTheme` sets the app bar's `backgroundColor` to green and its `foregroundColor` (the colour of the title and icons on it) to white, with `elevation: 0` to remove its drop shadow for a flat look.
 
-The `initialRoute` and `routes` parts are covered in the next section. The two imports for `basket_screen.dart` and `menu_screen.dart` refer to files we update shortly; the app will not compile cleanly until then, which is expected.
+The `initialRoute` and `routes` parts are covered in the next section. We create the `basket_screen.dart` placeholder and register the routes in the next section so the project compiles cleanly.
 
 ### Hide the debug banner
 
@@ -286,6 +287,97 @@ void main() {
 
 The first test checks that the label is drawn. The second passes an `onPressed` that flips a local `wasPressed` boolean, taps the button, and checks the flag turned true, proving the callback fired.
 
+### Use the primary button in the sandwich card
+
+Now that `PrimaryButton` exists, use it inside the existing sandwich card widget so every Order button on the menu shares the Subway green style.
+
+Open `lib/widgets/sandwich_card.dart`. Import `primary_button.dart` and replace the `ElevatedButton` with `PrimaryButton`. Also give the route builder an explicit `BuildContext` type annotation:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sandwich_shop/screens/order_screen.dart';
+import 'package:sandwich_shop/widgets/primary_button.dart';
+
+class SandwichCard extends StatelessWidget {
+  final Sandwich sandwich;
+
+  const SandwichCard({super.key, required this.sandwich});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  sandwich.imagePath,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        sandwich.name,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        sandwich.description,
+                        style: const TextStyle(color: Colors.black54),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  sandwich.formattedPrice,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                PrimaryButton(
+                  label: 'Order',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return OrderScreen(sandwich: sandwich);
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
 ### Extract a reusable basket button
 
 Every screen in the app wants the same basket button in its app bar, so rather than repeat the same `IconButton` on each screen we build it once as its own widget. This keeps the navigation behaviour in one place.
@@ -317,58 +409,6 @@ class BasketButton extends StatelessWidget {
 
 The `onPressed` first reads the name of the current route. `ModalRoute.of(context)` returns the route the button is on, and `?.settings.name` reads its registered name, falling back to the empty string with `?? ''` when there is none. If the current route is not already `'/basket'`, it calls `Navigator.pushNamed(context, '/basket')` to open the basket by its registered name. The check means tapping the basket button while already on the basket screen does nothing, so we never stack the basket on top of itself.
 
-### Widget test the basket button
-
-The reusable `BasketButton` also deserves a test, so we check it draws the basket icon and that tapping it navigates to the basket route. Create a new file named `test/widgets/basket_button_test.dart`:
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/screens/basket_screen.dart';
-import 'package:sandwich_shop/widgets/basket_button.dart';
-
-void main() {
-  testWidgets('BasketButton shows the basket icon', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: BasketButton(),
-        ),
-      ),
-    );
-
-    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
-  });
-
-  testWidgets('Tapping BasketButton navigates to the basket', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        initialRoute: '/',
-        routes: <String, WidgetBuilder>{
-          '/': (BuildContext context) {
-            return const Scaffold(body: BasketButton());
-          },
-          '/basket': (BuildContext context) {
-            return const BasketScreen();
-          },
-        },
-      ),
-    );
-
-    await tester.tap(find.byIcon(Icons.shopping_basket));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(BasketScreen), findsOneWidget);
-  });
-}
-```
-
-The first test pumps a `BasketButton` on its own and checks the basket icon is drawn. The second registers the menu and basket routes, taps the button, and checks the app has navigated to the `BasketScreen`. The `BasketScreen` is the shell we build later in this worksheet; the test compiles against it once that file exists.
-
 ### Register named routes
 
 The app has two main screens reached by name: the menu and the basket. We let the user move between them without stacking an endless history, using named routes.
@@ -376,6 +416,27 @@ The app has two main screens reached by name: the menu and the basket. We let th
 In Worksheet 3 you navigated with `Navigator.push`, which stacks a new screen on top of the old one and shows a back arrow. That is right for a detail screen you expect to return from, such as the order screen opened from a menu card. For top-level destinations such as the basket, it is tidier to give each screen a name.
 
 A named route is a short string path, such as `'/'` for the menu and `'/basket'` for the basket. You register these names in the `routes` map of `MaterialApp`, which you already added when applying the theme. Each entry maps a path to a function that builds the screen for it. The `initialRoute: '/'` property tells the app which route to show first.
+
+To make the `'/basket'` route compile immediately, create a minimal placeholder file named `lib/screens/basket_screen.dart`:
+
+```dart
+import 'package:flutter/material.dart';
+
+class BasketScreen extends StatelessWidget {
+  const BasketScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text('Basket Screen'),
+      ),
+    );
+  }
+}
+```
+
+We will build the complete stateful basket screen later in this worksheet. With this placeholder in place, `main.dart` compiles cleanly.
 
 Once a route is registered, any widget can navigate to it by name with `Navigator.pushNamed(context, '/basket')`, without repeating the builder each time. That is exactly what `BasketButton` does.
 
@@ -423,35 +484,67 @@ With the basket button in place, the menu's app bar should look like this, with 
 
 ### Widget test the menu screen
 
-Create a new file named `test/menu_screen_test.dart` to check the menu draws its title and the basket button:
+Create a new file named `test/menu_screen_test.dart` to check that the menu renders the sandwich list and the basket button, and that tapping the basket button navigates to the basket screen:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
-import 'package:sandwich_shop/widgets/basket_button.dart';
+import 'package:sandwich_shop/widgets/sandwich_card.dart';
 
 void main() {
-  testWidgets('MenuScreen shows the title and the basket button', (
+  testWidgets('MenuScreen shows the sandwich list and a basket button', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: MenuScreen()));
+
+    expect(find.byType(SandwichCard), findsWidgets);
+    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
+  });
+
+  testWidgets('Tapping the basket button navigates to BasketScreen', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
-      const MaterialApp(
-        home: MenuScreen(),
+      MaterialApp(
+        initialRoute: '/',
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) {
+            return const MenuScreen();
+          },
+          '/basket': (BuildContext context) {
+            return const BasketScreen();
+          },
+        },
       ),
     );
 
-    expect(find.text('Sandwich Shop'), findsOneWidget);
-    expect(find.byType(BasketButton), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.shopping_basket));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(BasketScreen), findsOneWidget);
   });
 }
 ```
 
-The test pumps the `MenuScreen` and checks that the app title and the reusable `BasketButton` are both on screen.
+The first test checks that `SandwichCard` items appear and the basket icon button is present. The second test sets up the named routes, taps the basket icon, and asserts that the `BasketScreen` appears on the screen.
+
+### Update the app smoke tests
+
+In Worksheet 4, the smoke test in `test/widget_test.dart` looked for the text `'Sandwich Menu'`. Because our app bar now displays the themed `appTitle` (`'Sandwich Shop'`) and includes the basket icon, update the smoke test in `test/widget_test.dart` to expect the basket button:
+
+```dart
+    testWidgets('App displays MenuScreen as home', (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      expect(find.byType(MenuScreen), findsOneWidget);
+      expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
+    });
+```
 
 ### Commit your changes (2)
 
-Stage your new `primary_button.dart`, `basket_button.dart`, their test files, the updated `menu_screen.dart`, and the menu screen test, then commit your changes with a short message of your own.
+Stage your new `primary_button.dart`, `basket_button.dart`, `primary_button_test.dart`, `menu_screen_test.dart`, the placeholder `basket_screen.dart`, and the updated `sandwich_card.dart`, `menu_screen.dart`, and `widget_test.dart`, then commit your changes with a short message of your own.
 
 ## Building the order form
 
@@ -1322,7 +1415,7 @@ void main() {
     );
 
     expect(find.text('Your basket'), findsOneWidget);
-    expect(find.text('Footlong'), findsOneWidget);
+    expect(find.text('2 x Footlong'), findsOneWidget);
     expect(find.text('£20.00'), findsWidgets);
     expect(find.text('Checkout'), findsOneWidget);
 
@@ -1563,7 +1656,7 @@ Keep the `getSandwichById` method from Worksheet 4 unchanged at the end of the c
 
 ```dart
   Sandwich? getSandwichById(String id) {
-    for (final sandwich in getSandwiches()) {
+    for (final Sandwich sandwich in getSandwiches()) {
       if (sandwich.id == id) {
         return sandwich;
       }
