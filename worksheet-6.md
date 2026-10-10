@@ -969,29 +969,31 @@ Install it by running the beta script in a PowerShell terminal on Windows:
 irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/install-android-beta.ps1 | iex
 ```
 
-Let the script finish and open VS Code on your project. Then open a new terminal and launch the pre-made emulator:
+Let the script finish and open VS Code on your project. Then open a new terminal and run the following commands in order, changing the first line to the path where you cloned the project:
 
 ```bash
+cd path/to/sandwich_shop
+flutter pub get
 flutter emulators --launch flutter_emulator
-```
-
-Wait for the Android home screen to appear. A black screen for a minute or two is normal, as the virtual phone is still booting. Once it has booted, confirm it is listed as a device:
-
-```bash
 flutter devices
+flutter run -d emulator-5554
 ```
 
-The emulator's id, such as `emulator-5554`, only exists while the emulator is booted and disappears when you close it. If `flutter devices` does not list it yet, give it another moment and run the command again.
+After `flutter emulators --launch flutter_emulator`, wait for the Android home screen to appear before carrying on. A black screen for a minute or two is normal, as the virtual phone is still booting. Once it has booted, `flutter devices` lists it as a device. The emulator's id, such as `emulator-5554`, only exists while the emulator is booted and disappears when you close it. If `flutter devices` shows a different id, use the one it reports in the `flutter run -d` command.
 
-With the emulator booted, pick it as the target device in the status bar device selector in the bottom-right (or through the Command Palette entry **Flutter: Select Device**), then start the app with **F5** or Run.
+You can run the app from VS Code instead of the terminal. With the emulator booted, pick it as the target device in the status bar device selector in the bottom-right (or through the Command Palette entry **Flutter: Select Device**), then start the app with **F5** or Run.
 
 <!-- TODO screenshot: images/6/device_selector.png — the VS Code status bar device selector listing the booted emulator -->
+
+Choose the emulator as your run device, or Edge if you want the web version. Do not choose the `Windows` device: Windows desktop builds need Developer Mode and fail with a `Building with plugins requires symlink support` error. If you see that error, switch the device back to the emulator or Edge.
+
+The first emulator build is slow, because it downloads `Gradle` and the build-tools and compiles the app, so give it time. During the build you may also see warnings that certain `Gradle`, `AGP`, or `Kotlin` versions will soon be dropped. These are harmless, the app still builds and runs, and no action is needed.
 
 The emulator shows its home screen once booting has finished, as shown below.
 
 <!-- TODO screenshot: images/6/emulator_home_screen.png — the Android emulator showing its home screen once booting has finished -->
 
-Alternatively, run `flutter run` in the terminal and choose the emulator when it asks which device to use. Either way, the app launches inside the emulator.
+Either way, the app launches inside the emulator.
 
 <!-- TODO screenshot: images/6/app_running_on_emulator.png — the Sandwich Shop app running inside the Android emulator -->
 
