@@ -141,22 +141,23 @@ First add the loader. It reads the three values and copies them into the screen'
 ```dart
   Future<void> _loadSavedOptions() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool savedToasted = prefs.getBool(prefToasted) ?? false;
-    final bool savedVegan = prefs.getBool(prefVegan) ?? false;
-    final String savedNote = prefs.getString(prefNote) ?? '';
-    if (mounted) {
-      setState(() {
-        _toasted = savedToasted;
-        _vegan = savedVegan;
-        _noteController.text = savedNote;
-      });
+    final bool toasted = prefs.getBool(prefToasted) ?? false;
+    final bool vegan = prefs.getBool(prefVegan) ?? false;
+    final String note = prefs.getString(prefNote) ?? '';
+    if (!mounted) {
+      return;
     }
+    setState(() {
+      _toasted = toasted;
+      _vegan = vegan;
+      _noteController.text = note;
+    });
   }
 ```
 
 `SharedPreferences.getInstance()` hands back the shared store, which we `await`. Then `prefs.getBool(prefToasted)` reads the saved toasted flag. The first time the app runs, nothing is stored yet, so that call returns `null`. The `??` operator handles this: it is the null-coalescing operator, and `prefs.getBool(prefToasted) ?? false` means "use the stored value, or `false` when it is null". The operator evaluates to its right-hand side only when the left-hand side is null, and to the left-hand side otherwise. We default the two booleans to `false` and the note to the empty string.
 
-The `if (mounted)` check is new. After an `await`, time has passed and the user may already have left this screen, which disposes its `State`. Calling `setState` on a disposed `State` is an error, so we first check `mounted`, which is `true` only while the `State` is still on screen, and only then call `setState`.
+The `if (!mounted) return;` check is new. After an `await`, time has passed and the user may already have left this screen, which disposes its `State`. Calling `setState` on a disposed `State` is an error, so we first check `mounted`, which is `true` only while the `State` is still on screen, and return early if it is not, calling `setState` only when the screen is still displayed.
 
 Now call the loader from `initState`, just after creating the controller:
 
@@ -224,7 +225,7 @@ The note `TextField` is left as it was in Worksheet 5; we read its text when the
 
 Now toggle a switch, type a note, hot restart the app, open the order screen again, and the options you left are already filled in.
 
-<!-- screenshot: images/6/order_screen_prefilled.png — the order screen reopened after a restart with the toasted switch on and a note already present -->
+<!-- TODO screenshot: images/6/order_screen_prefilled.png — the order screen reopened after a restart with the toasted switch on and a note already present -->
 
 ### Commit your changes (2)
 
@@ -684,31 +685,48 @@ A `DateTime` holds a point in time, and its `.day`, `.month`, `.year`, `.hour`, 
 
 ### Save and navigate on checkout
 
-Now add the method that runs when the user checks out. It is `async` because saving to the database takes time:
+Saving to a database can go wrong: on some platforms the database file may fail to open, and we do not want the app to freeze or crash silently when that happens. So we give the user feedback through the same `_confirmationMessage` field the Worksheet 5 basket already has, and we wrap the save in a `try`/`catch` block so a failure shows a message instead of breaking the app.
+
+Add the method that runs when the user checks out. It is `async` because saving to the database takes time:
 
 ```dart
   Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
-    final SandwichDatabase database = SandwichDatabase.instance;
-    final int orderNumber = await database.getNextOrderNumber();
-    final OrderRecord record = OrderRecord(
-      orderNumber: orderNumber,
-      summary: _buildSummary(items),
-      note: _buildNote(items),
-      toasted: _anyToasted(items) ? 1 : 0,
-      vegan: _anyVegan(items) ? 1 : 0,
-      total: cart.getTotalDue(),
-      date: _formatDate(DateTime.now()),
-    );
-    await database.insertOrder(record);
-    cart.clear();
-    if (!mounted) {
-      return;
+    setState(() {
+      _confirmationMessage = 'Saving your order...';
+    });
+    try {
+      final SandwichDatabase database = SandwichDatabase.instance;
+      final int orderNumber = await database.getNextOrderNumber();
+      final OrderRecord record = OrderRecord(
+        orderNumber: orderNumber,
+        summary: _buildSummary(items),
+        note: _buildNote(items),
+        toasted: _anyToasted(items) ? 1 : 0,
+        vegan: _anyVegan(items) ? 1 : 0,
+        total: cart.getTotalDue(),
+        date: _formatDate(DateTime.now()),
+      );
+      await database.insertOrder(record);
+      cart.clear();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _confirmationMessage = 'Order $orderNumber saved';
+      });
+      Navigator.pushNamed(context, '/orders');
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _confirmationMessage = 'Could not save your order: $error';
+      });
     }
-    Navigator.pushNamed(context, '/orders');
   }
 ```
 
-It asks the database for the next order number, builds an `OrderRecord` from the basket using the helpers, saves it with `insertOrder`, and clears the basket. The `_anyToasted(items) ? 1 : 0` expression turns each `bool` flag into the `1` or `0` the table stores. The `if (!mounted) return;` guard is the same `mounted` check as on the order screen: after the `await`, we only navigate if the screen is still on display. It then navigates to the orders screen by its registered name.
+First it shows "Saving your order..." so the user knows something is happening. Inside the `try` block it asks the database for the next order number, builds an `OrderRecord` from the basket using the helpers, saves it with `insertOrder`, and clears the basket. The `_anyToasted(items) ? 1 : 0` expression turns each `bool` flag into the `1` or `0` the table stores. The `if (!mounted) return;` guard is the same `mounted` check as on the order screen: after the `await`, we only touch the screen if it is still on display. On success it shows "Order N saved" and navigates to the orders screen by its registered name. If anything goes wrong, the `catch` block shows "Could not save your order:" followed by the error, so a problem such as the database file failing to open is reported to the user instead of failing silently.
 
 Next, change the Checkout button in `_buildBasketList` so it calls `_checkout` instead of clearing the basket inline:
 
@@ -726,7 +744,7 @@ Next, change the Checkout button in `_buildBasketList` so it calls `_checkout` i
     );
 ```
 
-Because the Worksheet 5 basket showed an inline confirmation after checkout, you no longer need that message here: checkout now moves straight to the orders screen. Remove the `_confirmationMessage` field, the lines in `_buildBasketList` that appended it, and the branch of `build` that showed it, so the empty case simply shows the empty-state widget.
+Keep the `_confirmationMessage` field and the lines in `_buildBasketList` that show it, since `_checkout` now sets it. The only part to tidy is the empty-basket case: in `build`, when the basket is empty just show the empty-state widget. Change that branch so it reads `content = _buildEmptyState();` with no confirmation message, because once an order is saved the screen navigates away to the orders page.
 
 Finally, add the orders button to the basket app bar so the user can reach their orders from here too. Change the `actions` of the `AppBar` in `build` to list both buttons:
 
@@ -909,7 +927,7 @@ While `_loading` is `true` the body is an empty `SizedBox.shrink()`, which takes
 
 Your orders screen, showing the seeded orders and any you place, should look like this:
 
-<!-- screenshot: images/6/orders_screen.png — the orders screen listing past orders as plain cards with the order number, summary, options, date, and total -->
+<!-- TODO screenshot: images/6/orders_screen.png — the orders screen listing past orders as plain cards with the order number, summary, options, date, and total -->
 
 The orders button is already shown on every screen, so a short note on how the receipt icon reaches this screen is worth repeating: the `OrdersButton` pushes the `'/orders'` route, which we register next.
 
@@ -967,19 +985,19 @@ The emulator's id, such as `emulator-5554`, only exists while the emulator is bo
 
 With the emulator booted, pick it as the target device in the status bar device selector in the bottom-right (or through the Command Palette entry **Flutter: Select Device**), then start the app with **F5** or Run.
 
-<!-- screenshot: images/6/device_selector.png — the VS Code status bar device selector listing the booted emulator -->
+<!-- TODO screenshot: images/6/device_selector.png — the VS Code status bar device selector listing the booted emulator -->
 
 The emulator shows its home screen once booting has finished, as shown below.
 
-<!-- screenshot: images/6/emulator_home_screen.png — the Android emulator showing its home screen once booting has finished -->
+<!-- TODO screenshot: images/6/emulator_home_screen.png — the Android emulator showing its home screen once booting has finished -->
 
 Alternatively, run `flutter run` in the terminal and choose the emulator when it asks which device to use. Either way, the app launches inside the emulator.
 
-<!-- screenshot: images/6/app_running_on_emulator.png — the Sandwich Shop app running inside the Android emulator -->
+<!-- TODO screenshot: images/6/app_running_on_emulator.png — the Sandwich Shop app running inside the Android emulator -->
 
 Now place an order, check out, and confirm it appears on the orders page. Then fully close the app and reopen it: the order is still there, because SQLite saved it to a real file in the emulator's private folder.
 
-<!-- screenshot: images/6/orders_page_on_emulator.png — the orders page on the emulator showing the order that persisted after closing and reopening the app -->
+<!-- TODO screenshot: images/6/orders_page_on_emulator.png — the orders page on the emulator showing the order that persisted after closing and reopening the app -->
 
 ### Your own Windows or Mac laptop: Android Studio
 
