@@ -22,7 +22,6 @@
   - [Add the basket button to the menu app bar](#add-the-basket-button-to-the-menu-app-bar)
   - [Widget test the menu screen](#widget-test-the-menu-screen)
   - [Update the app smoke tests](#update-the-app-smoke-tests)
-  - [Commit your changes (2)](#commit-your-changes-2)
 - [Holding an order in a basket](#holding-an-order-in-a-basket)
   - [Define the cart item model](#define-the-cart-item-model)
   - [Create the cart repository singleton](#create-the-cart-repository-singleton)
@@ -426,8 +425,6 @@ The `actions` property accepts a list of widgets displayed on the trailing side 
 
 ![The menu screen app bar with the Subway green styling and basket icon button](images/5/menu_app_bar_basket_button.png)
 
-<!-- TODO: Done till here -->
-
 ### Widget test the menu screen
 
 Create a new test file named `test/menu_screen_test.dart` to verify that the menu displays sandwich cards, the basket action button, and responds to taps:
@@ -474,37 +471,31 @@ void main() {
 }
 ```
 
-The first test confirms that `SandwichCard` widgets and the basket icon appear. The second test taps the basket icon button, waits for the transition with `tester.pumpAndSettle()`, and asserts that `BasketScreen` appears. Run this test suite:
-
-```bash
-flutter test test/menu_screen_test.dart
-```
+The first test confirms that `SandwichCard` widgets and the basket icon appear. The second test taps the basket icon button, waits for the transition with `tester.pumpAndSettle()`, and asserts that `BasketScreen` appears. Run this test suite and make sure it passes.
 
 ### Update the app smoke tests
 
-In Worksheet 4, our smoke test in `test/widget_test.dart` looked for the text `'Sandwich Menu'`. Because our app bar now displays `'Sandwich Shop'` alongside the basket button, update the test in `test/widget_test.dart` to expect the basket button:
+Recall that smoke tests generally verify that the app launches and displays the expected home screen. In [Worksheet 4](./worksheet-4.md), our smoke test in `test/widget_test.dart` looked for the text `'Sandwich Menu'`.
 
-```dart
-    testWidgets('App displays MenuScreen as home', (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-      expect(find.byType(MenuScreen), findsOneWidget);
-      expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
-    });
-```
+Because our app bar now displays `'Sandwich Shop'` alongside the basket button, update the test in `test/widget_test.dart` to expect the basket button's icon (`Icons.shopping_basket`) instead of the old text. The updated test should look like this:
 
-### Commit your changes (2)
+![The updated smoke test in VS Code](images/5/smoke_test_update.png)
 
-Stage your new files (`primary_button.dart`, `basket_button.dart`, `basket_screen.dart`, `primary_button_test.dart`, `menu_screen_test.dart`) and modified files (`main.dart`, `sandwich_card.dart`, `menu_screen.dart`, `widget_test.dart`). Commit your changes with a descriptive message of your own.
+Run the tests suite to make sure all tests pass. If you see a failure, check that you updated the test to look for the basket icon instead of the old text.
+
+The lesson here is to remember to update your tests when you change the user interface. Otherwise, your tests will fail even if the app is working correctly.
 
 ## Holding an order in a basket
 
-Before we expand the order screen into an interactive form, we create the model and repository that store selected items. Building the data layer first ensures that form inputs have a concrete destination.
+We would like to give our customers the ability to make certain configurations to their sandwiches, add them to a basket, and then check out. Configurations such as whether they want their sandwich toasted or vegan, and any special notes for the kitchen, need to be stored somewhere. We will create a model and repository to hold this data. And we will also require a form of some sort to allow the user to input their configurations. We will build the form in the next section.
+
+<!-- TODO: Verified till here -->
 
 ### Define the cart item model
 
-When a customer configures a sandwich, they select a quantity, options such as toasted or vegan, and can add an optional note for the kitchen.
+When a customer configures a sandwich, we want them to be able to select a quantity, options such as toasted or vegan, and they should also be able to add an optional note for the kitchen.
 
-Create a new file named `lib/models/cart_item.dart`:
+Create a new file named `lib/models/cart_item.dart`. The difference between the `CartItem` model and the `Sandwich` model is that `CartItem` represents a specific order of a sandwich, while `Sandwich` represents a menu item. A customer can order multiple sandwiches of the same type, each with different configurations. For example, they could order two toasted footlongs and one vegan footlong. Each of these would be represented as a separate `CartItem`.
 
 ```dart
 class CartItem {
