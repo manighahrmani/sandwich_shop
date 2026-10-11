@@ -97,9 +97,6 @@ dependencies:
   path: ^1.8.0
   sqflite_common_ffi: ^2.3.0
   sqflite_common_ffi_web: ^0.4.0
-  # Pinned so the committed web/sqlite3.wasm (the sqlite3-3.5.2 build) matches
-  # the sqlite3 version the app resolves, otherwise the browser fails to load
-  # the WebAssembly module.
   sqlite3: "3.5.2"
 ```
 
@@ -224,9 +221,9 @@ The note `TextField` is left as it was in Worksheet 5; we read its text when the
       _saveOptions();
 ```
 
-Now toggle a switch, type a note, hot restart the app, open the order screen again, and the options you left are already filled in.
+Now toggle a switch, type a note, hot restart the app, and open the order screen again. The options you left are already filled in, as shown below:
 
-<!-- TODO screenshot: images/6/order_screen_prefilled.png — the order screen reopened after a restart with the toasted switch on and a note already present -->
+![The order screen reopened after a restart with saved preferences](images/6/order_screen_prefilled.png)
 
 ### Commit your changes (2)
 
@@ -463,7 +460,6 @@ The `db.execute` method runs a raw SQL statement that returns no rows, which is 
 Now seed a few past orders so the orders screen has something to show the first time a student opens it. Still inside `_createDB`, insert three rows and close the method:
 
 ```dart
-    // Seed a few past orders so the orders screen has content on first run.
     await db.insert('orders', <String, Object?>{
       'order_number': 1003,
       'summary': '2 x Footlong Sub',
@@ -928,7 +924,7 @@ While `_loading` is `true` the body is an empty `SizedBox.shrink()`, which takes
 
 Your orders screen, showing the seeded orders and any you place, should look like this:
 
-<!-- TODO screenshot: images/6/orders_screen.png — the orders screen listing past orders as plain cards with the order number, summary, options, date, and total -->
+![The orders screen listing past orders as cards](images/6/orders_screen.png)
 
 The orders button is already shown on every screen, so a short note on how the receipt icon reaches this screen is worth repeating: the `OrdersButton` pushes the `'/orders'` route, which we register next.
 
@@ -984,25 +980,25 @@ flutter run -d emulator-5554
 
 After `flutter emulators --launch flutter_emulator`, wait for the Android home screen to appear before carrying on. A black screen for a minute or two is normal, as the virtual phone is still booting. Once it has booted, `flutter devices` lists it as a device. The emulator's id, such as `emulator-5554`, only exists while the emulator is booted and disappears when you close it. If `flutter devices` shows a different id, use the one it reports in the `flutter run -d` command.
 
-You can run the app from VS Code instead of the terminal. With the emulator booted, pick it as the target device in the status bar device selector in the bottom-right (or through the Command Palette entry **Flutter: Select Device**), then start the app with **F5** or Run.
+You can run the app from VS Code instead of the terminal. With the emulator booted, pick it as the target device in the status bar device selector in the bottom-right (or through the Command Palette entry **Flutter: Select Device**), then start the app with **F5** or Run, as shown below:
 
-<!-- TODO screenshot: images/6/device_selector.png — the VS Code status bar device selector listing the booted emulator -->
+![The VS Code status bar device selector listing the booted emulator](images/6/device_selector.png)
 
 Choose the emulator as your run device, or Edge if you want the web version. Do not choose the `Windows` device: Windows desktop builds need Developer Mode and fail with a `Building with plugins requires symlink support` error. If you see that error, switch the device back to the emulator or Edge.
 
 The first emulator build is slow, because it downloads `Gradle` and the build-tools and compiles the app, so give it time. During the build you may also see warnings that certain `Gradle`, `AGP`, or `Kotlin` versions will soon be dropped. These are harmless, the app still builds and runs, and no action is needed.
 
-The emulator shows its home screen once booting has finished, as shown below.
+The emulator shows its home screen once booting has finished, as shown below:
 
-<!-- TODO screenshot: images/6/emulator_home_screen.png — the Android emulator showing its home screen once booting has finished -->
+![The Android emulator showing its home screen](images/6/emulator_home_screen.png)
 
-Either way, the app launches inside the emulator.
+Either way, the app launches inside the emulator, as shown below:
 
-<!-- TODO screenshot: images/6/app_running_on_emulator.png — the Sandwich Shop app running inside the Android emulator -->
+![The Sandwich Shop app running inside the Android emulator](images/6/app_running_on_emulator.png)
 
-Now place an order, check out, and confirm it appears on the orders page. Then fully close the app and reopen it: the order is still there, because SQLite saved it to a real file in the emulator's private folder.
+Now place an order, check out, and confirm it appears on the orders page. Then fully close the app and reopen it: the order is still there, because SQLite saved it to a real file in the emulator's private folder, as shown below:
 
-<!-- TODO screenshot: images/6/orders_page_on_emulator.png — the orders page on the emulator showing the order that persisted after closing and reopening the app -->
+![The orders page on the emulator showing the persisted order](images/6/orders_page_on_emulator.png)
 
 ### Inspecting the database
 
@@ -1015,9 +1011,9 @@ adb shell "run-as com.example.sandwich_shop cat databases/sandwich_data.db > /da
 adb pull /data/local/tmp/s.db sandwich_shop.db
 ```
 
-Once the pull finishes, open the resulting `sandwich_shop.db` in VS Code by clicking it in the Explorer. The SQLite Viewer extension opens the file and shows the `orders` table and its rows, the seeded past orders together with any orders you have placed yourself, as shown below.
+Once the pull finishes, open the resulting `sandwich_shop.db` in VS Code by clicking it in the Explorer. The SQLite Viewer extension opens the file and shows the `orders` table and its rows, the seeded past orders together with any orders you have placed yourself, as shown below:
 
-<!-- TODO screenshot: images/6/sqlite_viewer_orders_table.png — the SQLite Viewer showing the orders table rows -->
+![The SQLite Viewer showing the orders table rows](images/6/sqlite_viewer_orders_table.png)
 
 This is an optional way to confirm the data is really stored, since the orders screen already shows it in the app.
 
