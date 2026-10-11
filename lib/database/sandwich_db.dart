@@ -31,9 +31,6 @@ class SandwichDatabase {
       onCreate: _createDB,
     );
 
-    // Tests run with the FLUTTER_TEST environment flag set. In that case we
-    // keep the fast, isolated in-memory FFI database so the existing tests
-    // behave exactly as before.
     const bool runningInTest = bool.fromEnvironment('FLUTTER_TEST');
     if (runningInTest) {
       sqfliteFfiInit();
@@ -45,9 +42,6 @@ class SandwichDatabase {
       return testDatabase;
     }
 
-    // On the web we use the WebAssembly build of SQLite through the dedicated
-    // web factory. The database name is enough here because the browser stores
-    // the data for us, so there is no file path to build.
     if (kIsWeb) {
       final DatabaseFactory webFactory = databaseFactoryFfiWebNoWebWorker;
       final Database webDatabase = await webFactory.openDatabase(
@@ -57,10 +51,6 @@ class SandwichDatabase {
       return webDatabase;
     }
 
-    // On Android and iOS the standard sqflite plugin owns the SQLite engine.
-    // A bare file name cannot be opened on a phone (it fails with "unable to
-    // open database file"), so we build a full path inside the folder the
-    // plugin gives us with getDatabasesPath().
     final TargetPlatform platform = defaultTargetPlatform;
     final bool runningOnMobile =
         platform == TargetPlatform.android || platform == TargetPlatform.iOS;
@@ -75,8 +65,6 @@ class SandwichDatabase {
       return mobileDatabase;
     }
 
-    // On desktop (Windows, macOS, Linux) we keep the FFI engine, but we still
-    // open a real file in a writable folder rather than a bare file name.
     sqfliteFfiInit();
     final DatabaseFactory desktopFactory = databaseFactoryFfi;
     final String desktopFolder = await sqflite_plugin.getDatabasesPath();
@@ -101,7 +89,6 @@ class SandwichDatabase {
         date TEXT NOT NULL
       )
     ''');
-    // Seed a few past orders so the orders screen has content on first run.
     await db.insert('orders', <String, Object?>{
       'order_number': 1003,
       'summary': '2 x Footlong Sub',

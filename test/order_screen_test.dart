@@ -14,7 +14,6 @@ const Sandwich testSandwich = Sandwich(
   imagePath: 'assets/images/footlong.jpeg',
 );
 
-// Match the note field by its label.
 final Finder noteFieldFinder = find.byWidgetPredicate((Widget widget) {
   return widget is TextField &&
       widget.decoration?.labelText == 'Note for the kitchen';
