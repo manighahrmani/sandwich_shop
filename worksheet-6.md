@@ -10,10 +10,10 @@
 - [Adding the dependencies](#adding-the-dependencies)
   - [Add the persistence packages](#add-the-persistence-packages)
   - [Commit your changes (1)](#commit-your-changes-1)
-- [Remembering order options with shared preferences](#remembering-order-options-with-shared-preferences)
+- [Remembering customer profile settings with shared preferences](#remembering-customer-profile-settings-with-shared-preferences)
   - [Define the preference keys](#define-the-preference-keys)
-  - [Load saved options when the screen opens](#load-saved-options-when-the-screen-opens)
-  - [Save options as the user changes them](#save-options-as-the-user-changes-them)
+  - [Load saved settings when the screen opens](#load-saved-settings-when-the-screen-opens)
+  - [Save settings when the user submits](#save-settings-when-the-user-submits)
   - [Commit your changes (2)](#commit-your-changes-2)
 - [Storing orders in SQLite](#storing-orders-in-sqlite)
   - [Define the order record model](#define-the-order-record-model)
@@ -39,8 +39,7 @@
   - [Your own Windows or Mac laptop: Android Studio](#your-own-windows-or-mac-laptop-android-studio)
   - [Mac only: the iOS simulator](#mac-only-the-ios-simulator)
 - [Testing persistence](#testing-persistence)
-  - [Update existing order screen tests](#update-existing-order-screen-tests)
-  - [Test the shared preferences flow](#test-the-shared-preferences-flow)
+  - [Test the shared preferences settings flow](#test-the-shared-preferences-settings-flow)
   - [Set up an in-memory database](#set-up-an-in-memory-database)
   - [Test inserting and reading orders](#test-inserting-and-reading-orders)
   - [Update the basket screen tests](#update-the-basket-screen-tests)
@@ -71,13 +70,13 @@ Run `flutter test` in your terminal to confirm that all existing tests pass befo
 
 ## Two kinds of persistence
 
-In Worksheet 5 everything lived in memory. The order options a user picked and the sandwiches in their basket vanished the moment the app restarted or the browser tab refreshed. In this worksheet we make two different kinds of data survive a restart, using the right tool for each.
+In Worksheet 5 everything lived in memory. The customer profile details a user entered and the sandwiches in their basket vanished the moment the app restarted or the browser tab refreshed. In this worksheet we make two different kinds of data survive a restart, using the right tool for each.
 
-The order options, whether a sandwich is toasted or vegan and the note for the kitchen, are small, loose pieces of interface state. There are only a few of them and we never need to search or sort them. For data like that we use shared preferences, a simple store of key-and-value pairs saved on the device. We read the last-used options back when the order screen opens, so a returning user does not retype them.
+Customer profile settings, such as full name, delivery address, email, and whether to receive newsletter updates, are small, loose pieces of interface state. There are only a few of them and we never need to search or sort them. For data like that we use shared preferences, a simple store of key-and-value pairs saved on the device. We read the last-used settings back when the profile screen opens, so a returning user does not retype them.
 
 The orders themselves are different. Each is a structured record with a number, a summary, a date, and a total, and we want to list them newest first and could later filter them by date. For structured, queryable records like that we use SQLite, a small relational database stored in a single file. We save each completed order as a row and read them back on an orders screen.
 
-The contrast is the lesson: reach for shared preferences for a handful of simple settings, and for a relational database such as SQLite when you have many structured records you need to query. We build the shared preferences part first because it extends the order screen you already know, then move on to the database.
+The contrast is the lesson: reach for shared preferences for a handful of simple settings, and for a relational database such as SQLite when you have many structured records you need to query. We build the shared preferences part first because it extends the settings screen you already know, then move on to the database.
 
 ## Adding the dependencies
 
@@ -110,140 +109,137 @@ flutter pub get
 
 Stage `pubspec.yaml` and `pubspec.lock`, then commit your changes with a short, descriptive message of your own.
 
-## Remembering order options with shared preferences
+## Remembering customer profile settings with shared preferences
 
-We start with the lighter kind of persistence. The order screen already has two switches and a note field. We make the app remember the user's last choices and pre-fill the form with them next time.
+We start with the lighter kind of persistence. The settings screen from Worksheet 5 already has three text fields and a switch toggle. We make the app remember the user's profile choices and pre-fill the form with them next time the screen opens.
 
 Shared preferences stores values under string keys. You read a value with a typed getter such as `getBool` or `getString`, and write one with `setBool` or `setString`. Reading and writing touch the device, so the methods are asynchronous and return a `Future` (the pattern from Worksheet 4).
 
 ### Define the preference keys
 
-Open `lib/screens/order_screen.dart`. First import the package, then define three constant keys at the top of the file so we never mistype a key name:
+Open `lib/screens/settings_screen.dart`. First import the package, then define constant keys at the top of the file so we never mistype a key name:
 
 ```dart
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String prefToasted = 'order_toasted';
-const String prefVegan = 'order_vegan';
-const String prefNote = 'order_note';
+const String prefName = 'user_name';
+const String prefAddress = 'user_address';
+const String prefEmail = 'user_email';
+const String prefNewsletter = 'user_newsletter';
 ```
 
-Each key is a plain `const String`. Using named constants rather than typing `'order_toasted'` in several places means the compiler, not you, keeps the names consistent. Add this import alongside the existing imports at the top of the file, and the three keys just below them.
+Each key is a plain `const String`. Using named constants rather than typing `'user_name'` in several places means the compiler, not you, keeps the names consistent. Add this import alongside the existing imports at the top of the file, and the four keys just below them.
 
-### Load saved options when the screen opens
+### Load saved settings when the screen opens
 
-We load the saved options as soon as the screen appears. Add a loader method to `_OrderScreenState`, and call it from `initState`.
+We load the saved profile settings as soon as the screen appears. Add a loader method to `_SettingsScreenState`, and call it from `initState`.
 
-First add the loader. It reads the three values and copies them into the screen's state:
+First add the loader. It reads the four values and copies them into the screen's state:
 
 ```dart
-  Future<void> _loadSavedOptions() async {
+  Future<void> _loadSettings() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool? savedToasted = prefs.getBool(prefToasted);
-    final bool? savedVegan = prefs.getBool(prefVegan);
-    final String? savedNote = prefs.getString(prefNote);
+    final String? savedName = prefs.getString(prefName);
+    final String? savedAddress = prefs.getString(prefAddress);
+    final String? savedEmail = prefs.getString(prefEmail);
+    final bool? savedNewsletter = prefs.getBool(prefNewsletter);
 
-    bool toasted = false;
-    if (savedToasted != null) {
-      toasted = savedToasted;
+    String name = '';
+    if (savedName != null) {
+      name = savedName;
     }
 
-    bool vegan = false;
-    if (savedVegan != null) {
-      vegan = savedVegan;
+    String address = '';
+    if (savedAddress != null) {
+      address = savedAddress;
     }
 
-    String note = '';
-    if (savedNote != null) {
-      note = savedNote;
+    String email = '';
+    if (savedEmail != null) {
+      email = savedEmail;
+    }
+
+    bool newsletter = false;
+    if (savedNewsletter != null) {
+      newsletter = savedNewsletter;
     }
 
     if (!mounted) {
       return;
     }
     setState(() {
-      _toasted = toasted;
-      _vegan = vegan;
-      _noteController.text = note;
+      _nameController.text = name;
+      _addressController.text = address;
+      _emailController.text = email;
+      _receiveNewsletter = newsletter;
     });
   }
 ```
 
-`SharedPreferences.getInstance()` hands back the shared store, which we `await`. Then `prefs.getBool(prefToasted)` reads the saved toasted flag. The first time the app runs, nothing is stored yet, so that call returns `null`. We assign the retrieved nullable values to local variables, and use `if` statements to check if values were found, defaulting the two booleans to `false` and the note to the empty string when no stored data exists.
+`SharedPreferences.getInstance()` hands back the shared store, which we `await`. Then `prefs.getString(prefName)` reads the saved name. The first time the app runs, nothing is stored yet, so that call returns `null`. We assign the retrieved nullable values to local variables, and use `if` statements to check if values were found, defaulting strings to empty text and the boolean to `false` when no stored data exists.
 
-The `if (!mounted) return;` check is new. After an `await`, time has passed and the user may already have left this screen, which disposes its `State`. Calling `setState` on a disposed `State` is an error, so we first check `mounted`, which is `true` only while the `State` is still on screen, and return early if it is not, calling `setState` only when the screen is still displayed.
+The `if (!mounted) return;` check ensures that after an `await`, calling `setState` only occurs if the widget's `State` is still active in the widget tree.
 
-Now call the loader from `initState`, just after creating the controller:
+Now call the loader from `initState`:
 
 ```dart
   @override
   void initState() {
     super.initState();
-    _noteController = TextEditingController();
-    _loadSavedOptions();
+    _nameController = TextEditingController();
+    _addressController = TextEditingController();
+    _emailController = TextEditingController();
+    _loadSettings();
   }
 ```
 
-### Save options as the user changes them
+### Save settings when the user submits
 
-Next add a method that writes the current options back to the store:
+Next update the save method in `_SettingsScreenState` to write the values back to the store:
 
 ```dart
-  Future<void> _saveOptions() async {
+  Future<void> _saveSettings() async {
+    final String name = _nameController.text.trim();
+    final String address = _addressController.text.trim();
+    final String email = _emailController.text.trim();
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(prefToasted, _toasted);
-    await prefs.setBool(prefVegan, _vegan);
-    await prefs.setString(prefNote, _noteController.text.trim());
+    await prefs.setString(prefName, name);
+    await prefs.setString(prefAddress, address);
+    await prefs.setString(prefEmail, email);
+    await prefs.setBool(prefNewsletter, _receiveNewsletter);
+
+    final UserSettings settings = UserSettings(
+      name: name,
+      address: address,
+      email: email,
+      receiveNewsletter: _receiveNewsletter,
+    );
+
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _confirmationMessage = 'Settings saved for ${settings.name}';
+    });
   }
 ```
 
-Each `set` call stores one value under its key, overwriting what was there. We call `_saveOptions` at two moments: whenever either switch is toggled, and when the sandwich is added to the basket. Update the two `Switch` widgets in the `build` method so their `onChanged` saves after updating state:
+Each `set` call stores one value under its key, overwriting what was there. Update the **Save Settings** button in the `build` method to invoke `_saveSettings`:
 
 ```dart
-            Row(
-              children: [
-                const Expanded(child: Text('Toasted')),
-                Switch(
-                  value: _toasted,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _toasted = value;
-                    });
-                    _saveOptions();
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Expanded(child: Text('Vegan')),
-                Switch(
-                  value: _vegan,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _vegan = value;
-                    });
-                    _saveOptions();
-                  },
-                ),
-              ],
+            SizedBox(
+              width: double.infinity,
+              child: PrimaryButton(
+                label: 'Save Settings',
+                onPressed: _saveSettings,
+              ),
             ),
 ```
-
-The note `TextField` is left as it was in Worksheet 5; we read its text when the sandwich is added rather than saving on every keystroke. In `_addToBasket`, call `_saveOptions()` right after adding the item to the repository, so the current toggles and note are stored together:
-
-```dart
-      CartRepository.instance.addItem(item);
-      _saveOptions();
-```
-
-Now toggle a switch, type a note, hot restart the app, and open the order screen again. The options you left are already filled in, as shown below:
-
-![The order screen reopened after a restart with saved preferences](images/6/order_screen_prefilled.png)
 
 ### Commit your changes (2)
 
-Stage your updated `order_screen.dart` and commit your changes with a message of your own.
+Stage your updated `lib/screens/settings_screen.dart` and commit your changes with a message of your own.
 
 ## Storing orders in SQLite
 
@@ -650,47 +646,19 @@ import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sandwich_shop/widgets/orders_button.dart';
 ```
 
-A basket can hold several items, but an order is one record, so we need small helpers that fold the basket down into the summary, note, and flags one row stores. Add these inside `_BasketScreenState`:
+A basket can hold several items, but an order is one record, so we need a helper that folds the basket down into the summary string our table stores. Add this inside `_BasketScreenState`:
 
 ```dart
   String _buildSummary(List<CartItem> items) {
-    final List<String> lines = [];
+    final List<String> parts = [];
     for (final CartItem item in items) {
-      lines.add('${item.quantity} x ${item.name}');
+      parts.add('${item.quantity} x ${item.sandwich.name}');
     }
-    return lines.join(', ');
-  }
-
-  bool _anyToasted(List<CartItem> items) {
-    for (final CartItem item in items) {
-      if (item.toasted) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool _anyVegan(List<CartItem> items) {
-    for (final CartItem item in items) {
-      if (item.vegan) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  String _buildNote(List<CartItem> items) {
-    final List<String> notes = [];
-    for (final CartItem item in items) {
-      if (item.note.isNotEmpty) {
-        notes.add(item.note);
-      }
-    }
-    return notes.join('; ');
+    return parts.join(', ');
   }
 ```
 
-`_buildSummary` joins each line into a short string such as `2 x Footlong Sub, 1 x Six-Inch Sub`. `_buildNote` gathers any notes into one string. `_anyToasted` and `_anyVegan` return `true` if any item in the basket has that option set; we convert each to the `1` or `0` the table stores when we build the record.
+`_buildSummary` gathers each line into a short string such as `2 x Footlong Sub, 1 x Six-Inch Sub`.
 
 The record also needs a date. Add a helper that formats the current date and time into a readable string:
 
@@ -723,9 +691,6 @@ Add the method that runs when the user checks out. It is `async` because saving 
       final OrderRecord record = OrderRecord(
         orderNumber: orderNumber,
         summary: _buildSummary(items),
-        note: _buildNote(items),
-        toasted: _anyToasted(items) ? 1 : 0,
-        vegan: _anyVegan(items) ? 1 : 0,
         total: cart.getTotalDue(),
         date: _formatDate(DateTime.now()),
       );
@@ -749,7 +714,7 @@ Add the method that runs when the user checks out. It is `async` because saving 
   }
 ```
 
-First it shows "Saving your order..." so the user knows something is happening. Inside the `try` block it asks the database for the next order number, builds an `OrderRecord` from the basket using the helpers, saves it with `insertOrder`, and clears the basket. The `_anyToasted(items) ? 1 : 0` expression turns each `bool` flag into the `1` or `0` the table stores. The `if (!mounted) return;` guard is the same `mounted` check as on the order screen: after the `await`, we only touch the screen if it is still on display. On success it shows "Order N saved" and navigates to the orders screen by its registered name. If anything goes wrong, the `catch` block shows "Could not save your order:" followed by the error, so a problem such as the database file failing to open is reported to the user instead of failing silently.
+First it shows "Saving your order..." so the user knows something is happening. Inside the `try` block it asks the database for the next order number, builds an `OrderRecord` from the basket using the helper, saves it with `insertOrder`, and clears the basket. The `if (!mounted) return;` guard is the same `mounted` check as on our other screens: after the `await`, we only touch the screen if it is still on display. On success it shows "Order N saved" and navigates to the orders screen by its registered name. If anything goes wrong, the `catch` block shows "Could not save your order:" followed by the error, so a problem such as the database file failing to open is reported to the user instead of failing silently.
 
 Next, change the Checkout button in `_buildBasketList` so it calls `_checkout` instead of clearing the basket inline:
 
@@ -1081,104 +1046,87 @@ The per-platform database open you wrote earlier already covers iOS through the 
 
 We test both kinds of persistence. The shared preferences test uses a mock store so no real device storage is touched, and the database tests use SQLite's in-memory mode so they run quickly and leave no file behind. These tests run with `flutter test` just as before, and do not need an emulator; the emulator in [Running the app on a mobile emulator](#running-the-app-on-a-mobile-emulator) is only for seeing the saved file persist by hand.
 
-### Update existing order screen tests
+### Test the shared preferences settings flow
 
-In Worksheet 5, we created `test/order_screen_test.dart`. Because `OrderScreen` now reads and writes shared preferences, open `test/order_screen_test.dart`, import `shared_preferences`, and initialise the mock key-value store in its `setUp` block:
-
-```dart
-import 'package:shared_preferences/shared_preferences.dart';
-```
-
-```dart
-  setUp(() {
-    CartRepository.instance.clear();
-    SharedPreferences.setMockInitialValues(<String, Object>{});
-  });
-```
-
-This ensures any tests running against `OrderScreen` have a clean, mocked preferences instance.
-
-### Test the shared preferences flow
-
-Create a new file named `test/order_options_prefs_test.dart`. Shared preferences offers `setMockInitialValues`, which fills the store with test data (or clears it) so a test runs without a real device:
+Create a new file named `test/settings_screen_test.dart`. Shared preferences offers `setMockInitialValues`, which fills the store with test data (or clears it) so a test runs without a real device:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/repositories/cart_repository.dart';
-import 'package:sandwich_shop/screens/order_screen.dart';
+import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-const Sandwich testSandwich = Sandwich(
-  id: 'test',
-  name: 'Test Sub',
-  description: 'Test description',
-  price: 5.0,
-  imagePath: 'assets/images/footlong.jpeg',
-);
-
-final Finder noteFieldFinder = find.byWidgetPredicate((Widget widget) {
-  return widget is TextField &&
-      widget.decoration?.labelText == 'Note for the kitchen';
-});
 
 void main() {
   setUp(() {
-    CartRepository.instance.clear();
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('Order screen pre-fills saved options on open', (
+  testWidgets('SettingsScreen displays form fields and switches', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+
+    expect(find.text('Customer Profile'), findsOneWidget);
+    expect(find.byType(TextField), findsNWidgets(3));
+    expect(find.byType(Switch), findsOneWidget);
+    expect(find.text('Save Settings'), findsOneWidget);
+  });
+
+  testWidgets('SettingsScreen pre-fills saved settings on open', (
     WidgetTester tester,
   ) async {
     SharedPreferences.setMockInitialValues(<String, Object>{
-      prefToasted: true,
-      prefVegan: true,
-      prefNote: 'No onions',
+      prefName: 'Jordan Lee',
+      prefAddress: '15 High Street, Portsmouth',
+      prefEmail: 'jordan@example.com',
+      prefNewsletter: true,
     });
 
-    await tester.pumpWidget(
-      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
-    );
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
 
-    final Switch toastedSwitch = tester.widget<Switch>(
-      find.byType(Switch).first,
-    );
-    final Switch veganSwitch = tester.widget<Switch>(find.byType(Switch).last);
-    expect(toastedSwitch.value, isTrue);
-    expect(veganSwitch.value, isTrue);
-    expect(find.text('No onions'), findsOneWidget);
+    expect(find.text('Jordan Lee'), findsOneWidget);
+    expect(find.text('15 High Street, Portsmouth'), findsOneWidget);
+    expect(find.text('jordan@example.com'), findsOneWidget);
+    final Switch switchWidget = tester.widget<Switch>(find.byType(Switch));
+    expect(switchWidget.value, isTrue);
   });
 
-  testWidgets('Toggling and adding to basket saves options', (
+  testWidgets('Toggling switch and saving settings updates SharedPreferences', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
-    );
-    await tester.pumpAndSettle();
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
 
-    await tester.tap(find.byType(Switch).first);
-    await tester.pumpAndSettle();
+    final Finder nameField = find.widgetWithText(TextField, 'Full name');
+    final Finder addressField =
+        find.widgetWithText(TextField, 'Delivery address');
+    final Finder emailField = find.widgetWithText(TextField, 'Email address');
+
+    await tester.enterText(nameField, 'Alex Smith');
+    await tester.enterText(addressField, '10 Elm Road, Portsmouth');
+    await tester.enterText(emailField, 'alex@example.com');
+
+    final Finder switchFinder = find.byType(Switch);
+    expect(tester.widget<Switch>(switchFinder).value, isFalse);
+    await tester.tap(switchFinder);
+    await tester.pump();
+    expect(tester.widget<Switch>(switchFinder).value, isTrue);
+
+    await tester.tap(find.text('Save Settings'));
+    await tester.pump();
+
+    expect(find.text('Settings saved for Alex Smith'), findsOneWidget);
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    expect(prefs.getBool(prefToasted), isTrue);
-
-    await tester.enterText(noteFieldFinder, 'Extra cheese');
-    await tester.tap(find.text('Add'));
-    await tester.pump();
-    await tester.tap(find.text('Add to Basket'));
-    await tester.pumpAndSettle();
-
-    final SharedPreferences updated = await SharedPreferences.getInstance();
-    expect(updated.getString(prefNote), 'Extra cheese');
+    expect(prefs.getString(prefName), 'Alex Smith');
+    expect(prefs.getString(prefAddress), '10 Elm Road, Portsmouth');
+    expect(prefs.getString(prefEmail), 'alex@example.com');
+    expect(prefs.getBool(prefNewsletter), isTrue);
   });
 }
 ```
 
-The `setUp` clears the mock store and the basket before each test. The first test seeds the store with saved options before the screen opens and verifies the switches and note field pre-fill. The second test flips the toasted switch, enters a note, taps Add to Basket, and verifies the updated options are saved to `SharedPreferences`.
+The `setUp` clears the mock store before each test. The first test verifies the profile form fields and switch appear on the screen. The second test seeds the store with customer details before the screen opens and verifies the fields and switch pre-fill. The third test enters new customer details, flips the newsletter switch, taps Save Settings, and asserts that the updated profile is written to `SharedPreferences`.
 
 ### Set up an in-memory database
 
@@ -1295,10 +1243,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+const Sandwich testSandwich = Sandwich(
+  id: 'footlong',
+  name: 'Footlong Sub',
+  description: 'Classic freshly baked sub.',
+  price: 10.0,
+  imagePath: 'assets/images/footlong.jpeg',
+);
 
 void main() {
   setUpAll(() {
@@ -1362,9 +1319,7 @@ void main() {
     'BasketScreen renders items and removes item when delete pressed',
     (WidgetTester tester) async {
       const CartItem item = CartItem(
-        id: 'footlong',
-        name: 'Footlong',
-        price: 10.0,
+        sandwich: testSandwich,
         quantity: 2,
       );
       CartRepository.instance.addItem(item);
@@ -1372,7 +1327,7 @@ void main() {
       await tester.pumpWidget(buildApp());
 
       expect(find.text('Your basket'), findsOneWidget);
-      expect(find.text('2 x Footlong'), findsOneWidget);
+      expect(find.text('2 x Footlong Sub'), findsOneWidget);
       expect(find.text('£20.00'), findsWidgets);
       expect(find.text('Checkout'), findsOneWidget);
 
@@ -1387,9 +1342,7 @@ void main() {
     'BasketScreen checkout stores the order and navigates to orders',
     (WidgetTester tester) async {
       const CartItem item = CartItem(
-        id: 'footlong',
-        name: 'Footlong',
-        price: 10.0,
+        sandwich: testSandwich,
         quantity: 1,
       );
       CartRepository.instance.addItem(item);
@@ -1410,7 +1363,7 @@ void main() {
       expect(find.byType(OrdersScreen), findsOneWidget);
       expect(CartRepository.instance.getItems(), isEmpty);
       expect(rows.length, 1);
-      expect(rows.first['summary'], '1 x Footlong');
+      expect(rows.first['summary'], '1 x Footlong Sub');
       expect(find.byType(SnackBar), findsNothing);
     },
   );
@@ -1661,7 +1614,7 @@ flutter test
 
 ### Commit your changes (7)
 
-Stage your test files, including the updated `order_screen_test.dart` and `basket_screen_test.dart`, and commit your changes with a message of your own.
+Stage your test files, including `test/settings_screen_test.dart` and the updated `test/basket_screen_test.dart`, and commit your changes with a message of your own.
 
 ## Exercises
 
@@ -1669,7 +1622,7 @@ The exercises below apply the concepts from this worksheet to the Southsea Cinem
 
 1. Following [Adding the dependencies](#adding-the-dependencies), add `shared_preferences`, `sqflite`, `path`, `sqflite_common_ffi`, and `sqflite_common_ffi_web` to your Southsea Cinema fork's `pubspec.yaml`, and run `flutter pub get`.
 
-2. Following [Remembering order options with shared preferences](#remembering-order-options-with-shared-preferences), make your booking screen remember the patron's last option choices with shared preferences, loading them in `initState` and saving them when they change. Decide which small options are worth remembering.
+2. Following [Remembering customer profile settings with shared preferences](#remembering-customer-profile-settings-with-shared-preferences), make your settings or booking screen remember the patron's details or option choices with shared preferences, loading them in `initState` and saving them when they change. Decide which patron settings are worth remembering.
 
 3. Following [Define the order record model](#define-the-order-record-model), add a `TicketTransaction` model in `lib/models/ticket_transaction.dart` with `toMap` and `fromMap`. Decide which fields a cinema ticket sale needs to record, remembering that SQLite stores booleans as `1` or `0`.
 

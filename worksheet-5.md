@@ -27,14 +27,11 @@
   - [Create the cart repository singleton](#create-the-cart-repository-singleton)
   - [Unit test the cart repository](#unit-test-the-cart-repository)
   - [Commit your changes (3)](#commit-your-changes-3)
-- [Building the order form](#building-the-order-form)
+- [Building the order screen](#building-the-order-screen)
   - [Recap the order screen state](#recap-the-order-screen-state)
   - [Update the order screen app bar](#update-the-order-screen-app-bar)
-  - [Add the toasted and vegan switches](#add-the-toasted-and-vegan-switches)
-  - [Add the note field with a text controller](#add-the-note-field-with-a-text-controller)
   - [Add items to the basket](#add-items-to-the-basket)
-  - [Wrap the form in a scroll view](#wrap-the-form-in-a-scroll-view)
-  - [Widget test the order form](#widget-test-the-order-form)
+  - [Widget test the order screen](#widget-test-the-order-screen)
   - [Commit your changes (4)](#commit-your-changes-4)
 - [Building the basket screen](#building-the-basket-screen)
   - [Convert BasketScreen to a stateful widget](#convert-basketscreen-to-a-stateful-widget)
@@ -44,13 +41,22 @@
   - [Assemble the basket screen scaffold](#assemble-the-basket-screen-scaffold)
   - [Widget test the basket screen](#widget-test-the-basket-screen)
   - [Commit your changes (5)](#commit-your-changes-5)
+- [Building the customer profile settings form](#building-the-customer-profile-settings-form)
+  - [Define the user settings model](#define-the-user-settings-model)
+  - [Text controllers and form lifecycle](#text-controllers-and-form-lifecycle)
+  - [Add text fields and the switch toggle](#add-text-fields-and-the-switch-toggle)
+  - [Wrap the form in a scroll view](#wrap-the-form-in-a-scroll-view)
+  - [Create the settings button and register the route](#create-the-settings-button-and-register-the-route)
+  - [Save settings and provide feedback](#save-settings-and-provide-feedback)
+  - [Widget test the settings screen](#widget-test-the-settings-screen)
+  - [Commit your changes (6)](#commit-your-changes-6)
 - [Loading the menu from JSON](#loading-the-menu-from-json)
   - [Create the JSON asset file](#create-the-json-asset-file)
   - [Register the asset in pubspec](#register-the-asset-in-pubspec)
   - [Add JSON serialisation to the sandwich model](#add-json-serialisation-to-the-sandwich-model)
   - [Unit test JSON serialisation](#unit-test-json-serialisation)
   - [Load JSON data in the repository](#load-json-data-in-the-repository)
-  - [Commit your changes (6)](#commit-your-changes-6)
+  - [Commit your changes (7)](#commit-your-changes-7)
 - [Exercises](#exercises)
 
 ## Getting help
@@ -493,41 +499,35 @@ We would like to give our customers the ability to make certain configurations t
 
 ### Define the cart item model
 
-When a customer configures a sandwich, we want them to be able to select a quantity, options such as toasted or vegan, and they should also be able to add an optional note for the kitchen.
+When a customer orders a sandwich, we need to track their selection and the quantity they wish to buy. In an e-commerce application, a menu item and an item inside a basket serve two distinct purposes. A `Sandwich` represents an item in the catalogue, with its name, description, and price. A `CartItem` represents a specific line item in the customer's shopping basket.
 
-Create a new file named `lib/models/cart_item.dart`. The difference between the `CartItem` model and the `Sandwich` model is that `CartItem` represents a specific order of a sandwich, while `Sandwich` represents a menu item. A customer can order multiple sandwiches of the same type, each with different configurations. For example, they could order two toasted footlongs and one vegan footlong. Each of these would be represented as a separate `CartItem`.
+A common beginner mistake is to copy all fields from `Sandwich` into `CartItem`, duplicating `id`, `name`, and `price`. In object-oriented programming, this creates maintenance bugs: if menu data updates, duplicate fields in the basket fall out of sync. A cleaner design is composition: `CartItem` holds a reference to a `Sandwich` instance along with an integer quantity.
+
+Create a new file named `lib/models/cart_item.dart`:
 
 ```dart
+import 'package:sandwich_shop/models/sandwich.dart';
+
 class CartItem {
-  final String id;
-  final String name;
-  final double price;
+  final Sandwich sandwich;
   final int quantity;
-  final bool toasted;
-  final bool vegan;
-  final String note;
 
   const CartItem({
-    required this.id,
-    required this.name,
-    required this.price,
+    required this.sandwich,
     required this.quantity,
-    this.toasted = false,
-    this.vegan = false,
-    this.note = '',
   });
 
   double get lineTotal {
-    return price * quantity;
+    return sandwich.price * quantity;
   }
 }
 ```
 
-Each field is marked `final` to ensure instances are immutable. The `toasted` and `vegan` flags default to `false`, and `note` defaults to an empty string. The computed getter `lineTotal` multiplies `price` by `quantity` to calculate the cost for that line item.
+Both fields are marked `final` to ensure instances are immutable once constructed. The computed getter `lineTotal` calculates the cost for that line item by multiplying `sandwich.price` by `quantity`. Notice how composing `Sandwich` inside `CartItem` avoids duplicating properties and guarantees that the basket always reflects the correct sandwich attributes.
 
 ### Create the cart repository singleton
 
-In [Worksheet 3](./worksheet-3.md), we introduced the repository pattern to encapsulate data access. For our shopping cart, multiple screens (the order screen and the basket screen) need to read and modify the same list of items. We implement this using the singleton pattern.
+In [Worksheet 3](./worksheet-3.md), we introduced the repository pattern to encapsulate data access. For our shopping cart, multiple screens (the order screen, the menu screen, and the basket screen) need to read and update the same list of items. We implement this shared access using the singleton pattern.
 
 Create a new file named `lib/repositories/cart_repository.dart`:
 
@@ -567,70 +567,109 @@ class CartRepository {
     return total;
   }
 
-  double getTotalDue() {
-    double total = 0.0;
+  double getSubtotal() {
+    double sum = 0.0;
     for (final CartItem item in _items) {
-      total += item.lineTotal;
+      sum += item.lineTotal;
     }
-    return total;
+    return sum;
+  }
+
+  double getDeliveryFee() {
+    if (_items.isEmpty) {
+      return 0.0;
+    }
+    return 1.50;
+  }
+
+  double getTotalDue() {
+    return getSubtotal() + getDeliveryFee();
   }
 }
 ```
 
-The private constructor `CartRepository._internal()` prevents direct instantiation outside this file. The single shared instance is exposed via `static final CartRepository instance`. The `_items` list is private; calling `getItems()` returns an unmodifiable view using `List.unmodifiable` so external code cannot mutate the list directly. The `totalItemCount` getter and `getTotalDue()` method iterate over the items using standard `for-in` loops to aggregate quantities and prices.
+The private constructor `CartRepository._internal()` prevents direct instantiation from outside the class. The single shared instance is exposed via `static final CartRepository instance`. The internal `_items` list is private; calling `getItems()` returns an unmodifiable view using `List.unmodifiable` so external widgets cannot mutate the list directly. The `totalItemCount` getter and `getSubtotal()` method use standard procedural `for-in` loops to aggregate quantities and prices. The delivery fee is £1.50 when items exist, and `getTotalDue()` computes the overall bill.
 
 ### Unit test the cart repository
 
-Create a new test file named `test/cart_repository_test.dart` to verify repository operations:
+Create a new test file named `test/cart_repository_test.dart` to verify that repository operations compute accurate totals:
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 
+const Sandwich testSandwich1 = Sandwich(
+  id: 'footlong',
+  name: 'Footlong Sub',
+  description: 'Classic freshly baked sub.',
+  price: 10.0,
+  imagePath: 'assets/images/footlong.jpeg',
+);
+
+const Sandwich testSandwich2 = Sandwich(
+  id: 'six_inch',
+  name: 'Six-Inch Sub',
+  description: 'Six inch sub.',
+  price: 6.0,
+  imagePath: 'assets/images/six_inch.jpeg',
+);
+
 void main() {
-  final CartRepository repository = CartRepository.instance;
-
   setUp(() {
-    repository.clear();
+    CartRepository.instance.clear();
   });
 
-  test('CartRepository starts empty', () {
-    expect(repository.getItems(), isEmpty);
-    expect(repository.totalItemCount, 0);
-    expect(repository.getTotalDue(), 0.0);
-  });
+  group('CartRepository tests', () {
+    test('starts with empty basket and zero totals', () {
+      final CartRepository cart = CartRepository.instance;
+      expect(cart.getItems(), isEmpty);
+      expect(cart.totalItemCount, 0);
+      expect(cart.getSubtotal(), 0.0);
+      expect(cart.getDeliveryFee(), 0.0);
+      expect(cart.getTotalDue(), 0.0);
+    });
 
-  test('addItem adds item and computes totals', () {
-    const CartItem item = CartItem(
-      id: 'footlong',
-      name: 'Footlong Sub',
-      price: 7.50,
-      quantity: 2,
-    );
-    repository.addItem(item);
+    test('adds items and calculates subtotal and delivery fee correctly', () {
+      final CartRepository cart = CartRepository.instance;
+      const CartItem item1 = CartItem(
+        sandwich: testSandwich1,
+        quantity: 2,
+      );
+      const CartItem item2 = CartItem(
+        sandwich: testSandwich2,
+        quantity: 1,
+      );
 
-    expect(repository.getItems().length, 1);
-    expect(repository.totalItemCount, 2);
-    expect(repository.getTotalDue(), 15.0);
-  });
+      cart.addItem(item1);
+      cart.addItem(item2);
 
-  test('removeItem removes item at index', () {
-    const CartItem item = CartItem(
-      id: 'footlong',
-      name: 'Footlong Sub',
-      price: 7.50,
-      quantity: 1,
-    );
-    repository.addItem(item);
-    repository.removeItem(0);
+      expect(cart.getItems().length, 2);
+      expect(cart.totalItemCount, 3);
+      expect(cart.getSubtotal(), 26.0);
+      expect(cart.getDeliveryFee(), 1.50);
+      expect(cart.getTotalDue(), 27.50);
+    });
 
-    expect(repository.getItems(), isEmpty);
+    test('removes items correctly', () {
+      final CartRepository cart = CartRepository.instance;
+      const CartItem item = CartItem(
+        sandwich: testSandwich1,
+        quantity: 1,
+      );
+      cart.addItem(item);
+      expect(cart.getItems().length, 1);
+
+      cart.removeItem(0);
+      expect(cart.getItems().length, 0);
+      expect(cart.getTotalDue(), 0.0);
+    });
   });
 }
 ```
 
-Run your new unit tests:
+Run your new unit tests in the terminal:
 
 ```bash
 flutter test test/cart_repository_test.dart
@@ -640,13 +679,13 @@ flutter test test/cart_repository_test.dart
 
 Stage `lib/models/cart_item.dart`, `lib/repositories/cart_repository.dart`, and `test/cart_repository_test.dart`. Commit your changes with a message of your own.
 
-## Building the order form
+## Building the order screen
 
-Now that the cart model and repository are ready, we turn `lib/screens/order_screen.dart` into a complete ordering form with switch toggles, a multiline text field, and basket submission.
+Now that the cart model and repository are ready, we turn `lib/screens/order_screen.dart` into an ordering screen that lets users choose a quantity and add their selected sandwich to the basket.
 
 ### Recap the order screen state
 
-In branch 4, `OrderScreen` was a `StatefulWidget` containing a quantity integer and two buttons (Add and Remove) that called `setState`:
+In branch 4, `OrderScreen` was a `StatefulWidget` containing a quantity integer and two buttons (**Add** and **Remove**) that called `setState`:
 
 ```dart
 class _OrderScreenState extends State<OrderScreen> {
@@ -669,7 +708,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 ```
 
-We keep these quantity handlers and build additional controls around them.
+We keep these quantity handlers and connect them to our basket repository.
 
 ### Update the order screen app bar
 
@@ -693,105 +732,9 @@ Your order screen app bar should look like this:
 
 ![The order screen app bar with title and basket button](images/5/order_screen_app_bar.png)
 
-### Add the toasted and vegan switches
-
-Customers can choose whether their sandwich should be toasted or vegan. A `Switch` is Flutter's toggle control. It accepts a boolean `value` and an `onChanged` callback.
-
-Add two boolean fields to `_OrderScreenState`:
-
-```dart
-  bool _toasted = false;
-  bool _vegan = false;
-```
-
-Inside the `build` method, below the quantity buttons, add two rows for the switches:
-
-```dart
-            Row(
-              children: [
-                const Expanded(child: Text('Toasted')),
-                Switch(
-                  value: _toasted,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _toasted = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Expanded(child: Text('Vegan')),
-                Switch(
-                  value: _vegan,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _vegan = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-```
-
-Wrapping each label in `Expanded` causes the label to occupy all available horizontal space on the left, pushing the `Switch` to the right edge. When the user flips a switch, `onChanged` receives the new boolean and updates state using `setState`. For more details, see the [Switch documentation](https://api.flutter.dev/flutter/material/Switch-class.html).
-
-Your screen should look like this with the switches in place:
-
-![The order screen showing the toasted and vegan switches](images/5/order_screen_switches.png)
-
-### Add the note field with a text controller
-
-Next, add an optional text field where the customer can type special instructions for the kitchen.
-
-To read and manage text input in Flutter, you attach a `TextEditingController` to a `TextField`. Controllers manage native input state and must be disposed when the widget is removed to prevent memory leaks. This lifecycle is managed across three parts:
-
-1. `late TextEditingController _noteController;`: Declares the controller. The `late` keyword informs Dart that the field will be initialised before it is first accessed.
-2. `initState()`: Called once when the state object is created. We initialise the controller here.
-3. `dispose()`: Called once when the widget is removed from the widget tree. We call `_noteController.dispose()` here.
-
-Add the controller declaration and lifecycle methods to `_OrderScreenState`:
-
-```dart
-  late TextEditingController _noteController;
-
-  @override
-  void initState() {
-    super.initState();
-    _noteController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _noteController.dispose();
-    super.dispose();
-  }
-```
-
-Now add the `TextField` below the switches in `build`:
-
-```dart
-            TextField(
-              controller: _noteController,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Note for the kitchen',
-                hintText: 'Add any notes for this order',
-              ),
-            ),
-```
-
-The `maxLines: 3` parameter creates a multiline input box. The `InputDecoration` styles the input with an outline border, a floating label, and placeholder hint text. For further guidance, see the [TextEditingController documentation](https://api.flutter.dev/flutter/widgets/TextEditingController-class.html).
-
-The kitchen note field should look like this in your application:
-
-![The order screen showing the kitchen note text field](images/5/order_screen_note_field.png)
-
 ### Add items to the basket
 
-Now wire the form to `CartRepository`. Add imports for the cart model, repository, and primary button at the top of `lib/screens/order_screen.dart`:
+Now wire the screen to `CartRepository`. Add imports for the cart model, repository, and primary button at the top of `lib/screens/order_screen.dart`:
 
 ```dart
 import 'package:sandwich_shop/models/cart_item.dart';
@@ -810,15 +753,9 @@ Next, add the submission method `_addToBasket`:
 ```dart
   void _addToBasket() {
     if (_quantity > 0) {
-      final String note = _noteController.text.trim();
       final CartItem item = CartItem(
-        id: widget.sandwich.id,
-        name: widget.sandwich.name,
-        price: widget.sandwich.price,
+        sandwich: widget.sandwich,
         quantity: _quantity,
-        toasted: _toasted,
-        vegan: _vegan,
-        note: note,
       );
       CartRepository.instance.addItem(item);
       setState(() {
@@ -833,12 +770,12 @@ Next, add the submission method `_addToBasket`:
   }
 ```
 
-The method checks that `_quantity > 0`. If valid, it reads the note text from `_noteController.text.trim()`, constructs a `CartItem`, and passes it to `CartRepository.instance.addItem(item)`. It then updates `_confirmationMessage` inside `setState`. If the quantity is zero, it prompts the user to select at least one sandwich.
+The method checks that `_quantity > 0`. If valid, it constructs a `CartItem` holding `widget.sandwich` and `_quantity`, and passes it to `CartRepository.instance.addItem(item)`. It then updates `_confirmationMessage` inside `setState`. If the quantity is zero, it informs the user to select at least one sandwich.
 
-Add the button and confirmation message below the text field in `build`:
+Add the button and confirmation message below the quantity controls in `build`:
 
 ```dart
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: PrimaryButton(
@@ -853,17 +790,7 @@ Add the button and confirmation message below the text field in `build`:
             ),
 ```
 
-The `SizedBox` with `width: double.infinity` expands the button across the width of the screen.
-
-Your order screen should now look like this:
-
-![The completed order screen with switches, note field, and Add to Basket button](images/5/order_screen_complete.png)
-
-### Wrap the form in a scroll view
-
-On mobile devices, tapping a text input causes the virtual keyboard to slide up from the bottom. If the form is in a fixed column, the reduced vertical space causes an "overflow error".
-
-Wrap the entire form column in a `SingleChildScrollView`:
+Wrap the body column in a `SingleChildScrollView` to prevent screen layout issues:
 
 ```dart
       body: SingleChildScrollView(
@@ -893,43 +820,6 @@ Wrap the entire form column in a `SingleChildScrollView`:
               ],
             ),
             const SizedBox(height: 24),
-            Row(
-              children: [
-                const Expanded(child: Text('Toasted')),
-                Switch(
-                  value: _toasted,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _toasted = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Expanded(child: Text('Vegan')),
-                Switch(
-                  value: _vegan,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _vegan = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _noteController,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Note for the kitchen',
-                hintText: 'Add any notes for this order',
-              ),
-            ),
-            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: PrimaryButton(
@@ -947,11 +837,11 @@ Wrap the entire form column in a `SingleChildScrollView`:
       ),
 ```
 
-Keep the existing `OrderItemDisplay` class unchanged at the bottom of the file. For more details, see the [SingleChildScrollView documentation](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html).
+Keep the existing `OrderItemDisplay` class unchanged at the bottom of the file.
 
-### Widget test the order form
+### Widget test the order screen
 
-Create a new test file named `test/order_screen_test.dart`:
+Create a new test file named `test/order_screen_test.dart` to verify that selecting a quantity and tapping **Add to Basket** properly updates the cart repository:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -969,56 +859,45 @@ const Sandwich testSandwich = Sandwich(
   imagePath: 'assets/images/footlong.jpeg',
 );
 
-final Finder noteFieldFinder = find.byWidgetPredicate((Widget widget) {
-  return widget is TextField &&
-      widget.decoration?.labelText == 'Note for the kitchen';
-});
-
 void main() {
   setUp(() {
     CartRepository.instance.clear();
   });
 
-  testWidgets('OrderScreen shows two switches and one note field', (
+  testWidgets('OrderScreen shows quantity buttons and Add to Basket button', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
       const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
     );
 
-    expect(find.byType(Switch), findsNWidgets(2));
-    expect(noteFieldFinder, findsOneWidget);
+    expect(find.text('Order Test Sub'), findsOneWidget);
+    expect(find.text('0 Test Sub sandwich(es): '), findsOneWidget);
+    expect(find.text('Add'), findsOneWidget);
+    expect(find.text('Remove'), findsOneWidget);
+    expect(find.text('Add to Basket'), findsOneWidget);
   });
 
-  testWidgets('Toggling the toasted switch flips its value', (
+  testWidgets('Adding to basket without selecting quantity shows warning', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
       const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
     );
 
-    final Finder toastedSwitch = find.byType(Switch).first;
-    Switch switchWidget = tester.widget<Switch>(toastedSwitch);
-    expect(switchWidget.value, isFalse);
-
-    await tester.tap(toastedSwitch);
+    await tester.tap(find.text('Add to Basket'));
     await tester.pump();
 
-    switchWidget = tester.widget<Switch>(toastedSwitch);
-    expect(switchWidget.value, isTrue);
+    expect(find.text('Please select at least 1 sandwich'), findsOneWidget);
+    expect(CartRepository.instance.getItems(), isEmpty);
   });
 
-  testWidgets('Adding to basket records quantity, toggles and note', (
+  testWidgets('Adding to basket records quantity and sandwich', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
       const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
     );
-
-    await tester.enterText(noteFieldFinder, 'No pickles');
-
-    await tester.tap(find.byType(Switch).first);
-    await tester.pump();
 
     await tester.tap(find.text('Add'));
     await tester.pump();
@@ -1033,9 +912,9 @@ void main() {
 
     final CartItem added = items.first;
     expect(added.quantity, 2);
-    expect(added.toasted, isTrue);
-    expect(added.vegan, isFalse);
-    expect(added.note, 'No pickles');
+    expect(added.sandwich.id, 'test');
+    expect(added.sandwich.name, 'Test Sub');
+    expect(find.text('Added 2 Test Sub to basket'), findsOneWidget);
   });
 }
 ```
@@ -1077,26 +956,13 @@ class BasketScreen extends StatefulWidget {
 
 class _BasketScreenState extends State<BasketScreen> {
   String _confirmationMessage = '';
-
-  void _removeItem(int index) {
-    setState(() {
-      CartRepository.instance.removeItem(index);
-    });
-  }
-
-  void _checkout(CartRepository cart) {
-    setState(() {
-      cart.clear();
-      _confirmationMessage = 'Order placed!';
-    });
-  }
 ```
 
-The screen holds a `_confirmationMessage` string. Calling `_removeItem` removes the item at that index and triggers a rebuild with `setState`. Calling `_checkout` clears the repository and updates the confirmation message.
+The screen holds a `_confirmationMessage` string to display feedback when orders are placed.
 
 ### Build the empty basket state
 
-When the cart contains no items, we display a friendly empty state message. Add the `_buildEmptyState` helper inside `_BasketScreenState`:
+When the cart contains no items, we display an empty state message. Add the `_buildEmptyState` helper inside `_BasketScreenState`:
 
 ```dart
   Widget _buildEmptyState() {
@@ -1118,146 +984,134 @@ Your empty basket view should look like this in the running app:
 
 ### Build the basket item card
 
-Next, add a helper to format each item as a `Card` displaying its quantity, name, calculated line total, selected options, and a delete button:
+Next, add a helper to format each item as a row displaying its quantity, name, calculated line total, and a delete button:
 
 ```dart
-  Widget _buildItemCard(CartItem item, int index) {
-    final List<String> optionParts = [];
-    if (item.toasted) {
-      optionParts.add('Toasted');
-    }
-    if (item.vegan) {
-      optionParts.add('Vegan');
-    }
-    if (item.note.isNotEmpty) {
-      optionParts.add('Note: ${item.note}');
-    }
-
-    final Widget optionsWidget;
-    if (optionParts.isNotEmpty) {
-      optionsWidget = Padding(
-        padding: const EdgeInsets.only(top: 4.0),
-        child: Text(
-          optionParts.join(' • '),
-          style: const TextStyle(fontSize: 12, color: Colors.black54),
-        ),
-      );
-    } else {
-      optionsWidget = const SizedBox.shrink();
-    }
-
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${item.quantity} x ${item.name}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text('£${item.lineTotal.toStringAsFixed(2)}'),
-                  optionsWidget,
-                ],
-              ),
+  Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${item.quantity} x ${item.sandwich.name}',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text('£${item.lineTotal.toStringAsFixed(2)}'),
+              ],
             ),
-            IconButton(
-              icon: const Icon(Icons.delete_outline),
-              onPressed: () {
-                _removeItem(index);
-              },
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete_outline, color: Colors.red),
+            onPressed: () {
+              setState(() {
+                cart.removeItem(index);
+              });
+            },
+          ),
+        ],
       ),
     );
   }
 ```
 
-If the customer selected options or added a note, `optionParts.join(' • ')` combines them into a single descriptive subtitle. The `IconButton` with `Icons.delete_outline` calls `_removeItem(index)`.
+The `IconButton` with `Icons.delete_outline` calls `cart.removeItem(index)` inside `setState` to immediately remove the item and refresh the view.
 
 ### Build the basket items list and checkout button
 
-Now create a helper that assembles the section heading, item cards, total due row, and checkout button:
+Now create helpers that assemble the item cards, price breakdown, and checkout button:
 
 ```dart
-  Widget _buildBasketList(CartRepository cart, List<CartItem> items) {
-    final List<Widget> children = [];
-    children.add(
-      const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text('Your basket', style: shopSectionTitleStyle),
-      ),
-    );
-
-    for (int i = 0; i < items.length; i++) {
-      children.add(_buildItemCard(items[i], i));
+  Widget _buildTotalRow(String label, String value, {bool emphasise = false}) {
+    final TextStyle style;
+    if (emphasise) {
+      style = const TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+    } else {
+      style = const TextStyle(color: shopText);
     }
 
-    children.add(const SizedBox(height: 16));
-    children.add(
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Total',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '£${cart.getTotalDue().toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: style),
+          Text(value, style: style),
+        ],
       ),
     );
+  }
 
+  Widget _buildBasketList(CartRepository cart, List<CartItem> items) {
+    final List<Widget> children = [];
+
+    children.add(const Text('Your basket', style: shopSectionTitleStyle));
     children.add(const SizedBox(height: 16));
+
+    for (int index = 0; index < items.length; index++) {
+      final CartItem item = items[index];
+      children.add(_buildLineItem(cart, item, index));
+    }
+
+    children.add(const SizedBox(height: 24));
     children.add(
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SizedBox(
-          width: double.infinity,
-          child: PrimaryButton(
-            label: 'Checkout',
-            onPressed: () {
-              _checkout(cart);
-            },
-          ),
+      _buildTotalRow(
+        'Items subtotal',
+        '£${cart.getSubtotal().toStringAsFixed(2)}',
+      ),
+    );
+    children.add(
+      _buildTotalRow(
+        'Delivery',
+        '£${cart.getDeliveryFee().toStringAsFixed(2)}',
+      ),
+    );
+    children.add(
+      _buildTotalRow(
+        'Total to pay',
+        '£${cart.getTotalDue().toStringAsFixed(2)}',
+        emphasise: true,
+      ),
+    );
+    children.add(const SizedBox(height: 24));
+
+    children.add(
+      SizedBox(
+        width: double.infinity,
+        child: PrimaryButton(
+          label: 'Checkout',
+          onPressed: () {
+            setState(() {
+              cart.clear();
+              _confirmationMessage = 'Thanks, your order is on its way';
+            });
+          },
         ),
       ),
     );
 
     if (_confirmationMessage.isNotEmpty) {
+      children.add(const SizedBox(height: 12));
       children.add(
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Text(
-              _confirmationMessage,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
+        Text(
+          _confirmationMessage,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       );
     }
 
-    return ListView(children: children);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
   }
 ```
 
-The loop builds a card for every item, followed by a summary row with `cart.getTotalDue().toStringAsFixed(2)`. The Checkout button uses `PrimaryButton` and runs `_checkout(cart)`.
+The loop builds a row for every item, followed by rows for items subtotal, delivery fee, and the overall total. The **Checkout** button runs `cart.clear()` and sets the confirmation text.
 
 When items are present, your screen should look like this:
 
@@ -1277,14 +1131,13 @@ Finally, implement the `build` method to select between the empty state and the 
     if (items.isEmpty) {
       if (_confirmationMessage.isNotEmpty) {
         content = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildEmptyState(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                _confirmationMessage,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
+            const SizedBox(height: 12),
+            Text(
+              _confirmationMessage,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
         );
@@ -1300,13 +1153,14 @@ Finally, implement the `build` method to select between the empty state and the 
         title: const Text(appTitle, style: shopHeaderStyle),
         actions: const [BasketButton()],
       ),
-      body: content,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: content,
+      ),
     );
   }
 }
 ```
-
-Save the file. You can now add items from the order screen and view them in your basket.
 
 ### Widget test the basket screen
 
@@ -1316,8 +1170,17 @@ Create a new test file named `test/basket_screen_test.dart`:
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
+
+const Sandwich testSandwich = Sandwich(
+  id: 'footlong',
+  name: 'Footlong Sub',
+  description: 'Classic freshly baked sub.',
+  price: 10.0,
+  imagePath: 'assets/images/footlong.jpeg',
+);
 
 void main() {
   setUp(() {
@@ -1337,9 +1200,7 @@ void main() {
     'BasketScreen renders items and removes item when delete pressed',
     (WidgetTester tester) async {
       const CartItem item = CartItem(
-        id: 'footlong',
-        name: 'Footlong',
-        price: 10.0,
+        sandwich: testSandwich,
         quantity: 2,
       );
       CartRepository.instance.addItem(item);
@@ -1347,7 +1208,7 @@ void main() {
       await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
 
       expect(find.text('Your basket'), findsOneWidget);
-      expect(find.text('2 x Footlong'), findsOneWidget);
+      expect(find.text('2 x Footlong Sub'), findsOneWidget);
       expect(find.text('£20.00'), findsWidgets);
       expect(find.text('Checkout'), findsOneWidget);
 
@@ -1369,6 +1230,363 @@ flutter test test/basket_screen_test.dart
 ### Commit your changes (5)
 
 Stage `lib/screens/basket_screen.dart` and `test/basket_screen_test.dart`. Commit your changes with a message of your own.
+
+## Building the customer profile settings form
+
+Capturing user input through forms is a fundamental requirement in mobile applications. In this section, we create a customer profile screen that introduces Flutter's core form widgets: `TextField`, `TextEditingController`, and `Switch`.
+
+### Define the user settings model
+
+Create a new file named `lib/models/user_settings.dart` to hold customer preferences:
+
+```dart
+class UserSettings {
+  final String name;
+  final String address;
+  final String email;
+  final bool receiveNewsletter;
+
+  const UserSettings({
+    this.name = '',
+    this.address = '',
+    this.email = '',
+    this.receiveNewsletter = false,
+  });
+}
+```
+
+Create a new unit test named `test/user_settings_test.dart` to verify default and configured values:
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/models/user_settings.dart';
+
+void main() {
+  test('UserSettings defaults to empty values and false newsletter', () {
+    const UserSettings settings = UserSettings();
+    expect(settings.name, isEmpty);
+    expect(settings.address, isEmpty);
+    expect(settings.email, isEmpty);
+    expect(settings.receiveNewsletter, isFalse);
+  });
+
+  test('UserSettings stores configured values', () {
+    const UserSettings settings = UserSettings(
+      name: 'Taylor Reed',
+      address: '22 Guildhall Walk',
+      email: 'taylor@example.com',
+      receiveNewsletter: true,
+    );
+    expect(settings.name, 'Taylor Reed');
+    expect(settings.address, '22 Guildhall Walk');
+    expect(settings.email, 'taylor@example.com');
+    expect(settings.receiveNewsletter, isTrue);
+  });
+}
+```
+
+Run the unit tests:
+
+```bash
+flutter test test/user_settings_test.dart
+```
+
+### Text controllers and form lifecycle
+
+In Flutter, reading text from an input requires a `TextEditingController`. Controllers manage the native text state and cursor position. Because controllers consume operating system resources, you must dispose of them when the widget is unmounted to prevent memory leaks.
+
+This lifecycle is divided into three parts:
+
+1. Declaring fields: `late TextEditingController _nameController;`
+2. Initialisation in `initState()`: `_nameController = TextEditingController();`
+3. Disposal in `dispose()`: `_nameController.dispose();`
+
+For more details on controller management, see the [TextEditingController documentation](https://api.flutter.dev/flutter/widgets/TextEditingController-class.html).
+
+### Add text fields and the switch toggle
+
+Create a new file named `lib/screens/settings_screen.dart`:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:sandwich_shop/constants.dart';
+import 'package:sandwich_shop/models/user_settings.dart';
+import 'package:sandwich_shop/widgets/basket_button.dart';
+import 'package:sandwich_shop/widgets/primary_button.dart';
+
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() {
+    return _SettingsScreenState();
+  }
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  late TextEditingController _nameController;
+  late TextEditingController _addressController;
+  late TextEditingController _emailController;
+  bool _receiveNewsletter = false;
+  String _confirmationMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _addressController = TextEditingController();
+    _emailController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _addressController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  void _saveSettings() {
+    final String name = _nameController.text.trim();
+    final String address = _addressController.text.trim();
+    final String email = _emailController.text.trim();
+
+    final UserSettings settings = UserSettings(
+      name: name,
+      address: address,
+      email: email,
+      receiveNewsletter: _receiveNewsletter,
+    );
+
+    setState(() {
+      _confirmationMessage = 'Settings saved for ${settings.name}';
+    });
+  }
+```
+
+The `_saveSettings` method reads values from each controller, constructs a `UserSettings` instance, and stores a confirmation string.
+
+### Wrap the form in a scroll view
+
+On mobile devices, tapping any text field triggers the software keyboard to slide up from the bottom of the display. If the inputs sit in an unconstrained `Column`, the reduced vertical space causes a yellow-and-black striped layout overflow error. Wrapping the form in a `SingleChildScrollView` ensures that the screen can scroll smoothly whenever the keyboard appears. For further guidance, see the [SingleChildScrollView documentation](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html).
+
+Implement the `build` method inside `_SettingsScreenState`:
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(appTitle, style: shopHeaderStyle),
+        actions: const [BasketButton()],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Customer Profile',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Full name',
+                hintText: 'Enter your name',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _addressController,
+              maxLines: 3,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Delivery address',
+                hintText: 'Enter delivery address',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Email address',
+                hintText: 'Enter your email',
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Expanded(
+                  child: Text('Receive newsletter and offers'),
+                ),
+                Switch(
+                  value: _receiveNewsletter,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _receiveNewsletter = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: PrimaryButton(
+                label: 'Save Settings',
+                onPressed: _saveSettings,
+              ),
+            ),
+            if (_confirmationMessage.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Text(
+                _confirmationMessage,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+The `keyboardType: TextInputType.emailAddress` parameter configures the mobile virtual keyboard to show the `@` symbol. For more details on the toggle control, see the [Switch documentation](https://api.flutter.dev/flutter/material/Switch-class.html).
+
+### Create the settings button and register the route
+
+Create a reusable navigation button in `lib/widgets/settings_button.dart` to open the profile screen:
+
+```dart
+import 'package:flutter/material.dart';
+
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.person_outline),
+      tooltip: 'Settings',
+      onPressed: () {
+        final ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
+        final String currentRoute;
+        if (modalRoute != null) {
+          final RouteSettings routeSettings = modalRoute.settings;
+          final String? name = routeSettings.name;
+          if (name != null) {
+            currentRoute = name;
+          } else {
+            currentRoute = '';
+          }
+        } else {
+          currentRoute = '';
+        }
+
+        if (currentRoute != '/settings') {
+          Navigator.pushNamed(context, '/settings');
+        }
+      },
+    );
+  }
+}
+```
+
+Open `lib/main.dart` and register the `'/settings'` named route:
+
+```dart
+import 'package:sandwich_shop/screens/settings_screen.dart';
+```
+
+Add the route entry to `routes`:
+
+```dart
+        '/settings': (BuildContext context) {
+          return const SettingsScreen();
+        },
+```
+
+Now open `lib/screens/menu_screen.dart`, import `settings_button.dart`, and add `SettingsButton` to the app bar:
+
+```dart
+import 'package:sandwich_shop/widgets/settings_button.dart';
+```
+
+```dart
+      appBar: AppBar(
+        title: const Text(appTitle, style: shopHeaderStyle),
+        actions: const [SettingsButton(), BasketButton()],
+      ),
+```
+
+### Save settings and provide feedback
+
+Run the application on your computer or emulator. Tap the person icon in the top right to open the customer profile. Enter your name, delivery address, and email, toggle the newsletter switch, and click **Save Settings**. The application displays the confirmation message below the button.
+
+### Widget test the settings screen
+
+Create a new test file named `test/settings_screen_test.dart` to verify form interactions:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/screens/settings_screen.dart';
+
+void main() {
+  testWidgets('SettingsScreen displays form fields and switches', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+
+    expect(find.text('Customer Profile'), findsOneWidget);
+    expect(find.byType(TextField), findsNWidgets(3));
+    expect(find.byType(Switch), findsOneWidget);
+    expect(find.text('Save Settings'), findsOneWidget);
+  });
+
+  testWidgets('Toggling switch and saving settings updates state', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+
+    final Finder nameField = find.widgetWithText(TextField, 'Full name');
+    final Finder addressField =
+        find.widgetWithText(TextField, 'Delivery address');
+    final Finder emailField = find.widgetWithText(TextField, 'Email address');
+
+    await tester.enterText(nameField, 'Alex Smith');
+    await tester.enterText(addressField, '10 Elm Road, Portsmouth');
+    await tester.enterText(emailField, 'alex@example.com');
+
+    final Finder switchFinder = find.byType(Switch);
+    expect(tester.widget<Switch>(switchFinder).value, isFalse);
+    await tester.tap(switchFinder);
+    await tester.pump();
+    expect(tester.widget<Switch>(switchFinder).value, isTrue);
+
+    await tester.tap(find.text('Save Settings'));
+    await tester.pump();
+
+    expect(find.text('Settings saved for Alex Smith'), findsOneWidget);
+  });
+}
+```
+
+Run the settings widget tests:
+
+```bash
+flutter test test/settings_screen_test.dart
+```
+
+### Commit your changes (6)
+
+Stage `lib/models/user_settings.dart`, `lib/screens/settings_screen.dart`, `lib/widgets/settings_button.dart`, `lib/main.dart`, `lib/screens/menu_screen.dart`, `test/user_settings_test.dart`, and `test/settings_screen_test.dart`. Commit your changes with a message of your own.
 
 ## Loading the menu from JSON
 
@@ -1581,7 +1799,7 @@ The method reads the asset string asynchronously, parses the list, and uses a st
 flutter test
 ```
 
-### Commit your changes (6)
+### Commit your changes (7)
 
 Stage `assets/data/sandwiches.json`, `pubspec.yaml`, `lib/models/sandwich.dart`, `lib/repositories/sandwich_repository.dart`, and `test/sandwich_model_test.dart`. Commit your changes with a message of your own.
 
@@ -1593,12 +1811,12 @@ The exercises below apply the concepts from this worksheet to the Southsea Cinem
 
 2. Following [Reusable widgets and navigation](#reusable-widgets-and-navigation), extract your application's squared action buttons into a reusable widget using `ElevatedButton.styleFrom` and `RoundedRectangleBorder(borderRadius: BorderRadius.zero)`, matching the cinema site design.
 
-3. Following [Register named routes](#register-named-routes), configure named routes (`'/'`, `'/basket'`, etc.) on your cinema application's `MaterialApp` and connect an app bar navigation action button across your screens.
+3. Following [Register named routes](#register-named-routes), configure named routes (`'/'`, `'/basket'`, `'/settings'`) on your cinema application's `MaterialApp` and connect app bar navigation action buttons across your screens.
 
-4. Following [Holding an order in a basket](#holding-an-order-in-a-basket), build a `TicketCartItem` model and a `TicketCartRepository` singleton to store selected cinema tickets and refreshments. Write unit tests verifying that tickets can be added, removed, and totals accurately calculated.
+4. Following [Holding an order in a basket](#holding-an-order-in-a-basket), build a `BasketItem` model that composes film details and a quantity, and create a `BasketRepository` singleton to manage tickets. Write unit tests verifying that tickets can be added, removed, and totals accurately calculated.
 
-5. Following [Building the order form](#building-the-order-form), build a ticket booking screen with interactive switches (for example concessions or member discounts) and a note field managed by a `TextEditingController`. Wrap the form in a `SingleChildScrollView` to prevent keyboard overflow errors.
+5. Following [Building the customer profile settings form](#building-the-customer-profile-settings-form), build a `UserSettings` model and a `SettingsView` customer profile screen with `TextField`, `TextEditingController`, and `Switch`. Wrap the form in a `SingleChildScrollView` to prevent keyboard overflow errors.
 
 6. Following [Building the basket screen](#building-the-basket-screen), build a basket screen displaying booked tickets, line totals, a total summary row, and a checkout button. Verify your screen with automated widget tests using `testWidgets`.
 
-7. Following [Loading the menu from JSON](#loading-the-menu-from-json), move your film listings or ticket price tiers into a JSON asset file, register it in `pubspec.yaml`, and implement `fromJson` and `toJson` methods on your cinema models. **Show your running application with active cart navigation to a member of staff** for your progress sign-off.
+7. Following [Loading the menu from JSON](#loading-the-menu-from-json), move your film listings into a JSON asset file, register it in `pubspec.yaml`, and implement `fromJson` and `toJson` methods on your cinema models. **Show your running application with active cart and settings navigation to a member of staff** for your progress sign-off.
