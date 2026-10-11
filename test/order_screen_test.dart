@@ -13,8 +13,6 @@ const Sandwich testSandwich = Sandwich(
   imagePath: 'assets/images/footlong.jpeg',
 );
 
-// The quantity DropdownMenu renders its own TextField, so match the note
-// field by its label rather than by widget type alone.
 final Finder noteFieldFinder = find.byWidgetPredicate((Widget widget) {
   return widget is TextField &&
       widget.decoration?.labelText == 'Note for the kitchen';

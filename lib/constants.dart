@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 const String appTitle = 'Sandwich Shop';
 
-// Subway-inspired palette, kept minimal.
 const Color shopBrand = Color(0xFF008C15);
 const Color shopWhite = Colors.white;
 const Color shopBackground = Color(0xFFF5F5F0);
