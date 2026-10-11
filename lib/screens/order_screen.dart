@@ -10,7 +10,11 @@ class OrderScreen extends StatefulWidget {
   final Sandwich sandwich;
   final int maxQuantity;
 
-  const OrderScreen({super.key, required this.sandwich, this.maxQuantity = 10});
+  const OrderScreen({
+    super.key,
+    required this.sandwich,
+    this.maxQuantity = 10,
+  });
 
   @override
   State<OrderScreen> createState() {
@@ -20,22 +24,7 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
-  bool _toasted = false;
-  bool _vegan = false;
-  late TextEditingController _noteController;
   String _confirmationMessage = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _noteController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _noteController.dispose();
-    super.dispose();
-  }
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
@@ -55,15 +44,9 @@ class _OrderScreenState extends State<OrderScreen> {
 
   void _addToBasket() {
     if (_quantity > 0) {
-      final String note = _noteController.text.trim();
       final CartItem item = CartItem(
-        id: widget.sandwich.id,
-        name: widget.sandwich.name,
-        price: widget.sandwich.price,
+        sandwich: widget.sandwich,
         quantity: _quantity,
-        toasted: _toasted,
-        vegan: _vegan,
-        note: note,
       );
       CartRepository.instance.addItem(item);
       setState(() {
@@ -111,43 +94,6 @@ class _OrderScreenState extends State<OrderScreen> {
               ],
             ),
             const SizedBox(height: 24),
-            Row(
-              children: [
-                const Expanded(child: Text('Toasted')),
-                Switch(
-                  value: _toasted,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _toasted = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Expanded(child: Text('Vegan')),
-                Switch(
-                  value: _vegan,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _vegan = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _noteController,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Note for the kitchen',
-                hintText: 'Add any notes for this order',
-              ),
-            ),
-            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: PrimaryButton(

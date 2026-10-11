@@ -29,31 +29,6 @@ class _BasketScreenState extends State<BasketScreen> {
     );
   }
 
-  Widget _buildOptionsText(CartItem item) {
-    final List<String> parts = [];
-    if (item.toasted) {
-      parts.add('Toasted');
-    }
-    if (item.vegan) {
-      parts.add('Vegan');
-    }
-    if (item.note.isNotEmpty) {
-      parts.add('Note: ${item.note}');
-    }
-
-    if (parts.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: Text(
-        parts.join(' • '),
-        style: const TextStyle(fontSize: 12, color: Colors.black54),
-      ),
-    );
-  }
-
   Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -64,14 +39,14 @@ class _BasketScreenState extends State<BasketScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${item.quantity} x ${item.name}',
+                  '${item.quantity} x ${item.sandwich.name}',
                   style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
-                _buildOptionsText(item),
+                const SizedBox(height: 4),
+                Text('£${item.lineTotal.toStringAsFixed(2)}'),
               ],
             ),
           ),
-          Text('£${item.totalPrice.toStringAsFixed(2)}'),
           IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.red),
             onPressed: () {
