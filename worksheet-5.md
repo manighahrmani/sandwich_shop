@@ -12,7 +12,6 @@
   - [Import constants in the main app](#import-constants-in-the-main-app)
   - [Configure the Subway theme](#configure-the-subway-theme)
   - [Hide the debug banner](#hide-the-debug-banner)
-  - [Commit your changes (1)](#commit-your-changes-1)
 - [Reusable widgets and navigation](#reusable-widgets-and-navigation)
   - [Build the primary button](#build-the-primary-button)
   - [Widget test the primary button](#widget-test-the-primary-button)
@@ -137,45 +136,13 @@ A `TextStyle` describes text formatting such as font size and weight. The `fontW
 
 ### Import constants in the main app
 
-Now open `lib/main.dart`. In branch 4, the root widget was defined like this:
+Now open `lib/main.dart` and import our new constants file at the top of `lib/main.dart` with `import 'package:sandwich_shop/constants.dart'`.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:sandwich_shop/screens/menu_screen.dart';
+Then update the `title` property of `MaterialApp` to use `appTitle` instead of the hardcoded string. Because `appTitle` is a top-level constant, `MaterialApp` can read it directly.
 
-void main() {
-  runApp(const App());
-}
+See below where we are showing the changes to our `lib/main.dart` file in VS Code:
 
-class App extends StatelessWidget {
-  const App({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Sandwich Shop App',
-      home: MenuScreen(),
-    );
-  }
-}
-```
-
-Import our new constants file at the top of `lib/main.dart`:
-
-```dart
-import 'package:sandwich_shop/constants.dart';
-```
-
-Then update the `title` property of `MaterialApp` to use `appTitle` instead of the hardcoded string:
-
-```dart
-    return const MaterialApp(
-      title: appTitle,
-      home: MenuScreen(),
-    );
-```
-
-Because `appTitle` is a top-level constant, `MaterialApp` can read it directly.
+![Importing constants and using appTitle in VS Code](images/5/import_constants.png)
 
 ### Configure the Subway theme
 
@@ -196,7 +163,13 @@ Next, apply our custom brand colours to the whole application using `ThemeData`.
       ),
 ```
 
-The `theme` property accepts a `ThemeData` object containing global styles and colour tokens. `ColorScheme.fromSeed` generates a balanced palette around a single seed colour, which we set to `shopBrand`. The `scaffoldBackgroundColor` sets the default background colour for every `Scaffold` in the app. The `appBarTheme` styles all app bars with our brand green background, white foreground text and icons, and removes the drop shadow with `elevation: 0`. For more details, consult the [ThemeData documentation](https://api.flutter.dev/flutter/material/ThemeData-class.html) and [ColorScheme documentation](https://api.flutter.dev/flutter/material/ColorScheme-class.html).
+The `theme` property accepts a `ThemeData` object containing global styles and colour tokens. `ColorScheme.fromSeed` generates a palette around a single seed colour, which we set to `shopBrand`. The `scaffoldBackgroundColor` sets the default background colour for every `Scaffold` in the app.
+
+The `appBarTheme` styles all app bars with our brand green background, white foreground text and icons, and removes the drop shadow with `elevation: 0`. For more details, view the [ThemeData documentation](https://api.flutter.dev/flutter/material/ThemeData-class.html) and [ColorScheme documentation](https://api.flutter.dev/flutter/material/ColorScheme-class.html).
+
+Here is a summary of our changes:
+
+![Themed app bar and background in VS Code](images/5/themed_app_bar.png)
 
 Run the application with `flutter run` in your terminal. Your screen should look like this, with the new green app bar and the debug banner in the corner:
 
@@ -204,37 +177,15 @@ Run the application with `flutter run` in your terminal. Your screen should look
 
 ### Hide the debug banner
 
-Notice the small red or grey ribbon in the top-right corner that reads "DEBUG". Flutter displays this ribbon to indicate that the application is running in an unoptimised debug build. While harmless, you can hide it during development to preview how the final app looks.
+Notice the small red or grey ribbon in the top-right corner that reads "DEBUG". Flutter displays this ribbon to indicate that the application is running in an unoptimised debug build. It's harmless but you can hide it during development to preview how the final app looks.
 
-Add `debugShowCheckedModeBanner: false` directly inside `MaterialApp`:
-
-```dart
-    return MaterialApp(
-      title: appTitle,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: shopBrand,
-          primary: shopBrand,
-        ),
-        scaffoldBackgroundColor: shopBackground,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: shopBrand,
-          foregroundColor: shopWhite,
-          elevation: 0,
-        ),
-      ),
-      home: const MenuScreen(),
-    );
-```
-
-Save the file and trigger hot reload. The debug ribbon disappears from the top-right corner, as shown below:
+Add `debugShowCheckedModeBanner: false` directly inside `MaterialApp` as shown below:
 
 ![The menu screen with the debug ribbon removed](images/5/debug_banner_removed.png)
 
-### Commit your changes (1)
+Save the file and trigger hot reload. The debug ribbon disappears from the top-right corner:
 
-Open your terminal or the Source Control panel. Stage `lib/constants.dart` and `lib/main.dart`, then commit your changes with a short, descriptive message of your own.
+![The menu screen with the debug ribbon removed](images/5/debug_banner_removed_app.png)
 
 ## Reusable widgets and navigation
 
@@ -242,9 +193,9 @@ Before adding form inputs or cart state, we construct reusable navigation compon
 
 ### Build the primary button
 
-Several screens in our app require a wide green action button. Rather than repeating identical `ElevatedButton` styling in multiple files, we extract it into a standalone widget.
+Let's suppose we need a button that gets styled consistently across the app, in multiple screens. Rather than repeating identical `ElevatedButton` styling in multiple files, it's best to extract it into a standalone widget.
 
-Create a new file named `lib/widgets/primary_button.dart`:
+Create a new file named `lib/widgets/primary_button.dart` and add the following code inside it:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -274,15 +225,17 @@ class PrimaryButton extends StatelessWidget {
 }
 ```
 
-Your widget code should look like this in VS Code:
+`PrimaryButton` is a `StatelessWidget` with two properties: `label` for the button caption, and `onPressed` for the tap callback. The type `VoidCallback` represents a function that takes no arguments and returns nothing. `ElevatedButton.styleFrom` configures the green background and white text from our constants file.
 
-![The PrimaryButton widget code in VS Code](images/5/primary_button_code.png)
+Here is the documentation page on [ElevatedButton](https://api.flutter.dev/flutter/material/ElevatedButton-class.html). But there are other kinds of buttons in Flutter, such as `TextButton` and `OutlinedButton`. For more information on them, feel free to check out the [Flutter buttons documentation](https://docs.flutter.dev/development/ui/widgets/material#buttons).
 
-`PrimaryButton` is a `StatelessWidget` with two properties: `label` for the button caption, and `onPressed` for the tap callback. The type `VoidCallback` represents a function that takes no arguments and returns nothing. `ElevatedButton.styleFrom` configures the green background and white text from our constants file. For more details on button styling, see the [ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html).
+We will use `PrimaryButton` in multiple screens later but first we need to write tests for it.
 
 ### Widget test the primary button
 
-A reusable widget should be verified with automated tests. Create a new test file named `test/widgets/primary_button_test.dart`:
+Every (reusable) widget should be verified with automated tests. Create a new test file named `test/widgets/primary_button_test.dart`. Notice that the name of the subfolder in `test` folder matches the name of the folder in `lib`. This is a common convention for organising widget tests (so here, we have a `test/widgets` folder for testing widgets in `lib/widgets`).
+
+Add the following code to `test/widgets/primary_button_test.dart`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -330,7 +283,11 @@ void main() {
 }
 ```
 
-The first test confirms that the button renders the text passed to its label. The second test passes a callback that flips a boolean flag, simulates a user tap with `tester.tap`, and asserts that the callback executed. Run this test suite in your terminal:
+The first test confirms that the button renders the text passed to its label. The second test passes a callback that flips a boolean flag, simulates a user tap with `tester.tap`, and asserts that the callback executed.
+
+Feel free to add a `group` to organise these tests. You are also encouraged to organise the rest of the files in `test` folder in a similar way, for example, you can create a `test/screens` folder for testing screens in `lib/screens` and `test/models` folder for testing models in `lib/models`.
+
+Run this test using the play button in VS Code or the following command in your terminal:
 
 ```bash
 flutter test test/widgets/primary_button_test.dart
@@ -344,39 +301,9 @@ Now update `lib/widgets/sandwich_card.dart` so each menu item uses our new butto
 import 'package:sandwich_shop/widgets/primary_button.dart';
 ```
 
-Then locate the `ElevatedButton` inside the card's `build` method:
+Then locate the `ElevatedButton` inside the card's `build` method and replace it with `PrimaryButton`. Here what the change should look like:
 
-```dart
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OrderScreen(sandwich: sandwich),
-                      ),
-                    );
-                  },
-                  child: const Text('Order'),
-                ),
-```
-
-Replace it with `PrimaryButton`, using explicit type annotations on the route builder:
-
-```dart
-                PrimaryButton(
-                  label: 'Order',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return OrderScreen(sandwich: sandwich);
-                        },
-                      ),
-                    );
-                  },
-                ),
-```
+![The SandwichCard widget using PrimaryButton in VS Code](images/5/sandwich_card_primary_button.png)
 
 Save the file and check your running application. Each menu card now displays the styled green Order button, as shown below:
 
@@ -384,9 +311,9 @@ Save the file and check your running application. Each menu card now displays th
 
 ### Create the basket button
 
-Every screen in our application needs a shopping basket icon in its app bar that takes the user to their basket. Extracting this into a widget prevents duplicated navigation code.
+Let's add another reusable widget for the shopping basket icon button. Every screen in our application needs a shopping basket icon in its app bar that takes the user to their basket.
 
-Create a new file named `lib/widgets/basket_button.dart`:
+Create a new file named `lib/widgets/basket_button.dart` and make a `StatelessWidget` that displays a shopping basket icon and navigates to the basket screen when tapped:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -399,7 +326,17 @@ class BasketButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.shopping_basket),
       onPressed: () {
-        final String currentRoute = ModalRoute.of(context)?.settings.name ?? '';
+        ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
+        String currentRoute = '';
+
+        if (modalRoute != null) {
+          RouteSettings settings = modalRoute.settings;
+          String? routeName = settings.name;
+          if (routeName != null) {
+            currentRoute = routeName;
+          }
+        }
+
         if (currentRoute != '/basket') {
           Navigator.pushNamed(context, '/basket');
         }
@@ -409,11 +346,13 @@ class BasketButton extends StatelessWidget {
 }
 ```
 
-Your code should look like this in VS Code:
+`IconButton` displays an icon from Flutter's Material icon set (`Icons.shopping_basket`). Feel free to remove `shopping_basket`, put your cursor at the dot, and press **Ctrl + Space** on Windows or **⌘ + Space** on macOS to see a list of available icons. You can check out the [documentation page on Material icons](https://api.flutter.dev/flutter/material/Icons-class.html) for a complete list of icons.
 
-![The BasketButton widget code in VS Code](images/5/basket_button_code.png)
+![The list of available Material icons in VS Code](images/5/material_icons.png)
 
-`IconButton` displays an icon from Flutter's Material icon set (`Icons.shopping_basket`). Inside `onPressed`, `ModalRoute.of(context)?.settings.name` checks the name of the current route. If the user is not already on the basket screen, `Navigator.pushNamed(context, '/basket')` opens it. If they are already on the basket screen, nothing happens, preventing unnecessary duplicate screens in the navigation stack.
+Inside `onPressed`, we check the name of the current route using `ModalRoute.of(context)`. We discussed `context` back in [Worksheet 3](./worksheet-3.md) when we built the `SandwichCard` widget. It is a handle to the location of a widget in the widget tree, and it allows us to access the current route. A route is essentially a screen in the app. So for example if we are on the menu screen, the current route is `'/'`. If we are on the basket screen, the current route is `'/basket'`.
+
+If a modal route exists, we retrieve its `RouteSettings` and extract its route name. If the user is not already on the basket screen, `Navigator.pushNamed(context, '/basket')` opens it. If they are already on the basket screen, nothing happens. This practice prevents unnecessary duplicate screens in the navigation stack.
 
 ### Create the placeholder basket screen
 
@@ -437,10 +376,6 @@ class BasketScreen extends StatelessWidget {
   }
 }
 ```
-
-Your placeholder screen should look like this in VS Code:
-
-![The initial BasketScreen code in VS Code](images/5/basket_screen_shell.png)
 
 We will build the complete stateful basket screen later in this worksheet. For now, this placeholder enables navigation between screens.
 
@@ -470,49 +405,7 @@ In `App.build`, remove `home: const MenuScreen()` and replace it with `initialRo
 
 The `initialRoute: '/'` property instructs Flutter to open the menu screen on launch. The `routes` map associates `'/'` with `MenuScreen` and `'/basket'` with `BasketScreen`. Your complete `lib/main.dart` should now look like this:
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:sandwich_shop/constants.dart';
-import 'package:sandwich_shop/screens/basket_screen.dart';
-import 'package:sandwich_shop/screens/menu_screen.dart';
-
-void main() {
-  runApp(const App());
-}
-
-class App extends StatelessWidget {
-  const App({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: appTitle,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: shopBrand,
-          primary: shopBrand,
-        ),
-        scaffoldBackgroundColor: shopBackground,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: shopBrand,
-          foregroundColor: shopWhite,
-          elevation: 0,
-        ),
-      ),
-      initialRoute: '/',
-      routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) {
-          return const MenuScreen();
-        },
-        '/basket': (BuildContext context) {
-          return const BasketScreen();
-        },
-      },
-    );
-  }
-}
-```
+![The main.dart file with named routes in VS Code](images/5/main_with_named_routes.png)
 
 For more details on routing, see the [Flutter named routes documentation](https://docs.flutter.dev/cookbook/navigation/named-routes).
 
@@ -525,26 +418,15 @@ import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 ```
 
-In `MenuScreen.build`, update the `AppBar` to use `appTitle`, `shopHeaderStyle`, and add `BasketButton` to its `actions`:
+In `MenuScreen.build`, update the `AppBar` to use `appTitle`, `shopHeaderStyle` first. Also add the `BasketButton` to the `actions` list as shown in the screenshot below:
 
-```dart
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton()],
-      ),
-      body: ListView.builder(
-        itemCount: sandwiches.length,
-        itemBuilder: (BuildContext context, int index) {
-          return SandwichCard(sandwich: sandwiches[index]);
-        },
-      ),
-    );
-```
+![The menu screen app bar with the styled title and basket button in VS Code](images/5/menu_app_bar_basket_button_code.png)
 
 The `actions` property accepts a list of widgets displayed on the trailing side of the app bar. Save the file. The menu screen app bar now shows the styled title and the basket icon button, as shown below:
 
 ![The menu screen app bar with the Subway green styling and basket icon button](images/5/menu_app_bar_basket_button.png)
+
+<!-- TODO: Done till here -->
 
 ### Widget test the menu screen
 

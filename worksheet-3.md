@@ -280,7 +280,9 @@ This is what your `SandwichCard` class should look like at this point:
 
 ![The SandwichCard class with a constructor for the Sandwich object](images/3/sandwich_card_class.png)
 
-You should expect a "Missing concrete implementation of 'StatelessWidget.build'." error at this point because we haven't added the `build` method yet. So make one (similar to `OrderItemDisplay` in `main.dart`). For now, have the build method take a `BuildContext` and return a `Widget`. The widget for now can be a `Card` with a single child `Column`. Your `build` method should look like this:
+You should expect a "Missing concrete implementation of 'StatelessWidget.build'." error at this point because we haven't added the `build` method yet. So make one (similar to `OrderItemDisplay` in `main.dart`). For now, have the build method take a `BuildContext` and return a `Widget`. `context` is a handle to the location of a widget in the widget tree. In simple terms, it is a reference to the current screen. You will use it later to navigate to the order screen when the user taps the Order button.
+
+The widget for now can be a `Card` with a single child `Column`. Your `build` method should look like this:
 
 ```dart
   @override
