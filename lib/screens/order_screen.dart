@@ -46,9 +46,25 @@ class _OrderScreenState extends State<OrderScreen> {
 
   Future<void> _loadSavedOptions() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool toasted = prefs.getBool(prefToasted) ?? false;
-    final bool vegan = prefs.getBool(prefVegan) ?? false;
-    final String note = prefs.getString(prefNote) ?? '';
+    final bool? savedToasted = prefs.getBool(prefToasted);
+    final bool? savedVegan = prefs.getBool(prefVegan);
+    final String? savedNote = prefs.getString(prefNote);
+
+    bool toasted = false;
+    if (savedToasted != null) {
+      toasted = savedToasted;
+    }
+
+    bool vegan = false;
+    if (savedVegan != null) {
+      vegan = savedVegan;
+    }
+
+    String note = '';
+    if (savedNote != null) {
+      note = savedNote;
+    }
+
     if (!mounted) {
       return;
     }
