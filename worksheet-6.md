@@ -139,9 +139,25 @@ First add the loader. It reads the three values and copies them into the screen'
 ```dart
   Future<void> _loadSavedOptions() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool toasted = prefs.getBool(prefToasted) ?? false;
-    final bool vegan = prefs.getBool(prefVegan) ?? false;
-    final String note = prefs.getString(prefNote) ?? '';
+    final bool? savedToasted = prefs.getBool(prefToasted);
+    final bool? savedVegan = prefs.getBool(prefVegan);
+    final String? savedNote = prefs.getString(prefNote);
+
+    bool toasted = false;
+    if (savedToasted != null) {
+      toasted = savedToasted;
+    }
+
+    bool vegan = false;
+    if (savedVegan != null) {
+      vegan = savedVegan;
+    }
+
+    String note = '';
+    if (savedNote != null) {
+      note = savedNote;
+    }
+
     if (!mounted) {
       return;
     }
@@ -153,7 +169,7 @@ First add the loader. It reads the three values and copies them into the screen'
   }
 ```
 
-`SharedPreferences.getInstance()` hands back the shared store, which we `await`. Then `prefs.getBool(prefToasted)` reads the saved toasted flag. The first time the app runs, nothing is stored yet, so that call returns `null`. The `??` operator handles this: it is the null-coalescing operator, and `prefs.getBool(prefToasted) ?? false` means "use the stored value, or `false` when it is null". The operator evaluates to its right-hand side only when the left-hand side is null, and to the left-hand side otherwise. We default the two booleans to `false` and the note to the empty string.
+`SharedPreferences.getInstance()` hands back the shared store, which we `await`. Then `prefs.getBool(prefToasted)` reads the saved toasted flag. The first time the app runs, nothing is stored yet, so that call returns `null`. We assign the retrieved nullable values to local variables, and use `if` statements to check if values were found, defaulting the two booleans to `false` and the note to the empty string when no stored data exists.
 
 The `if (!mounted) return;` check is new. After an `await`, time has passed and the user may already have left this screen, which disposes its `State`. Calling `setState` on a disposed `State` is an error, so we first check `mounted`, which is `true` only while the `State` is still on screen, and return early if it is not, calling `setState` only when the screen is still displayed.
 
@@ -577,7 +593,17 @@ class OrdersButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.receipt_long),
       onPressed: () {
-        final String currentRoute = ModalRoute.of(context)?.settings.name ?? '';
+        ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
+        String currentRoute = '';
+
+        if (modalRoute != null) {
+          RouteSettings settings = modalRoute.settings;
+          String? routeName = settings.name;
+          if (routeName != null) {
+            currentRoute = routeName;
+          }
+        }
+
         if (currentRoute != '/orders') {
           Navigator.pushNamed(context, '/orders');
         }
@@ -1654,3 +1680,7 @@ The exercises below apply the concepts from this worksheet to the Southsea Cinem
 6. Following [Testing persistence](#testing-persistence), write a shared preferences test using `SharedPreferences.setMockInitialValues` for your remembered options, and an in-memory SQLite test using `sqfliteFfiInit`, `databaseFactoryFfi`, and `inMemoryDatabasePath` for your bookings.
 
 7. Decide what matters most about your Demo 3 experience and prove it works: cover the behaviour you care about with automated tests, and make sure `dart analyze` and `flutter test` both pass cleanly. **Show your running application with live SQLite booking persistence to a member of staff** for your Demo 3 sign-off.
+
+8. (Advanced challenge — Focus management and input controls) Following the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input), enrich your cinema settings or booking form with programmatic focus management and user controls. Use a `FocusNode` to focus the primary input field automatically when entering edit mode with `focusNode.requestFocus()`, add an `IconButton` inside the input decoration to clear text using `controller.clear()`, and clean up your `FocusNode` in `dispose`.
+
+9. (Advanced challenge — Test directory mirroring and coverage) Prepare ahead for Demo 4 requirements by restructuring your `test/` directory to strictly mirror the organisation of `lib/` (for example `test/models/`, `test/views/`, `test/repositories/`, `test/database/`, `test/widgets/`). Install the Flutter Coverage extension in VS Code and run `flutter test --coverage` in the terminal to inspect line-by-line coverage and identify untested branches across your models and repositories.

@@ -43,7 +43,15 @@ percentages below are shares of Item 1:
 - Functionality is worth 9%: you run your app and show that it implements the
   features expected for this stage from the worksheet exercises.
 - Code quality is worth 8%: a member of staff inspects your code, looking at
-  naming, formatting, structure, and separation of concerns.
+  naming, formatting, structure, and separation of concerns. From Demo 4
+  onwards, a significant portion of these marks is awarded for project
+  structure and automated test coverage. Your `test/` folder must strictly
+  mirror the organisation of folders in `lib/` (such as `test/models/`,
+  `test/screens/`, `test/widgets/`, `test/repositories/`, `test/database/`),
+  and you must generate coverage with `flutter test --coverage` and demonstrate
+  it live using the Flutter Coverage extension in VS Code. Leaving test files
+  unorganised in the root of `test/` or having inadequate test coverage will
+  result in a substantial loss of marks.
 - Understanding is worth 8%: you answer two questions about your own code and
   the decisions behind it.
 

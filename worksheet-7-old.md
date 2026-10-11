@@ -1584,30 +1584,18 @@ flutter pub add --dev sqflite_common_ffi
 
 Read more about it in the [official documentation](https://pub.dev/packages/sqflite_common_ffi). Once you have added all the tests, make sure to manually check to make sure all functionality is tested and that all tests pass by running `flutter test`.
 
-We have not mentioned committing your changes in this section but we would ideally want you to commit each step of the way. For example, after creating the model, after creating the service, after updating the checkout screen, and after creating the order history screen. Well done if you have completed the worksheet up to this point!
+Well done if you have completed the worksheet up to this point!
 
-## **Exercises**
+## Exercises
 
-This week we have had a heavy worksheet so we will keep the exercises light. Complete the following exercises at your own pace.
+The exercises below apply the concepts from this worksheet to the Southsea Cinema coursework application. They prepare you for Demo 4 of your coursework. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-1. Our codebase currently has a lot of redundancy and inconsistencies. For example, the app bar is implemented separately in each screen, and the cart indicator is also duplicated.
+1. Organise your `test/` directory so that its structure strictly mirrors the organisation of folders in `lib/`. As introduced in [Worksheet 5](./worksheet-5.md), widget tests belong in `test/widgets/` matching `lib/widgets/`. Move all existing test files into their corresponding mirrored subdirectories: models into `test/models/`, screens into `test/screens/`, repositories into `test/repositories/`, and database helpers into `test/database/`. Ensure that no loose test files remain in the root of `test/`.
 
-   You can choose to place duplicated code (widgets) in a separate file, ideally called `common_widgets.dart` inside the `views` folder and import it wherever needed. You can for example, take your solution to the second exercise form [Worksheet 6](worksheet-6.md#exercises) and place it there. Think about what else can be placed there to decrease redundancy and declutter your codebase.
+2. Install the Flutter Coverage extension in VS Code. Run your tests with coverage in the terminal by executing `flutter test --coverage` to generate `coverage/lcov.info`. In VS Code, open the Flutter Coverage panel or toggle the editor coverage gutters to inspect line-by-line coverage and test execution across your files. Write additional unit and widget tests to cover any uncovered branches and methods in your models, repositories, and state logic.
 
-   The goal of this exercise is to eliminate duplication, standardize the look of the app across all screens, and ideally add a more consistent navigation experience.
+3. Eliminate duplication across your cinema screens by extracting shared widgets into `lib/widgets/`. For example, create a shared cinema app bar, movie card, or action button matching the live Southsea Cinema site design (`RoundedRectangleBorder(borderRadius: BorderRadius.zero)`). Update your screens to use these reusable widgets and ensure each widget has a corresponding test in `test/widgets/`.
 
-   **Describe your changes and show the app to a staff member** for a sign-off (e.g., show them the file(s) containing the common widgets and how you have used them across the app).
+4. Extend your application state management by integrating a `ChangeNotifier` provider for your ticket booking and basket state. Ensure screens update reactively when tickets or refreshments are added or removed, and write tests in `test/models/` and `test/screens/` verifying state updates.
 
-2. (Advanced) Our database operations so far are only limited to creating a table, inserting and reading data. You are already familiar with SQL commands like `UPDATE` and `DELETE` from your previous database module.
-
-   Extend the functionality of the order history screen to allow users to modify their orders after a certain period of time (e.g., 5 minutes after placing the order).
-
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
-
-3. (Advanced) We've shown you examples of unit testing and widget testing so far. Another type of testing is integration testing, which tests the complete app or a large part of it.
-
-   In Flutter, integration tests are written using the `integration_test` package. You can read more about it in the [official documentation](https://docs.flutter.dev/testing/integration-tests). We will cover this topic in more detail in the next worksheet but you are welcome to explore it now.
-
-   As a solid goal, write integration tests that cover the main user flows in your app, such as placing an order from start to finish.
-
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+5. From Demo 4 onwards, project structure and test coverage bear a significant proportion of your demo marks under code quality. Verify that `flutter test --coverage` passes with all tests green and that coverage is visible in the VS Code extension. **Show your restructured project directory, running tests, live test coverage in VS Code, and running application to a member of staff** for your Demo 4 sign-off.

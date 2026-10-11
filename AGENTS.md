@@ -200,6 +200,21 @@ clarity, expressiveness, and ease of understanding for students:
   - Worksheets 3 & 4 concepts used: Class definitions, repository pattern,
     explicit procedural `for-in` loops (no arrow syntax or functional chained
     methods), and unit/widget tests (`test`, `expect`, `testWidgets`).
+  - Worksheets 5 & 6 concepts used: Shared constants, theme configuration,
+    navigation and named routes, reusable widgets, form state (`Switch`,
+    `TextField`, `TextEditingController`), shared preferences, and SQLite
+    persistence (`sqflite`, `sqflite_common_ffi`).
+  - Worksheets 7 & 8 concepts used: App state management (`provider` or
+    `ChangeNotifier`), integration tests, cloud services.
+  - Test folder organisation rule: Starting Worksheet 8 (and branch 8), the
+    `test/` directory structure must strictly mirror the organisation of
+    folders in `lib/` (for example `test/models/`, `test/screens/`,
+    `test/widgets/`, `test/repositories/`, `test/database/`).
+  - Demo 4 onwards assessment requirements: From Demo 4 onwards (and Worksheet 7
+    onwards), test coverage using the editor extension (`flutter test --coverage`
+    visualised with the Flutter Coverage extension) and a test directory
+    structure mirroring `lib/` are mandatory requirements that bear a
+    significant portion of marks during practical demos.
 - Critical constraint: never refactor or simplify worksheet code snippets or
   application code at the expense of breaking existing screenshots or
   instructions in the worksheets. If an existing screenshot displays shorthand

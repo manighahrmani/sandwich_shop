@@ -133,7 +133,7 @@ Your module (PAPL — M30235, or UXDI — M32605, depending on your cohort) has 
 
 You develop your coursework by completing the exercises at the end of each weekly worksheet. Every two worksheets prepare you for one demo (for example, Worksheets 1 and 2 prepare you for Demo 1). You submit the link to your public GitHub repository on Moodle before the first demo, then attend your practical to demonstrate your work. Marks are awarded only at the demos.
 
-There are five demos across the term, but only your best four demo marks count towards Item 1. Each counted demo is worth 25% of Item 1 (12.5% of the overall module mark). At each demo a member of staff assesses functionality (9% of Item 1) by watching you run your app, inspects code quality (8%), and asks two questions to test your understanding of your own code (8%).
+There are five demos across the term, but only your best four demo marks count towards Item 1. Each counted demo is worth 25% of Item 1 (12.5% of the overall module mark). At each demo a member of staff assesses functionality (9% of Item 1) by watching you run your app, inspects code quality (8%), and asks two questions to test your understanding of your own code (8%). From Demo 4 onwards, the code quality component places significant weight on project structure and automated test coverage. Specifically, your `test/` directory must strictly mirror the organisation of folders in `lib/` (such as `test/models/`, `test/screens/`, `test/widgets/`, `test/repositories/`, `test/database/`), and you must generate test coverage with `flutter test --coverage` and demonstrate it live using the Flutter Coverage extension in VS Code. Leaving test files unorganised in the root of `test/` or having inadequate test coverage will result in a substantial mark penalty.
 
 Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks 3 and 4, Weeks 5 and 6, Weeks 7 and 8, and Weeks 9 and 10). Three rules apply:
 
@@ -180,9 +180,26 @@ southsea_cinema/
 │   └── widget_test.dart        # Basic widget test
 ├── pubspec.yaml                # Project dependencies
 └── README.md                   # This file
-```
+You are expected to create additional files and directories as needed to complete the coursework. From Demo 4 onwards, your `test/` directory must be reorganised so that its subdirectories strictly mirror `lib/`:
 
-Note that this is the initial structure. You are expected to create additional files and directories as needed to complete the coursework, and you can reorganise the project structure as you see fit.
+```text
+southsea_cinema/
+├── lib/
+│   ├── constants.dart
+│   ├── database/
+│   ├── models/
+│   ├── repositories/
+│   ├── screens/
+│   └── widgets/
+├── test/
+│   ├── database/
+│   ├── models/
+│   ├── repositories/
+│   ├── screens/
+│   └── widgets/
+├── pubspec.yaml
+└── README.md
+```
 
 ## Retrieval of failure
 
