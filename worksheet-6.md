@@ -35,6 +35,7 @@
   - [Commit your changes (6)](#commit-your-changes-6)
 - [Running the app on a mobile emulator](#running-the-app-on-a-mobile-emulator)
   - [Lab machines: the Android emulator beta bundle](#lab-machines-the-android-emulator-beta-bundle)
+  - [Inspecting the database](#inspecting-the-database)
   - [Your own Windows or Mac laptop: Android Studio](#your-own-windows-or-mac-laptop-android-studio)
   - [Mac only: the iOS simulator](#mac-only-the-ios-simulator)
 - [Testing persistence](#testing-persistence)
@@ -963,6 +964,8 @@ Earlier worksheets set up the lab machines with a portable Flutter and VS Code b
 
 On top of the normal portable environment, the beta bundle ships a JDK, a command-line Android SDK, and a pre-made virtual device, an AVD named `flutter_emulator`. Like the main script, it finishes by opening VS Code on your cloned project, so you land in the same place as before with the extra tooling in place. The beta is experimental and needs hardware acceleration enabled on the machine, which the lab machines already have.
 
+This Android bundle is a separate, larger installer that takes significantly longer to run than the normal bundle, and you only need it from Worksheet 6 onwards, because this is the first worksheet whose app uses a SQLite database; for Worksheets 1 to 5 the normal bundle plus Edge is enough.
+
 Install it by running the beta script in a PowerShell terminal on Windows:
 
 ```bash
@@ -1000,6 +1003,23 @@ Either way, the app launches inside the emulator.
 Now place an order, check out, and confirm it appears on the orders page. Then fully close the app and reopen it: the order is still there, because SQLite saved it to a real file in the emulator's private folder.
 
 <!-- TODO screenshot: images/6/orders_page_on_emulator.png — the orders page on the emulator showing the order that persisted after closing and reopening the app -->
+
+### Inspecting the database
+
+The database file lives inside the emulator, in the app's own private folder, under the package `com.example.sandwich_shop` as the file `databases/sandwich_data.db`. Because that folder belongs to the app, you cannot open the file in place; you copy it out of the emulator and onto your computer, then open the copy with the SQLite Viewer extension the beta bundle ships. Do this only after you have run the app at least once, so that the database file has actually been created.
+
+Copy the database out with the two commands below, run in order in your terminal. The first uses `run-as` to read the file from inside the app's private sandbox and write it to a temporary location the next command can reach, and the second pulls that copy onto your computer as `sandwich_shop.db`:
+
+```bash
+adb shell "run-as com.example.sandwich_shop cat databases/sandwich_data.db > /data/local/tmp/s.db"
+adb pull /data/local/tmp/s.db sandwich_shop.db
+```
+
+Once the pull finishes, open the resulting `sandwich_shop.db` in VS Code by clicking it in the Explorer. The SQLite Viewer extension opens the file and shows the `orders` table and its rows, the seeded past orders together with any orders you have placed yourself, as shown below.
+
+<!-- TODO screenshot: images/6/sqlite_viewer_orders_table.png — the SQLite Viewer showing the orders table rows -->
+
+This is an optional way to confirm the data is really stored, since the orders screen already shows it in the app.
 
 ### Your own Windows or Mac laptop: Android Studio
 
