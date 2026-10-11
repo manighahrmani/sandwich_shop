@@ -29,10 +29,14 @@ class CartRepository {
     return total;
   }
 
+  int get totalItemCount {
+    return getTotalItems();
+  }
+
   double getSubtotal() {
     double sum = 0.0;
     for (final CartItem item in _items) {
-      sum += item.totalPrice;
+      sum += item.lineTotal;
     }
     return sum;
   }

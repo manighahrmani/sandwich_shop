@@ -20,40 +20,24 @@ class BasketScreen extends StatefulWidget {
 class _BasketScreenState extends State<BasketScreen> {
   String _confirmationMessage = '';
 
+  Widget _buildEmptyState() {
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 32.0),
+        child: Text(
+          'Your basket is empty',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      ),
+    );
+  }
+
   String _buildSummary(List<CartItem> items) {
-    final List<String> lines = [];
+    final List<String> parts = [];
     for (final CartItem item in items) {
-      lines.add('${item.quantity} x ${item.name}');
+      parts.add('${item.quantity} x ${item.sandwich.name}');
     }
-    return lines.join(', ');
-  }
-
-  bool _anyToasted(List<CartItem> items) {
-    for (final CartItem item in items) {
-      if (item.toasted) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool _anyVegan(List<CartItem> items) {
-    for (final CartItem item in items) {
-      if (item.vegan) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  String _buildNote(List<CartItem> items) {
-    final List<String> notes = [];
-    for (final CartItem item in items) {
-      if (item.note.isNotEmpty) {
-        notes.add(item.note);
-      }
-    }
-    return notes.join('; ');
+    return parts.join(', ');
   }
 
   String _formatDate(DateTime now) {
@@ -75,9 +59,6 @@ class _BasketScreenState extends State<BasketScreen> {
       final OrderRecord record = OrderRecord(
         orderNumber: orderNumber,
         summary: _buildSummary(items),
-        note: _buildNote(items),
-        toasted: _anyToasted(items) ? 1 : 0,
-        vegan: _anyVegan(items) ? 1 : 0,
         total: cart.getTotalDue(),
         date: _formatDate(DateTime.now()),
       );
@@ -100,43 +81,6 @@ class _BasketScreenState extends State<BasketScreen> {
     }
   }
 
-  Widget _buildEmptyState() {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 32.0),
-        child: Text(
-          'Your basket is empty',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOptionsText(CartItem item) {
-    final List<String> parts = [];
-    if (item.toasted) {
-      parts.add('Toasted');
-    }
-    if (item.vegan) {
-      parts.add('Vegan');
-    }
-    if (item.note.isNotEmpty) {
-      parts.add('Note: ${item.note}');
-    }
-
-    if (parts.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: Text(
-        parts.join(' • '),
-        style: const TextStyle(fontSize: 12, color: Colors.black54),
-      ),
-    );
-  }
-
   Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -147,14 +91,14 @@ class _BasketScreenState extends State<BasketScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${item.quantity} x ${item.name}',
+                  '${item.quantity} x ${item.sandwich.name}',
                   style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
-                _buildOptionsText(item),
+                const SizedBox(height: 4),
+                Text('£${item.lineTotal.toStringAsFixed(2)}'),
               ],
             ),
           ),
-          Text('£${item.totalPrice.toStringAsFixed(2)}'),
           IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.red),
             onPressed: () {
@@ -226,8 +170,8 @@ class _BasketScreenState extends State<BasketScreen> {
         width: double.infinity,
         child: PrimaryButton(
           label: 'Checkout',
-          onPressed: () {
-            _checkout(cart, items);
+          onPressed: () async {
+            await _checkout(cart, items);
           },
         ),
       ),
@@ -256,7 +200,21 @@ class _BasketScreenState extends State<BasketScreen> {
 
     final Widget content;
     if (items.isEmpty) {
-      content = _buildEmptyState();
+      if (_confirmationMessage.isNotEmpty) {
+        content = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildEmptyState(),
+            const SizedBox(height: 12),
+            Text(
+              _confirmationMessage,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        );
+      } else {
+        content = _buildEmptyState();
+      }
     } else {
       content = _buildBasketList(cart, items);
     }
@@ -264,7 +222,7 @@ class _BasketScreenState extends State<BasketScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton(), OrdersButton()],
+        actions: const [OrdersButton(), BasketButton()],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

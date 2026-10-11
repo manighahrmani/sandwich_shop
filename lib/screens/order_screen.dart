@@ -6,17 +6,16 @@ import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/orders_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-const String prefToasted = 'order_toasted';
-const String prefVegan = 'order_vegan';
-const String prefNote = 'order_note';
 
 class OrderScreen extends StatefulWidget {
   final Sandwich sandwich;
   final int maxQuantity;
 
-  const OrderScreen({super.key, required this.sandwich, this.maxQuantity = 10});
+  const OrderScreen({
+    super.key,
+    required this.sandwich,
+    this.maxQuantity = 10,
+  });
 
   @override
   State<OrderScreen> createState() {
@@ -26,61 +25,7 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
-  bool _toasted = false;
-  bool _vegan = false;
-  late TextEditingController _noteController;
   String _confirmationMessage = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _noteController = TextEditingController();
-    _loadSavedOptions();
-  }
-
-  @override
-  void dispose() {
-    _noteController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _loadSavedOptions() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool? savedToasted = prefs.getBool(prefToasted);
-    final bool? savedVegan = prefs.getBool(prefVegan);
-    final String? savedNote = prefs.getString(prefNote);
-
-    bool toasted = false;
-    if (savedToasted != null) {
-      toasted = savedToasted;
-    }
-
-    bool vegan = false;
-    if (savedVegan != null) {
-      vegan = savedVegan;
-    }
-
-    String note = '';
-    if (savedNote != null) {
-      note = savedNote;
-    }
-
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _toasted = toasted;
-      _vegan = vegan;
-      _noteController.text = note;
-    });
-  }
-
-  Future<void> _saveOptions() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(prefToasted, _toasted);
-    await prefs.setBool(prefVegan, _vegan);
-    await prefs.setString(prefNote, _noteController.text.trim());
-  }
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
@@ -100,18 +45,11 @@ class _OrderScreenState extends State<OrderScreen> {
 
   void _addToBasket() {
     if (_quantity > 0) {
-      final String note = _noteController.text.trim();
       final CartItem item = CartItem(
-        id: widget.sandwich.id,
-        name: widget.sandwich.name,
-        price: widget.sandwich.price,
+        sandwich: widget.sandwich,
         quantity: _quantity,
-        toasted: _toasted,
-        vegan: _vegan,
-        note: note,
       );
       CartRepository.instance.addItem(item);
-      _saveOptions();
       setState(() {
         _confirmationMessage =
             'Added $_quantity ${widget.sandwich.name} to basket';
@@ -128,7 +66,7 @@ class _OrderScreenState extends State<OrderScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton(), OrdersButton()],
+        actions: const [OrdersButton(), BasketButton()],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -157,45 +95,6 @@ class _OrderScreenState extends State<OrderScreen> {
               ],
             ),
             const SizedBox(height: 24),
-            Row(
-              children: [
-                const Expanded(child: Text('Toasted')),
-                Switch(
-                  value: _toasted,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _toasted = value;
-                    });
-                    _saveOptions();
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Expanded(child: Text('Vegan')),
-                Switch(
-                  value: _vegan,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _vegan = value;
-                    });
-                    _saveOptions();
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _noteController,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Note for the kitchen',
-                hintText: 'Add any notes for this order',
-              ),
-            ),
-            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: PrimaryButton(

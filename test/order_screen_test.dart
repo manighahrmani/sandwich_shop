@@ -4,7 +4,6 @@ import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/screens/order_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 const Sandwich testSandwich = Sandwich(
   id: 'test',
@@ -14,57 +13,45 @@ const Sandwich testSandwich = Sandwich(
   imagePath: 'assets/images/footlong.jpeg',
 );
 
-final Finder noteFieldFinder = find.byWidgetPredicate((Widget widget) {
-  return widget is TextField &&
-      widget.decoration?.labelText == 'Note for the kitchen';
-});
-
 void main() {
   setUp(() {
     CartRepository.instance.clear();
-    SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('OrderScreen shows two switches and one note field', (
+  testWidgets('OrderScreen shows quantity buttons and Add to Basket button', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
       const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
     );
 
-    expect(find.byType(Switch), findsNWidgets(2));
-    expect(noteFieldFinder, findsOneWidget);
+    expect(find.text('Order Test Sub'), findsOneWidget);
+    expect(find.text('0 Test Sub sandwich(es): '), findsOneWidget);
+    expect(find.text('Add'), findsOneWidget);
+    expect(find.text('Remove'), findsOneWidget);
+    expect(find.text('Add to Basket'), findsOneWidget);
   });
 
-  testWidgets('Toggling the toasted switch flips its value', (
+  testWidgets('Adding to basket without selecting quantity shows warning', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
       const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
     );
 
-    final Finder toastedSwitch = find.byType(Switch).first;
-    Switch switchWidget = tester.widget<Switch>(toastedSwitch);
-    expect(switchWidget.value, isFalse);
-
-    await tester.tap(toastedSwitch);
+    await tester.tap(find.text('Add to Basket'));
     await tester.pump();
 
-    switchWidget = tester.widget<Switch>(toastedSwitch);
-    expect(switchWidget.value, isTrue);
+    expect(find.text('Please select at least 1 sandwich'), findsOneWidget);
+    expect(CartRepository.instance.getItems(), isEmpty);
   });
 
-  testWidgets('Adding to basket records quantity, toggles and note', (
+  testWidgets('Adding to basket records quantity and sandwich', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
       const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
     );
-
-    await tester.enterText(noteFieldFinder, 'No pickles');
-
-    await tester.tap(find.byType(Switch).first);
-    await tester.pump();
 
     await tester.tap(find.text('Add'));
     await tester.pump();
@@ -79,8 +66,8 @@ void main() {
 
     final CartItem added = items.first;
     expect(added.quantity, 2);
-    expect(added.toasted, isTrue);
-    expect(added.vegan, isFalse);
-    expect(added.note, 'No pickles');
+    expect(added.sandwich.id, 'test');
+    expect(added.sandwich.name, 'Test Sub');
+    expect(find.text('Added 2 Test Sub to basket'), findsOneWidget);
   });
 }

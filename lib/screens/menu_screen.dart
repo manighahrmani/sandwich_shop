@@ -5,6 +5,7 @@ import 'package:sandwich_shop/repositories/sandwich_repository.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/orders_button.dart';
 import 'package:sandwich_shop/widgets/sandwich_card.dart';
+import 'package:sandwich_shop/widgets/settings_button.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -17,7 +18,7 @@ class MenuScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton(), OrdersButton()],
+        actions: const [SettingsButton(), OrdersButton(), BasketButton()],
       ),
       body: ListView.builder(
         itemCount: sandwiches.length,
