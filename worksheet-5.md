@@ -26,13 +26,11 @@
   - [Define the cart item model](#define-the-cart-item-model)
   - [Create the cart repository singleton](#create-the-cart-repository-singleton)
   - [Unit test the cart repository](#unit-test-the-cart-repository)
-  - [Commit your changes (3)](#commit-your-changes-3)
 - [Building the order screen](#building-the-order-screen)
   - [Recap the order screen state](#recap-the-order-screen-state)
   - [Update the order screen app bar](#update-the-order-screen-app-bar)
   - [Add items to the basket](#add-items-to-the-basket)
   - [Widget test the order screen](#widget-test-the-order-screen)
-  - [Commit your changes (4)](#commit-your-changes-4)
 - [Building the basket screen](#building-the-basket-screen)
   - [Convert BasketScreen to a stateful widget](#convert-basketscreen-to-a-stateful-widget)
   - [Build the empty basket state](#build-the-empty-basket-state)
@@ -40,7 +38,6 @@
   - [Build the basket items list and checkout button](#build-the-basket-items-list-and-checkout-button)
   - [Assemble the basket screen scaffold](#assemble-the-basket-screen-scaffold)
   - [Widget test the basket screen](#widget-test-the-basket-screen)
-  - [Commit your changes (5)](#commit-your-changes-5)
 - [Building the customer profile settings form](#building-the-customer-profile-settings-form)
   - [Define the user settings model](#define-the-user-settings-model)
   - [Text controllers and form lifecycle](#text-controllers-and-form-lifecycle)
@@ -49,14 +46,12 @@
   - [Create the settings button and register the route](#create-the-settings-button-and-register-the-route)
   - [Save settings and provide feedback](#save-settings-and-provide-feedback)
   - [Widget test the settings screen](#widget-test-the-settings-screen)
-  - [Commit your changes (6)](#commit-your-changes-6)
 - [Loading the menu from JSON](#loading-the-menu-from-json)
   - [Create the JSON asset file](#create-the-json-asset-file)
   - [Register the asset in pubspec](#register-the-asset-in-pubspec)
   - [Add JSON serialisation to the sandwich model](#add-json-serialisation-to-the-sandwich-model)
   - [Unit test JSON serialisation](#unit-test-json-serialisation)
   - [Load JSON data in the repository](#load-json-data-in-the-repository)
-  - [Commit your changes (7)](#commit-your-changes-7)
 - [Exercises](#exercises)
 
 ## Getting help
@@ -879,10 +874,6 @@ All three tests should pass:
 
 ![The cart repository unit tests passing in the terminal](images/5/cart_repository_tests_terminal.png)
 
-### Commit your changes (3)
-
-Stage `lib/models/cart_item.dart`, `lib/repositories/cart_repository.dart`, and `test/cart_repository_test.dart`. Commit your changes with a message of your own.
-
 ## Building the order screen
 
 Now that the cart model and repository are ready, we turn `lib/screens/order_screen.dart` into an ordering screen that lets users choose a quantity and add their selected sandwich to the basket.
@@ -1222,10 +1213,6 @@ flutter test test/order_screen_test.dart
 All three tests should pass:
 
 ![The order screen widget tests passing in the terminal](images/5/order_screen_tests_terminal.png)
-
-### Commit your changes (4)
-
-Stage `lib/screens/order_screen.dart` and `test/order_screen_test.dart`. Commit your changes with a message of your own.
 
 ## Building the basket screen
 
@@ -1600,10 +1587,6 @@ flutter test test/basket_screen_test.dart
 Both tests should pass:
 
 ![The basket screen widget tests passing in the terminal](images/5/basket_screen_tests_terminal.png)
-
-### Commit your changes (5)
-
-Stage `lib/screens/basket_screen.dart` and `test/basket_screen_test.dart`. Commit your changes with a message of your own.
 
 ## Building the customer profile settings form
 
@@ -2021,10 +2004,6 @@ Both tests should pass:
 
 ![The settings screen widget tests passing in the terminal](images/5/settings_screen_tests_terminal.png)
 
-### Commit your changes (6)
-
-Stage `lib/models/user_settings.dart`, `lib/screens/settings_screen.dart`, `lib/widgets/settings_button.dart`, `lib/main.dart`, `lib/screens/menu_screen.dart`, `test/user_settings_test.dart`, and `test/settings_screen_test.dart`. Commit your changes with a message of your own.
-
 ## Loading the menu from JSON
 
 Up to this point, our sandwich menu items were hardcoded in `SandwichRepository`. Hardcoded data is inflexible; adding a new sandwich or altering prices requires modifying Dart code. In this section we move the menu into an external JSON file, register the asset, and load it into our data models.
@@ -2242,10 +2221,6 @@ The method reads the asset string asynchronously, parses the list, and uses a st
 ```bash
 flutter test
 ```
-
-### Commit your changes (7)
-
-Stage `assets/data/sandwiches.json`, `pubspec.yaml`, `lib/models/sandwich.dart`, `lib/repositories/sandwich_repository.dart`, and `test/sandwich_model_test.dart`. Commit your changes with a message of your own.
 
 ## Exercises
 
