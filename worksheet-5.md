@@ -943,7 +943,7 @@ Now we replace the placeholder `lib/screens/basket_screen.dart` with a full scre
 
 ### Convert BasketScreen to a stateful widget
 
-Open `lib/screens/basket_screen.dart`. Replace the placeholder with the complete `StatefulWidget` implementation below. This initial version places all screen logic and layout directly inside the `build` method:
+Open `lib/screens/basket_screen.dart`. Replace the placeholder `StatelessWidget` with a `StatefulWidget` that sets up the high-level screen scaffold:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -970,194 +970,73 @@ class _BasketScreenState extends State<BasketScreen> {
     final CartRepository cart = CartRepository.instance;
     final List<CartItem> items = cart.getItems();
 
-    final Widget content;
-    if (items.isEmpty) {
-      if (_confirmationMessage.isNotEmpty) {
-        content = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 32.0),
-                child: Text(
-                  'Your basket is empty',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              _confirmationMessage,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
-        );
-      } else {
-        content = const Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 32.0),
-            child: Text(
-              'Your basket is empty',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ),
-        );
-      }
-    } else {
-      final List<Widget> children = [];
-
-      children.add(const Text('Your basket', style: shopSectionTitleStyle));
-      children.add(const SizedBox(height: 16));
-
-      for (int index = 0; index < items.length; index++) {
-        final CartItem item = items[index];
-        children.add(
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${item.quantity} x ${item.sandwich.name}',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 4),
-                      Text('£${item.lineTotal.toStringAsFixed(2)}'),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete_outline, color: Colors.red),
-                  onPressed: () {
-                    setState(() {
-                      cart.removeItem(index);
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-
-      children.add(const SizedBox(height: 24));
-      children.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Items subtotal', style: TextStyle(color: shopText)),
-              Text(
-                '£${cart.getSubtotal().toStringAsFixed(2)}',
-                style: const TextStyle(color: shopText),
-              ),
-            ],
-          ),
-        ),
-      );
-      children.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Delivery', style: TextStyle(color: shopText)),
-              Text(
-                '£${cart.getDeliveryFee().toStringAsFixed(2)}',
-                style: const TextStyle(color: shopText),
-              ),
-            ],
-          ),
-        ),
-      );
-      children.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Total to pay',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              Text(
-                '£${cart.getTotalDue().toStringAsFixed(2)}',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ],
-          ),
-        ),
-      );
-      children.add(const SizedBox(height: 24));
-
-      children.add(
-        SizedBox(
-          width: double.infinity,
-          child: PrimaryButton(
-            label: 'Checkout',
-            onPressed: () {
-              setState(() {
-                cart.clear();
-                _confirmationMessage = 'Thanks, your order is on its way';
-              });
-            },
-          ),
-        ),
-      );
-
-      if (_confirmationMessage.isNotEmpty) {
-        children.add(const SizedBox(height: 12));
-        children.add(
-          Text(
-            _confirmationMessage,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        );
-      }
-
-      content = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: children,
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
         actions: const [BasketButton()],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: content,
+      body: const SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Text('Basket placeholder'),
       ),
     );
   }
 }
 ```
 
-Run the app, add a few sandwiches to the basket, and navigate to the basket screen. You should see a list of items with their quantities, line totals, and a checkout button. Tapping the delete icon removes an item from the basket, and tapping checkout clears the basket and displays a confirmation message.
+The screen displays the themed `AppBar` and a `SingleChildScrollView` body. The string field `_confirmationMessage` holds feedback to display once an order is submitted.
 
-This is what our basket screen looks like with a few items in the basket:
+Here is what your code should look like in VS Code:
 
-![The basket screen with a list of items, totals, and checkout button](images/5/basket_screen_final.png)
+![The basket screen scaffold in VS Code](images/5/basket_screen_scaffold.png)
 
-While this monolithic version functions correctly, the design has serious architectural flaws. The `build` method is over a hundred lines long, mixes repository queries with deeply nested widget trees, duplicates the empty state message twice, and copy-pastes the exact same `Padding` and `Row` layout three times for pricing subtotals.
+To decide what widget to pass to the `child` parameter of `SingleChildScrollView`, declare a `Widget content` variable before returning `Scaffold`. Add an `if` statement checking `if (items.isEmpty)`, placing a placeholder in the `if` branch and another in the `else` branch:
 
-In professional Flutter development, we keep our code maintainable and expressive by refactoring large widget trees into smaller, reusable helper methods or widgets. VS Code provides built-in automated refactoring tools for this. Whenever you place your cursor on a widget and press **Ctrl + .** on Windows or **⌘ + .** on macOS, the quick fix menu opens. Selecting **Extract Method** or **Extract Widget** automatically moves that widget subtree into its own method or class.
+```dart
+    final Widget content;
+    if (items.isEmpty) {
+      content = const Text('Empty basket placeholder');
+    } else {
+      content = const Text('Basket list placeholder');
+    }
+```
 
-We will now refactor this monolithic `BasketScreen` step by step.
+Now add the nested `if` statement checking `if (_confirmationMessage.isNotEmpty)` inside the empty basket branch:
+
+```dart
+    final Widget content;
+    if (items.isEmpty) {
+      if (_confirmationMessage.isNotEmpty) {
+        content = Column(
+          children: [
+            const Text('Empty basket placeholder'),
+            Text(_confirmationMessage),
+          ],
+        );
+      } else {
+        content = const Text('Empty basket placeholder');
+      }
+    } else {
+      content = const Text('Basket list placeholder');
+    }
+```
+
+Pass `content` to the `child` of `SingleChildScrollView`:
+
+```dart
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: content,
+      ),
+```
+
+Why do we need the nested `if (_confirmationMessage.isNotEmpty)` check and what does it do? When a customer taps **Checkout**, the cart repository is cleared, so `items.isEmpty` becomes true. If we only checked `items.isEmpty`, the screen would immediately show the plain empty basket message without confirming that the order was received. By checking `_confirmationMessage.isNotEmpty`, we can show the confirmation message alongside the empty state right after an order is placed.
+
+Now we replace the placeholders bit by bit with dedicated helper widgets.
 
 ### Build the empty basket state
 
-Notice how the empty basket message (`Center(...)`) is written twice in the `if (items.isEmpty)` block. Writing the same layout in multiple places violates the principle of code reuse and forces you to update both places whenever the design changes.
-
-In VS Code, place your cursor on the first `Center` widget, press **Ctrl + .** on Windows or **⌘ + .** on macOS, and select **Extract Method**. Name the method `_buildEmptyState`.
-
-The extracted helper method looks like this inside `_BasketScreenState`:
+When the cart contains no items, we display an informative placeholder. Add the `_buildEmptyState` helper inside `_BasketScreenState`:
 
 ```dart
   Widget _buildEmptyState() {
@@ -1173,17 +1052,36 @@ The extracted helper method looks like this inside `_BasketScreenState`:
   }
 ```
 
-The `Center` widget centres the placeholder text within the screen. Wrapping the text in `Padding` with `EdgeInsets.symmetric(vertical: 32.0)` provides vertical breathing room above and below without adding unnecessary horizontal margins. The text uses a muted grey colour (`Colors.grey`) and a distinct font size (`16`) to communicate an informative placeholder state.
+The `Center` widget centres the text horizontally and vertically within the viewport. `Padding` with `EdgeInsets.symmetric(vertical: 32.0)` provides vertical breathing room above and below the message without extra horizontal margins. The text uses a muted grey colour (`Colors.grey`) and font size `16`.
 
-Now replace both inline occurrences of the empty state in `build` with `_buildEmptyState()`.
+In `build`, replace the placeholder `Text('Empty basket placeholder')` with `_buildEmptyState()` and format the confirmation column:
+
+```dart
+    final Widget content;
+    if (items.isEmpty) {
+      if (_confirmationMessage.isNotEmpty) {
+        content = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildEmptyState(),
+            const SizedBox(height: 12),
+            Text(
+              _confirmationMessage,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        );
+      } else {
+        content = _buildEmptyState();
+      }
+    } else {
+      content = const Text('Basket list placeholder');
+    }
+```
 
 ### Build the basket item card
 
-Next, look at the `for` loop inside the `else` block. The widget displaying each sandwich's quantity, name, price, and delete button is nested twenty lines deep inside the loop:
-
-In VS Code, highlight the `Padding` widget inside the `for` loop, press **Ctrl + .** on Windows or **⌘ + .** on macOS, and select **Extract Method**. Name the new helper `_buildLineItem`.
-
-The extracted method should accept the cart repository, item, and index:
+When sandwiches are present in the basket, each entry must display its quantity, name, calculated line total, and an option to remove the item. Add the `_buildLineItem` helper:
 
 ```dart
   Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
@@ -1218,21 +1116,17 @@ The extracted method should accept the cart repository, item, and index:
   }
 ```
 
-Here is why each widget inside `_buildLineItem` is necessary:
+The layout uses a `Row` containing the item description on the left and an `IconButton` on the right:
 
-In Worksheet 3, we introduced `Expanded` to prevent layout overflow in rows. Here in `_buildLineItem`, `Expanded` is critical. Sandwich names vary in length; a long name like "Footlong Sweet Onion Chicken Teriyaki" requires substantial horizontal space. If placed in a plain `Column` within a `Row`, Flutter attempts to give the text infinite horizontal width, pushing the delete button off the right edge of the display and causing a yellow-and-black striped layout overflow error. Wrapping the text `Column` in `Expanded` forces it to take only the remaining horizontal space in the row, wrapping long names onto multiple lines while guaranteeing room for the delete button.
+In Worksheet 3, we met `Expanded` for constraining text width in rows. Here in `_buildLineItem`, `Expanded` is critical. Sandwich names vary in length; a long name would expand horizontally and push the delete button off the right edge of the display, causing a yellow-and-black striped layout overflow error. Wrapping the text `Column` in `Expanded` forces it to take only the remaining horizontal space in the row, wrapping long sandwich names onto multiple lines while guaranteeing space for the delete button.
 
 The line total is formatted with `toStringAsFixed(2)`. In Dart, double values omit trailing zeros (`10.0` or `7.5`). Calling `toStringAsFixed(2)` rounds and formats the number to two decimal places, producing clean currency figures like `£10.00`.
 
 The `IconButton` uses `Icons.delete_outline` with red colouring to indicate a destructive action. Its `onPressed` callback invokes `cart.removeItem(index)` inside `setState`. Calling `removeItem` mutates the repository list, and wrapping that call in `setState` signals Flutter to rebuild `BasketScreen` immediately so the deleted item vanishes and all total figures update.
 
-In the `for` loop, you can now simply call `children.add(_buildLineItem(cart, item, index));`.
-
 ### Build the basket items list and checkout button
 
-Look at the three pricing rows in the monolithic code: "Items subtotal", "Delivery", and "Total to pay". Each row duplicates the exact same `Padding` and `Row` layout.
-
-We extract a single reusable helper named `_buildTotalRow`:
+The order summary displays three total rows: items subtotal, delivery fee, and the grand total to pay. Writing three separate `Row` implementations would duplicate layout code, so we create a helper method `_buildTotalRow`:
 
 ```dart
   Widget _buildTotalRow(String label, String value, {bool emphasise = false}) {
@@ -1256,9 +1150,9 @@ We extract a single reusable helper named `_buildTotalRow`:
   }
 ```
 
-In `_buildTotalRow`, `MainAxisAlignment.spaceBetween` pushes the description label to the far-left edge and the formatted price to the far-right edge. The optional named parameter `{bool emphasise = false}` determines typography. For intermediate subtotals, standard `shopText` is used; for the final total to pay, `emphasise: true` applies bold weight and a larger `16` font size.
+In `_buildTotalRow`, `MainAxisAlignment.spaceBetween` pushes the description label to the far-left edge and the formatted price to the far-right edge. The optional named parameter `{bool emphasise = false}` determines typography: standard `shopText` for intermediate subtotals, and bold weight with a larger `16` font size for the final total to pay.
 
-Now observe the entire `else` branch that builds `children`, loops through items, adds total rows, and configures the checkout button. Highlight that block, press **Ctrl + .** on Windows or **⌘ + .** on macOS, and extract it into a method named `_buildBasketList`:
+Now add the `_buildBasketList` helper to assemble the item cards, price breakdown, and checkout button:
 
 ```dart
   Widget _buildBasketList(CartRepository cart, List<CartItem> items) {
@@ -1332,7 +1226,7 @@ When the user taps **Checkout**, `onPressed` runs `cart.clear()` to empty the ba
 
 ### Assemble the basket screen scaffold
 
-With our helper methods extracted, look at how clean and readable `build` becomes:
+With our helper methods in place, update `build` in `_BasketScreenState` to tie everything together:
 
 ```dart
   @override
@@ -1374,9 +1268,202 @@ With our helper methods extracted, look at how clean and readable `build` become
   }
 ```
 
-The method has shrunk from over a hundred lines to approximately thirty lines. It clearly expresses high-level screen flow: reading repository items, choosing between `_buildEmptyState()` and `_buildBasketList(cart, items)`, and wrapping the result in a `Scaffold`.
-
 Notice that `content` is wrapped in `SingleChildScrollView(padding: const EdgeInsets.all(16.0), child: content)`. As customers add multiple sandwiches to their order, the list of items, summary rows, checkout button, and confirmation text can easily exceed the height of a mobile display. A standard `Column` cannot scroll, which would trigger a vertical layout overflow error on smaller handsets. Wrapping the body in a `SingleChildScrollView` ensures that the user can scroll smoothly through their entire order and comfortably reach the checkout controls.
+
+Your complete `lib/screens/basket_screen.dart` file should look like this:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:sandwich_shop/constants.dart';
+import 'package:sandwich_shop/models/cart_item.dart';
+import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/widgets/basket_button.dart';
+import 'package:sandwich_shop/widgets/primary_button.dart';
+
+class BasketScreen extends StatefulWidget {
+  const BasketScreen({super.key});
+
+  @override
+  State<BasketScreen> createState() {
+    return _BasketScreenState();
+  }
+}
+
+class _BasketScreenState extends State<BasketScreen> {
+  String _confirmationMessage = '';
+
+  Widget _buildEmptyState() {
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 32.0),
+        child: Text(
+          'Your basket is empty',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${item.quantity} x ${item.sandwich.name}',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text('£${item.lineTotal.toStringAsFixed(2)}'),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete_outline, color: Colors.red),
+            onPressed: () {
+              setState(() {
+                cart.removeItem(index);
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTotalRow(String label, String value, {bool emphasise = false}) {
+    final TextStyle style;
+    if (emphasise) {
+      style = const TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+    } else {
+      style = const TextStyle(color: shopText);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: style),
+          Text(value, style: style),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBasketList(CartRepository cart, List<CartItem> items) {
+    final List<Widget> children = [];
+
+    children.add(const Text('Your basket', style: shopSectionTitleStyle));
+    children.add(const SizedBox(height: 16));
+
+    for (int index = 0; index < items.length; index++) {
+      final CartItem item = items[index];
+      children.add(_buildLineItem(cart, item, index));
+    }
+
+    children.add(const SizedBox(height: 24));
+    children.add(
+      _buildTotalRow(
+        'Items subtotal',
+        '£${cart.getSubtotal().toStringAsFixed(2)}',
+      ),
+    );
+    children.add(
+      _buildTotalRow(
+        'Delivery',
+        '£${cart.getDeliveryFee().toStringAsFixed(2)}',
+      ),
+    );
+    children.add(
+      _buildTotalRow(
+        'Total to pay',
+        '£${cart.getTotalDue().toStringAsFixed(2)}',
+        emphasise: true,
+      ),
+    );
+    children.add(const SizedBox(height: 24));
+
+    children.add(
+      SizedBox(
+        width: double.infinity,
+        child: PrimaryButton(
+          label: 'Checkout',
+          onPressed: () {
+            setState(() {
+              cart.clear();
+              _confirmationMessage = 'Thanks, your order is on its way';
+            });
+          },
+        ),
+      ),
+    );
+
+    if (_confirmationMessage.isNotEmpty) {
+      children.add(const SizedBox(height: 12));
+      children.add(
+        Text(
+          _confirmationMessage,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final CartRepository cart = CartRepository.instance;
+    final List<CartItem> items = cart.getItems();
+
+    final Widget content;
+    if (items.isEmpty) {
+      if (_confirmationMessage.isNotEmpty) {
+        content = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildEmptyState(),
+            const SizedBox(height: 12),
+            Text(
+              _confirmationMessage,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        );
+      } else {
+        content = _buildEmptyState();
+      }
+    } else {
+      content = _buildBasketList(cart, items);
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(appTitle, style: shopHeaderStyle),
+        actions: const [BasketButton()],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: content,
+      ),
+    );
+  }
+}
+```
+
+Run your app, add a few sandwiches to the basket, and navigate to the basket screen. You should see a list of items with their quantities, line totals, and a checkout button. Tapping the delete icon removes an item from the basket, and tapping checkout clears the basket and displays a confirmation message.
+
+Our basket screen looks like this:
+
+![The basket screen with a list of items, totals, and checkout button](images/5/basket_screen_final.png)
 
 ### Widget test the basket screen
 
