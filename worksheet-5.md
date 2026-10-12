@@ -225,9 +225,7 @@ class PrimaryButton extends StatelessWidget {
 }
 ```
 
-`PrimaryButton` is a `StatelessWidget` with two properties: `label` for the button caption, and `onPressed` for the tap callback. The type `VoidCallback` represents a function that takes no arguments and returns nothing. `ElevatedButton.styleFrom` configures the green background and white text from our constants file.
-
-Here is the documentation page on [ElevatedButton](https://api.flutter.dev/flutter/material/ElevatedButton-class.html). But there are other kinds of buttons in Flutter, such as `TextButton` and `OutlinedButton`. For more information on them, feel free to check out the [Flutter buttons documentation](https://docs.flutter.dev/development/ui/widgets/material#buttons).
+`PrimaryButton` is a `StatelessWidget` with two properties: `label` for the button caption, and `onPressed` for the tap callback. The type `VoidCallback` represents a function that takes no arguments and returns nothing. `ElevatedButton.styleFrom` configures the green background and white text from our constants file. For more button variants such as `TextButton` and `OutlinedButton`, consult the [Flutter buttons documentation](https://docs.flutter.dev/development/ui/widgets/material#buttons).
 
 We will use `PrimaryButton` in multiple screens later but first we need to write tests for it.
 
@@ -285,7 +283,7 @@ void main() {
 
 The first test confirms that the button renders the text passed to its label. The second test passes a callback that flips a boolean flag, simulates a user tap with `tester.tap`, and asserts that the callback executed.
 
-Feel free to add a `group` to organise these tests. You are also encouraged to organise the rest of the files in `test` folder in a similar way, for example, you can create a `test/screens` folder for testing screens in `lib/screens` and `test/models` folder for testing models in `lib/models`.
+You can add a `group` to organise these tests. You are also encouraged to organise the rest of the files in `test` folder in a similar way, for example, you can create a `test/screens` folder for testing screens in `lib/screens` and `test/models` folder for testing models in `lib/models`.
 
 Run this test using the play button in VS Code or the following command in your terminal:
 
@@ -346,7 +344,7 @@ class BasketButton extends StatelessWidget {
 }
 ```
 
-`IconButton` displays an icon from Flutter's Material icon set (`Icons.shopping_basket`). Feel free to remove `shopping_basket`, put your cursor at the dot, and press **Ctrl + Space** on Windows or **⌘ + Space** on macOS to see a list of available icons. You can check out the [documentation page on Material icons](https://api.flutter.dev/flutter/material/Icons-class.html) for a complete list of icons.
+`IconButton` displays an icon from Flutter's Material icon set (`Icons.shopping_basket`). You can press **Ctrl + Space** on Windows or **⌘ + Space** on macOS after the dot to browse available icons. For a complete list, consult the [Material icons documentation](https://api.flutter.dev/flutter/material/Icons-class.html).
 
 ![The list of available Material icons in VS Code](images/5/material_icons.png)
 
@@ -494,7 +492,7 @@ We would like to give our customers the ability to make certain configurations t
 
 When a customer orders a sandwich, we need to track their selection and the quantity they wish to buy. A `Sandwich` represents an item in the catalogue, with its name, description, and price. A `CartItem` represents a specific line item in the customer's shopping basket.
 
-Hopefully you remember from [Worksheet 1](./worksheet-1.md) what composition is. We will use composition to build our `CartItem` model: `CartItem` holds a reference to a `Sandwich` instance along with an integer quantity. (Note that we could have alternatively stored a collection of `Sandwich` instances in a `List<Sandwich>` to represent the quantity in a `CartItem`.)
+As introduced in [Worksheet 1](./worksheet-1.md), we use composition to build `CartItem`: it holds a reference to a `Sandwich` instance along with an integer quantity. (Note that we could have alternatively stored a collection of `Sandwich` instances in a `List<Sandwich>` to represent the quantity in a `CartItem`.)
 
 Create a new file named `lib/models/cart_item.dart` and define a `CartItem` class with two instance variables: `sandwich` and `quantity`. `sandwich` is a `Sandwich` object (make sure to import it at the top of the file), and `quantity` is an integer. Both fields should be marked `final` to ensure instances are immutable once constructed. Add a constructor that requires both fields to be passed in and finally add a getter called `lineTotal` that multiplies the sandwich price by the quantity and returns the result.
 
@@ -504,11 +502,9 @@ There are different ways to write this class, here is ours.
 
 ### Create the cart repository singleton
 
-In [Worksheet 3](./worksheet-3.md), we introduced the repository pattern to encapsulate data access. For our shopping cart, multiple screens (the order screen, the menu screen, and the basket screen) need to read and update the same list of items. We implement this shared access using the singleton pattern.
+In [Worksheet 3](./worksheet-3.md), we introduced the repository pattern to encapsulate data access for sandwiches (`SandwichRepository`). For our shopping cart, multiple screens (the menu, order, and basket screens) need to read and update the same shared list of items.
 
-A singleton is a class that allows only one instance to exist throughout the application. In [Worksheet 3](./worksheet-3.md), we introduced the repository pattern to encapsulate data access for sandwiches (`SandwichRepository`). For our shopping cart, multiple screens (the menu screen, the order screen, and the basket screen) need to read and update the same list of items in memory.
-
-If each screen created its own `CartRepository` by calling `CartRepository()`, every screen would hold an independent list of items. An item added on the order screen would not appear on the basket screen. To share state across multiple screens without passing the repository down the widget tree through parameters, we use the singleton pattern. A singleton ensures that a class has only one instance and provides a single global access point to it.
+If each screen created its own `CartRepository` instance, each would hold an independent list of items, so an item added on the order screen would never appear in the basket. We solve this with the singleton pattern, which restricts a class to a single shared instance accessible throughout the application.
 
 Create a new file named `lib/repositories/cart_repository.dart`. Start with an empty class that declares a private named constructor:
 
@@ -556,7 +552,7 @@ Now add methods to add and remove items:
   }
 ```
 
-Hopefully you know what these methods do. Next, add methods to calculate item quantities, prices, and the delivery fee:
+Next, add methods to calculate item quantities, prices, and the delivery fee:
 
 ```dart
   int getTotalItems() {
@@ -595,7 +591,7 @@ Hopefully you know what these methods do. Next, add methods to calculate item qu
   }
 ```
 
-The only thing worth nothing is how the getter `totalItemCount` delegates to `getTotalItems()` (letting this property be accessed like an instance variable). This is a common pattern in Dart, where you can define a getter that computes a value on demand.
+The getter `totalItemCount` delegates to `getTotalItems()`, computing the total item count on demand.
 
 Your complete `lib/repositories/cart_repository.dart` file should have all the members shown in the screenshot below:
 
@@ -801,6 +797,8 @@ Add the button and confirmation message below the quantity controls in `build`, 
             ),
 ```
 
+By default, buttons size themselves to fit their label text. Wrapping `PrimaryButton` in a `SizedBox` with `width: double.infinity` tells Flutter to expand the box across the full available width of the parent column, giving the button full width across the screen.
+
 In Worksheet 3, we resolved layout overflow inside a `Row` using `Expanded`. A `Column` behaves similarly along the vertical axis. If child widgets require more vertical height than the display provides (for example on smaller handsets, in landscape orientation, or when user font sizes increase), Flutter cannot resize them and reports a vertical `RenderFlex` overflow error with a yellow-and-black striped hazard banner.
 
 While Worksheet 3 used `ListView.builder` for scrolling an arbitrary collection of repeating cards, a `SingleChildScrollView` is designed to make a single fixed layout of different widgets scrollable. Wrapping the body `Column` in a [`SingleChildScrollView`](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) ensures that the entire column scrolls smoothly if the viewport is constrained.
@@ -1001,7 +999,7 @@ To decide what widget to pass to the `child` parameter of `SingleChildScrollView
     }
 ```
 
-See below the changes:
+Your code should look like this in VS Code:
 
 ![The basket screen content variable with if statement in VS Code](images/5/basket_screen_content_if.png)
 
@@ -1025,11 +1023,11 @@ Now add the nested `if` statement checking `if (_confirmationMessage.isNotEmpty)
     }
 ```
 
-Here are the changes:
+Your code should look like this in VS Code:
 
 ![The basket screen content variable with nested if statement in VS Code](images/5/basket_screen_content_nested_if.png)
 
-Pass `content` to the `child` of `SingleChildScrollView`:
+Pass `content` to the `child` parameter of `SingleChildScrollView`, removing `const` from `SingleChildScrollView` because `content` is a dynamic variable:
 
 ```dart
       body: SingleChildScrollView(
@@ -1038,7 +1036,7 @@ Pass `content` to the `child` of `SingleChildScrollView`:
       ),
 ```
 
-See the changes below (pay attention to the `const` keyword):
+Your code should look like this in VS Code:
 
 ![The basket screen body with content variable in VS Code](images/5/basket_screen_body_content.png)
 
@@ -1066,7 +1064,7 @@ When the cart contains no items, we display an informative placeholder. Add the 
 
 The `Center` widget centres the text horizontally and vertically within the viewport.
 
-In `build`, replace the placeholder `Text('Empty basket placeholder')` with `_buildEmptyState()` and optionally format the confirmation column:
+In `build`, replace the placeholder `Text('Empty basket placeholder')` with `_buildEmptyState()` and format the confirmation column with spacing and bold styling:
 
 ```dart
     final Widget content;
@@ -1091,7 +1089,7 @@ In `build`, replace the placeholder `Text('Empty basket placeholder')` with `_bu
     }
 ```
 
-See below our changes in VS Code:
+Your code should look like this in VS Code:
 
 ![The basket screen content variable with empty state helper in VS Code](images/5/basket_screen_empty_state_helper.png)
 
@@ -1132,9 +1130,9 @@ When sandwiches are present in the basket, each entry must display its quantity,
   }
 ```
 
-The layout uses a `Row` containing the item description on the left and an `IconButton` on the right: In Worksheet 3, we met `Expanded` for constraining text width in rows. Here in `_buildLineItem`, `Expanded` is critical. Sandwich names vary in length; a long name would expand horizontally and push the delete button off the right edge of the display, causing a yellow-and-black striped layout overflow error. Wrapping the text `Column` in `Expanded` forces it to take only the remaining horizontal space in the row, wrapping long sandwich names onto multiple lines while guaranteeing space for the delete button.
+The layout uses a `Row` containing the item description on the left and a delete `IconButton` on the right. As in Worksheet 3, wrapping the text `Column` in `Expanded` ensures it takes only the remaining horizontal space in the row, wrapping longer sandwich names so the delete button stays in view.
 
-The `IconButton` uses `Icons.delete_outline` with red colouring to indicate a destructive action. Its `onPressed` callback invokes `cart.removeItem(index)` inside `setState`. Calling `removeItem` updates the repository list, and wrapping that call in `setState` signals Flutter to rebuild `BasketScreen` immediately so the deleted item vanishes and all total figures update.
+The `IconButton` uses `Icons.delete_outline` with red colouring to indicate a destructive action. Its `onPressed` callback invokes `cart.removeItem(index)` inside `setState` so the screen rebuilds with updated items and totals.
 
 ### Build the basket items list and checkout button
 
@@ -1280,7 +1278,7 @@ With our helper methods in place, update `build` in `_BasketScreenState` to tie 
   }
 ```
 
-Notice that `content` is wrapped in `SingleChildScrollView(padding: const EdgeInsets.all(16.0), child: content)`. As customers add multiple sandwiches to their order, the list of items, summary rows, checkout button, and confirmation text can easily exceed the height of a mobile display. A standard `Column` cannot scroll, which would trigger a vertical layout overflow error on smaller handsets. Wrapping the body in a `SingleChildScrollView` ensures that the user can scroll smoothly through their entire order and comfortably reach the checkout controls.
+Wrapping `content` in `SingleChildScrollView` ensures customers can scroll through longer orders and comfortably reach the checkout button on smaller screens.
 
 Run your app, add a few sandwiches to the basket, and navigate to the basket screen. You should see a list of items with their quantities, line totals, and a checkout button. Tapping the delete icon removes an item from the basket, and tapping checkout clears the basket and displays a confirmation message.
 
