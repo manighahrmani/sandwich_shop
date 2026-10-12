@@ -845,8 +845,13 @@ Be sure to make a separate commit for each exercise below, and commit more often
     ```
 
     Commit your changes with the message `Style movie listing to match brand constants`.
+6. (Advanced) Make your page adapt to the width of the window to prevent layout overflows.
 
-6. (Advanced) Make your page adapt to the width of the window. A `LayoutBuilder` gives you the available width, so you can show a different layout on narrow and wide windows. For example, in your sandwich shop app you could show the buttons in a `Row` on wide windows and a `Column` on narrow ones:
+    When you run your application across different screen sizes or resize your browser window, a fixed layout can run out of space. A horizontal `Row` that fits comfortably on a desktop display will overflow when viewed on a narrow mobile viewport because Flutter cannot automatically shrink or wrap widgets inside a plain `Row`. When children demand more width than the screen provides, Flutter reports a layout overflow error with a yellow-and-black striped hazard banner.
+
+    To resolve this without forcing a single fixed design, Flutter provides [`LayoutBuilder`](https://api.flutter.dev/flutter/widgets/LayoutBuilder-class.html). A `LayoutBuilder` measures the parent container and gives you incoming layout constraints through `constraints.maxWidth`. You can inspect this width dynamically and return a different widget tree depending on the available space: returning a `Row` on wide viewports, and switching to a vertical `Column` on narrow screens so buttons and details stack neatly instead of spilling off the display.
+
+    In your sandwich shop app, for example, you can wrap the quantity buttons in a `LayoutBuilder` to switch between a `Row` and a `Column`:
 
     ```dart
     LayoutBuilder(
