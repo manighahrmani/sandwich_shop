@@ -480,13 +480,11 @@ This is what our `MenuScreen` should ideally look like:
 
 ![The MenuScreen with a ListView of SandwichCards](images/3/menu_screen_listview.png)
 
-Notice how we use [`ListView.builder`](https://api.flutter.dev/flutter/widgets/ListView/ListView.builder.html):
+Why do we use `ListView.builder` instead of placing the cards inside a `Column` or a basic `ListView`? A standard `Column` requires unbounded vertical space and cannot scroll. As soon as your menu contains more items than fit on the display, a `Column` triggers a vertical layout overflow error.
 
-- A standard `Column` does not scroll when cards exceed screen height.
-- A standard `ListView(children: [...])` builds every child in memory all at once.
-- `ListView.builder` builds each row on demand (lazily) as it scrolls into view, recycling items that move out of view to preserve memory.
-- `itemCount: sandwiches.length` tells Flutter how many items exist in total.
-- `itemBuilder: (context, index)` is a function called for each row position `index` (0, 1, 2, ...), returning a `SandwichCard` configured with `sandwiches[index]`.
+A basic `ListView(children: [...])` adds scrolling, but it instantiates, lays out, and paints every child in memory all at once when the screen loads. For long or dynamic lists with dozens of items, this eager rendering wastes memory and causes interface stutter.
+
+In contrast, [`ListView.builder`](https://api.flutter.dev/flutter/widgets/ListView/ListView.builder.html) renders rows lazily on demand. It calls `itemBuilder` only when a row is about to scroll into the visible viewport, and recycles widgets that move out of view to preserve memory. We pass `itemCount: sandwiches.length` so Flutter knows the total number of items, and `itemBuilder: (context, index)` to return a `SandwichCard` for each position `index` from `0` to `sandwiches.length - 1`.
 
 To explore scrolling lists further, watch [Widget of the Week: ListView](https://www.youtube.com/watch?v=KJpkjHGiI5A).
 

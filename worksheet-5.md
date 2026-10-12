@@ -506,11 +506,9 @@ There are different ways to write this class, here is ours.
 
 In [Worksheet 3](./worksheet-3.md), we introduced the repository pattern to encapsulate data access. For our shopping cart, multiple screens (the order screen, the menu screen, and the basket screen) need to read and update the same list of items. We implement this shared access using the singleton pattern.
 
-<!-- TODO: Done till here -->
-
 A singleton is a class that allows only one instance to exist throughout the application. In [Worksheet 3](./worksheet-3.md), we introduced the repository pattern to encapsulate data access for sandwiches (`SandwichRepository`). For our shopping cart, multiple screens (the menu screen, the order screen, and the basket screen) need to read and update the same list of items in memory.
 
-If each screen created its own `CartRepository` by calling `CartRepository()`, every screen would hold an independent list of items. An item added on the order screen would not appear on the basket screen. To share state across multiple screens without passing the repository down the widget tree through parameters, we use the singleton pattern. A singleton ensures that a class has only one instance and provides a single global access point to it. You can read more about class constructors in the [Dart constructors documentation](https://dart.dev/language/constructors).
+If each screen created its own `CartRepository` by calling `CartRepository()`, every screen would hold an independent list of items. An item added on the order screen would not appear on the basket screen. To share state across multiple screens without passing the repository down the widget tree through parameters, we use the singleton pattern. A singleton ensures that a class has only one instance and provides a single global access point to it.
 
 Create a new file named `lib/repositories/cart_repository.dart`. Start with an empty class that declares a private named constructor:
 
@@ -522,20 +520,12 @@ class CartRepository {
 }
 ```
 
-In Dart, an identifier prefixed with an underscore (`_`) is private to its library (the file it is defined in), as you saw with state classes like `_OrderScreenState` in [Worksheet 2](./worksheet-2.md). Naming the constructor `CartRepository._internal()` creates a private named constructor. Because this constructor is private, code outside `lib/repositories/cart_repository.dart` cannot call it. This prevents any other file from accidentally creating a second instance of `CartRepository`.
+In Dart, an identifier prefixed with an underscore (`_`) is private to its library (the file it is defined in), as you saw with state classes like `_OrderScreenState` in [Worksheet 2](./worksheet-2.md). Naming the constructor `CartRepository._internal()` creates a private named constructor. Because this constructor is private, code outside `lib/repositories/cart_repository.dart` cannot call it. This prevents the creation of a second instance of `CartRepository`.
 
-Your code should look like this:
-
-![The CartRepository class with the private constructor in VS Code](images/5/cart_repository_private_constructor.png)
-
-Now expose a single shared instance from within the class by adding a static field:
+Now expose a single shared instance from within the class by adding a static field inside the class:
 
 ```dart
-class CartRepository {
-  CartRepository._internal();
-
   static final CartRepository instance = CartRepository._internal();
-}
 ```
 
 The `static` keyword means this member belongs to the class itself rather than to an individual instance of the class. You access static members directly on the class name (`CartRepository.instance`) without constructing an object. The `final` keyword ensures that the `instance` variable can only be assigned once. Because `CartRepository._internal()` is called inside the class body, it has access to the private constructor, creating the one instance our entire application will share.
@@ -550,9 +540,7 @@ Next, add an internal list to hold the customer's items:
   }
 ```
 
-The list `_items` is marked with a leading underscore to keep it private. This encapsulation prevents external code from mutating or clearing the basket directly.
-
-To let screens read the basket items safely, `getItems()` returns `List<CartItem>.unmodifiable(_items)`. In Dart, [`List.unmodifiable`](https://api.dart.dev/stable/dart-core/List/List.unmodifiable.html) creates an unmodifiable list wrapper. If an external widget attempts to call `.add()` or `.clear()` on the list returned by `getItems()`, Dart throws an `UnsupportedError` at runtime. This practice is known as defensive copying, ensuring that only the repository itself can alter its internal data structure.
+The list `_items` is again marked with a leading underscore to keep it private. To let screens read the basket items safely (without allowing modifications), `getItems()` returns `List<CartItem>.unmodifiable(_items)`. In Dart, [`List.unmodifiable`](https://api.dart.dev/stable/dart-core/List/List.unmodifiable.html) creates an unmodifiable list wrapper. If an external widget attempts to call `.add()` or `.clear()` on the list returned by `getItems()`, Dart throws an `UnsupportedError` at runtime. This practice is known as defensive copying, ensuring that only the repository itself can alter its internal data structure.
 
 Now add methods to add and remove items:
 
@@ -568,9 +556,7 @@ Now add methods to add and remove items:
   }
 ```
 
-The `addItem` method appends a new `CartItem` to `_items`. The `removeItem` method checks that the provided `index` falls within the valid range (`index >= 0 && index < _items.length`) before removing the element with `removeAt(index)`. Checking bounds prevents `RangeError` runtime exceptions if an invalid index is passed.
-
-Next, add methods to calculate item quantities, prices, and the delivery fee:
+Hopefully you know what these methods do. Next, add methods to calculate item quantities, prices, and the delivery fee:
 
 ```dart
   int getTotalItems() {
@@ -609,74 +595,9 @@ Next, add methods to calculate item quantities, prices, and the delivery fee:
   }
 ```
 
-The `getTotalItems` method uses an explicit procedural `for-in` loop to sum the `quantity` of every item in `_items`. The getter `totalItemCount` delegates to `getTotalItems()`, providing property access for badges and counters.
+The only thing worth nothing is how the getter `totalItemCount` delegates to `getTotalItems()` (letting this property be accessed like an instance variable). This is a common pattern in Dart, where you can define a getter that computes a value on demand.
 
-The `getSubtotal` method iterates over `_items` and sums the `lineTotal` of each item. The `getDeliveryFee` method checks whether `_items` is empty: if the basket is empty, delivery is `0.0`; otherwise, a flat fee of `1.50` (£1.50) is charged. The `getTotalDue` method sums the subtotal and the delivery fee to give the final amount payable. Finally, `clear()` empties `_items`, resetting the basket after checkout.
-
-Your complete `lib/repositories/cart_repository.dart` file should look like this:
-
-```dart
-import 'package:sandwich_shop/models/cart_item.dart';
-
-class CartRepository {
-  CartRepository._internal();
-
-  static final CartRepository instance = CartRepository._internal();
-
-  final List<CartItem> _items = [];
-
-  List<CartItem> getItems() {
-    return List<CartItem>.unmodifiable(_items);
-  }
-
-  void addItem(CartItem item) {
-    _items.add(item);
-  }
-
-  void removeItem(int index) {
-    if (index >= 0 && index < _items.length) {
-      _items.removeAt(index);
-    }
-  }
-
-  int getTotalItems() {
-    int total = 0;
-    for (final CartItem item in _items) {
-      total += item.quantity;
-    }
-    return total;
-  }
-
-  int get totalItemCount {
-    return getTotalItems();
-  }
-
-  double getSubtotal() {
-    double sum = 0.0;
-    for (final CartItem item in _items) {
-      sum += item.lineTotal;
-    }
-    return sum;
-  }
-
-  double getDeliveryFee() {
-    if (_items.isEmpty) {
-      return 0.0;
-    }
-    return 1.50;
-  }
-
-  double getTotalDue() {
-    return getSubtotal() + getDeliveryFee();
-  }
-
-  void clear() {
-    _items.clear();
-  }
-}
-```
-
-Your file in the editor should look like this:
+Your complete `lib/repositories/cart_repository.dart` file should have all the members shown in the screenshot below:
 
 ![The complete CartRepository class in VS Code](images/5/cart_repository_complete.png)
 
@@ -693,7 +614,7 @@ import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 ```
 
-Next, define two sample `Sandwich` constants at the top level of the test file:
+Next, define two sample `Sandwich` constants at the top level of the test file (outside of any function). These constants will be used to create predictable test fixtures with known prices (£10.00 and £6.00) without depending on external asset files.
 
 ```dart
 const Sandwich testSandwich1 = Sandwich(
@@ -713,20 +634,21 @@ const Sandwich testSandwich2 = Sandwich(
 );
 ```
 
-These constants give us predictable test fixtures with known prices (£10.00 and £6.00) without depending on external asset files.
+Because `CartRepository` is a singleton, its in-memory list persists across the entire test session. If one test adds items to the cart, subsequent tests would see those items unless we reset the repository state. To prevent test pollution, Flutter provides the `setUp` hook which runs before each test. We can use it to clear the cart before every test case.
 
-Because `CartRepository` is a singleton, its in-memory list persists across the entire test session. If one test adds items to the cart, subsequent tests would see those items unless we reset the repository state. To prevent test pollution, Flutter provides the `setUp` hook:
+Add the following `setUp` function inside `main()` in `test/cart_repository_test.dart`:
 
 ```dart
 void main() {
   setUp(() {
     CartRepository.instance.clear();
   });
+}
 ```
 
 The `setUp` callback runs before every individual test in this file. Calling `CartRepository.instance.clear()` inside `setUp` guarantees that each test starts with a clean, empty basket.
 
-Now add the test group with three test cases:
+Now add the test group with three test cases inside `main()`:
 
 ```dart
   group('CartRepository tests', () {
@@ -776,7 +698,6 @@ Now add the test group with three test cases:
       expect(cart.getTotalDue(), 0.0);
     });
   });
-}
 ```
 
 Here is what each test case verifies:
@@ -787,92 +708,9 @@ Here is what each test case verifies:
 
 Your complete `test/cart_repository_test.dart` file should look like this:
 
-```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/models/cart_item.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/repositories/cart_repository.dart';
+![The complete cart repository unit tests in VS Code](images/5/cart_repository_tests.png)
 
-const Sandwich testSandwich1 = Sandwich(
-  id: 'footlong',
-  name: 'Footlong Sub',
-  description: 'Classic freshly baked sub.',
-  price: 10.0,
-  imagePath: 'assets/images/footlong.jpeg',
-);
-
-const Sandwich testSandwich2 = Sandwich(
-  id: 'six_inch',
-  name: 'Six-Inch Sub',
-  description: 'Six inch sub.',
-  price: 6.0,
-  imagePath: 'assets/images/six_inch.jpeg',
-);
-
-void main() {
-  setUp(() {
-    CartRepository.instance.clear();
-  });
-
-  group('CartRepository tests', () {
-    test('starts with empty basket and zero totals', () {
-      final CartRepository cart = CartRepository.instance;
-      expect(cart.getItems().length, 0);
-      expect(cart.getTotalItems(), 0);
-      expect(cart.totalItemCount, 0);
-      expect(cart.getSubtotal(), 0.0);
-      expect(cart.getDeliveryFee(), 0.0);
-      expect(cart.getTotalDue(), 0.0);
-    });
-
-    test('adds items and calculates subtotal and delivery fee correctly', () {
-      final CartRepository cart = CartRepository.instance;
-      const CartItem item1 = CartItem(
-        sandwich: testSandwich1,
-        quantity: 2,
-      );
-      const CartItem item2 = CartItem(
-        sandwich: testSandwich2,
-        quantity: 1,
-      );
-
-      cart.addItem(item1);
-      cart.addItem(item2);
-
-      expect(cart.getItems().length, 2);
-      expect(cart.getTotalItems(), 3);
-      expect(cart.totalItemCount, 3);
-      expect(cart.getSubtotal(), 26.0);
-      expect(cart.getDeliveryFee(), 1.50);
-      expect(cart.getTotalDue(), 27.50);
-    });
-
-    test('removes items correctly', () {
-      final CartRepository cart = CartRepository.instance;
-      const CartItem item = CartItem(
-        sandwich: testSandwich1,
-        quantity: 1,
-      );
-      cart.addItem(item);
-      expect(cart.getItems().length, 1);
-
-      cart.removeItem(0);
-      expect(cart.getItems().length, 0);
-      expect(cart.getTotalDue(), 0.0);
-    });
-  });
-}
-```
-
-Run your new unit tests in the terminal:
-
-```bash
-flutter test test/cart_repository_test.dart
-```
-
-All three tests should pass:
-
-![The cart repository unit tests passing in the terminal](images/5/cart_repository_tests_terminal.png)
+Run this new test suite and make sure it passes.
 
 ## Building the order screen
 
@@ -880,30 +718,7 @@ Now that the cart model and repository are ready, we turn `lib/screens/order_scr
 
 ### Recap the order screen state
 
-In branch 4, `OrderScreen` was a `StatefulWidget` containing a quantity integer and two buttons (**Add** and **Remove**) that called `setState`:
-
-```dart
-class _OrderScreenState extends State<OrderScreen> {
-  int _quantity = 0;
-
-  void _increaseQuantity() {
-    if (_quantity < widget.maxQuantity) {
-      setState(() {
-        _quantity++;
-      });
-    }
-  }
-
-  void _decreaseQuantity() {
-    if (_quantity > 0) {
-      setState(() {
-        _quantity--;
-      });
-    }
-  }
-```
-
-We keep these quantity handlers and connect them to our basket repository.
+In branch 4, `OrderScreen` was a `StatefulWidget` containing a quantity integer and two buttons (**Add** and **Remove**) that called `setState`. We will keep these quantity handlers and connect them to our basket repository.
 
 ### Update the order screen app bar
 
@@ -914,18 +729,13 @@ import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 ```
 
-In `OrderScreen.build`, update the `AppBar` to display our themed title and include `BasketButton`:
-
-```dart
-      appBar: AppBar(
-        title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton()],
-      ),
-```
-
-Your order screen app bar should look like this:
+In `OrderScreen.build`, update the `AppBar` to display our themed title and include `BasketButton`. The changes in your order screen app bar should look like this:
 
 ![The order screen app bar with title and basket button](images/5/order_screen_app_bar.png)
+
+Make sure to run your app, navigate to the order screen, and verify that the app bar displays the styled title and basket button. Our `OrderScreen` looks like this:
+
+![The order screen with the styled app bar and basket button](images/5/order_screen_app_bar_app.png)
 
 ### Add items to the basket
 
@@ -937,7 +747,7 @@ import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 ```
 
-Add a string field in `_OrderScreenState` to hold an inline feedback message:
+Add a string field (instance variable) in `_OrderScreenState` to hold an inline feedback message:
 
 ```dart
   String _confirmationMessage = '';
@@ -965,9 +775,15 @@ Next, add the submission method `_addToBasket`:
   }
 ```
 
-The method checks that `_quantity > 0`. If valid, it constructs a `CartItem` holding `widget.sandwich` and `_quantity`, and passes it to `CartRepository.instance.addItem(item)`. It then updates `_confirmationMessage` inside `setState`. If the quantity is zero, it informs the user to select at least one sandwich.
+The method checks that `_quantity > 0`. If valid, it constructs a `CartItem` holding `widget.sandwich` and `_quantity`, and passes it to `CartRepository.instance.addItem(item)`. (Recall that we use `widget` to access the `StatefulWidget` instance from its state class.)
 
-Add the button and confirmation message below the quantity controls in `build`:
+It then updates `_confirmationMessage` inside `setState`. If the quantity is zero, it informs the user to select at least one sandwich.
+
+So far, your changes should look like this:
+
+![The order screen state class with add to basket logic in VS Code](images/5/order_screen_add_to_basket.png)
+
+Add the button and confirmation message below the quantity controls in `build`, add this in the `Column`'s children:
 
 ```dart
             const SizedBox(height: 24),
@@ -985,7 +801,9 @@ Add the button and confirmation message below the quantity controls in `build`:
             ),
 ```
 
-Wrap the body column in a `SingleChildScrollView` to prevent screen layout issues:
+In Worksheet 3, we resolved layout overflow inside a `Row` using `Expanded`. A `Column` behaves similarly along the vertical axis. If child widgets require more vertical height than the display provides (for example on smaller handsets, in landscape orientation, or when user font sizes increase), Flutter cannot resize them and reports a vertical `RenderFlex` overflow error with a yellow-and-black striped hazard banner.
+
+While Worksheet 3 used `ListView.builder` for scrolling an arbitrary collection of repeating cards, a `SingleChildScrollView` is designed to make a single fixed layout of heterogeneous widgets scrollable. Wrapping the body `Column` in a [`SingleChildScrollView`](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) ensures that the entire column scrolls smoothly if the viewport is constrained:
 
 ```dart
       body: SingleChildScrollView(
@@ -1404,7 +1222,7 @@ When items are present, your screen should look like this:
 
 ### Assemble the basket screen scaffold
 
-Finally, implement the `build` method to select between the empty state and the basket list:
+Finally, implement the `build` method to select between the empty state and the basket list. We wrap `content` in a `SingleChildScrollView` so that customers who add multiple sandwiches can scroll down through their full order, price summaries, and the checkout button without encountering layout overflow errors:
 
 ```dart
   @override
@@ -1725,7 +1543,9 @@ The `_saveSettings` method reads values from each controller, constructs a `User
 
 ### Wrap the form in a scroll view
 
-On mobile devices, tapping any text field triggers the software keyboard to slide up from the bottom of the display. If the inputs sit in an unconstrained `Column`, the reduced vertical space causes a yellow-and-black striped layout overflow error. Wrapping the form in a `SingleChildScrollView` ensures that the screen can scroll smoothly whenever the keyboard appears. For further guidance, see the [SingleChildScrollView documentation](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html).
+On mobile devices, tapping any text field triggers the software keyboard to slide up from the bottom of the display, reducing available screen height by hundreds of pixels. If the form fields sit in an unconstrained `Column`, the reduced vertical space causes a yellow-and-black striped layout overflow error.
+
+Unlike the repeating sandwich cards in Worksheet 3 where we used `ListView.builder`, this settings screen is a single fixed form with distinct fields, toggles, and buttons. Wrapping the form `Column` in a `SingleChildScrollView` ensures that the entire page scrolls smoothly whenever the keyboard appears, allowing users to reach every input field and tap **Save Settings**. For further guidance, see the [SingleChildScrollView documentation](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html).
 
 Implement the `build` method inside `_SettingsScreenState`:
 
