@@ -803,7 +803,17 @@ Add the button and confirmation message below the quantity controls in `build`, 
 
 In Worksheet 3, we resolved layout overflow inside a `Row` using `Expanded`. A `Column` behaves similarly along the vertical axis. If child widgets require more vertical height than the display provides (for example on smaller handsets, in landscape orientation, or when user font sizes increase), Flutter cannot resize them and reports a vertical `RenderFlex` overflow error with a yellow-and-black striped hazard banner.
 
-While Worksheet 3 used `ListView.builder` for scrolling an arbitrary collection of repeating cards, a `SingleChildScrollView` is designed to make a single fixed layout of heterogeneous widgets scrollable. Wrapping the body `Column` in a [`SingleChildScrollView`](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) ensures that the entire column scrolls smoothly if the viewport is constrained:
+While Worksheet 3 used `ListView.builder` for scrolling an arbitrary collection of repeating cards, a `SingleChildScrollView` is designed to make a single fixed layout of different widgets scrollable. Wrapping the body `Column` in a [`SingleChildScrollView`](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) ensures that the entire column scrolls smoothly if the viewport is constrained.
+
+Click on the `Column` widget in VS Code, then press **Ctrl + .** on Windows or **⌘ + .** on macOS to open the quick fix menu. Select **Wrap with widget**. It should look like this:
+
+![Wrapping the order screen column in a widget in VS Code](images/5/order_screen_wrap_column.png)
+
+Replace `widget` with `SingleChildScrollView` and add padding to the scroll view. This is what your changes should look like:
+
+![The order screen column wrapped in a SingleChildScrollView in VS Code](images/5/order_screen_scroll_view.png)
+
+Below we've made some other changes including adding a text widget with the sandwich name and updating spacing. Just make sure to keep the existing `OrderItemDisplay` class unchanged at the bottom of the file. Your complete `body` should look like this:
 
 ```dart
       body: SingleChildScrollView(
@@ -850,35 +860,17 @@ While Worksheet 3 used `ListView.builder` for scrolling an arbitrary collection 
       ),
 ```
 
-Keep the existing `OrderItemDisplay` class unchanged at the bottom of the file.
+Your order screen should now look like this:
+
+![The order screen with quantity controls, Add to Basket button, and confirmation message](images/5/order_screen_final.png)
 
 ### Widget test the order screen
 
 Create a new test file named `test/order_screen_test.dart` to verify that selecting a quantity and tapping **Add to Basket** properly updates the cart repository.
 
-We define a sample `testSandwich` fixture and use the `setUp` callback to clear `CartRepository.instance` before each test, preventing test state from carrying over between test cases:
+Import `flutter_test`, the cart model, sandwich model, cart repository, and order screen. Then create a test `Sandwich` constant to use in the tests. Also, add a `main` function, and in there, call `setUp()` to clear the cart repository before each test. Here is what it should look like:
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/models/cart_item.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/repositories/cart_repository.dart';
-import 'package:sandwich_shop/screens/order_screen.dart';
-
-const Sandwich testSandwich = Sandwich(
-  id: 'test',
-  name: 'Test Sub',
-  description: 'Test description',
-  price: 5.0,
-  imagePath: 'assets/images/footlong.jpeg',
-);
-
-void main() {
-  setUp(() {
-    CartRepository.instance.clear();
-  });
-```
+![The order screen widget test file with imports and setUp in VS Code](images/5/order_screen_test_setup.png)
 
 Now add three widget tests verifying screen rendering, zero-quantity validation, and basket submission:
 
@@ -935,7 +927,6 @@ Now add three widget tests verifying screen rendering, zero-quantity validation,
     expect(added.sandwich.name, 'Test Sub');
     expect(find.text('Added 2 Test Sub to basket'), findsOneWidget);
   });
-}
 ```
 
 Here is what each test case verifies:
@@ -944,93 +935,7 @@ Here is what each test case verifies:
 2. `Adding to basket without selecting quantity shows warning`: taps **Add to Basket** when quantity is zero, calls `tester.pump()` to trigger a rebuild, and asserts that the warning message `Please select at least 1 sandwich` is shown while the repository remains empty.
 3. `Adding to basket records quantity and sandwich`: simulates a customer tapping **Add** twice to choose a quantity of 2, taps **Add to Basket**, and asserts that an item with quantity 2 was stored in `CartRepository.instance` and the confirmation message `Added 2 Test Sub to basket` is rendered.
 
-Your complete `test/order_screen_test.dart` file should look like this:
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/models/cart_item.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/repositories/cart_repository.dart';
-import 'package:sandwich_shop/screens/order_screen.dart';
-
-const Sandwich testSandwich = Sandwich(
-  id: 'test',
-  name: 'Test Sub',
-  description: 'Test description',
-  price: 5.0,
-  imagePath: 'assets/images/footlong.jpeg',
-);
-
-void main() {
-  setUp(() {
-    CartRepository.instance.clear();
-  });
-
-  testWidgets('OrderScreen shows quantity buttons and Add to Basket button', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
-    );
-
-    expect(find.text('Order Test Sub'), findsOneWidget);
-    expect(find.text('0 Test Sub sandwich(es): '), findsOneWidget);
-    expect(find.text('Add'), findsOneWidget);
-    expect(find.text('Remove'), findsOneWidget);
-    expect(find.text('Add to Basket'), findsOneWidget);
-  });
-
-  testWidgets('Adding to basket without selecting quantity shows warning', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
-    );
-
-    await tester.tap(find.text('Add to Basket'));
-    await tester.pump();
-
-    expect(find.text('Please select at least 1 sandwich'), findsOneWidget);
-    expect(CartRepository.instance.getItems(), isEmpty);
-  });
-
-  testWidgets('Adding to basket records quantity and sandwich', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
-    );
-
-    await tester.tap(find.text('Add'));
-    await tester.pump();
-    await tester.tap(find.text('Add'));
-    await tester.pump();
-
-    await tester.tap(find.text('Add to Basket'));
-    await tester.pump();
-
-    final List<CartItem> items = CartRepository.instance.getItems();
-    expect(items.length, 1);
-
-    final CartItem added = items.first;
-    expect(added.quantity, 2);
-    expect(added.sandwich.id, 'test');
-    expect(added.sandwich.name, 'Test Sub');
-    expect(find.text('Added 2 Test Sub to basket'), findsOneWidget);
-  });
-}
-```
-
-Run your new widget tests:
-
-```bash
-flutter test test/order_screen_test.dart
-```
-
-All three tests should pass:
-
-![The order screen widget tests passing in the terminal](images/5/order_screen_tests_terminal.png)
+Don't forget to run this new test suite and make sure it passes.
 
 ## Building the basket screen
 
@@ -1038,7 +943,7 @@ Now we replace the placeholder `lib/screens/basket_screen.dart` with a full scre
 
 ### Convert BasketScreen to a stateful widget
 
-Open `lib/screens/basket_screen.dart`. Replace the placeholder with a `StatefulWidget`:
+Open `lib/screens/basket_screen.dart`. Replace the placeholder with the complete `StatefulWidget` implementation below:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1059,15 +964,7 @@ class BasketScreen extends StatefulWidget {
 
 class _BasketScreenState extends State<BasketScreen> {
   String _confirmationMessage = '';
-```
 
-The screen holds a `_confirmationMessage` string to display feedback when orders are placed.
-
-### Build the empty basket state
-
-When the cart contains no items, we display an empty state message. Add the `_buildEmptyState` helper inside `_BasketScreenState`:
-
-```dart
   Widget _buildEmptyState() {
     return const Center(
       child: Padding(
@@ -1079,17 +976,7 @@ When the cart contains no items, we display an empty state message. Add the `_bu
       ),
     );
   }
-```
 
-Your empty basket view should look like this in the running app:
-
-![The basket screen showing the empty state message](images/5/basket_screen_empty.png)
-
-### Build the basket item card
-
-Next, add a helper to format each item as a row displaying its quantity, name, calculated line total, and a delete button:
-
-```dart
   Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -1120,15 +1007,7 @@ Next, add a helper to format each item as a row displaying its quantity, name, c
       ),
     );
   }
-```
 
-The `IconButton` with `Icons.delete_outline` calls `cart.removeItem(index)` inside `setState` to immediately remove the item and refresh the view.
-
-### Build the basket items list and checkout button
-
-Now create helpers that assemble the item cards, price breakdown, and checkout button:
-
-```dart
   Widget _buildTotalRow(String label, String value, {bool emphasise = false}) {
     final TextStyle style;
     if (emphasise) {
@@ -1212,19 +1091,7 @@ Now create helpers that assemble the item cards, price breakdown, and checkout b
       children: children,
     );
   }
-```
 
-The loop builds a row for every item, followed by rows for items subtotal, delivery fee, and the overall total. The **Checkout** button runs `cart.clear()` and sets the confirmation text.
-
-When items are present, your screen should look like this:
-
-![The basket screen showing items, total due, and checkout button](images/5/basket_screen_with_items.png)
-
-### Assemble the basket screen scaffold
-
-Finally, implement the `build` method to select between the empty state and the basket list. We wrap `content` in a `SingleChildScrollView` so that customers who add multiple sandwiches can scroll down through their full order, price summaries, and the checkout button without encountering layout overflow errors:
-
-```dart
   @override
   Widget build(BuildContext context) {
     final CartRepository cart = CartRepository.instance;
@@ -1264,6 +1131,225 @@ Finally, implement the `build` method to select between the empty state and the 
   }
 }
 ```
+
+Notice how `_BasketScreenState` is structured. Instead of putting hundreds of lines of layout logic inside a single monolithic `build` method, we break the interface down into smaller, focused helper methods that return widgets (`_buildEmptyState`, `_buildLineItem`, `_buildTotalRow`, and `_buildBasketList`).
+
+In VS Code, you can perform this refactoring using the quick fix menu. If you have a block of widgets inside your `build` method, place your cursor on the parent widget and press **Ctrl + .** on Windows or **⌘ + .** on macOS. Selecting **Extract Method** prompts you for a name and moves that widget subtree into its own helper method inside the state class. You can also select **Extract Widget** if you want to extract it into a separate `StatelessWidget` class.
+
+Let us walk through each helper method in detail so you understand why each part is needed and how the pieces assemble.
+
+### Build the empty basket state
+
+When the user navigates to the basket before adding any sandwiches, displaying empty pricing rows or an inactive checkout button is confusing. We provide an empty state through the `_buildEmptyState` helper:
+
+```dart
+  Widget _buildEmptyState() {
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 32.0),
+        child: Text(
+          'Your basket is empty',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      ),
+    );
+  }
+```
+
+The `Center` widget centres the text horizontally and vertically within the available space. We wrap the text in `Padding` with `EdgeInsets.symmetric(vertical: 32.0)` to give the placeholder visual breathing room above and below without adding unnecessary horizontal margins. The text uses a muted grey colour (`Colors.grey`) and a distinct font size (`16`) to communicate an informative placeholder state.
+
+### Build the basket item card
+
+When items exist in the basket, each sandwich must display its quantity, name, calculated line total, and an option to remove the item:
+
+```dart
+  Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${item.quantity} x ${item.sandwich.name}',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text('£${item.lineTotal.toStringAsFixed(2)}'),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete_outline, color: Colors.red),
+            onPressed: () {
+              setState(() {
+                cart.removeItem(index);
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+```
+
+The layout uses a `Row` containing the item description on the left and an `IconButton` on the right:
+
+In Worksheet 3, we met `Expanded` for constraining text width in rows. Here in `_buildLineItem`, `Expanded` is critical. Sandwich names vary in length; a long name would expand horizontally and push the delete button off the right edge of the display, causing a yellow-and-black striped layout overflow error. Wrapping the text `Column` in `Expanded` forces it to take only the remaining horizontal space in the row, wrapping long sandwich names onto multiple lines while guaranteeing space for the delete button.
+
+The line total is formatted with `toStringAsFixed(2)`. In Dart, double values omit trailing zeros (`10.0` or `7.5`). Calling `toStringAsFixed(2)` rounds and formats the number to two decimal places, producing clean currency figures like `£10.00`.
+
+The `IconButton` uses `Icons.delete_outline` with red colouring to indicate a destructive action. Its `onPressed` callback invokes `cart.removeItem(index)` inside `setState`. Calling `removeItem` mutates the repository list, and wrapping that call in `setState` signals Flutter to rebuild `BasketScreen` immediately so the deleted item vanishes and all total figures update.
+
+### Build the basket items list and checkout button
+
+The order summary displays three total rows: items subtotal, delivery fee, and the grand total to pay. Writing three separate `Row` implementations would duplicate layout logic, so we extract `_buildTotalRow`:
+
+```dart
+  Widget _buildTotalRow(String label, String value, {bool emphasise = false}) {
+    final TextStyle style;
+    if (emphasise) {
+      style = const TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+    } else {
+      style = const TextStyle(color: shopText);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: style),
+          Text(value, style: style),
+        ],
+      ),
+    );
+  }
+```
+
+In `_buildTotalRow`, `MainAxisAlignment.spaceBetween` pushes the description label to the far-left edge and the formatted price to the far-right edge. The optional named parameter `{bool emphasise = false}` determines typography. For intermediate subtotals, standard `shopText` is used; for the final total to pay, `emphasise: true` applies bold weight and a larger `16` font size.
+
+Next, the `_buildBasketList` helper assembles all item rows, totals, and the checkout action:
+
+```dart
+  Widget _buildBasketList(CartRepository cart, List<CartItem> items) {
+    final List<Widget> children = [];
+
+    children.add(const Text('Your basket', style: shopSectionTitleStyle));
+    children.add(const SizedBox(height: 16));
+
+    for (int index = 0; index < items.length; index++) {
+      final CartItem item = items[index];
+      children.add(_buildLineItem(cart, item, index));
+    }
+
+    children.add(const SizedBox(height: 24));
+    children.add(
+      _buildTotalRow(
+        'Items subtotal',
+        '£${cart.getSubtotal().toStringAsFixed(2)}',
+      ),
+    );
+    children.add(
+      _buildTotalRow(
+        'Delivery',
+        '£${cart.getDeliveryFee().toStringAsFixed(2)}',
+      ),
+    );
+    children.add(
+      _buildTotalRow(
+        'Total to pay',
+        '£${cart.getTotalDue().toStringAsFixed(2)}',
+        emphasise: true,
+      ),
+    );
+    children.add(const SizedBox(height: 24));
+
+    children.add(
+      SizedBox(
+        width: double.infinity,
+        child: PrimaryButton(
+          label: 'Checkout',
+          onPressed: () {
+            setState(() {
+              cart.clear();
+              _confirmationMessage = 'Thanks, your order is on its way';
+            });
+          },
+        ),
+      ),
+    );
+
+    if (_confirmationMessage.isNotEmpty) {
+      children.add(const SizedBox(height: 12));
+      children.add(
+        Text(
+          _confirmationMessage,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
+  }
+```
+
+We build `children` procedurally using a standard `for` loop over `items`, calling `_buildLineItem` for each sandwich entry. We then append the three total rows using our helper, and add our reusable `PrimaryButton` wrapped in `SizedBox(width: double.infinity)` so the button fills the container width.
+
+When the user taps **Checkout**, `onPressed` runs `cart.clear()` to empty the basket and sets `_confirmationMessage` inside `setState`. If a confirmation message is present, an extra `Text` widget appears below the button.
+
+### Assemble the basket screen scaffold
+
+The `build` method coordinates between the empty state and the populated basket:
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    final CartRepository cart = CartRepository.instance;
+    final List<CartItem> items = cart.getItems();
+
+    final Widget content;
+    if (items.isEmpty) {
+      if (_confirmationMessage.isNotEmpty) {
+        content = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildEmptyState(),
+            const SizedBox(height: 12),
+            Text(
+              _confirmationMessage,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        );
+      } else {
+        content = _buildEmptyState();
+      }
+    } else {
+      content = _buildBasketList(cart, items);
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(appTitle, style: shopHeaderStyle),
+        actions: const [BasketButton()],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: content,
+      ),
+    );
+  }
+```
+
+The method reads the repository instance and checks `items.isEmpty`. If the basket is empty and an order was just submitted, it pairs `_buildEmptyState()` with the confirmation message; otherwise, it displays `_buildEmptyState()`. When items are present, it renders `_buildBasketList(cart, items)`.
+
+Notice that `content` is wrapped in `SingleChildScrollView(padding: const EdgeInsets.all(16.0), child: content)`. As customers add multiple sandwiches to their order, the list of items, summary rows, checkout button, and confirmation text can easily exceed the height of a mobile display. A standard `Column` cannot scroll, which would trigger a vertical layout overflow error on smaller handsets. Wrapping the body in a `SingleChildScrollView` ensures that the user can scroll smoothly through their entire order and comfortably reach the checkout controls.
 
 ### Widget test the basket screen
 
