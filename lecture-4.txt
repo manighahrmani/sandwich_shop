@@ -192,4 +192,3 @@ Module feedback
 Give us your feedback, comments, criticisms, or insults by filling out the following form.
 It’s anonymous; you need to sign in via your student account, but your details aren’t recorded.
 Use this link or the QR code: forms.cloud.microsoft/e/88jd4UGAui
-
