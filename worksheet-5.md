@@ -552,7 +552,7 @@ Now add methods to add and remove items:
   }
 ```
 
-Next, add methods to calculate item quantities, prices, and the delivery fee:
+Next, add methods to calculate quantities and prices. Start with `getTotalItems()` and the `totalItemCount` getter:
 
 ```dart
   int getTotalItems() {
@@ -566,7 +566,13 @@ Next, add methods to calculate item quantities, prices, and the delivery fee:
   int get totalItemCount {
     return getTotalItems();
   }
+```
 
+`getTotalItems()` iterates through `_items` using a procedural `for` loop, accumulating each item's `quantity`. The getter `totalItemCount` delegates to `getTotalItems()`, exposing the count as a property.
+
+Now add `getSubtotal()`, `getDeliveryFee()`, and `getTotalDue()` to compute prices:
+
+```dart
   double getSubtotal() {
     double sum = 0.0;
     for (final CartItem item in _items) {
@@ -585,13 +591,19 @@ Next, add methods to calculate item quantities, prices, and the delivery fee:
   double getTotalDue() {
     return getSubtotal() + getDeliveryFee();
   }
+```
 
+`getSubtotal()` sums `lineTotal` across all cart items. `getDeliveryFee()` returns `0.0` when the basket is empty, or a flat fee of `1.50` when items are present. `getTotalDue()` adds the subtotal and delivery fee together.
+
+Finally, add `clear()` to empty the basket:
+
+```dart
   void clear() {
     _items.clear();
   }
 ```
 
-The getter `totalItemCount` delegates to `getTotalItems()`, computing the total item count on demand.
+Calling `clear()` wipes the internal list, which we use when resetting the basket after checkout.
 
 Your complete `lib/repositories/cart_repository.dart` file should have all the members shown in the screenshot below:
 
@@ -811,7 +823,15 @@ Replace `widget` with `SingleChildScrollView` and add padding to the scroll view
 
 ![The order screen column wrapped in a SingleChildScrollView in VS Code](images/5/order_screen_scroll_view.png)
 
-Below we've made some other changes including adding a text widget with the sandwich name and updating spacing. Just make sure to keep the existing `OrderItemDisplay` class unchanged at the bottom of the file. Your complete `body` should look like this:
+Now assemble the complete `body` inside the `SingleChildScrollView`. Place a `Column` with `crossAxisAlignment: CrossAxisAlignment.start` as its child, containing:
+
+1. A `Text` title displaying `'Order ${widget.sandwich.name}'` with bold styling.
+2. A `SizedBox(height: 16)` spacer followed by `OrderItemDisplay(_quantity, widget.sandwich.name)`.
+3. The centred `Row` of **Remove** and **Add** buttons that modify `_quantity`.
+4. Our full-width `PrimaryButton` labelled **Add to Basket**, wrapped in `SizedBox(width: double.infinity)`.
+5. The `Text` widget displaying `_confirmationMessage`.
+
+Your `body` should look like this:
 
 ```dart
       body: SingleChildScrollView(
@@ -857,6 +877,8 @@ Below we've made some other changes including adding a text widget with the sand
         ),
       ),
 ```
+
+Keep the existing `OrderItemDisplay` class unchanged at the bottom of the file.
 
 Your order screen should now look like this:
 
@@ -1162,7 +1184,9 @@ The order summary displays three total rows: items subtotal, delivery fee, and t
 
 In `_buildTotalRow`, `MainAxisAlignment.spaceBetween` pushes the description label to the far-left edge and the formatted price to the far-right edge. The optional named parameter `{bool emphasise = false}` determines typography: standard `shopText` for intermediate subtotals, and bold weight with a larger `16` font size for the final total to pay.
 
-Now add the `_buildBasketList` helper to assemble the item cards, price breakdown, and checkout button:
+Now construct the `_buildBasketList` helper inside `_BasketScreenState`. We build its contents procedurally by accumulating widgets into a `List<Widget> children` list.
+
+Start by adding the section title and a `for` loop that calls `_buildLineItem` for each sandwich in the cart:
 
 ```dart
   Widget _buildBasketList(CartRepository cart, List<CartItem> items) {
@@ -1175,7 +1199,11 @@ Now add the `_buildBasketList` helper to assemble the item cards, price breakdow
       final CartItem item = items[index];
       children.add(_buildLineItem(cart, item, index));
     }
+```
 
+Next, append the three total rows by calling `_buildTotalRow`:
+
+```dart
     children.add(const SizedBox(height: 24));
     children.add(
       _buildTotalRow(
@@ -1197,7 +1225,11 @@ Now add the `_buildBasketList` helper to assemble the item cards, price breakdow
       ),
     );
     children.add(const SizedBox(height: 24));
+```
 
+Finally, add the full-width **Checkout** button and return the `Column`. Tapping checkout clears the cart and sets `_confirmationMessage` inside `setState`:
+
+```dart
     children.add(
       SizedBox(
         width: double.infinity,
@@ -1229,10 +1261,6 @@ Now add the `_buildBasketList` helper to assemble the item cards, price breakdow
     );
   }
 ```
-
-We build `children` procedurally using a standard `for` loop over `items`, calling `_buildLineItem` for each sandwich entry. We then append the three total rows using `_buildTotalRow`, and add our reusable `PrimaryButton` wrapped in `SizedBox(width: double.infinity)` so the button fills the container width.
-
-When the user taps **Checkout**, `onPressed` runs `cart.clear()` to empty the basket and sets `_confirmationMessage` inside `setState`. If a confirmation message is present, an extra `Text` widget appears below the button.
 
 ### Assemble the basket screen scaffold
 
@@ -1417,83 +1445,44 @@ void main() {
 }
 ```
 
-<!-- TODO: Done till here -->
-
 ## Building the customer profile settings form
 
 Capturing user input through forms is a fundamental requirement in mobile applications. In this section, we create a customer profile screen that introduces Flutter's core form widgets: `TextField`, `TextEditingController`, and `Switch`.
 
 ### Define the user settings model
 
-Create a new file named `lib/models/user_settings.dart` to hold customer preferences:
+Create a new file named `lib/models/user_settings.dart` to hold customer preferences.
 
-```dart
-class UserSettings {
-  final String name;
-  final String address;
-  final String email;
-  final bool receiveNewsletter;
+In there add a `UserSettings` class with four instance variables: `name`, `address`, `email`, and `receiveNewsletter`. Add a constructor with default values for each variable (empty strings for the first three and `false` for the last). Here is what your code should look like:
 
-  const UserSettings({
-    this.name = '',
-    this.address = '',
-    this.email = '',
-    this.receiveNewsletter = false,
-  });
-}
-```
+![The user settings model in VS Code](images/5/user_settings_model.png)
 
-Create a new unit test named `test/user_settings_test.dart` to verify default and configured values:
+Create a new unit test named `test/user_settings_test.dart` to verify default and configured values. You need to have at least two tests:
 
-```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/models/user_settings.dart';
+1. Verify that a default `UserSettings` instance has empty strings for `name`, `address`, and `email`, and that `receiveNewsletter` is false. You can see some of the constants user in [the `expect` library](https://api.flutter.dev/flutter/package-matcher_expect/#constants) documentation. See for example `isEmpty` and `isFalse`.
+2. Verify that a configured `UserSettings` instance stores the values passed to the constructor. For this, create a `UserSettings` instance with non-empty strings for `name`, `address`, and `email`, and set `receiveNewsletter` to true. Then assert that the instance variables match the values you passed in.
 
-void main() {
-  test('UserSettings defaults to empty values and false newsletter', () {
-    const UserSettings settings = UserSettings();
-    expect(settings.name, isEmpty);
-    expect(settings.address, isEmpty);
-    expect(settings.email, isEmpty);
-    expect(settings.receiveNewsletter, isFalse);
-  });
+Below is what our test file looks like. Yours can be slightly different, but it should test the same functionality. Make sure to run the test and verify that it passes.
 
-  test('UserSettings stores configured values', () {
-    const UserSettings settings = UserSettings(
-      name: 'Taylor Reed',
-      address: '22 Guildhall Walk',
-      email: 'taylor@example.com',
-      receiveNewsletter: true,
-    );
-    expect(settings.name, 'Taylor Reed');
-    expect(settings.address, '22 Guildhall Walk');
-    expect(settings.email, 'taylor@example.com');
-    expect(settings.receiveNewsletter, isTrue);
-  });
-}
-```
-
-Run the unit tests:
-
-```bash
-flutter test test/user_settings_test.dart
-```
+![The user settings unit tests in VS Code](images/5/user_settings_tests.png)
 
 ### Text controllers and form lifecycle
 
-In Flutter, reading text from an input requires a `TextEditingController`. Controllers manage the native text state and cursor position. Because controllers consume operating system resources, you must dispose of them when the widget is unmounted to prevent memory leaks.
+In Flutter, reading text from an input requires a `TextEditingController`. Controllers manage the text state and cursor position. Because controllers consume operating system resources, you must dispose of them when the widget is no longer in use to prevent the RAM from filling up with unused objects.
 
-This lifecycle is divided into three parts:
+Suppose we have a text controller called `_nameController`. The lifecycle of a controller is tied to the lifecycle of the widget that owns it. Its lifecycle is generally divided into three parts:
 
-1. Declaring fields: `late TextEditingController _nameController;`
-2. Initialisation in `initState()`: `_nameController = TextEditingController();`
-3. Disposal in `dispose()`: `_nameController.dispose();`
+1. Declaring fields: `late TextEditingController _nameController;` (`late` tells Dart that the variable will be assigned a value later, before it is used.)
+2. Initialisation in `initState()`: `_nameController = TextEditingController();` sets up the controller when the widget is first created.
+3. Disposal in `dispose()`: `_nameController.dispose();` frees the memory resources when the widget is removed from the widget tree.
 
 For more details on controller management, see the [TextEditingController documentation](https://api.flutter.dev/flutter/widgets/TextEditingController-class.html).
 
 ### Add text fields and the switch toggle
 
-Create a new file named `lib/screens/settings_screen.dart`:
+Create a new file named `lib/screens/settings_screen.dart`.
+
+First, define the `SettingsScreen` widget and the shell of its state class:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1512,12 +1501,25 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+```
+
+`SettingsScreen` is a `StatefulWidget` because its input fields, newsletter switch, and confirmation feedback change as the customer interacts with the form.
+
+Now declare the text controllers, newsletter toggle flag, and confirmation string inside `_SettingsScreenState`:
+
+```dart
   late TextEditingController _nameController;
   late TextEditingController _addressController;
   late TextEditingController _emailController;
   bool _receiveNewsletter = false;
   String _confirmationMessage = '';
+```
 
+We declare three `late TextEditingController` variables to manage the text content for the customer's name, delivery address, and email. The `late` keyword tells Dart that these fields will be initialised before they are read. The `_receiveNewsletter` flag starts as `false`, and `_confirmationMessage` starts empty.
+
+Next, override `initState()` to initialise each controller:
+
+```dart
   @override
   void initState() {
     super.initState();
@@ -1525,7 +1527,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _addressController = TextEditingController();
     _emailController = TextEditingController();
   }
+```
 
+In `initState()`, we create a fresh `TextEditingController` for each field when the widget state is first created.
+
+Now override `dispose()` to release the controllers:
+
+```dart
   @override
   void dispose() {
     _nameController.dispose();
@@ -1533,7 +1541,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _emailController.dispose();
     super.dispose();
   }
+```
 
+Calling `.dispose()` on each controller frees the operating system text-editing resources before calling `super.dispose()`.
+
+Next, add `_saveSettings` to extract the input values and update state:
+
+```dart
   void _saveSettings() {
     final String name = _nameController.text.trim();
     final String address = _addressController.text.trim();
@@ -1552,7 +1566,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 ```
 
-The `_saveSettings` method reads values from each controller, constructs a `UserSettings` instance, and stores a confirmation string.
+The `_saveSettings` method reads values from each controller with `.text.trim()`, which removes unwanted leading and trailing whitespace. It constructs a `UserSettings` instance and calls `setState()` to update `_confirmationMessage`, triggering a rebuild so the confirmation appears.
 
 ### Wrap the form in a scroll view
 
@@ -1560,7 +1574,7 @@ On mobile devices, tapping any text field triggers the software keyboard to slid
 
 Unlike the repeating sandwich cards in Worksheet 3 where we used `ListView.builder`, this settings screen is a single fixed form with distinct fields, toggles, and buttons. Wrapping the form `Column` in a `SingleChildScrollView` ensures that the entire page scrolls smoothly whenever the keyboard appears, allowing users to reach every input field and tap **Save Settings**. For further guidance, see the [SingleChildScrollView documentation](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html).
 
-Implement the `build` method inside `_SettingsScreenState`:
+Start implementing `build` inside `_SettingsScreenState` with the `Scaffold` and `SingleChildScrollView`:
 
 ```dart
   @override
@@ -1580,6 +1594,13 @@ Implement the `build` method inside `_SettingsScreenState`:
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
+```
+
+The `Scaffold` displays the app bar with `BasketButton`. Inside the body, `SingleChildScrollView` wraps a left-aligned `Column` with 16 pixels of padding, starting with a bold `'Customer Profile'` title.
+
+Now add the full name `TextField`:
+
+```dart
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
@@ -1589,6 +1610,13 @@ Implement the `build` method inside `_SettingsScreenState`:
               ),
             ),
             const SizedBox(height: 16),
+```
+
+The `controller: _nameController` links the input to our name controller. `InputDecoration` provides an outline border around the box, a floating label `'Full name'`, and placeholder hint text `'Enter your name'`.
+
+Next, add the delivery address field:
+
+```dart
             TextField(
               controller: _addressController,
               maxLines: 3,
@@ -1599,6 +1627,13 @@ Implement the `build` method inside `_SettingsScreenState`:
               ),
             ),
             const SizedBox(height: 16),
+```
+
+Setting `maxLines: 3` allows the input box to expand vertically to accommodate postal addresses that span multiple lines.
+
+Next, add the email address field:
+
+```dart
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
@@ -1609,6 +1644,13 @@ Implement the `build` method inside `_SettingsScreenState`:
               ),
             ),
             const SizedBox(height: 16),
+```
+
+The `keyboardType: TextInputType.emailAddress` parameter configures the mobile virtual keyboard to show the `@` symbol.
+
+Now add the newsletter toggle switch:
+
+```dart
             Row(
               children: [
                 const Expanded(
@@ -1625,6 +1667,13 @@ Implement the `build` method inside `_SettingsScreenState`:
               ],
             ),
             const SizedBox(height: 20),
+```
+
+The `Row` places the description text on the left and the `Switch` on the right. Wrapping the text in `Expanded` makes it take up the available horizontal space. When toggled, `onChanged` receives the new boolean value and updates `_receiveNewsletter` inside `setState()`. For more details on the toggle control, see the [Switch documentation](https://api.flutter.dev/flutter/material/Switch-class.html).
+
+Finally, add the submit button and conditional feedback message:
+
+```dart
             SizedBox(
               width: double.infinity,
               child: PrimaryButton(
@@ -1647,11 +1696,13 @@ Implement the `build` method inside `_SettingsScreenState`:
 }
 ```
 
-The `keyboardType: TextInputType.emailAddress` parameter configures the mobile virtual keyboard to show the `@` symbol. For more details on the toggle control, see the [Switch documentation](https://api.flutter.dev/flutter/material/Switch-class.html).
+Wrapping `PrimaryButton` in `SizedBox(width: double.infinity)` stretches the button across the entire width of the form. When tapped, it invokes `_saveSettings`. If `_confirmationMessage` is not empty, collection-if appends a vertical spacer and bold confirmation text below the button.
 
 ### Create the settings button and register the route
 
-Create a reusable navigation button in `lib/widgets/settings_button.dart` to open the profile screen:
+Create a reusable navigation button in `lib/widgets/settings_button.dart` to open the profile screen.
+
+Start with the widget shell and icon button:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1665,6 +1716,13 @@ class SettingsButton extends StatelessWidget {
       icon: const Icon(Icons.person_outline),
       tooltip: 'Settings',
       onPressed: () {
+```
+
+`SettingsButton` is a `StatelessWidget` that displays a person outline icon using `IconButton`.
+
+Now add the navigation logic inside `onPressed`:
+
+```dart
         final ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
         final String currentRoute;
         if (modalRoute != null) {
@@ -1687,6 +1745,8 @@ class SettingsButton extends StatelessWidget {
   }
 }
 ```
+
+The callback inspects `ModalRoute.of(context)` to check the name of the current screen. If the user is not already viewing the settings screen, it calls `Navigator.pushNamed(context, '/settings')`. This prevents stacking duplicate copies of the settings screen when the user taps the icon repeatedly.
 
 Open `lib/main.dart` and register the `'/settings'` named route:
 
@@ -1733,7 +1793,7 @@ import 'package:sandwich_shop/screens/settings_screen.dart';
 void main() {
 ```
 
-Now add two widget tests:
+Now add a test verifying that all form fields, the switch toggle, and the save button render on screen:
 
 ```dart
   testWidgets('SettingsScreen displays form fields and switches', (
@@ -1746,7 +1806,13 @@ Now add two widget tests:
     expect(find.byType(Switch), findsOneWidget);
     expect(find.text('Save Settings'), findsOneWidget);
   });
+```
 
+This test renders `SettingsScreen` and verifies that the `Customer Profile` title, three `TextField` inputs (name, address, and email), one `Switch` toggle, and the **Save Settings** button are all rendered.
+
+Next, add a test that enters form data, toggles the switch, and verifies state updates on save:
+
+```dart
   testWidgets('Toggling switch and saving settings updates state', (
     WidgetTester tester,
   ) async {
@@ -1775,57 +1841,7 @@ Now add two widget tests:
 }
 ```
 
-Here is what each test case verifies:
-
-1. `SettingsScreen displays form fields and switches`: renders `SettingsScreen` and verifies that the `Customer Profile` title, three `TextField` inputs (name, address, and email), one `Switch` toggle, and the **Save Settings** button are all rendered.
-2. `Toggling switch and saving settings updates state`: locates the individual fields using `find.widgetWithText(TextField, ...)` and enters text using `tester.enterText`. It verifies that the newsletter switch begins as `false`, taps it to toggle it to `true`, and taps **Save Settings** before asserting that the confirmation text `Settings saved for Alex Smith` appears below the button.
-
-Your complete `test/settings_screen_test.dart` file should look like this:
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/screens/settings_screen.dart';
-
-void main() {
-  testWidgets('SettingsScreen displays form fields and switches', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
-
-    expect(find.text('Customer Profile'), findsOneWidget);
-    expect(find.byType(TextField), findsNWidgets(3));
-    expect(find.byType(Switch), findsOneWidget);
-    expect(find.text('Save Settings'), findsOneWidget);
-  });
-
-  testWidgets('Toggling switch and saving settings updates state', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
-
-    final Finder nameField = find.widgetWithText(TextField, 'Full name');
-    final Finder addressField =
-        find.widgetWithText(TextField, 'Delivery address');
-    final Finder emailField = find.widgetWithText(TextField, 'Email address');
-
-    await tester.enterText(nameField, 'Alex Smith');
-    await tester.enterText(addressField, '10 Elm Road, Portsmouth');
-    await tester.enterText(emailField, 'alex@example.com');
-
-    final Finder switchFinder = find.byType(Switch);
-    expect(tester.widget<Switch>(switchFinder).value, isFalse);
-    await tester.tap(switchFinder);
-    await tester.pump();
-    expect(tester.widget<Switch>(switchFinder).value, isTrue);
-
-    await tester.tap(find.text('Save Settings'));
-    await tester.pump();
-
-    expect(find.text('Settings saved for Alex Smith'), findsOneWidget);
-  });
-}
-```
+This test locates the individual fields using `find.widgetWithText(TextField, ...)` and enters text using `tester.enterText`. It verifies that the newsletter switch begins as `false`, taps it to toggle it to `true`, and taps **Save Settings** before asserting that the confirmation text `Settings saved for Alex Smith` appears below the button.
 
 Run the settings widget tests:
 
@@ -1895,24 +1911,11 @@ Trailing slashes register entire directories. Run `flutter pub get` in your term
 
 ### Add JSON serialisation to the sandwich model
 
-Open `lib/models/sandwich.dart`. We add a factory constructor `Sandwich.fromJson` to parse a `Map<String, dynamic>` into a `Sandwich`, and a `toJson` method to convert it back to a map:
+Open `lib/models/sandwich.dart`. We add a factory constructor `Sandwich.fromJson` to parse a `Map<String, dynamic>` into a `Sandwich`, and a `toJson` method to convert it back to a map.
+
+First, add the factory constructor inside `Sandwich`:
 
 ```dart
-class Sandwich {
-  final String id;
-  final String name;
-  final String description;
-  final double price;
-  final String imagePath;
-
-  const Sandwich({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.imagePath,
-  });
-
   factory Sandwich.fromJson(Map<String, dynamic> json) {
     final num priceNumber = json['price'] as num;
     final double parsedPrice = priceNumber.toDouble();
@@ -1925,7 +1928,13 @@ class Sandwich {
       imagePath: json['imagePath'] as String,
     );
   }
+```
 
+A factory constructor creates an instance from external data. In Dart, parsing numbers from JSON can yield either an `int` or a `double`. Reading `json['price']` as `num` and calling `.toDouble()` safely converts both representations to `double` without runtime casting errors. The remaining map entries are cast directly to `String`.
+
+Now add `toJson` to convert a sandwich back to a map:
+
+```dart
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'id': id,
@@ -1935,18 +1944,13 @@ class Sandwich {
       'imagePath': imagePath,
     };
   }
-
-  String get formattedPrice {
-    return '£${price.toStringAsFixed(2)}';
-  }
-}
 ```
 
-In Dart, parsing numbers from JSON can yield either an `int` or a `double`. Reading `json['price']` as `num` and calling `.toDouble()` safely handles both integers and floats without runtime casting errors.
+The `toJson` method packs the sandwich fields into a `Map<String, dynamic>` ready for JSON encoding.
 
 ### Unit test JSON serialisation
 
-Open `test/sandwich_model_test.dart` and add tests verifying `fromJson` and `toJson`:
+Open `test/sandwich_model_test.dart`. Add a test verifying JSON decoding with `fromJson`:
 
 ```dart
     test('fromJson creates a Sandwich instance from valid JSON map', () {
@@ -1965,7 +1969,13 @@ Open `test/sandwich_model_test.dart` and add tests verifying `fromJson` and `toJ
       expect(sandwich.price, 5.50);
       expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
     });
+```
 
+This test passes a map containing sandwich attributes to `Sandwich.fromJson` and asserts that each property is extracted and cast to its expected value.
+
+Now add a test verifying map serialisation with `toJson`:
+
+```dart
     test('toJson serialises a Sandwich instance into a JSON map', () {
       const Sandwich sandwich = Sandwich(
         id: 'meatball',
@@ -1984,10 +1994,7 @@ Open `test/sandwich_model_test.dart` and add tests verifying `fromJson` and `toJ
     });
 ```
 
-Here is what each test case verifies:
-
-1. `fromJson creates a Sandwich instance from valid JSON map`: passes a `Map<String, dynamic>` containing realistic menu item data to the `Sandwich.fromJson` factory constructor, asserting that each property is extracted and cast to its proper type.
-2. `toJson serialises a Sandwich instance into a JSON map`: constructs a constant `Sandwich` model, calls `sandwich.toJson()`, and verifies that the output map contains the corresponding string and double keys and values ready for JSON encoding.
+This test constructs a constant `Sandwich` model, calls `sandwich.toJson()`, and verifies that the output map contains the corresponding keys and values.
 
 Run your model tests:
 
@@ -2001,33 +2008,16 @@ All model tests should pass:
 
 ### Load JSON data in the repository
 
-Open `lib/repositories/sandwich_repository.dart`. We add a method `loadSandwichesFromAsset` that uses `rootBundle.loadString` from `package:flutter/services.dart` to read the JSON file, decodes it with `jsonDecode` from `dart:convert`, and builds `Sandwich` instances:
+Open `lib/repositories/sandwich_repository.dart`. First, import the necessary JSON and asset packages at the top of the file:
 
 ```dart
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
+```
 
-class SandwichRepository {
-  List<Sandwich> getSandwiches() {
-    return const [
-      Sandwich(
-        id: 'footlong',
-        name: 'Footlong Sub',
-        description: 'Our classic freshly baked 12-inch sub.',
-        price: 7.50,
-        imagePath: 'assets/images/footlong.jpeg',
-      ),
-      Sandwich(
-        id: 'six_inch',
-        name: 'Six-Inch Sub',
-        description: 'A 6-inch sub packed with fresh ingredients.',
-        price: 4.50,
-        imagePath: 'assets/images/six_inch.jpeg',
-      ),
-    ];
-  }
+Now add `loadSandwichesFromAsset` to load and decode the JSON asset:
 
+```dart
   Future<List<Sandwich>> loadSandwichesFromAsset(String path) async {
     final String jsonString = await rootBundle.loadString(path);
     final List<dynamic> jsonList = jsonDecode(jsonString) as List<dynamic>;
@@ -2037,19 +2027,9 @@ class SandwichRepository {
     }
     return sandwiches;
   }
-
-  Sandwich? getSandwichById(String id) {
-    for (final Sandwich sandwich in getSandwiches()) {
-      if (sandwich.id == id) {
-        return sandwich;
-      }
-    }
-    return null;
-  }
-}
 ```
 
-The method reads the asset string asynchronously, parses the list, and uses a standard `for-in` loop to deserialize each item with `Sandwich.fromJson`. Run all tests across the repository to verify that existing synchronous calls and new model methods work properly:
+The method reads the asset string asynchronously with `rootBundle.loadString(path)`, parses the JSON string into a list with `jsonDecode`, and uses an explicit `for-in` loop to decode each item using `Sandwich.fromJson`. Run all tests across the repository to verify that existing synchronous calls and new model methods work properly:
 
 ```bash
 flutter test

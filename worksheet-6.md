@@ -134,7 +134,7 @@ Each key is a plain `const String`. Using named constants rather than typing `'u
 
 We load the saved profile settings as soon as the screen appears. Add a loader method to `_SettingsScreenState`, and call it from `initState`.
 
-First add the loader. It reads the four values and copies them into the screen's state:
+First, read the saved values asynchronously from `SharedPreferences`:
 
 ```dart
   Future<void> _loadSettings() async {
@@ -143,7 +143,13 @@ First add the loader. It reads the four values and copies them into the screen's
     final String? savedAddress = prefs.getString(prefAddress);
     final String? savedEmail = prefs.getString(prefEmail);
     final bool? savedNewsletter = prefs.getBool(prefNewsletter);
+```
 
+`SharedPreferences.getInstance()` hands back the shared store asynchronously. Then `prefs.getString` and `prefs.getBool` read the saved values using our constant keys. The first time the app runs, nothing is stored yet, so these calls return nullable types (`String?` or `bool?`).
+
+Next, assign fallback defaults using `if` checks:
+
+```dart
     String name = '';
     if (savedName != null) {
       name = savedName;
@@ -163,7 +169,13 @@ First add the loader. It reads the four values and copies them into the screen's
     if (savedNewsletter != null) {
       newsletter = savedNewsletter;
     }
+```
 
+We check each nullable result. If a value was found, we keep it; otherwise we default strings to empty text and the newsletter boolean to `false`.
+
+Finally, guard with a `mounted` check and update state:
+
+```dart
     if (!mounted) {
       return;
     }
@@ -176,9 +188,7 @@ First add the loader. It reads the four values and copies them into the screen's
   }
 ```
 
-`SharedPreferences.getInstance()` hands back the shared store, which we `await`. Then `prefs.getString(prefName)` reads the saved name. The first time the app runs, nothing is stored yet, so that call returns `null`. We assign the retrieved nullable values to local variables, and use `if` statements to check if values were found, defaulting strings to empty text and the boolean to `false` when no stored data exists.
-
-The `if (!mounted) return;` check ensures that after an `await`, calling `setState` only occurs if the widget's `State` is still active in the widget tree.
+The `if (!mounted) return;` check ensures that after an `await`, calling `setState` only occurs if the widget is still active in the widget tree. We then copy the resolved values into the controllers and newsletter flag.
 
 Now call the loader from `initState`:
 
@@ -195,7 +205,9 @@ Now call the loader from `initState`:
 
 ### Save settings when the user submits
 
-Next update the save method in `_SettingsScreenState` to write the values back to the store:
+Next update the save method in `_SettingsScreenState` to write the values back to the store.
+
+First, read the trimmed text and persist the values:
 
 ```dart
   Future<void> _saveSettings() async {
@@ -208,7 +220,13 @@ Next update the save method in `_SettingsScreenState` to write the values back t
     await prefs.setString(prefAddress, address);
     await prefs.setString(prefEmail, email);
     await prefs.setBool(prefNewsletter, _receiveNewsletter);
+```
 
+We read each controller using `.text.trim()` to strip surrounding whitespace. We obtain the preferences instance and save each setting with `setString` or `setBool`, overwriting any previously stored value.
+
+Next, build the `UserSettings` model and update screen feedback:
+
+```dart
     final UserSettings settings = UserSettings(
       name: name,
       address: address,
@@ -224,6 +242,8 @@ Next update the save method in `_SettingsScreenState` to write the values back t
     });
   }
 ```
+
+We construct a `UserSettings` instance, verify that the widget remains `mounted`, and update `_confirmationMessage` inside `setState()` so the confirmation line appears below the button.
 
 Each `set` call stores one value under its key, overwriting what was there. Update the **Save Settings** button in the `build` method to invoke `_saveSettings`:
 
@@ -576,7 +596,9 @@ Now that orders are saved, the user needs a way to reach them from anywhere in t
 
 ### Create the orders button
 
-Create a new file named `lib/widgets/orders_button.dart`, mirroring `basket_button.dart`:
+Create a new file named `lib/widgets/orders_button.dart`, mirroring `basket_button.dart`.
+
+Start with the widget shell and icon button:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -589,6 +611,13 @@ class OrdersButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.receipt_long),
       onPressed: () {
+```
+
+`OrdersButton` is a `StatelessWidget` that displays a receipt icon (`Icons.receipt_long`) inside an `IconButton`.
+
+Now add the route inspection and navigation logic inside `onPressed`:
+
+```dart
         ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
         String currentRoute = '';
 
@@ -609,7 +638,7 @@ class OrdersButton extends StatelessWidget {
 }
 ```
 
-`OrdersButton` is the same shape as `BasketButton`. It draws `Icons.receipt_long`, a receipt icon that suits a list of past orders, and its `onPressed` reads the current route name and pushes `'/orders'` unless it is already there. We register the `'/orders'` route and build the screen it opens later in this worksheet.
+The `onPressed` callback reads the current route name and pushes `'/orders'` unless the user is already on the orders screen. We register the `'/orders'` route and build the screen it opens later in this worksheet.
 
 ### Show both buttons on the menu and order screens
 
@@ -678,13 +707,20 @@ A `DateTime` holds a point in time, and its `.day`, `.month`, `.year`, `.hour`, 
 
 Saving to a database can go wrong: on some platforms the database file may fail to open, and we do not want the app to freeze or crash silently when that happens. So we give the user feedback through the same `_confirmationMessage` field the Worksheet 5 basket already has, and we wrap the save in a `try`/`catch` block so a failure shows a message instead of breaking the app.
 
-Add the method that runs when the user checks out. It is `async` because saving to the database takes time:
+Add the method that runs when the user checks out. It is `async` because saving to the database takes time.
+
+First, set initial feedback to inform the user that saving has begun:
 
 ```dart
   Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
     setState(() {
       _confirmationMessage = 'Saving your order...';
     });
+```
+
+Now, inside a `try` block, fetch the order number, build the record, and insert it into SQLite:
+
+```dart
     try {
       final SandwichDatabase database = SandwichDatabase.instance;
       final int orderNumber = await database.getNextOrderNumber();
@@ -696,6 +732,13 @@ Add the method that runs when the user checks out. It is `async` because saving 
       );
       await database.insertOrder(record);
       cart.clear();
+```
+
+Inside `try`, it asks the database for the next order number, builds an `OrderRecord` from the basket using the helper, saves it with `insertOrder`, and clears the in-memory cart.
+
+Finally, handle success navigation and catch errors:
+
+```dart
       if (!mounted) {
         return;
       }
@@ -714,7 +757,7 @@ Add the method that runs when the user checks out. It is `async` because saving 
   }
 ```
 
-First it shows "Saving your order..." so the user knows something is happening. Inside the `try` block it asks the database for the next order number, builds an `OrderRecord` from the basket using the helper, saves it with `insertOrder`, and clears the basket. The `if (!mounted) return;` guard is the same `mounted` check as on our other screens: after the `await`, we only touch the screen if it is still on display. On success it shows "Order N saved" and navigates to the orders screen by its registered name. If anything goes wrong, the `catch` block shows "Could not save your order:" followed by the error, so a problem such as the database file failing to open is reported to the user instead of failing silently.
+The `if (!mounted) return;` guard ensures that after the `await`, we only touch the screen if it is still on display. On success it updates the confirmation message and navigates to the registered `'/orders'` route. If an error occurs, the `catch` block displays the error message so database issues are clearly visible.
 
 Next, change the Checkout button in `_buildBasketList` so it calls `_checkout` instead of clearing the basket inline:
 
@@ -1048,7 +1091,9 @@ We test both kinds of persistence. The shared preferences test uses a mock store
 
 ### Test the shared preferences settings flow
 
-Create a new file named `test/settings_screen_test.dart`. Shared preferences offers `setMockInitialValues`, which fills the store with test data (or clears it) so a test runs without a real device:
+Create a new file named `test/settings_screen_test.dart`. Shared preferences offers `setMockInitialValues`, which fills the store with test data (or clears it) so a test runs without a real device.
+
+Start with the imports, `main` function, and `setUp`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1060,7 +1105,13 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
+```
 
+The `setUp` callback calls `SharedPreferences.setMockInitialValues(<String, Object>{})` to clear the mock store before each test.
+
+Now add a test verifying that the form fields and switch appear:
+
+```dart
   testWidgets('SettingsScreen displays form fields and switches', (
     WidgetTester tester,
   ) async {
@@ -1071,7 +1122,13 @@ void main() {
     expect(find.byType(Switch), findsOneWidget);
     expect(find.text('Save Settings'), findsOneWidget);
   });
+```
 
+This test confirms that the `Customer Profile` title, three `TextField` inputs, one `Switch` toggle, and the **Save Settings** button appear on screen.
+
+Next, add a test verifying that saved settings pre-fill the form on open:
+
+```dart
   testWidgets('SettingsScreen pre-fills saved settings on open', (
     WidgetTester tester,
   ) async {
@@ -1091,7 +1148,13 @@ void main() {
     final Switch switchWidget = tester.widget<Switch>(find.byType(Switch));
     expect(switchWidget.value, isTrue);
   });
+```
 
+This test seeds the store with customer details before the screen opens. `tester.pumpAndSettle()` waits for the asynchronous `_loadSettings()` call to finish and confirms that the fields and switch are pre-filled.
+
+Finally, add a test verifying that submitting the form persists the updated settings:
+
+```dart
   testWidgets('Toggling switch and saving settings updates SharedPreferences', (
     WidgetTester tester,
   ) async {
@@ -1126,7 +1189,7 @@ void main() {
 }
 ```
 
-The `setUp` clears the mock store before each test. The first test verifies the profile form fields and switch appear on the screen. The second test seeds the store with customer details before the screen opens and verifies the fields and switch pre-fill. The third test enters new customer details, flips the newsletter switch, taps Save Settings, and asserts that the updated profile is written to `SharedPreferences`.
+This test enters new customer details, flips the newsletter switch, taps **Save Settings**, and asserts that the updated profile is written to `SharedPreferences`.
 
 ### Set up an in-memory database
 
@@ -1134,7 +1197,9 @@ The database tests use two setup functions. `setUpAll` runs its callback once, b
 
 ### Test inserting and reading orders
 
-Create a new file named `test/sandwich_db_test.dart`:
+Create a new file named `test/sandwich_db_test.dart`.
+
+Start with the imports, test harness setup, and helper:
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
@@ -1190,7 +1255,13 @@ void main() {
       date: '01/01/2026 10:00',
     );
   }
+```
 
+The `setUpAll` initialises the FFI database factory once. In `setUp` we open an in-memory SQLite database, run the create-table query, and inject it with `setDatabase`. The `tearDown` cleans up afterwards, and `buildRecord` provides sample records.
+
+Now add a test verifying that inserting an order stores its fields and generates an id:
+
+```dart
   test('insertOrder stores an order and returns its id', () async {
     final int id = await SandwichDatabase.instance.insertOrder(
       buildRecord(1001, '1 x Footlong Sub', 7.50),
@@ -1202,7 +1273,13 @@ void main() {
     expect(orders.first.summary, '1 x Footlong Sub');
     expect(orders.first.total, 7.50);
   });
+```
 
+This test checks that `insertOrder` adds a row, gives back a positive integer id, and returns matching values when read back with `getAllOrders`.
+
+Next, add a test verifying descending order sort:
+
+```dart
   test('getAllOrders returns newest order number first', () async {
     await SandwichDatabase.instance.insertOrder(
       buildRecord(1001, 'First', 5.0),
@@ -1219,7 +1296,13 @@ void main() {
     expect(orders[1].orderNumber, 1002);
     expect(orders[2].orderNumber, 1001);
   });
+```
 
+This test inserts orders out of sequence and verifies that `getAllOrders` returns them sorted newest first by order number.
+
+Finally, add a test checking auto-incrementing order numbers:
+
+```dart
   test('getNextOrderNumber increments the current maximum', () async {
     expect(await SandwichDatabase.instance.getNextOrderNumber(), 1001);
     await SandwichDatabase.instance.insertOrder(
@@ -1230,13 +1313,15 @@ void main() {
 }
 ```
 
-The `setUp` opens an in-memory database with the same orders table and injects it with `setDatabase`, and `tearDown` closes it and clears the injected connection. The small `buildRecord` helper keeps each test short. The three tests check that an inserted order comes back from `getAllOrders` with the right summary and total, that orders return newest first by order number, and that `getNextOrderNumber` starts at `1001` on an empty table and returns one more than the current highest after an insert.
+This test verifies that an empty database starts numbering at `1001`, and returns one higher than the largest existing order number once records exist.
 
 ### Update the basket screen tests
 
 In Worksheet 5, `test/basket_screen_test.dart` tested the old checkout behaviour that cleared the basket and printed an inline confirmation. In this worksheet, checkout inserts the order into the SQLite database and navigates to the orders screen.
 
-Update `test/basket_screen_test.dart` to initialise the in-memory SQLite database and test that checkout stores the order record and navigates to `OrdersScreen`:
+Update `test/basket_screen_test.dart` to initialise the in-memory SQLite database and test that checkout stores the order record and navigates to `OrdersScreen`.
+
+First, update the imports, fixture, in-memory database setup, and the test app wrapper:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1305,7 +1390,13 @@ void main() {
       },
     );
   }
+```
 
+The `buildApp` helper wraps `BasketScreen` in a `MaterialApp` with the `'/orders'` route registered so the screen can navigate on checkout.
+
+Now add the test checking the empty basket state:
+
+```dart
   testWidgets('BasketScreen displays empty message when basket has no items', (
     WidgetTester tester,
   ) async {
@@ -1314,7 +1405,13 @@ void main() {
     expect(find.text('Your basket is empty'), findsOneWidget);
     expect(find.text('Checkout'), findsNothing);
   });
+```
 
+This test confirms that when the cart is empty, the empty message is displayed and the Checkout button is hidden.
+
+Next, add the test verifying line item display and item deletion:
+
+```dart
   testWidgets(
     'BasketScreen renders items and removes item when delete pressed',
     (WidgetTester tester) async {
@@ -1337,7 +1434,13 @@ void main() {
       expect(find.text('Your basket is empty'), findsOneWidget);
     },
   );
+```
 
+This test verifies that items in the basket display their quantities and prices, and that tapping delete empties the cart.
+
+Finally, add the test verifying that checking out inserts an order row into SQLite and navigates:
+
+```dart
   testWidgets(
     'BasketScreen checkout stores the order and navigates to orders',
     (WidgetTester tester) async {
@@ -1370,9 +1473,13 @@ void main() {
 }
 ```
 
+This test runs the asynchronous database insert inside `tester.runAsync`, asserts that an order row was written to the `orders` table, verifies that the in-memory cart cleared, and confirms navigation to `OrdersScreen`.
+
 ### Test the orders screen
 
-Create a new file named `test/orders_screen_test.dart` to verify that `OrdersScreen` displays past orders newest first and shows an empty state when no orders have been placed:
+Create a new file named `test/orders_screen_test.dart` to verify that `OrdersScreen` displays past orders newest first and shows an empty state when no orders have been placed.
+
+Start with the imports, `main` setup, and the database test helper:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1412,7 +1519,13 @@ void main() {
     SandwichDatabase.instance.setDatabase(database);
     return database;
   }
+```
 
+The `openDatabaseForTest` helper creates an in-memory database with the `orders` table and injects it into `SandwichDatabase.instance`.
+
+Now add a test verifying that orders display newest first:
+
+```dart
   testWidgets('OrdersScreen lists seeded orders newest-first', (
     WidgetTester tester,
   ) async {
@@ -1453,7 +1566,13 @@ void main() {
     expect(find.text('2 x Footlong Sub'), findsOneWidget);
     expect(find.byType(Divider), findsNothing);
   });
+```
 
+This test seeds order #1001 and order #1002, pumps `OrdersScreen`, and confirms that order #1002 appears first.
+
+Finally, add a test checking the empty state when no orders exist:
+
+```dart
   testWidgets('OrdersScreen shows an empty state when there are no orders', (
     WidgetTester tester,
   ) async {
@@ -1471,9 +1590,13 @@ void main() {
 }
 ```
 
+This test opens `OrdersScreen` with an empty table and verifies that the "No orders yet" placeholder message is rendered.
+
 ### Test the app bar navigation actions
 
-Create a new file named `test/widgets/app_bar_actions_test.dart` to verify that both app bar buttons appear across the screens and that tapping the orders action navigates to the orders screen:
+Create a new file named `test/widgets/app_bar_actions_test.dart` to verify that both app bar buttons appear across the screens and that tapping the orders action navigates to the orders screen.
+
+Start with the imports, setup, and navigation wrapper:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1542,7 +1665,13 @@ void main() {
       },
     );
   }
+```
 
+The `wrap` helper wraps any screen in `MaterialApp` with the `'/orders'` route registered so app bar actions can be tested uniformly.
+
+Now add tests verifying that both app bar action icons appear across each screen:
+
+```dart
   testWidgets('Menu screen shows both basket and orders actions', (
     WidgetTester tester,
   ) async {
@@ -1586,7 +1715,13 @@ void main() {
     expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
     expect(find.byIcon(Icons.receipt_long), findsOneWidget);
   });
+```
 
+These tests verify that both `Icons.shopping_basket` and `Icons.receipt_long` render on `MenuScreen`, `OrderScreen`, `BasketScreen`, and `OrdersScreen`.
+
+Finally, add a test verifying navigation when tapping the receipt action:
+
+```dart
   testWidgets('Tapping the orders action navigates to the orders screen', (
     WidgetTester tester,
   ) async {
@@ -1605,6 +1740,8 @@ void main() {
   });
 }
 ```
+
+This test simulates tapping the orders receipt button on `MenuScreen` and confirms that the navigator transitions to `OrdersScreen`.
 
 Run your test suite with `flutter test` to confirm everything passes:
 
