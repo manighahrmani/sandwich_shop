@@ -348,13 +348,15 @@ class BasketButton extends StatelessWidget {
 
 ![The list of available Material icons in VS Code](images/5/material_icons.png)
 
-Inside `onPressed`, we check the name of the current screen using `ModalRoute.of(context)`. In Flutter, a route represents a screen or page managed by the navigator stack. A modal route (`ModalRoute`) is a route that displays in front of previous content and blocks user interaction with the screens underneath it until dismissed. Standard full-screen pages in Flutter, including screens pushed with named routes, are modal routes.
+Inside `onPressed`, we check which screen the user is currently viewing. If the user is already looking at the basket, tapping the button again should not open a second copy of the basket on top of the first.
 
-The static method `ModalRoute.of(context)` searches upwards in the widget tree from `context` to find the enclosing route hosting the current widget. It returns `ModalRoute<dynamic>?`, which is nullable if the widget is not hosted inside a route (such as in an isolated unit test). In Dart, `ModalRoute<T>` is a generic class where `T` specifies the type of value returned when the route is dismissed with `Navigator.pop(context, result)`. Because `BasketButton` only inspects the screen identifier and does not receive a return value, we write `ModalRoute<dynamic>` so the method accepts a route returning any type.
+In Flutter, each screen is called a route. The screen currently displayed in front of the user is represented by a class called `ModalRoute`. We call `ModalRoute.of(context)` to ask Flutter for the route that holds our button.
 
-Every `ModalRoute` exposes a `settings` property of type `RouteSettings`, which holds configuration metadata about the route. The `name` property on `RouteSettings` is a nullable string (`String?`) that holds the route's path identifier, such as `'/'` for the menu screen or `'/basket'` for the basket screen. We retrieve `settings.name` and assign it to `currentRoute`.
+In Flutter, a screen can optionally return a result when it closes. Because different screens can return different types of data, or no data at all, Flutter uses `dynamic` to mean any type. Writing `ModalRoute<dynamic>` tells Dart that our button only wants to inspect the screen, without expecting any specific return type.
 
-If the user is not already on the basket screen (`currentRoute != '/basket'`), `Navigator.pushNamed(context, '/basket')` opens it. If they are already on the basket screen, nothing happens. This check prevents stacking duplicate copies of the basket screen when the button is tapped repeatedly.
+The route's `settings` property holds information about the screen, including its name (`settings.name`). For example, the menu screen is named `'/'` and the basket screen is named `'/basket'`. If the route exists and has a name, we store that name in our `currentRoute` variable.
+
+Finally, we compare `currentRoute != '/basket'`. If the user is on the menu or another screen, `Navigator.pushNamed(context, '/basket')` opens the basket. If the user is already on the basket screen, the code does nothing.
 
 ### Create the placeholder basket screen
 
