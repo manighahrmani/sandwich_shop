@@ -1388,9 +1388,9 @@ Next, add a test verifying that saved settings pre-fill the form on open:
   });
 ```
 
-This test seeds the store with customer details before the screen opens. `tester.pumpAndSettle()` waits for the asynchronous `_loadSettings()` call to finish and confirms that the fields and switch are pre-filled.
+This test seeds the store with customer details before the screen opens. `tester.pumpAndSettle()` waits for the asynchronous `_loadSettings()` call to finish. We use `tester.widget<Switch>(find.byType(Switch))` to retrieve the `Switch` widget instance and confirm its `value` is `true`, and check that all text inputs are pre-filled.
 
-Finally, add a test verifying that submitting the form persists the updated settings:
+Finally, add a test verifying that submitting the form persists the updated settings. Start by pumping `SettingsScreen` and entering text into the fields:
 
 ```dart
   testWidgets('Toggling switch and saving settings updates SharedPreferences', (
@@ -1406,13 +1406,25 @@ Finally, add a test verifying that submitting the form persists the updated sett
     await tester.enterText(nameField, 'Alex Smith');
     await tester.enterText(addressField, '10 Elm Road, Portsmouth');
     await tester.enterText(emailField, 'alex@example.com');
+```
 
+The `find.widgetWithText(TextField, '...')` finder locates each `TextField` widget by matching its label text. Calling `tester.enterText` simulates typing into each input field.
+
+Next, locate and toggle the newsletter switch:
+
+```dart
     final Finder switchFinder = find.byType(Switch);
     expect(tester.widget<Switch>(switchFinder).value, isFalse);
     await tester.tap(switchFinder);
     await tester.pump();
     expect(tester.widget<Switch>(switchFinder).value, isTrue);
+```
 
+We verify that the switch begins disabled, simulate a tap with `tester.tap`, pump the widget tree, and assert that its `value` switches to `true`.
+
+Finally, tap **Save Settings**, verify the confirmation text, and assert that the values were stored in `SharedPreferences`:
+
+```dart
     await tester.tap(find.text('Save Settings'));
     await tester.pump();
 
@@ -1427,7 +1439,7 @@ Finally, add a test verifying that submitting the form persists the updated sett
 }
 ```
 
-This test enters new customer details, flips the newsletter switch, taps **Save Settings**, and asserts that the updated profile is written to `SharedPreferences`.
+Tapping **Save Settings** triggers `_saveSettings()`. We check that the on-screen confirmation message is rendered, and read each preference key directly from `SharedPreferences.getInstance()` to confirm that the profile was written to the store.
 
 ### Set up an in-memory database
 
@@ -1454,7 +1466,7 @@ void main() {
 
 We call `sqfliteFfiInit()` and set `databaseFactory = databaseFactoryFfi` in `setUpAll` to prepare the SQLite engine once before running tests.
 
-Now configure database creation in `setUp` and closing the connection in `tearDown`:
+Now declare the `database` reference and configure `setUp` to open a fresh in-memory database before each test:
 
 ```dart
   late Database database;
@@ -1482,14 +1494,20 @@ Now configure database creation in `setUp` and closing the connection in `tearDo
     );
     SandwichDatabase.instance.setDatabase(database);
   });
+```
 
+In `setUp`, `databaseFactory.openDatabase` creates an isolated SQLite database using `inMemoryDatabasePath`. Running the `CREATE TABLE` query inside `onCreate` ensures the schema exists, and `SandwichDatabase.instance.setDatabase(database)` injects the in-memory connection into the singleton.
+
+Now add `tearDown` to close the connection after each test finishes:
+
+```dart
   tearDown(() async {
     await database.close();
     SandwichDatabase.instance.setDatabase(null);
   });
 ```
 
-In `setUp` we open an in-memory SQLite database, run the create-table query, and inject it into `SandwichDatabase.instance` using `setDatabase`. The `tearDown` callback closes the database and resets the instance so tests do not interfere with each other.
+The `tearDown` callback closes the in-memory database and resets the singleton instance with `setDatabase(null)` so each test runs in isolation.
 
 Next, add a helper function to construct test order records:
 
@@ -1605,7 +1623,7 @@ void main() {
 
 We initialise the SQLite FFI engine once before running tests.
 
-Now add `setUp` and `tearDown` to manage the in-memory database lifecycle:
+Now declare the `database` variable and configure `setUp` to reset state and open the in-memory database:
 
 ```dart
   late Database database;
@@ -1634,14 +1652,20 @@ Now add `setUp` and `tearDown` to manage the in-memory database lifecycle:
     );
     SandwichDatabase.instance.setDatabase(database);
   });
+```
 
+In `setUp` we empty the cart repository, open an in-memory SQLite database, and inject it into `SandwichDatabase.instance`.
+
+Now add `tearDown` to clean up after each test:
+
+```dart
   tearDown(() async {
     await database.close();
     SandwichDatabase.instance.setDatabase(null);
   });
 ```
 
-In `setUp` we reset the in-memory cart, create a fresh in-memory database with the `orders` table, and inject it into `SandwichDatabase.instance`. In `tearDown`, we close the database and clear the singleton reference.
+The `tearDown` callback closes the database and clears the singleton reference.
 
 Now add the `buildApp` navigation wrapper helper:
 
@@ -1704,7 +1728,11 @@ Next, add the test verifying line item display and item deletion:
 
 This test verifies that items in the basket display their quantities and prices, and that tapping delete empties the cart.
 
-Finally, add the test verifying that checking out inserts an order row into SQLite and navigates:
+Finally, add the test verifying that checking out inserts an order row into SQLite and navigates to the orders screen.
+
+Flutter widget tests execute inside a simulated environment that intercepts timers and asynchronous microtasks. Because SQLite operations perform real asynchronous I/O through native FFI channels, running them inside a widget test requires `tester.runAsync`. Code placed inside `tester.runAsync` escapes the simulated environment and runs on the real asynchronous event loop.
+
+Start by populating the cart and pumping the application:
 
 ```dart
   testWidgets(
@@ -1717,7 +1745,11 @@ Finally, add the test verifying that checking out inserts an order row into SQLi
       CartRepository.instance.addItem(item);
 
       await tester.pumpWidget(buildApp());
+```
 
+Next, tap **Checkout** and query the database table inside `tester.runAsync`:
+
+```dart
       late List<Map<String, Object?>> rows;
       await tester.runAsync(() async {
         await tester.tap(find.text('Checkout'));
@@ -1728,7 +1760,13 @@ Finally, add the test verifying that checking out inserts an order row into SQLi
         rows = await database.query('orders');
       });
       await tester.pump();
+```
 
+Inside `tester.runAsync`, tapping **Checkout** invokes `_checkout()`. The small delayed intervals allow the asynchronous SQLite insert and navigation animation to complete before `database.query('orders')` reads the persisted rows.
+
+Finally, verify that navigation succeeded, the cart emptied, and the order row matches the basket:
+
+```dart
       expect(find.byType(OrdersScreen), findsOneWidget);
       expect(CartRepository.instance.getItems(), isEmpty);
       expect(rows.length, 1);
@@ -1739,7 +1777,7 @@ Finally, add the test verifying that checking out inserts an order row into SQLi
 }
 ```
 
-This test runs the asynchronous database insert inside `tester.runAsync`, asserts that an order row was written to the `orders` table, verifies that the in-memory cart cleared, and confirms navigation to `OrdersScreen`.
+We assert that `OrdersScreen` is currently displayed, `CartRepository` holds no remaining items, and the SQLite `orders` table contains one row with the expected summary.
 
 ### Test the orders screen
 
@@ -1795,7 +1833,7 @@ Now add the database helper that prepares an in-memory test database:
 
 The `openDatabaseForTest` helper creates an in-memory database with the `orders` table and injects it into `SandwichDatabase.instance`.
 
-Now add a test verifying that orders display newest first:
+Now add a test verifying that orders display newest first. Start by preparing the database and inserting two orders inside `tester.runAsync`:
 
 ```dart
   testWidgets('OrdersScreen lists seeded orders newest-first', (
@@ -1825,14 +1863,26 @@ Now add a test verifying that orders display newest first:
           date: '02/01/2026 11:00',
         ),
       );
+```
 
+We insert order #1001 and order #1002 into the in-memory database using `SandwichDatabase.instance.insertOrder`.
+
+Next, pump `OrdersScreen`, wait for the asynchronous loader to finish, and close the database:
+
+```dart
       await tester.pumpWidget(const MaterialApp(home: OrdersScreen()));
       await Future<void>.delayed(const Duration(milliseconds: 50));
       await database.close();
       SandwichDatabase.instance.setDatabase(null);
     });
     await tester.pump();
+```
 
+We pump `OrdersScreen`, wait for `_loadOrders()` to complete, and clean up the database connection.
+
+Finally, assert that the newest order appears first on screen:
+
+```dart
     expect(find.text('Order #1002'), findsOneWidget);
     expect(find.text('Order #1001'), findsOneWidget);
     expect(find.text('2 x Footlong Sub'), findsOneWidget);
@@ -1840,7 +1890,7 @@ Now add a test verifying that orders display newest first:
   });
 ```
 
-This test seeds order #1001 and order #1002, pumps `OrdersScreen`, and confirms that order #1002 appears first.
+Because `getAllOrders()` sorts by `order_number DESC`, order #1002 appears above order #1001.
 
 Finally, add a test checking the empty state when no orders exist:
 
