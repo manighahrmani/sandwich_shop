@@ -12,34 +12,27 @@
   - [Add JSON serialisation to the sandwich model](#add-json-serialisation-to-the-sandwich-model)
   - [Unit test JSON serialisation](#unit-test-json-serialisation)
   - [Load JSON data in the repository](#load-json-data-in-the-repository)
-  - [Commit your changes (1)](#commit-your-changes-1)
 - [Two kinds of persistence](#two-kinds-of-persistence)
 - [Adding the dependencies](#adding-the-dependencies)
   - [Add the persistence packages](#add-the-persistence-packages)
-  - [Commit your changes (2)](#commit-your-changes-2)
 - [Remembering customer profile settings with shared preferences](#remembering-customer-profile-settings-with-shared-preferences)
   - [Define the preference keys](#define-the-preference-keys)
   - [Load saved settings when the screen opens](#load-saved-settings-when-the-screen-opens)
   - [Save settings when the user submits](#save-settings-when-the-user-submits)
-  - [Commit your changes (3)](#commit-your-changes-3)
 - [Storing orders in SQLite](#storing-orders-in-sqlite)
   - [Define the order record model](#define-the-order-record-model)
   - [Create the database helper](#create-the-database-helper)
   - [Create the orders table and seed past orders](#create-the-orders-table-and-seed-past-orders)
   - [Insert and query orders](#insert-and-query-orders)
-  - [Commit your changes (4)](#commit-your-changes-4)
 - [Adding an orders button to every screen](#adding-an-orders-button-to-every-screen)
   - [Create the orders button](#create-the-orders-button)
   - [Show both buttons on the menu and order screens](#show-both-buttons-on-the-menu-and-order-screens)
-  - [Commit your changes (5)](#commit-your-changes-5)
 - [Saving an order at checkout](#saving-an-order-at-checkout)
   - [Build the order record from the basket](#build-the-order-record-from-the-basket)
   - [Save and navigate on checkout](#save-and-navigate-on-checkout)
-  - [Commit your changes (6)](#commit-your-changes-6)
 - [Showing past orders](#showing-past-orders)
   - [Create the orders screen](#create-the-orders-screen)
   - [Register the orders route](#register-the-orders-route)
-  - [Commit your changes (7)](#commit-your-changes-7)
 - [Running the app on a mobile emulator](#running-the-app-on-a-mobile-emulator)
   - [Lab machines: the Android emulator beta bundle](#lab-machines-the-android-emulator-beta-bundle)
   - [Inspecting the database](#inspecting-the-database)
@@ -52,7 +45,6 @@
   - [Update the basket screen tests](#update-the-basket-screen-tests)
   - [Test the orders screen](#test-the-orders-screen)
   - [Test the app bar navigation actions](#test-the-app-bar-navigation-actions)
-  - [Commit your changes (8)](#commit-your-changes-8)
 - [Exercises](#exercises)
 
 ## Getting help
@@ -297,9 +289,7 @@ Update `getSandwiches()` to return the cached list when available:
   }
 ```
 
-### Commit your changes (1)
-
-Stage `assets/data/sandwiches.json`, `pubspec.yaml`, `lib/models/sandwich.dart`, `lib/repositories/sandwich_repository.dart`, and `test/sandwich_model_test.dart`, then commit your changes with a short, descriptive message of your own.
+If `loadSandwichesFromAsset()` was previously awaited, `_cachedSandwiches` holds the loaded sandwiches and `getSandwiches()` returns them directly. If not, the method falls back to returning the const list of default sandwiches so callers that do not await asynchronous loading still receive data.
 
 ## Two kinds of persistence
 
@@ -337,10 +327,6 @@ Run `flutter pub get` in your terminal to download the packages:
 ```bash
 flutter pub get
 ```
-
-### Commit your changes (2)
-
-Stage `pubspec.yaml` and `pubspec.lock`, then commit your changes with a short, descriptive message of your own.
 
 ## Remembering customer profile settings with shared preferences
 
@@ -490,10 +476,6 @@ Each `set` call stores one value under its key, overwriting what was there. Upda
             ),
 ```
 
-### Commit your changes (3)
-
-Stage your updated `lib/screens/settings_screen.dart` and commit your changes with a message of your own.
-
 ## Storing orders in SQLite
 
 Now for the heavier kind of persistence. We store each completed order as a row in a SQLite database so the orders survive restarts and can be listed and queried.
@@ -535,7 +517,7 @@ Now add the `const` constructor:
   });
 ```
 
-This model converts to and from a database row, just as `Sandwich` converted to and from JSON in Worksheet 5. The database equivalent of `toJson` and `fromJson` is a pair named `toMap` and `fromMap`, which produce and read the `Map<String, Object?>` of column names to values that the database methods expect. Add `toMap` first, inside the class:
+This model converts to and from a database row, just as `Sandwich` converted to and from JSON earlier in this worksheet. The database equivalent of `toJson` and `fromJson` is a pair named `toMap` and `fromMap`, which produce and read the `Map<String, Object?>` of column names to values that the database methods expect. Add `toMap` first, inside the class:
 
 ```dart
   Map<String, Object?> toMap() {
@@ -571,7 +553,7 @@ Now add the `fromMap` factory constructor, which reads a row map back into an `O
     final String date = map['date'] as String;
 ```
 
-As in Worksheet 5, we read each value out of the map and use `as` to assert its type, reading the total as a `num` and calling `.toDouble()`.
+As in the earlier JSON serialisation section, we read each value out of the map and use `as` to assert its type, reading the total as a `num` and calling `.toDouble()`.
 
 Finally, return the newly instantiated `OrderRecord`:
 
@@ -837,10 +819,6 @@ Finally, add a method that closes the database. Our tests use it to reset betwee
   }
 ```
 
-### Commit your changes (4)
-
-Stage your new `order_record.dart` and `sandwich_db.dart`, then commit your changes with a message of your own.
-
 ## Adding an orders button to every screen
 
 Now that orders are saved, the user needs a way to reach them from anywhere in the app. In Worksheet 5 you built the reusable `BasketButton` as an app bar action shown on every screen. We follow the same pattern here with an orders button, so a single widget carries the behaviour and every screen simply lists it.
@@ -907,10 +885,6 @@ import 'package:sandwich_shop/widgets/orders_button.dart';
 ```
 
 Open `lib/screens/order_screen.dart` and make the same change: import `orders_button.dart` and update its app bar `actions` to `const [BasketButton(), OrdersButton()]`. The basket app bar gets the same pair when we edit it next.
-
-### Commit your changes (5)
-
-Stage your new `orders_button.dart` and the updated `menu_screen.dart` and `order_screen.dart`, then commit your changes with a message of your own.
 
 ## Saving an order at checkout
 
@@ -1036,10 +1010,6 @@ Finally, add the orders button to the basket app bar so the user can reach their
         actions: const [BasketButton(), OrdersButton()],
       ),
 ```
-
-### Commit your changes (6)
-
-Stage your updated `basket_screen.dart` and commit your changes with a message of your own.
 
 ## Showing past orders
 
@@ -1226,7 +1196,7 @@ Now return the `Scaffold` shell with the standard app bar actions:
 }
 ```
 
-While `_loading` is `true` the body is an empty `SizedBox.shrink()`, which takes no space. Once loading finishes, an empty table shows the "No orders yet" message, and a filled one shows a `ListView.builder` (from Worksheet 3) of order cards. The app bar carries the same `const [BasketButton(), OrdersButton()]` pair as every other screen.
+The `AppBar` carries the same `const [BasketButton(), OrdersButton()]` pair as every other screen.
 
 Your orders screen, showing the seeded orders and any you place, should look like this:
 
@@ -1247,10 +1217,6 @@ import 'package:sandwich_shop/screens/orders_screen.dart';
           return const OrdersScreen();
         },
 ```
-
-### Commit your changes (7)
-
-Stage your new `orders_screen.dart` and the updated `main.dart`, then commit your changes with a message of your own.
 
 ## Running the app on a mobile emulator
 
@@ -2082,10 +2048,6 @@ Run your test suite with `flutter test` to confirm everything passes:
 ```bash
 flutter test
 ```
-
-### Commit your changes (8)
-
-Stage your test files, including `test/settings_screen_test.dart` and the updated `test/basket_screen_test.dart`, and commit your changes with a message of your own.
 
 ## Exercises
 
