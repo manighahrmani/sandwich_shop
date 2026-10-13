@@ -1737,6 +1737,10 @@ Now add the navigation logic inside `onPressed`'s curly braces:
 
 The callback inspects `ModalRoute.of(context)` to check the name of the current screen. If the user is not already viewing the settings screen, it calls `Navigator.pushNamed(context, '/settings')`. This prevents stacking duplicate copies of the settings screen when the user taps the icon repeatedly.
 
+This is our final `lib/widgets/settings_button.dart`:
+
+![The settings button with navigation logic in VS Code](images/5/settings_button_navigation_logic.png)
+
 Open `lib/main.dart` and register the `'/settings'` named route:
 
 ```dart
@@ -1751,6 +1755,10 @@ Add the route entry to `routes`:
         },
 ```
 
+See below the changes:
+
+![The main.dart file with the registered settings route](images/5/main_dart_registered_settings_route.png)
+
 Now open `lib/screens/menu_screen.dart`, import `settings_button.dart`, and add `SettingsButton` to the app bar:
 
 ```dart
@@ -1764,50 +1772,19 @@ import 'package:sandwich_shop/widgets/settings_button.dart';
       ),
 ```
 
-Next, open `test/menu_screen_test.dart` and update the test suite to verify that the menu screen includes the settings button and navigates to the customer profile screen:
+Again, take a look at the changes:
+
+![The menu screen app bar with the settings button](images/5/menu_screen_app_bar_with_settings_button.png)
+
+Next, open `test/menu_screen_test.dart` and update the test suite to verify that the menu screen includes the settings button and navigates to the customer profile screen.
+
+Here is what you need to change in the first test case to include the settings button:
+
+![The menu screen test updated to include the settings button](images/5/menu_screen_test_updated_with_settings_button.png)
+
+Next import `settings_screen.dart` at the top of the test file and add a test case to verify navigation to the settings screen. We suggest something like this:
 
 ```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/screens/basket_screen.dart';
-import 'package:sandwich_shop/screens/menu_screen.dart';
-import 'package:sandwich_shop/screens/settings_screen.dart';
-import 'package:sandwich_shop/widgets/sandwich_card.dart';
-
-void main() {
-  testWidgets('MenuScreen shows sandwich list, settings button and basket button', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(const MaterialApp(home: MenuScreen()));
-
-    expect(find.byType(SandwichCard), findsWidgets);
-    expect(find.byIcon(Icons.person_outline), findsOneWidget);
-    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
-  });
-
-  testWidgets('Tapping the basket button navigates to BasketScreen', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        initialRoute: '/',
-        routes: <String, WidgetBuilder>{
-          '/': (BuildContext context) {
-            return const MenuScreen();
-          },
-          '/basket': (BuildContext context) {
-            return const BasketScreen();
-          },
-        },
-      ),
-    );
-
-    await tester.tap(find.byIcon(Icons.shopping_basket));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(BasketScreen), findsOneWidget);
-  });
-
   testWidgets('Tapping the settings button navigates to SettingsScreen', (
     WidgetTester tester,
   ) async {
@@ -1830,16 +1807,19 @@ void main() {
 
     expect(find.byType(SettingsScreen), findsOneWidget);
   });
-}
 ```
-
-The updated test verifies the presence of `Icons.person_outline` on the menu screen and simulates tapping the settings button to confirm navigation to `SettingsScreen`.
 
 ### Save settings and provide feedback
 
-Run the application on your computer or emulator. Tap the person icon in the top right to open the customer profile. Enter your name, delivery address, and email, toggle the newsletter switch, and click **Save Settings**. The application displays the confirmation message below the button.
+It's time to run the application. Tap the person icon in the top right to open the customer profile. Enter your name, delivery address, and email, toggle the newsletter switch, and click **Save Settings**. The application displays the confirmation message below the button.
+
+This is what ours looks like:
+
+![The settings screen with filled form and confirmation message](images/5/settings_screen_filled_with_confirmation.png)
 
 ### Widget test the settings screen
+
+Before we forget, we should also add widget tests for the settings screen to ensure that form interactions and state updates work correctly.
 
 Create a new test file named `test/settings_screen_test.dart` to verify form interactions and state updates on `SettingsScreen`.
 
@@ -1902,14 +1882,6 @@ Next, add a test that enters form data, toggles the switch, and verifies state u
 ```
 
 This test locates the individual fields using `find.widgetWithText(TextField, ...)` and enters text using `tester.enterText`. It verifies that the newsletter switch begins as `false`, taps it to toggle it to `true`, and taps **Save Settings** before asserting that the confirmation text `Settings saved for Alex Smith` appears below the button.
-
-Run the settings widget tests:
-
-```bash
-flutter test test/settings_screen_test.dart
-```
-
-Both tests should pass.
 
 ## Loading the menu from JSON
 
