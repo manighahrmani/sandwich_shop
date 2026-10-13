@@ -1731,6 +1731,77 @@ import 'package:sandwich_shop/widgets/settings_button.dart';
       ),
 ```
 
+Next, open `test/menu_screen_test.dart` and update the test suite to verify that the menu screen includes the settings button and navigates to the customer profile screen:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/screens/basket_screen.dart';
+import 'package:sandwich_shop/screens/menu_screen.dart';
+import 'package:sandwich_shop/screens/settings_screen.dart';
+import 'package:sandwich_shop/widgets/sandwich_card.dart';
+
+void main() {
+  testWidgets('MenuScreen shows sandwich list, settings button and basket button', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: MenuScreen()));
+
+    expect(find.byType(SandwichCard), findsWidgets);
+    expect(find.byIcon(Icons.person_outline), findsOneWidget);
+    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
+  });
+
+  testWidgets('Tapping the basket button navigates to BasketScreen', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        initialRoute: '/',
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) {
+            return const MenuScreen();
+          },
+          '/basket': (BuildContext context) {
+            return const BasketScreen();
+          },
+        },
+      ),
+    );
+
+    await tester.tap(find.byIcon(Icons.shopping_basket));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(BasketScreen), findsOneWidget);
+  });
+
+  testWidgets('Tapping the settings button navigates to SettingsScreen', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        initialRoute: '/',
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) {
+            return const MenuScreen();
+          },
+          '/settings': (BuildContext context) {
+            return const SettingsScreen();
+          },
+        },
+      ),
+    );
+
+    await tester.tap(find.byIcon(Icons.person_outline));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SettingsScreen), findsOneWidget);
+  });
+}
+```
+
+The updated test verifies the presence of `Icons.person_outline` on the menu screen and simulates tapping the settings button to confirm navigation to `SettingsScreen`.
+
 ### Save settings and provide feedback
 
 Run the application on your computer or emulator. Tap the person icon in the top right to open the customer profile. Enter your name, delivery address, and email, toggle the newsletter switch, and click **Save Settings**. The application displays the confirmation message below the button.
@@ -1805,9 +1876,7 @@ Run the settings widget tests:
 flutter test test/settings_screen_test.dart
 ```
 
-Both tests should pass:
-
-![The settings screen widget tests passing in the terminal](images/5/settings_screen_tests_terminal.png)
+Both tests should pass.
 
 ## Loading the menu from JSON
 
@@ -1822,23 +1891,19 @@ Create a new file named `assets/data/sandwiches.json`:
   {
     "id": "footlong",
     "name": "Footlong Sub",
-    "description": "Our classic freshly baked 12-inch sub.",
+    "description": "A freshly baked 12-inch sandwich filled with savoury ingredients.",
     "price": 7.50,
     "imagePath": "assets/images/footlong.jpeg"
   },
   {
-    "id": "six_inch",
+    "id": "six-inch",
     "name": "Six-Inch Sub",
-    "description": "A 6-inch sub packed with fresh ingredients.",
+    "description": "A light 6-inch sandwich made with your favourite toppings.",
     "price": 4.50,
     "imagePath": "assets/images/six_inch.jpeg"
   }
 ]
 ```
-
-Your file in VS Code should look like this:
-
-![The sandwiches.json file registered and opened in VS Code](images/5/sandwiches_json_file.png)
 
 This JSON array contains two sandwich objects matching the fields in our `Sandwich` class.
 
@@ -1873,32 +1938,37 @@ First, add the factory constructor inside `Sandwich`:
 
 ```dart
   factory Sandwich.fromJson(Map<String, dynamic> json) {
+    final String id = json['id'] as String;
+    final String name = json['name'] as String;
+    final String description = json['description'] as String;
     final num priceNumber = json['price'] as num;
-    final double parsedPrice = priceNumber.toDouble();
+    final double price = priceNumber.toDouble();
+    final String imagePath = json['imagePath'] as String;
 
     return Sandwich(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      price: parsedPrice,
-      imagePath: json['imagePath'] as String,
+      id: id,
+      name: name,
+      description: description,
+      price: price,
+      imagePath: imagePath,
     );
   }
 ```
 
-A factory constructor creates an instance from external data. In Dart, parsing numbers from JSON can yield either an `int` or a `double`. Reading `json['price']` as `num` and calling `.toDouble()` safely converts both representations to `double` without runtime casting errors. The remaining map entries are cast directly to `String`.
+A factory constructor creates an instance from external data. In Dart, parsing numbers from JSON can yield either an `int` or a `double`. Reading `json['price']` as `num` and calling `.toDouble()` safely converts both representations to `double` without runtime casting errors. The remaining map entries are cast explicitly to `String`.
 
 Now add `toJson` to convert a sandwich back to a map:
 
 ```dart
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
+    final Map<String, dynamic> data = <String, dynamic>{
       'id': id,
       'name': name,
       'description': description,
       'price': price,
       'imagePath': imagePath,
     };
+    return data;
   }
 ```
 
@@ -1958,9 +2028,7 @@ Run your model tests:
 flutter test test/sandwich_model_test.dart
 ```
 
-All model tests should pass:
-
-![The sandwich model unit tests passing in the terminal](images/5/sandwich_model_tests_terminal.png)
+All model tests should pass.
 
 ### Load JSON data in the repository
 
@@ -1968,24 +2036,69 @@ Open `lib/repositories/sandwich_repository.dart`. First, import the necessary JS
 
 ```dart
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
+```
+
+Next, declare a nullable cache list inside `SandwichRepository` to store loaded sandwiches:
+
+```dart
+  List<Sandwich>? _cachedSandwiches;
 ```
 
 Now add `loadSandwichesFromAsset` to load and decode the JSON asset:
 
 ```dart
-  Future<List<Sandwich>> loadSandwichesFromAsset(String path) async {
-    final String jsonString = await rootBundle.loadString(path);
-    final List<dynamic> jsonList = jsonDecode(jsonString) as List<dynamic>;
-    final List<Sandwich> sandwiches = [];
+  Future<List<Sandwich>> loadSandwichesFromAsset({
+    String assetPath = 'assets/data/sandwiches.json',
+  }) async {
+    final String jsonString = await rootBundle.loadString(assetPath);
+    final dynamic decodedData = jsonDecode(jsonString);
+    final List<dynamic> jsonList = decodedData as List<dynamic>;
+
+    final List<Sandwich> loadedSandwiches = [];
     for (final dynamic item in jsonList) {
-      sandwiches.add(Sandwich.fromJson(item as Map<String, dynamic>));
+      final Map<String, dynamic> itemMap = item as Map<String, dynamic>;
+      final Sandwich sandwich = Sandwich.fromJson(itemMap);
+      loadedSandwiches.add(sandwich);
     }
-    return sandwiches;
+
+    _cachedSandwiches = loadedSandwiches;
+    return loadedSandwiches;
   }
 ```
 
-The method reads the asset string asynchronously with `rootBundle.loadString(path)`, parses the JSON string into a list with `jsonDecode`, and uses an explicit `for-in` loop to decode each item using `Sandwich.fromJson`. Run all tests across the repository to verify that existing synchronous calls and new model methods work properly:
+The method reads the asset string asynchronously with `rootBundle.loadString(assetPath)`, parses the JSON string into a list with `jsonDecode`, and uses an explicit `for-in` loop to decode each item using `Sandwich.fromJson`. It saves the loaded list to `_cachedSandwiches` and returns it.
+
+Finally, update `getSandwiches()` to return the cached list when available:
+
+```dart
+  List<Sandwich> getSandwiches() {
+    if (_cachedSandwiches != null) {
+      return _cachedSandwiches!;
+    }
+    return const [
+      Sandwich(
+        id: 'footlong',
+        name: 'Footlong Sub',
+        description:
+            'A freshly baked 12-inch sandwich filled with savoury ingredients.',
+        price: 7.50,
+        imagePath: 'assets/images/footlong.jpeg',
+      ),
+      Sandwich(
+        id: 'six-inch',
+        name: 'Six-Inch Sub',
+        description:
+            'A light 6-inch sandwich made with your favourite toppings.',
+        price: 4.50,
+        imagePath: 'assets/images/six_inch.jpeg',
+      ),
+    ];
+  }
+```
+
+Run all tests across the repository to verify that existing synchronous calls and new model methods work properly:
 
 ```bash
 flutter test
