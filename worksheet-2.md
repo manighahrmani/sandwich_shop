@@ -730,126 +730,129 @@ You can reach this page from the navigation drawer, by opening the menu in the a
 
 ![Opening the movie listing page from the navigation drawer](images/2/movie_listing_navigate.png)
 
+Open `lib/views/movie_listing.dart`. At this point, `MovieListing` is a `StatelessWidget`, and the `body` of its `Scaffold` contains an empty `SizedBox`:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:southsea_cinema/constants.dart';
+import 'package:southsea_cinema/widgets/nav_drawer.dart';
+
+class MovieListing extends StatelessWidget {
+  const MovieListing({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(appTitle, style: cinemaHeaderStyle),
+        backgroundColor: cinemaSurface,
+        iconTheme: const IconThemeData(color: cinemaBrand),
+        elevation: 0,
+      ),
+      drawer: const NavDrawer(),
+      body: const SizedBox.shrink(),
+    );
+  }
+}
+```
+
 Your task is to update `movie_listing.dart` to show a single film. Use this [example listing](https://southseacinema.savoysystems.co.uk/SouthseaCinema.dll/TSelectItems.waSelectItemsPrompt.TcsWebMenuItem_687.TcsWebTab_688.TcsProgramme_26436) as a reference point:
 
 ![The example film listing on the Southsea Cinema website](images/2/southsea_cinema_listing_example.png)
 
-The exercises below help you prepare for Demo 1. In short, you need to build the same kind of page. Replace Dracula with your own favourite film. Give it a title, runtime, age rating, and other descriptive text. You need to also have a ticket quantity dropdown and a booking button. You need to run your app on a phone-sized view, as you did in Worksheet 1.
+Choose your own favourite film and include its title, runtime, age rating and description, a ticket quantity dropdown and a booking button. Run your app on a phone-sized view, as you did in Worksheet 1.
 
-Be sure to make a separate commit for each exercise below, and commit more often than that if you can. Small, frequent commits with clear messages are part of the quality mark at your demo.
+1. Wrap the existing `SizedBox` in a `Container`. A `Container` holds a single child and can give it a size, a colour, a border and more.
 
-1. Add the film title and a short description as `Text` widgets, wrapped in a `Container` widget. Place the `Container` in the `body` property of the `Scaffold` widget inside `lib/views/movie_listing.dart`, replacing the placeholder content. A `Container` holds a single child and can give it a size, a colour, a border and more.
+    Place the cursor on `SizedBox` in `body: const SizedBox.shrink()`. Click the lightbulb icon, or press **Ctrl + .** on Windows or **⌘ + .** on macOS, and choose **Wrap with Container**, as shown below:
 
-    As an example, in your sandwich shop app you could wrap the `Row` of buttons in a `Container` with its own colour:
+    ![The Wrap with Container action for SizedBox in VS Code](images/2/wrap_sized_box_with_container.png)
+
+    The `Container` should now be the `body` of the `Scaffold`, with the `SizedBox` as its `child`:
 
     ```dart
-    Container(
-      color: Colors.red,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: _increaseQuantity,
-            child: const Text('Add'),
-          ),
-          ElevatedButton(
-            onPressed: _decreaseQuantity,
-            child: const Text('Remove'),
-          ),
-        ],
-      ),
+    body: Container(
+      child: const SizedBox.shrink(),
     ),
     ```
 
-    The [widget fundamentals tutorial](https://docs.flutter.dev/learn/pathway/tutorial/widget-fundamentals) has a nice walkthrough on `Container`, `BoxDecoration` (for borders and background colours) and passing a `child`. Complete it before attempting this exercise. You may optionally also check out the [Container documentation](https://api.flutter.dev/flutter/widgets/Container-class.html).
+    If you need help, see the [widget fundamentals tutorial](https://docs.flutter.dev/learn/pathway/tutorial/widget-fundamentals).
 
-    Optionally, you can adjust the font size, font weight, or colour of your text by passing a `TextStyle` to the `style` property of a `Text` widget. For example, in your sandwich shop app you could enlarge a heading and make it bold:
+2. Decide whether the film title, description and booking controls should appear above one another or side by side. Which layout widget fits each arrangement: `Column` or `Row`? For a vertical listing, replace the `SizedBox.shrink()` inside your `Container` with a `Column`, then add the film title and a short description as `Text` widgets in its `children` list.
+
+    Add an `ElevatedButton` labelled "Add to order" below the text. Remove `const` before the `Column` if present, because the callback is not constant. For now, print a message when the button is pressed:
 
     ```dart
-    Text(
-      'Welcome to the Sandwich Shop!',
-      style: const TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.bold,
-      ),
+    ElevatedButton(
+      onPressed: () {
+        print('Add to order button pressed');
+      },
+      child: const Text('Add to order'),
     ),
     ```
 
-    The [text and typography documentation](https://docs.flutter.dev/ui/design/text) and the [TextStyle documentation](https://api.flutter.dev/flutter/painting/TextStyle-class.html) cover font styling options. Commit your changes with the message `Add film title and description container`.
-
-2. Arrange the title, the description and the rest of the widgets you will add later in the next exercises using `Column` and `Row` widgets
-
-    For more information, check out the [layout tutorial on the Flutter website](https://docs.flutter.dev/learn/pathway/tutorial/layout) which explains how to position children in a row and a column. Commit your changes with the message `Arrange movie listing layout with Column and Row`.
+    Keep `MovieListing` stateless for now. Run the app and press the button to check the terminal output; printing alone does not need `setState`.
 
 3. Let the user choose how many tickets they want with a single `DropdownMenu`, offering quantities up to 5. You should try to match the screenshot shown above.
 
-    Store the selected value in state and update it inside `setState`, just as the sandwich counter did. To see how a `DropdownMenu` works, you can try this snippet in your sandwich shop app first. In `lib/main.dart`, declare `int _totalPrice = 10;` inside `_OrderScreenState` and place the `DropdownMenu` directly inside the `Column` widget's `children` list in `build`, above or below `OrderItemDisplay`. Here each entry is a sandwich type, and the value behind it is that item's price, so selecting an entry sets `_totalPrice`:
+    Place the dropdown in your `Column` widget's `children` list, above the booking button. Initially, use `print(value);` inside its `onSelected` callback to check the selected quantity in the terminal.
+
+    Before using the selected quantity to update text on the page, convert `MovieListing` to a `StatefulWidget`. Select `StatelessWidget` in its class declaration, open the lightbulb menu with **Ctrl + .** on Windows or **⌘ + .** on macOS, and choose **Convert to StatefulWidget**, as shown below:
+
+    ![The Convert to StatefulWidget action in the MovieListing class declaration in VS Code](images/2/convert_movie_listing_to_stateful_widget.png)
+
+    VS Code creates `_MovieListingState` and moves `build` into it. Use this action rather than only changing the superclass name.
+
+    Declare `int _ticketQuantity = 1;` inside `_MovieListingState`, above `build`. Update the dropdown's callback to store the quantity inside `setState`, using the following pattern:
 
     ```dart
     DropdownMenu<int>(
-      initialSelection: 10,
+      initialSelection: _ticketQuantity,
       onSelected: (int? value) {
         if (value != null) {
           setState(() {
-            _totalPrice = value;
+            _ticketQuantity = value;
+            print('Tickets selected: $_ticketQuantity');
           });
         }
       },
       dropdownMenuEntries: [
-        DropdownMenuEntry(value: 10, label: 'Footlong'),
-        DropdownMenuEntry(value: 6, label: 'Six-inch'),
-        DropdownMenuEntry(value: 4, label: 'Nachos'),
+        DropdownMenuEntry(value: 1, label: '1'),
+        DropdownMenuEntry(value: 2, label: '2'),
+        DropdownMenuEntry(value: 3, label: '3'),
+        DropdownMenuEntry(value: 4, label: '4'),
+        DropdownMenuEntry(value: 5, label: '5'),
       ],
     ),
     ```
 
-    The type in `onSelected: (int? value)` is `int?`, not `int`. The `?` means the value can be an integer or `null` (nothing selected yet), which is why we check `if (value != null)` before using it. If you are unsure about nullable types, see the section on data types in the [Dart software and resources guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQAeCWXLehKuTou1gTpjrNKRAcCHcRGxPJSinskA7x1opXg?e=lfIK0S).
+    `int?` allows `null`, so check the value before assigning it. Add `Text('Tickets selected: $_ticketQuantity')` below the dropdown and check that its text changes when you select a quantity.
 
-    The [DropdownMenu documentation](https://api.flutter.dev/flutter/material/DropdownMenu-class.html) has more details and examples on the widget. Commit your changes with the message `Add ticket quantity dropdown menu`.
+    See the [DropdownMenu documentation](https://api.flutter.dev/flutter/material/DropdownMenu-class.html) if you need more detail.
 
-4. Add an "Add to order" button that gives the user feedback when pressed. There is no basket yet, so the feedback should be adding a new `Text` widget or updating an existing one below the button (for example, displaying a message that states how many tickets were added to the order).
+4. Update your "Add to order" button so it gives the user feedback on the page rather than only printing a message. There is no basket yet, so add a `Text` widget below the button to display how many tickets were added to the order.
 
-    Optionally, you can style the button to customise its background colour, text colour, and shape using `ElevatedButton.styleFrom()`. For example, in your sandwich shop app you could style the Add button with custom colours:
-
-    ```dart
-    ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.teal,
-        foregroundColor: Colors.white,
-      ),
-      onPressed: _increaseQuantity,
-      child: const Text('Add'),
-    ),
-    ```
-
-    The [ElevatedButton documentation](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) and [ButtonStyle documentation](https://api.flutter.dev/flutter/material/ButtonStyle-class.html) explain button appearance in more detail. Commit your changes with the message `Add booking feedback button`.
+    Declare `String _bookingMessage = '';` above `build` in `_MovieListingState` and display it with `Text(_bookingMessage)`. In `onPressed`, use `setState` to assign `'Added $_ticketQuantity tickets to the order'` to `_bookingMessage`. You can also print the message inside that callback. Select a quantity and press the button to check that the feedback matches.
 
 5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does.
 
     For example, you can apply `cinemaHeaderStyle` directly to your title `Text` widget (`style: cinemaHeaderStyle`), or define custom text styles using colours such as `cinemaFontWhite` and `cinemaFontMuted`.
 
-    Optionally, you can also style your booking button to match the brand aesthetic of the cinema. Southsea Cinema buttons use squared corners rather than rounded edges. You can apply the brand colour and square the corners by configuring the `shape` property with `BorderRadius.zero`:
+    Use `ElevatedButton.styleFrom` to apply the brand colours and squared corners to your booking button:
 
     ```dart
-    ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: cinemaBrand,
-        foregroundColor: cinemaFontWhite,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-        ),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: cinemaBrand,
+      foregroundColor: cinemaFontWhite,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
       ),
-      onPressed: _addToOrder,
-      child: const Text('Add to order'),
     ),
     ```
 
-    Commit your changes with the message `Style movie listing to match brand constants`.
 6. (Advanced) Make your page adapt to the width of the window to prevent layout overflows.
 
-    When you run your application across different screen sizes or resize your browser window, a fixed layout can run out of space. A horizontal `Row` that fits comfortably on a desktop display will overflow when viewed on a narrow mobile viewport because Flutter cannot automatically shrink or wrap widgets inside a plain `Row`. When children demand more width than the screen provides, Flutter reports a layout overflow error with a yellow-and-black striped hazard banner.
-
-    To resolve this without forcing a single fixed design, Flutter provides [`LayoutBuilder`](https://api.flutter.dev/flutter/widgets/LayoutBuilder-class.html). A `LayoutBuilder` measures the parent container and gives you incoming layout constraints through `constraints.maxWidth`. You can inspect this width dynamically and return a different widget tree depending on the available space: returning a `Row` on wide viewports, and switching to a vertical `Column` on narrow screens so buttons and details stack neatly instead of spilling off the display.
+    A `Row` can overflow on narrow screens. A [`LayoutBuilder`](https://api.flutter.dev/flutter/widgets/LayoutBuilder-class.html) provides `constraints.maxWidth`, so you can choose a `Row` on wide screens and a `Column` on narrow ones.
 
     In your sandwich shop app, for example, you can wrap the quantity buttons in a `LayoutBuilder` to switch between a `Row` and a `Column`:
 
@@ -888,4 +891,6 @@ Be sure to make a separate commit for each exercise below, and commit more often
     ),
     ```
 
-    The [adaptive layout tutorial](https://docs.flutter.dev/learn/pathway/tutorial/adaptive-layout) walks through this approach with `LayoutBuilder`. Resize the browser window to see the layout change. Commit your changes with the message `Make movie listing layout adaptive`. Show the running application to a member of staff at your practical session for your Demo 1 sign-off.
+    Resize the browser window and check that your page works at phone widths without overflowing.
+
+    **Show the running application to a member of staff at your practical session for your Demo 1 sign-off.**
