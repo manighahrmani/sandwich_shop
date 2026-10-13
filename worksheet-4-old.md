@@ -534,15 +534,13 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    Once you have a generated README, carefully review it against the quality criteria mentioned in the last section of the worksheet. Is it accurate? Is it complete? Do the instructions work? Do you need to customise anything (feel free to ask the AI to refine the document further).
 
-   **Show your README.md file to a member of staff** for a sign-off. If you do attempt any other exercises, remember to update the README accordingly.
+   If you attempt any other exercises, remember to update the README accordingly.
 
 2. Our widget tests currently cover tapping buttons and entering text. Let's expand our test coverage to other types of user interaction.
 
    Write a new widget test in `test/views/widget_test.dart` to verify the functionality of the `Switch` widget that toggles between 'six-inch' and 'footlong'.
 
    Hint: `Switch` widgets are toggled by tapping on them like buttons.
-
-   **Show your new passing widget test to a member of staff** for a sign-off.
 
 3. Let's add an option for the user to have their sandwich toasted. First, in `lib/main.dart`, add a new state variable to your `_OrderScreenState` class: `bool _isToasted = false;`.
 
@@ -570,15 +568,11 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    To solve this, refer to the [Finders documentation](https://docs.flutter.dev/cookbook/testing/widget/finders) and find a way to uniquely identify each `Switch` widget. (Hint: This is similar to giving an HTML element an `id` attribute.)
 
-   **Show your running app with the two switches and the updated, passing widget tests to a member of staff** for a sign-off.
-
 4. Our app does not yet have a concept of price. Let's add a repository to manage the pricing logic. Suppose that a six-inch sandwich costs £7 and a footlong costs £11.
 
    Create a new `PricingRepository` class in the `repositories`. This class should calculate the total price of a sandwich order based on the quantity and sandwich size. This should give you an idea what the constructor of the class should look like and what method(s) it should have.
 
    Before integrating this new repository, create a new unit test file similar to  what we did for `OrderRepository`. Finally, use it in `OrderScreen` to calculate and display the total price of the order.
-
-   **Show your new pricing repository and its unit tests to a member of staff** for a sign-off.
 
 5. (Advanced) Let's add functionality to save an order to a local file. This feature is only available on mobile and desktop platforms, so you will need to run your app on a compatible device.
 
@@ -636,7 +630,7 @@ Complete the exercises below. Remember to commit your changes after each exercis
 
    Remember to write unit tests for both `FileService` and `OrderViewModel` to verify that the file writing logic works as expected. Additionally, feel free to implement a feature to read and display the previous order from the file when the app starts. Can you find out where the file is located on your device? Try adding a print statement to display the file path.
 
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+   This task is **optional**.
 
 6. (Advanced) Let's add some images to our app like a company logo in the `AppBar`.
 
@@ -668,4 +662,4 @@ Complete the exercises below. Remember to commit your changes after each exercis
    });
    ```
 
-   This task is **optional** and there's no need to show it to a member of staff for a sign-off.
+   This task is **optional**.

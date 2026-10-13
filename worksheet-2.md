@@ -716,7 +716,7 @@ Commit your final changes with a message like `Add interactivity with setState`.
 
 ## Exercises
 
-As in Worksheet 1, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 1 exercises, prepare you for Demo 1. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Commit after each exercise. Small, frequent commits with clear messages are required for your demos and form part of your code quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
+These exercises apply to your Southsea Cinema coursework. Together, the exercises in [Worksheet 1](worksheet-1.md#exercises) and Worksheet 2 form Demo 1. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) for the assessment requirements. Commit after each exercise.
 
 The fork of the `southsea_cinema` repo that you have already made (in Worksheet 1) has a `lib/views` folder. This folder contains two pages. `home_view.dart` is the home page shown when the app starts, and `movie_listing.dart` is the movie listing page you will build.
 
@@ -834,7 +834,7 @@ Choose your own favourite film and include its title, runtime, age rating and de
 
     Declare `String _bookingMessage = '';` above `build` in `_MovieListingState` and display it with `Text(_bookingMessage)`. In `onPressed`, use `setState` to assign `'Added $_ticketQuantity tickets to the order'` to `_bookingMessage`. You can also print the message inside that callback. Select a quantity and press the button to check that the feedback matches.
 
-5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does.
+5. (Advanced, optional) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does.
 
     For example, you can apply `cinemaHeaderStyle` directly to your title `Text` widget (`style: cinemaHeaderStyle`), or define custom text styles using colours such as `cinemaFontWhite` and `cinemaFontMuted`.
 
@@ -850,7 +850,9 @@ Choose your own favourite film and include its title, runtime, age rating and de
     ),
     ```
 
-6. (Advanced) Make your page adapt to the width of the window to prevent layout overflows.
+    This styling extension is not required for Demo 1.
+
+6. (Advanced, optional) Make your page adapt to the width of the window to prevent layout overflows.
 
     A `Row` can overflow on narrow screens. A [`LayoutBuilder`](https://api.flutter.dev/flutter/widgets/LayoutBuilder-class.html) provides `constraints.maxWidth`, so you can choose a `Row` on wide screens and a `Column` on narrow ones.
 
@@ -893,4 +895,4 @@ Choose your own favourite film and include its title, runtime, age rating and de
 
     Resize the browser window and check that your page works at phone widths without overflowing.
 
-    **Show the running application to a member of staff at your practical session for your Demo 1 sign-off.**
+    This layout extension is not required for Demo 1.

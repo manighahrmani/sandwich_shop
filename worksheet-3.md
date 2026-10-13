@@ -659,53 +659,38 @@ In the Source Control panel, stage `lib/widgets/sandwich_card.dart` and commit w
 
 ## Exercises
 
-As in Worksheet 1 and Worksheet 2, these exercises apply to your Southsea Cinema coursework and, together with the Worksheet 4 exercises, prepare you for Demo 2. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Remember to commit your changes regularly as you work through each exercise; small, frequent commits are assessed as part of your demo quality mark. You must demonstrate your work for a sign-off during your own timetabled practical session.
+These exercises apply to your Southsea Cinema coursework. Together, the exercises in Worksheet 3 and [Worksheet 4](worksheet-4.md#exercises) form Demo 2. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) for the assessment requirements. Commit after each exercise.
 
-In Worksheet 2 you built a hardcoded movie listing page for Dracula. For Demo 2, your cinema app must show a browsable home page with cards for films that are screening, and a booking button on each card must open the listing page for that film.
+Build on your listing page from the [Worksheet 2 exercises](worksheet-2.md#exercises). Now add a browsable home page with film cards whose booking buttons open the selected film. Keep your ticket dropdown and booking feedback working.
 
-1. Create a movie data model inside your `southsea_cinema` fork, following the pattern from [Define the Sandwich data model](#define-the-sandwich-data-model). Be sure to include a unique `id` field (such as `'phantom-of-the-opera'`); every film needs an ID so that repository lookups and navigation routes can find that exact movie without relying on titles. Look back at the movie listing page you built in Worksheet 2 to identify which film properties need to be represented. Define these as `final` fields with a constructor using named, `required` parameters.
+1. Create `lib/models/movie.dart` with a `Movie` class, following [Define the Sandwich data model](#define-the-sandwich-data-model). Include a unique `String id`, a title, synopsis, age rating, runtime, screening time, ticket price and poster image path. Use `String` for descriptive values, including the screening time, and `double` for the price; date parsing is not needed.
+
+    Make the fields `final` and initialise them with named, `required` constructor parameters, as in [Add the constructor](#add-the-constructor). Check that the model has no uninitialised-field errors before continuing.
 
 2. Download poster images for at least two of your favourite films and place them in `assets/images/`. Follow the steps from [Add asset images to the project](#add-asset-images-to-the-project) to register the folder in `pubspec.yaml` and run `flutter pub get`.
 
-3. Create a movie repository that returns a list of movie instances, following the repository pattern from [Abstract data access with a repository](#abstract-data-access-with-a-repository). Populate it with mock data and asset paths for at least two of your favourite films.
+3. Create `lib/repositories/movie_repository.dart` with a `MovieRepository` class and a `List<Movie> getMovies()` method, following [Return mock sandwich items](#return-mock-sandwich-items). Return at least two movies with different IDs and details. Check that each image path matches an asset file; no database or ID lookup method is needed yet.
 
-4. Create a movie card widget similar to [`SandwichCard`](#create-the-sandwichcard-widget). It should display the film's poster, title, age rating, synopsis, screening time, and a booking button. Use the brand colours and text styles defined in `lib/constants.dart`.
+4. Create a reusable `MovieCard` in `lib/widgets/movie_card.dart`, following [Create the SandwichCard widget](#create-the-sandwichcard-widget). Pass a `Movie` into its constructor. If you need a reminder about choosing a widget type, revisit [Stateless versus Stateful in Worksheet 2](worksheet-2.md#stateless-versus-stateful).
 
-5. (Advanced) Update your home page to retrieve movies from the repository and display them in a scrollable list with `ListView.builder`, as we did in [Build the MenuScreen widget](#build-the-menuscreen-widget). Your home page should display film cards with poster images and booking buttons as shown below:
+    Show the poster, title, age rating, synopsis, screening time and a booking button. Use [Lay out the image and text](#lay-out-the-image-and-text) for guidance. Reuse your brand styles and squared buttons from Worksheet 2. For now, let the button print a message, as in [Add the Add and Remove buttons](worksheet-2.md#add-the-add-and-remove-buttons).
+
+5. Display the repository's movies as a scrollable list of cards on your home page, following [Build the MenuScreen widget](#build-the-menuscreen-widget). Keep your app bar and drawer.
+
+    Check that each card shows its own film and the list scrolls at phone widths. Use your own films rather than the example titles shown below:
 
     ![Southsea Cinema home screen showing film cards with poster images and booking buttons](images/3/southsea_cinema_home_view.png)
 
-    Make sure you replace the example movies (The Phantom of the Opera and Halloween) with your own favourite films, and ensure there are at least two cards in the list.
+    (Advanced, optional) Add a third film to the repository and check that the home screen displays it without changing `MovieCard` or the list layout. This extension is not required for Demo 2.
 
-6. (Advanced) Make each movie card interactive so that tapping its booking button navigates to that film's listing page and dynamically displays the details of the selected film, following the navigation and data passing approach from [Navigate between screens and pass data](#navigate-between-screens-and-pass-data). The behaviour you are after is that pressing the booking button opens the listing page for that specific card's film, so the listing page now needs the selected film passed to it when it is opened, just as `OrderScreen` receives a `Sandwich`.
+6. (Advanced) Connect the booking buttons to `MovieListing`, following [Accept a Sandwich in OrderScreen](#accept-a-sandwich-in-orderscreen) and [Connect SandwichCard to OrderScreen](#connect-sandwichcard-to-orderscreen). This completes the booking flow for Demo 2.
 
-    Once the listing page needs a film passed in, it can no longer be opened without one. In `lib/main.dart`, comment out the listing page import near the top of the file so it is no longer used, leaving the line in place as a reminder of what changed:
+    Pass the selected `Movie` into your existing stateful listing page and display its details through `widget.movie`. Keep ticket quantity and booking feedback in the state class; revisit [Add and remove emojis with setState in Worksheet 2](worksheet-2.md#add-and-remove-emojis-with-setstate) if needed.
 
-    ```dart
-    // import 'package:southsea_cinema/views/movie_listing.dart';
-    ```
+    If your old `'/listing'` route or drawer tile still opens the listing without a film, remove those entries and any unused import. Keep the home link. Skip this if you have already done it.
 
-    Then comment out the `'/listing'` route further down so that the home page is the only route left:
+    If the listing's drawer hides the back arrow, use an `IconButton` in `AppBar.leading` with `Icons.arrow_back` and `Navigator.pop(context)`. See [Experiment with the parts of the Scaffold in Worksheet 2](worksheet-2.md#experiment-with-the-parts-of-the-scaffold) for a reminder about app bar properties.
 
-    ```dart
-    initialRoute: '/',
-    routes: {
-      '/': (BuildContext context) {
-        return const HomeView();
-      },
-      // '/listing': (BuildContext context) {
-      //   return const MovieListing();
-      // },
-    },
-    ```
-
-    This also affects your navigation drawer in the `lib/widgets` folder. It previously offered a direct link to the listing page through a `DrawerTile` pointing at the `'/listing'` route, which no longer exists. A drawer link cannot choose which film to show, so comment out that tile and leave only the home tile:
-
-    ```dart
-    const DrawerTile(title: 'Home', route: '/'),
-    // const DrawerTile(title: 'Movie Listing', route: '/listing'),
-    ```
-
-    The listing page is now reached only through a film's booking button. So for example, if the user clicked on the Phantom of the Opera's booking button, the user should be navigated to the `MovieListing` page with the Phantom of the Opera's details as shown below:
+    Follow [Test the complete navigation flow](#test-the-complete-navigation-flow) to check both films, return navigation and booking feedback. The selected film's listing should look like this:
 
     ![The MovieListing page with the Phantom of the Opera's details](images/3/southsea_cinema_movie_listing.png)

@@ -2117,7 +2117,7 @@ The exercises below apply the concepts from this worksheet to the Southsea Cinem
 
 7. Following [Testing persistence](#testing-persistence), write a shared preferences test using `SharedPreferences.setMockInitialValues` for your remembered options, and an in-memory SQLite test using `sqfliteFfiInit`, `databaseFactoryFfi`, and `inMemoryDatabasePath` for your bookings.
 
-8. Decide what matters most about your Demo 3 experience and prove it works: cover the behaviour you care about with automated tests, and make sure `dart analyze` and `flutter test` both pass cleanly. **Show your running application with live SQLite booking persistence to a member of staff** for your Demo 3 sign-off.
+8. Decide what matters most about your Demo 3 experience and prove it works: cover the behaviour you care about with automated tests, and make sure `dart analyze` and `flutter test` both pass cleanly.
 
 9. (Advanced challenge — Focus management and input controls) Following the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input), enrich your cinema settings or booking form with programmatic focus management and user controls. Use a `FocusNode` to focus the primary input field automatically when entering edit mode with `focusNode.requestFocus()`, add an `IconButton` inside the input decoration to clear text using `controller.clear()`, and clean up your `FocusNode` in `dispose`.
 

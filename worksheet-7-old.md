@@ -1598,4 +1598,4 @@ The exercises below apply the concepts from this worksheet to the Southsea Cinem
 
 4. Extend your application state management by integrating a `ChangeNotifier` provider for your ticket booking and basket state. Ensure screens update reactively when tickets or refreshments are added or removed, and write tests in `test/models/` and `test/screens/` verifying state updates.
 
-5. From Demo 4 onwards, project structure and test coverage bear a significant proportion of your demo marks under code quality. Verify that `flutter test --coverage` passes with all tests green and that coverage is visible in the VS Code extension. **Show your restructured project directory, running tests, live test coverage in VS Code, and running application to a member of staff** for your Demo 4 sign-off.
+5. From Demo 4 onwards, project structure and test coverage bear a significant proportion of your demo marks under code quality. Verify that `flutter test --coverage` passes with all tests green and that coverage is visible in the VS Code extension.
