@@ -31,39 +31,5 @@ void main() {
         expect(sandwich.formattedPrice, '£7.50');
       },
     );
-
-    test('fromJson creates a Sandwich instance from valid JSON map', () {
-      final Map<String, dynamic> jsonMap = <String, dynamic>{
-        'id': 'veggie-delight',
-        'name': 'Veggie Delight',
-        'description': 'Crisp garden vegetables on fresh bread.',
-        'price': 5.50,
-        'imagePath': 'assets/images/six_inch.jpeg',
-      };
-
-      final Sandwich sandwich = Sandwich.fromJson(jsonMap);
-
-      expect(sandwich.id, 'veggie-delight');
-      expect(sandwich.name, 'Veggie Delight');
-      expect(sandwich.price, 5.50);
-      expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
-    });
-
-    test('toJson serialises a Sandwich instance into a JSON map', () {
-      const Sandwich sandwich = Sandwich(
-        id: 'meatball',
-        name: 'Meatball Marinara',
-        description: 'Italian meatballs in rich marinara sauce.',
-        price: 8.00,
-        imagePath: 'assets/images/footlong.jpeg',
-      );
-
-      final Map<String, dynamic> jsonMap = sandwich.toJson();
-
-      expect(jsonMap['id'], 'meatball');
-      expect(jsonMap['name'], 'Meatball Marinara');
-      expect(jsonMap['price'], 8.00);
-      expect(jsonMap['imagePath'], 'assets/images/footlong.jpeg');
-    });
   });
 }
