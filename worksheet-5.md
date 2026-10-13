@@ -1227,7 +1227,7 @@ Next, append the three total rows by calling `_buildTotalRow`:
     children.add(const SizedBox(height: 24));
 ```
 
-Finally, add the full-width **Checkout** button and return the `Column`. Tapping checkout clears the cart and sets `_confirmationMessage` inside `setState`:
+Finally, add the full-width **Checkout** button:
 
 ```dart
     children.add(
@@ -1244,7 +1244,11 @@ Finally, add the full-width **Checkout** button and return the `Column`. Tapping
         ),
       ),
     );
+```
 
+Tapping checkout clears the cart and updates `_confirmationMessage` inside `setState`. Now append the confirmation text when present and return the `Column`:
+
+```dart
     if (_confirmationMessage.isNotEmpty) {
       children.add(const SizedBox(height: 12));
       children.add(
@@ -1264,7 +1268,9 @@ Finally, add the full-width **Checkout** button and return the `Column`. Tapping
 
 ### Assemble the basket screen scaffold
 
-With our helper methods in place, update `build` in `_BasketScreenState` to tie everything together:
+With our helper methods in place, update `build` in `_BasketScreenState` to tie everything together.
+
+First, determine `content` based on whether items are present in the cart:
 
 ```dart
   @override
@@ -1292,7 +1298,11 @@ With our helper methods in place, update `build` in `_BasketScreenState` to tie 
     } else {
       content = _buildBasketList(cart, items);
     }
+```
 
+Now return the `Scaffold` shell wrapping `content` in a `SingleChildScrollView`:
+
+```dart
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
@@ -1346,7 +1356,7 @@ void main() {
   });
 ```
 
-Now add two widget tests:
+Now add the first test verifying that the empty message appears when the cart has no items:
 
 ```dart
   testWidgets('BasketScreen displays empty message when basket has no items', (
@@ -1357,7 +1367,13 @@ Now add two widget tests:
     expect(find.text('Your basket is empty'), findsOneWidget);
     expect(find.text('Checkout'), findsNothing);
   });
+```
 
+This test pumps `BasketScreen` when the repository is empty and asserts that the informational text `Your basket is empty` appears while the **Checkout** button is not rendered.
+
+Next, add a test verifying that items render with line totals and that tapping the delete button removes the sandwich:
+
+```dart
   testWidgets(
     'BasketScreen renders items and removes item when delete pressed',
     (WidgetTester tester) async {
@@ -1383,67 +1399,7 @@ Now add two widget tests:
 }
 ```
 
-Here is what each test case verifies:
-
-1. `BasketScreen displays empty message when basket has no items`: pumps `BasketScreen` when the repository is empty and asserts that the informational text `Your basket is empty` appears while the **Checkout** button is not rendered.
-2. `BasketScreen renders items and removes item when delete pressed`: adds a test `CartItem` (2 Footlong Subs) to `CartRepository.instance`, pumps `BasketScreen`, and asserts that the header, item title, computed price (`£20.00`), and **Checkout** button are present. It then simulates tapping the delete icon button (`Icons.delete_outline`), calls `tester.pump()` to trigger the `setState` rebuild, and confirms that the basket transitions to the empty state.
-
-Your complete `test/basket_screen_test.dart` file should look like this:
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/models/cart_item.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/repositories/cart_repository.dart';
-import 'package:sandwich_shop/screens/basket_screen.dart';
-
-const Sandwich testSandwich = Sandwich(
-  id: 'footlong',
-  name: 'Footlong Sub',
-  description: 'Classic freshly baked sub.',
-  price: 10.0,
-  imagePath: 'assets/images/footlong.jpeg',
-);
-
-void main() {
-  setUp(() {
-    CartRepository.instance.clear();
-  });
-
-  testWidgets('BasketScreen displays empty message when basket has no items', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
-
-    expect(find.text('Your basket is empty'), findsOneWidget);
-    expect(find.text('Checkout'), findsNothing);
-  });
-
-  testWidgets(
-    'BasketScreen renders items and removes item when delete pressed',
-    (WidgetTester tester) async {
-      const CartItem item = CartItem(
-        sandwich: testSandwich,
-        quantity: 2,
-      );
-      CartRepository.instance.addItem(item);
-
-      await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
-
-      expect(find.text('Your basket'), findsOneWidget);
-      expect(find.text('2 x Footlong Sub'), findsOneWidget);
-      expect(find.text('£20.00'), findsWidgets);
-      expect(find.text('Checkout'), findsOneWidget);
-
-      await tester.tap(find.byIcon(Icons.delete_outline));
-      await tester.pump();
-
-      expect(find.text('Your basket is empty'), findsOneWidget);
-    },
-  );
-}
-```
+This test adds a test `CartItem` (2 Footlong Subs) to `CartRepository.instance`, pumps `BasketScreen`, and asserts that the header, item title, computed price (`£20.00`), and **Checkout** button are present. It then simulates tapping the delete icon button (`Icons.delete_outline`), calls `tester.pump()` to trigger the `setState` rebuild, and confirms that the basket transitions to the empty state.
 
 ## Building the customer profile settings form
 
@@ -1459,7 +1415,7 @@ In there add a `UserSettings` class with four instance variables: `name`, `addre
 
 Create a new unit test named `test/user_settings_test.dart` to verify default and configured values. You need to have at least two tests:
 
-1. Verify that a default `UserSettings` instance has empty strings for `name`, `address`, and `email`, and that `receiveNewsletter` is false. You can see some of the constants user in [the `expect` library](https://api.flutter.dev/flutter/package-matcher_expect/#constants) documentation. See for example `isEmpty` and `isFalse`.
+1. Verify that a default `UserSettings` instance has empty strings for `name`, `address`, and `email`, and that `receiveNewsletter` is false. You can see some of the constants used in [the `expect` library](https://api.flutter.dev/flutter/package-matcher_expect/#constants) documentation. See for example `isEmpty` and `isFalse`.
 2. Verify that a configured `UserSettings` instance stores the values passed to the constructor. For this, create a `UserSettings` instance with non-empty strings for `name`, `address`, and `email`, and set `receiveNewsletter` to true. Then assert that the instance variables match the values you passed in.
 
 Below is what our test file looks like. Yours can be slightly different, but it should test the same functionality. Make sure to run the test and verify that it passes.

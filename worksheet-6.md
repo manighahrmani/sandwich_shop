@@ -269,7 +269,9 @@ SQLite is a small relational database engine. It needs no separate server; the w
 
 ### Define the order record model
 
-Create a new file named `lib/models/order_record.dart`. Start with the fields and the `const` constructor:
+Create a new file named `lib/models/order_record.dart`.
+
+First, define the class and declare its fields:
 
 ```dart
 class OrderRecord {
@@ -281,7 +283,13 @@ class OrderRecord {
   final int vegan;
   final double total;
   final String date;
+```
 
+The `id` field has the nullable type `int?` and is not `required`. A record we have just built in memory has no `id` yet: SQLite assigns one when the row is inserted. So `id` is `null` before saving and holds a number afterwards. Note that `toasted` and `vegan` are stored as `int` here, not `bool`: SQLite has no boolean type, so we use `1` for true and `0` for false.
+
+Now add the `const` constructor:
+
+```dart
   const OrderRecord({
     this.id,
     required this.orderNumber,
@@ -292,10 +300,7 @@ class OrderRecord {
     required this.total,
     required this.date,
   });
-}
 ```
-
-The `id` field has the nullable type `int?` and is not `required`. A record we have just built in memory has no `id` yet: SQLite assigns one when the row is inserted. So `id` is `null` before saving and holds a number afterwards. Note that `toasted` and `vegan` are stored as `int` here, not `bool`: SQLite has no boolean type, so we use `1` for true and `0` for false.
 
 This model converts to and from a database row, just as `Sandwich` converted to and from JSON in Worksheet 5. The database equivalent of `toJson` and `fromJson` is a pair named `toMap` and `fromMap`, which produce and read the `Map<String, Object?>` of column names to values that the database methods expect. Add `toMap` first, inside the class:
 
@@ -319,7 +324,7 @@ This model converts to and from a database row, just as `Sandwich` converted to 
 
 Each map key matches a column in the orders table we create shortly. We add the `id` entry only when `id` is not `null`, so a brand-new record leaves `id` out and lets SQLite fill it in.
 
-Now add the `fromMap` constructor, which reads a row map back into an `OrderRecord`. It is a `factory` constructor, the kind you met in Worksheet 5:
+Now add the `fromMap` factory constructor, which reads a row map back into an `OrderRecord`. Start by extracting and casting the fields from the map:
 
 ```dart
   factory OrderRecord.fromMap(Map<String, Object?> map) {
@@ -331,7 +336,13 @@ Now add the `fromMap` constructor, which reads a row map back into an `OrderReco
     final num totalNumber = map['total'] as num;
     final double total = totalNumber.toDouble();
     final String date = map['date'] as String;
+```
 
+As in Worksheet 5, we read each value out of the map and use `as` to assert its type, reading the total as a `num` and calling `.toDouble()`.
+
+Finally, return the newly instantiated `OrderRecord`:
+
+```dart
     return OrderRecord(
       id: map['id'] as int?,
       orderNumber: orderNumber,
@@ -346,7 +357,7 @@ Now add the `fromMap` constructor, which reads a row map back into an `OrderReco
 }
 ```
 
-As in Worksheet 5, we read each value out of the map and use `as` to assert its type, reading the total as a `num` and calling `.toDouble()`. The `id` might be missing, so we read it as the nullable `int?`.
+The `id` might be missing from an unpersisted map, so we read it as the nullable `int?`.
 
 ### Create the database helper
 
@@ -489,7 +500,7 @@ Still inside `SandwichDatabase`, add `_createDB`. The engine calls this once, th
 
 The `db.execute` method runs a raw SQL statement that returns no rows, which is what we need to create a table. The SQL `CREATE TABLE IF NOT EXISTS orders (...)` makes a table called `orders` only if it does not already exist. Inside the brackets each line names a column and its type: `INTEGER` for whole numbers, `TEXT` for strings, and `REAL` for decimal numbers. `PRIMARY KEY` marks `id` as the unique identifier for each row, and `AUTOINCREMENT` tells SQLite to fill it in automatically with the next number, so we never set it ourselves. `NOT NULL` means a column must always have a value. The triple-quoted string (`'''`) lets the SQL span several lines. The columns match the keys in `OrderRecord.toMap`.
 
-Now seed a few past orders so the orders screen has something to show the first time a student opens it. Still inside `_createDB`, insert three rows and close the method:
+Now seed a few past orders so the orders screen has something to show the first time a student opens it. Still inside `_createDB`, insert the first order:
 
 ```dart
     await db.insert('orders', <String, Object?>{
@@ -501,6 +512,13 @@ Now seed a few past orders so the orders screen has something to show the first 
       'total': 15.00,
       'date': '18 Apr 2026 12:45',
     });
+```
+
+The `db.insert` method adds one row to a named table from a `Map<String, Object?>` whose keys match the column names.
+
+Now insert the remaining two seed orders and close the method:
+
+```dart
     await db.insert('orders', <String, Object?>{
       'order_number': 1002,
       'summary': '1 x Six-Inch Sub',
@@ -522,7 +540,7 @@ Now seed a few past orders so the orders screen has something to show the first 
   }
 ```
 
-The `db.insert` method adds one row to a named table from a `Map<String, Object?>` whose keys match the column names. Because `_createDB` runs only when the database is first created, this seeding happens once. The coursework asks you to seed your own account history in the same way.
+Because `_createDB` runs only when the database is first created, this seeding happens once. The coursework asks you to seed your own account history in the same way.
 
 ### Insert and query orders
 
@@ -847,7 +865,9 @@ Now add `initState` (from Worksheet 5) to start loading as soon as the screen ap
 
 The loader reads every order from the database, and once the data is back it stores it in `_orders` and sets `_loading` to `false` with `setState`, guarded by the `mounted` check so we never update a screen the user has left.
 
-Next add a helper that turns one order's options into a short line of text, so the toggles and note show beneath the summary. It builds a list of the parts that apply and joins them, returning an empty box when none do:
+Next add a helper that turns one order's options into a short line of text, so the toggles and note show beneath the summary.
+
+First, check which options apply and collect them into a list:
 
 ```dart
   Widget _buildOptionsText(OrderRecord order) {
@@ -861,7 +881,13 @@ Next add a helper that turns one order's options into a short line of text, so t
     if (order.note.isNotEmpty) {
       parts.add('Note: ${order.note}');
     }
+```
 
+Because the table stores `toasted` and `vegan` as `1` or `0`, we check each against `1`.
+
+Now return an empty box if no options apply, or join the parts with a bullet separator:
+
+```dart
     if (parts.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -876,9 +902,9 @@ Next add a helper that turns one order's options into a short line of text, so t
   }
 ```
 
-Because the table stores `toasted` and `vegan` as `1` or `0`, we check each against `1`. This mirrors the options line you built on the basket screen in Worksheet 5.
+This mirrors the options line you built on the basket screen in Worksheet 5.
 
-Now add the helper that builds one card per order. We use a plain `Card` with no decoration or coloured circles, matching the simple basket style from Worksheet 5:
+Now add the helper that builds one card per order. Start with the `Card` wrapper and header row showing the order number and total:
 
 ```dart
   Widget _buildOrderCard(OrderRecord order) {
@@ -899,6 +925,13 @@ Now add the helper that builds one card per order. We use a plain `Card` with no
                 Text('£${order.total.toStringAsFixed(2)}'),
               ],
             ),
+```
+
+A `Card` is Flutter's lightly raised panel. Inside it, `MainAxisAlignment.spaceBetween` places the order number on the left and the total on the right.
+
+Now append the summary, options line, and date:
+
+```dart
             const SizedBox(height: 4),
             Text(order.summary),
             _buildOptionsText(order),
@@ -914,9 +947,9 @@ Now add the helper that builds one card per order. We use a plain `Card` with no
   }
 ```
 
-A `Card` is Flutter's lightly raised panel. Inside it, a top `Row` places the order number on the left and the total on the right with `MainAxisAlignment.spaceBetween`, then come the summary, the options line, and the date in small grey text. There is no `Divider` and no coloured quantity circle, so the orders list reads as cleanly as the basket.
+There is no `Divider` and no coloured quantity circle, so the orders list reads as cleanly as the basket.
 
-Finally, add the `build` method. It picks between three states: nothing while loading, the empty-state message when there are no orders, and a scrolling list of cards otherwise:
+Finally, implement the `build` method. Start by choosing the `body` widget between loading, empty, and populated states:
 
 ```dart
   @override
@@ -942,7 +975,13 @@ Finally, add the `build` method. It picks between three states: nothing while lo
         },
       );
     }
+```
 
+While `_loading` is `true` the body is an empty `SizedBox.shrink()`, which takes no space. Once loading finishes, an empty table shows the "No orders yet" message, and a filled one shows a `ListView.builder` of order cards.
+
+Now return the `Scaffold` shell with the standard app bar actions:
+
+```dart
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
@@ -1199,7 +1238,7 @@ The database tests use two setup functions. `setUpAll` runs its callback once, b
 
 Create a new file named `test/sandwich_db_test.dart`.
 
-Start with the imports, test harness setup, and helper:
+Start by importing test packages, models, and initializing the FFI database factory:
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
@@ -1212,7 +1251,13 @@ void main() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   });
+```
 
+We call `sqfliteFfiInit()` and set `databaseFactory = databaseFactoryFfi` in `setUpAll` to prepare the SQLite engine once before running tests.
+
+Now configure database creation in `setUp` and closing the connection in `tearDown`:
+
+```dart
   late Database database;
 
   setUp(() async {
@@ -1243,7 +1288,13 @@ void main() {
     await database.close();
     SandwichDatabase.instance.setDatabase(null);
   });
+```
 
+In `setUp` we open an in-memory SQLite database, run the create-table query, and inject it into `SandwichDatabase.instance` using `setDatabase`. The `tearDown` callback closes the database and resets the instance so tests do not interfere with each other.
+
+Next, add a helper function to construct test order records:
+
+```dart
   OrderRecord buildRecord(int orderNumber, String summary, double total) {
     return OrderRecord(
       orderNumber: orderNumber,
@@ -1257,7 +1308,7 @@ void main() {
   }
 ```
 
-The `setUpAll` initialises the FFI database factory once. In `setUp` we open an in-memory SQLite database, run the create-table query, and inject it with `setDatabase`. The `tearDown` cleans up afterwards, and `buildRecord` provides sample records.
+The `buildRecord` helper creates sample `OrderRecord` instances with default values for tests.
 
 Now add a test verifying that inserting an order stores its fields and generates an id:
 
@@ -1321,7 +1372,7 @@ In Worksheet 5, `test/basket_screen_test.dart` tested the old checkout behaviour
 
 Update `test/basket_screen_test.dart` to initialise the in-memory SQLite database and test that checkout stores the order record and navigates to `OrdersScreen`.
 
-First, update the imports, fixture, in-memory database setup, and the test app wrapper:
+Start by updating the imports and declaring the sample sandwich fixture:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1341,13 +1392,23 @@ const Sandwich testSandwich = Sandwich(
   price: 10.0,
   imagePath: 'assets/images/footlong.jpeg',
 );
+```
 
+Next, define `main` and initialise SQLite FFI in `setUpAll`:
+
+```dart
 void main() {
   setUpAll(() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   });
+```
 
+We initialise the SQLite FFI engine once before running tests.
+
+Now add `setUp` and `tearDown` to manage the in-memory database lifecycle:
+
+```dart
   late Database database;
 
   setUp(() async {
@@ -1379,7 +1440,13 @@ void main() {
     await database.close();
     SandwichDatabase.instance.setDatabase(null);
   });
+```
 
+In `setUp` we reset the in-memory cart, create a fresh in-memory database with the `orders` table, and inject it into `SandwichDatabase.instance`. In `tearDown`, we close the database and clear the singleton reference.
+
+Now add the `buildApp` navigation wrapper helper:
+
+```dart
   Widget buildApp() {
     return MaterialApp(
       home: const BasketScreen(),
@@ -1479,7 +1546,7 @@ This test runs the asynchronous database insert inside `tester.runAsync`, assert
 
 Create a new file named `test/orders_screen_test.dart` to verify that `OrdersScreen` displays past orders newest first and shows an empty state when no orders have been placed.
 
-Start with the imports, `main` setup, and the database test helper:
+Start with the imports, `main` setup, and engine initialisation:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1494,7 +1561,13 @@ void main() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   });
+```
 
+We import the testing tools and initialise the SQLite FFI database factory in `setUpAll`.
+
+Now add the database helper that prepares an in-memory test database:
+
+```dart
   Future<Database> openDatabaseForTest() async {
     final Database database = await databaseFactory.openDatabase(
       inMemoryDatabasePath,
@@ -1596,7 +1669,7 @@ This test opens `OrdersScreen` with an empty table and verifies that the "No ord
 
 Create a new file named `test/widgets/app_bar_actions_test.dart` to verify that both app bar buttons appear across the screens and that tapping the orders action navigates to the orders screen.
 
-Start with the imports, setup, and navigation wrapper:
+Start with the imports and sample sandwich fixture:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1618,7 +1691,11 @@ const Sandwich testSandwich = Sandwich(
   price: 5.0,
   imagePath: 'assets/images/footlong.jpeg',
 );
+```
 
+Now define `main`, initialise the test engine, and reset test state:
+
+```dart
 void main() {
   setUpAll(() {
     sqfliteFfiInit();
@@ -1629,7 +1706,13 @@ void main() {
     CartRepository.instance.clear();
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
+```
 
+We initialise the database engine in `setUpAll`, and clear both the cart repository and mock shared preferences in `setUp` before each test.
+
+Now add the database helper that prepares an in-memory test database:
+
+```dart
   Future<Database> openDatabaseForTest() async {
     final Database database = await databaseFactory.openDatabase(
       inMemoryDatabasePath,
@@ -1654,7 +1737,13 @@ void main() {
     SandwichDatabase.instance.setDatabase(database);
     return database;
   }
+```
 
+The `openDatabaseForTest` helper creates an in-memory database with the `orders` table and injects it into `SandwichDatabase.instance`.
+
+Next, add the test harness wrapper helper:
+
+```dart
   Widget wrap(Widget home) {
     return MaterialApp(
       home: home,
@@ -1669,7 +1758,7 @@ void main() {
 
 The `wrap` helper wraps any screen in `MaterialApp` with the `'/orders'` route registered so app bar actions can be tested uniformly.
 
-Now add tests verifying that both app bar action icons appear across each screen:
+Now verify that both action icons appear on the menu screen:
 
 ```dart
   testWidgets('Menu screen shows both basket and orders actions', (
@@ -1680,7 +1769,13 @@ Now add tests verifying that both app bar action icons appear across each screen
     expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
     expect(find.byIcon(Icons.receipt_long), findsOneWidget);
   });
+```
 
+This test verifies that `Icons.shopping_basket` and `Icons.receipt_long` both render on `MenuScreen`.
+
+Now add tests verifying the actions on the order and basket screens:
+
+```dart
   testWidgets('Order screen shows both basket and orders actions', (
     WidgetTester tester,
   ) async {
@@ -1699,7 +1794,13 @@ Now add tests verifying that both app bar action icons appear across each screen
     expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
     expect(find.byIcon(Icons.receipt_long), findsOneWidget);
   });
+```
 
+These tests verify that both action buttons also render on `OrderScreen` and `BasketScreen`.
+
+Now test the orders screen with an active database connection:
+
+```dart
   testWidgets('Orders screen shows both basket and orders actions', (
     WidgetTester tester,
   ) async {
@@ -1717,7 +1818,7 @@ Now add tests verifying that both app bar action icons appear across each screen
   });
 ```
 
-These tests verify that both `Icons.shopping_basket` and `Icons.receipt_long` render on `MenuScreen`, `OrderScreen`, `BasketScreen`, and `OrdersScreen`.
+This test confirms that `OrdersScreen` renders both app bar action icons once loaded from the database.
 
 Finally, add a test verifying navigation when tapping the receipt action:
 
