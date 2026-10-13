@@ -1,4 +1,4 @@
-# Worksheet 6 — Two kinds of local persistence
+# Worksheet 6 — Local data and persistence
 
 ## Table of contents
 
@@ -6,33 +6,40 @@
 - [Getting started](#getting-started)
   - [Continue from Worksheet 5](#continue-from-worksheet-5)
   - [Switch to branch 5](#switch-to-branch-5)
+- [Loading the menu from JSON](#loading-the-menu-from-json)
+  - [Create the JSON asset file](#create-the-json-asset-file)
+  - [Register the asset in pubspec](#register-the-asset-in-pubspec)
+  - [Add JSON serialisation to the sandwich model](#add-json-serialisation-to-the-sandwich-model)
+  - [Unit test JSON serialisation](#unit-test-json-serialisation)
+  - [Load JSON data in the repository](#load-json-data-in-the-repository)
+  - [Commit your changes (1)](#commit-your-changes-1)
 - [Two kinds of persistence](#two-kinds-of-persistence)
 - [Adding the dependencies](#adding-the-dependencies)
   - [Add the persistence packages](#add-the-persistence-packages)
-  - [Commit your changes (1)](#commit-your-changes-1)
+  - [Commit your changes (2)](#commit-your-changes-2)
 - [Remembering customer profile settings with shared preferences](#remembering-customer-profile-settings-with-shared-preferences)
   - [Define the preference keys](#define-the-preference-keys)
   - [Load saved settings when the screen opens](#load-saved-settings-when-the-screen-opens)
   - [Save settings when the user submits](#save-settings-when-the-user-submits)
-  - [Commit your changes (2)](#commit-your-changes-2)
+  - [Commit your changes (3)](#commit-your-changes-3)
 - [Storing orders in SQLite](#storing-orders-in-sqlite)
   - [Define the order record model](#define-the-order-record-model)
   - [Create the database helper](#create-the-database-helper)
   - [Create the orders table and seed past orders](#create-the-orders-table-and-seed-past-orders)
   - [Insert and query orders](#insert-and-query-orders)
-  - [Commit your changes (3)](#commit-your-changes-3)
+  - [Commit your changes (4)](#commit-your-changes-4)
 - [Adding an orders button to every screen](#adding-an-orders-button-to-every-screen)
   - [Create the orders button](#create-the-orders-button)
   - [Show both buttons on the menu and order screens](#show-both-buttons-on-the-menu-and-order-screens)
-  - [Commit your changes (4)](#commit-your-changes-4)
+  - [Commit your changes (5)](#commit-your-changes-5)
 - [Saving an order at checkout](#saving-an-order-at-checkout)
   - [Build the order record from the basket](#build-the-order-record-from-the-basket)
   - [Save and navigate on checkout](#save-and-navigate-on-checkout)
-  - [Commit your changes (5)](#commit-your-changes-5)
+  - [Commit your changes (6)](#commit-your-changes-6)
 - [Showing past orders](#showing-past-orders)
   - [Create the orders screen](#create-the-orders-screen)
   - [Register the orders route](#register-the-orders-route)
-  - [Commit your changes (6)](#commit-your-changes-6)
+  - [Commit your changes (7)](#commit-your-changes-7)
 - [Running the app on a mobile emulator](#running-the-app-on-a-mobile-emulator)
   - [Lab machines: the Android emulator beta bundle](#lab-machines-the-android-emulator-beta-bundle)
   - [Inspecting the database](#inspecting-the-database)
@@ -45,7 +52,7 @@
   - [Update the basket screen tests](#update-the-basket-screen-tests)
   - [Test the orders screen](#test-the-orders-screen)
   - [Test the app bar navigation actions](#test-the-app-bar-navigation-actions)
-  - [Commit your changes (7)](#commit-your-changes-7)
+  - [Commit your changes (8)](#commit-your-changes-8)
 - [Exercises](#exercises)
 
 ## Getting help
@@ -68,9 +75,235 @@ git checkout 5
 
 Run `flutter test` in your terminal to confirm that all existing tests pass before continuing.
 
+## Loading the menu from JSON
+
+In Worksheet 5 our sandwich menu items were hardcoded in `SandwichRepository`. Hardcoded data is inflexible; adding a new sandwich or altering prices requires modifying Dart code. In this section we move the menu into an external JSON file, register the asset, and load it into our data models.
+
+### Create the JSON asset file
+
+Create a new file named `assets/data/sandwiches.json`:
+
+```json
+[
+  {
+    "id": "footlong",
+    "name": "Footlong Sub",
+    "description": "A freshly baked 12-inch sandwich filled with savoury ingredients.",
+    "price": 7.50,
+    "imagePath": "assets/images/footlong.jpeg"
+  },
+  {
+    "id": "six-inch",
+    "name": "Six-Inch Sub",
+    "description": "A light 6-inch sandwich made with your favourite toppings.",
+    "price": 4.50,
+    "imagePath": "assets/images/six_inch.jpeg"
+  }
+]
+```
+
+This JSON array contains two sandwich objects matching the fields in our `Sandwich` class.
+
+### Register the asset in pubspec
+
+Flutter requires external assets to be registered in `pubspec.yaml` before they can be bundled with the application. Open `pubspec.yaml` and locate the `flutter:` section:
+
+```yaml
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+```
+
+Add `- assets/data/` to the list of assets:
+
+```yaml
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/data/
+```
+
+Trailing slashes register entire directories. Run `flutter pub get` in your terminal to update the asset bundle. For more details on asset management, see the [Flutter Assets documentation](https://docs.flutter.dev/ui/assets/assets-and-images).
+
+### Add JSON serialisation to the sandwich model
+
+Open `lib/models/sandwich.dart`. We add a factory constructor `Sandwich.fromJson` to parse a `Map<String, dynamic>` into a `Sandwich`, and a `toJson` method to convert it back to a map.
+
+First, add the factory constructor inside `Sandwich`:
+
+```dart
+  factory Sandwich.fromJson(Map<String, dynamic> json) {
+    final String id = json['id'] as String;
+    final String name = json['name'] as String;
+    final String description = json['description'] as String;
+    final num priceNumber = json['price'] as num;
+    final double price = priceNumber.toDouble();
+    final String imagePath = json['imagePath'] as String;
+
+    return Sandwich(
+      id: id,
+      name: name,
+      description: description,
+      price: price,
+      imagePath: imagePath,
+    );
+  }
+```
+
+A factory constructor creates an instance from external data. In Dart, parsing numbers from JSON can yield either an `int` or a `double`. Reading `json['price']` as `num` and calling `.toDouble()` safely converts both representations to `double` without runtime casting errors. The remaining map entries are cast explicitly to `String`.
+
+Now add `toJson` to convert a sandwich back to a map:
+
+```dart
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
+      'imagePath': imagePath,
+    };
+    return data;
+  }
+```
+
+The `toJson` method packs the sandwich fields into a `Map<String, dynamic>` ready for JSON encoding.
+
+### Unit test JSON serialisation
+
+Open `test/sandwich_model_test.dart`. Add a test verifying JSON decoding with `fromJson`:
+
+```dart
+    test('fromJson creates a Sandwich instance from valid JSON map', () {
+      final Map<String, dynamic> jsonMap = <String, dynamic>{
+        'id': 'veggie-delight',
+        'name': 'Veggie Delight',
+        'description': 'Crisp garden vegetables on fresh bread.',
+        'price': 5.50,
+        'imagePath': 'assets/images/six_inch.jpeg',
+      };
+
+      final Sandwich sandwich = Sandwich.fromJson(jsonMap);
+
+      expect(sandwich.id, 'veggie-delight');
+      expect(sandwich.name, 'Veggie Delight');
+      expect(sandwich.price, 5.50);
+      expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
+    });
+```
+
+This test passes a map containing sandwich attributes to `Sandwich.fromJson` and asserts that each property is extracted and cast to its expected value.
+
+Now add a test verifying map serialisation with `toJson`:
+
+```dart
+    test('toJson serialises a Sandwich instance into a JSON map', () {
+      const Sandwich sandwich = Sandwich(
+        id: 'meatball',
+        name: 'Meatball Marinara',
+        description: 'Italian meatballs in rich marinara sauce.',
+        price: 8.00,
+        imagePath: 'assets/images/footlong.jpeg',
+      );
+
+      final Map<String, dynamic> jsonMap = sandwich.toJson();
+
+      expect(jsonMap['id'], 'meatball');
+      expect(jsonMap['name'], 'Meatball Marinara');
+      expect(jsonMap['price'], 8.00);
+      expect(jsonMap['imagePath'], 'assets/images/footlong.jpeg');
+    });
+```
+
+This test constructs a constant `Sandwich` model, calls `sandwich.toJson()`, and verifies that the output map contains the corresponding keys and values.
+
+Run your model tests:
+
+```bash
+flutter test test/sandwich_model_test.dart
+```
+
+All model tests should pass.
+
+### Load JSON data in the repository
+
+Open `lib/repositories/sandwich_repository.dart`. First, import the necessary JSON and asset packages at the top of the file:
+
+```dart
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+```
+
+The `dart:convert` library provides `jsonDecode` to convert JSON text into Dart lists and maps. The `package:flutter/services.dart` library provides `rootBundle`, which accesses static asset files bundled with your application.
+
+Next, declare a nullable cache list inside `SandwichRepository` to store loaded sandwiches:
+
+```dart
+  List<Sandwich>? _cachedSandwiches;
+```
+
+Now add `loadSandwichesFromAsset` to load and decode the JSON asset:
+
+```dart
+  Future<List<Sandwich>> loadSandwichesFromAsset({
+    String assetPath = 'assets/data/sandwiches.json',
+  }) async {
+    final String jsonString = await rootBundle.loadString(assetPath);
+    final dynamic decodedData = jsonDecode(jsonString);
+    final List<dynamic> jsonList = decodedData as List<dynamic>;
+
+    final List<Sandwich> loadedSandwiches = [];
+    for (final dynamic item in jsonList) {
+      final Map<String, dynamic> itemMap = item as Map<String, dynamic>;
+      final Sandwich sandwich = Sandwich.fromJson(itemMap);
+      loadedSandwiches.add(sandwich);
+    }
+
+    _cachedSandwiches = loadedSandwiches;
+    return loadedSandwiches;
+  }
+```
+
+Calling `rootBundle.loadString(assetPath)` reads the asset file asynchronously into a `String`. Calling `jsonDecode(jsonString)` parses the raw text into a `List<dynamic>`. The explicit `for-in` loop iterates through the decoded entries, casts each item to a `Map<String, dynamic>`, and decodes it using `Sandwich.fromJson`. The method saves the loaded list to `_cachedSandwiches` and returns it.
+
+Update `getSandwiches()` to return the cached list when available:
+
+```dart
+  List<Sandwich> getSandwiches() {
+    if (_cachedSandwiches != null) {
+      return _cachedSandwiches!;
+    }
+    return const [
+      Sandwich(
+        id: 'footlong',
+        name: 'Footlong Sub',
+        description:
+            'A freshly baked 12-inch sandwich filled with savoury ingredients.',
+        price: 7.50,
+        imagePath: 'assets/images/footlong.jpeg',
+      ),
+      Sandwich(
+        id: 'six-inch',
+        name: 'Six-Inch Sub',
+        description:
+            'A light 6-inch sandwich made with your favourite toppings.',
+        price: 4.50,
+        imagePath: 'assets/images/six_inch.jpeg',
+      ),
+    ];
+  }
+```
+
+### Commit your changes (1)
+
+Stage `assets/data/sandwiches.json`, `pubspec.yaml`, `lib/models/sandwich.dart`, `lib/repositories/sandwich_repository.dart`, and `test/sandwich_model_test.dart`, then commit your changes with a short, descriptive message of your own.
+
 ## Two kinds of persistence
 
-In Worksheet 5 everything lived in memory. The customer profile details a user entered and the sandwiches in their basket vanished the moment the app restarted or the browser tab refreshed. In this worksheet we make two different kinds of data survive a restart, using the right tool for each.
+Bundling a JSON file with your application provides static catalogue data, but it is read-only at runtime. In Worksheet 5 everything else lived in memory: the customer profile details a user entered and the sandwiches in their basket vanished the moment the app restarted or the browser tab refreshed. In this worksheet we make two different kinds of data survive a restart, using the right tool for each.
 
 Customer profile settings, such as full name, delivery address, email, and whether to receive newsletter updates, are small, loose pieces of interface state. There are only a few of them and we never need to search or sort them. For data like that we use shared preferences, a simple store of key-and-value pairs saved on the device. We read the last-used settings back when the profile screen opens, so a returning user does not retype them.
 
@@ -105,7 +338,7 @@ Run `flutter pub get` in your terminal to download the packages:
 flutter pub get
 ```
 
-### Commit your changes (1)
+### Commit your changes (2)
 
 Stage `pubspec.yaml` and `pubspec.lock`, then commit your changes with a short, descriptive message of your own.
 
@@ -257,7 +490,7 @@ Each `set` call stores one value under its key, overwriting what was there. Upda
             ),
 ```
 
-### Commit your changes (2)
+### Commit your changes (3)
 
 Stage your updated `lib/screens/settings_screen.dart` and commit your changes with a message of your own.
 
@@ -604,7 +837,7 @@ Finally, add a method that closes the database. Our tests use it to reset betwee
   }
 ```
 
-### Commit your changes (3)
+### Commit your changes (4)
 
 Stage your new `order_record.dart` and `sandwich_db.dart`, then commit your changes with a message of your own.
 
@@ -675,7 +908,7 @@ import 'package:sandwich_shop/widgets/orders_button.dart';
 
 Open `lib/screens/order_screen.dart` and make the same change: import `orders_button.dart` and update its app bar `actions` to `const [BasketButton(), OrdersButton()]`. The basket app bar gets the same pair when we edit it next.
 
-### Commit your changes (4)
+### Commit your changes (5)
 
 Stage your new `orders_button.dart` and the updated `menu_screen.dart` and `order_screen.dart`, then commit your changes with a message of your own.
 
@@ -804,7 +1037,7 @@ Finally, add the orders button to the basket app bar so the user can reach their
       ),
 ```
 
-### Commit your changes (5)
+### Commit your changes (6)
 
 Stage your updated `basket_screen.dart` and commit your changes with a message of your own.
 
@@ -1015,7 +1248,7 @@ import 'package:sandwich_shop/screens/orders_screen.dart';
         },
 ```
 
-### Commit your changes (6)
+### Commit your changes (7)
 
 Stage your new `orders_screen.dart` and the updated `main.dart`, then commit your changes with a message of your own.
 
@@ -1850,7 +2083,7 @@ Run your test suite with `flutter test` to confirm everything passes:
 flutter test
 ```
 
-### Commit your changes (7)
+### Commit your changes (8)
 
 Stage your test files, including `test/settings_screen_test.dart` and the updated `test/basket_screen_test.dart`, and commit your changes with a message of your own.
 
@@ -1858,20 +2091,22 @@ Stage your test files, including `test/settings_screen_test.dart` and the update
 
 The exercises below apply the concepts from this worksheet to the Southsea Cinema coursework application. They prepare you for Demo 3 of your coursework. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Remember to commit your changes to Git after each exercise.
 
-1. Following [Adding the dependencies](#adding-the-dependencies), add `shared_preferences`, `sqflite`, `path`, `sqflite_common_ffi`, and `sqflite_common_ffi_web` to your Southsea Cinema fork's `pubspec.yaml`, and run `flutter pub get`.
+1. Following [Loading the menu from JSON](#loading-the-menu-from-json), move your film listings into a JSON asset file, register it in `pubspec.yaml`, and implement `fromJson` and `toJson` methods on your cinema models.
 
-2. Following [Remembering customer profile settings with shared preferences](#remembering-customer-profile-settings-with-shared-preferences), make your settings or booking screen remember the patron's details or option choices with shared preferences, loading them in `initState` and saving them when they change. Decide which patron settings are worth remembering.
+2. Following [Adding the dependencies](#adding-the-dependencies), add `shared_preferences`, `sqflite`, `path`, `sqflite_common_ffi`, and `sqflite_common_ffi_web` to your Southsea Cinema fork's `pubspec.yaml`, and run `flutter pub get`.
 
-3. Following [Define the order record model](#define-the-order-record-model), add a `TicketTransaction` model in `lib/models/ticket_transaction.dart` with `toMap` and `fromMap`. Decide which fields a cinema ticket sale needs to record, remembering that SQLite stores booleans as `1` or `0`.
+3. Following [Remembering customer profile settings with shared preferences](#remembering-customer-profile-settings-with-shared-preferences), make your settings or booking screen remember the patron's details or option choices with shared preferences, loading them in `initState` and saving them when they change. Decide which patron settings are worth remembering.
 
-4. Following [Create the database helper](#create-the-database-helper), create `lib/database/cinema_db.dart` with a `CinemaDatabase` helper that opens the database, creates a `bookings` table, and seeds a few past bookings matching your own account history.
+4. Following [Define the order record model](#define-the-order-record-model), add a `TicketTransaction` model in `lib/models/ticket_transaction.dart` with `toMap` and `fromMap`. Decide which fields a cinema ticket sale needs to record, remembering that SQLite stores booleans as `1` or `0`.
 
-5. Following [Saving an order at checkout](#saving-an-order-at-checkout), make confirming a purchase save a `TicketTransaction` to `CinemaDatabase.instance`, clear the basket, and take the patron to a bookings screen. Then, following [Showing past orders](#showing-past-orders), build that bookings screen so it reads and lists the stored bookings newest first.
+5. Following [Create the database helper](#create-the-database-helper), create `lib/database/cinema_db.dart` with a `CinemaDatabase` helper that opens the database, creates a `bookings` table, and seeds a few past bookings matching your own account history.
 
-6. Following [Testing persistence](#testing-persistence), write a shared preferences test using `SharedPreferences.setMockInitialValues` for your remembered options, and an in-memory SQLite test using `sqfliteFfiInit`, `databaseFactoryFfi`, and `inMemoryDatabasePath` for your bookings.
+6. Following [Saving an order at checkout](#saving-an-order-at-checkout), make confirming a purchase save a `TicketTransaction` to `CinemaDatabase.instance`, clear the basket, and take the patron to a bookings screen. Then, following [Showing past orders](#showing-past-orders), build that bookings screen so it reads and lists the stored bookings newest first.
 
-7. Decide what matters most about your Demo 3 experience and prove it works: cover the behaviour you care about with automated tests, and make sure `dart analyze` and `flutter test` both pass cleanly. **Show your running application with live SQLite booking persistence to a member of staff** for your Demo 3 sign-off.
+7. Following [Testing persistence](#testing-persistence), write a shared preferences test using `SharedPreferences.setMockInitialValues` for your remembered options, and an in-memory SQLite test using `sqfliteFfiInit`, `databaseFactoryFfi`, and `inMemoryDatabasePath` for your bookings.
 
-8. (Advanced challenge — Focus management and input controls) Following the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input), enrich your cinema settings or booking form with programmatic focus management and user controls. Use a `FocusNode` to focus the primary input field automatically when entering edit mode with `focusNode.requestFocus()`, add an `IconButton` inside the input decoration to clear text using `controller.clear()`, and clean up your `FocusNode` in `dispose`.
+8. Decide what matters most about your Demo 3 experience and prove it works: cover the behaviour you care about with automated tests, and make sure `dart analyze` and `flutter test` both pass cleanly. **Show your running application with live SQLite booking persistence to a member of staff** for your Demo 3 sign-off.
 
-9. (Advanced challenge — Test directory mirroring and coverage) Prepare ahead for Demo 4 requirements by restructuring your `test/` directory to strictly mirror the organisation of `lib/` (for example `test/models/`, `test/views/`, `test/repositories/`, `test/database/`, `test/widgets/`). Install the Flutter Coverage extension in VS Code and run `flutter test --coverage` in the terminal to inspect line-by-line coverage and identify untested branches across your models and repositories.
+9. (Advanced challenge — Focus management and input controls) Following the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input), enrich your cinema settings or booking form with programmatic focus management and user controls. Use a `FocusNode` to focus the primary input field automatically when entering edit mode with `focusNode.requestFocus()`, add an `IconButton` inside the input decoration to clear text using `controller.clear()`, and clean up your `FocusNode` in `dispose`.
+
+10. (Advanced challenge — Test directory mirroring and coverage) Prepare ahead for Demo 4 requirements by restructuring your `test/` directory to strictly mirror the organisation of `lib/` (for example `test/models/`, `test/views/`, `test/repositories/`, `test/database/`, `test/widgets/`). Install the Flutter Coverage extension in VS Code and run `flutter test --coverage` in the terminal to inspect line-by-line coverage and identify untested branches across your models and repositories.

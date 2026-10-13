@@ -20,7 +20,7 @@ I need tech news from you! I will provide some of my own.
 
 - Named routes and the Navigator: [docs.flutter.dev/ui/navigation](https://docs.flutter.dev/ui/navigation)
 - Widget of the Week on the `Drawer`: [youtube.com/watch](https://www.youtube.com/watch?v=WRj86iHihgY)
-- Parsing JSON in Flutter: [docs.flutter.dev/data-and-backend/serialization/json](https://docs.flutter.dev/data-and-backend/serialization/json)
+- Managing text field input: [docs.flutter.dev/cookbook/forms/text-field-changes](https://docs.flutter.dev/cookbook/forms/text-field-changes)
 
 ---
 
@@ -44,13 +44,13 @@ I need tech news from you! I will provide some of my own.
 
 ---
 
-## Loading and sharing data — loading from JSON
+## Loading and sharing data — cart repository
 
-- Hardcoding a menu in Dart means recompiling for every data change.
-- Store the catalogue in a JSON asset and register the folder in `pubspec.yaml`.
-- `rootBundle.loadString` reads the bundled file into a string at runtime.
-- `jsonDecode` from `dart:convert` turns that string into Dart lists and maps.
-- A `factory` constructor named `fromJson` builds a model from a decoded map.
+- A shopping basket requires items to persist across different screens.
+- Rather than passing data manually through route arguments, we encapsulate basket logic in a repository.
+- A private constructor ensures only a single shared instance can be created.
+- Screens access `CartRepository.instance` directly to add items or query totals.
+- Returning an unmodifiable list prevents external code from mutating the collection directly.
 
 ---
 
@@ -158,5 +158,5 @@ Run this live during the lecture to show how a drawer, named routes, and a share
 
 - A `Drawer` plus named routes gives flat, top-level navigation with no stacking.
 - A singleton shares one in-memory basket across every screen.
-- Loading the menu from JSON and capturing input with controllers are the worksheet's next steps.
+- Capturing input with controllers and building forms are the worksheet's next steps.
 - Encourage students to build the full drawer, basket, and settings form by following Worksheet 5.
