@@ -348,9 +348,13 @@ class BasketButton extends StatelessWidget {
 
 ![The list of available Material icons in VS Code](images/5/material_icons.png)
 
-Inside `onPressed`, we check the name of the current route using `ModalRoute.of(context)`. We discussed `context` back in [Worksheet 3](./worksheet-3.md) when we built the `SandwichCard` widget. It is a handle to the location of a widget in the widget tree, and it allows us to access the current route. A route is essentially a screen in the app. So for example if we are on the menu screen, the current route is `'/'`. If we are on the basket screen, the current route is `'/basket'`.
+Inside `onPressed`, we check the name of the current screen using `ModalRoute.of(context)`. In Flutter, a route represents a screen or page managed by the navigator stack. A modal route (`ModalRoute`) is a route that displays in front of previous content and blocks user interaction with the screens underneath it until dismissed. Standard full-screen pages in Flutter, including screens pushed with named routes, are modal routes.
 
-If a modal route exists, we retrieve its `RouteSettings` and extract its route name. If the user is not already on the basket screen, `Navigator.pushNamed(context, '/basket')` opens it. If they are already on the basket screen, nothing happens. This practice prevents unnecessary duplicate screens in the navigation stack.
+The static method `ModalRoute.of(context)` searches upwards in the widget tree from `context` to find the enclosing route hosting the current widget. It returns `ModalRoute<dynamic>?`, which is nullable if the widget is not hosted inside a route (such as in an isolated unit test). In Dart, `ModalRoute<T>` is a generic class where `T` specifies the type of value returned when the route is dismissed with `Navigator.pop(context, result)`. Because `BasketButton` only inspects the screen identifier and does not receive a return value, we write `ModalRoute<dynamic>` so the method accepts a route returning any type.
+
+Every `ModalRoute` exposes a `settings` property of type `RouteSettings`, which holds configuration metadata about the route. The `name` property on `RouteSettings` is a nullable string (`String?`) that holds the route's path identifier, such as `'/'` for the menu screen or `'/basket'` for the basket screen. We retrieve `settings.name` and assign it to `currentRoute`.
+
+If the user is not already on the basket screen (`currentRoute != '/basket'`), `Navigator.pushNamed(context, '/basket')` opens it. If they are already on the basket screen, nothing happens. This check prevents stacking duplicate copies of the basket screen when the button is tapped repeatedly.
 
 ### Create the placeholder basket screen
 
@@ -1438,7 +1442,7 @@ For more details on controller management, see the [TextEditingController docume
 
 Create a new file named `lib/screens/settings_screen.dart`.
 
-First, define the `SettingsScreen` widget and the shell of its state class:
+First, define a `StatefulWidget` called `SettingsScreen` that will hold the customer profile form. Add the following imports at the top of the file too:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1457,11 +1461,16 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
+  }
+}
 ```
 
-`SettingsScreen` is a `StatefulWidget` because its input fields, newsletter switch, and confirmation feedback change as the customer interacts with the form.
+`SettingsScreen` is a `StatefulWidget` because it will contain a form with which the user can interact. The `build` method currently throws an `UnimplementedError` because we will implement it later.
 
-Now declare the text controllers, newsletter toggle flag, and confirmation string inside `_SettingsScreenState`:
+Now declare the text controllers, newsletter toggle flag, and confirmation string inside `_SettingsScreenState` (before `build`):
 
 ```dart
   late TextEditingController _nameController;
@@ -1471,7 +1480,7 @@ Now declare the text controllers, newsletter toggle flag, and confirmation strin
   String _confirmationMessage = '';
 ```
 
-We declare three `late TextEditingController` variables to manage the text content for the customer's name, delivery address, and email. The `late` keyword tells Dart that these fields will be initialised before they are read. The `_receiveNewsletter` flag starts as `false`, and `_confirmationMessage` starts empty.
+We declare three `late TextEditingController` variables to manage the text content for the customer's name, delivery address, and email. As mentioned before, the `late` keyword tells Dart that these fields will be initialised before they are read.
 
 Next, override `initState()` to initialise each controller:
 
@@ -1487,6 +1496,10 @@ Next, override `initState()` to initialise each controller:
 
 In `initState()`, we create a fresh `TextEditingController` for each field when the widget state is first created.
 
+Here is what your changes should look like in VS Code:
+
+![The settings screen state class with text controllers in VS Code](images/5/settings_screen_text_controllers.png)
+
 Now override `dispose()` to release the controllers:
 
 ```dart
@@ -1499,9 +1512,13 @@ Now override `dispose()` to release the controllers:
   }
 ```
 
-Calling `.dispose()` on each controller frees the operating system text-editing resources before calling `super.dispose()`.
+Calling `.dispose()` on each controller frees the operating system text-editing resources before calling `super.dispose()`. (Recall that we use `super` to invoke the parent class's, `State`, implementation of a method.)
 
-Next, add `_saveSettings` to extract the input values and update state:
+Note that all of these methods are part of the `State` class (hence we are overriding them). For more details on the `State` class, see the [State documentation](https://api.flutter.dev/flutter/widgets/State-class.html). You could also read the what each of these methods does if you hover your mouse over the `State` class as shown below:
+
+![The State class documentation in VS Code](images/5/state_class_documentation.png)
+
+Next, add `_saveSettings` to extract the input values and update state (this method is not an override, so we don't use the `@override` annotation):
 
 ```dart
   void _saveSettings() {
@@ -1536,25 +1553,37 @@ Start implementing `build` inside `_SettingsScreenState` with the `Scaffold` and
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton()],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Customer Profile',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
+        appBar: AppBar(
+          title: const Text(appTitle, style: shopHeaderStyle),
+          actions: const [BasketButton()],
+        ),
+        body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Customer Profile',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ]
+            )
+        )
+    );
+  }
 ```
 
-The `Scaffold` displays the app bar with `BasketButton`. Inside the body, `SingleChildScrollView` wraps a left-aligned `Column` with 16 pixels of padding, starting with a bold `'Customer Profile'` title.
+The `Scaffold` displays the app bar with `BasketButton`. Inside the body, `SingleChildScrollView` wraps a left-aligned `Column` with some space and a title.
 
-Now add the full name `TextField`:
+Here is what your changes should look like in VS Code:
+
+![The settings screen scaffold with scroll view in VS Code](images/5/settings_screen_scaffold.png)
+
+Now add the full name `TextField` inside the children of the `Column`:
 
 ```dart
             TextField(
@@ -1568,7 +1597,11 @@ Now add the full name `TextField`:
             const SizedBox(height: 16),
 ```
 
-The `controller: _nameController` links the input to our name controller. `InputDecoration` provides an outline border around the box, a floating label `'Full name'`, and placeholder hint text `'Enter your name'`.
+The `controller: _nameController` links the input to our name controller. `InputDecoration` lets us customise the text field's appearance. The `border: OutlineInputBorder()` option for example provides an outline border around the box, a floating label `'Full name'`, and placeholder hint text `'Enter your name'`.
+
+Recall that you can browse all of these options by hovering your mouse over `InputDecoration` as shown below:
+
+![The InputDecoration documentation in VS Code](images/5/input_decoration_documentation.png)
 
 Next, add the delivery address field:
 
@@ -1587,7 +1620,7 @@ Next, add the delivery address field:
 
 Setting `maxLines: 3` allows the input box to expand vertically to accommodate postal addresses that span multiple lines.
 
-Next, add the email address field:
+Next, add the email address field in the children of the `Column`:
 
 ```dart
             TextField(
@@ -1604,7 +1637,7 @@ Next, add the email address field:
 
 The `keyboardType: TextInputType.emailAddress` parameter configures the mobile virtual keyboard to show the `@` symbol.
 
-Now add the newsletter toggle switch:
+Now add the newsletter toggle switch in the children of the `Column`:
 
 ```dart
             Row(
@@ -1644,15 +1677,15 @@ Finally, add the submit button and conditional feedback message:
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
-          ],
-        ),
-      ),
-    );
-  }
-}
 ```
 
-Wrapping `PrimaryButton` in `SizedBox(width: double.infinity)` stretches the button across the entire width of the form. When tapped, it invokes `_saveSettings`. If `_confirmationMessage` is not empty, collection-if appends a vertical spacer and bold confirmation text below the button.
+Wrapping `PrimaryButton` in `SizedBox(width: double.infinity)` stretches the button across the entire width of the form. When tapped, it invokes `_saveSettings`.
+
+The final part uses a syntax that you may not have seen before: `...` is the spread operator, which allows you to insert multiple widgets into a list. Suppose we have a list `List<int> numbers = [1, 2, 3]` and we want to add a few more numbers at the end of it, we can use `numbers = [...numbers, 4, 5]` to create a new list `[1, 2, 3, 4, 5]`.
+
+In our case, we are using `...` to insert more children into the `Column` widget. The `if (_confirmationMessage.isNotEmpty)` condition checks whether the confirmation message is not empty. If it is not empty, we use the spread operator to add a `SizedBox` for spacing and a `Text` widget to display the confirmation message. If the confirmation message is empty, nothing is added to the `Column`.
+
+You can see the full code for `lib/screens/settings_screen.dart` [at branch 5 of the Sandwich Shop repository](https://github.com/manighahrmani/sandwich_shop/blob/5/lib/screens/settings_screen.dart).
 
 ### Create the settings button and register the route
 
@@ -1669,14 +1702,16 @@ class SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.person_outline),
-      tooltip: 'Settings',
-      onPressed: () {
+        icon: const Icon(Icons.person_outline),
+        tooltip: 'Settings',
+        onPressed: () {});
+  }
+}
 ```
 
 `SettingsButton` is a `StatelessWidget` that displays a person outline icon using `IconButton`.
 
-Now add the navigation logic inside `onPressed`:
+Now add the navigation logic inside `onPressed`'s curly braces:
 
 ```dart
         final ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
@@ -1696,10 +1731,6 @@ Now add the navigation logic inside `onPressed`:
         if (currentRoute != '/settings') {
           Navigator.pushNamed(context, '/settings');
         }
-      },
-    );
-  }
-}
 ```
 
 The callback inspects `ModalRoute.of(context)` to check the name of the current screen. If the user is not already viewing the settings screen, it calls `Navigator.pushNamed(context, '/settings')`. This prevents stacking duplicate copies of the settings screen when the user taps the icon repeatedly.
@@ -2040,6 +2071,8 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 ```
 
+The `dart:convert` library provides `jsonDecode` to convert JSON text into Dart lists and maps. The `package:flutter/services.dart` library provides `rootBundle`, which accesses static asset files bundled with your application.
+
 Next, declare a nullable cache list inside `SandwichRepository` to store loaded sandwiches:
 
 ```dart
@@ -2068,7 +2101,7 @@ Now add `loadSandwichesFromAsset` to load and decode the JSON asset:
   }
 ```
 
-The method reads the asset string asynchronously with `rootBundle.loadString(assetPath)`, parses the JSON string into a list with `jsonDecode`, and uses an explicit `for-in` loop to decode each item using `Sandwich.fromJson`. It saves the loaded list to `_cachedSandwiches` and returns it.
+Calling `rootBundle.loadString(assetPath)` reads the asset file asynchronously into a `String`. Calling `jsonDecode(jsonString)` parses the raw text into a `List<dynamic>`. The explicit `for-in` loop iterates through the decoded entries, casts each item to a `Map<String, dynamic>`, and decodes it using `Sandwich.fromJson`. The method saves the loaded list to `_cachedSandwiches` and returns it.
 
 Finally, update `getSandwiches()` to return the cached list when available:
 
