@@ -8,17 +8,7 @@ class BasketButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.shopping_basket),
       onPressed: () {
-        ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
-        String currentRoute = '';
-
-        if (modalRoute != null) {
-          RouteSettings settings = modalRoute.settings;
-          String? routeName = settings.name;
-          if (routeName != null) {
-            currentRoute = routeName;
-          }
-        }
-
+        final String? currentRoute = ModalRoute.of(context)?.settings.name;
         if (currentRoute != '/basket') {
           Navigator.pushNamed(context, '/basket');
         }
