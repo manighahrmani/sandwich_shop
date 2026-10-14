@@ -279,7 +279,7 @@ The first test confirms that the button renders the text passed to its label. Th
 
 You can add a `group` to organise these tests. You are also encouraged to organise the rest of the files in `test` folder in a similar way, for example, you can create a `test/screens` folder for testing screens in `lib/screens` and `test/models` folder for testing models in `lib/models`.
 
-Run this test using the play button in VS Code or the following command in your terminal:
+Run this test as you learned in [Worksheet 4](./worksheet-4.md#running-test-suites-and-static-analysis). To run a single file from the terminal, pass its path:
 
 ```bash
 flutter test test/widgets/primary_button_test.dart
@@ -470,7 +470,7 @@ void main() {
 }
 ```
 
-The first test confirms that `SandwichCard` widgets and the basket icon appear. The second test taps the basket icon button, waits for the transition with `tester.pumpAndSettle()`, and asserts that `BasketScreen` appears. Run this test suite and make sure it passes.
+The first test confirms that `SandwichCard` widgets and the basket icon appear. The second test taps the basket icon button, waits for the transition with `tester.pumpAndSettle()`, and asserts that `BasketScreen` appears.
 
 ### Update the app smoke tests
 
@@ -480,7 +480,7 @@ Because our app bar now displays `'Sandwich Shop'` alongside the basket button, 
 
 ![The updated smoke test in VS Code](images/5/smoke_test_update.png)
 
-Run the tests suite to make sure all tests pass. If you see a failure, check that you updated the test to look for the basket icon instead of the old text.
+If this test fails, check that you updated it to look for the basket icon instead of the old text.
 
 The lesson here is to remember to update your tests when you change the user interface. Otherwise, your tests will fail even if the app is working correctly.
 
@@ -644,7 +644,7 @@ const Sandwich testSandwich2 = Sandwich(
 
 Because `CartRepository` is a singleton, its in-memory list persists across the entire test session. If one test adds items to the cart, subsequent tests would see those items unless we reset the repository state. To prevent test pollution, Flutter provides the `setUp` hook which runs before each test. We can use it to clear the cart before every test case.
 
-Add the following `setUp` function inside `main()` in `test/cart_repository_test.dart`:
+Add the following `main()` with its `setUp` function in `test/cart_repository_test.dart`:
 
 ```dart
 void main() {
@@ -656,7 +656,7 @@ void main() {
 
 The `setUp` callback runs before every individual test in this file. Calling `CartRepository.instance.clear()` inside `setUp` guarantees that each test starts with a clean, empty basket.
 
-Now add the test group with three test cases inside `main()`:
+Now add the test group with three test cases inside `main()`, below the `setUp` call:
 
 ```dart
   group('CartRepository tests', () {
@@ -718,15 +718,13 @@ Your complete `test/cart_repository_test.dart` file should look like this:
 
 ![The complete cart repository unit tests in VS Code](images/5/cart_repository_tests.png)
 
-Run this new test suite and make sure it passes.
-
 ## Building the order screen
 
 Now that the cart model and repository are ready, we turn `lib/screens/order_screen.dart` into an ordering screen that lets users choose a quantity and add their selected sandwich to the basket.
 
 ### Recap the order screen state
 
-In branch 4, `OrderScreen` was a `StatefulWidget` containing a quantity integer and two buttons (**Add** and **Remove**) that called `setState`. We will keep these quantity handlers and connect them to our basket repository.
+After [Worksheet 4](./worksheet-4.md), `OrderScreen` was a `StatefulWidget` containing a quantity integer and two buttons (**Add** and **Remove**) that called `setState`. We will keep these quantity handlers and connect them to our basket repository.
 
 ### Update the order screen app bar
 
@@ -811,9 +809,9 @@ Add the button and confirmation message below the quantity controls in `build`, 
 
 By default, buttons size themselves to fit their label text. Wrapping `PrimaryButton` in a `SizedBox` with `width: double.infinity` tells Flutter to expand the box across the full available width of the parent column, giving the button full width across the screen.
 
-In Worksheet 3, we resolved layout overflow inside a `Row` using `Expanded`. A `Column` behaves similarly along the vertical axis. If child widgets require more vertical height than the display provides (for example on smaller handsets, in landscape orientation, or when user font sizes increase), Flutter cannot resize them and reports a vertical `RenderFlex` overflow error with a yellow-and-black striped hazard banner.
+In [Worksheet 3](./worksheet-3.md#build-the-menu-interface) we resolved layout overflow inside a `Row` using `Expanded`. A `Column` behaves similarly along the vertical axis: when child widgets need more vertical height than the display provides, Flutter reports a vertical `RenderFlex` overflow with the yellow-and-black striped hazard banner.
 
-While Worksheet 3 used `ListView.builder` for scrolling an arbitrary collection of repeating cards, a `SingleChildScrollView` is designed to make a single fixed layout of different widgets scrollable. Wrapping the body `Column` in a [`SingleChildScrollView`](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) ensures that the entire column scrolls smoothly if the viewport is constrained.
+The [`SingleChildScrollView`](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html) widget is new here. Unlike the [`ListView.builder`](./worksheet-3.md#build-the-menuscreen-widget) we used in Worksheet 3 for an arbitrary collection of repeating cards, `SingleChildScrollView` makes a single fixed layout of different widgets scrollable. Wrapping the body `Column` in it ensures the entire column scrolls smoothly if the viewport is constrained.
 
 Click on the `Column` widget in VS Code, then press **Ctrl + .** on Windows or **⌘ + .** on macOS to open the quick fix menu. Select **Wrap with widget**. It should look like this:
 
@@ -892,7 +890,7 @@ Import `flutter_test`, the cart model, sandwich model, cart repository, and orde
 
 ![The order screen widget test file with imports and setUp in VS Code](images/5/order_screen_test_setup.png)
 
-Now add three widget tests verifying screen rendering, zero-quantity validation, and basket submission:
+Now add the following three widget tests inside `main()`, below the `setUp` call, verifying screen rendering, zero-quantity validation, and basket submission:
 
 ```dart
   testWidgets('OrderScreen shows quantity buttons and Add to Basket button', (
@@ -954,8 +952,6 @@ Here is what each test case verifies:
 1. `OrderScreen shows quantity buttons and Add to Basket button`: pumps `OrderScreen` wrapped in a `MaterialApp` and verifies that the app bar title, zero-quantity display, and the **Add**, **Remove**, and **Add to Basket** buttons all appear on screen.
 2. `Adding to basket without selecting quantity shows warning`: taps **Add to Basket** when quantity is zero, calls `tester.pump()` to trigger a rebuild, and asserts that the warning message `Please select at least 1 sandwich` is shown while the repository remains empty.
 3. `Adding to basket records quantity and sandwich`: simulates a customer tapping **Add** twice to choose a quantity of 2, taps **Add to Basket**, and asserts that an item with quantity 2 was stored in `CartRepository.instance` and the confirmation message `Added 2 Test Sub to basket` is rendered.
-
-Don't forget to run this new test suite and make sure it passes.
 
 ## Building the basket screen
 
@@ -1152,7 +1148,7 @@ When sandwiches are present in the basket, each entry must display its quantity,
   }
 ```
 
-The layout uses a `Row` containing the item description on the left and a delete `IconButton` on the right. As in Worksheet 3, wrapping the text `Column` in `Expanded` ensures it takes only the remaining horizontal space in the row, wrapping longer sandwich names so the delete button stays in view.
+The layout uses a `Row` containing the item description on the left and a delete `IconButton` on the right. As in [Worksheet 3](./worksheet-3.md#build-the-menu-interface), wrapping the text `Column` in `Expanded` ensures it takes only the remaining horizontal space in the row, wrapping longer sandwich names so the delete button stays in view.
 
 The `IconButton` uses `Icons.delete_outline` with red colouring to indicate a destructive action. Its `onPressed` callback invokes `cart.removeItem(index)` inside `setState` so the screen rebuilds with updated items and totals.
 
@@ -1339,7 +1335,7 @@ import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 ```
 
-Define a sample `testSandwich` fixture and use `setUp` to reset the singleton cart repository before each test:
+Define a sample `testSandwich` fixture above `main()`, then open `main()` with a `setUp` that resets the singleton cart repository before each test:
 
 ```dart
 const Sandwich testSandwich = Sandwich(
@@ -1356,7 +1352,7 @@ void main() {
   });
 ```
 
-Now add the first test verifying that the empty message appears when the cart has no items:
+Now add the first test inside `main()`, verifying that the empty message appears when the cart has no items:
 
 ```dart
   testWidgets('BasketScreen displays empty message when basket has no items', (
@@ -1371,7 +1367,7 @@ Now add the first test verifying that the empty message appears when the cart ha
 
 This test pumps `BasketScreen` when the repository is empty and asserts that the informational text `Your basket is empty` appears while the **Checkout** button is not rendered.
 
-Next, add a test verifying that items render with line totals and that tapping the delete button removes the sandwich:
+Next, add a second test inside `main()`, verifying that items render with line totals and that tapping the delete button removes the sandwich. The closing brace of this snippet closes `main()`:
 
 ```dart
   testWidgets(
@@ -1418,7 +1414,7 @@ Create a new unit test named `test/user_settings_test.dart` to verify default an
 1. Verify that a default `UserSettings` instance has empty strings for `name`, `address`, and `email`, and that `receiveNewsletter` is false. You can see some of the constants used in [the `expect` library](https://api.flutter.dev/flutter/package-matcher_expect/#constants) documentation. See for example `isEmpty` and `isFalse`.
 2. Verify that a configured `UserSettings` instance stores the values passed to the constructor. For this, create a `UserSettings` instance with non-empty strings for `name`, `address`, and `email`, and set `receiveNewsletter` to true. Then assert that the instance variables match the values you passed in.
 
-Below is what our test file looks like. Yours can be slightly different, but it should test the same functionality. Make sure to run the test and verify that it passes.
+Below is what our test file looks like. Yours can be slightly different, but it should test the same functionality.
 
 ![The user settings unit tests in VS Code](images/5/user_settings_tests.png)
 
@@ -1539,9 +1535,7 @@ The `_saveSettings` method reads values from each controller with `.text.trim()`
 
 ### Wrap the form in a scroll view
 
-On mobile devices, tapping any text field triggers the software keyboard to slide up from the bottom of the display, reducing available screen height by hundreds of pixels. If the form fields sit in an unconstrained `Column`, the reduced vertical space causes a yellow-and-black striped layout overflow error.
-
-Unlike the repeating sandwich cards in Worksheet 3 where we used `ListView.builder`, this settings screen is a single fixed form with distinct fields, toggles, and buttons. Wrapping the form `Column` in a `SingleChildScrollView` ensures that the entire page scrolls smoothly whenever the keyboard appears, allowing users to reach every input field and tap **Save Settings**. For further guidance, see the [SingleChildScrollView documentation](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html).
+On mobile devices, tapping any text field slides the software keyboard up from the bottom of the display, reducing the available screen height and causing the same vertical overflow we handled on the [order screen](#add-items-to-the-basket). As there, we wrap the form `Column` in a `SingleChildScrollView` so the entire page scrolls smoothly whenever the keyboard appears, letting users reach every input field and tap **Save Settings**.
 
 Start implementing `build` inside `_SettingsScreenState` with the `Scaffold` and `SingleChildScrollView`:
 
@@ -1759,6 +1753,8 @@ Now open `lib/screens/menu_screen.dart`, import `settings_button.dart`, and add 
 import 'package:sandwich_shop/widgets/settings_button.dart';
 ```
 
+Add `SettingsButton` to the front of the `actions` list so the settings icon appears before the basket icon:
+
 ```dart
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
@@ -1817,17 +1813,17 @@ Before we forget, we should also add widget tests for the settings screen to ens
 
 Create a new test file named `test/settings_screen_test.dart` to verify form interactions and state updates on `SettingsScreen`.
 
-Start by importing Flutter's material library, test package, and the settings screen:
+Start by importing Flutter's material library, test package, and the settings screen, with an empty `main()`:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 
-void main() {
+void main() {}
 ```
 
-Now add a test verifying that all form fields, the switch toggle, and the save button render on screen:
+Add the following test inside `main()`, verifying that all form fields, the switch toggle, and the save button render on screen:
 
 ```dart
   testWidgets('SettingsScreen displays form fields and switches', (
@@ -1844,7 +1840,7 @@ Now add a test verifying that all form fields, the switch toggle, and the save b
 
 This test renders `SettingsScreen` and verifies that the `Customer Profile` title, three `TextField` inputs (name, address, and email), one `Switch` toggle, and the **Save Settings** button are all rendered.
 
-Next, add a test that enters form data, toggles the switch, and verifies state updates on save:
+Next, add a second test inside `main()` that enters form data, toggles the switch, and verifies state updates on save:
 
 ```dart
   testWidgets('Toggling switch and saving settings updates state', (
@@ -1872,12 +1868,11 @@ Next, add a test that enters form data, toggles the switch, and verifies state u
 
     expect(find.text('Settings saved for Alex Smith'), findsOneWidget);
   });
-}
 ```
 
 This test locates the individual fields using `find.widgetWithText(TextField, ...)` and enters text using `tester.enterText`. It verifies that the newsletter switch begins as `false`, taps it to toggle it to `true`, and taps **Save Settings** before asserting that the confirmation text `Settings saved for Alex Smith` appears below the button.
 
-Run all tests across the repository to verify that your widgets, navigation, and settings form operate as expected:
+With every screen in place, finish with the whole-repository run from [Worksheet 4](./worksheet-4.md#running-test-suites-and-static-analysis) to confirm your widgets, navigation, and settings form all operate together:
 
 ```bash
 flutter test
@@ -1887,7 +1882,7 @@ flutter test
 
 As in the previous worksheets, these exercises apply to your Southsea Cinema coursework. They prepare you for the user interface side of Demo 3, where you add a themed look, named-route navigation, a ticket basket, and a customer profile form to your cinema application. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-In Worksheet 3 and Worksheet 4 you built a browsable home page of film cards backed by a repository and automated tests. These exercises grow that work into a small multi-screen booking flow.
+In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#exercises) you built a browsable home page of film cards backed by a repository and automated tests. These exercises grow that work into a small multi-screen booking flow.
 
 1. The starter already defines the app title, cinema colours and header style in `lib/constants.dart`. See the [Sandwich Shop example for configuring the theme](#configure-the-subway-theme) and use the same approach to set up one shared app-bar style so that every screen uses the same background colour, icon colour, title style and elevation. In `lib/main.dart`, add this `appBarTheme` to the existing `ThemeData`:
 
