@@ -1,6 +1,6 @@
 # Lecture 4 — Unit and Widget Testing
 
-> This mirrors `lecture-4.pptx`. Slides are minimal; detail lives in the worksheets and in what I say when each slide is shown. Update this file whenever the deck changes.
+> This mirrors `past_lectures/lecture-4.pptx`. Slides are minimal; detail lives in the worksheets and in what I say when each slide is shown. Update this file whenever the deck changes.
 
 ## Overview
 

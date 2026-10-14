@@ -1,6 +1,6 @@
 # Lecture 3 — Repositories and Assets
 
-> This mirrors `lecture-3.pptx`. Slides are minimal; detail lives in the worksheets and in what I say when each slide is shown. Update this file whenever the deck changes.
+> This mirrors `past_lectures/lecture-3.pptx`. Slides are minimal; detail lives in the worksheets and in what I say when each slide is shown. Update this file whenever the deck changes.
 
 ## Overview
 

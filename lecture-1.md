@@ -1,6 +1,6 @@
 # Lecture 1 — Overview
 
-> This mirrors `lecture-1.pptx`. Slides are minimal; detail lives in the worksheets and in what I say when each slide is shown. Update this file whenever the deck changes.
+> This mirrors `past_lectures/lecture-1.pptx`. Slides are minimal; detail lives in the worksheets and in what I say when each slide is shown. Update this file whenever the deck changes.
 
 ## Overview
 
