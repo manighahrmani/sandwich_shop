@@ -1889,15 +1889,26 @@ As in the previous worksheets, these exercises apply to your Southsea Cinema cou
 
 In Worksheet 3 and Worksheet 4 you built a browsable home page of film cards backed by a repository and automated tests. These exercises grow that work into a small multi-screen booking flow.
 
-1. Give your cinema application one source of truth for its look, following [Shared constants and the Subway theme](#shared-constants-and-the-subway-theme). Create a `lib/constants.dart` file in your `southsea_cinema` fork and move your repeated values into it: the app title as a `const String`, your brand colours as `const Color` values, and at least one shared `const TextStyle`.
+1. The starter already defines the app title, cinema colours and header style in `lib/constants.dart`. See the [Sandwich Shop example for configuring the theme](#configure-the-subway-theme) and use the same approach to set up one shared app-bar style so that every screen uses the same background colour, icon colour, title style and elevation. In `lib/main.dart`, add this `appBarTheme` to the existing `ThemeData`:
 
-    Open `lib/main.dart`, import the file, and set the `title` of your `MaterialApp` from the constant. Add a `theme: ThemeData(...)` configured with `ColorScheme.fromSeed`, a `scaffoldBackgroundColor`, and an `appBarTheme` using your brand colours.
+    ```dart
+    appBarTheme: const AppBarTheme(
+      backgroundColor: cinemaSurface,
+      iconTheme: IconThemeData(color: cinemaBrand),
+      titleTextStyle: cinemaHeaderStyle,
+      elevation: 0,
+    ),
+    ```
 
-    Finally, hide the debug ribbon with `debugShowCheckedModeBanner: false`. Run the app and confirm every screen shares the themed app bar and background.
+    Then, in `lib/views/home_view.dart` and `lib/views/movie_listing.dart`, remove the per-screen app-bar styling and keep each title. See the [Sandwich Shop menu app bar example](#add-the-basket-button-to-the-menu-app-bar) for how the shared theme supplies the styling consistently across all pages.
 
-    ![PLACEHOLDER: Southsea Cinema home page with the themed app bar and background](images/5/PLACEHOLDER_cinema_themed_home.png)
+    Run the app and check that the app bars on its pages keep the same appearance. The screenshots below show the top of our app on different pages. Notice that all of them look identical in style (and functionality of the `NavBar` is preserved across all pages).
 
-2. The live Southsea Cinema site uses squared buttons with no rounded corners, so your coursework must match it. Create a reusable button widget in `lib/widgets/`, following the pattern in [Build the primary button](#build-the-primary-button). Give it a `label` and an `onPressed` callback, and style it with `ElevatedButton.styleFrom` using your brand colour and a squared shape:
+    ![The Southsea Cinema home page with its shared app bar](images/5/home.png)
+
+    ![The Southsea Cinema basket page with its shared app bar](images/5/basket.png)
+
+2. The live Southsea Cinema site uses squared buttons with no rounded corners, so your coursework must match it. Create a reusable button widget in `lib/widgets/`. See [Build the primary button](#build-the-primary-button) for an example. Give it a `label` and an `onPressed` callback, and style it with `ElevatedButton.styleFrom` using your brand colour and a squared shape:
 
     ```dart
     shape: const RoundedRectangleBorder(
@@ -1905,32 +1916,30 @@ In Worksheet 3 and Worksheet 4 you built a browsable home page of film cards bac
     ),
     ```
 
-    Replace the inline booking and action buttons on your screens with this widget. Then write a widget test for it in `test/widgets/`, following [Widget test the primary button](#widget-test-the-primary-button), that confirms it renders its label and invokes its callback when tapped.
+    Replace the booking and all other suitable buttons on your app with this. Write a widget test for it in `test/widgets/`. See [Widget test the primary button](#widget-test-the-primary-button) for an example that checks the label appears and the callback runs when tapped.
 
-    ![PLACEHOLDER: A squared cinema action button rendered on screen](images/5/PLACEHOLDER_cinema_squared_button.png)
+    The screenshots below show the booking button on the home page and the add-to-order button on the movie listing page. Notice that they both have the same style.
 
-3. Connect your screens with named routes, following [Register named routes](#register-named-routes). In `lib/main.dart`, replace the `home` property with an `initialRoute` of `'/'` and a `routes` map for `'/'`, `'/basket'`, and `'/settings'`. Create minimal placeholder screens for the basket and settings routes first, so the app compiles.
+    ![Squared BOOK NOW button on the Southsea Cinema home page](images/5/home_ex2.png)
 
-    Then build two app bar action buttons, following [Create the basket button](#create-the-basket-button): one that opens `'/basket'` and one that opens `'/settings'`. Each should use `ModalRoute.of(context)` to avoid reopening a screen the user is already on. Add both to the `actions` of your home page app bar.
+    ![Squared Add to order button on the Southsea Cinema movie listing page](images/5/movie_listing_ex2.png)
 
-    ![PLACEHOLDER: Cinema home app bar showing the basket and settings action buttons](images/5/PLACEHOLDER_cinema_app_bar_actions.png)
+3. See the [Register named routes](#register-named-routes) section of this worksheet. Add the `'/basket'` and `'/settings'` named routes in `lib/main.dart`.
 
-4. Build the data layer for the basket, following [Holding an order in a basket](#holding-an-order-in-a-basket). Create a `BasketItem` model holding a booked film's details and an integer `quantity`, with a getter for the line total.
+    Then add **My Basket** and **My Settings** items to `NavDrawer` in `lib/widgets/nav_drawer.dart`, similar to the existing **Home** item in the drawer. Check that each item navigates to the correct route. For example, clicking **My Basket** should navigate to `http://127.0.0.1:8765/#/basket`.
 
-    Then create a `BasketRepository` singleton with a private named constructor and a `static final` instance, so every screen shares one basket. Give it methods to add and remove items, read them back through an unmodifiable list, and calculate the subtotal and total due.
+    The screenshot below shows us what our opened drawer looks like:
 
-    Write a unit test suite for the repository, following [Unit test the cart repository](#unit-test-the-cart-repository). Use `setUp` to clear the basket before each test.
+    ![Southsea Cinema navigation drawer with Home, My Basket, My Tickets and My Settings](images/5/navbar.png)
 
-5. Build the customer profile form on your `'/settings'` screen, applying [Building the customer profile settings form](#building-the-customer-profile-settings-form). Define a `UserSettings` model and a `SettingsView` `StatefulWidget` that creates a `TextEditingController` for each field in `initState` and releases them in `dispose`.
+4. The user should be able to add tickets to their basket. Develop and test a basket repository for managing the basket contents similar to how in [Holding an order in a basket](#holding-an-order-in-a-basket), we build and test a repository for the Sandwich Shop order. It should support adding, removing and clearing tickets, and provide the basket contents and total.
 
-    Add the `TextField` inputs your cinema needs, a `Switch` for a yes/no preference, and a save button that reads the controllers and shows a confirmation. Wrap the form in a `SingleChildScrollView` so the keyboard cannot cause an overflow. Cover it with widget tests, following [Widget test the settings screen](#widget-test-the-settings-screen).
+5. Use your basket repository from the previous exercise to build and test a screen that displays and manages the customer's tickets. We build a similar screen in [Building the basket screen](#building-the-basket-screen).
 
-6. Replace your basket placeholder with the full basket screen, applying [Building the basket screen](#building-the-basket-screen). Show an empty state when the basket has no tickets, and otherwise list each booking with its quantity, title, and line total, plus a delete button.
+    ![Cinema basket screen with ticket line items, totals, and a checkout button](images/5/cinema_basket_screen.png)
 
-    Below the list, show a subtotal row, an emphasised total-to-pay row, and a checkout button that clears the basket. Cover the empty state, the populated list, and item removal with widget tests.
+6. Build and test an editable customer profile form on your `'/settings'` screen, like the one we create in [Building the customer profile settings form](#building-the-customer-profile-settings-form).
 
-    ![PLACEHOLDER: Cinema basket screen with ticket line items, totals, and a checkout button](images/5/PLACEHOLDER_cinema_basket_screen.png)
+    Here is an example of the customer profile form on the settings page:
 
-7. (Advanced) Show a live ticket count on the basket button in the app bar. Add a method to `BasketRepository` returning the total number of tickets, then display that number as a badge that updates as the user books and removes tickets. Decide which widget owns the state that triggers the rebuild, drawing on `setState` from [Worksheet 2](./worksheet-2.md).
-
-8. (Advanced) Ask the user to confirm before checkout. When the checkout button is tapped, open a dialogue box with `showDialog` and an `AlertDialog` offering cancel and confirm actions, and only clear the basket if the user confirms. These widgets are not covered in this worksheet, so read the [Flutter `AlertDialog` documentation](https://api.flutter.dev/flutter/material/AlertDialog-class.html) and work out how its result flows back to your screen.
+    ![Customer profile form on the Southsea Cinema settings page](images/5/customer_profile_edit_example.png)
