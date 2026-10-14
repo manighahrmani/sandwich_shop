@@ -12,6 +12,7 @@
   - [Add JSON serialisation to the sandwich model](#add-json-serialisation-to-the-sandwich-model)
   - [Unit test JSON serialisation](#unit-test-json-serialisation)
   - [Load JSON data in the repository](#load-json-data-in-the-repository)
+  - [Load the menu from the asset at startup](#load-the-menu-from-the-asset-at-startup)
 - [Two kinds of persistence](#two-kinds-of-persistence)
 - [Adding the dependencies](#adding-the-dependencies)
   - [Add the persistence packages](#add-the-persistence-packages)
@@ -290,6 +291,73 @@ Update `getSandwiches()` to return the cached list when available:
 ```
 
 If `loadSandwichesFromAsset()` was previously awaited, `_cachedSandwiches` holds the loaded sandwiches and `getSandwiches()` returns them directly. If not, the method falls back to returning the const list of default sandwiches so callers that do not await asynchronous loading still receive data.
+
+### Load the menu from the asset at startup
+
+Adding `loadSandwichesFromAsset` is only half the work. Until a screen awaits it, the repository keeps returning the hardcoded fallback and the JSON file is never read at runtime. We wire the menu screen to load from the asset as soon as it appears, using the same `initState` and `setState` pattern you met in Worksheet 5.
+
+Open `lib/screens/menu_screen.dart`. If the menu screen is still a `StatelessWidget`, convert it to a `StatefulWidget` so it can load its data after it appears and rebuild when the data arrives. Give the state two typed fields: a list for the loaded sandwiches and a flag for the loading phase.
+
+```dart
+class _MenuScreenState extends State<MenuScreen> {
+  List<Sandwich> _sandwiches = [];
+  bool _loading = true;
+}
+```
+
+The `_sandwiches` list holds what the repository returns, and `_loading` stays `true` until the first load finishes so we can show a progress indicator rather than an empty menu.
+
+Add `initState` to start the load, and the asynchronous loader it calls:
+
+```dart
+  @override
+  void initState() {
+    super.initState();
+    _loadSandwiches();
+  }
+
+  Future<void> _loadSandwiches() async {
+    final SandwichRepository repository = SandwichRepository();
+    final List<Sandwich> loadedSandwiches =
+        await repository.loadSandwichesFromAsset();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _sandwiches = loadedSandwiches;
+      _loading = false;
+    });
+  }
+```
+
+The loader awaits `loadSandwichesFromAsset()`, which reads and decodes the JSON file. The `if (!mounted) { return; }` guard stops us calling `setState` on a screen the user has already left during the asynchronous gap. Once the data is back, `setState` stores it and clears the loading flag.
+
+Finally, use `_loading` and `_sandwiches` in `build`. While loading, return a centred progress indicator; afterwards build the menu from `_sandwiches` instead of the direct repository call.
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: _sandwiches.length,
+        itemBuilder: (BuildContext context, int index) {
+          final Sandwich sandwich = _sandwiches[index];
+          return SandwichCard(sandwich: sandwich);
+        },
+      ),
+    );
+  }
+```
+
+Keep whatever app bar and layout your menu screen already had; the only change is reading the list from `_sandwiches` and showing the indicator while `_loading` is `true`. Run the app and the menu now comes from the JSON asset at startup.
 
 ## Two kinds of persistence
 
@@ -2101,9 +2169,9 @@ flutter test
 
 ## Exercises
 
-The exercises below apply the concepts from this worksheet to the Southsea Cinema coursework application. They prepare you for Demo 3 of your coursework. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw). Remember to commit your changes to Git after each exercise.
+The exercises below apply the concepts from this worksheet to the Southsea Cinema coursework application. They prepare you for Demo 3 of your coursework. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-1. Following [Loading the menu from JSON](#loading-the-menu-from-json), move your film listings into a JSON asset file, register it in `pubspec.yaml`, and implement `fromJson` and `toJson` methods on your cinema models.
+1. Following [Loading the menu from JSON](#loading-the-menu-from-json), move your film listings into a JSON asset file, register it in `pubspec.yaml`, and implement `fromJson` and `toJson` methods on your cinema models. Then, following [Load the menu from the asset at startup](#load-the-menu-from-the-asset-at-startup), make your listing screen load the films from the JSON asset at runtime in `initState` so the hardcoded list is no longer used.
 
 2. Following [Adding the dependencies](#adding-the-dependencies), add `shared_preferences`, `sqflite`, `path`, `sqflite_common_ffi`, and `sqflite_common_ffi_web` to your Southsea Cinema fork's `pubspec.yaml`, and run `flutter pub get`.
 
@@ -2115,7 +2183,7 @@ The exercises below apply the concepts from this worksheet to the Southsea Cinem
 
 6. Following [Saving an order at checkout](#saving-an-order-at-checkout), make confirming a purchase save a `TicketTransaction` to `CinemaDatabase.instance`, clear the basket, and take the patron to a bookings screen. Then, following [Showing past orders](#showing-past-orders), build that bookings screen so it reads and lists the stored bookings newest first.
 
-7. Following [Testing persistence](#testing-persistence), write a shared preferences test using `SharedPreferences.setMockInitialValues` for your remembered options, and an in-memory SQLite test using `sqfliteFfiInit`, `databaseFactoryFfi`, and `inMemoryDatabasePath` for your bookings.
+7. Following [Testing persistence](#testing-persistence), write a shared preferences test using `SharedPreferences.setMockInitialValues` for your remembered options, and a direct in-memory SQLite test of your `CinemaDatabase` helper under `test/database/`. Using `sqfliteFfiInit`, `databaseFactoryFfi`, and `inMemoryDatabasePath`, check that a booking inserts and reads back, that bookings list newest first, that the next booking number increments, and that settings round-trip through `getSettings` and `updateSettings`.
 
 8. Decide what matters most about your Demo 3 experience and prove it works: cover the behaviour you care about with automated tests, and make sure `dart analyze` and `flutter test` both pass cleanly.
 
