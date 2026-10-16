@@ -1,0 +1,54 @@
+name: Application tests
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - .github/workflows/application-tests.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Worksheet ${{ matrix.branch }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: ['5', '6']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.branch }}
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Restore dependencies
+        run: flutter pub get
+      - name: Format application and tests
+        run: |
+          dart format lib test
+          git diff -- lib test > formatting.patch
+      - name: Analyse application and tests
+        run: dart analyze
+      - name: Run tests with coverage
+        run: flutter test --coverage --reporter expanded
+      - name: Summarise line coverage
+        if: always()
+        run: |
+          if [ -f coverage/lcov.info ]; then
+            awk -F: '/^LF:/{found += $2} /^LH:/{hit += $2} END {if (found > 0) printf "Line coverage: %d/%d (%.2f%%)\n", hit, found, hit * 100 / found}' coverage/lcov.info
+          fi
+      - name: Upload coverage and formatting patch
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: worksheet-${{ matrix.branch }}-validation
+          path: |
+            coverage/lcov.info
+            formatting.patch
+      - name: Require committed formatting
+        run: git diff --exit-code -- lib test
