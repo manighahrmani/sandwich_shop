@@ -25,7 +25,7 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 | 28/09/2026 | 02/10/2026 | [Worksheet 2](./worksheet-2.md) | [Lecture 2](https://docs.google.com/presentation/d/1HyWI8me8idDz5ixpSXtOs8UvoPlhnZg3Kl6OjnB5_oI/edit?usp=sharing) | Demo Window 1 |
 | 05/10/2026 | 09/10/2026 | [Worksheet 3](./worksheet-3.md) | [Lecture 3](https://docs.google.com/presentation/d/1K2GpWchPcWoec_GMyueHftuglxOU9aHjnAF1eO4Sfys/edit?usp=sharing) | Demo Window 2 |
 | 12/10/2026 | 16/10/2026 | [Worksheet 4](./worksheet-4.md) | [Lecture 4](https://docs.google.com/presentation/d/1ldcbaYmn0MFEeIaLUbZQ2HXiUi45aSVD5z3VxUB7g4k/edit?usp=sharing) | Demo Window 2 |
-| 19/10/2026 | 23/10/2026 | [Worksheet 5](https://manighahrmani.github.io/sandwich_shop/worksheet-5.html) | Lecture 5 | Demo Window 3 |
+| 19/10/2026 | 23/10/2026 | [Worksheet 5](https://manighahrmani.github.io/sandwich_shop/worksheet-5.html) | [Lecture 5](https://docs.google.com/presentation/d/1O3wcAsfoCyju2lxdG0etLIONCe4E6SR80h-0PeIG6Bs/edit?usp=sharing) | Demo Window 3 |
 | 26/10/2026 | 30/10/2026 | Reading week (break) | | |
 | 02/11/2026 | 06/11/2026 | Worksheet 6 | Lecture 6 | Demo Window 3 |
 | 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo Window 4 |
