@@ -135,6 +135,8 @@ You develop your coursework by completing the exercises at the end of each weekl
 
 There are five demos across the term, but only your best four demo marks count towards Item 1. Each counted demo is worth 25% of Item 1 (12.5% of the overall module mark). At each demo a member of staff assesses functionality (9% of Item 1) by watching you run your app, inspects code quality (8%), and asks two questions to test your understanding of your own code (8%). From Demo 4 onwards, the code quality component places significant weight on project structure and automated test coverage. Specifically, your `test/` directory must strictly mirror the organisation of folders in `lib/` (such as `test/models/`, `test/screens/`, `test/widgets/`, `test/repositories/`, `test/database/`), and you must generate test coverage with `flutter test --coverage` and demonstrate it live using the Flutter Coverage extension in VS Code. Leaving test files unorganised in the root of `test/` or having inadequate test coverage will result in a substantial mark penalty.
 
+For Demos 1 to 3, if any required functionality item scores zero, the final demo mark is capped at 23 out of 25. A lower mark remains unchanged; the cap does not add a separate deduction for each missing feature. Demo 3 asks one understanding question from Worksheet 5 and one from Worksheet 6, excluding advanced challenges.
+
 Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks 3 and 4, Weeks 5 and 6, Weeks 7 and 8, and Weeks 9 and 10). Three rules apply:
 
 - You can perform at most one demo in any demo window.

@@ -55,6 +55,12 @@ percentages below are shares of Item 1:
 - Understanding is worth 8%: you answer two questions about your own code and
   the decisions behind it.
 
+For Demos 1 to 3, if any required functionality item scores zero, your final
+demo mark is capped at 23 out of 25. A lower mark remains unchanged; this is
+not an additional deduction for each missing feature. At Demo 3, one
+understanding question comes from Worksheet 5 and one from Worksheet 6,
+excluding advanced challenges.
+
 ## Demo windows and missing a demo
 
 Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks

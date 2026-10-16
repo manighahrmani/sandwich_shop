@@ -486,7 +486,7 @@ The lesson here is to remember to update your tests when you change the user int
 
 ## Holding an order in a basket
 
-We would like to give our customers the ability to make certain configurations to their sandwiches, add them to a basket, and then check out. Configurations such as whether they want their sandwich toasted or vegan, and any special notes for the kitchen, need to be stored somewhere. We will create a model and repository to hold this data. And we will also require a form of some sort to allow the user to input their configurations. We will build the form in the next section.
+We would like customers to select a sandwich and quantity, add them to a shared basket, and then check out. We will create a model to hold each selection and a repository to manage the basket. The order screen will let customers choose the quantity before adding their sandwich.
 
 ### Define the cart item model
 
@@ -611,7 +611,7 @@ Your complete `lib/repositories/cart_repository.dart` file should have all the m
 
 ### Unit test the cart repository
 
-In [Worksheet 3](./worksheet-3.md), we introduced unit testing with `flutter_test`. We now write unit tests for `CartRepository` to verify that repository calculations compute accurate totals.
+In [Worksheet 4](./worksheet-4.md), we introduced unit testing with `flutter_test`. We now write unit tests for `CartRepository` to verify that repository calculations compute accurate totals.
 
 Create a new test file named `test/cart_repository_test.dart`. Start by importing `flutter_test` along with the cart model, sandwich model, and cart repository:
 
