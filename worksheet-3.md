@@ -663,7 +663,7 @@ These exercises apply to your Southsea Cinema coursework. Together, the exercise
 
 Build on your listing page from the [Worksheet 2 exercises](worksheet-2.md#exercises). Now add a browsable home page with film cards whose booking buttons open the selected film. Keep your ticket dropdown and booking feedback working.
 
-1. Create `lib/models/movie.dart` with a `Movie` class, following [Define the Sandwich data model](#define-the-sandwich-data-model). Include a unique `String id`, a title, synopsis, age rating, runtime, screening time, ticket price and poster image path. Use `String` for descriptive values, including the screening time, and `double` for the price; date parsing is not needed.
+1. Create `lib/models/movie.dart` with a `Movie` class, following [Define the Sandwich data model](#define-the-sandwich-data-model). Include a unique `String id`, a title, synopsis, age rating, screening time, ticket price and poster image path. Use `String` for descriptive values, including the screening time, and `double` for the price; date parsing is not needed.
 
     Make the fields `final` and initialise them with named, `required` constructor parameters, as in [Add the constructor](#add-the-constructor). Check that the model has no uninitialised-field errors before continuing.
 
@@ -675,22 +675,26 @@ Build on your listing page from the [Worksheet 2 exercises](worksheet-2.md#exerc
 
     Show the poster, title, age rating, synopsis, screening time and a booking button. Use [Lay out the image and text](#lay-out-the-image-and-text) for guidance. Reuse your brand styles and squared buttons from Worksheet 2. For now, let the button print a message, as in [Add the Add and Remove buttons](worksheet-2.md#add-the-add-and-remove-buttons).
 
-5. Display the repository's movies as a scrollable list of cards on your home page, following [Build the MenuScreen widget](#build-the-menuscreen-widget). Keep your app bar and drawer.
+5. Display the repository's movies as a scrollable list of cards on your home page, following our example in the [Build the MenuScreen widget](#build-the-menuscreen-widget) section of this worksheet.
 
-    Check that each card shows its own film and the list scrolls at phone widths. Use your own films rather than the example titles shown below:
+    Use your own favourite films rather than the example titles shown below. The screenshot below is the `HomeView` page; check that each card shows its own film.
 
-    ![Southsea Cinema home screen showing film cards with poster images and booking buttons](images/3/southsea_cinema_home_view.png)
+    ![The Southsea Cinema HomeView page showing film cards with poster images and booking buttons](images/3/southsea_cinema_home_view.png)
 
-    (Advanced, optional) Add a third film to the repository and check that the home screen displays it without changing `MovieCard` or the list layout. This extension is not required for Demo 2.
+    The home page should be on `lib/views/home_view.dart`. (Note that the cinema app keeps its pages in `lib/views/`, not `lib/screens/` like the sandwich app.) Keep your app bar and drawer consistent across all these pages.
 
-6. (Advanced) Connect the booking buttons to `MovieListing`, following [Accept a Sandwich in OrderScreen](#accept-a-sandwich-in-orderscreen) and [Connect SandwichCard to OrderScreen](#connect-sandwichcard-to-orderscreen). This completes the booking flow for Demo 2.
+    (Advanced, optional) Add a third film to the repository and check that the `HomeView` page displays it without changing `MovieCard` or the list layout. This extension is not required for Demo 2.
+
+6. (Advanced) Connect the booking buttons to `MovieListing`, following [Accept a Sandwich in OrderScreen](#accept-a-sandwich-in-orderscreen) and [Connect SandwichCard to OrderScreen](#connect-sandwichcard-to-orderscreen). Remember that the listing page should be in `lib/views/movie_listing.dart`.
 
     Pass the selected `Movie` into your existing stateful listing page and display its details through `widget.movie`. Keep ticket quantity and booking feedback in the state class; revisit [Add and remove emojis with setState in Worksheet 2](worksheet-2.md#add-and-remove-emojis-with-setstate) if needed.
 
-    If your old `'/listing'` route or drawer tile still opens the listing without a film, remove those entries and any unused import. Keep the home link. Skip this if you have already done it.
+    If your old `'/listing'` route or drawer tile still opens the listing without a film, remove those entries and any unused import. Keep the home link.
 
-    If the listing's drawer hides the back arrow, use an `IconButton` in `AppBar.leading` with `Icons.arrow_back` and `Navigator.pop(context)`. See [Experiment with the parts of the Scaffold in Worksheet 2](worksheet-2.md#experiment-with-the-parts-of-the-scaffold) for a reminder about app bar properties.
+    The return navigation should work through the system (user clicking on the back button on the browser) and it should return the user back to the home page, so do not add a back button on the app or change the app bar.
 
-    Follow [Test the complete navigation flow](#test-the-complete-navigation-flow) to check both films, return navigation and booking feedback. The selected film's listing should look like this:
+     The screenshot below is the `MovieListing` page; see that it shows the selected film's details. The selected film's listing should look like this:
 
     ![The MovieListing page with the Phantom of the Opera's details](images/3/southsea_cinema_movie_listing.png)
+
+    Follow the example in the [Test the complete navigation flow](#test-the-complete-navigation-flow) section to test both films, return navigation and booking feedback.
