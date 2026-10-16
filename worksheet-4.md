@@ -788,7 +788,7 @@ These exercises apply to your Southsea Cinema coursework. Together, the exercise
 
 In Worksheet 3 you refactored the Southsea Cinema application to show movie cards on the home page and navigate to the dynamic listing page. For Demo 2 you must demonstrate that your codebase is backed by passing automated tests and clean static analysis.
 
-1. In your `southsea_cinema` fork, add a `formattedPrice` getter to `Movie`, following [Add a formatted price getter to the sandwich model](#add-a-formatted-price-getter-to-the-sandwich-model). Display `widget.movie.formattedPrice` on the listing page.
+1. In your `southsea_cinema` fork, add a `formattedPrice` getter to `Movie`, following [Add a formatted price getter to the sandwich model](#add-a-formatted-price-getter-to-the-sandwich-model). Display `widget.movie.formattedPrice` on the `MovieListing` page.
 
 2. Create `test/movie_model_test.dart`, following [Unit testing data models](#unit-testing-data-models). Use `group()`, `test()` and `expect()` to verify constructor property assignment and `formattedPrice`. Check a whole-pound price and a price with pence so that both results have two decimal places.
 
@@ -796,12 +796,12 @@ In Worksheet 3 you refactored the Southsea Cinema application to show movie card
 
     Create `test/movie_repository_test.dart`, following [Unit testing repositories](#unit-testing-repositories). Check the mock films and test both an existing and a missing ID, as in [Test getSandwichById with existing and missing identifiers](#test-getsandwichbyid-with-existing-and-missing-identifiers).
 
+    For Demo 2 you only need `getMovies` and `getMovieById` on the repository and `formattedPrice` on the model. Extra methods, such as one returning the movies under a given price or all movies with a given age rating are optional; if you add them, make sure you also test them.
+
 4. In your Southsea Cinema fork, add a widget test in `test/widget_test.dart` that pumps `SouthseaCinemaApp` and checks that the home page displays its title, movie cards and booking buttons. Adapt the examples in [Test initial menu screen rendering](#test-initial-menu-screen-rendering) to your app.
 
 5. Run `dart format` and `dart analyze` across your project, as described in [Running test suites and static analysis](#running-test-suites-and-static-analysis). Confirm that your codebase has zero analyser issues and follows formatting conventions.
 
-6. Expand `test/widget_test.dart` to test booking navigation, following [Test navigating to the order screen](#test-navigating-to-the-order-screen). Tap a film's booking button and check that the listing shows its details. If several buttons match, use a finder to select the right one.
-
-    Test the listing's **Add to order** button and check its feedback, following [Test adding and removing sandwich items](#test-adding-and-removing-sandwich-items). Run all tests again.
+6. (Advanced) Expand `test/widget_test.dart` to test the full booking flow in one test. Tap a film's **BOOK NOW** button and check that the `MovieListing` page shows its details, following [Test navigating to the order screen](#test-navigating-to-the-order-screen); if several buttons match, use a finder to select the right one. Then, in the same test, tap the `MovieListing` page's **Add to order** button and check its feedback, following our example in [Test adding and removing sandwich items](#test-adding-and-removing-sandwich-items). Run all tests again.
 
 7. (Advanced, optional) Extend your navigation test to return to the home page and open a different film. Check that the second listing shows the correct details and starts with fresh booking feedback. Combine the techniques from [Test navigating to the order screen](#test-navigating-to-the-order-screen) and [Test adding and removing sandwich items](#test-adding-and-removing-sandwich-items). This extension is not required for Demo 2.
