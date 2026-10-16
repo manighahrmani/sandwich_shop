@@ -1554,6 +1554,27 @@ Finish the test with:
 
 The existing fixture costs `10.0` and delivery is `1.50`; the saved total must include both.
 
+Add a failure test so the success test is not your only evidence. Start it by adding one `CartItem` to the basket, as above. Inside `tester.runAsync`, create a SQLite trigger that rejects insertion:
+
+```dart
+      await database.execute('''
+        CREATE TRIGGER reject_order BEFORE INSERT ON orders
+        BEGIN
+          SELECT RAISE(FAIL, 'Test insert failure');
+        END
+      ''');
+```
+
+Still inside `runAsync`, render `buildApp()`, tap **Checkout** and settle the frames. After it finishes, check the failure state:
+
+```dart
+    expect(CartRepository.instance.getItems(), hasLength(1));
+    expect(find.textContaining('Could not save your order'), findsOneWidget);
+    expect(find.byType(OrdersScreen), findsNothing);
+```
+
+Query `orders` inside `runAsync` and check that it is empty. A trigger runs when its specified database operation occurs; this one exercises a genuine failed write without replacing the database helper. The next test receives a fresh database, so the trigger does not affect it.
+
 ### Test the orders list and its empty state
 
 Create `test/orders_screen_test.dart` with the material and test imports, `SandwichDatabase`, `OrderRecord`, `OrdersScreen` and `support/test_database.dart`. Start with an empty `main`.

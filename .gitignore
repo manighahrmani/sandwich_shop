@@ -9,6 +9,7 @@ prompt.md
 
 # Agent working artifacts
 .agents/
+.worktrees/
 
 # Python
 __pycache__/
