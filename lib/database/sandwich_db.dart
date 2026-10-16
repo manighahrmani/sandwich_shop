@@ -1,9 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sandwich_shop/models/order_record.dart';
-import 'package:sqflite/sqflite.dart' as sqflite_plugin;
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:sqflite/sqflite.dart';
 
 class SandwichDatabase {
   SandwichDatabase._internal();
@@ -26,57 +23,17 @@ class SandwichDatabase {
   }
 
   Future<Database> _initDB(String fileName) async {
-    final OpenDatabaseOptions options = OpenDatabaseOptions(
+    final String folder = await getDatabasesPath();
+    final String filePath = join(folder, fileName);
+    final Database db = await openDatabase(
+      filePath,
       version: 1,
       onCreate: _createDB,
     );
-
-    const bool runningInTest = bool.fromEnvironment('FLUTTER_TEST');
-    if (runningInTest) {
-      sqfliteFfiInit();
-      final DatabaseFactory testFactory = databaseFactoryFfi;
-      final Database testDatabase = await testFactory.openDatabase(
-        inMemoryDatabasePath,
-        options: options,
-      );
-      return testDatabase;
-    }
-
-    if (kIsWeb) {
-      final DatabaseFactory webFactory = databaseFactoryFfiWebNoWebWorker;
-      final Database webDatabase = await webFactory.openDatabase(
-        fileName,
-        options: options,
-      );
-      return webDatabase;
-    }
-
-    final TargetPlatform platform = defaultTargetPlatform;
-    final bool runningOnMobile =
-        platform == TargetPlatform.android || platform == TargetPlatform.iOS;
-    if (runningOnMobile) {
-      final DatabaseFactory mobileFactory = sqflite_plugin.databaseFactory;
-      final String databasesFolder = await sqflite_plugin.getDatabasesPath();
-      final String mobilePath = join(databasesFolder, fileName);
-      final Database mobileDatabase = await mobileFactory.openDatabase(
-        mobilePath,
-        options: options,
-      );
-      return mobileDatabase;
-    }
-
-    sqfliteFfiInit();
-    final DatabaseFactory desktopFactory = databaseFactoryFfi;
-    final String desktopFolder = await sqflite_plugin.getDatabasesPath();
-    final String desktopPath = join(desktopFolder, fileName);
-    final Database desktopDatabase = await desktopFactory.openDatabase(
-      desktopPath,
-      options: options,
-    );
-    return desktopDatabase;
+    return db;
   }
 
-  Future<void> _createDB(Database db, int version) async {
+  Future<void> createTables(Database db, int version) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -89,6 +46,10 @@ class SandwichDatabase {
         date TEXT NOT NULL
       )
     ''');
+  }
+
+  Future<void> _createDB(Database db, int version) async {
+    await createTables(db, version);
     await db.insert('orders', <String, Object?>{
       'order_number': 1003,
       'summary': '2 x Footlong Sub',

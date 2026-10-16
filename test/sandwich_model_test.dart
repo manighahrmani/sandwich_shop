@@ -2,6 +2,39 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 
 void main() {
+  test('JSON conversions round-trip all sandwich fields', () {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'id': 'custom',
+      'name': 'Custom sub',
+      'description': 'Freshly made',
+      'price': 0.0,
+      'imagePath': 'custom.jpeg',
+    };
+    expect(Sandwich.fromJson(data).toJson(), data);
+    expect(Sandwich.fromJson(data).formattedPrice, '£0.00');
+  });
+
+  for (final String key in <String>[
+    'id',
+    'name',
+    'description',
+    'price',
+    'imagePath',
+  ]) {
+    test('JSON missing $key is rejected rather than silently defaulted', () {
+      final Map<String, dynamic> data = <String, dynamic>{
+        'id': 'custom',
+        'name': 'Custom sub',
+        'description': 'Freshly made',
+        'price': 4.5,
+        'imagePath': 'custom.jpeg',
+      };
+      data.remove(key);
+      expect(() {
+        Sandwich.fromJson(data);
+      }, throwsA(isA<TypeError>()));
+    });
+  }
   group('Sandwich model tests', () {
     test('creates Sandwich instance with given properties', () {
       const sandwich = Sandwich(
@@ -45,8 +78,23 @@ void main() {
 
       expect(sandwich.id, 'veggie-delight');
       expect(sandwich.name, 'Veggie Delight');
+      expect(sandwich.description, jsonMap['description']);
       expect(sandwich.price, 5.50);
       expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
+      expect(sandwich.toJson(), jsonMap);
+    });
+
+    test('fromJson accepts a whole-number price', () {
+      final Map<String, dynamic> data = <String, dynamic>{
+        'id': 'test',
+        'name': 'Test Sub',
+        'description': 'Test sandwich.',
+        'price': 5,
+        'imagePath': 'assets/images/footlong.jpeg',
+      };
+      final Sandwich sandwich = Sandwich.fromJson(data);
+      expect(sandwich.price, 5.0);
+      expect(sandwich.price, isA<double>());
     });
 
     test('toJson serialises a Sandwich instance into a JSON map', () {

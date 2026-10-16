@@ -12,8 +12,4 @@ class CartItem {
   double get lineTotal {
     return sandwich.price * quantity;
   }
-
-  double get totalPrice {
-    return lineTotal;
-  }
 }

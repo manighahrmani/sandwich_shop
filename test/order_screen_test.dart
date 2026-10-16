@@ -70,4 +70,49 @@ void main() {
     expect(added.sandwich.name, 'Test Sub');
     expect(find.text('Added 2 Test Sub to basket'), findsOneWidget);
   });
+
+  testWidgets('Custom maximum and lower boundary keep the quantity in range', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: OrderScreen(sandwich: testSandwich, maxQuantity: 2),
+      ),
+    );
+    for (int press = 0; press < 4; press++) {
+      await tester.tap(find.text('Add'));
+      await tester.pump();
+    }
+    expect(find.text('2 Test Sub sandwich(es): 🥪🥪'), findsOneWidget);
+    for (int press = 0; press < 4; press++) {
+      await tester.tap(find.text('Remove'));
+      await tester.pump();
+    }
+    expect(find.text('0 Test Sub sandwich(es): '), findsOneWidget);
+    await tester.tap(find.text('Add to Basket'));
+    await tester.pump();
+    expect(CartRepository.instance.getItems(), isEmpty);
+  });
+
+  testWidgets('Repeated basket additions keep independent immutable lines', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
+    );
+    await tester.tap(find.text('Add'));
+    await tester.pump();
+    await tester.tap(find.text('Add to Basket'));
+    await tester.pump();
+    await tester.tap(find.text('Add'));
+    await tester.pump();
+    await tester.tap(find.text('Add to Basket'));
+    await tester.pump();
+    final List<CartItem> items = CartRepository.instance.getItems();
+    expect(items, hasLength(2));
+    expect(items.first.quantity, 1);
+    expect(items.last.quantity, 2);
+    expect(CartRepository.instance.totalItemCount, 3);
+    expect(find.text('Added 2 Test Sub to basket'), findsOneWidget);
+  });
 }

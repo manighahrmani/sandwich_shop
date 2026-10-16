@@ -55,4 +55,10 @@ class CartRepository {
   void clear() {
     _items.clear();
   }
+
+  void removePurchasedItems(List<CartItem> purchasedItems) {
+    for (final CartItem item in purchasedItems) {
+      _items.remove(item);
+    }
+  }
 }

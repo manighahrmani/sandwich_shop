@@ -38,18 +38,9 @@ class OrderRecord {
   factory OrderRecord.fromMap(Map<String, Object?> map) {
     final int orderNumber = map['order_number'] as int;
     final String summary = map['summary'] as String;
-    String note = '';
-    if (map['note'] is String) {
-      note = map['note'] as String;
-    }
-    int toasted = 0;
-    if (map['toasted'] is int) {
-      toasted = map['toasted'] as int;
-    }
-    int vegan = 0;
-    if (map['vegan'] is int) {
-      vegan = map['vegan'] as int;
-    }
+    final String note = map['note'] as String;
+    final int toasted = map['toasted'] as int;
+    final int vegan = map['vegan'] as int;
     final num totalNumber = map['total'] as num;
     final double total = totalNumber.toDouble();
     final String date = map['date'] as String;

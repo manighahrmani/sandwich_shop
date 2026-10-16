@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/main.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
@@ -6,6 +7,10 @@ import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/order_screen.dart';
 
 void main() {
+  setUp(() {
+    rootBundle.clear();
+  });
+
   group('OrderItemDisplay widget tests', () {
     testWidgets('displays zero sandwiches with no emoji', (
       WidgetTester tester,
@@ -35,6 +40,7 @@ void main() {
   group('App smoke tests', () {
     testWidgets('App displays MenuScreen as home', (WidgetTester tester) async {
       await tester.pumpWidget(const App());
+      await tester.pumpAndSettle();
       expect(find.byType(MenuScreen), findsOneWidget);
       expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
     });
@@ -43,6 +49,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(const App());
+      await tester.pumpAndSettle();
       expect(find.text('Footlong Sub'), findsOneWidget);
       expect(find.text('£7.50'), findsOneWidget);
       expect(find.text('Six-Inch Sub'), findsOneWidget);
@@ -54,6 +61,7 @@ void main() {
       'Tapping Order navigates to OrderScreen with selected sandwich',
       (WidgetTester tester) async {
         await tester.pumpWidget(const App());
+        await tester.pumpAndSettle();
 
         await tester.tap(find.text('Order').first);
         await tester.pumpAndSettle();

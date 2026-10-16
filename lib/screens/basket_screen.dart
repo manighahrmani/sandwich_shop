@@ -19,6 +19,7 @@ class BasketScreen extends StatefulWidget {
 
 class _BasketScreenState extends State<BasketScreen> {
   String _confirmationMessage = '';
+  bool _savingOrder = false;
 
   Widget _buildEmptyState() {
     return const Center(
@@ -49,7 +50,15 @@ class _BasketScreenState extends State<BasketScreen> {
   }
 
   Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
+    if (_savingOrder || items.isEmpty) {
+      return;
+    }
+    final List<CartItem> purchasedItems = List<CartItem>.unmodifiable(items);
+    final String summary = _buildSummary(purchasedItems);
+    final double total = cart.getTotalDue();
+    final String date = _formatDate(DateTime.now());
     setState(() {
+      _savingOrder = true;
       _confirmationMessage = 'Saving your order...';
     });
 
@@ -58,12 +67,12 @@ class _BasketScreenState extends State<BasketScreen> {
       final int orderNumber = await database.getNextOrderNumber();
       final OrderRecord record = OrderRecord(
         orderNumber: orderNumber,
-        summary: _buildSummary(items),
-        total: cart.getTotalDue(),
-        date: _formatDate(DateTime.now()),
+        summary: summary,
+        total: total,
+        date: date,
       );
       await database.insertOrder(record);
-      cart.clear();
+      cart.removePurchasedItems(purchasedItems);
       if (!mounted) {
         return;
       }
@@ -78,6 +87,12 @@ class _BasketScreenState extends State<BasketScreen> {
       setState(() {
         _confirmationMessage = 'Could not save your order: $error';
       });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _savingOrder = false;
+        });
+      }
     }
   }
 
@@ -101,11 +116,13 @@ class _BasketScreenState extends State<BasketScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.red),
-            onPressed: () {
-              setState(() {
-                cart.removeItem(index);
-              });
-            },
+            onPressed: _savingOrder
+                ? null
+                : () {
+                    setState(() {
+                      cart.removeItem(index);
+                    });
+                  },
           ),
         ],
       ),
@@ -170,9 +187,11 @@ class _BasketScreenState extends State<BasketScreen> {
         width: double.infinity,
         child: PrimaryButton(
           label: 'Checkout',
-          onPressed: () async {
-            await _checkout(cart, items);
-          },
+          onPressed: _savingOrder
+              ? null
+              : () async {
+                  await _checkout(cart, items);
+                },
         ),
       ),
     );

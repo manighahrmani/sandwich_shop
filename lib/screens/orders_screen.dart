@@ -17,6 +17,7 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   List<OrderRecord> _orders = [];
   bool _loading = true;
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -25,15 +26,25 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Future<void> _loadOrders() async {
-    final List<OrderRecord> orders = await SandwichDatabase.instance
-        .getAllOrders();
-    if (!mounted) {
-      return;
+    try {
+      final List<OrderRecord> orders =
+          await SandwichDatabase.instance.getAllOrders();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _orders = orders;
+        _loading = false;
+      });
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _errorMessage = 'Could not load orders: $error';
+        _loading = false;
+      });
     }
-    setState(() {
-      _orders = orders;
-      _loading = false;
-    });
   }
 
   Widget _buildOptionsText(OrderRecord order) {
@@ -97,7 +108,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     final Widget body;
     if (_loading) {
-      body = const SizedBox.shrink();
+      body = const Center(child: CircularProgressIndicator());
+    } else if (_errorMessage.isNotEmpty) {
+      body = Center(child: Text(_errorMessage));
     } else if (_orders.isEmpty) {
       body = const Center(
         child: Padding(
@@ -120,7 +133,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton(), OrdersButton()],
+        actions: const [OrdersButton(), BasketButton()],
       ),
       body: body,
     );

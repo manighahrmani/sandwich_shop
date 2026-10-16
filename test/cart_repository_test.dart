@@ -25,6 +25,54 @@ void main() {
   });
 
   group('CartRepository tests', () {
+    test('Returned lists are immutable snapshots', () {
+      final CartRepository cart = CartRepository.instance;
+      const CartItem first = CartItem(sandwich: testSandwich1, quantity: 1);
+      const CartItem second = CartItem(sandwich: testSandwich2, quantity: 2);
+      cart.addItem(first);
+      final List<CartItem> snapshot = cart.getItems();
+      expect(() {
+        snapshot.add(second);
+      }, throwsUnsupportedError);
+      cart.addItem(second);
+      expect(snapshot, <CartItem>[first]);
+      expect(cart.getItems(), <CartItem>[first, second]);
+    });
+
+    test('Out-of-range removals leave the basket unchanged', () {
+      final CartRepository cart = CartRepository.instance;
+      const CartItem item = CartItem(sandwich: testSandwich1, quantity: 1);
+      cart.removeItem(0);
+      cart.addItem(item);
+      cart.removeItem(-1);
+      cart.removeItem(1);
+      expect(cart.getItems(), <CartItem>[item]);
+      expect(cart.getTotalDue(), 11.50);
+    });
+
+    test('Clearing repeatedly resets all totals and delivery', () {
+      final CartRepository cart = CartRepository.instance;
+      cart.addItem(const CartItem(sandwich: testSandwich1, quantity: 2));
+      cart.clear();
+      cart.clear();
+      expect(cart.getItems(), isEmpty);
+      expect(cart.totalItemCount, 0);
+      expect(cart.getSubtotal(), 0);
+      expect(cart.getDeliveryFee(), 0);
+      expect(cart.getTotalDue(), 0);
+    });
+
+    test('Removing purchased items preserves later basket additions', () {
+      final CartRepository cart = CartRepository.instance;
+      const CartItem purchased = CartItem(sandwich: testSandwich1, quantity: 1);
+      const CartItem later = CartItem(sandwich: testSandwich1, quantity: 2);
+      cart.addItem(purchased);
+      cart.addItem(later);
+      cart.removePurchasedItems(<CartItem>[purchased]);
+      expect(cart.getItems(), <CartItem>[later]);
+      cart.removePurchasedItems(<CartItem>[purchased]);
+      expect(cart.getItems(), <CartItem>[later]);
+    });
     test('starts with empty basket and zero totals', () {
       final CartRepository cart = CartRepository.instance;
       expect(cart.getItems().length, 0);
