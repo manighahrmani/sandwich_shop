@@ -5,47 +5,57 @@
 - [Getting help](#getting-help)
 - [Getting started](#getting-started)
   - [Continue from Worksheet 5](#continue-from-worksheet-5)
-  - [Switch to branch 5](#switch-to-branch-5)
-- [Loading the menu from JSON](#loading-the-menu-from-json)
-  - [Create the JSON asset file](#create-the-json-asset-file)
-  - [Register the asset in pubspec](#register-the-asset-in-pubspec)
-  - [Add JSON serialisation to the sandwich model](#add-json-serialisation-to-the-sandwich-model)
-  - [Unit test JSON serialisation](#unit-test-json-serialisation)
-  - [Load JSON data in the repository](#load-json-data-in-the-repository)
-  - [Load the menu from the asset at startup](#load-the-menu-from-the-asset-at-startup)
-- [Two kinds of persistence](#two-kinds-of-persistence)
-- [Adding the dependencies](#adding-the-dependencies)
-  - [Add the persistence packages](#add-the-persistence-packages)
-- [Remembering customer profile settings with shared preferences](#remembering-customer-profile-settings-with-shared-preferences)
+  - [Use branch 5 for a clean starting point](#use-branch-5-for-a-clean-starting-point)
+- [Choosing where to store the data](#choosing-where-to-store-the-data)
+- [Preparing an Android emulator](#preparing-an-android-emulator)
+  - [Install the Android bundle on university computers](#install-the-android-bundle-on-university-computers)
+  - [Set up an emulator on your own computer](#set-up-an-emulator-on-your-own-computer)
+  - [Select the emulator and run the app](#select-the-emulator-and-run-the-app)
+- [Loading the menu from a JSON asset](#loading-the-menu-from-a-json-asset)
+  - [Create and register the JSON asset](#create-and-register-the-json-asset)
+  - [Convert a JSON map into a sandwich](#convert-a-json-map-into-a-sandwich)
+  - [Convert a sandwich back into a map](#convert-a-sandwich-back-into-a-map)
+  - [Test both sandwich conversions](#test-both-sandwich-conversions)
+  - [Read the asset in the repository](#read-the-asset-in-the-repository)
+  - [Load the menu when the screen opens](#load-the-menu-when-the-screen-opens)
+  - [Display loading and error states](#display-loading-and-error-states)
+  - [Update the menu and app tests](#update-the-menu-and-app-tests)
+- [Adding the persistence packages](#adding-the-persistence-packages)
+- [Remembering the customer profile with shared preferences](#remembering-the-customer-profile-with-shared-preferences)
   - [Define the preference keys](#define-the-preference-keys)
-  - [Load saved settings when the screen opens](#load-saved-settings-when-the-screen-opens)
-  - [Save settings when the user submits](#save-settings-when-the-user-submits)
-- [Storing orders in SQLite](#storing-orders-in-sqlite)
-  - [Define the order record model](#define-the-order-record-model)
-  - [Create the database helper](#create-the-database-helper)
-  - [Create the orders table and seed past orders](#create-the-orders-table-and-seed-past-orders)
-  - [Insert and query orders](#insert-and-query-orders)
-- [Adding an orders button to every screen](#adding-an-orders-button-to-every-screen)
-  - [Create the orders button](#create-the-orders-button)
-  - [Show both buttons on the menu and order screens](#show-both-buttons-on-the-menu-and-order-screens)
-- [Saving an order at checkout](#saving-an-order-at-checkout)
-  - [Build the order record from the basket](#build-the-order-record-from-the-basket)
-  - [Save and navigate on checkout](#save-and-navigate-on-checkout)
-- [Showing past orders](#showing-past-orders)
-  - [Create the orders screen](#create-the-orders-screen)
-  - [Register the orders route](#register-the-orders-route)
-- [Running the app on a mobile emulator](#running-the-app-on-a-mobile-emulator)
-  - [Lab machines: the Android emulator beta bundle](#lab-machines-the-android-emulator-beta-bundle)
-  - [Inspecting the database](#inspecting-the-database)
-  - [Your own Windows or Mac laptop: Android Studio](#your-own-windows-or-mac-laptop-android-studio)
-  - [Mac only: the iOS simulator](#mac-only-the-ios-simulator)
-- [Testing persistence](#testing-persistence)
-  - [Test the shared preferences settings flow](#test-the-shared-preferences-settings-flow)
-  - [Set up an in-memory database](#set-up-an-in-memory-database)
-  - [Test inserting and reading orders](#test-inserting-and-reading-orders)
-  - [Update the basket screen tests](#update-the-basket-screen-tests)
-  - [Test the orders screen](#test-the-orders-screen)
-  - [Test the app bar navigation actions](#test-the-app-bar-navigation-actions)
+  - [Read saved values when settings opens](#read-saved-values-when-settings-opens)
+  - [Fill the form after loading](#fill-the-form-after-loading)
+  - [Save the profile before showing confirmation](#save-the-profile-before-showing-confirmation)
+  - [Test loading and saving preferences](#test-loading-and-saving-preferences)
+- [Representing a saved order](#representing-a-saved-order)
+  - [Create the order record and its constructor](#create-the-order-record-and-its-constructor)
+  - [Convert an order into a database row](#convert-an-order-into-a-database-row)
+  - [Convert a database row into an order](#convert-a-database-row-into-an-order)
+- [Creating the SQLite database helper](#creating-the-sqlite-database-helper)
+  - [Create one shared database helper](#create-one-shared-database-helper)
+  - [Open the database in the app folder](#open-the-database-in-the-app-folder)
+  - [Create the orders table](#create-the-orders-table)
+  - [Seed past orders only when creating the database](#seed-past-orders-only-when-creating-the-database)
+  - [Insert an order and read saved orders](#insert-an-order-and-read-saved-orders)
+  - [Find the next order number and close the connection](#find-the-next-order-number-and-close-the-connection)
+- [Displaying saved orders](#displaying-saved-orders)
+  - [Create the orders screen and its state](#create-the-orders-screen-and-its-state)
+  - [Load orders and report a database error](#load-orders-and-report-a-database-error)
+  - [Build the options line for an order](#build-the-options-line-for-an-order)
+  - [Build an order card in stages](#build-an-order-card-in-stages)
+  - [Choose the loading, error, empty or list body](#choose-the-loading-error-empty-or-list-body)
+  - [Register the orders route and add navigation buttons](#register-the-orders-route-and-add-navigation-buttons)
+- [Saving the basket at checkout](#saving-the-basket-at-checkout)
+  - [Build the order summary and date](#build-the-order-summary-and-date)
+  - [Save the order before clearing the basket](#save-the-order-before-clearing-the-basket)
+  - [Connect the checkout button and verify a restart](#connect-the-checkout-button-and-verify-a-restart)
+  - [Inspect the database on the emulator](#inspect-the-database-on-the-emulator)
+- [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator)
+  - [Create one in-memory database helper for tests](#create-one-in-memory-database-helper-for-tests)
+  - [Test inserting, reading and numbering orders](#test-inserting-reading-and-numbering-orders)
+  - [Update the basket checkout test](#update-the-basket-checkout-test)
+  - [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state)
+  - [Test navigation and run the complete suite](#test-navigation-and-run-the-complete-suite)
 - [Exercises](#exercises)
 
 ## Getting help
@@ -56,85 +66,161 @@ To get support with this worksheet, follow the [Discord guide](https://portdotac
 
 ### Continue from Worksheet 5
 
-You can continue directly with the Sandwich Shop project you completed in Worksheet 5. Open your project folder in VS Code with **File > Open Folder**.
+Open the Sandwich Shop project you completed in [Worksheet 5](worksheet-5.md). We keep its basket, customer profile form, shared theme and navigation, then add local storage.
 
-### Switch to branch 5
+### Use branch 5 for a clean starting point
 
-If you prefer a clean copy matching the Worksheet 5 end state, switch to branch `5`:
+If you need a fresh copy, follow [cloning the repository in Worksheet 5](worksheet-5.md#clone-the-sandwich-shop-repository). In that copy, select the Worksheet 5 end state:
 
 ```bash
 git checkout 5
+flutter pub get
+flutter test
 ```
 
-Run `flutter test` in your terminal to confirm that all existing tests pass before continuing.
+Do not switch branches over unfinished work. Branch `6` contains the completed Sandwich Shop application for this worksheet; use it to compare your finished work, not as your starting point.
 
-## Loading the menu from JSON
+## Choosing where to store the data
 
-In Worksheet 5 our sandwich menu items were hardcoded in `SandwichRepository`. Hardcoded data is inflexible; adding a new sandwich or altering prices requires modifying Dart code. In this section we move the menu into an external JSON file, register the asset, and load it into our data models.
+Persistence means keeping data after the app closes. We use three stores for different purposes:
 
-### Create the JSON asset file
+- A bundled JSON asset holds the sandwich catalogue. JSON is a text format for lists, objects and simple values; the app reads this file but does not edit it.
+- Shared preferences holds a few customer profile values under named keys.
+- SQLite holds completed orders as rows in a table, so we can retrieve them in order.
 
-Create a new file named `assets/data/sandwiches.json`:
+We use manual JSON conversion, direct preference reads and writes, and one database helper. No code generation, extra state-management package or storage framework is needed. The [Flutter JSON guide](https://docs.flutter.dev/data-and-backend/serialization/json#manual-encoding), [key-value recipe](https://docs.flutter.dev/cookbook/persistence/key-value) and [SQLite recipe](https://docs.flutter.dev/cookbook/persistence/sqlite) describe these approaches.
+
+Shared preferences is not secure storage and does not guarantee that every write reaches disk. Use fictional profile details in this exercise, never passwords or payment details. Orders belong in SQLite rather than preferences.
+
+## Preparing an Android emulator
+
+For the SQLite parts of this worksheet, run the app on an Android emulator, not Edge, Chrome or Windows desktop. An emulator is a virtual Android device running on your computer. The standard `sqflite` plugin works on Android without a separate database server or browser database setup.
+
+Automated tests will use an in-memory database and do not need an emulator. Prepare your emulator now, before adding database code.
+
+### Install the Android bundle on university computers
+
+The browser-only bundle from [Worksheet 1](worksheet-1.md#b---using-the-university-machines-on-campus) does not include the Android tools. Use the [Android emulator release of the portable bundle](https://github.com/manighahrmani/flutter_vscode_package#android-emulator-setup-worksheet-6-onwards) instead. Open PowerShell and run its installer:
+
+```powershell
+irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/install-android-beta.ps1 | iex
+```
+
+This is the Android bundle release, not a request to build your Flutter app in release mode. It installs a JDK, the Android SDK and a virtual device named `flutter_emulator`, then opens VS Code on your project. The download is several gigabytes and takes longer than the original bundle. Let the installer finish; the university machines provide the hardware acceleration the emulator needs.
+
+In the new VS Code terminal, from your project folder, launch the virtual device:
+
+```bash
+flutter emulators --launch flutter_emulator
+```
+
+Wait for the Android home screen before continuing.
+
+### Set up an emulator on your own computer
+
+If Flutter is already installed on your own Windows, macOS or Linux computer, follow the [Flutter Android setup guide](https://docs.flutter.dev/platform-integration/android/setup). Install Android Studio and its Android SDK tools, then create a virtual device in **Device Manager** using a system image suitable for your computer.
+
+Check the toolchain and accept the SDK licences:
+
+```bash
+flutter doctor
+flutter doctor --android-licenses
+```
+
+Start the device from **Device Manager**, or run `flutter emulators` and then `flutter emulators --launch` followed by the listed emulator name. You only need this setup or the university bundle, not both.
+
+### Select the emulator and run the app
+
+Use the [device selector introduced in Worksheet 1](worksheet-1.md#selecting-a-target-device) to choose the booted Android emulator.
+
+Alternatively, list the devices and run on the emulator:
+
+```bash
+flutter devices
+flutter run -d emulator-5554
+```
+
+Replace `emulator-5554` with the actual id reported by `flutter devices`. The first build downloads Android build dependencies and can take several minutes. If it fails, read the reported error and check `flutter doctor`; do not assume every warning or failure is harmless.
+
+The app should appear inside the emulator.
+
+## Loading the menu from a JSON asset
+
+The catalogue currently comes from the hard-coded list in `SandwichRepository`. We add a JSON loader and use its result on the menu screen. The repository keeps its original synchronous methods for the existing lookup tests, but the running menu will use the asset.
+
+### Create and register the JSON asset
+
+Create `assets/data/sandwiches.json`. Start with an empty JSON array:
 
 ```json
-[
-  {
-    "id": "footlong",
-    "name": "Footlong Sub",
-    "description": "A freshly baked 12-inch sandwich filled with savoury ingredients.",
-    "price": 7.50,
-    "imagePath": "assets/images/footlong.jpeg"
-  },
-  {
-    "id": "six-inch",
-    "name": "Six-Inch Sub",
-    "description": "A light 6-inch sandwich made with your favourite toppings.",
-    "price": 4.50,
-    "imagePath": "assets/images/six_inch.jpeg"
-  }
-]
+[]
 ```
 
-This JSON array contains two sandwich objects matching the fields in our `Sandwich` class.
+Inside the square brackets, add the first object:
 
-### Register the asset in pubspec
-
-Flutter requires external assets to be registered in `pubspec.yaml` before they can be bundled with the application. Open `pubspec.yaml` and locate the `flutter:` section:
-
-```yaml
-flutter:
-  uses-material-design: true
-  assets:
-    - assets/images/
+```json
+{
+  "id": "footlong",
+  "name": "Footlong Sub",
+  "description": "A freshly baked 12-inch sandwich filled with savoury ingredients.",
+  "price": 7.50,
+  "imagePath": "assets/images/footlong.jpeg"
+}
 ```
 
-Add `- assets/data/` to the list of assets:
+Add a comma after that object's closing brace, then add the second object:
+
+```json
+{
+  "id": "six-inch",
+  "name": "Six-Inch Sub",
+  "description": "A light 6-inch sandwich made with your favourite toppings.",
+  "price": 4.50,
+  "imagePath": "assets/images/six_inch.jpeg"
+}
+```
+
+The array now contains two objects matching the [Sandwich fields from Worksheet 3](worksheet-3.md#add-the-fields). JSON uses double quotes around names and string values, and does not allow a trailing comma after the last object.
+
+Follow [asset registration in Worksheet 3](worksheet-3.md#register-assets-in-pubspec) to add `assets/data/` alongside `assets/images/` in `pubspec.yaml`:
 
 ```yaml
-flutter:
-  uses-material-design: true
   assets:
     - assets/images/
     - assets/data/
 ```
 
-Trailing slashes register entire directories. Run `flutter pub get` in your terminal to update the asset bundle. For more details on asset management, see the [Flutter Assets documentation](https://docs.flutter.dev/ui/assets/assets-and-images).
+Keep this under the existing `flutter:` entry and run `flutter pub get`.
 
-### Add JSON serialisation to the sandwich model
+### Convert a JSON map into a sandwich
 
-Open `lib/models/sandwich.dart`. We add a factory constructor `Sandwich.fromJson` to parse a `Map<String, dynamic>` into a `Sandwich`, and a `toJson` method to convert it back to a map.
+Open `lib/models/sandwich.dart`. We convert each JSON object into a `Sandwich` by hand, following the [manual JSON guide](https://docs.flutter.dev/data-and-backend/serialization/json#manual-encoding).
 
-First, add the factory constructor inside `Sandwich`:
+A `Map` stores values under keys. `Map<String, dynamic>` means that its keys are strings and its values can have different types. `dynamic` was introduced with route information in [Worksheet 5](worksheet-5.md#create-the-basket-button). The expression `json['name']` reads the value under the key `'name'`.
+
+Inside `Sandwich`, add an empty factory constructor:
 
 ```dart
   factory Sandwich.fromJson(Map<String, dynamic> json) {
+  }
+```
+
+A factory constructor is a named way to return an instance of a class. Inside its braces, read the fields:
+
+```dart
     final String id = json['id'] as String;
     final String name = json['name'] as String;
     final String description = json['description'] as String;
     final num priceNumber = json['price'] as num;
     final double price = priceNumber.toDouble();
     final String imagePath = json['imagePath'] as String;
+```
 
+The `as` operator checks that a value has the stated type; it throws an error if the data is wrong. `num` accepts either an integer or a decimal number, and `toDouble()` gives our model a `double` in both cases. See [Dart type tests](https://dart.dev/language/operators#type-test-operators).
+
+After those declarations, return the instance:
+
+```dart
     return Sandwich(
       id: id,
       name: name,
@@ -142,15 +228,22 @@ First, add the factory constructor inside `Sandwich`:
       price: price,
       imagePath: imagePath,
     );
-  }
 ```
 
-A factory constructor creates an instance from external data. In Dart, parsing numbers from JSON can yield either an `int` or a `double`. Reading `json['price']` as `num` and calling `.toDouble()` safely converts both representations to `double` without runtime casting errors. The remaining map entries are cast explicitly to `String`.
+### Convert a sandwich back into a map
 
-Now add `toJson` to convert a sandwich back to a map:
+Inside `Sandwich`, add a `toJson` method:
 
 ```dart
   Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    return data;
+  }
+```
+
+Replace the empty map `{}` with these entries:
+
+```dart
     final Map<String, dynamic> data = <String, dynamic>{
       'id': id,
       'name': name,
@@ -158,71 +251,60 @@ Now add `toJson` to convert a sandwich back to a map:
       'price': price,
       'imagePath': imagePath,
     };
-    return data;
-  }
 ```
 
-The `toJson` method packs the sandwich fields into a `Map<String, dynamic>` ready for JSON encoding.
+`toJson` returns a map, not JSON text. `jsonEncode` from `dart:convert` can turn that map into text when needed; we only need to decode text for the catalogue.
 
-### Unit test JSON serialisation
+### Test both sandwich conversions
 
-Open `test/sandwich_model_test.dart`. Add a test verifying JSON decoding with `fromJson`:
+Use the [model testing pattern from Worksheet 4](worksheet-4.md#unit-testing-data-models). Inside the existing group in `test/sandwich_model_test.dart`, add a test with a map:
 
 ```dart
-    test('fromJson creates a Sandwich instance from valid JSON map', () {
-      final Map<String, dynamic> jsonMap = <String, dynamic>{
-        'id': 'veggie-delight',
-        'name': 'Veggie Delight',
-        'description': 'Crisp garden vegetables on fresh bread.',
+    test('JSON conversion preserves every sandwich field', () {
+      final Map<String, dynamic> data = <String, dynamic>{
+        'id': 'veggie',
+        'name': 'Veggie Sub',
+        'description': 'Fresh vegetables.',
         'price': 5.50,
         'imagePath': 'assets/images/six_inch.jpeg',
       };
-
-      final Sandwich sandwich = Sandwich.fromJson(jsonMap);
-
-      expect(sandwich.id, 'veggie-delight');
-      expect(sandwich.name, 'Veggie Delight');
-      expect(sandwich.price, 5.50);
-      expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
     });
 ```
 
-This test passes a map containing sandwich attributes to `Sandwich.fromJson` and asserts that each property is extracted and cast to its expected value.
-
-Now add a test verifying map serialisation with `toJson`:
+After the map declaration, convert it and check every field by comparing the resulting map:
 
 ```dart
-    test('toJson serialises a Sandwich instance into a JSON map', () {
-      const Sandwich sandwich = Sandwich(
-        id: 'meatball',
-        name: 'Meatball Marinara',
-        description: 'Italian meatballs in rich marinara sauce.',
-        price: 8.00,
-        imagePath: 'assets/images/footlong.jpeg',
-      );
+      final Sandwich sandwich = Sandwich.fromJson(data);
+      expect(sandwich.id, 'veggie');
+      expect(sandwich.name, 'Veggie Sub');
+      expect(sandwich.description, 'Fresh vegetables.');
+      expect(sandwich.price, 5.50);
+      expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
+      expect(sandwich.toJson(), data);
+```
 
-      final Map<String, dynamic> jsonMap = sandwich.toJson();
+Add another test using a whole-number price to exercise the `num` conversion:
 
-      expect(jsonMap['id'], 'meatball');
-      expect(jsonMap['name'], 'Meatball Marinara');
-      expect(jsonMap['price'], 8.00);
-      expect(jsonMap['imagePath'], 'assets/images/footlong.jpeg');
+```dart
+    test('fromJson accepts a whole-number price', () {
+      final Map<String, dynamic> data = <String, dynamic>{
+        'id': 'test',
+        'name': 'Test Sub',
+        'description': 'Test sandwich.',
+        'price': 5,
+        'imagePath': 'assets/images/footlong.jpeg',
+      };
+      final Sandwich sandwich = Sandwich.fromJson(data);
+      expect(sandwich.price, 5.0);
+      expect(sandwich.price, isA<double>());
     });
 ```
 
-This test constructs a constant `Sandwich` model, calls `sandwich.toJson()`, and verifies that the output map contains the corresponding keys and values.
+Run `flutter test test/sandwich_model_test.dart`.
 
-Run your model tests:
+### Read the asset in the repository
 
-```bash
-flutter test test/sandwich_model_test.dart
-```
-
-All model tests should pass.
-
-### Load JSON data in the repository
-
-Open `lib/repositories/sandwich_repository.dart`. First, import the necessary JSON and asset packages at the top of the file:
+Open `lib/repositories/sandwich_repository.dart` and add these imports:
 
 ```dart
 import 'dart:convert';
@@ -230,25 +312,33 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 ```
 
-The `dart:convert` library provides `jsonDecode` to convert JSON text into Dart lists and maps. The `package:flutter/services.dart` library provides `rootBundle`, which accesses static asset files bundled with your application.
+`jsonDecode` turns JSON text into Dart lists and maps. `rootBundle` reads the assets bundled with the app; see [loading text assets](https://docs.flutter.dev/ui/assets/assets-and-images#loading-text-assets).
 
-Next, declare a nullable cache list inside `SandwichRepository` to store loaded sandwiches:
+Inside `SandwichRepository`, add a nullable cache and the loader's outline:
 
 ```dart
   List<Sandwich>? _cachedSandwiches;
-```
 
-Now add `loadSandwichesFromAsset` to load and decode the JSON asset:
-
-```dart
   Future<List<Sandwich>> loadSandwichesFromAsset({
     String assetPath = 'assets/data/sandwiches.json',
   }) async {
+  }
+```
+
+For nullable types, revisit [Worksheet 4](worksheet-4.md#add-getsandwichbyid-to-sandwichrepository). For `Future`, `async` and `await`, revisit [the first widget test in Worksheet 4](worksheet-4.md#test-orderitemdisplay-in-isolation).
+
+Inside the loader, read and decode the text:
+
+```dart
     final String jsonString = await rootBundle.loadString(assetPath);
     final dynamic decodedData = jsonDecode(jsonString);
     final List<dynamic> jsonList = decodedData as List<dynamic>;
-
     final List<Sandwich> loadedSandwiches = [];
+```
+
+After those declarations, convert each entry using the [explicit loop from Worksheet 4](worksheet-4.md#add-getsandwichbyid-to-sandwichrepository):
+
+```dart
     for (final dynamic item in jsonList) {
       final Map<String, dynamic> itemMap = item as Map<String, dynamic>;
       final Sandwich sandwich = Sandwich.fromJson(itemMap);
@@ -257,57 +347,31 @@ Now add `loadSandwichesFromAsset` to load and decode the JSON asset:
 
     _cachedSandwiches = loadedSandwiches;
     return loadedSandwiches;
-  }
 ```
 
-Calling `rootBundle.loadString(assetPath)` reads the asset file asynchronously into a `String`. Calling `jsonDecode(jsonString)` parses the raw text into a `List<dynamic>`. The explicit `for-in` loop iterates through the decoded entries, casts each item to a `Map<String, dynamic>`, and decodes it using `Sandwich.fromJson`. The method saves the loaded list to `_cachedSandwiches` and returns it.
-
-Update `getSandwiches()` to return the cached list when available:
+At the beginning of the existing `getSandwiches` method, before its original `return const [...]`, add:
 
 ```dart
-  List<Sandwich> getSandwiches() {
     if (_cachedSandwiches != null) {
       return _cachedSandwiches!;
     }
-    return const [
-      Sandwich(
-        id: 'footlong',
-        name: 'Footlong Sub',
-        description:
-            'A freshly baked 12-inch sandwich filled with savoury ingredients.',
-        price: 7.50,
-        imagePath: 'assets/images/footlong.jpeg',
-      ),
-      Sandwich(
-        id: 'six-inch',
-        name: 'Six-Inch Sub',
-        description:
-            'A light 6-inch sandwich made with your favourite toppings.',
-        price: 4.50,
-        imagePath: 'assets/images/six_inch.jpeg',
-      ),
-    ];
-  }
 ```
 
-If `loadSandwichesFromAsset()` was previously awaited, `_cachedSandwiches` holds the loaded sandwiches and `getSandwiches()` returns them directly. If not, the method falls back to returning the const list of default sandwiches so callers that do not await asynchronous loading still receive data.
+The `!` tells Dart that the value is not `null`, after our explicit check. Keep the existing fixed list and `getSandwichById` method. A repository instance returns its loaded list after a successful load; the menu below awaits the loader directly, so a failed asset load is not hidden by the old list.
 
-### Load the menu from the asset at startup
+### Load the menu when the screen opens
 
-Adding `loadSandwichesFromAsset` is only half the work. Until a screen awaits it, the repository keeps returning the hardcoded fallback and the JSON file is never read at runtime. We wire the menu screen to load from the asset as soon as it appears, using the same `initState` and `setState` pattern you met in Worksheet 5.
+Open `lib/screens/menu_screen.dart`. Convert `MenuScreen` to a `StatefulWidget` using **Ctrl + .** on Windows or **⌘ + .** on macOS and **Convert to StatefulWidget**. Keep its constructor, imports, app bar and list layout. The two-class structure is the one from [Worksheet 2](worksheet-2.md#define-the-orderscreen-stateful-widget).
 
-Open `lib/screens/menu_screen.dart`. If the menu screen is still a `StatelessWidget`, convert it to a `StatefulWidget` so it can load its data after it appears and rebuild when the data arrives. Give the state two typed fields: a list for the loaded sandwiches and a flag for the loading phase.
+Inside `_MenuScreenState`, declare:
 
 ```dart
-class _MenuScreenState extends State<MenuScreen> {
   List<Sandwich> _sandwiches = [];
   bool _loading = true;
-}
+  String _errorMessage = '';
 ```
 
-The `_sandwiches` list holds what the repository returns, and `_loading` stays `true` until the first load finishes so we can show a progress indicator rather than an empty menu.
-
-Add `initState` to start the load, and the asynchronous loader it calls:
+Add `initState`, using the [lifecycle pattern from Worksheet 5](worksheet-5.md#text-controllers-and-form-lifecycle):
 
 ```dart
   @override
@@ -315,116 +379,134 @@ Add `initState` to start the load, and the asynchronous loader it calls:
     super.initState();
     _loadSandwiches();
   }
-
-  Future<void> _loadSandwiches() async {
-    final SandwichRepository repository = SandwichRepository();
-    final List<Sandwich> loadedSandwiches =
-        await repository.loadSandwichesFromAsset();
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _sandwiches = loadedSandwiches;
-      _loading = false;
-    });
-  }
 ```
 
-The loader awaits `loadSandwichesFromAsset()`, which reads and decodes the JSON file. The `if (!mounted) { return; }` guard stops us calling `setState` on a screen the user has already left during the asynchronous gap. Once the data is back, `setState` stores it and clears the loading flag.
-
-Finally, use `_loading` and `_sandwiches` in `build`. While loading, return a centred progress indicator; afterwards build the menu from `_sandwiches` instead of the direct repository call.
+Add the loader shell:
 
 ```dart
-  @override
-  Widget build(BuildContext context) {
-    if (_loading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+  Future<void> _loadSandwiches() async {
+    try {
+    } catch (error) {
     }
-
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: _sandwiches.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Sandwich sandwich = _sandwiches[index];
-          return SandwichCard(sandwich: sandwich);
-        },
-      ),
-    );
   }
 ```
 
-Keep whatever app bar and layout your menu screen already had; the only change is reading the list from `_sandwiches` and showing the indicator while `_loading` is `true`. Run the app and the menu now comes from the JSON asset at startup.
+`try` runs an operation that might fail; `catch` handles the error. Here we display the failure rather than leave a permanent loading indicator. See [Dart error handling](https://dart.dev/language/error-handling#catch).
 
-## Two kinds of persistence
+Inside `try`, load the menu and update state:
 
-Bundling a JSON file with your application provides static catalogue data, but it is read-only at runtime. In Worksheet 5 everything else lived in memory: the customer profile details a user entered and the sandwiches in their basket vanished the moment the app restarted or the browser tab refreshed. In this worksheet we make two different kinds of data survive a restart, using the right tool for each.
-
-Customer profile settings, such as full name, delivery address, email, and whether to receive newsletter updates, are small, loose pieces of interface state. There are only a few of them and we never need to search or sort them. For data like that we use shared preferences, a simple store of key-and-value pairs saved on the device. We read the last-used settings back when the profile screen opens, so a returning user does not retype them.
-
-The orders themselves are different. Each is a structured record with a number, a summary, a date, and a total, and we want to list them newest first and could later filter them by date. For structured, queryable records like that we use SQLite, a small relational database stored in a single file. We save each completed order as a row and read them back on an orders screen.
-
-The contrast is the lesson: reach for shared preferences for a handful of simple settings, and for a relational database such as SQLite when you have many structured records you need to query. We build the shared preferences part first because it extends the settings screen you already know, then move on to the database.
-
-## Adding the dependencies
-
-Both kinds of persistence come from packages we add to the project.
-
-### Add the persistence packages
-
-Open `pubspec.yaml` in your project root. Under `dependencies:`, add the packages below. `shared_preferences` gives us the key-value store. The database packages are split by platform: `sqflite` is the standard plugin that opens SQLite on Android and iOS, `path` lets us build a file path that works on any platform, and the two `sqflite_common_ffi` packages give us SQLite on desktop, test, and web. We also pin `sqlite3` to version `3.5.2` so web builds match the compiled WebAssembly binary in `web/sqlite3.wasm`:
-
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  cupertino_icons: ^1.0.0
-  shared_preferences: ^2.2.0
-  sqflite: ^2.3.0
-  path: ^1.8.0
-  sqflite_common_ffi: ^2.3.0
-  sqflite_common_ffi_web: ^0.4.0
-  sqlite3: "3.5.2"
+```dart
+      final SandwichRepository repository = SandwichRepository();
+      final List<Sandwich> sandwiches =
+          await repository.loadSandwichesFromAsset();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _sandwiches = sandwiches;
+        _loading = false;
+      });
 ```
 
-Run `flutter pub get` in your terminal to download the packages:
+[`mounted`](https://api.flutter.dev/flutter/widgets/State/mounted.html) is true while this state belongs to the widget tree. After an `await`, the user might have left the screen. The guard prevents updating a disposed state; we use the same guard after later storage operations.
+
+Inside `catch`, add:
+
+```dart
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _errorMessage = 'Could not load the menu: $error';
+        _loading = false;
+      });
+```
+
+### Display loading and error states
+
+In `build`, remove the local repository and `sandwiches` declarations. Start the method with:
+
+```dart
+    final Widget body;
+    if (_loading) {
+      body = const Center(child: CircularProgressIndicator());
+    } else if (_errorMessage.isNotEmpty) {
+      body = Center(child: Text(_errorMessage));
+    } else {
+      body = ListView.builder(
+        itemCount: _sandwiches.length,
+        itemBuilder: (BuildContext context, int index) {
+          return SandwichCard(sandwich: _sandwiches[index]);
+        },
+      );
+    }
+```
+
+[`CircularProgressIndicator`](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html) shows that work is in progress. Keep the existing `Scaffold` and its app bar, but replace its `body` value with `body`. The list now comes from the asset.
+
+### Update the menu and app tests
+
+In `test/menu_screen_test.dart` and `test/widget_test.dart`, import the asset services:
+
+```dart
+import 'package:flutter/services.dart';
+```
+
+Inside `main`, add this setup, or add its single statement to an existing `setUp`:
+
+```dart
+  setUp(() {
+    rootBundle.clear();
+  });
+```
+
+`setUp` runs before each test, as in [Worksheet 5's repository tests](worksheet-5.md#unit-test-the-cart-repository). `rootBundle.clear()` clears cached asset reads so a later widget test does not reuse a `Future` created in an earlier test's simulated clock.
+
+In every test that opens the menu or app, add `await tester.pumpAndSettle();` after `pumpWidget`, before checking catalogue text or tapping its buttons. The [frame-settling pattern from Worksheet 4](worksheet-4.md#test-initial-menu-screen-rendering) now also allows the asset load to finish.
+
+To verify the actual data source, temporarily change a sandwich name in the JSON asset, fully restart the app, and check that the menu changes. Restore the name afterwards. A hot reload alone does not reliably refresh a bundled asset.
+
+## Adding the persistence packages
+
+From the project root, add the mobile storage packages and the separate test dependency:
 
 ```bash
-flutter pub get
+flutter pub add shared_preferences sqflite path
+flutter pub add --dev sqflite_common_ffi
 ```
 
-## Remembering customer profile settings with shared preferences
+These commands update `pubspec.yaml` and fetch compatible package versions. `shared_preferences` stores simple values; `sqflite` opens SQLite on Android; `path` provides `join` to build a file path. `sqflite_common_ffi` supplies SQLite for tests on your computer, not the mobile app.
 
-We start with the lighter kind of persistence. The settings screen from Worksheet 5 already has three text fields and a switch toggle. We make the app remember the user's profile choices and pre-fill the form with them next time the screen opens.
+We do not need web database packages, WebAssembly files or platform-detection branches. Follow the [SQLite recipe](https://docs.flutter.dev/cookbook/persistence/sqlite) and run the application on your emulator. After adding plugins, stop and restart the app rather than only hot reloading.
 
-Shared preferences stores values under string keys. You read a value with a typed getter such as `getBool` or `getString`, and write one with `setBool` or `setString`. Reading and writing touch the device, so the methods are asynchronous and return a `Future` (the pattern from Worksheet 4).
+## Remembering the customer profile with shared preferences
+
+We extend the [profile form from Worksheet 5](worksheet-5.md#building-the-customer-profile-settings-form). Keep its controllers, `dispose`, fields and switch; only loading and saving change.
+
+We use `SharedPreferences`, matching the [Flutter key-value recipe](https://docs.flutter.dev/cookbook/persistence/key-value). The [package documentation](https://pub.dev/packages/shared_preferences) calls this the legacy API and recommends newer APIs for new production apps. We keep this small, single-screen example on one API so its direct getters, setters and mock store can be learnt together.
 
 ### Define the preference keys
 
-Open `lib/screens/settings_screen.dart`. First import the package, then define constant keys at the top of the file so we never mistype a key name:
+In `lib/screens/settings_screen.dart`, add the package import alongside the existing imports:
 
 ```dart
 import 'package:shared_preferences/shared_preferences.dart';
+```
 
+Below the imports, define the keys using the [constants pattern from Worksheet 5](worksheet-5.md#define-the-shared-constants):
+
+```dart
 const String prefName = 'user_name';
 const String prefAddress = 'user_address';
 const String prefEmail = 'user_email';
 const String prefNewsletter = 'user_newsletter';
 ```
 
-Each key is a plain `const String`. Using named constants rather than typing `'user_name'` in several places means the compiler, not you, keeps the names consistent. Add this import alongside the existing imports at the top of the file, and the four keys just below them.
+### Read saved values when settings opens
 
-### Load saved settings when the screen opens
-
-We load the saved profile settings as soon as the screen appears. Add a loader method to `_SettingsScreenState`, and call it from `initState`.
-
-First, read the saved values asynchronously from `SharedPreferences`:
+Inside `_SettingsScreenState`, create an empty `Future<void> _loadSettings() async {}` method. Within its braces, obtain the store and read its values:
 
 ```dart
-  Future<void> _loadSettings() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? savedName = prefs.getString(prefName);
     final String? savedAddress = prefs.getString(prefAddress);
@@ -432,9 +514,9 @@ First, read the saved values asynchronously from `SharedPreferences`:
     final bool? savedNewsletter = prefs.getBool(prefNewsletter);
 ```
 
-`SharedPreferences.getInstance()` hands back the shared store asynchronously. Then `prefs.getString` and `prefs.getBool` read the saved values using our constant keys. The first time the app runs, nothing is stored yet, so these calls return nullable types (`String?` or `bool?`).
+Obtaining the store is asynchronous. These getters then read cached values synchronously; they return `null` when a key has not been saved.
 
-Next, assign fallback defaults using `if` checks:
+Below those declarations, resolve each optional string with an explicit check:
 
 ```dart
     String name = '';
@@ -451,16 +533,22 @@ Next, assign fallback defaults using `if` checks:
     if (savedEmail != null) {
       email = savedEmail;
     }
+```
 
+Resolve the switch value in the same way:
+
+```dart
     bool newsletter = false;
     if (savedNewsletter != null) {
       newsletter = savedNewsletter;
     }
 ```
 
-We check each nullable result. If a value was found, we keep it; otherwise we default strings to empty text and the newsletter boolean to `false`.
+These are first-use defaults for missing keys, not substitutes for handling a storage error.
 
-Finally, guard with a `mounted` check and update state:
+### Fill the form after loading
+
+Finish `_loadSettings` with the mounted guard and state update:
 
 ```dart
     if (!mounted) {
@@ -472,36 +560,17 @@ Finally, guard with a `mounted` check and update state:
       _emailController.text = email;
       _receiveNewsletter = newsletter;
     });
-  }
 ```
 
-The `if (!mounted) return;` check ensures that after an `await`, calling `setState` only occurs if the widget is still active in the widget tree. We then copy the resolved values into the controllers and newsletter flag.
+In the existing `initState`, add `_loadSettings();` after creating all three controllers. Do not create a second `initState` or remove `dispose`.
 
-Now call the loader from `initState`:
+### Save the profile before showing confirmation
 
-```dart
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-    _addressController = TextEditingController();
-    _emailController = TextEditingController();
-    _loadSettings();
-  }
-```
+Change the existing `_saveSettings` return type from `void` to `Future<void>` and add `async`. Keep its three declarations that read and trim the controller text, as in [Worksheet 5](worksheet-5.md#add-text-fields-and-the-switch-toggle).
 
-### Save settings when the user submits
-
-Next update the save method in `_SettingsScreenState` to write the values back to the store.
-
-First, read the trimmed text and persist the values:
+After those declarations, before constructing `UserSettings`, write the values:
 
 ```dart
-  Future<void> _saveSettings() async {
-    final String name = _nameController.text.trim();
-    final String address = _addressController.text.trim();
-    final String email = _emailController.text.trim();
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(prefName, name);
     await prefs.setString(prefAddress, address);
@@ -509,55 +578,97 @@ First, read the trimmed text and persist the values:
     await prefs.setBool(prefNewsletter, _receiveNewsletter);
 ```
 
-We read each controller using `.text.trim()` to strip surrounding whitespace. We obtain the preferences instance and save each setting with `setString` or `setBool`, overwriting any previously stored value.
-
-Next, build the `UserSettings` model and update screen feedback:
+Keep the existing `UserSettings` construction. Before its confirmation `setState`, insert the guard:
 
 ```dart
-    final UserSettings settings = UserSettings(
-      name: name,
-      address: address,
-      email: email,
-      receiveNewsletter: _receiveNewsletter,
-    );
-
     if (!mounted) {
       return;
     }
-    setState(() {
-      _confirmationMessage = 'Settings saved for ${settings.name}';
+```
+
+The existing **Save Settings** button still uses `onPressed: _saveSettings`. The confirmation now follows the awaited writes, rather than only changing the form's in-memory state.
+
+### Test loading and saving preferences
+
+Open the existing `test/settings_screen_test.dart` from [Worksheet 5](worksheet-5.md#widget-test-the-settings-screen); do not replace its earlier tests. Add the `shared_preferences` import, then add this setup inside `main`:
+
+```dart
+  setUp(() {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+  });
+```
+
+This creates a mock preference store before each test so tests do not read or change your real profile. `setUp` was introduced in [Worksheet 5](worksheet-5.md#unit-test-the-cart-repository). See the [recipe's testing support](https://docs.flutter.dev/cookbook/persistence/key-value#testing-support).
+
+In each existing settings test, use `await tester.pumpAndSettle();` after opening the screen and after tapping **Save Settings**, before checking the result.
+
+Add a new test inside `main`:
+
+```dart
+  testWidgets('SettingsScreen pre-fills saved settings on open', (
+    WidgetTester tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      prefName: 'Jordan Lee',
+      prefAddress: '15 High Street, Portsmouth',
+      prefEmail: 'jordan@example.com',
+      prefNewsletter: true,
     });
-  }
+  });
 ```
 
-We construct a `UserSettings` instance, verify that the widget remains `mounted`, and update `_confirmationMessage` inside `setState()` so the confirmation line appears below the button.
-
-Each `set` call stores one value under its key, overwriting what was there. Update the **Save Settings** button in the `build` method to invoke `_saveSettings`:
+After setting the mock values, render the form and check the result:
 
 ```dart
-            SizedBox(
-              width: double.infinity,
-              child: PrimaryButton(
-                label: 'Save Settings',
-                onPressed: _saveSettings,
-              ),
-            ),
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Jordan Lee'), findsOneWidget);
+    expect(find.text('15 High Street, Portsmouth'), findsOneWidget);
+    expect(find.text('jordan@example.com'), findsOneWidget);
+    final Switch switchWidget = tester.widget<Switch>(find.byType(Switch));
+    expect(switchWidget.value, isTrue);
 ```
 
-## Storing orders in SQLite
-
-Now for the heavier kind of persistence. We store each completed order as a row in a SQLite database so the orders survive restarts and can be listed and queried.
-
-SQLite is a small relational database engine. It needs no separate server; the whole database is a single file on disk, or kept in memory for tests. We store orders in a table of rows and columns, give each row a unique id, and read them back sorted by order number.
-
-### Define the order record model
-
-Create a new file named `lib/models/order_record.dart`.
-
-First, define the class and declare its fields:
+At the end of the existing save test, read the mock store to verify persistence, not just the confirmation:
 
 ```dart
-class OrderRecord {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString(prefName), 'Alex Smith');
+    expect(prefs.getString(prefAddress), '10 Elm Road, Portsmouth');
+    expect(prefs.getString(prefEmail), 'alex@example.com');
+    expect(prefs.getBool(prefNewsletter), isTrue);
+```
+
+Then remove and recreate the screen to verify the saved profile is loaded again:
+
+```dart
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pumpAndSettle();
+    expect(find.text('Alex Smith'), findsOneWidget);
+    expect(find.text('10 Elm Road, Portsmouth'), findsOneWidget);
+    expect(find.text('alex@example.com'), findsOneWidget);
+    expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
+```
+
+The menu navigation test also opens `SettingsScreen`. Add the package import and the same `setUp` mock to `test/menu_screen_test.dart`, otherwise that test will try to call the real preferences plugin.
+
+Run the two affected files together:
+
+```bash
+flutter test test/settings_screen_test.dart test/menu_screen_test.dart
+```
+
+## Representing a saved order
+
+SQLite is a local database engine: it stores tables in a file without a separate server. A table contains rows, and each row has named columns. Our `orders` table will store one completed basket per row.
+
+### Create the order record and its constructor
+
+Create `lib/models/order_record.dart` with `class OrderRecord {}`. Use the [model-building pattern from Worksheet 3](worksheet-3.md#define-the-sandwich-data-model). Inside its braces, declare:
+
+```dart
   final int? id;
   final int orderNumber;
   final String summary;
@@ -568,27 +679,32 @@ class OrderRecord {
   final String date;
 ```
 
-The `id` field has the nullable type `int?` and is not `required`. A record we have just built in memory has no `id` yet: SQLite assigns one when the row is inserted. So `id` is `null` before saving and holds a number afterwards. Note that `toasted` and `vegan` are stored as `int` here, not `bool`: SQLite has no boolean type, so we use `1` for true and `0` for false.
+`id` is absent before insertion; SQLite assigns it when saving the row. The `note`, `toasted` and `vegan` fields describe the sample order history. SQLite does not accept Dart `bool` values, so we store `1` for true and `0` for false, as explained in the [sqflite supported types](https://pub.dev/packages/sqflite#supported-sqlite-types).
 
-Now add the `const` constructor:
+Add the constructor:
 
 ```dart
   const OrderRecord({
     this.id,
     required this.orderNumber,
     required this.summary,
-    required this.note,
-    required this.toasted,
-    required this.vegan,
+    this.note = '',
+    this.toasted = 0,
+    this.vegan = 0,
     required this.total,
     required this.date,
   });
 ```
 
-This model converts to and from a database row, just as `Sandwich` converted to and from JSON earlier in this worksheet. The database equivalent of `toJson` and `fromJson` is a pair named `toMap` and `fromMap`, which produce and read the `Map<String, Object?>` of column names to values that the database methods expect. Add `toMap` first, inside the class:
+The optional fields have defaults so checkout can record a basket without inventing sandwich options. `CartItem` still contains only a sandwich and quantity; do not add option controls or change that model.
+
+### Convert an order into a database row
+
+Inside `OrderRecord`, add an empty `Map<String, Object?> toMap() {}` method. `Object?` accepts a value of any Dart type, including `null`, while keeping static type checking. We only put SQLite-supported values into this map.
+
+Inside the method, build the row:
 
 ```dart
-  Map<String, Object?> toMap() {
     final Map<String, Object?> data = <String, Object?>{
       'order_number': orderNumber,
       'summary': summary,
@@ -598,19 +714,24 @@ This model converts to and from a database row, just as `Sandwich` converted to 
       'total': total,
       'date': date,
     };
+```
+
+After the map, add the id only if it exists, then return the row:
+
+```dart
     if (id != null) {
       data['id'] = id;
     }
     return data;
-  }
 ```
 
-Each map key matches a column in the orders table we create shortly. We add the `id` entry only when `id` is not `null`, so a brand-new record leaves `id` out and lets SQLite fill it in.
+The keys are column names, not necessarily Dart field names. Leaving out a new order's id lets SQLite generate it.
 
-Now add the `fromMap` factory constructor, which reads a row map back into an `OrderRecord`. Start by extracting and casting the fields from the map:
+### Convert a database row into an order
+
+Add `factory OrderRecord.fromMap(Map<String, Object?> map) {}`. Inside it, read the values using the same conversion pattern as [the sandwich JSON constructor](#convert-a-json-map-into-a-sandwich):
 
 ```dart
-  factory OrderRecord.fromMap(Map<String, Object?> map) {
     final int orderNumber = map['order_number'] as int;
     final String summary = map['summary'] as String;
     final String note = map['note'] as String;
@@ -621,9 +742,7 @@ Now add the `fromMap` factory constructor, which reads a row map back into an `O
     final String date = map['date'] as String;
 ```
 
-As in the earlier JSON serialisation section, we read each value out of the map and use `as` to assert its type, reading the total as a `num` and calling `.toDouble()`.
-
-Finally, return the newly instantiated `OrderRecord`:
+Return the record:
 
 ```dart
     return OrderRecord(
@@ -636,42 +755,43 @@ Finally, return the newly instantiated `OrderRecord`:
       total: total,
       date: date,
     );
-  }
-}
 ```
 
-The `id` might be missing from an unpersisted map, so we read it as the nullable `int?`.
+## Creating the SQLite database helper
 
-### Create the database helper
+We keep database operations in `lib/database/sandwich_db.dart`, following the [SQLite cookbook recipe](https://docs.flutter.dev/cookbook/persistence/sqlite). Screens call this helper instead of repeating SQL.
 
-Create a new file named `lib/database/sandwich_db.dart`. We manage every database operation through one helper class, `SandwichDatabase`, and build it in stages so each piece is explained before the next.
+### Create one shared database helper
 
-Start with the imports and the class with its private constructor and shared instance:
+Create the file with these imports and an empty class:
 
 ```dart
-import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sandwich_shop/models/order_record.dart';
-import 'package:sqflite/sqflite.dart' as sqflite_plugin;
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:sqflite/sqflite.dart';
 
-class SandwichDatabase {
+class SandwichDatabase {}
+```
+
+Inside the class, reuse the [singleton pattern from Worksheet 5](worksheet-5.md#create-the-cart-repository-singleton):
+
+```dart
   SandwichDatabase._internal();
 
   static final SandwichDatabase instance = SandwichDatabase._internal();
 
   static Database? _database;
+```
 
+`Database` represents an open SQLite connection. Add a method that lets tests supply their own connection:
+
+```dart
   void setDatabase(Database? db) {
     _database = db;
   }
-}
 ```
 
-This is the same singleton pattern you built for `CartRepository` in Worksheet 5. The private constructor `SandwichDatabase._internal()` cannot be called from outside this file, and the one shared instance is exposed through `static final SandwichDatabase instance`, so every screen talks to the same database helper and no other code can create a second one. The two `sqflite_common_ffi` imports give us the FFI engine and the types we use below, such as `Database`, `DatabaseFactory`, and `OpenDatabaseOptions`. The `package:sqflite/sqflite.dart` import brings in the standard plugin we use on a phone; we give it the prefix `sqflite_plugin` so it is clear which package each name comes from. The `package:path/path.dart` import gives us `join`, which builds a file path safely, and `package:flutter/foundation.dart` gives us `kIsWeb` and `defaultTargetPlatform`, both used shortly. The `_database` field caches the open connection, a `Database`, and starts as `null`. The `setDatabase` method lets our tests supply their own connection.
-
-Now add the getter that opens the database on first use:
+Add the asynchronous getter. Getters were introduced in [Worksheet 4](worksheet-4.md#add-a-formatted-price-getter-to-the-sandwich-model):
 
 ```dart
   Future<Database> get database async {
@@ -684,89 +804,36 @@ Now add the getter that opens the database on first use:
   }
 ```
 
-The `database` getter is `async` and returns a `Future<Database>`: it returns the cached connection if one exists, otherwise opens one with `_initDB`, caches it, and returns it.
+This reuses the connection after the first call.
 
-Now add `_initDB`, which opens the connection. A database must be opened differently on each platform, so we handle the four cases one at a time. Start the method with the shared options, then handle a test run:
+### Open the database in the app folder
+
+Inside `SandwichDatabase`, add `_initDB`:
 
 ```dart
   Future<Database> _initDB(String fileName) async {
-    final OpenDatabaseOptions options = OpenDatabaseOptions(
+    final String folder = await getDatabasesPath();
+    final String filePath = join(folder, fileName);
+    final Database db = await openDatabase(
+      filePath,
       version: 1,
       onCreate: _createDB,
     );
-
-    const bool runningInTest = bool.fromEnvironment('FLUTTER_TEST');
-    if (runningInTest) {
-      sqfliteFfiInit();
-      final DatabaseFactory testFactory = databaseFactoryFfi;
-      final Database testDatabase = await testFactory.openDatabase(
-        inMemoryDatabasePath,
-        options: options,
-      );
-      return testDatabase;
-    }
-```
-
-`OpenDatabaseOptions` sets the schema `version` and the `onCreate` callback, which we point at `_createDB` (written next) so our table is created the first time the database is made. The expression `bool.fromEnvironment('FLUTTER_TEST')` is `true` while a `flutter test` run is in progress; when it is, we call `sqfliteFfiInit()` to prepare the FFI engine and open `inMemoryDatabasePath`, a special path that keeps the database in memory so tests run quickly and leave no file behind.
-
-Next handle the web. In a browser the data is stored for us, so a bare database name is all we need:
-
-```dart
-    if (kIsWeb) {
-      final DatabaseFactory webFactory = databaseFactoryFfiWebNoWebWorker;
-      final Database webDatabase = await webFactory.openDatabase(
-        fileName,
-        options: options,
-      );
-      return webDatabase;
-    }
-```
-
-`kIsWeb` is a compile-time boolean that is `true` in a web browser. When it is, we use `databaseFactoryFfiWebNoWebWorker` from `sqflite_common_ffi_web`, which loads the WebAssembly build of SQLite, and open the database by its name.
-
-Now handle a phone. On Android and iOS the standard `sqflite` plugin owns the SQLite engine, and it cannot open a bare file name. If you pass just `sandwich_data.db`, the app fails at checkout with the error "unable to open database file", because the phone gives each app its own private folder and will not let it write just anywhere. We ask the plugin where that folder is with `getDatabasesPath()` and build a full path to the file with `join`:
-
-```dart
-    final TargetPlatform platform = defaultTargetPlatform;
-    final bool runningOnMobile =
-        platform == TargetPlatform.android || platform == TargetPlatform.iOS;
-    if (runningOnMobile) {
-      final DatabaseFactory mobileFactory = sqflite_plugin.databaseFactory;
-      final String databasesFolder = await sqflite_plugin.getDatabasesPath();
-      final String mobilePath = join(databasesFolder, fileName);
-      final Database mobileDatabase = await mobileFactory.openDatabase(
-        mobilePath,
-        options: options,
-      );
-      return mobileDatabase;
-    }
-```
-
-`defaultTargetPlatform` tells us which platform the app runs on, and we treat `TargetPlatform.android` and `TargetPlatform.iOS` as a phone. We use this value rather than checking the operating system directly, because the usual way of doing that does not compile for the web. On a phone we take the plugin's own `databaseFactory`, ask it for the writable folder, join the file name onto that folder, and open the real file there. This is the fix for the "unable to open database file" error.
-
-Finally handle the desktop (Windows, macOS, and Linux). There we keep the FFI engine, but we still open a real file in a writable folder rather than a bare name:
-
-```dart
-    sqfliteFfiInit();
-    final DatabaseFactory desktopFactory = databaseFactoryFfi;
-    final String desktopFolder = await sqflite_plugin.getDatabasesPath();
-    final String desktopPath = join(desktopFolder, fileName);
-    final Database desktopDatabase = await desktopFactory.openDatabase(
-      desktopPath,
-      options: options,
-    );
-    return desktopDatabase;
+    return db;
   }
 ```
 
-If the code reaches this point it is not a test, not the web, and not a phone, so it must be the desktop. We call `sqfliteFfiInit()` to prepare the FFI engine, use `databaseFactoryFfi`, and build a full path the same way as on a phone. Each of the four cases returns an opened `Database`, so the right engine and the right path are always paired together.
+`getDatabasesPath` finds the app's writable database folder. `join` combines it with the file name. `openDatabase` opens that file, creating it if necessary. `version` identifies the table structure, and `onCreate` is called only when the database is first created.
 
-### Create the orders table and seed past orders
+We define `_createDB` below. There is no platform switch here: the app uses the Android plugin, and tests supply their own connection through `setDatabase`.
 
-Still inside `SandwichDatabase`, add `_createDB`. The engine calls this once, through the `onCreate` callback, the first time the database is created. Start the method and create the `orders` table:
+### Create the orders table
+
+Add an empty `Future<void> createTables(Database db, int version) async {}` method. We give it a public name so tests can create the exact same table without duplicating SQL.
+
+Inside it, create the table:
 
 ```dart
-  Future<void> _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -781,9 +848,21 @@ Still inside `SandwichDatabase`, add `_createDB`. The engine calls this once, th
     ''');
 ```
 
-The `db.execute` method runs a raw SQL statement that returns no rows, which is what we need to create a table. The SQL `CREATE TABLE IF NOT EXISTS orders (...)` makes a table called `orders` only if it does not already exist. Inside the brackets each line names a column and its type: `INTEGER` for whole numbers, `TEXT` for strings, and `REAL` for decimal numbers. `PRIMARY KEY` marks `id` as the unique identifier for each row, and `AUTOINCREMENT` tells SQLite to fill it in automatically with the next number, so we never set it ourselves. `NOT NULL` means a column must always have a value. The triple-quoted string (`'''`) lets the SQL span several lines. The columns match the keys in `OrderRecord.toMap`.
+SQL is the language used to define and query database tables. `execute` runs this statement without returning rows. `INTEGER`, `TEXT` and `REAL` store whole numbers, strings and decimal numbers. `PRIMARY KEY` uniquely identifies a row; `AUTOINCREMENT` assigns ids without reusing earlier automatically generated ids. `NOT NULL` requires a value.
 
-Now seed a few past orders so the orders screen has something to show the first time a student opens it. Still inside `_createDB`, insert the first order:
+The triple quotes let a Dart string span several lines. Each column matches a key in `OrderRecord.toMap`. See [creating a table in the SQLite recipe](https://docs.flutter.dev/cookbook/persistence/sqlite#4-create-the-dogs-table).
+
+### Seed past orders only when creating the database
+
+Add `_createDB`:
+
+```dart
+  Future<void> _createDB(Database db, int version) async {
+    await createTables(db, version);
+  }
+```
+
+After the table call, insert the first sample order:
 
 ```dart
     await db.insert('orders', <String, Object?>{
@@ -797,9 +876,7 @@ Now seed a few past orders so the orders screen has something to show the first 
     });
 ```
 
-The `db.insert` method adds one row to a named table from a `Map<String, Object?>` whose keys match the column names.
-
-Now insert the remaining two seed orders and close the method:
+`insert` adds a row using the map's column names. Add a second sample after it:
 
 ```dart
     await db.insert('orders', <String, Object?>{
@@ -811,6 +888,11 @@ Now insert the remaining two seed orders and close the method:
       'total': 4.50,
       'date': '2 Mar 2026 18:10',
     });
+```
+
+Then add the third:
+
+```dart
     await db.insert('orders', <String, Object?>{
       'order_number': 1001,
       'summary': '3 x Footlong Sub',
@@ -820,14 +902,15 @@ Now insert the remaining two seed orders and close the method:
       'total': 22.50,
       'date': '11 Jan 2026 13:02',
     });
-  }
 ```
 
-Because `_createDB` runs only when the database is first created, this seeding happens once. The coursework asks you to seed your own account history in the same way.
+These are seed data: example rows added once to populate a new database. Reopening the app does not add them again. Tests call `createTables` directly when they need an empty table.
 
-### Insert and query orders
+Changing this SQL or the seed values does not change an existing database. During development, clearing the emulator app's storage or uninstalling it creates a fresh start, but also deletes saved orders and preferences. Real updates need a schema migration rather than deleting user data.
 
-Add a method that inserts one order and returns its new id:
+### Insert an order and read saved orders
+
+Add the insert method:
 
 ```dart
   Future<int> insertOrder(OrderRecord order) async {
@@ -837,9 +920,7 @@ Add a method that inserts one order and returns its new id:
   }
 ```
 
-It opens the connection through the `database` getter, then calls `db.insert('orders', order.toMap())`, which inserts the row map and returns the row's auto-generated id.
-
-Now add a method that reads every order, newest first:
+`insert` returns the generated row id. Add the outline of the read method:
 
 ```dart
   Future<List<OrderRecord>> getAllOrders() async {
@@ -848,17 +929,24 @@ Now add a method that reads every order, newest first:
       'orders',
       orderBy: 'order_number DESC',
     );
+  }
+```
+
+`query` retrieves rows. `DESC` means descending order, so the highest order number appears first. We sort by number, not the displayed date string.
+
+After the query, convert the rows and return the list:
+
+```dart
     final List<OrderRecord> orders = [];
     for (final Map<String, Object?> row in records) {
       orders.add(OrderRecord.fromMap(row));
     }
     return orders;
-  }
 ```
 
-The `db.query` method reads rows from a named table and is simpler than writing raw SQL for everyday reads. The `orderBy: 'order_number DESC'` argument sorts by order number in descending order (`DESC`), so the newest order comes first. We loop over the row maps with a `for-in` loop, turning each into an `OrderRecord` with `fromMap`.
+### Find the next order number and close the connection
 
-Next, add a method that works out the next order number by reading the current highest one:
+Add the numbering method:
 
 ```dart
   Future<int> getNextOrderNumber() async {
@@ -874,9 +962,9 @@ Next, add a method that works out the next order number by reading the current h
   }
 ```
 
-Here `db.rawQuery` runs a SQL query that returns rows, giving back a `List<Map<String, Object?>>` where each map is one row. The SQL `SELECT MAX(order_number) as max_num FROM orders` asks SQLite for the largest `order_number` and labels that result `max_num`. If a value comes back we add one to it; if the table is empty we start at `1001`.
+`rawQuery` executes a SQL query that returns rows. `MAX` finds the largest number, and `as max_num` names that result. An empty table starts at `1001`; a new app with our seed data starts at `1004`. This numbering is for our single-user teaching app, not a multi-user payment system.
 
-Finally, add a method that closes the database. Our tests use it to reset between runs:
+Finally, add:
 
 ```dart
   Future<void> close() async {
@@ -887,205 +975,15 @@ Finally, add a method that closes the database. Our tests use it to reset betwee
   }
 ```
 
-## Adding an orders button to every screen
+Tests close the connection after each test so no data leaks into the next one.
 
-Now that orders are saved, the user needs a way to reach them from anywhere in the app. In Worksheet 5 you built the reusable `BasketButton` as an app bar action shown on every screen. We follow the same pattern here with an orders button, so a single widget carries the behaviour and every screen simply lists it.
+## Displaying saved orders
 
-### Create the orders button
+Build and register the destination screen before making checkout navigate to it.
 
-Create a new file named `lib/widgets/orders_button.dart`, mirroring `basket_button.dart`.
+### Create the orders screen and its state
 
-Start with the widget shell and icon button:
-
-```dart
-import 'package:flutter/material.dart';
-
-class OrdersButton extends StatelessWidget {
-  const OrdersButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.receipt_long),
-      onPressed: () {
-```
-
-`OrdersButton` is a `StatelessWidget` that displays a receipt icon (`Icons.receipt_long`) inside an `IconButton`.
-
-Now add the route inspection and navigation logic inside `onPressed`:
-
-```dart
-        ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
-        String currentRoute = '';
-
-        if (modalRoute != null) {
-          RouteSettings settings = modalRoute.settings;
-          String? routeName = settings.name;
-          if (routeName != null) {
-            currentRoute = routeName;
-          }
-        }
-
-        if (currentRoute != '/orders') {
-          Navigator.pushNamed(context, '/orders');
-        }
-      },
-    );
-  }
-}
-```
-
-The `onPressed` callback reads the current route name and pushes `'/orders'` unless the user is already on the orders screen. We register the `'/orders'` route and build the screen it opens later in this worksheet.
-
-### Show both buttons on the menu and order screens
-
-Open `lib/screens/menu_screen.dart`. Import the orders button and list it after the basket button in the app bar `actions`:
-
-```dart
-import 'package:sandwich_shop/widgets/orders_button.dart';
-```
-
-```dart
-      appBar: AppBar(
-        title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton(), OrdersButton()],
-      ),
-```
-
-Open `lib/screens/order_screen.dart` and make the same change: import `orders_button.dart` and update its app bar `actions` to `const [BasketButton(), OrdersButton()]`. The basket app bar gets the same pair when we edit it next.
-
-## Saving an order at checkout
-
-The basket screen already has a Checkout button that clears the basket. We now make it save the order to SQLite first, then take the user to a screen listing their orders.
-
-### Build the order record from the basket
-
-Open `lib/screens/basket_screen.dart`. First add the three imports we need at the top, alongside the existing ones. Two give us the database and the record model, and the third is the orders button we add to the app bar shortly:
-
-```dart
-import 'package:sandwich_shop/database/sandwich_db.dart';
-import 'package:sandwich_shop/models/order_record.dart';
-import 'package:sandwich_shop/widgets/orders_button.dart';
-```
-
-A basket can hold several items, but an order is one record, so we need a helper that folds the basket down into the summary string our table stores. Add this inside `_BasketScreenState`:
-
-```dart
-  String _buildSummary(List<CartItem> items) {
-    final List<String> parts = [];
-    for (final CartItem item in items) {
-      parts.add('${item.quantity} x ${item.sandwich.name}');
-    }
-    return parts.join(', ');
-  }
-```
-
-`_buildSummary` gathers each line into a short string such as `2 x Footlong Sub, 1 x Six-Inch Sub`.
-
-The record also needs a date. Add a helper that formats the current date and time into a readable string:
-
-```dart
-  String _formatDate(DateTime now) {
-    final String day = now.day.toString().padLeft(2, '0');
-    final String month = now.month.toString().padLeft(2, '0');
-    final String hour = now.hour.toString().padLeft(2, '0');
-    final String minute = now.minute.toString().padLeft(2, '0');
-    return '$day/$month/${now.year} $hour:$minute';
-  }
-```
-
-A `DateTime` holds a point in time, and its `.day`, `.month`, `.year`, `.hour`, and `.minute` properties give the parts. The `padLeft(2, '0')` call pads each part to two digits so `9:5` reads as `09:05`, giving a date such as `18/04/2026 12:45`.
-
-### Save and navigate on checkout
-
-Saving to a database can go wrong: on some platforms the database file may fail to open, and we do not want the app to freeze or crash silently when that happens. So we give the user feedback through the same `_confirmationMessage` field the Worksheet 5 basket already has, and we wrap the save in a `try`/`catch` block so a failure shows a message instead of breaking the app.
-
-Add the method that runs when the user checks out. It is `async` because saving to the database takes time.
-
-First, set initial feedback to inform the user that saving has begun:
-
-```dart
-  Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
-    setState(() {
-      _confirmationMessage = 'Saving your order...';
-    });
-```
-
-Now, inside a `try` block, fetch the order number, build the record, and insert it into SQLite:
-
-```dart
-    try {
-      final SandwichDatabase database = SandwichDatabase.instance;
-      final int orderNumber = await database.getNextOrderNumber();
-      final OrderRecord record = OrderRecord(
-        orderNumber: orderNumber,
-        summary: _buildSummary(items),
-        total: cart.getTotalDue(),
-        date: _formatDate(DateTime.now()),
-      );
-      await database.insertOrder(record);
-      cart.clear();
-```
-
-Inside `try`, it asks the database for the next order number, builds an `OrderRecord` from the basket using the helper, saves it with `insertOrder`, and clears the in-memory cart.
-
-Finally, handle success navigation and catch errors:
-
-```dart
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _confirmationMessage = 'Order $orderNumber saved';
-      });
-      Navigator.pushNamed(context, '/orders');
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _confirmationMessage = 'Could not save your order: $error';
-      });
-    }
-  }
-```
-
-The `if (!mounted) return;` guard ensures that after the `await`, we only touch the screen if it is still on display. On success it updates the confirmation message and navigates to the registered `'/orders'` route. If an error occurs, the `catch` block displays the error message so database issues are clearly visible.
-
-Next, change the Checkout button in `_buildBasketList` so it calls `_checkout` instead of clearing the basket inline:
-
-```dart
-    children.add(
-      SizedBox(
-        width: double.infinity,
-        child: PrimaryButton(
-          label: 'Checkout',
-          onPressed: () {
-            _checkout(cart, items);
-          },
-        ),
-      ),
-    );
-```
-
-Keep the `_confirmationMessage` field and the lines in `_buildBasketList` that show it, since `_checkout` now sets it. The only part to tidy is the empty-basket case: in `build`, when the basket is empty just show the empty-state widget. Change that branch so it reads `content = _buildEmptyState();` with no confirmation message, because once an order is saved the screen navigates away to the orders page.
-
-Finally, add the orders button to the basket app bar so the user can reach their orders from here too. Change the `actions` of the `AppBar` in `build` to list both buttons:
-
-```dart
-      appBar: AppBar(
-        title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton(), OrdersButton()],
-      ),
-```
-
-## Showing past orders
-
-Now we build a screen that lists the saved orders, so the user can see the ones we seeded and any they place.
-
-### Create the orders screen
-
-Create a new file named `lib/screens/orders_screen.dart`. It is a `StatefulWidget` because it loads its data after it appears. Start with the imports, the shell, and the two pieces of state:
+Create `lib/screens/orders_screen.dart` with these imports:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1093,8 +991,11 @@ import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
-import 'package:sandwich_shop/widgets/orders_button.dart';
+```
 
+Create the widget using the [stateful structure from Worksheet 2](worksheet-2.md#define-the-orderscreen-stateful-widget):
+
+```dart
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
 
@@ -1103,16 +1004,26 @@ class OrdersScreen extends StatefulWidget {
     return _OrdersScreenState();
   }
 }
+```
 
+Below it, create the state class with a temporary body:
+
+```dart
 class _OrdersScreenState extends State<OrdersScreen> {
   List<OrderRecord> _orders = [];
   bool _loading = true;
+  String _errorMessage = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
 }
 ```
 
-The `_orders` list holds the loaded orders, and `_loading` is `true` until the first load finishes, so we can show nothing rather than an empty list while the database is read. The two widget imports give us the app bar actions used below.
+### Load orders and report a database error
 
-Now add `initState` (from Worksheet 5) to start loading as soon as the screen appears, and the asynchronous loader it calls:
+Inside the state class, add `initState`:
 
 ```dart
   @override
@@ -1120,28 +1031,41 @@ Now add `initState` (from Worksheet 5) to start loading as soon as the screen ap
     super.initState();
     _loadOrders();
   }
-
-  Future<void> _loadOrders() async {
-    final List<OrderRecord> orders = await SandwichDatabase.instance
-        .getAllOrders();
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _orders = orders;
-      _loading = false;
-    });
-  }
 ```
 
-The loader reads every order from the database, and once the data is back it stores it in `_orders` and sets `_loading` to `false` with `setState`, guarded by the `mounted` check so we never update a screen the user has left.
-
-Next add a helper that turns one order's options into a short line of text, so the toggles and note show beneath the summary.
-
-First, check which options apply and collect them into a list:
+Add `Future<void> _loadOrders() async {}` with empty `try` and `catch (error)` blocks, as in [the menu loader](#load-the-menu-when-the-screen-opens). Inside `try`, add:
 
 ```dart
-  Widget _buildOptionsText(OrderRecord order) {
+      final List<OrderRecord> orders =
+          await SandwichDatabase.instance.getAllOrders();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _orders = orders;
+        _loading = false;
+      });
+```
+
+Inside `catch`, add:
+
+```dart
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _errorMessage = 'Could not load orders: $error';
+        _loading = false;
+      });
+```
+
+This uses the same asynchronous loading pattern once again, rather than introducing another widget or state-management approach.
+
+### Build the options line for an order
+
+Add `Widget _buildOptionsText(OrderRecord order) {}` inside the state class. In its braces, collect the applicable options:
+
+```dart
     final List<String> parts = [];
     if (order.toasted == 1) {
       parts.add('Toasted');
@@ -1154,15 +1078,12 @@ First, check which options apply and collect them into a list:
     }
 ```
 
-Because the table stores `toasted` and `vegan` as `1` or `0`, we check each against `1`.
-
-Now return an empty box if no options apply, or join the parts with a bullet separator:
+After those checks, choose the output:
 
 ```dart
     if (parts.isEmpty) {
       return const SizedBox.shrink();
     }
-
     return Padding(
       padding: const EdgeInsets.only(top: 4.0),
       child: Text(
@@ -1170,12 +1091,13 @@ Now return an empty box if no options apply, or join the parts with a bullet sep
         style: const TextStyle(fontSize: 12, color: Colors.black54),
       ),
     );
-  }
 ```
 
-This mirrors the options line you built on the basket screen in Worksheet 5.
+`join` combines the list of strings with the given separator. `SizedBox.shrink` is a zero-sized box, so orders without options do not show an extra line. These fields display the seeded history; newly checked-out baskets use their default values.
 
-Now add the helper that builds one card per order. Start with the `Card` wrapper and header row showing the order number and total:
+### Build an order card in stages
+
+Add this helper:
 
 ```dart
   Widget _buildOrderCard(OrderRecord order) {
@@ -1185,7 +1107,16 @@ Now add the helper that builds one card per order. Start with the `Card` wrapper
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: [],
+        ),
+      ),
+    );
+  }
+```
+
+The layout reuses the [card, padding and column from Worksheet 3](worksheet-3.md#lay-out-the-image-and-text). Inside the empty `children` list, add a row for the number and total:
+
+```dart
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -1198,9 +1129,7 @@ Now add the helper that builds one card per order. Start with the `Card` wrapper
             ),
 ```
 
-A `Card` is Flutter's lightly raised panel. Inside it, `MainAxisAlignment.spaceBetween` places the order number on the left and the total on the right.
-
-Now append the summary, options line, and date:
+After the row, add the summary, options and date:
 
 ```dart
             const SizedBox(height: 4),
@@ -1211,23 +1140,18 @@ Now append the summary, options line, and date:
               order.date,
               style: const TextStyle(fontSize: 12, color: Colors.black54),
             ),
-          ],
-        ),
-      ),
-    );
-  }
 ```
 
-There is no `Divider` and no coloured quantity circle, so the orders list reads as cleanly as the basket.
+### Choose the loading, error, empty or list body
 
-Finally, implement the `build` method. Start by choosing the `body` widget between loading, empty, and populated states:
+Replace the `Placeholder` return in `build`. First declare `body` and choose the first three states:
 
 ```dart
-  @override
-  Widget build(BuildContext context) {
     final Widget body;
     if (_loading) {
-      body = const SizedBox.shrink();
+      body = const Center(child: CircularProgressIndicator());
+    } else if (_errorMessage.isNotEmpty) {
+      body = Center(child: Text(_errorMessage));
     } else if (_orders.isEmpty) {
       body = const Center(
         child: Padding(
@@ -1238,7 +1162,13 @@ Finally, implement the `build` method. Start by choosing the `body` widget betwe
           ),
         ),
       );
-    } else {
+    }
+```
+
+Immediately after that last closing brace, add the populated state:
+
+```dart
+    else {
       body = ListView.builder(
         itemCount: _orders.length,
         itemBuilder: (BuildContext context, int index) {
@@ -1248,37 +1178,21 @@ Finally, implement the `build` method. Start by choosing the `body` widget betwe
     }
 ```
 
-While `_loading` is `true` the body is an empty `SizedBox.shrink()`, which takes no space. Once loading finishes, an empty table shows the "No orders yet" message, and a filled one shows a `ListView.builder` of order cards.
-
-Now return the `Scaffold` shell with the standard app bar actions:
+After the conditional, return the screen:
 
 ```dart
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [BasketButton(), OrdersButton()],
+        actions: const [BasketButton()],
       ),
       body: body,
     );
-  }
-}
 ```
 
-The `AppBar` carries the same `const [BasketButton(), OrdersButton()]` pair as every other screen.
+### Register the orders route and add navigation buttons
 
-Your orders screen, showing the seeded orders and any you place, should look like this:
-
-![The orders screen listing past orders as cards](images/6/orders_screen.png)
-
-The orders button is already shown on every screen, so a short note on how the receipt icon reaches this screen is worth repeating: the `OrdersButton` pushes the `'/orders'` route, which we register next.
-
-### Register the orders route
-
-Open `lib/main.dart` and register the orders screen under `'/orders'`, the name the checkout navigates to. Import the screen and add the route to the `routes` map:
-
-```dart
-import 'package:sandwich_shop/screens/orders_screen.dart';
-```
+In `lib/main.dart`, import `orders_screen.dart` and add this entry to the existing `routes` map, following [named routes in Worksheet 5](worksheet-5.md#register-named-routes):
 
 ```dart
         '/orders': (BuildContext context) {
@@ -1286,316 +1200,230 @@ import 'package:sandwich_shop/screens/orders_screen.dart';
         },
 ```
 
-## Running the app on a mobile emulator
+Create `lib/widgets/orders_button.dart` by copying the completed [BasketButton from Worksheet 5](worksheet-5.md#create-the-basket-button). Rename the class and constructor to `OrdersButton`, replace `Icons.shopping_basket` with `Icons.receipt_long`, and replace both occurrences of `'/basket'` with `'/orders'`.
 
-Every earlier worksheet ran the app in a web browser on Chrome or Edge, and it still runs there exactly as before. The browser is fine for most of what we do, but it hides one thing this worksheet is about: the on-disk SQLite file. In the browser the database lives in storage the browser manages for us, so you cannot watch a real file survive a full close and reopen the way it would on a phone.
+Keep the existing route-name check so pressing the receipt icon while already on orders does not push a second orders screen. No new navigation mechanism is needed.
 
-A mobile emulator is a virtual Android phone that runs on your computer, and a simulator is the same idea for iOS on a Mac. Running the app on one of these lets you place an order, close the app completely, reopen it, and see the saved orders still there, because the SQLite database is a genuine file in the device's private folder. The emulator is not a hard requirement; the app runs on the web just as it did before, and the emulator is only there to show native persistence.
+Import `orders_button.dart` into the menu, order, basket, settings and orders screens. On the menu, keep the settings button and use:
 
-There are three routes to the same outcome, and you only need one. On a university lab machine, use the emulator beta bundle. On your own Windows or Mac laptop, install Android Studio. On a Mac, you can instead use the iOS simulator. Pick the route that matches your machine and follow it.
-
-### Lab machines: the Android emulator beta bundle
-
-Earlier worksheets set up the lab machines with a portable Flutter and VS Code bundle. That standard bundle does not include the Android SDK, so it cannot run an emulator. A separate experimental build of the bundle adds everything an emulator needs. You can find it in the Experimental section of the bundle README at [the flutter_vscode_package repository](https://github.com/manighahrmani/flutter_vscode_package), listed as the Android emulator beta release.
-
-On top of the normal portable environment, the beta bundle ships a JDK, a command-line Android SDK, and a pre-made virtual device, an AVD named `flutter_emulator`. Like the main script, it finishes by opening VS Code on your cloned project, so you land in the same place as before with the extra tooling in place. The beta is experimental and needs hardware acceleration enabled on the machine, which the lab machines already have.
-
-This Android bundle is a separate, larger installer that takes significantly longer to run than the normal bundle, and you only need it from Worksheet 6 onwards, because this is the first worksheet whose app uses a SQLite database; for Worksheets 1 to 5 the normal bundle plus Edge is enough.
-
-Install it by running the beta script in a PowerShell terminal on Windows:
-
-```bash
-irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/install-android-beta.ps1 | iex
+```dart
+        actions: const [SettingsButton(), OrdersButton(), BasketButton()],
 ```
 
-Let the script finish and open VS Code on your project. Then open a new terminal and run the following commands in order, changing the first line to the path where you cloned the project:
+On the other four screens, use:
 
-```bash
-cd path/to/sandwich_shop
-flutter pub get
-flutter emulators --launch flutter_emulator
-flutter devices
-flutter run -d emulator-5554
+```dart
+        actions: const [OrdersButton(), BasketButton()],
 ```
 
-After `flutter emulators --launch flutter_emulator`, wait for the Android home screen to appear before carrying on. A black screen for a minute or two is normal, as the virtual phone is still booting. Once it has booted, `flutter devices` lists it as a device. The emulator's id, such as `emulator-5554`, only exists while the emulator is booted and disappears when you close it. If `flutter devices` shows a different id, use the one it reports in the `flutter run -d` command.
+Run the app on the emulator and open the receipt icon. You should see orders `1003`, `1002` and `1001`, in that order, with their summaries, totals, options and dates.
 
-You can run the app from VS Code instead of the terminal. With the emulator booted, pick it as the target device in the status bar device selector in the bottom-right (or through the Command Palette entry **Flutter: Select Device**), then start the app with **F5** or Run, as shown below:
+## Saving the basket at checkout
 
-![The VS Code status bar device selector listing the booted emulator](images/6/device_selector.png)
+The [Worksheet 5 basket](worksheet-5.md#building-the-basket-screen) already calculates totals and clears its contents at checkout. We now save the order first, and only clear the basket if insertion succeeds.
 
-Choose the emulator as your run device, or Edge if you want the web version. Do not choose the `Windows` device: Windows desktop builds need Developer Mode and fail with a `Building with plugins requires symlink support` error. If you see that error, switch the device back to the emulator or Edge.
+### Build the order summary and date
 
-The first emulator build is slow, because it downloads `Gradle` and the build-tools and compiles the app, so give it time. During the build you may also see warnings that certain `Gradle`, `AGP`, or `Kotlin` versions will soon be dropped. These are harmless, the app still builds and runs, and no action is needed.
+In `lib/screens/basket_screen.dart`, add these imports:
 
-The emulator shows its home screen once booting has finished, as shown below:
+```dart
+import 'package:sandwich_shop/database/sandwich_db.dart';
+import 'package:sandwich_shop/models/order_record.dart';
+```
 
-![The Android emulator showing its home screen](images/6/emulator_home_screen.png)
+Inside `_BasketScreenState`, add:
 
-Either way, the app launches inside the emulator, as shown below:
+```dart
+  String _buildSummary(List<CartItem> items) {
+    final List<String> parts = [];
+    for (final CartItem item in items) {
+      parts.add('${item.quantity} x ${item.sandwich.name}');
+    }
+    return parts.join(', ');
+  }
+```
 
-![The Sandwich Shop app running inside the Android emulator](images/6/app_running_on_emulator.png)
+This reuses `join` to create a summary such as `2 x Footlong Sub, 1 x Six-Inch Sub`. Add a helper for the display date:
 
-Now place an order, check out, and confirm it appears on the orders page. Then fully close the app and reopen it: the order is still there, because SQLite saved it to a real file in the emulator's private folder, as shown below:
+```dart
+  String _formatDate(DateTime now) {
+    final String day = now.day.toString().padLeft(2, '0');
+    final String month = now.month.toString().padLeft(2, '0');
+    final String hour = now.hour.toString().padLeft(2, '0');
+    final String minute = now.minute.toString().padLeft(2, '0');
+    return '$day/$month/${now.year} $hour:$minute';
+  }
+```
 
-![The orders page on the emulator showing the persisted order](images/6/orders_page_on_emulator.png)
+[`DateTime`](https://api.dart.dev/dart-core/DateTime-class.html) provides the date and time parts. `padLeft(2, '0')` gives each part two digits, so five minutes past nine displays as `09:05`. This string is for display; order numbers determine list order.
 
-### Inspecting the database
+### Save the order before clearing the basket
 
-The database file lives inside the emulator, in the app's own private folder, under the package `com.example.sandwich_shop` as the file `databases/sandwich_data.db`. Because that folder belongs to the app, you cannot open the file in place; you copy it out of the emulator and onto your computer, then open the copy with the SQLite Viewer extension the beta bundle ships. Do this only after you have run the app at least once, so that the database file has actually been created.
+Add the checkout shell:
 
-Copy the database out with the two commands below, run in order in your terminal. The first uses `run-as` to read the file from inside the app's private sandbox and write it to a temporary location the next command can reach, and the second pulls that copy onto your computer as `sandwich_shop.db`:
+```dart
+  Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
+    setState(() {
+      _confirmationMessage = 'Saving your order...';
+    });
+    try {
+    } catch (error) {
+    }
+  }
+```
+
+Inside `try`, obtain a number and create the record:
+
+```dart
+      final SandwichDatabase database = SandwichDatabase.instance;
+      final int orderNumber = await database.getNextOrderNumber();
+      final OrderRecord record = OrderRecord(
+        orderNumber: orderNumber,
+        summary: _buildSummary(items),
+        total: cart.getTotalDue(),
+        date: _formatDate(DateTime.now()),
+      );
+```
+
+After creating the record, save it before clearing the cart:
+
+```dart
+      await database.insertOrder(record);
+      cart.clear();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _confirmationMessage = 'Order $orderNumber saved';
+      });
+      Navigator.pushNamed(context, '/orders');
+```
+
+Inside `catch`, report the failure:
+
+```dart
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _confirmationMessage = 'Could not save your order: $error';
+      });
+```
+
+If insertion fails, the cart is not cleared and no success navigation occurs. Never use an empty `catch` around a database write.
+
+### Connect the checkout button and verify a restart
+
+In `_buildBasketList`, replace the old checkout callback with:
+
+```dart
+          onPressed: () async {
+            await _checkout(cart, items);
+          },
+```
+
+Keep the existing confirmation field, feedback widgets, empty-basket handling and app bar. Do not replace the whole basket screen.
+
+On the emulator, save fictional profile details, add a sandwich and check out. Confirm the new order appears above the seeded history. Fully stop and reopen the app without uninstalling it or clearing its storage. Both the profile values and completed order should still be present.
+
+Reopening the app must not duplicate the three seed orders. The basket itself is still in memory; only completed orders and the saved profile persist.
+
+### Inspect the database on the emulator
+
+This optional check opens a copy of the actual SQLite file. Stop the app's debug run first so there are no writes in progress, but leave the emulator running.
+
+For the supplied Android project, the debug package is `com.example.sandwich_shop`. Copy the database to a temporary location on the emulator, then pull the copy into your project folder:
 
 ```bash
 adb shell "run-as com.example.sandwich_shop cat databases/sandwich_data.db > /data/local/tmp/s.db"
 adb pull /data/local/tmp/s.db sandwich_shop.db
 ```
 
-Once the pull finishes, open the resulting `sandwich_shop.db` in VS Code by clicking it in the Explorer. The SQLite Viewer extension opens the file and shows the `orders` table and its rows, the seeded past orders together with any orders you have placed yourself, as shown below:
+`adb` communicates with the Android device. `run-as` reads the debug app's private files, and `pull` copies a file to your computer. If you changed the Android application id, use that id instead.
 
-![The SQLite Viewer showing the orders table rows](images/6/sqlite_viewer_orders_table.png)
+Open `sandwich_shop.db` in VS Code using the bundle's **SQLite Viewer** extension. Select the `orders` table and check that it contains the three seed rows and your saved order.
 
-This is an optional way to confirm the data is really stored, since the orders screen already shows it in the app.
+This is a snapshot, not a live connection. Remove the copied file after inspection; it is runtime data, not an application asset.
 
-### Your own Windows or Mac laptop: Android Studio
+## Testing SQLite without an emulator
 
-If you have admin rights on your own machine, install [Android Studio](https://developer.android.com/studio) to get the Android SDK and an emulator. During setup, open the SDK Manager and install the Android SDK and a system image, then open the Device Manager and create a virtual device, which is the AVD you will run. The [Flutter install guide](https://docs.flutter.dev/get-started/install) has the full platform setup steps if you need them.
+The [sqflite FFI package](https://pub.dev/packages/sqflite_common_ffi) runs SQLite directly on the test computer. FFI means foreign function interface: Dart calls a native library. We use it only in tests, with a fresh in-memory database rather than the user's file.
 
-VS Code can set up the toolchain for you as well. Run `flutter doctor`, which checks the Android toolchain and reports anything missing:
+### Create one in-memory database helper for tests
 
-```bash
-flutter doctor
-```
-
-Accept the Android licences when it asks:
-
-```bash
-flutter doctor --android-licenses
-```
-
-Once an AVD exists, launching and running it is the same as on the lab machines: launch the emulator with `flutter emulators --launch`, pick it in the device selector, and run.
-
-### Mac only: the iOS simulator
-
-On a Mac you can use the iOS simulator instead of an Android emulator. The simulator is Mac-only, as it depends on Apple's developer tools. Install [Xcode](https://docs.flutter.dev/get-started/install/macos) from the App Store, then start the simulator from a terminal:
-
-```bash
-open -a Simulator
-```
-
-You can also list devices with `flutter emulators` or pick the simulator in the VS Code device selector. With the simulator running, run the app and choose it as the target:
-
-```bash
-flutter run
-```
-
-The per-platform database open you wrote earlier already covers iOS through the same `sqflite` plugin branch (`TargetPlatform.iOS`), so no code changes are needed to see the same on-disk persistence on the simulator.
-
-## Testing persistence
-
-We test both kinds of persistence. The shared preferences test uses a mock store so no real device storage is touched, and the database tests use SQLite's in-memory mode so they run quickly and leave no file behind. These tests run with `flutter test` just as before, and do not need an emulator; the emulator in [Running the app on a mobile emulator](#running-the-app-on-a-mobile-emulator) is only for seeing the saved file persist by hand.
-
-### Test the shared preferences settings flow
-
-Create a new file named `test/settings_screen_test.dart`. Shared preferences offers `setMockInitialValues`, which fills the store with test data (or clears it) so a test runs without a real device.
-
-Start with the imports, `main` function, and `setUp`:
+Create `test/support/test_database.dart` with these imports:
 
 ```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/screens/settings_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-void main() {
-  setUp(() {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
-  });
+import 'package:sandwich_shop/database/sandwich_db.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 ```
 
-The `setUp` callback calls `SharedPreferences.setMockInitialValues(<String, Object>{})` to clear the mock store before each test.
-
-Now add a test verifying that the form fields and switch appear:
+Add an empty `Future<Database> openTestDatabase() async {}` function. Inside it, open the test connection:
 
 ```dart
-  testWidgets('SettingsScreen displays form fields and switches', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
-
-    expect(find.text('Customer Profile'), findsOneWidget);
-    expect(find.byType(TextField), findsNWidgets(3));
-    expect(find.byType(Switch), findsOneWidget);
-    expect(find.text('Save Settings'), findsOneWidget);
-  });
+  sqfliteFfiInit();
+  final Database database = await databaseFactoryFfiNoIsolate.openDatabase(
+    inMemoryDatabasePath,
+    options: OpenDatabaseOptions(
+      version: 1,
+      onCreate: SandwichDatabase.instance.createTables,
+    ),
+  );
 ```
 
-This test confirms that the `Customer Profile` title, three `TextField` inputs, one `Switch` toggle, and the **Save Settings** button appear on screen.
+`sqfliteFfiInit` prepares the native library. `inMemoryDatabasePath` keeps the data out of the app's real file. `databaseFactoryFfiNoIsolate` runs in the test's current isolate, avoiding a background worker and timing delays in widget tests.
 
-Next, add a test verifying that saved settings pre-fill the form on open:
+After opening it, supply the connection and return it:
 
 ```dart
-  testWidgets('SettingsScreen pre-fills saved settings on open', (
-    WidgetTester tester,
-  ) async {
-    SharedPreferences.setMockInitialValues(<String, Object>{
-      prefName: 'Jordan Lee',
-      prefAddress: '15 High Street, Portsmouth',
-      prefEmail: 'jordan@example.com',
-      prefNewsletter: true,
-    });
-
-    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Jordan Lee'), findsOneWidget);
-    expect(find.text('15 High Street, Portsmouth'), findsOneWidget);
-    expect(find.text('jordan@example.com'), findsOneWidget);
-    final Switch switchWidget = tester.widget<Switch>(find.byType(Switch));
-    expect(switchWidget.value, isTrue);
-  });
+  SandwichDatabase.instance.setDatabase(database);
+  return database;
 ```
 
-This test seeds the store with customer details before the screen opens. `tester.pumpAndSettle()` waits for the asynchronous `_loadSettings()` call to finish. We use `tester.widget<Switch>(find.byType(Switch))` to retrieve the `Switch` widget instance and confirm its `value` is `true`, and check that all text inputs are pre-filled.
+Tests reuse the application's table definition but do not seed its example history. We write this helper once rather than copying the SQL into every test file.
 
-Finally, add a test verifying that submitting the form persists the updated settings. Start by pumping `SettingsScreen` and entering text into the fields:
+### Test inserting, reading and numbering orders
 
-```dart
-  testWidgets('Toggling switch and saving settings updates SharedPreferences', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
-
-    final Finder nameField = find.widgetWithText(TextField, 'Full name');
-    final Finder addressField =
-        find.widgetWithText(TextField, 'Delivery address');
-    final Finder emailField = find.widgetWithText(TextField, 'Email address');
-
-    await tester.enterText(nameField, 'Alex Smith');
-    await tester.enterText(addressField, '10 Elm Road, Portsmouth');
-    await tester.enterText(emailField, 'alex@example.com');
-```
-
-The `find.widgetWithText(TextField, '...')` finder locates each `TextField` widget by matching its label text. Calling `tester.enterText` simulates typing into each input field.
-
-Next, locate and toggle the newsletter switch:
-
-```dart
-    final Finder switchFinder = find.byType(Switch);
-    expect(tester.widget<Switch>(switchFinder).value, isFalse);
-    await tester.tap(switchFinder);
-    await tester.pump();
-    expect(tester.widget<Switch>(switchFinder).value, isTrue);
-```
-
-We verify that the switch begins disabled, simulate a tap with `tester.tap`, pump the widget tree, and assert that its `value` switches to `true`.
-
-Finally, tap **Save Settings**, verify the confirmation text, and assert that the values were stored in `SharedPreferences`:
-
-```dart
-    await tester.tap(find.text('Save Settings'));
-    await tester.pump();
-
-    expect(find.text('Settings saved for Alex Smith'), findsOneWidget);
-
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString(prefName), 'Alex Smith');
-    expect(prefs.getString(prefAddress), '10 Elm Road, Portsmouth');
-    expect(prefs.getString(prefEmail), 'alex@example.com');
-    expect(prefs.getBool(prefNewsletter), isTrue);
-  });
-}
-```
-
-Tapping **Save Settings** triggers `_saveSettings()`. We check that the on-screen confirmation message is rendered, and read each preference key directly from `SharedPreferences.getInstance()` to confirm that the profile was written to the store.
-
-### Set up an in-memory database
-
-The database tests use two setup functions. `setUpAll` runs its callback once, before all the tests in the file, which suits one-off initialisation. That contrasts with `setUp`, which runs before each test. In `setUpAll` we call `sqfliteFfiInit()` and set `databaseFactory = databaseFactoryFfi` once to prepare the engine. In `setUp` we open a fresh in-memory database and hand it to the helper with `setDatabase`, so each test starts clean. A `tearDown` closes it afterwards.
-
-### Test inserting and reading orders
-
-Create a new file named `test/sandwich_db_test.dart`.
-
-Start by importing test packages, models, and initializing the FFI database factory:
+Create `test/sandwich_db_test.dart`:
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/order_record.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-void main() {
-  setUpAll(() {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  });
+import 'support/test_database.dart';
+
+void main() {}
 ```
 
-We call `sqfliteFfiInit()` and set `databaseFactory = databaseFactoryFfi` in `setUpAll` to prepare the SQLite engine once before running tests.
-
-Now declare the `database` reference and configure `setUp` to open a fresh in-memory database before each test:
+Inside `main`, open a database before each test and close it afterwards:
 
 ```dart
-  late Database database;
-
   setUp(() async {
-    database = await databaseFactory.openDatabase(
-      inMemoryDatabasePath,
-      options: OpenDatabaseOptions(
-        version: 1,
-        onCreate: (Database db, int version) async {
-          await db.execute('''
-            CREATE TABLE orders (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              order_number INTEGER NOT NULL,
-              summary TEXT NOT NULL,
-              note TEXT NOT NULL,
-              toasted INTEGER NOT NULL,
-              vegan INTEGER NOT NULL,
-              total REAL NOT NULL,
-              date TEXT NOT NULL
-            )
-          ''');
-        },
-      ),
-    );
-    SandwichDatabase.instance.setDatabase(database);
+    await openTestDatabase();
   });
-```
 
-In `setUp`, `databaseFactory.openDatabase` creates an isolated SQLite database using `inMemoryDatabasePath`. Running the `CREATE TABLE` query inside `onCreate` ensures the schema exists, and `SandwichDatabase.instance.setDatabase(database)` injects the in-memory connection into the singleton.
-
-Now add `tearDown` to close the connection after each test finishes:
-
-```dart
   tearDown(() async {
-    await database.close();
-    SandwichDatabase.instance.setDatabase(null);
+    await SandwichDatabase.instance.close();
   });
 ```
 
-The `tearDown` callback closes the in-memory database and resets the singleton instance with `setDatabase(null)` so each test runs in isolation.
+`tearDown` is the cleanup partner to `setUp`, running after each test. See the [Flutter unit test recipe](https://docs.flutter.dev/cookbook/testing/unit/introduction). Closing the singleton also resets its cached connection.
 
-Next, add a helper function to construct test order records:
+Inside `main`, add a small fixture builder:
 
 ```dart
-  OrderRecord buildRecord(int orderNumber, String summary, double total) {
+  OrderRecord buildRecord(int number, String summary, double total) {
     return OrderRecord(
-      orderNumber: orderNumber,
+      orderNumber: number,
       summary: summary,
-      note: '',
-      toasted: 0,
-      vegan: 0,
       total: total,
       date: '01/01/2026 10:00',
     );
   }
 ```
 
-The `buildRecord` helper creates sample `OrderRecord` instances with default values for tests.
-
-Now add a test verifying that inserting an order stores its fields and generates an id:
+Add the insert-and-read test:
 
 ```dart
   test('insertOrder stores an order and returns its id', () async {
@@ -1606,14 +1434,25 @@ Now add a test verifying that inserting an order stores its fields and generates
     final List<OrderRecord> orders =
         await SandwichDatabase.instance.getAllOrders();
     expect(orders.length, 1);
+    expect(orders.first.id, id);
     expect(orders.first.summary, '1 x Footlong Sub');
     expect(orders.first.total, 7.50);
   });
 ```
 
-This test checks that `insertOrder` adds a row, gives back a positive integer id, and returns matching values when read back with `getAllOrders`.
+This exercises `toMap`, SQLite insertion and `fromMap` together. Add a test for numbering:
 
-Next, add a test verifying descending order sort:
+```dart
+  test('getNextOrderNumber increments the current maximum', () async {
+    expect(await SandwichDatabase.instance.getNextOrderNumber(), 1001);
+    await SandwichDatabase.instance.insertOrder(
+      buildRecord(1005, 'Order', 5.0),
+    );
+    expect(await SandwichDatabase.instance.getNextOrderNumber(), 1006);
+  });
+```
+
+Add a third test for descending order:
 
 ```dart
   test('getAllOrders returns newest order number first', () async {
@@ -1634,108 +1473,32 @@ Next, add a test verifying descending order sort:
   });
 ```
 
-This test inserts orders out of sequence and verifies that `getAllOrders` returns them sorted newest first by order number.
+### Update the basket checkout test
 
-Finally, add a test checking auto-incrementing order numbers:
-
-```dart
-  test('getNextOrderNumber increments the current maximum', () async {
-    expect(await SandwichDatabase.instance.getNextOrderNumber(), 1001);
-    await SandwichDatabase.instance.insertOrder(
-      buildRecord(1005, 'Order', 5.0),
-    );
-    expect(await SandwichDatabase.instance.getNextOrderNumber(), 1006);
-  });
-}
-```
-
-This test verifies that an empty database starts numbering at `1001`, and returns one higher than the largest existing order number once records exist.
-
-### Update the basket screen tests
-
-In Worksheet 5, `test/basket_screen_test.dart` tested the old checkout behaviour that cleared the basket and printed an inline confirmation. In this worksheet, checkout inserts the order into the SQLite database and navigates to the orders screen.
-
-Update `test/basket_screen_test.dart` to initialise the in-memory SQLite database and test that checkout stores the order record and navigates to `OrdersScreen`.
-
-Start by updating the imports and declaring the sample sandwich fixture:
+Keep the two existing tests in `test/basket_screen_test.dart` from [Worksheet 5](worksheet-5.md#widget-test-the-basket-screen). Add imports for the database helper, `OrdersScreen`, the FFI types and our shared test helper:
 
 ```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
-import 'package:sandwich_shop/models/cart_item.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/repositories/cart_repository.dart';
-import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-const Sandwich testSandwich = Sandwich(
-  id: 'footlong',
-  name: 'Footlong Sub',
-  description: 'Classic freshly baked sub.',
-  price: 10.0,
-  imagePath: 'assets/images/footlong.jpeg',
-);
+import 'support/test_database.dart';
 ```
 
-Next, define `main` and initialise SQLite FFI in `setUpAll`:
+Inside `main`, declare `late Database database;`. Replace the existing `setUp` with:
 
 ```dart
-void main() {
-  setUpAll(() {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  });
-```
-
-We initialise the SQLite FFI engine once before running tests.
-
-Now declare the `database` variable and configure `setUp` to reset state and open the in-memory database:
-
-```dart
-  late Database database;
-
   setUp(() async {
     CartRepository.instance.clear();
-    database = await databaseFactory.openDatabase(
-      inMemoryDatabasePath,
-      options: OpenDatabaseOptions(
-        version: 1,
-        onCreate: (Database db, int version) async {
-          await db.execute('''
-            CREATE TABLE orders (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              order_number INTEGER NOT NULL,
-              summary TEXT NOT NULL,
-              note TEXT NOT NULL,
-              toasted INTEGER NOT NULL,
-              vegan INTEGER NOT NULL,
-              total REAL NOT NULL,
-              date TEXT NOT NULL
-            )
-          ''');
-        },
-      ),
-    );
-    SandwichDatabase.instance.setDatabase(database);
+    database = await openTestDatabase();
   });
-```
 
-In `setUp` we empty the cart repository, open an in-memory SQLite database, and inject it into `SandwichDatabase.instance`.
-
-Now add `tearDown` to clean up after each test:
-
-```dart
   tearDown(() async {
-    await database.close();
-    SandwichDatabase.instance.setDatabase(null);
+    await SandwichDatabase.instance.close();
   });
 ```
 
-The `tearDown` callback closes the database and clears the singleton reference.
-
-Now add the `buildApp` navigation wrapper helper:
+Add a navigation wrapper:
 
 ```dart
   Widget buildApp() {
@@ -1750,443 +1513,152 @@ Now add the `buildApp` navigation wrapper helper:
   }
 ```
 
-The `buildApp` helper wraps `BasketScreen` in a `MaterialApp` with the `'/orders'` route registered so the screen can navigate on checkout.
-
-Now add the test checking the empty basket state:
+Use `buildApp()` instead of the bare `MaterialApp` in the existing tests. Add a new test and populate its basket:
 
 ```dart
-  testWidgets('BasketScreen displays empty message when basket has no items', (
+  testWidgets('Checkout saves the order and opens orders', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(buildApp());
-
-    expect(find.text('Your basket is empty'), findsOneWidget);
-    expect(find.text('Checkout'), findsNothing);
-  });
-```
-
-This test confirms that when the cart is empty, the empty message is displayed and the Checkout button is hidden.
-
-Next, add the test verifying line item display and item deletion:
-
-```dart
-  testWidgets(
-    'BasketScreen renders items and removes item when delete pressed',
-    (WidgetTester tester) async {
-      const CartItem item = CartItem(
-        sandwich: testSandwich,
-        quantity: 2,
-      );
-      CartRepository.instance.addItem(item);
-
-      await tester.pumpWidget(buildApp());
-
-      expect(find.text('Your basket'), findsOneWidget);
-      expect(find.text('2 x Footlong Sub'), findsOneWidget);
-      expect(find.text('£20.00'), findsWidgets);
-      expect(find.text('Checkout'), findsOneWidget);
-
-      await tester.tap(find.byIcon(Icons.delete_outline));
-      await tester.pump();
-
-      expect(find.text('Your basket is empty'), findsOneWidget);
-    },
-  );
-```
-
-This test verifies that items in the basket display their quantities and prices, and that tapping delete empties the cart.
-
-Finally, add the test verifying that checking out inserts an order row into SQLite and navigates to the orders screen.
-
-Flutter widget tests execute inside a simulated environment that intercepts timers and asynchronous microtasks. Because SQLite operations perform real asynchronous I/O through native FFI channels, running them inside a widget test requires `tester.runAsync`. Code placed inside `tester.runAsync` escapes the simulated environment and runs on the real asynchronous event loop.
-
-Start by populating the cart and pumping the application:
-
-```dart
-  testWidgets(
-    'BasketScreen checkout stores the order and navigates to orders',
-    (WidgetTester tester) async {
-      const CartItem item = CartItem(
-        sandwich: testSandwich,
-        quantity: 1,
-      );
-      CartRepository.instance.addItem(item);
-
-      await tester.pumpWidget(buildApp());
-```
-
-Next, tap **Checkout** and query the database table inside `tester.runAsync`:
-
-```dart
-      late List<Map<String, Object?>> rows;
-      await tester.runAsync(() async {
-        await tester.tap(find.text('Checkout'));
-        await Future<void>.delayed(const Duration(milliseconds: 50));
-        await tester.pumpAndSettle();
-        await Future<void>.delayed(const Duration(milliseconds: 50));
-        await tester.pump();
-        rows = await database.query('orders');
-      });
-      await tester.pump();
-```
-
-Inside `tester.runAsync`, tapping **Checkout** invokes `_checkout()`. The small delayed intervals allow the asynchronous SQLite insert and navigation animation to complete before `database.query('orders')` reads the persisted rows.
-
-Finally, verify that navigation succeeded, the cart emptied, and the order row matches the basket:
-
-```dart
-      expect(find.byType(OrdersScreen), findsOneWidget);
-      expect(CartRepository.instance.getItems(), isEmpty);
-      expect(rows.length, 1);
-      expect(rows.first['summary'], '1 x Footlong Sub');
-      expect(find.byType(SnackBar), findsNothing);
-    },
-  );
-}
-```
-
-We assert that `OrdersScreen` is currently displayed, `CartRepository` holds no remaining items, and the SQLite `orders` table contains one row with the expected summary.
-
-### Test the orders screen
-
-Create a new file named `test/orders_screen_test.dart` to verify that `OrdersScreen` displays past orders newest first and shows an empty state when no orders have been placed.
-
-Start with the imports, `main` setup, and engine initialisation:
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/database/sandwich_db.dart';
-import 'package:sandwich_shop/models/order_record.dart';
-import 'package:sandwich_shop/screens/orders_screen.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
-void main() {
-  setUpAll(() {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  });
-```
-
-We import the testing tools and initialise the SQLite FFI database factory in `setUpAll`.
-
-Now add the database helper that prepares an in-memory test database:
-
-```dart
-  Future<Database> openDatabaseForTest() async {
-    final Database database = await databaseFactory.openDatabase(
-      inMemoryDatabasePath,
-      options: OpenDatabaseOptions(
-        version: 1,
-        onCreate: (Database db, int version) async {
-          await db.execute('''
-            CREATE TABLE orders (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              order_number INTEGER NOT NULL,
-              summary TEXT NOT NULL,
-              note TEXT NOT NULL,
-              toasted INTEGER NOT NULL,
-              vegan INTEGER NOT NULL,
-              total REAL NOT NULL,
-              date TEXT NOT NULL
-            )
-          ''');
-        },
-      ),
+    const CartItem item = CartItem(
+      sandwich: testSandwich,
+      quantity: 1,
     );
-    SandwichDatabase.instance.setDatabase(database);
-    return database;
-  }
+    CartRepository.instance.addItem(item);
+    await tester.pumpWidget(buildApp());
+  });
 ```
 
-The `openDatabaseForTest` helper creates an in-memory database with the `orders` table and injects it into `SandwichDatabase.instance`.
-
-Now add a test verifying that orders display newest first. Start by preparing the database and inserting two orders inside `tester.runAsync`:
+After pumping, tap checkout and query the result:
 
 ```dart
-  testWidgets('OrdersScreen lists seeded orders newest-first', (
+    late List<Map<String, Object?>> rows;
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Checkout'));
+      await tester.pumpAndSettle();
+      rows = await database.query('orders');
+    });
+    await tester.pump();
+```
+
+[`runAsync`](https://api.flutter.dev/flutter/flutter_test/WidgetTester/runAsync.html) allows real asynchronous work inside a widget test. We use the no-isolate database factory and wait for frames to settle, not arbitrary delays such as sleeping for 50 milliseconds.
+
+Finish the test with:
+
+```dart
+    expect(find.byType(OrdersScreen), findsOneWidget);
+    expect(CartRepository.instance.getItems(), isEmpty);
+    expect(rows.length, 1);
+    expect(rows.first['summary'], '1 x Footlong Sub');
+    expect(rows.first['total'], 11.50);
+```
+
+The existing fixture costs `10.0` and delivery is `1.50`; the saved total must include both.
+
+### Test the orders list and its empty state
+
+Create `test/orders_screen_test.dart` with the material and test imports, `SandwichDatabase`, `OrderRecord`, `OrdersScreen` and `support/test_database.dart`. Start with an empty `main`.
+
+Inside `main`, add the same `tearDown` that closes `SandwichDatabase.instance`. Add a test shell:
+
+```dart
+  testWidgets('OrdersScreen lists orders newest first', (
     WidgetTester tester,
   ) async {
     await tester.runAsync(() async {
-      final Database database = await openDatabaseForTest();
+      await openTestDatabase();
+    });
+  });
+```
+
+Inside `runAsync`, after opening the database, insert the first fixture:
+
+```dart
       await SandwichDatabase.instance.insertOrder(
         const OrderRecord(
           orderNumber: 1001,
           summary: '1 x Six-Inch Sub',
-          note: '',
-          toasted: 0,
-          vegan: 0,
           total: 4.50,
           date: '01/01/2026 10:00',
         ),
       );
-      await SandwichDatabase.instance.insertOrder(
-        const OrderRecord(
-          orderNumber: 1002,
-          summary: '2 x Footlong Sub',
-          note: '',
-          toasted: 0,
-          vegan: 0,
-          total: 15.00,
-          date: '02/01/2026 11:00',
-        ),
-      );
 ```
 
-We insert order #1001 and order #1002 into the in-memory database using `SandwichDatabase.instance.insertOrder`.
-
-Next, pump `OrdersScreen`, wait for the asynchronous loader to finish, and close the database:
+Insert a second fixture with `orderNumber: 1002`, `summary: '2 x Footlong Sub'`, `total: 15.00` and `date: '02/01/2026 11:00'`. Then, still inside `runAsync`, render the screen:
 
 ```dart
       await tester.pumpWidget(const MaterialApp(home: OrdersScreen()));
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-      await database.close();
-      SandwichDatabase.instance.setDatabase(null);
-    });
-    await tester.pump();
+      await tester.pumpAndSettle();
 ```
 
-We pump `OrdersScreen`, wait for `_loadOrders()` to complete, and clean up the database connection.
-
-Finally, assert that the newest order appears first on screen:
+After `runAsync` closes, check both presence and position:
 
 ```dart
+    await tester.pump();
     expect(find.text('Order #1002'), findsOneWidget);
     expect(find.text('Order #1001'), findsOneWidget);
-    expect(find.text('2 x Footlong Sub'), findsOneWidget);
-    expect(find.byType(Divider), findsNothing);
-  });
+    final double newestY = tester.getTopLeft(find.text('Order #1002')).dy;
+    final double oldestY = tester.getTopLeft(find.text('Order #1001')).dy;
+    expect(newestY, lessThan(oldestY));
 ```
 
-Because `getAllOrders()` sorts by `order_number DESC`, order #1002 appears above order #1001.
+[`getTopLeft`](https://api.flutter.dev/flutter/flutter_test/WidgetController/getTopLeft.html) gives a widget's position. A smaller vertical coordinate means the newer order is above the older one; checking that both texts exist would not prove their order.
 
-Finally, add a test checking the empty state when no orders exist:
+Add the empty-table test:
 
 ```dart
-  testWidgets('OrdersScreen shows an empty state when there are no orders', (
+  testWidgets('OrdersScreen shows an empty state', (
     WidgetTester tester,
   ) async {
     await tester.runAsync(() async {
-      final Database database = await openDatabaseForTest();
+      await openTestDatabase();
       await tester.pumpWidget(const MaterialApp(home: OrdersScreen()));
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-      await database.close();
-      SandwichDatabase.instance.setDatabase(null);
+      await tester.pumpAndSettle();
     });
     await tester.pump();
-
     expect(find.text('No orders yet'), findsOneWidget);
   });
-}
 ```
 
-This test opens `OrdersScreen` with an empty table and verifies that the "No orders yet" placeholder message is rendered.
+### Test navigation and run the complete suite
 
-### Test the app bar navigation actions
+Create `test/widgets/app_bar_actions_test.dart`, following the [navigation test from Worksheet 5](worksheet-5.md#widget-test-the-menu-screen). Import the screens and test tools it needs, and import the shared helper using `../support/test_database.dart` because this test is one folder deeper.
 
-Create a new file named `test/widgets/app_bar_actions_test.dart` to verify that both app bar buttons appear across the screens and that tapping the orders action navigates to the orders screen.
+Build a `MaterialApp` with a menu home and `'/orders'` route. Clear the asset cache in `setUp`, as in [the menu tests](#update-the-menu-and-app-tests). In a test, open the test database, render that app, wait for the menu asset, tap `Icons.receipt_long` and settle the frames, all inside `tester.runAsync`. Afterwards, expect one `OrdersScreen`. Close the database in `tearDown`.
 
-Start with the imports and sample sandwich fixture:
+Also check that the menu, order, basket, settings and orders screens retain their basket and receipt icons. The menu must still show `Icons.person_outline`. When testing settings, initialise mock preferences as above. Check that tapping the receipt icon again on the named orders route does not add another orders screen.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/database/sandwich_db.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/repositories/cart_repository.dart';
-import 'package:sandwich_shop/screens/basket_screen.dart';
-import 'package:sandwich_shop/screens/menu_screen.dart';
-import 'package:sandwich_shop/screens/order_screen.dart';
-import 'package:sandwich_shop/screens/orders_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
-const Sandwich testSandwich = Sandwich(
-  id: 'test',
-  name: 'Test Sub',
-  description: 'Test description',
-  price: 5.0,
-  imagePath: 'assets/images/footlong.jpeg',
-);
-```
-
-Now define `main`, initialise the test engine, and reset test state:
-
-```dart
-void main() {
-  setUpAll(() {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  });
-
-  setUp(() {
-    CartRepository.instance.clear();
-    SharedPreferences.setMockInitialValues(<String, Object>{});
-  });
-```
-
-We initialise the database engine in `setUpAll`, and clear both the cart repository and mock shared preferences in `setUp` before each test.
-
-Now add the database helper that prepares an in-memory test database:
-
-```dart
-  Future<Database> openDatabaseForTest() async {
-    final Database database = await databaseFactory.openDatabase(
-      inMemoryDatabasePath,
-      options: OpenDatabaseOptions(
-        version: 1,
-        onCreate: (Database db, int version) async {
-          await db.execute('''
-            CREATE TABLE orders (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              order_number INTEGER NOT NULL,
-              summary TEXT NOT NULL,
-              note TEXT NOT NULL,
-              toasted INTEGER NOT NULL,
-              vegan INTEGER NOT NULL,
-              total REAL NOT NULL,
-              date TEXT NOT NULL
-            )
-          ''');
-        },
-      ),
-    );
-    SandwichDatabase.instance.setDatabase(database);
-    return database;
-  }
-```
-
-The `openDatabaseForTest` helper creates an in-memory database with the `orders` table and injects it into `SandwichDatabase.instance`.
-
-Next, add the test harness wrapper helper:
-
-```dart
-  Widget wrap(Widget home) {
-    return MaterialApp(
-      home: home,
-      routes: <String, WidgetBuilder>{
-        '/orders': (BuildContext context) {
-          return const OrdersScreen();
-        },
-      },
-    );
-  }
-```
-
-The `wrap` helper wraps any screen in `MaterialApp` with the `'/orders'` route registered so app bar actions can be tested uniformly.
-
-Now verify that both action icons appear on the menu screen:
-
-```dart
-  testWidgets('Menu screen shows both basket and orders actions', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(wrap(const MenuScreen()));
-
-    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
-    expect(find.byIcon(Icons.receipt_long), findsOneWidget);
-  });
-```
-
-This test verifies that `Icons.shopping_basket` and `Icons.receipt_long` both render on `MenuScreen`.
-
-Now add tests verifying the actions on the order and basket screens:
-
-```dart
-  testWidgets('Order screen shows both basket and orders actions', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(wrap(const OrderScreen(sandwich: testSandwich)));
-    await tester.pumpAndSettle();
-
-    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
-    expect(find.byIcon(Icons.receipt_long), findsOneWidget);
-  });
-
-  testWidgets('Basket screen shows both basket and orders actions', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(wrap(const BasketScreen()));
-
-    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
-    expect(find.byIcon(Icons.receipt_long), findsOneWidget);
-  });
-```
-
-These tests verify that both action buttons also render on `OrderScreen` and `BasketScreen`.
-
-Now test the orders screen with an active database connection:
-
-```dart
-  testWidgets('Orders screen shows both basket and orders actions', (
-    WidgetTester tester,
-  ) async {
-    await tester.runAsync(() async {
-      final Database database = await openDatabaseForTest();
-      await tester.pumpWidget(wrap(const OrdersScreen()));
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-      await database.close();
-      SandwichDatabase.instance.setDatabase(null);
-    });
-    await tester.pump();
-
-    expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
-    expect(find.byIcon(Icons.receipt_long), findsOneWidget);
-  });
-```
-
-This test confirms that `OrdersScreen` renders both app bar action icons once loaded from the database.
-
-Finally, add a test verifying navigation when tapping the receipt action:
-
-```dart
-  testWidgets('Tapping the orders action navigates to the orders screen', (
-    WidgetTester tester,
-  ) async {
-    await tester.runAsync(() async {
-      final Database database = await openDatabaseForTest();
-      await tester.pumpWidget(wrap(const MenuScreen()));
-      await tester.tap(find.byIcon(Icons.receipt_long));
-      await tester.pump();
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-      await database.close();
-      SandwichDatabase.instance.setDatabase(null);
-    });
-    await tester.pump();
-
-    expect(find.byType(OrdersScreen), findsOneWidget);
-  });
-}
-```
-
-This test simulates tapping the orders receipt button on `MenuScreen` and confirms that the navigator transitions to `OrdersScreen`.
-
-Run your test suite with `flutter test` to confirm everything passes:
+Use the [formatting, analysis and test workflow from Worksheet 4](worksheet-4.md#running-test-suites-and-static-analysis):
 
 ```bash
+dart format lib test
+dart analyze
 flutter test
 ```
 
+Compare your finished application with branch `6`. Check both the automated tests and the emulator restart behaviour; an in-memory database test cannot prove that a device file survives restarting the app.
+
 ## Exercises
 
-The exercises below apply the concepts from this worksheet to the Southsea Cinema coursework application. They prepare you for Demo 3 of your coursework. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
+The exercises below apply these concepts to your Southsea Cinema coursework. Together with [Worksheet 5's exercises](worksheet-5.md#exercises), they prepare you for Demo 3. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-1. Following [Loading the menu from JSON](#loading-the-menu-from-json), move your film listings into a JSON asset file, register it in `pubspec.yaml`, and implement `fromJson` and `toJson` methods on your cinema models. Then, following [Load the menu from the asset at startup](#load-the-menu-from-the-asset-at-startup), make your listing screen load the films from the JSON asset at runtime in `initState` so the hardcoded list is no longer used.
+Continue your cinema work from Worksheet 5, which started from cinema branch `2`. The completed Demo 3 state is cinema branch `3`. Keep the shared app bars, drawer routes, squared buttons, ticket basket and scrollable profile form you already built.
 
-2. Following [Adding the dependencies](#adding-the-dependencies), add `shared_preferences`, `sqflite`, `path`, `sqflite_common_ffi`, and `sqflite_common_ffi_web` to your Southsea Cinema fork's `pubspec.yaml`, and run `flutter pub get`.
+1. Following [Loading the menu from a JSON asset](#loading-the-menu-from-a-json-asset), move the films into `assets/data/movies.json` and register the asset. Add `Movie.fromJson` and `Movie.toJson`, with tests for all fields and whole-number prices. Make `HomeView` await the repository's asset loader in `initState`; the displayed film cards must come from that result, not a hard-coded list. Include loading and error feedback.
 
-3. Following [Remembering customer profile settings with shared preferences](#remembering-customer-profile-settings-with-shared-preferences), make your settings or booking screen remember the patron's details or option choices with shared preferences, loading them in `initState` and saving them when they change. Decide which patron settings are worth remembering.
+2. Set up the [Android emulator](#preparing-an-android-emulator) and add the [same persistence packages](#adding-the-persistence-packages) to the cinema app. Use the university Android bundle on lab machines or install an emulator on your own computer. Do not add web database packages or copy the Sandwich Shop's Android package id.
 
-4. Following [Define the order record model](#define-the-order-record-model), add a `TicketTransaction` model in `lib/models/ticket_transaction.dart` with `toMap` and `fromMap`. Decide which fields a cinema ticket sale needs to record, remembering that SQLite stores booleans as `1` or `0`.
+3. Following [Remembering the customer profile](#remembering-the-customer-profile-with-shared-preferences), persist the editable cinema profile fields and email-news preference under named keys. Load them when settings opens and save them when the patron submits. Use fictional details. Keep the existing controller lifecycle and scrollable form, and test loading, saving and reopening with mock preferences. A second SQLite settings table is not needed.
 
-5. Following [Create the database helper](#create-the-database-helper), create `lib/database/cinema_db.dart` with a `CinemaDatabase` helper that opens the database, creates a `bookings` table, and seeds a few past bookings matching your own account history.
+4. Following [Representing a saved order](#representing-a-saved-order), create `Booking` in `lib/models/booking.dart`, with an optional database `id`, `bookingNumber`, `saleSummary`, `saleDate` and `totalPrice`. Add `toMap` and `fromMap` methods and tests. Use a `Booking` consistently for a completed ticket purchase; do not create a second `TicketTransaction` class for the same record.
 
-6. Following [Saving an order at checkout](#saving-an-order-at-checkout), make confirming a purchase save a `TicketTransaction` to `CinemaDatabase.instance`, clear the basket, and take the patron to a bookings screen. Then, following [Showing past orders](#showing-past-orders), build that bookings screen so it reads and lists the stored bookings newest first.
+5. Following [Creating the SQLite database helper](#creating-the-sqlite-database-helper), create `CinemaDatabase` in `lib/database/cinema_db.dart`. Open a file in the app's database folder, create a `bookings` table and seed fictional past bookings once in `onCreate`. Add methods to insert bookings, read them newest first, find the next booking number and close the connection.
 
-7. Following [Testing persistence](#testing-persistence), write a shared preferences test using `SharedPreferences.setMockInitialValues` for your remembered options, and a direct in-memory SQLite test of your `CinemaDatabase` helper under `test/database/`. Using `sqfliteFfiInit`, `databaseFactoryFfi`, and `inMemoryDatabasePath`, check that a booking inserts and reads back, that bookings list newest first, that the next booking number increments, and that settings round-trip through `getSettings` and `updateSettings`.
+6. Following [Displaying saved orders](#displaying-saved-orders) and [Saving the basket at checkout](#saving-the-basket-at-checkout), build a bookings screen and register `'/bookings'`. Make the drawer's **My Tickets** entry open it. Checkout must save a `Booking` with the basket summary and total before clearing the basket or navigating. Show database errors instead of swallowing them. Fully close and reopen the emulator app to verify the purchase remains and seed rows are not duplicated. **Show the running app to a member of staff.**
 
-8. Decide what matters most about your Demo 3 experience and prove it works: cover the behaviour you care about with automated tests, and make sure `dart analyze` and `flutter test` both pass cleanly.
+7. Following [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator), test your actual table definition using an in-memory database. Check the generated id and saved fields, descending booking order, numbering from an empty table and the next number after insertion. Add widget tests for successful checkout, the bookings list and its empty state. Verify that a failed insert leaves the basket intact. Keep `dart analyze` and `flutter test` passing.
 
-9. (Advanced challenge — Focus management and input controls) Following the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input), enrich your cinema settings or booking form with programmatic focus management and user controls. Use a `FocusNode` to focus the primary input field automatically when entering edit mode with `focusNode.requestFocus()`, add an `IconButton` inside the input decoration to clear text using `controller.clear()`, and clean up your `FocusNode` in `dispose`.
+8. For Demo 3, be ready to explain where the film JSON is read, how map conversion works, why preferences and SQLite have different jobs, why asynchronous screen updates check `mounted`, how seed data is added only once, and how the emulator restart check differs from an in-memory test. Retain the themed navigation, squared buttons, basket calculations and editable form from Worksheet 5. **Show your completed Demo 3 application to a member of staff.**
 
-10. (Advanced challenge — Test directory mirroring and coverage) Prepare ahead for Demo 4 requirements by restructuring your `test/` directory to strictly mirror the organisation of `lib/` (for example `test/models/`, `test/views/`, `test/repositories/`, `test/database/`, `test/widgets/`). Install the Flutter Coverage extension in VS Code and run `flutter test --coverage` in the terminal to inspect line-by-line coverage and identify untested branches across your models and repositories.
+9. As an advanced challenge, follow the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input) to add focus management. Create a `FocusNode`, attach it to the primary editable field, call `requestFocus()` when entering edit mode, and dispose of it with the controllers. Add a clear `IconButton` that calls the controller's `clear()` method. Build and test one control at a time.
+
+10. As an advanced challenge, prepare for Demo 4 by making `test/` mirror `lib/`, for example with `models`, `views`, `repositories`, `database` and `widgets` subfolders. Update relative test-helper imports after moving files. Run `flutter test --coverage` and inspect the results with the Flutter Coverage extension in VS Code; mirrored folders and demonstrated coverage become requirements from Demo 4.
