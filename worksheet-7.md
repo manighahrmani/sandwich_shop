@@ -41,6 +41,7 @@
   - [Test inserting, reading and numbering orders](#test-inserting-reading-and-numbering-orders)
   - [Test order map conversion](#test-order-map-conversion)
   - [Update the basket checkout test](#update-the-basket-checkout-test)
+  - [Test that a failed save keeps the basket](#test-that-a-failed-save-keeps-the-basket)
   - [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state)
   - [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite)
 - [Organising tests and inspecting coverage](#organising-tests-and-inspecting-coverage)
@@ -1184,6 +1185,54 @@ Read the saved records in another `runAsync` call:
 
 The fixture costs `10.0` per sandwich, so two sandwiches plus `1.50` delivery produce a saved total of `21.50`. The assertions check the database, basket and destination screen, not just a success message.
 
+### Test that a failed save keeps the basket
+
+The checkout's `catch` block should leave the basket untouched when saving fails. To test it, we need a database write that fails on purpose. The simplest way is to delete the `orders` table before checkout, so every query on it throws an error.
+
+In the same file, add another test inside `main`:
+
+```dart
+  testWidgets('Checkout keeps the basket when saving fails', (
+    WidgetTester tester,
+  ) async {
+    CartRepository.instance.addItem(
+      const CartItem(sandwich: testSandwich, quantity: 2),
+    );
+  });
+```
+
+After adding the item, delete the table from the test database:
+
+```dart
+    await tester.runAsync(() async {
+      final Database database = await SandwichDatabase.instance.database;
+      await database.execute('DROP TABLE orders');
+    });
+```
+
+`DROP TABLE` is the SQL command that removes a table and all of its rows. It only affects this test's in-memory database, and `setUp` creates a fresh table before the next test.
+
+Then render the basket and tap **Checkout**, exactly as in the previous test:
+
+```dart
+    await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Checkout'));
+      await tester.pumpAndSettle();
+    });
+    await tester.pumpAndSettle();
+```
+
+Finish with assertions that the item is still in the basket and the error is shown:
+
+```dart
+    expect(CartRepository.instance.getItems().length, 1);
+    expect(find.text('2 x Footlong Sub'), findsOneWidget);
+    expect(find.textContaining('Could not save your order'), findsOneWidget);
+```
+
+`find.textContaining` matches any `Text` widget whose text includes the given words, which is useful here because the full message also contains the database error.
+
 ### Test the orders list and its empty state
 
 Create `test/screens/orders_screen_test.dart` with these imports and an empty `main`:
@@ -1360,7 +1409,7 @@ Continue from cinema branch `3`, the Demo 3 state after Worksheets 5 and 6. Cine
 
 5. Following [Saving the basket at checkout](#saving-the-basket-at-checkout), replace the temporary checkout with one that saves a `Booking` containing the basket summary and total. Only clear the basket and navigate after the insert succeeds. Show database errors without clearing the basket. Fully close and reopen the emulator app to verify that the purchase remains and seed rows are not duplicated. **Show the running app to a member of staff.**
 
-6. Following [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator), test the actual table definition using an in-memory database. Check generated ids and saved fields, descending booking order, numbering from an empty table and the next number after insertion. Add widget tests for successful checkout, the bookings list and its empty state. Verify that a failed insert leaves the basket intact.
+6. Following [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator), test the actual table definition using an in-memory database. Check generated ids and saved fields, descending booking order, numbering from an empty table and the next number after insertion. Add widget tests for successful checkout, the bookings list and its empty state. Following [Test that a failed save keeps the basket](#test-that-a-failed-save-keeps-the-basket), verify that a failed insert leaves the basket intact.
 
 7. Follow [Organising tests and inspecting coverage](#organising-tests-and-inspecting-coverage). Make your test folders mirror `lib/`, run `flutter test --coverage` and demonstrate the results with the Flutter Coverage extension. Keep `dart analyze` and the complete test suite passing.
 
