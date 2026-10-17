@@ -294,6 +294,8 @@ Widget build(BuildContext context) {
 }
 ```
 
+Inside the quotes, `$quantity` and `$itemType` insert the values of those fields into the text. A longer expression needs curly braces, so `${'🥪' * quantity}` works out the value of `'🥪' * quantity` first and then inserts it. Multiplying a string by a whole number repeats it, so `'🥪' * 3` gives `'🥪🥪🥪'` and `'🥪' * 0` gives an empty string.
+
 ### Commit your changes (5)
 
 Commit this update with a message like `Implement dynamic text in OrderItemDisplay`.
@@ -692,6 +694,14 @@ There are two things to notice here. The first is `widget.maxQuantity`, which le
 ![Max quantity declaration: Screenshot showing the maxQuantity declaration in the OrderScreen class](images/2/max_quantity_declaration.png)
 
 The second, and the most important, is `setState()`. You call it to tell Flutter that a value has changed, and Flutter then runs `build()` again and redraws the UI with the new `_quantity`. If you wrote `_quantity++` without wrapping it in `setState()`, the number would change in memory but the screen would not update.
+
+`_quantity++` adds one to `_quantity`, and `_quantity--` subtracts one; they are short for `_quantity = _quantity + 1` and `_quantity = _quantity - 1`. The code we pass to `setState` is a small function with no name. `() => _quantity++` is the short arrow form of a function that runs a single statement. The longer form below does exactly the same thing, and we use this longer form in later worksheets because it can hold more than one statement:
+
+```dart
+setState(() {
+  _quantity++;
+});
+```
 
 Now connect the buttons to these methods. Replace the two `onPressed` callbacks in the `build` method of `_OrderScreenState` so they call the new functions instead of printing:
 

@@ -14,6 +14,7 @@
   - [Convert a sandwich back into a map](#convert-a-sandwich-back-into-a-map)
   - [Test both sandwich conversions](#test-both-sandwich-conversions)
   - [Read the asset in the repository](#read-the-asset-in-the-repository)
+  - [Test the asset loader](#test-the-asset-loader)
   - [Load the menu when the screen opens](#load-the-menu-when-the-screen-opens)
   - [Display loading and error states](#display-loading-and-error-states)
   - [Update the menu and app tests](#update-the-menu-and-app-tests)
@@ -129,7 +130,9 @@ Inside `Sandwich`, add an empty factory constructor:
   }
 ```
 
-A factory constructor is a named way to return an instance of a class. Inside its braces, read the fields:
+The constructors you have written so far, such as `const Sandwich({required this.id, ...})`, copy their parameters straight into the fields. A constructor marked with the `factory` keyword works differently: it runs ordinary code first and then returns an object with a `return` statement. This lets us read and check the map before building the `Sandwich`. The `.fromJson` part gives the constructor a name, so you call it as `Sandwich.fromJson(someMap)`, in the same way as named constructors such as `EdgeInsets.all`. See [factory constructors](https://dart.dev/language/constructors#factory-constructors).
+
+Inside its braces, read the fields:
 
 ```dart
     final String id = json['id'] as String;
@@ -140,7 +143,7 @@ A factory constructor is a named way to return an instance of a class. Inside it
     final String imagePath = json['imagePath'] as String;
 ```
 
-The `as` operator checks that a value has the stated type; it throws an error if the data is wrong. `num` accepts either an integer or a decimal number, and `toDouble()` gives our model a `double` in both cases. See [Dart type tests](https://dart.dev/language/operators#type-test-operators).
+Because the map's values are `dynamic`, Dart does not know that `json['name']` holds a `String`. The `as` operator checks that a value has the stated type, so `json['name'] as String` gives us a `String` we can store in a typed variable; it throws an error if the data is wrong. `num` accepts either an integer or a decimal number, and `toDouble()` gives our model a `double` in both cases. See [Dart type tests](https://dart.dev/language/operators#type-test-operators).
 
 After those declarations, return the instance:
 
@@ -236,7 +239,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 ```
 
-`jsonDecode` turns JSON text into Dart lists and maps. `rootBundle` reads the assets bundled with the app; see [loading text assets](https://docs.flutter.dev/ui/assets/assets-and-images#loading-text-assets).
+`dart:convert` provides `jsonDecode`, which turns JSON text into Dart lists and maps: a JSON array becomes a `List` and each JSON object becomes a `Map<String, dynamic>`. `package:flutter/services.dart` provides `rootBundle`, an object that reads the files listed under `assets:` in `pubspec.yaml`; see [loading text assets](https://docs.flutter.dev/ui/assets/assets-and-images#loading-text-assets).
 
 Inside `SandwichRepository`, add a nullable cache and the loader's outline:
 
@@ -249,7 +252,11 @@ Inside `SandwichRepository`, add a nullable cache and the loader's outline:
   }
 ```
 
-For nullable types, revisit [Worksheet 4](worksheet-4.md#add-getsandwichbyid-to-sandwichrepository). For `Future`, `async` and `await`, revisit [the first widget test in Worksheet 4](worksheet-4.md#test-orderitemdisplay-in-isolation).
+`List<Sandwich>?` means the cache is either a list or `null`; it starts as `null` because nothing has been loaded yet. For nullable types, revisit [Worksheet 4](worksheet-4.md#add-getsandwichbyid-to-sandwichrepository).
+
+Reading a file takes time, so the loader cannot hand back the list straight away. Its return type `Future<List<Sandwich>>` is a promise that a `List<Sandwich>` will arrive later. Marking the method `async` lets us write `await` inside it, which pauses the method until a slow step finishes, while the rest of the app keeps running. You met `async` and `await` in [the first widget test in Worksheet 4](worksheet-4.md#test-orderitemdisplay-in-isolation).
+
+The curly braces around `assetPath` make it an optional named parameter with a default value, just like `maxQuantity` in [Worksheet 2](worksheet-2.md). Calling `loadSandwichesFromAsset()` reads `assets/data/sandwiches.json`, while a test could pass a different path.
 
 Inside the loader, read and decode the text:
 
@@ -259,6 +266,8 @@ Inside the loader, read and decode the text:
     final List<dynamic> jsonList = decodedData as List<dynamic>;
     final List<Sandwich> loadedSandwiches = [];
 ```
+
+`rootBundle.loadString` returns a `Future<String>`, so `await` waits for the file text. `jsonDecode` returns `dynamic`, because it cannot know in advance whether the text holds a list, a map or a single value. Our file starts with `[`, so `decodedData as List<dynamic>` tells Dart to treat it as a list whose items can be anything. The empty `loadedSandwiches` list will collect the converted sandwiches.
 
 After those declarations, convert each entry using the [explicit loop from Worksheet 4](worksheet-4.md#add-getsandwichbyid-to-sandwichrepository):
 
@@ -273,15 +282,43 @@ After those declarations, convert each entry using the [explicit loop from Works
     return loadedSandwiches;
 ```
 
+Each `item` is `dynamic`, so `item as Map<String, dynamic>` checks that it is a JSON object before we pass it to `Sandwich.fromJson`. After the loop, we store the list in the cache and return it. Because the method is `async`, returning a `List<Sandwich>` completes the `Future`.
+
 At the beginning of the existing `getSandwiches` method, before its original `return const [...]`, add:
 
 ```dart
-    if (_cachedSandwiches != null) {
-      return _cachedSandwiches!;
+    final List<Sandwich>? cachedSandwiches = _cachedSandwiches;
+    if (cachedSandwiches != null) {
+      return cachedSandwiches;
     }
 ```
 
-The `!` tells Dart that the value is not `null`, after our explicit check. Keep the existing fixed list and `getSandwichById` method. A repository instance returns its loaded list after a successful load; the menu below awaits the loader directly, so a failed asset load is not hidden by the old list.
+We copy the field into a local variable first. After the `!= null` check, Dart knows the local variable cannot be `null` inside the `if`, so it can be returned as a `List<Sandwich>`. Dart does not apply this check to class fields directly, which is why we need the local copy. Keep the existing fixed list and `getSandwichById` method. A repository instance returns its loaded list after a successful load; the menu below awaits the loader directly, so a failed asset load is not hidden by the old list.
+
+### Test the asset loader
+
+Open `test/sandwich_repository_test.dart`. Reading an asset with `rootBundle` needs part of the Flutter engine, which plain `test` calls do not start. At the top of `main()`, before the group, add:
+
+```dart
+  TestWidgetsFlutterBinding.ensureInitialized();
+```
+
+`testWidgets` starts this for you, but our repository tests use `test`. Inside the group, add a test that loads the real file:
+
+```dart
+    test('loadSandwichesFromAsset reads the bundled JSON menu', () async {
+      final SandwichRepository repository = SandwichRepository();
+      final List<Sandwich> sandwiches =
+          await repository.loadSandwichesFromAsset();
+
+      expect(sandwiches.length, 2);
+      expect(sandwiches[0].id, 'footlong');
+      expect(sandwiches[1].id, 'six-inch');
+      expect(repository.getSandwiches(), sandwiches);
+    });
+```
+
+The callback is `async` so that it can `await` the loader. The last line checks that `getSandwiches` now returns the cached list. Run `flutter test test/sandwich_repository_test.dart`.
 
 ### Load the menu when the screen opens
 
@@ -315,7 +352,7 @@ Add the loader shell:
   }
 ```
 
-`try` runs an operation that might fail; `catch` handles the error. Here we display the failure rather than leave a permanent loading indicator. See [Dart error handling](https://dart.dev/language/error-handling#catch).
+`try` runs an operation that might fail; if any statement inside it throws an error, Dart jumps to `catch`, and `error` holds what was thrown. Here we display the failure rather than leave a permanent loading indicator. See [Dart error handling](https://dart.dev/language/error-handling#catch).
 
 Inside `try`, load the menu and update state:
 
@@ -366,7 +403,7 @@ In `build`, remove the local repository and `sandwiches` declarations. Start the
     }
 ```
 
-[`CircularProgressIndicator`](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html) shows that work is in progress. Keep the existing `Scaffold` and its app bar, but replace its `body` value with `body`. The list now comes from the asset.
+`final Widget body;` declares a variable without giving it a value yet. Each branch of the `if` statement assigns it exactly once, and Dart reports an error if any branch forgets. [`CircularProgressIndicator`](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html) shows that work is in progress. Keep the existing `Scaffold` and its app bar, but replace its `body` value with `body`. The list now comes from the asset.
 
 ### Update the menu and app tests
 
@@ -519,7 +556,7 @@ Open the existing `test/settings_screen_test.dart` from [Worksheet 5](worksheet-
   });
 ```
 
-This creates a mock preference store before each test so tests do not read or change your real profile. `setUp` was introduced in [Worksheet 5](worksheet-5.md#unit-test-the-cart-repository). See the [recipe's testing support](https://docs.flutter.dev/cookbook/persistence/key-value#testing-support).
+This creates a mock preference store before each test so tests do not read or change your real profile. `<String, Object>{}` is an empty map whose keys are strings and whose values can be any non-null object, such as a `String` or a `bool`. `setUp` was introduced in [Worksheet 5](worksheet-5.md#unit-test-the-cart-repository). See the [recipe's testing support](https://docs.flutter.dev/cookbook/persistence/key-value#testing-support).
 
 In each existing settings test, use `await tester.pumpAndSettle();` after opening the screen and after tapping **Save Settings**, before checking the result.
 
@@ -551,6 +588,8 @@ After setting the mock values, render the form and check the result:
     expect(switchWidget.value, isTrue);
 ```
 
+`find.byType(Switch)` locates the switch, and `tester.widget<Switch>(...)` returns that widget as a `Switch` so we can read its `value` property.
+
 At the end of the existing save test, read the mock store to verify persistence, not just the confirmation:
 
 ```dart
@@ -570,8 +609,11 @@ Then remove and recreate the screen to verify the saved profile is loaded again:
     expect(find.text('Alex Smith'), findsOneWidget);
     expect(find.text('10 Elm Road, Portsmouth'), findsOneWidget);
     expect(find.text('alex@example.com'), findsOneWidget);
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
+    final Switch reopenedSwitch = tester.widget<Switch>(find.byType(Switch));
+    expect(reopenedSwitch.value, isTrue);
 ```
+
+Pumping `const SizedBox.shrink()`, an empty widget, removes the settings screen from the test, so the next `pumpWidget` creates a fresh screen that must load the saved values again.
 
 The menu navigation test also opens `SettingsScreen`. Add the package import and the same `setUp` mock to `test/menu_screen_test.dart`, otherwise that test will try to call the real preferences plugin.
 

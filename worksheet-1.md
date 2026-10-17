@@ -130,7 +130,7 @@ The screenshot below shows the `main.dart` and `pubspec.yaml` files in the start
 
 You don't need to understand the code at this moment but below is a brief overview.
 
-The default application's `main.dart` file contains the entry point `void main() => runApp(const MyApp());`, which runs the root widget, `MyApp`. This `StatelessWidget` sets up the `MaterialApp` and defines the home screen, which is the `MyHomePage` widget. `MyHomePage` is a `StatefulWidget` because it manages the changing counter value. It contains the `_incrementCounter()` method, which uses `setState()` to rebuild the UI when the `_counter` variable changes.
+The default application's `main.dart` file contains the entry point `main`, which calls `runApp(const MyApp());` to run the root widget, `MyApp`. This `StatelessWidget` sets up the `MaterialApp` and defines the home screen, which is the `MyHomePage` widget. `MyHomePage` is a `StatefulWidget` because it manages the changing counter value. It contains the `_incrementCounter()` method, which uses `setState()` to rebuild the UI when the `_counter` variable changes.
 
 ### Using AI
 
