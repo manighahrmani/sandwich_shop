@@ -12,6 +12,18 @@ class ControlledPreferences extends SharedPreferencesStorePlatform {
   int writeCount = 0;
 
   @override
+  Future<bool> clear() async {
+    values.clear();
+    return true;
+  }
+
+  @override
+  Future<bool> remove(String key) async {
+    values.remove(key);
+    return true;
+  }
+
+  @override
   Future<Map<String, Object>> getAll() async {
     if (loadGate != null) {
       await loadGate!.future;
