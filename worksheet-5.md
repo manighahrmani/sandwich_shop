@@ -1882,9 +1882,9 @@ flutter test
 
 As in the previous worksheets, these exercises apply to your Southsea Cinema coursework. They prepare you for the user interface side of Demo 3, where you add a themed look, named-route navigation, a ticket basket, and a customer profile form to your cinema application. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#exercises) you built a browsable home page of film cards backed by a repository and automated tests. These exercises grow that work into a small multi-screen booking flow.
+In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#exercises) you built a browsable home page of film cards backed by a repository and automated tests. These exercises grow that work into a small multi-page booking flow.
 
-1. The starter already defines the app title, cinema colours and header style in `lib/constants.dart`. See the [Sandwich Shop example for configuring the theme](#configure-the-subway-theme) and use the same approach to set up one shared app-bar style so that every screen uses the same background colour, icon colour, title style and elevation. In `lib/main.dart`, add this `appBarTheme` to the existing `ThemeData`:
+1. The starter already defines the app title, cinema colours and header style in `lib/constants.dart`. See the [Sandwich Shop example for configuring the theme](#configure-the-subway-theme) and use the same approach to set up one shared app-bar style so that every page uses the same background colour, icon colour, title style and elevation. In `lib/main.dart`, add this `appBarTheme` to the existing `ThemeData`:
 
     ```dart
     appBarTheme: const AppBarTheme(
@@ -1895,7 +1895,7 @@ In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#
     ),
     ```
 
-    Then, in `lib/views/home_view.dart` and `lib/views/movie_listing.dart`, remove the per-screen app-bar styling and keep each title. See the [Sandwich Shop menu app bar example](#add-the-basket-button-to-the-menu-app-bar) for how the shared theme supplies the styling consistently across all pages.
+    Then, in `lib/views/home_view.dart` and `lib/views/movie_listing.dart`, remove the per-page app-bar styling and keep each title. See the [Sandwich Shop menu app bar example](#add-the-basket-button-to-the-menu-app-bar) for how the shared theme supplies the styling consistently across all pages.
 
     Run the app and check that the app bars on its pages keep the same appearance. The screenshots below show the top of our app on different pages. Notice that all of them look identical in style (and functionality of the `NavBar` is preserved across all pages).
 
@@ -1929,11 +1929,11 @@ In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#
 
 4. The user should be able to add tickets to their basket. Develop and test a basket repository for managing the basket contents similar to how in [Holding an order in a basket](#holding-an-order-in-a-basket), we build and test a repository for the Sandwich Shop order. It should support adding, removing and clearing tickets, and provide the basket contents and total.
 
-5. Use your basket repository from the previous exercise to build and test a screen that displays and manages the customer's tickets. We build a similar screen in [Building the basket screen](#building-the-basket-screen).
+5. Use your basket repository from the previous exercise to build and test a basket page that displays and manages the customer's tickets. We build a similar screen for the Sandwich Shop in [Building the basket screen](#building-the-basket-screen).
 
-    ![Cinema basket screen with ticket line items, totals, and a checkout button](images/5/cinema_basket_screen.png)
+    ![Cinema basket page with ticket line items, totals, and a checkout button](images/5/cinema_basket_screen.png)
 
-6. Build and test an editable customer profile form on your `'/settings'` screen, like the one we create in [Building the customer profile settings form](#building-the-customer-profile-settings-form).
+6. Build and test an editable customer profile form on your `'/settings'` page, like the one we create in [Building the customer profile settings form](#building-the-customer-profile-settings-form).
 
     Here is an example of the customer profile form on the settings page:
 

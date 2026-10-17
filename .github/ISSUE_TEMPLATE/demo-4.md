@@ -18,10 +18,9 @@ assignees: ''
 
 Students run the Southsea Cinema application and demonstrate the features implemented during Weeks 7 and 8 (Worksheets 7 and 8).
 
-- [ ] SQLite persistence: Completed bookings appear in the booking history after fully closing and reopening the app on an Android emulator; seed bookings are not duplicated.
-- [ ] Database-backed checkout: Save the booking before removing purchased tickets or navigating; an insert failure displays an error and leaves the basket intact.
-- [ ] Booking history: The drawer opens the saved bookings view, which handles loading, errors and an empty table.
-- [ ] User flow: Patron can browse films, configure bookings, view the basket and complete checkout without Provider, notifiers or an app-bar basket badge.
+- [ ] Database-backed checkout: Checkout on the basket page saves the booking to SQLite before clearing the basket.
+- [ ] SQLite persistence: Past orders on the basket page still list earlier bookings after fully closing and reopening the app on an Android emulator.
+- [ ] User flow: Patron can browse films, configure bookings, open the basket page and complete checkout without Provider, notifiers or an app-bar basket badge.
 - [ ] Visual polish: Squared button styling matches the Southsea Cinema site design.
 
 **Functionality Mark (out of 9)**: _____
@@ -44,7 +43,7 @@ Staff inspect code architecture, directory structure, and automated test coverag
 
 - [ ] Tests run and pass cleanly with `flutter test --coverage`.
 - [ ] Coverage demonstrated live in VS Code using the Flutter Coverage extension.
-- [ ] Coverage includes model conversion, repositories, database creation and queries, checkout success and failure, and booking history.
+- [ ] Coverage includes model conversion, repositories, database creation and queries, saving a booking at checkout and listing past orders.
 
 ### Code Style and Standards
 

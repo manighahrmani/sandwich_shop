@@ -7,7 +7,9 @@
   - [Continue from Worksheet 5](#continue-from-worksheet-5)
   - [Clone the Sandwich Shop repository](#clone-the-sandwich-shop-repository)
   - [Switch to branch 5](#switch-to-branch-5)
-- [Choosing where to store the data](#choosing-where-to-store-the-data)
+- [Understanding JSON](#understanding-json)
+  - [Objects and arrays](#objects-and-arrays)
+  - [Why we use a bundled asset](#why-we-use-a-bundled-asset)
 - [Loading the menu from a JSON asset](#loading-the-menu-from-a-json-asset)
   - [Create and register the JSON asset](#create-and-register-the-json-asset)
   - [Convert a JSON map into a sandwich](#convert-a-json-map-into-a-sandwich)
@@ -51,7 +53,7 @@ Open the cloned folder in VS Code with **File > Open Folder**.
 
 ### Switch to branch 5
 
-Switch to branch `5` so your project matches the state after completing Worksheet 5:
+If you cloned a fresh copy, switch to branch `5` so your project matches the state after completing Worksheet 5. If you are continuing your own project, stay on the branch containing your completed work instead:
 
 ```bash
 git checkout 5
@@ -61,17 +63,57 @@ Run `flutter pub get` to install the project dependencies, then run `flutter tes
 
 Do not switch branches over unfinished work. Branch `6` contains the completed Sandwich Shop application for this worksheet; use it to compare your finished work, not as your starting point.
 
-## Choosing where to store the data
+## Understanding JSON
 
-A bundled JSON asset holds the sandwich catalogue. The app reads this file but does not edit it. Shared preferences remembers a few customer profile values under named keys between app launches.
+JSON stands for JavaScript Object Notation. It is a plain-text format for storing and exchanging structured data, not a programming language. Despite its name, you can use it with Dart and many other languages without writing JavaScript. JSON files use the `.json` extension.
 
-We use manual JSON conversion and direct preference reads and writes. The [Flutter JSON guide](https://docs.flutter.dev/data-and-backend/serialization/json#manual-encoding) and [key-value recipe](https://docs.flutter.dev/cookbook/persistence/key-value) describe these approaches.
+Apps commonly use JSON for product catalogues, configuration and data sent between an app and a server. Both people and programs can read its structure. The [MDN JSON introduction](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON) explains the format with further examples.
 
-Shared preferences is not secure storage and does not guarantee that every write reaches disk. Use fictional profile details, never passwords or payment details. Keep the basket in memory; this worksheet does not save completed purchases.
+### Objects and arrays
+
+A JSON object groups related values inside curly braces, `{}` (similar to a dictionary in Python). Each value has a name, called a key, followed by a colon and the value. For example, this object describes a sandwich's name and price:
+
+```json
+{
+  "name": "Footlong Sub",
+  "price": 7.50
+}
+```
+
+The key `"name"` holds the text value `"Footlong Sub"`, while `"price"` holds the number `7.50`. Keys and text values need double quotes; numbers do not. JSON also supports the Boolean values `true` and `false`, and `null` to represent no value.
+
+A JSON array holds an ordered collection of values inside square brackets, `[]`. Our catalogue needs several sandwiches, so we can put objects into an array. This shortened example contains two sandwiches:
+
+```json
+[
+  {
+    "name": "Footlong Sub",
+    "price": 7.50
+  },
+  {
+    "name": "Six-Inch Sub",
+    "price": 4.50
+  }
+]
+```
+
+Commas separate the fields in an object and the items in an array. Do not put a trailing comma after the final field or item, and do not add comments inside JSON. These examples show only two fields; the catalogue you create below will include all the fields required by `Sandwich`.
+
+JSON is text, not a Dart `Sandwich` instance. Decoding turns that text into Dart collections and values; we then use those values to construct our model objects. Encoding works in the other direction, turning Dart collections and values into JSON text. We will write the model conversion ourselves rather than use generated code, following the [Flutter manual JSON guide](https://docs.flutter.dev/data-and-backend/serialization/json#manual-encoding).
+
+### Why we use a bundled asset
+
+At present, changing a sandwich's name or price means editing Dart code in `SandwichRepository`. A separate data file keeps the catalogue apart from the program's behaviour, making menu maintenance easier. Someone who does not write Dart can edit the JSON in a text editor, provided they follow its structure, without changing how the app works.
+
+The same loading code can read the updated catalogue each time the app starts, without a server or an internet connection. The hard-coded list also survives restarts; the benefit of JSON here is separating data from code.
+
+You already registered image assets in [Worksheet 3](worksheet-3.md#register-assets-in-pubspec). A JSON file can be an asset too: it is a supporting file that the app reads, rather than Dart source code. It is called a bundled asset because Flutter packages the registered file with the app during the build, in an asset bundle. See the [Flutter assets guide](https://docs.flutter.dev/ui/assets/assets-and-images).
+
+The running app reads this packaged copy; it does not overwrite it when a customer changes settings. To distribute a changed bundled catalogue, you must rebuild and redistribute the app. This makes it suitable for fixed/static data, in our case our starting menu, but not for saving customer edits or keeping a live shop's prices up to date without an app update.
 
 ## Loading the menu from a JSON asset
 
-The catalogue currently comes from the hard-coded list in `SandwichRepository`. We add a JSON loader and use its result on the menu screen. The repository keeps its original synchronous methods for the existing lookup tests, but the running menu will use the asset.
+We add a JSON loader to `SandwichRepository` and use its result on the menu screen. The repository keeps its original (synchronous) methods for the existing lookup tests, but the running menu will use the asset.
 
 ### Create and register the JSON asset
 
@@ -105,9 +147,15 @@ Add a comma after that object's closing brace, then add the second object:
 }
 ```
 
-The array now contains two objects matching the [Sandwich fields from Worksheet 3](worksheet-3.md#add-the-fields). JSON uses double quotes around names and string values, and does not allow a trailing comma after the last object.
+The array now contains two objects matching the [Sandwich fields from Worksheet 3](worksheet-3.md#add-the-fields). Here is what your JSON file should look like:
 
-Follow [asset registration in Worksheet 3](worksheet-3.md#register-assets-in-pubspec) to add `assets/data/` alongside `assets/images/` in `pubspec.yaml`:
+![The sandwiches.json file with two sandwich objects](images/6/sandwiches_json.png)
+
+With `sandwiches.json` open, open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS. Run **Format Document With...**, select **Configure Default Formatter...**, then choose **JSON Language Features** or **Prettier - Code formatter** (you may be prompted to install extensions if you don't have them). This sets the default formatter for JSON files, without changing your Dart formatter.
+
+Run **Format Document** from the Command Palette to tidy the indentation. You can also use **Shift + Alt + F** on Windows or **Shift + Option + F** on macOS. If formatting fails, check for missing commas or brackets first; formatting does not repair invalid JSON.
+
+Similar to [asset registration in Worksheet 3](worksheet-3.md#register-assets-in-pubspec), we add `assets/data/` alongside `assets/images/` in `pubspec.yaml`:
 
 ```yaml
   assets:
@@ -115,26 +163,26 @@ Follow [asset registration in Worksheet 3](worksheet-3.md#register-assets-in-pub
     - assets/data/
 ```
 
-Keep this under the existing `flutter:` entry and run `flutter pub get`.
+See below the changes we made in `pubspec.yaml`:
 
-Your project should now look like this:
+![The changes made in pubspec.yaml to include assets/data/](images/6/pubspec_changes.png)
 
-![The sandwiches.json file open in the editor and the assets/data/ entry in pubspec.yaml](images/6/json_asset_and_pubspec.png)
+Make sure to place this under the existing `flutter:` entry and run `flutter pub get`.
 
 ### Convert a JSON map into a sandwich
 
-Open `lib/models/sandwich.dart`. We convert each JSON object into a `Sandwich` by hand, following the [manual JSON guide](https://docs.flutter.dev/data-and-backend/serialization/json#manual-encoding).
+Open `lib/models/sandwich.dart`. We will add a named constructor, `Sandwich.fromJson`, to convert the map representing each JSON object into a `Sandwich`:
 
-A `Map` stores values under keys. `Map<String, dynamic>` means that its keys are strings and its values can have different types. `dynamic` was introduced with route information in [Worksheet 5](worksheet-5.md#create-the-basket-button). The expression `json['name']` reads the value under the key `'name'`.
-
-Inside `Sandwich`, add an empty factory constructor:
+A `Map` stores values under keys. `Map<String, dynamic>` means that its keys are strings and its values can have different types. Inside `Sandwich`, after its existing constructor, add this factory constructor outline. It will show an error until you add its return statement:
 
 ```dart
   factory Sandwich.fromJson(Map<String, dynamic> json) {
   }
 ```
 
-The constructors you have written so far, such as `const Sandwich({required this.id, ...})`, copy their parameters straight into the fields. A constructor marked with the `factory` keyword works differently: it runs ordinary code first and then returns an object with a `return` statement. This lets us read and check the map before building the `Sandwich`. The `.fromJson` part gives the constructor a name, so you call it as `Sandwich.fromJson(someMap)`, in the same way as named constructors such as `EdgeInsets.all`. See [factory constructors](https://dart.dev/language/constructors#factory-constructors).
+The `Sandwich` constructor you wrote in Worksheet 3 needs every value to be passed in separately. Here we have a single map instead, so we write a second constructor that takes the map, picks out each value and builds the `Sandwich` for us. The `factory` keyword lets a constructor run some code first and then `return` the new `Sandwich`. The way you can use this constructor is to call `Sandwich.fromJson(someMap)`. See [factory constructors](https://dart.dev/language/constructors#factory-constructors) for more detail.
+
+<!-- TODO: Done till here -->
 
 Inside its braces, read the fields:
 
@@ -167,7 +215,7 @@ Your `fromJson` constructor should look like this:
 
 ### Convert a sandwich back into a map
 
-Inside `Sandwich`, add a `toJson` method:
+The menu only needs to read JSON, but we also practise the reverse conversion so you can export a sandwich's data when needed. Inside `Sandwich`, add a `toJson` method:
 
 ```dart
   Map<String, dynamic> toJson() {
@@ -206,7 +254,7 @@ Use the [model testing pattern from Worksheet 4](worksheet-4.md#unit-testing-dat
     });
 ```
 
-After the map declaration, convert it and check every field by comparing the resulting map:
+Inside that test, after the map declaration, convert it into a `Sandwich`, check each field, and compare the map returned by `toJson` with the original:
 
 ```dart
       final Sandwich sandwich = Sandwich.fromJson(data);
@@ -253,7 +301,7 @@ import 'package:flutter/services.dart';
 
 `dart:convert` provides `jsonDecode`, which turns JSON text into Dart lists and maps: a JSON array becomes a `List` and each JSON object becomes a `Map<String, dynamic>`. `package:flutter/services.dart` provides `rootBundle`, an object that reads the files listed under `assets:` in `pubspec.yaml`; see [loading text assets](https://docs.flutter.dev/ui/assets/assets-and-images#loading-text-assets).
 
-Inside `SandwichRepository`, add a nullable cache and the loader's outline:
+Inside `SandwichRepository`, add `_cachedSandwiches` to hold the most recently loaded list, followed by the loader's outline. Complete the method in the steps below:
 
 ```dart
   List<Sandwich>? _cachedSandwiches;
@@ -266,9 +314,9 @@ Inside `SandwichRepository`, add a nullable cache and the loader's outline:
 
 `List<Sandwich>?` means the cache is either a list or `null`; it starts as `null` because nothing has been loaded yet. For nullable types, revisit [Worksheet 4](worksheet-4.md#add-getsandwichbyid-to-sandwichrepository).
 
-Reading a file takes time, so the loader cannot hand back the list straight away. Its return type `Future<List<Sandwich>>` is a promise that a `List<Sandwich>` will arrive later. Marking the method `async` lets us write `await` inside it, which pauses the method until a slow step finishes, while the rest of the app keeps running. You met `async` and `await` in [the first widget test in Worksheet 4](worksheet-4.md#test-orderitemdisplay-in-isolation).
+Apply the `Future`, `async` and `await` pattern from [Worksheet 4's widget tests](worksheet-4.md#test-orderitemdisplay-in-isolation) to the file read. Here, `Future<List<Sandwich>>` means the operation completes with a sandwich list or an error, rather than handing back a list immediately.
 
-The curly braces around `assetPath` make it an optional named parameter with a default value, just like `maxQuantity` in [Worksheet 2](worksheet-2.md). Calling `loadSandwichesFromAsset()` reads `assets/data/sandwiches.json`, while a test could pass a different path.
+Like `maxQuantity` in [Worksheet 2](worksheet-2.md#use-orderscreen-inside-app), `assetPath` is an optional named parameter with a default value. Calling `loadSandwichesFromAsset()` reads `assets/data/sandwiches.json`, while a test could pass a different path.
 
 Inside the loader, read and decode the text:
 
@@ -279,7 +327,7 @@ Inside the loader, read and decode the text:
     final List<Sandwich> loadedSandwiches = [];
 ```
 
-`rootBundle.loadString` returns a `Future<String>`, so `await` waits for the file text. `jsonDecode` returns `dynamic`, because it cannot know in advance whether the text holds a list, a map or a single value. Our file starts with `[`, so `decodedData as List<dynamic>` tells Dart to treat it as a list whose items can be anything. The empty `loadedSandwiches` list will collect the converted sandwiches.
+`rootBundle.loadString` returns a `Future<String>`, so `await` waits for the file text. `jsonDecode` returns `dynamic`, because it cannot know in advance whether the text holds a list, a map or a single value. Our file contains an array, so `decodedData as List<dynamic>` checks that the decoded value is a list; it throws an error if the file contains a different kind of value. The empty `loadedSandwiches` list will collect the converted sandwiches.
 
 After those declarations, convert each entry using the [explicit loop from Worksheet 4](worksheet-4.md#add-getsandwichbyid-to-sandwichrepository):
 
@@ -305,7 +353,9 @@ At the beginning of the existing `getSandwiches` method, before its original `re
     }
 ```
 
-We copy the field into a local variable first. After the `!= null` check, Dart knows the local variable cannot be `null` inside the `if`, so it can be returned as a `List<Sandwich>`. Dart does not apply this check to class fields directly, which is why we need the local copy. Keep the existing fixed list and `getSandwichById` method. A repository instance returns its loaded list after a successful load; the menu below awaits the loader directly, so a failed asset load is not hidden by the old list.
+We copy the field into a local variable first. After the `!= null` check, Dart knows the local variable cannot be `null` inside the `if`, so it can be returned as a `List<Sandwich>`. Dart cannot make that guarantee for our mutable `_cachedSandwiches` field directly, which is why we use the local copy.
+
+Keep the existing fixed list and `getSandwichById` method so the earlier synchronous lookup tests still work without loading an asset. For each repository instance, `getSandwiches` returns the fixed list until a successful load, then returns the cached list. The menu will await the loader directly and display an error if it fails, rather than fall back to the fixed list.
 
 Your repository should look like this:
 
@@ -313,13 +363,13 @@ Your repository should look like this:
 
 ### Test the asset loader
 
-Open `test/sandwich_repository_test.dart`. Reading an asset with `rootBundle` needs part of the Flutter engine, which plain `test` calls do not start. At the top of `main()`, before the group, add:
+Open `test/sandwich_repository_test.dart`. Reading an asset with `rootBundle` needs Flutter's test binding, which connects the test to Flutter services. Plain `test` calls do not initialise it automatically. At the top of `main()`, before the group, add:
 
 ```dart
   TestWidgetsFlutterBinding.ensureInitialized();
 ```
 
-`testWidgets` starts this for you, but our repository tests use `test`. Inside the group, add a test that loads the real file:
+`testWidgets` initialises the binding for you, but our repository tests use `test`. The existing `flutter_test` import provides `TestWidgetsFlutterBinding`. Inside the group, add a test that loads the real file:
 
 ```dart
     test('loadSandwichesFromAsset reads the bundled JSON menu', () async {
@@ -371,6 +421,8 @@ Add the loader shell:
     }
   }
 ```
+
+`Future<void>` means the asynchronous method completes without returning a value; it updates the screen's state instead. Keep `initState` synchronous: it starts `_loadSandwiches`, and that separate method awaits the file read.
 
 `try` runs an operation that might fail; if any statement inside it throws an error, Dart jumps to `catch`, and `error` holds what was thrown. Here we display the failure rather than leave a permanent loading indicator. See [Dart error handling](https://dart.dev/language/error-handling#catch).
 
@@ -445,17 +497,25 @@ Inside `main`, add this setup, or add its single statement to an existing `setUp
   });
 ```
 
-`setUp` runs before each test, as in [Worksheet 5's repository tests](worksheet-5.md#unit-test-the-cart-repository). `rootBundle.clear()` clears cached asset reads so a later widget test does not reuse a `Future` created in an earlier test's simulated clock.
+`setUp` runs before each test, as in [Worksheet 5's repository tests](worksheet-5.md#unit-test-the-cart-repository). Flutter widget tests control time so that asynchronous behaviour can be tested predictably. `rootBundle.clear()` clears cached asset reads so a later widget test does not reuse an unfinished read from an earlier test.
 
 In every test that opens the menu or app, add `await tester.pumpAndSettle();` after `pumpWidget`, before checking catalogue text or tapping its buttons. The [frame-settling pattern from Worksheet 4](worksheet-4.md#test-initial-menu-screen-rendering) now also allows the asset load to finish.
 
 To verify the actual data source, temporarily change a sandwich name in the JSON asset, fully restart the app, and check that the menu changes. Restore the name afterwards. A hot reload alone does not reliably refresh a bundled asset.
 
-With a changed name, the menu should look similar to this:
+During that check, before restoring the name, the menu should look similar to this:
 
 ![The menu screen showing a sandwich name changed in the JSON asset](images/6/menu_with_changed_json_name.png)
 
 ## Adding shared preferences
+
+The menu now reads its catalogue from a bundled JSON file. Next, we address a different need: remembering entries in the customer profile form when the app closes. The bundled catalogue is read-only, so it is not where we save those changes.
+
+For these few editable values, we use shared preferences, which stores values under named keys on the device. It does not require JSON conversion: we save text and Boolean values directly, following the [Flutter key-value recipe](https://docs.flutter.dev/cookbook/persistence/key-value). Both approaches keep data available between launches, but the JSON asset supplies the menu while preferences remembers the customer's choices.
+
+Shared preferences suits small, non-critical values, such as whether you want email news. It does not encrypt stored values, so never use it for passwords or payment details, and use fictional profile details when testing. The [package documentation](https://pub.dev/packages/shared_preferences) also warns that a completed save does not guarantee the data has reached permanent storage. Losing a recent preference is inconvenient, but losing a paid order would be unacceptable.
+
+We only add storage for the catalogue and profile in this worksheet. The basket keeps its existing in-memory behaviour: closing the app loses its contents, and checkout shows a temporary confirmation rather than saving a purchase record.
 
 From the project root, add the preference package:
 
@@ -473,7 +533,7 @@ The terminal output should look similar to this:
 
 We extend the [profile form from Worksheet 5](worksheet-5.md#building-the-customer-profile-settings-form). Keep its controllers, `dispose`, fields and switch; only loading and saving change.
 
-We use `SharedPreferences`, matching the [Flutter key-value recipe](https://docs.flutter.dev/cookbook/persistence/key-value). The [package documentation](https://pub.dev/packages/shared_preferences) calls this the legacy API and recommends newer APIs for new production apps. We keep this small, single-screen example on one API so its direct getters, setters and mock store can be learnt together.
+We use the package's `SharedPreferences` class, matching the [Flutter key-value recipe](https://docs.flutter.dev/cookbook/persistence/key-value). The [package documentation](https://pub.dev/packages/shared_preferences) calls this the legacy API, meaning an older interface retained for compatibility, and recommends newer APIs for new apps. We use it here to follow the recipe and learn its getters, setters and test support together.
 
 ### Define the preference keys
 
@@ -483,7 +543,7 @@ In `lib/screens/settings_screen.dart`, add the package import alongside the exis
 import 'package:shared_preferences/shared_preferences.dart';
 ```
 
-Below the imports, define the keys using the [constants pattern from Worksheet 5](worksheet-5.md#define-the-shared-constants):
+Each saved value needs a stable key so we can find it again. Below the imports, define these keys using the [constants pattern from Worksheet 5](worksheet-5.md#define-the-shared-constants):
 
 ```dart
 const String prefName = 'user_name';
@@ -504,7 +564,7 @@ Inside `_SettingsScreenState`, create an empty `Future<void> _loadSettings() asy
     final bool? savedNewsletter = prefs.getBool(prefNewsletter);
 ```
 
-Obtaining the store is asynchronous. These getters then read cached values synchronously; they return `null` when a key has not been saved.
+Obtaining the store is asynchronous. `getString` reads a text value and `getBool` reads a Boolean value under the supplied key. These getters read cached values synchronously; they return `null` when a key has not been saved.
 
 Below those declarations, resolve each optional string with an explicit check:
 
@@ -592,7 +652,13 @@ Save a profile in the running app, then stop the app and run it again. When you 
 
 ### Test loading and saving preferences
 
-Open the existing `test/settings_screen_test.dart` from [Worksheet 5](worksheet-5.md#widget-test-the-settings-screen); do not replace its earlier tests. Add the `shared_preferences` import, then add this setup inside `main`:
+Open the existing `test/settings_screen_test.dart` from [Worksheet 5](worksheet-5.md#widget-test-the-settings-screen); do not replace its earlier tests. Add the same package import used in the settings screen:
+
+```dart
+import 'package:shared_preferences/shared_preferences.dart';
+```
+
+Inside `main`, add this setup, or add its statement to an existing `setUp`:
 
 ```dart
   setUp(() {
@@ -600,7 +666,7 @@ Open the existing `test/settings_screen_test.dart` from [Worksheet 5](worksheet-
   });
 ```
 
-This creates a mock preference store before each test so tests do not read or change your real profile. `<String, Object>{}` is an empty map whose keys are strings and whose values can be any non-null object, such as a `String` or a `bool`. `setUp` was introduced in [Worksheet 5](worksheet-5.md#unit-test-the-cart-repository). See the [recipe's testing support](https://docs.flutter.dev/cookbook/persistence/key-value#testing-support).
+This resets an in-memory test store using the same `setUp` pattern as [Worksheet 5's cart tests](worksheet-5.md#unit-test-the-cart-repository), so tests do not read or change your real profile. `<String, Object>{}` is an empty map whose keys are strings and whose values can be any non-null object, such as a `String` or a `bool`. See the [recipe's testing support](https://docs.flutter.dev/cookbook/persistence/key-value#testing-support).
 
 In each existing settings test, use `await tester.pumpAndSettle();` after opening the screen and after tapping **Save Settings**, before checking the result.
 
@@ -659,7 +725,7 @@ Then remove and recreate the screen to verify the saved profile is loaded again:
 
 Pumping `const SizedBox.shrink()`, an empty widget, removes the settings screen from the test, so the next `pumpWidget` creates a fresh screen that must load the saved values again.
 
-The menu navigation test also opens `SettingsScreen`. Add the package import and the same `setUp` mock to `test/menu_screen_test.dart`, otherwise that test will try to call the real preferences plugin.
+The menu navigation test also opens `SettingsScreen`. Add the package import to `test/menu_screen_test.dart` and add `SharedPreferences.setMockInitialValues(<String, Object>{});` to the `setUp` that already clears `rootBundle`. Keep both setup statements, otherwise the test may reuse an earlier asset read or try to call the real preferences plugin. Use the same mock setup in any other test file that opens the settings screen.
 
 Run the two affected files together:
 
@@ -671,6 +737,8 @@ All of the tests in both files should pass, as shown below:
 
 ![The terminal showing the settings and menu screen tests passing](images/6/settings_tests_passing.png)
 
+Finish by running `dart analyze` and `flutter test` from the project root to check that the full application still passes static analysis and all tests.
+
 ## Exercises
 
 The exercises below apply these concepts to your Southsea Cinema coursework. Together with [Worksheet 5's exercises](worksheet-5.md#exercises), they prepare you for Demo 3. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
@@ -679,12 +747,12 @@ Continue your cinema work from Worksheet 5, which started from cinema branch `2`
 
 1. Following [Loading the menu from a JSON asset](#loading-the-menu-from-a-json-asset), move the films into `assets/data/movies.json` and register the asset. Add `Movie.fromJson` and `Movie.toJson`, with tests for all fields and whole-number prices.
 
-2. Make `HomeView` await the repository's asset loader in `initState`; the displayed film cards must come from that result, not a hard-coded list. Include loading and error feedback, check `mounted` before updating the screen after an `await`, and update the home-page and app tests.
+2. In the state class for `HomeView`, start an asynchronous loading method from `initState`, following the menu screen example. Await the repository's asset loader inside that method, not inside `initState`; the displayed film cards must come from its result, not a hard-coded list. Include loading and error feedback, check `mounted` before updating the page after an `await`, and update the home-page and app tests.
 
-3. Add `shared_preferences`. Following [Remembering the customer profile](#remembering-the-customer-profile-with-shared-preferences), persist the editable cinema profile fields and email-news preference under named keys. Load them when settings opens and save them when the patron submits. Use fictional details. Keep the existing controller lifecycle and scrollable form.
+3. Add `shared_preferences`. Following [Remembering the customer profile](#remembering-the-customer-profile-with-shared-preferences), persist the editable cinema profile fields and email-news preference under named keys. Load them when the settings page opens and save them when the patron submits. Use fictional details. Keep the existing controller lifecycle and scrollable form.
 
 4. Test loading saved preferences, saving edited values and reopening the settings form with mock preferences. Fully close and reopen the running app to check that profile values remain. Keep `dart analyze` and `flutter test` passing; mock preferences alone do not prove that a real device or browser retains the values.
 
-5. Retain Worksheet 5's basket calculations, removal and temporary checkout confirmation. Checkout clears the in-memory basket, but does not create a saved booking history at this stage. For Demo 3, be ready to explain where film JSON is read, how map conversion works, why asynchronous screen updates check `mounted`, and how profile values survive reopening the app. **Show your completed Demo 3 application to a member of staff.**
+5. Retain Worksheet 5's basket calculations, removal and temporary checkout confirmation. Checkout clears the in-memory basket, but does not create a saved booking history at this stage. For Demo 3, be ready to explain where film JSON is read, how map conversion works, why asynchronous page updates check `mounted`, and how profile values survive reopening the app. **Show your completed Demo 3 application to a member of staff.**
 
-6. As an advanced challenge, follow the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input) to add focus management. Create a `FocusNode`, attach it to the primary editable field, call `requestFocus()` when entering edit mode, and dispose of it with the controllers. Add a clear `IconButton` that calls the controller's `clear()` method. Build and test one control at a time.
+6. As an advanced challenge, follow the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input) to add focus management to the profile form. A `FocusNode` tracks whether an input has keyboard focus. Create one for the name field, attach it through the field's `focusNode` parameter, and add a button that calls its `requestFocus()` method. Dispose of the node alongside the controllers. Add a clear `IconButton` that calls the name controller's `clear()` method. Build and test one control at a time.
