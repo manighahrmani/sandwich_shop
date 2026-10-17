@@ -25,8 +25,9 @@ class SandwichRepository {
   }
 
   List<Sandwich> getSandwiches() {
-    if (_cachedSandwiches != null) {
-      return _cachedSandwiches!;
+    final List<Sandwich>? cachedSandwiches = _cachedSandwiches;
+    if (cachedSandwiches != null) {
+      return cachedSandwiches;
     }
     return const [
       Sandwich(

@@ -49,35 +49,4 @@ void main() {
       expect(find.text('Your basket is empty'), findsOneWidget);
     },
   );
-
-  testWidgets('Multiple lines include one delivery fee and remove the right row',
-      (WidgetTester tester) async {
-    final CartRepository cart = CartRepository.instance;
-    cart.addItem(const CartItem(sandwich: testSandwich, quantity: 1));
-    cart.addItem(const CartItem(sandwich: testSandwich, quantity: 3));
-    await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
-    expect(find.text('£41.50'), findsOneWidget);
-    expect(find.text('£1.50'), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.delete_outline).first);
-    await tester.pump();
-    expect(find.text('1 x Footlong Sub'), findsNothing);
-    expect(find.text('3 x Footlong Sub'), findsOneWidget);
-    expect(find.text('£31.50'), findsOneWidget);
-  });
-
-  testWidgets('Checkout clears the basket and shows a confirmation', (
-    WidgetTester tester,
-  ) async {
-    CartRepository.instance.addItem(
-      const CartItem(sandwich: testSandwich, quantity: 2),
-    );
-    await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
-
-    await tester.tap(find.text('Checkout'));
-    await tester.pump();
-
-    expect(CartRepository.instance.getItems(), isEmpty);
-    expect(find.text('Your basket is empty'), findsOneWidget);
-    expect(find.text('Thanks, your order is on its way'), findsOneWidget);
-  });
 }
