@@ -198,11 +198,21 @@ clarity, expressiveness, and ease of understanding for students:
     methods), and unit/widget tests (`test`, `expect`, `testWidgets`).
   - Worksheets 5 & 6 concepts used: Shared constants, theme configuration,
     navigation and named routes, reusable widgets, form state (`Switch`,
-    `TextField`, `TextEditingController`), shared preferences, and SQLite
-    persistence (`sqflite`, `sqflite_common_ffi`).
-  - Worksheets 7 & 8 concepts used: App state management (`provider` or
-    `ChangeNotifier`), integration tests, cloud services.
-  - Test folder organisation rule: Starting Worksheet 8 (and branch 8), the
+    `TextField`, `TextEditingController`), JSON assets, asynchronous loading,
+    and shared preferences. Worksheet 6 does not include SQLite or saved
+    purchase history; checkout still uses the temporary in-memory flow.
+  - Worksheet 7 concepts used: SQLite persistence (`sqflite`,
+    `sqflite_common_ffi`), order records, database-backed checkout and
+    saved purchase history on an Android emulator. No Provider package,
+    notifiers or app-bar basket badge is required.
+  - Worksheet 8 covers Review-Driven Development. Integration testing and
+    cloud services belong to the later worksheets, not Worksheet 7.
+  - Sandwich Shop branch `6` ends after JSON and preferences; branch `7`
+    adds SQLite orders. Southsea Cinema Private uses demo checkpoints:
+    branch `3` ends after Worksheets 5 and 6, while branch `4` adds
+    Worksheet 7's SQLite bookings. Cinema branch numbers are not worksheet
+    numbers.
+  - Test folder organisation rule: Starting Worksheet 7 (and branch 7), the
     `test/` directory structure must strictly mirror the organisation of
     folders in `lib/` (for example `test/models/`, `test/screens/`,
     `test/widgets/`, `test/repositories/`, `test/database/`).

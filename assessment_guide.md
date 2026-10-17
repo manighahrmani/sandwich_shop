@@ -61,6 +61,12 @@ not an additional deduction for each missing feature. At Demo 3, one
 understanding question comes from Worksheet 5 and one from Worksheet 6,
 excluding advanced challenges.
 
+Demo 3 covers Worksheets 5 and 6: themed navigation, the ticket basket,
+profile forms, a JSON film catalogue and saved profile preferences.
+Database-backed checkout and SQLite booking history are introduced in
+Worksheet 7 for Demo 4, not required for Demo 3. Provider and notifiers
+are not assessment requirements.
+
 ## Demo windows and missing a demo
 
 Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks

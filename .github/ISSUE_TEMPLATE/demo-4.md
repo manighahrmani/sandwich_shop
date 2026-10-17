@@ -18,9 +18,10 @@ assignees: ''
 
 Students run the Southsea Cinema application and demonstrate the features implemented during Weeks 7 and 8 (Worksheets 7 and 8).
 
-- [ ] State management: Cart and booking state updates reactively across screens (for example adding tickets updates basket indicator and basket screen).
-- [ ] Data persistence or cloud integration: Booking records or cinema state persist across app restarts (SQLite or shared preferences).
-- [ ] User flow: Patron can browse films, configure bookings, view basket, and complete checkout.
+- [ ] SQLite persistence: Completed bookings appear in the booking history after fully closing and reopening the app on an Android emulator; seed bookings are not duplicated.
+- [ ] Database-backed checkout: Save the booking before removing purchased tickets or navigating; an insert failure displays an error and leaves the basket intact.
+- [ ] Booking history: The drawer opens the saved bookings view, which handles loading, errors and an empty table.
+- [ ] User flow: Patron can browse films, configure bookings, view the basket and complete checkout without Provider, notifiers or an app-bar basket badge.
 - [ ] Visual polish: Squared button styling matches the Southsea Cinema site design.
 
 **Functionality Mark (out of 9)**: _____
@@ -33,17 +34,17 @@ Staff inspect code architecture, directory structure, and automated test coverag
 
 - [ ] Subfolders in `test/` strictly mirror `lib/`:
   - `test/models/` mirrors `lib/models/`
-  - `test/screens/` mirrors `lib/screens/`
+  - `test/views/` mirrors `lib/views/` (or `test/screens/` for `lib/screens/`)
   - `test/widgets/` mirrors `lib/widgets/`
   - `test/repositories/` mirrors `lib/repositories/`
   - `test/database/` mirrors `lib/database/`
-- [ ] No loose test files remain in the root of `test/`.
+- [ ] Test files are grouped under the matching application folders; shared helpers may use `test/support/`.
 
 ### Automated Test Coverage
 
 - [ ] Tests run and pass cleanly with `flutter test --coverage`.
 - [ ] Coverage demonstrated live in VS Code using the Flutter Coverage extension.
-- [ ] Comprehensive coverage of models, repositories, and critical UI widgets.
+- [ ] Coverage includes model conversion, repositories, database creation and queries, checkout success and failure, and booking history.
 
 ### Code Style and Standards
 

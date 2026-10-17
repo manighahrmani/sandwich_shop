@@ -199,8 +199,8 @@ void _save() {
 
 ## Demo 3 (footnote)
 
-- Union of Worksheet 5 and Worksheet 6 exercises: navigation, a basket, a profile form and saved bookings.
-- More on SQL databases and emulators next week too.
+- Union of Worksheet 5 and Worksheet 6 exercises: navigation, a basket, a profile form, a JSON catalogue and saved profile preferences.
+- SQLite bookings and Android emulators follow in Worksheet 7 for Demo 4.
 - Also unit tests and widget tests covering almost all of your codebase.
 - Demonstrate in your own timetabled practical session.
 - You can only do one demo in each window.

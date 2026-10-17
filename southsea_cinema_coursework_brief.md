@@ -137,6 +137,8 @@ There are five demos across the term, but only your best four demo marks count t
 
 For Demos 1 to 3, if any required functionality item scores zero, the final demo mark is capped at 23 out of 25. A lower mark remains unchanged; the cap does not add a separate deduction for each missing feature. Demo 3 asks one understanding question from Worksheet 5 and one from Worksheet 6, excluding advanced challenges.
 
+Demo 3 covers Worksheets 5 and 6: themed navigation, the ticket basket, profile forms, a JSON film catalogue and saved profile preferences. SQLite booking history and database-backed checkout begin in Worksheet 7 for Demo 4. Demonstrate that completed bookings survive restarting the Android emulator app and that a failed database insert leaves the basket intact. Provider and notifiers are not required.
+
 Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks 3 and 4, Weeks 5 and 6, Weeks 7 and 8, and Weeks 9 and 10). Three rules apply:
 
 - You can perform at most one demo in any demo window.
