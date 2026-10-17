@@ -117,6 +117,10 @@ Follow [asset registration in Worksheet 3](worksheet-3.md#register-assets-in-pub
 
 Keep this under the existing `flutter:` entry and run `flutter pub get`.
 
+Your project should now look like this:
+
+![The sandwiches.json file open in the editor and the assets/data/ entry in pubspec.yaml](images/6/json_asset_and_pubspec.png)
+
 ### Convert a JSON map into a sandwich
 
 Open `lib/models/sandwich.dart`. We convert each JSON object into a `Sandwich` by hand, following the [manual JSON guide](https://docs.flutter.dev/data-and-backend/serialization/json#manual-encoding).
@@ -156,6 +160,10 @@ After those declarations, return the instance:
       imagePath: imagePath,
     );
 ```
+
+Your `fromJson` constructor should look like this:
+
+![The Sandwich.fromJson factory constructor in lib/models/sandwich.dart](images/6/sandwich_from_json_code.png)
 
 ### Convert a sandwich back into a map
 
@@ -229,6 +237,10 @@ Add another test using a whole-number price to exercise the `num` conversion:
 
 Run `flutter test test/sandwich_model_test.dart`.
 
+All of the model tests should pass, as shown below:
+
+![The terminal showing all sandwich model tests passing](images/6/sandwich_model_tests_passing.png)
+
 ### Read the asset in the repository
 
 Open `lib/repositories/sandwich_repository.dart` and add these imports:
@@ -295,6 +307,10 @@ At the beginning of the existing `getSandwiches` method, before its original `re
 
 We copy the field into a local variable first. After the `!= null` check, Dart knows the local variable cannot be `null` inside the `if`, so it can be returned as a `List<Sandwich>`. Dart does not apply this check to class fields directly, which is why we need the local copy. Keep the existing fixed list and `getSandwichById` method. A repository instance returns its loaded list after a successful load; the menu below awaits the loader directly, so a failed asset load is not hidden by the old list.
 
+Your repository should look like this:
+
+![The SandwichRepository with the asset loader and the cache check in getSandwiches](images/6/sandwich_repository_asset_loader.png)
+
 ### Test the asset loader
 
 Open `test/sandwich_repository_test.dart`. Reading an asset with `rootBundle` needs part of the Flutter engine, which plain `test` calls do not start. At the top of `main()`, before the group, add:
@@ -319,6 +335,10 @@ Open `test/sandwich_repository_test.dart`. Reading an asset with `rootBundle` ne
 ```
 
 The callback is `async` so that it can `await` the loader. The last line checks that `getSandwiches` now returns the cached list. Run `flutter test test/sandwich_repository_test.dart`.
+
+The new test should pass alongside the existing repository tests, as shown below:
+
+![The terminal showing the repository tests, including the asset loader test, passing](images/6/sandwich_repository_tests_passing.png)
 
 ### Load the menu when the screen opens
 
@@ -405,6 +425,10 @@ In `build`, remove the local repository and `sandwiches` declarations. Start the
 
 `final Widget body;` declares a variable without giving it a value yet. Each branch of the `if` statement assigns it exactly once, and Dart reports an error if any branch forgets. [`CircularProgressIndicator`](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html) shows that work is in progress. Keep the existing `Scaffold` and its app bar, but replace its `body` value with `body`. The list now comes from the asset.
 
+When you run the app, the menu should look like this:
+
+![The menu screen showing the two sandwiches loaded from the JSON asset](images/6/menu_loaded_from_json.png)
+
 ### Update the menu and app tests
 
 In `test/menu_screen_test.dart` and `test/widget_test.dart`, import the asset services:
@@ -427,6 +451,10 @@ In every test that opens the menu or app, add `await tester.pumpAndSettle();` af
 
 To verify the actual data source, temporarily change a sandwich name in the JSON asset, fully restart the app, and check that the menu changes. Restore the name afterwards. A hot reload alone does not reliably refresh a bundled asset.
 
+With a changed name, the menu should look similar to this:
+
+![The menu screen showing a sandwich name changed in the JSON asset](images/6/menu_with_changed_json_name.png)
+
 ## Adding shared preferences
 
 From the project root, add the preference package:
@@ -436,6 +464,10 @@ flutter pub add shared_preferences
 ```
 
 This command updates `pubspec.yaml` and fetches a compatible package version. Stop and restart the app after adding the plugin rather than only hot reloading. You can continue using your browser for this worksheet; an Android emulator is not required.
+
+The terminal output should look similar to this:
+
+![The terminal output after adding the shared_preferences package](images/6/flutter_pub_add_shared_preferences.png)
 
 ## Remembering the customer profile with shared preferences
 
@@ -522,6 +554,10 @@ Finish `_loadSettings` with the mounted guard and state update:
 
 In the existing `initState`, add `_loadSettings();` after creating all three controllers. Do not create a second `initState` or remove `dispose`.
 
+Your `_loadSettings` method and `initState` should look like this:
+
+![The _loadSettings method and the initState method in lib/screens/settings_screen.dart](images/6/load_settings_method.png)
+
 ### Save the profile before showing confirmation
 
 Change the existing `_saveSettings` return type from `void` to `Future<void>` and add `async`. Keep its three declarations that read and trim the controller text, as in [Worksheet 5](worksheet-5.md#add-text-fields-and-the-switch-toggle).
@@ -545,6 +581,14 @@ Keep the existing `UserSettings` construction. Before its confirmation `setState
 ```
 
 The existing **Save Settings** button still uses `onPressed: _saveSettings`. The confirmation now follows the awaited writes, rather than only changing the form's in-memory state.
+
+Your `_saveSettings` method should look like this:
+
+![The asynchronous _saveSettings method writing the profile to shared preferences](images/6/save_settings_method.png)
+
+Save a profile in the running app, then stop the app and run it again. When you open the settings screen, the form should be filled with your saved details, as shown below:
+
+![The settings form filled with saved profile details after restarting the app](images/6/settings_form_after_restart.png)
 
 ### Test loading and saving preferences
 
@@ -622,6 +666,10 @@ Run the two affected files together:
 ```bash
 flutter test test/settings_screen_test.dart test/menu_screen_test.dart
 ```
+
+All of the tests in both files should pass, as shown below:
+
+![The terminal showing the settings and menu screen tests passing](images/6/settings_tests_passing.png)
 
 ## Exercises
 
