@@ -103,4 +103,26 @@ void main() {
     expect(find.byType(OrdersScreen), findsOneWidget);
     expect(find.text('Order #1001'), findsOneWidget);
   });
+
+  testWidgets('Checkout keeps the basket when saving fails', (
+    WidgetTester tester,
+  ) async {
+    CartRepository.instance.addItem(
+      const CartItem(sandwich: testSandwich, quantity: 2),
+    );
+    await tester.runAsync(() async {
+      final Database database = await SandwichDatabase.instance.database;
+      await database.execute('DROP TABLE orders');
+    });
+    await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Checkout'));
+      await tester.pumpAndSettle();
+    });
+    await tester.pumpAndSettle();
+
+    expect(CartRepository.instance.getItems().length, 1);
+    expect(find.text('2 x Footlong Sub'), findsOneWidget);
+    expect(find.textContaining('Could not save your order'), findsOneWidget);
+  });
 }
