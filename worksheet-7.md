@@ -12,6 +12,7 @@
   - [Set up an emulator on your own computer](#set-up-an-emulator-on-your-own-computer)
   - [Select the emulator and run the app](#select-the-emulator-and-run-the-app)
 - [Adding the SQLite packages](#adding-the-sqlite-packages)
+  - [Stop the app running in a browser](#stop-the-app-running-in-a-browser)
 - [Representing a saved order](#representing-a-saved-order)
   - [Create the order record and its constructor](#create-the-order-record-and-its-constructor)
   - [Convert an order into a database row](#convert-an-order-into-a-database-row)
@@ -147,7 +148,76 @@ flutter pub add --dev sqflite_common_ffi
 
 `sqflite` opens SQLite on Android. `path` provides `join` to build a file path, and `sqflite_common_ffi` supplies SQLite for tests on your computer, not the mobile app. Keep the `shared_preferences` dependency from Worksheet 6.
 
-We do not need web database packages, WebAssembly files or platform-detection branches. Run the app on your emulator. After adding plugins, stop and restart the app rather than only hot reloading.
+We do not need web database packages or WebAssembly files. Run the app on your emulator. After adding plugins, stop and restart the app rather than only hot reloading.
+
+### Stop the app running in a browser
+
+`sqflite` does not work in a browser or on Windows or Linux desktop. Remove the `web`, `windows` and `linux` folders from your project so these targets are no longer offered. Flutter can still build a web version without the `web` folder, so we also check the platform when the app starts.
+
+Open `lib/main.dart` and add this import above the existing Material import:
+
+```dart
+import 'package:flutter/foundation.dart';
+```
+
+`kIsWeb` is `true` when the app is compiled for a browser, and `defaultTargetPlatform` tells us which operating system the app runs on. Replace the `main` function with:
+
+```dart
+// SQLite (sqflite) only works on Android, iOS and macOS, not in a browser.
+bool isSupportedPlatform() {
+  if (kIsWeb) {
+    return false;
+  }
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    return true;
+  }
+  if (defaultTargetPlatform == TargetPlatform.iOS) {
+    return true;
+  }
+  if (defaultTargetPlatform == TargetPlatform.macOS) {
+    return true;
+  }
+  return false;
+}
+
+void main() {
+  if (isSupportedPlatform()) {
+    runApp(const App());
+  } else {
+    runApp(const UnsupportedPlatformApp());
+  }
+}
+```
+
+At the end of the file, add the small app shown on unsupported platforms:
+
+```dart
+class UnsupportedPlatformApp extends StatelessWidget {
+  const UnsupportedPlatformApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(24.0),
+            child: Text(
+              'This app saves orders with SQLite, which does not work in a '
+              'web browser or on Windows or Linux desktop. Stop the app and '
+              'run it on an Android emulator instead.',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+From now on, select your Android emulator before running the app, as described in [Preparing an Android emulator](#preparing-an-android-emulator).
 
 ## Representing a saved order
 
