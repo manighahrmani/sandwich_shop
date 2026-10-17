@@ -14,8 +14,9 @@ class SandwichDatabase {
   }
 
   Future<Database> get database async {
-    if (_database != null) {
-      return _database!;
+    final Database? cachedDatabase = _database;
+    if (cachedDatabase != null) {
+      return cachedDatabase;
     }
     final Database db = await _initDB('sandwich_data.db');
     _database = db;
@@ -103,16 +104,21 @@ class SandwichDatabase {
     final List<Map<String, Object?>> records = await db.rawQuery(
       'SELECT MAX(order_number) as max_num FROM orders',
     );
-    if (records.isNotEmpty && records[0]['max_num'] != null) {
-      final int currentMax = records[0]['max_num'] as int;
-      return currentMax + 1;
+    if (records.isEmpty) {
+      return 1001;
     }
-    return 1001;
+    final Object? maxValue = records[0]['max_num'];
+    if (maxValue == null) {
+      return 1001;
+    }
+    final int currentMax = maxValue as int;
+    return currentMax + 1;
   }
 
   Future<void> close() async {
-    if (_database != null) {
-      await _database!.close();
+    final Database? cachedDatabase = _database;
+    if (cachedDatabase != null) {
+      await cachedDatabase.close();
       _database = null;
     }
   }

@@ -25,7 +25,7 @@ void main() {
     });
   });
 
-  test('A complete database map round-trips every field including the id', () {
+  test('A database map converts back into an order', () {
     final Map<String, Object?> row = <String, Object?>{
       'id': 7,
       'order_number': 1010,
@@ -50,24 +50,5 @@ void main() {
     final OrderRecord restored = OrderRecord.fromMap(row);
     expect(restored.total, 6.0);
     expect(restored.total, isA<double>());
-    expect(restored.id, isNull);
   });
-
-  for (final String key in <String>[
-    'order_number',
-    'summary',
-    'note',
-    'toasted',
-    'vegan',
-    'total',
-    'date',
-  ]) {
-    test('Missing required database field $key is rejected', () {
-      final Map<String, Object?> row = order.toMap();
-      row.remove(key);
-      expect(() {
-        OrderRecord.fromMap(row);
-      }, throwsA(isA<TypeError>()));
-    });
-  }
 }

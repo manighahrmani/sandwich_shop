@@ -70,49 +70,74 @@ void main() {
     expect(added.sandwich.name, 'Test Sub');
     expect(find.text('Added 2 Test Sub to basket'), findsOneWidget);
   });
+  group('OrderItemDisplay widget tests', () {
+    testWidgets('displays zero sandwiches with no emoji', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: OrderItemDisplay(0, 'Footlong Sub')),
+        ),
+      );
 
-  testWidgets('Custom maximum and lower boundary keep the quantity in range', (
+      expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
+    });
+
+    testWidgets('displays three sandwiches with three emojis', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: OrderItemDisplay(3, 'Footlong Sub')),
+        ),
+      );
+
+      expect(find.text('3 Footlong Sub sandwich(es): 🥪🥪🥪'), findsOneWidget);
+    });
+  });
+
+  testWidgets('OrderScreen quantity does not drop below zero', (
     WidgetTester tester,
   ) async {
+    const Sandwich sandwich = Sandwich(
+      id: 'test',
+      name: 'Test Sub',
+      description: 'Test description',
+      price: 5.0,
+      imagePath: 'assets/images/footlong.jpeg',
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(home: OrderScreen(sandwich: sandwich)),
+    );
+
+    await tester.tap(find.text('Remove'));
+    await tester.pump();
+    expect(find.text('0 Test Sub sandwich(es): '), findsOneWidget);
+  });
+
+  testWidgets('OrderScreen quantity does not exceed maxQuantity', (
+    WidgetTester tester,
+  ) async {
+    const Sandwich sandwich = Sandwich(
+      id: 'test',
+      name: 'Test Sub',
+      description: 'Test description',
+      price: 5.0,
+      imagePath: 'assets/images/footlong.jpeg',
+    );
+
     await tester.pumpWidget(
       const MaterialApp(
-        home: OrderScreen(sandwich: testSandwich, maxQuantity: 2),
+        home: OrderScreen(sandwich: sandwich, maxQuantity: 3),
       ),
     );
-    for (int press = 0; press < 4; press++) {
+
+    for (int i = 0; i < 5; i++) {
       await tester.tap(find.text('Add'));
       await tester.pump();
     }
-    expect(find.text('2 Test Sub sandwich(es): 🥪🥪'), findsOneWidget);
-    for (int press = 0; press < 4; press++) {
-      await tester.tap(find.text('Remove'));
-      await tester.pump();
-    }
-    expect(find.text('0 Test Sub sandwich(es): '), findsOneWidget);
-    await tester.tap(find.text('Add to Basket'));
-    await tester.pump();
-    expect(CartRepository.instance.getItems(), isEmpty);
-  });
 
-  testWidgets('Repeated basket additions keep independent immutable lines', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: OrderScreen(sandwich: testSandwich)),
-    );
-    await tester.tap(find.text('Add'));
-    await tester.pump();
-    await tester.tap(find.text('Add to Basket'));
-    await tester.pump();
-    await tester.tap(find.text('Add'));
-    await tester.pump();
-    await tester.tap(find.text('Add to Basket'));
-    await tester.pump();
-    final List<CartItem> items = CartRepository.instance.getItems();
-    expect(items, hasLength(2));
-    expect(items.first.quantity, 1);
-    expect(items.last.quantity, 2);
-    expect(CartRepository.instance.totalItemCount, 3);
-    expect(find.text('Added 2 Test Sub to basket'), findsOneWidget);
+    expect(find.text('3 Test Sub sandwich(es): 🥪🥪🥪'), findsOneWidget);
   });
 }

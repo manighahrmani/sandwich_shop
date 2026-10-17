@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/user_settings.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
-import 'package:sandwich_shop/widgets/orders_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,11 +25,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late TextEditingController _emailController;
   bool _receiveNewsletter = false;
   String _confirmationMessage = '';
-  bool _nameEdited = false;
-  bool _addressEdited = false;
-  bool _emailEdited = false;
-  bool _newsletterEdited = false;
-  bool _savingSettings = false;
 
   @override
   void initState() {
@@ -50,109 +44,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadSettings() async {
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? savedName = prefs.getString(prefName);
-      final String? savedAddress = prefs.getString(prefAddress);
-      final String? savedEmail = prefs.getString(prefEmail);
-      final bool? savedNewsletter = prefs.getBool(prefNewsletter);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? savedName = prefs.getString(prefName);
+    final String? savedAddress = prefs.getString(prefAddress);
+    final String? savedEmail = prefs.getString(prefEmail);
+    final bool? savedNewsletter = prefs.getBool(prefNewsletter);
 
-      String name = '';
-      if (savedName != null) {
-        name = savedName;
-      }
-
-      String address = '';
-      if (savedAddress != null) {
-        address = savedAddress;
-      }
-
-      String email = '';
-      if (savedEmail != null) {
-        email = savedEmail;
-      }
-
-      bool newsletter = false;
-      if (savedNewsletter != null) {
-        newsletter = savedNewsletter;
-      }
-
-      if (mounted) {
-        setState(() {
-          if (!_nameEdited) {
-            _nameController.text = name;
-          }
-          if (!_addressEdited) {
-            _addressController.text = address;
-          }
-          if (!_emailEdited) {
-            _emailController.text = email;
-          }
-          if (!_newsletterEdited) {
-            _receiveNewsletter = newsletter;
-          }
-        });
-      }
-    } catch (error) {
-      if (mounted) {
-        setState(() {
-          _confirmationMessage = 'Could not load settings: $error';
-        });
-      }
+    String name = '';
+    if (savedName != null) {
+      name = savedName;
     }
+
+    String address = '';
+    if (savedAddress != null) {
+      address = savedAddress;
+    }
+
+    String email = '';
+    if (savedEmail != null) {
+      email = savedEmail;
+    }
+
+    bool newsletter = false;
+    if (savedNewsletter != null) {
+      newsletter = savedNewsletter;
+    }
+
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _nameController.text = name;
+      _addressController.text = address;
+      _emailController.text = email;
+      _receiveNewsletter = newsletter;
+    });
   }
 
   Future<void> _saveSettings() async {
-    if (_savingSettings) {
-      return;
-    }
     final String name = _nameController.text.trim();
     final String address = _addressController.text.trim();
     final String email = _emailController.text.trim();
-    final bool receiveNewsletter = _receiveNewsletter;
-    setState(() {
-      _savingSettings = true;
-      _confirmationMessage = 'Saving settings...';
-    });
 
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final bool nameSaved = await prefs.setString(prefName, name);
-      final bool addressSaved = await prefs.setString(prefAddress, address);
-      final bool emailSaved = await prefs.setString(prefEmail, email);
-      final bool newsletterSaved = await prefs.setBool(
-        prefNewsletter,
-        receiveNewsletter,
-      );
-      if (!nameSaved || !addressSaved || !emailSaved || !newsletterSaved) {
-        throw StateError('The preferences could not be stored');
-      }
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(prefName, name);
+    await prefs.setString(prefAddress, address);
+    await prefs.setString(prefEmail, email);
+    await prefs.setBool(prefNewsletter, _receiveNewsletter);
 
-      final UserSettings settings = UserSettings(
-        name: name,
-        address: address,
-        email: email,
-        receiveNewsletter: receiveNewsletter,
-      );
+    final UserSettings settings = UserSettings(
+      name: name,
+      address: address,
+      email: email,
+      receiveNewsletter: _receiveNewsletter,
+    );
 
-      if (mounted) {
-        setState(() {
-          _confirmationMessage = 'Settings saved for ${settings.name}';
-        });
-      }
-    } catch (error) {
-      if (mounted) {
-        setState(() {
-          _confirmationMessage = 'Could not save settings: $error';
-        });
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _savingSettings = false;
-        });
-      }
+    if (!mounted) {
+      return;
     }
+    setState(() {
+      _confirmationMessage = 'Settings saved for ${settings.name}';
+    });
   }
 
   @override
@@ -160,7 +112,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [OrdersButton(), BasketButton()],
+        actions: const [BasketButton()],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -174,9 +126,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: _nameController,
-              onChanged: (String value) {
-                _nameEdited = true;
-              },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Full name',
@@ -186,9 +135,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: _addressController,
-              onChanged: (String value) {
-                _addressEdited = true;
-              },
               maxLines: 3,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -199,9 +145,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: _emailController,
-              onChanged: (String value) {
-                _emailEdited = true;
-              },
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -212,13 +155,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 16),
             Row(
               children: [
-                const Expanded(child: Text('Receive newsletter and offers')),
+                const Expanded(
+                  child: Text('Receive newsletter and offers'),
+                ),
                 Switch(
                   value: _receiveNewsletter,
                   onChanged: (bool value) {
                     setState(() {
                       _receiveNewsletter = value;
-                      _newsletterEdited = true;
                     });
                   },
                 ),
@@ -229,7 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               width: double.infinity,
               child: PrimaryButton(
                 label: 'Save Settings',
-                onPressed: _savingSettings ? null : _saveSettings,
+                onPressed: _saveSettings,
               ),
             ),
             if (_confirmationMessage.isNotEmpty) ...[

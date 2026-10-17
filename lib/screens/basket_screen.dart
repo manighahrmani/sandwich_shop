@@ -19,7 +19,6 @@ class BasketScreen extends StatefulWidget {
 
 class _BasketScreenState extends State<BasketScreen> {
   String _confirmationMessage = '';
-  bool _savingOrder = false;
 
   Widget _buildEmptyState() {
     return const Center(
@@ -50,17 +49,9 @@ class _BasketScreenState extends State<BasketScreen> {
   }
 
   Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
-    if (_savingOrder || items.isEmpty) {
-      return;
-    }
-    final List<CartItem> purchasedItems = List<CartItem>.unmodifiable(items);
-    final String summary = _buildSummary(purchasedItems);
+    final String summary = _buildSummary(items);
     final double total = cart.getTotalDue();
     final String date = _formatDate(DateTime.now());
-    setState(() {
-      _savingOrder = true;
-      _confirmationMessage = 'Saving your order...';
-    });
 
     try {
       final SandwichDatabase database = SandwichDatabase.instance;
@@ -72,7 +63,7 @@ class _BasketScreenState extends State<BasketScreen> {
         date: date,
       );
       await database.insertOrder(record);
-      cart.removePurchasedItems(purchasedItems);
+      cart.clear();
       if (!mounted) {
         return;
       }
@@ -87,12 +78,6 @@ class _BasketScreenState extends State<BasketScreen> {
       setState(() {
         _confirmationMessage = 'Could not save your order: $error';
       });
-    } finally {
-      if (mounted) {
-        setState(() {
-          _savingOrder = false;
-        });
-      }
     }
   }
 
@@ -116,13 +101,11 @@ class _BasketScreenState extends State<BasketScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.red),
-            onPressed: _savingOrder
-                ? null
-                : () {
-                    setState(() {
-                      cart.removeItem(index);
-                    });
-                  },
+            onPressed: () {
+              setState(() {
+                cart.removeItem(index);
+              });
+            },
           ),
         ],
       ),
@@ -187,11 +170,9 @@ class _BasketScreenState extends State<BasketScreen> {
         width: double.infinity,
         child: PrimaryButton(
           label: 'Checkout',
-          onPressed: _savingOrder
-              ? null
-              : () async {
-                  await _checkout(cart, items);
-                },
+          onPressed: () {
+            _checkout(cart, items);
+          },
         ),
       ),
     );
