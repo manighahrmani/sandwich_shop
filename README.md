@@ -1,8 +1,9 @@
 # Sandwich Shop
 
 This is a simple Flutter app that allows users to order sandwiches.
-The app is built using Flutter and Dart. Branch `6` uses SQLite and runs on an
-Android emulator rather than a web browser.
+The app is built using Flutter and Dart. Branch `6` loads the menu from a JSON
+asset, saves settings with shared preferences and runs on an Android emulator
+rather than a web browser.
 
 ## Install the essential tools
 
@@ -73,7 +74,7 @@ and launch `flutter_emulator`. On your own computer, follow the
 [Flutter Android setup guide](https://docs.flutter.dev/platform-integration/android/setup).
 Select the booted emulator in VS Code before running.
 
-Tests use an in-memory SQLite database and do not need an emulator:
+Tests use mock shared preferences and do not need an emulator:
 
 ```bash
 flutter test

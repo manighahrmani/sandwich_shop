@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
-import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
-import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
-import 'package:sandwich_shop/widgets/orders_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 
 class BasketScreen extends StatefulWidget {
@@ -19,7 +16,6 @@ class BasketScreen extends StatefulWidget {
 
 class _BasketScreenState extends State<BasketScreen> {
   String _confirmationMessage = '';
-  bool _savingOrder = false;
 
   Widget _buildEmptyState() {
     return const Center(
@@ -31,69 +27,6 @@ class _BasketScreenState extends State<BasketScreen> {
         ),
       ),
     );
-  }
-
-  String _buildSummary(List<CartItem> items) {
-    final List<String> parts = [];
-    for (final CartItem item in items) {
-      parts.add('${item.quantity} x ${item.sandwich.name}');
-    }
-    return parts.join(', ');
-  }
-
-  String _formatDate(DateTime now) {
-    final String day = now.day.toString().padLeft(2, '0');
-    final String month = now.month.toString().padLeft(2, '0');
-    final String hour = now.hour.toString().padLeft(2, '0');
-    final String minute = now.minute.toString().padLeft(2, '0');
-    return '$day/$month/${now.year} $hour:$minute';
-  }
-
-  Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
-    if (_savingOrder || items.isEmpty) {
-      return;
-    }
-    final List<CartItem> purchasedItems = List<CartItem>.unmodifiable(items);
-    final String summary = _buildSummary(purchasedItems);
-    final double total = cart.getTotalDue();
-    final String date = _formatDate(DateTime.now());
-    setState(() {
-      _savingOrder = true;
-      _confirmationMessage = 'Saving your order...';
-    });
-
-    try {
-      final SandwichDatabase database = SandwichDatabase.instance;
-      final int orderNumber = await database.getNextOrderNumber();
-      final OrderRecord record = OrderRecord(
-        orderNumber: orderNumber,
-        summary: summary,
-        total: total,
-        date: date,
-      );
-      await database.insertOrder(record);
-      cart.removePurchasedItems(purchasedItems);
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _confirmationMessage = 'Order $orderNumber saved';
-      });
-      Navigator.pushNamed(context, '/orders');
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _confirmationMessage = 'Could not save your order: $error';
-      });
-    } finally {
-      if (mounted) {
-        setState(() {
-          _savingOrder = false;
-        });
-      }
-    }
   }
 
   Widget _buildLineItem(CartRepository cart, CartItem item, int index) {
@@ -116,13 +49,11 @@ class _BasketScreenState extends State<BasketScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.red),
-            onPressed: _savingOrder
-                ? null
-                : () {
-                    setState(() {
-                      cart.removeItem(index);
-                    });
-                  },
+            onPressed: () {
+              setState(() {
+                cart.removeItem(index);
+              });
+            },
           ),
         ],
       ),
@@ -187,11 +118,12 @@ class _BasketScreenState extends State<BasketScreen> {
         width: double.infinity,
         child: PrimaryButton(
           label: 'Checkout',
-          onPressed: _savingOrder
-              ? null
-              : () async {
-                  await _checkout(cart, items);
-                },
+          onPressed: () {
+            setState(() {
+              cart.clear();
+              _confirmationMessage = 'Thanks, your order is on its way';
+            });
+          },
         ),
       ),
     );
@@ -241,7 +173,7 @@ class _BasketScreenState extends State<BasketScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [OrdersButton(), BasketButton()],
+        actions: const [BasketButton()],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

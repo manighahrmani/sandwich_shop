@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/constants.dart';
-import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/main.dart' as application;
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
-import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'support/test_database.dart';
 
 void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
     CartRepository.instance.clear();
-  });
-
-  tearDown(() async {
-    await SandwichDatabase.instance.close();
   });
 
   testWidgets(
@@ -46,14 +38,6 @@ void main() {
       await tester.tap(find.byIcon(Icons.person_outline));
       await tester.pumpAndSettle();
       expect(find.byType(SettingsScreen), findsOneWidget);
-      await tester.runAsync(() async {
-        await openTestDatabase();
-        await tester.tap(find.byIcon(Icons.receipt_long));
-        await tester.pumpAndSettle();
-      });
-      await tester.pump();
-      expect(find.byType(OrdersScreen), findsOneWidget);
-      expect(find.text('No orders yet'), findsOneWidget);
     },
   );
 }

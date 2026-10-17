@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/user_settings.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
-import 'package:sandwich_shop/widgets/orders_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -160,7 +159,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [OrdersButton(), BasketButton()],
+        actions: const [BasketButton()],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
-import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 
 void main() {
@@ -39,9 +38,6 @@ class App extends StatelessWidget {
         },
         '/settings': (BuildContext context) {
           return const SettingsScreen();
-        },
-        '/orders': (BuildContext context) {
-          return const OrdersScreen();
         },
       },
     );

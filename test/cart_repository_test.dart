@@ -62,17 +62,6 @@ void main() {
       expect(cart.getTotalDue(), 0);
     });
 
-    test('Removing purchased items preserves later basket additions', () {
-      final CartRepository cart = CartRepository.instance;
-      const CartItem purchased = CartItem(sandwich: testSandwich1, quantity: 1);
-      const CartItem later = CartItem(sandwich: testSandwich1, quantity: 2);
-      cart.addItem(purchased);
-      cart.addItem(later);
-      cart.removePurchasedItems(<CartItem>[purchased]);
-      expect(cart.getItems(), <CartItem>[later]);
-      cart.removePurchasedItems(<CartItem>[purchased]);
-      expect(cart.getItems(), <CartItem>[later]);
-    });
     test('starts with empty basket and zero totals', () {
       final CartRepository cart = CartRepository.instance;
       expect(cart.getItems().length, 0);
