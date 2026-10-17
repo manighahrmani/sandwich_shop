@@ -1,7 +1,7 @@
 # Sandwich Shop
 
 This is a simple Flutter app that allows users to order sandwiches.
-The app is built using Flutter and Dart. Branch `6` uses SQLite and runs on an
+The app is built using Flutter and Dart. Branch `7` saves orders with SQLite and runs on an
 Android emulator rather than a web browser.
 
 ## Install the essential tools
@@ -39,7 +39,7 @@ You may want to change directory (`cd`) to the directory where you want to clone
 repository first.
 
 ```bash
-git clone --branch 6 https://github.com/manighahrmani/sandwich_shop
+git clone --branch 7 https://github.com/manighahrmani/sandwich_shop
 cd sandwich_shop
 code .
 ```
@@ -51,7 +51,7 @@ Remember to `cd` to the directory where you cloned the repository first.
 
 ```bash
 git fetch origin
-git checkout 6
+git checkout 7
 ```
 
 ## Run the app
