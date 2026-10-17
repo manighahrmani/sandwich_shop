@@ -4,8 +4,8 @@ import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'support/test_database.dart';
-import 'support/in_memory_database_factory.dart';
+import '../support/test_database.dart';
+import '../support/in_memory_database_factory.dart';
 
 void main() {
   setUp(() async {

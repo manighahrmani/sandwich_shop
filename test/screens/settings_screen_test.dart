@@ -4,7 +4,7 @@ import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 
-import 'support/controlled_preferences.dart';
+import '../support/controlled_preferences.dart';
 
 void main() {
   setUp(() {

@@ -7,7 +7,7 @@ import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:sandwich_shop/widgets/sandwich_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'support/controlled_assets.dart';
+import '../support/controlled_assets.dart';
 
 void main() {
   setUp(() {

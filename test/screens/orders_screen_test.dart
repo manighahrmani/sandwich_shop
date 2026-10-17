@@ -5,8 +5,8 @@ import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'support/test_database.dart';
-import 'support/controlled_database.dart';
+import '../support/test_database.dart';
+import '../support/controlled_database.dart';
 
 void main() {
   tearDown(() async {
