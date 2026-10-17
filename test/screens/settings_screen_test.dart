@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
@@ -204,7 +206,8 @@ void main() {
     preferences.writeGate = gate;
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
-    await tester.enterText(find.widgetWithText(TextField, 'Full name'), 'Before');
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Full name'), 'Before');
     final ElevatedButton button =
         tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     button.onPressed!();
@@ -213,7 +216,8 @@ void main() {
     expect(preferences.writeCount, 1);
     expect(tester.widget<ElevatedButton>(find.byType(ElevatedButton)).onPressed,
         isNull);
-    await tester.enterText(find.widgetWithText(TextField, 'Full name'), 'After');
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Full name'), 'After');
     await tester.tap(find.byType(Switch));
     gate.complete();
     await tester.pumpAndSettle();
@@ -256,4 +260,3 @@ void main() {
     });
   }
 }
-import 'dart:async';

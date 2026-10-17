@@ -68,8 +68,8 @@ void main() {
     'loadSandwichesFromAsset reads and caches the bundled catalogue',
     () async {
       final SandwichRepository repository = SandwichRepository();
-      final List<Sandwich> sandwiches = await repository
-          .loadSandwichesFromAsset();
+      final List<Sandwich> sandwiches =
+          await repository.loadSandwichesFromAsset();
       expect(sandwiches, hasLength(2));
       expect(sandwiches.first.id, 'footlong');
       expect(sandwiches.last.id, 'six-inch');

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
@@ -143,10 +145,13 @@ void main() {
     expect(find.text('Saving your order...'), findsOneWidget);
     expect(tester.widget<ElevatedButton>(find.byType(ElevatedButton)).onPressed,
         isNull);
-    expect(tester.widget<IconButton>(
-        find.widgetWithIcon(IconButton, Icons.delete_outline)).onPressed, isNull);
-    final CartItem laterItem =
-        CartItem(sandwich: testSandwich, quantity: 3);
+    expect(
+        tester
+            .widget<IconButton>(
+                find.widgetWithIcon(IconButton, Icons.delete_outline))
+            .onPressed,
+        isNull);
+    const CartItem laterItem = CartItem(sandwich: testSandwich, quantity: 3);
     cart.addItem(laterItem);
     late List<Map<String, Object?>> rows;
     await tester.runAsync(() async {
@@ -165,7 +170,8 @@ void main() {
     expect(cart.getItems(), <CartItem>[laterItem]);
   });
 
-  testWidgets('Multiple lines include one delivery fee and remove the right row',
+  testWidgets(
+      'Multiple lines include one delivery fee and remove the right row',
       (WidgetTester tester) async {
     final CartRepository cart = CartRepository.instance;
     cart.addItem(const CartItem(sandwich: testSandwich, quantity: 1));
@@ -190,8 +196,8 @@ void main() {
 
   testWidgets('An order-number query failure keeps the basket and allows retry',
       (WidgetTester tester) async {
-    CartRepository.instance.addItem(
-        const CartItem(sandwich: testSandwich, quantity: 1));
+    CartRepository.instance
+        .addItem(const CartItem(sandwich: testSandwich, quantity: 1));
     await database.execute('ALTER TABLE orders RENAME TO saved_orders');
     await tester.pumpWidget(buildApp());
     await tester.runAsync(() async {
@@ -214,8 +220,8 @@ void main() {
   for (final bool failSave in <bool>[false, true]) {
     testWidgets('Disposal during checkout handles failure=$failSave safely',
         (WidgetTester tester) async {
-      CartRepository.instance.addItem(
-          const CartItem(sandwich: testSandwich, quantity: 1));
+      CartRepository.instance
+          .addItem(const CartItem(sandwich: testSandwich, quantity: 1));
       final ControlledDatabase controlled = ControlledDatabase(database);
       final Completer<void> gate = Completer<void>();
       controlled.numberGate = gate;
@@ -244,4 +250,3 @@ void main() {
     });
   }
 }
-import 'dart:async';

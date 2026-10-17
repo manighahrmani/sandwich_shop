@@ -1,11 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:path/path.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/order_record.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../support/test_database.dart';
-import '../support/in_memory_database_factory.dart';
 
 void main() {
   setUp(() async {
@@ -34,8 +33,8 @@ void main() {
     );
     expect(id, greaterThan(0));
 
-    final List<OrderRecord> orders = await SandwichDatabase.instance
-        .getAllOrders();
+    final List<OrderRecord> orders =
+        await SandwichDatabase.instance.getAllOrders();
     expect(orders.length, 1);
     expect(orders.first.id, id);
     expect(orders.first.summary, '1 x Footlong Sub');
@@ -53,8 +52,8 @@ void main() {
       buildRecord(1002, 'Second', 7.0),
     );
 
-    final List<OrderRecord> orders = await SandwichDatabase.instance
-        .getAllOrders();
+    final List<OrderRecord> orders =
+        await SandwichDatabase.instance.getAllOrders();
     expect(orders[0].orderNumber, 1003);
     expect(orders[1].orderNumber, 1002);
     expect(orders[2].orderNumber, 1001);
@@ -110,8 +109,8 @@ void main() {
         date: '02/01/2026 10:00',
       );
       expect(await SandwichDatabase.instance.insertOrder(original), 42);
-      final List<OrderRecord> orders = await SandwichDatabase.instance
-          .getAllOrders();
+      final List<OrderRecord> orders =
+          await SandwichDatabase.instance.getAllOrders();
       expect(orders.single.toMap(), original.toMap());
     },
   );
@@ -141,13 +140,15 @@ void main() {
     () async {
       await SandwichDatabase.instance.close();
       sqfliteFfiInit();
-      final DatabaseFactory originalFactory = databaseFactory;
-      final InMemoryDatabaseFactory factory = InMemoryDatabaseFactory();
-      databaseFactory = factory;
+      final DatabaseFactory? originalFactory = databaseFactoryOrNull;
+      databaseFactory = databaseFactoryFfiNoIsolate;
+      final String folder = await getDatabasesPath();
+      final String filePath = join(folder, 'sandwich_data.db');
+      await deleteDatabase(filePath);
       try {
         final Database database = await SandwichDatabase.instance.database;
-        final List<OrderRecord> orders = await SandwichDatabase.instance
-            .getAllOrders();
+        final List<OrderRecord> orders =
+            await SandwichDatabase.instance.getAllOrders();
         expect(orders, hasLength(3));
         expect(orders.first.orderNumber, 1003);
         expect(orders.first.note, 'Extra napkins please');
@@ -156,11 +157,11 @@ void main() {
         expect(orders.last.orderNumber, 1001);
         expect(await SandwichDatabase.instance.getNextOrderNumber(), 1004);
         expect(await SandwichDatabase.instance.database, same(database));
-        expect(factory.openCount, 1);
-        expect(factory.requestedPath, endsWith('sandwich_data.db'));
+        expect(database.path, endsWith('sandwich_data.db'));
       } finally {
         await SandwichDatabase.instance.close();
-        databaseFactory = originalFactory;
+        await deleteDatabase(filePath);
+        databaseFactoryOrNull = originalFactory;
       }
     },
   );
