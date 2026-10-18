@@ -20,12 +20,11 @@ I need tech news from you! I will provide some of my own.
 
 Student opportunities and developer events:
 
-- Google Solution Challenge:
-  - Annual global university competition to build solutions for UN Sustainable Development Goals using Flutter and Google technologies.
-  - Mentorship, hands-on workshops, and global showcase: [developers.google.com/community/solutions-challenge](https://developers.google.com/community/solutions-challenge)
+- Microsoft Imagine Cup:
+  - Global student technology competition offering mentorship, Azure credits, and global showcase opportunities: [imaginecup.microsoft.com](https://imaginecup.microsoft.com)
 - JetBrains Student Pack:
   - Free professional licences for IntelliJ IDEA Ultimate, WebStorm, PyCharm, and DataGrip.
-  - Renewable annually with your university email: [jetbrains.com/community/education](https://www.jetbrains.com/community/education/)
+  - Renewable annually with your university email: [jetbrains.com/academy/student-pack](https://www.jetbrains.com/academy/student-pack/)
 
 Tech news from you:
 
@@ -38,7 +37,7 @@ Tech news from you:
 - JSON (JavaScript Object Notation) is a plain-text format for structured data.
 - Data is organised into key-value maps (`{}`) and ordered lists (`[]`).
 - In Lecture 3, our menu items were hardcoded directly in Dart code.
-- Hardcoded data mixes presentation with data; changing a price or sandwich requires recompiling and redeploying.
+- Hardcoded data mixes presentation with data; changing a price or sandwich requires updating and recompiling Dart code.
 - Moving data to JSON separates content from code so non-developers can update catalogues independently.
 - Dart maps JSON objects to `Map<String, dynamic>` and arrays to `List<dynamic>`.
 - Learn more in the [MDN JSON guide](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON).
@@ -47,13 +46,14 @@ Tech news from you:
 
 ## JSON assets — bundled assets
 
-- Assets live in an `assets/` directory (for example `assets/sandwiches.json`).
-- Register the file in `pubspec.yaml` under the `flutter` section:
+- Assets live in an `assets/` directory (for example `assets/data/sandwiches.json`).
+- Register the asset folder in `pubspec.yaml` under the `flutter` section:
 
 ```yaml
 flutter:
   assets:
-    - assets/sandwiches.json
+    - assets/images/
+    - assets/data/
 ```
 
 - YAML indentation is strict: exactly two spaces per level, never tabs.
@@ -61,8 +61,10 @@ flutter:
 - Read asset text with `rootBundle` from `package:flutter/services.dart`:
 
 ```dart
-final String data = await rootBundle.loadString('assets/sandwiches.json');
+final String jsonString = await rootBundle.loadString('assets/data/sandwiches.json');
 ```
+
+- See the [Flutter assets and images guide](https://docs.flutter.dev/ui/assets/assets-and-images) for full configuration options.
 
 ---
 
@@ -73,17 +75,18 @@ final String data = await rootBundle.loadString('assets/sandwiches.json');
 ```dart
 import 'dart:convert';
 
-final dynamic decoded = jsonDecode(data);
-final List<dynamic> jsonList = decoded as List<dynamic>;
+final dynamic decodedData = jsonDecode(jsonString);
+final List<dynamic> jsonList = decodedData as List<dynamic>;
 ```
 
 - `jsonDecode` returns `dynamic`; always cast collections explicitly.
 - A procedural `for-in` loop converts each dynamic item into a strongly typed model:
 
 ```dart
-final List<Sandwich> menu = <Sandwich>[];
+final List<Sandwich> loadedSandwiches = <Sandwich>[];
 for (final dynamic item in jsonList) {
-  menu.add(Sandwich.fromJson(item as Map<String, dynamic>));
+  final Map<String, dynamic> itemMap = item as Map<String, dynamic>;
+  loadedSandwiches.add(Sandwich.fromJson(itemMap));
 }
 ```
 
@@ -98,8 +101,11 @@ for (final dynamic item in jsonList) {
 ```dart
 factory Sandwich.fromJson(Map<String, dynamic> json) {
   return Sandwich(
+    id: json['id'] as String,
     name: json['name'] as String,
+    description: json['description'] as String,
     price: (json['price'] as num).toDouble(),
+    imagePath: json['imagePath'] as String,
   );
 }
 ```
@@ -110,8 +116,11 @@ factory Sandwich.fromJson(Map<String, dynamic> json) {
 ```dart
 Map<String, dynamic> toJson() {
   return <String, dynamic>{
+    'id': id,
     'name': name,
+    'description': description,
     'price': price,
+    'imagePath': imagePath,
   };
 }
 ```
@@ -127,14 +136,23 @@ Map<String, dynamic> toJson() {
 - Mark functions `async` to pause at `await` without freezing the screen:
 
 ```dart
-Future<List<Sandwich>> loadMenu() async {
-  final String text = await rootBundle.loadString('assets/sandwiches.json');
-  return parseSandwiches(text);
+Future<List<Sandwich>> loadSandwichesFromAsset({
+  String assetPath = 'assets/data/sandwiches.json',
+}) async {
+  final String jsonString = await rootBundle.loadString(assetPath);
+  final dynamic decodedData = jsonDecode(jsonString);
+  final List<dynamic> jsonList = decodedData as List<dynamic>;
+
+  final List<Sandwich> loadedSandwiches = <Sandwich>[];
+  for (final dynamic item in jsonList) {
+    loadedSandwiches.add(Sandwich.fromJson(item as Map<String, dynamic>));
+  }
+  return loadedSandwiches;
 }
 ```
 
 - While awaiting, Flutter continues to render animations smoothly at 60 fps.
-- Practise asynchronous programming with the [Dart async codelab](https://dart.dev/codelabs/async-await).
+- Practise asynchronous programming with the [Dart async codelab](https://dart.dev/libraries/async/async-await).
 
 ---
 
@@ -147,7 +165,7 @@ Future<List<Sandwich>> loadMenu() async {
 @override
 void initState() {
   super.initState();
-  _loadMenu();
+  _loadSandwiches();
 }
 ```
 
@@ -163,19 +181,19 @@ void initState() {
 - Track these with simple state fields in your `State` class:
 
 ```dart
-bool _isLoading = true;
-String? _errorMessage;
-List<Sandwich> _menu = <Sandwich>[];
+bool _loading = true;
+String _errorMessage = '';
+List<Sandwich> _sandwiches = <Sandwich>[];
 ```
 
 - In `build`, return the appropriate widget based on the current state:
 
 ```dart
-if (_isLoading) {
+if (_loading) {
   return const Center(child: CircularProgressIndicator());
 }
-if (_errorMessage != null) {
-  return Center(child: Text(_errorMessage!));
+if (_errorMessage.isNotEmpty) {
+  return Center(child: Text(_errorMessage));
 }
 return ListView.builder(...);
 ```
@@ -195,7 +213,7 @@ return ListView.builder(...);
 flutter pub add shared_preferences
 ```
 
-- Values are stored against string keys (such as `'customer_name'` or `'is_vegetarian'`).
+- Values are stored against string keys (such as `prefName = 'user_name'` or `prefNewsletter = 'user_newsletter'`).
 - Supported types: `String`, `bool`, `int`, `double`, and `List<String>`.
 - Read the [shared_preferences documentation](https://pub.dev/packages/shared_preferences).
 
@@ -207,8 +225,8 @@ flutter pub add shared_preferences
 
 ```dart
 final SharedPreferences prefs = await SharedPreferences.getInstance();
-await prefs.setString('customer_name', _nameController.text);
-final String savedName = prefs.getString('customer_name') ?? '';
+await prefs.setString(prefName, name);
+final String savedName = prefs.getString(prefName) ?? '';
 ```
 
 - The `??` operator provides a fallback default when no value has been stored yet.
@@ -216,8 +234,8 @@ final String savedName = prefs.getString('customer_name') ?? '';
 
 ```dart
 SharedPreferences.setMockInitialValues(<String, Object>{
-  'customer_name': 'Alex',
-  'is_vegetarian': true,
+  prefName: 'Alex Smith',
+  prefNewsletter: true,
 });
 ```
 
