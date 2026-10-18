@@ -1,4 +1,4 @@
-# Lecture 6 — JSON Assets and Saved Preferences
+# Lecture 6 — JSON and Saved Preferences
 
 > This mirrors `finalised_lectures/lecture-6.pptx`. Slides are minimal; detail lives in the worksheets and in what I say when each slide is shown. Update this file whenever the deck changes.
 
@@ -9,36 +9,56 @@
 Lecture 6:
 
 - JSON assets
-- Asynchronous loading
+- Async load
 - Saved preferences
 
 ---
 
 ## JSON assets — tech news
 
-I need tech news from you! I will provide some of my own.
-
-Student opportunities and developer events:
-
-- Microsoft Imagine Cup:
-  - Global student technology competition offering mentorship, Azure credits, and global showcase opportunities: [imaginecup.microsoft.com](https://imaginecup.microsoft.com)
 - JetBrains Student Pack:
-  - Free professional licences for IntelliJ IDEA Ultimate, WebStorm, PyCharm, and DataGrip.
-  - Renewable annually with your university email: [jetbrains.com/academy/student-pack](https://www.jetbrains.com/academy/student-pack/)
+  - Free professional licences for IntelliJ IDEA Ultimate, WebStorm, PyCharm, …
+  - Renews annually with university email.
+  - Get yourself some here: [jetbrains.com/academy/student-pack](https://www.jetbrains.com/academy/student-pack/)
 
-Tech news from you:
+---
 
-- [Leave space for student news, placements, and module tech updates]
+## JSON assets — kinds of data
+
+Technically, JSON is semi-structured data:
+
+- Structured data has a rigid rule that enforces the same types in every instance (e.g., rows in a normalised SQL database).
+- Semi-structured data allows exceptions and is less rigid compared to structured data (e.g., XML and JSON).
+- Unstructured data has no order; no schema is enforced (e.g., plain text files, images, and generally files that require special software to be read/used).
 
 ---
 
 ## JSON assets — structured data with JSON
 
-- JSON (JavaScript Object Notation) is a plain-text format for structured data.
-- Data is organised into key-value maps (`{}`) and ordered lists (`[]`).
-- In Lecture 3, our menu items were hardcoded directly in Dart code.
-- Hardcoded data mixes presentation with data; changing a price or sandwich requires updating and recompiling Dart code.
-- Moving data to JSON separates content from code so non-developers can update catalogues independently.
+- JSON (JavaScript Object Notation) is a plain-text format for data.
+- Data is organised into key-value objects (`{}`) and ordered arrays (`[]`).
+
+An object describing one book:
+
+```json
+{
+  "title": "Dune",
+  "year": 1965,
+  "available": true
+}
+```
+
+An array of two objects:
+
+```json
+[
+  { "title": "Dune", "year": 1965 },
+  { "title": "Emma", "year": 1815 }
+]
+```
+
+- Hardcoded data mixes presentation with data; changing a value requires updating and recompiling Dart code.
+- Moving data to JSON separates content from code so non-developers can update data independently.
 - Dart maps JSON objects to `Map<String, dynamic>` and arrays to `List<dynamic>`.
 - Learn more in the [MDN JSON guide](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON).
 
@@ -46,8 +66,7 @@ Tech news from you:
 
 ## JSON assets — bundled assets
 
-- Assets live in an `assets/` directory (for example `assets/data/sandwiches.json`).
-- Register the asset folder in `pubspec.yaml` under the `flutter` section:
+JSON assets must also be registered in `pubspec.yaml` under the `flutter` section:
 
 ```yaml
 flutter:
@@ -56,198 +75,158 @@ flutter:
     - assets/data/
 ```
 
-- YAML indentation is strict: exactly two spaces per level, never tabs.
 - Flutter bundles registered assets into the compiled app binary at build time.
 - Read asset text with `rootBundle` from `package:flutter/services.dart`:
 
 ```dart
-final String jsonString = await rootBundle.loadString('assets/data/sandwiches.json');
+final String jsonString =
+    await rootBundle.loadString(
+        'assets/data/data.json'
+    );
 ```
 
-- See the [Flutter assets and images guide](https://docs.flutter.dev/ui/assets/assets-and-images) for full configuration options.
+- More information at [Adding assets and images](https://docs.flutter.dev/ui/assets/assets-and-images)
 
 ---
 
-## JSON assets — parsing and converting collections
+## JSON assets — from JSON to a Dart object
 
-- `dart:convert` provides `jsonDecode` to convert raw JSON strings into Dart collections:
-
-```dart
-import 'dart:convert';
-
-final dynamic decodedData = jsonDecode(jsonString);
-final List<dynamic> jsonList = decodedData as List<dynamic>;
-```
-
-- `jsonDecode` returns `dynamic`; always cast collections explicitly.
-- A procedural `for-in` loop converts each dynamic item into a strongly typed model:
+A class for the book object above, with a `factory` constructor that reads a map:
 
 ```dart
-final List<Sandwich> loadedSandwiches = <Sandwich>[];
-for (final dynamic item in jsonList) {
-  final Map<String, dynamic> itemMap = item as Map<String, dynamic>;
-  loadedSandwiches.add(Sandwich.fromJson(itemMap));
+class Book {
+  final String title;
+  final int year;
+
+  Book({required this.title, required this.year});
+
+  factory Book.fromJson(Map<String, dynamic> json) {
+    return Book(
+      title: json['title'] as String,
+      year: json['year'] as int,
+    );
+  }
 }
 ```
 
-- Avoid dense functional chains or arrow shorthands; explicit loops make data transformations transparent and easy to debug.
-
----
-
-## JSON assets — model serialisation
-
-- A factory constructor creates a model instance from a `Map<String, dynamic>`:
-
-```dart
-factory Sandwich.fromJson(Map<String, dynamic> json) {
-  return Sandwich(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    description: json['description'] as String,
-    price: (json['price'] as num).toDouble(),
-    imagePath: json['imagePath'] as String,
-  );
-}
-```
-
-- Numbers in JSON decode as either `int` or `double`; cast to `num` first before calling `toDouble()`.
-- A `toJson` method converts model instances back into a map for saving:
+- Each value comes out as `dynamic`, so cast it with `as`.
+- A `toJson` method does the reverse:
 
 ```dart
 Map<String, dynamic> toJson() {
-  return <String, dynamic>{
-    'id': id,
-    'name': name,
-    'description': description,
-    'price': price,
-    'imagePath': imagePath,
-  };
+  return <String, dynamic>{'title': title, 'year': year};
 }
 ```
 
-- Read the official [JSON serialisation guide](https://docs.flutter.dev/data-and-backend/serialization/json) for further patterns.
+- More detail: [JSON and serialization](https://docs.flutter.dev/data-and-backend/serialization/json)
 
 ---
 
-## Asynchronous loading — futures and async/await
+## Async load — futures, async and await
 
-- Reading assets from disk is I/O: it takes time and must not block the UI thread.
-- A `Future<T>` represents a value that will become available in the future.
-- Mark functions `async` to pause at `await` without freezing the screen:
+- Reading a file takes time; the app must not freeze while it waits.
+- A `Future<T>` is a value of type `T` that arrives later.
+- Inside an `async` function, `await` waits for a `Future` to finish:
 
 ```dart
-Future<List<Sandwich>> loadSandwichesFromAsset({
-  String assetPath = 'assets/data/sandwiches.json',
-}) async {
-  final String jsonString = await rootBundle.loadString(assetPath);
-  final dynamic decodedData = jsonDecode(jsonString);
-  final List<dynamic> jsonList = decodedData as List<dynamic>;
+Future<List<Book>> loadBooks() async {
+  final String text =
+      await rootBundle.loadString('assets/data/books.json');
+  final List<dynamic> list = jsonDecode(text) as List<dynamic>;
 
-  final List<Sandwich> loadedSandwiches = <Sandwich>[];
-  for (final dynamic item in jsonList) {
-    loadedSandwiches.add(Sandwich.fromJson(item as Map<String, dynamic>));
+  final List<Book> books = <Book>[];
+  for (final dynamic item in list) {
+    books.add(Book.fromJson(item as Map<String, dynamic>));
   }
-  return loadedSandwiches;
+  return books;
 }
 ```
 
-- While awaiting, Flutter continues to render animations smoothly at 60 fps.
-- Practise asynchronous programming with the [Dart async codelab](https://dart.dev/libraries/async/async-await).
+- `jsonDecode` (from `dart:convert`) turns the text into Dart lists and maps.
+- More detail: [Asynchronous programming: futures, async, await](https://dart.dev/libraries/async/async-await)
 
 ---
 
-## Asynchronous loading — lifecycle and initState
+## Async load — starting the load
 
-- `StatefulWidget` provides lifecycle methods that execute as widgets mount and unmount.
-- `initState` runs exactly once when the `State` object is inserted into the tree:
+- `initState` runs once, when the screen's `State` is created; start the load there, not in `build`:
 
 ```dart
 @override
 void initState() {
   super.initState();
-  _loadSandwiches();
+  _load();
 }
 ```
 
-- Always call `super.initState()` on the first line.
-- Never trigger asynchronous loading directly inside `build()`; `build` runs repeatedly on every frame and `setState` call.
-- Check the [State.initState documentation](https://api.flutter.dev/flutter/widgets/State/initState.html) for details.
+- After an `await`, check `mounted` before calling `setState`; the user may have left the screen.
+- More detail: [initState](https://api.flutter.dev/flutter/widgets/State/initState.html)
 
 ---
 
-## Asynchronous loading — loading and error states
+## Async load — loading and error states
 
-- Asynchronous screens have three distinct states: loading, loaded, and failed.
-- Track these with simple state fields in your `State` class:
+The screen keeps track of what to show:
 
 ```dart
 bool _loading = true;
-String _errorMessage = '';
-List<Sandwich> _sandwiches = <Sandwich>[];
+String _error = '';
+List<Book> _books = <Book>[];
 ```
 
-- In `build`, return the appropriate widget based on the current state:
+`build` picks a widget based on these fields:
 
 ```dart
 if (_loading) {
-  return const Center(child: CircularProgressIndicator());
+  return const CircularProgressIndicator();
 }
-if (_errorMessage.isNotEmpty) {
-  return Center(child: Text(_errorMessage));
+if (_error != '') {
+  return Text(_error);
 }
-return ListView.builder(...);
+return Text('${_books.length} books');
 ```
 
-- See the [CircularProgressIndicator documentation](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html).
+- More detail: [CircularProgressIndicator](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html)
 
 ---
 
-## Saved preferences — key-value persistence
+## Saved preferences — key-value storage
 
-- In-memory variables and singletons reset when the application process terminates.
-- For user preferences, theme modes, and customer profiles, we need persistence across app launches.
-- `shared_preferences` wraps platform-native storage (`NSUserDefaults` on iOS, `SharedPreferences` on Android).
-- Add the package from your terminal:
+- Fields in memory are lost when the app closes.
+- `shared_preferences` saves small values (`bool`, `int`, `double`, `String`, `List<String>`) under string keys.
+- Not for large or sensitive data.
 
 ```bash
 flutter pub add shared_preferences
 ```
 
-- Values are stored against string keys (such as `prefName = 'user_name'` or `prefNewsletter = 'user_newsletter'`).
-- Supported types: `String`, `bool`, `int`, `double`, and `List<String>`.
-- Read the [shared_preferences documentation](https://pub.dev/packages/shared_preferences).
+- More detail: [Store key-value data on disk](https://docs.flutter.dev/cookbook/persistence/key-value) and [shared_preferences](https://pub.dev/packages/shared_preferences)
 
 ---
 
 ## Saved preferences — reading, writing and testing
 
-- Access the preferences instance asynchronously, then save or retrieve:
-
 ```dart
-final SharedPreferences prefs = await SharedPreferences.getInstance();
-await prefs.setString(prefName, name);
-final String savedName = prefs.getString(prefName) ?? '';
+final SharedPreferences prefs =
+    await SharedPreferences.getInstance();
+await prefs.setString('user_name', 'Alex');
+final String? name = prefs.getString('user_name');
 ```
 
-- The `??` operator provides a fallback default when no value has been stored yet.
-- Unit and widget tests run in headless environments; mock initial values before testing:
+- `getString` returns `null` if nothing has been saved under that key yet.
+- In tests, start from a fake store instead of the real one:
 
 ```dart
-SharedPreferences.setMockInitialValues(<String, Object>{
-  prefName: 'Alex Smith',
-  prefNewsletter: true,
-});
+SharedPreferences.setMockInitialValues(
+  <String, Object>{'user_name': 'Alex'},
+);
 ```
-
-- Mocked tests run in milliseconds without launching an emulator or physical device.
 
 ---
 
 ## Demo 3 (footnote)
 
-- Union of Worksheet 5 and Worksheet 6 exercises: navigation, a basket, customer profile form, JSON catalogue and saved profile preferences.
-- SQLite bookings and Android emulators follow in Worksheet 7 for Demo 4.
-- Also unit tests and widget tests covering almost all of your codebase.
+- Union of Worksheet 5 and Worksheet 6 exercises: …
 - Demonstrate in your own timetabled practical session.
 - You can only do one demo in each window.
 - More information on the web page: [manighahrmani.github.io/sandwich_shop](https://manighahrmani.github.io/sandwich_shop/)
@@ -265,92 +244,70 @@ Give us your feedback, comments, criticisms, or insults by filling out the follo
 
 ## Live demo guide (for the lecturer)
 
-Run this live during the lecture to teach resolving pull request conflicts on GitHub. We continue from the pull request demo in Lecture 5. In Lecture 4 we resolved merge conflicts locally in VS Code; this demo shows what happens when a pull request conflicts with `main` on GitHub, and how to resolve it directly in the GitHub web interface. Do not mention the coursework or Southsea Cinema here; that is a footnote at the end.
+Resolving a pull request conflict on GitHub. Lecture 4 resolved conflicts locally in VS Code and Lecture 5 introduced pull requests; this combines the two in the browser.
+
+- GitHub's guide: [Resolving a merge conflict on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github)
+- The web editor only handles competing line changes. Anything more complex (for example a file deleted on one branch) must be resolved locally.
 
 ### Setup
 
-1. Pull requests are how teams review code before merging into `main`.
-2. When two developers change the same lines on different branches, GitHub cannot merge automatically.
-3. GitHub disables the merge button and warns: "This branch has conflicts that must be resolved".
-4. GitHub provides a built-in web conflict editor to resolve conflicts directly in the browser without having to switch branches locally.
-5. Create a fresh throwaway repository on GitHub called `pr-conflict-demo` (or reuse the repository from Lecture 5). Push an initial commit with a base file:
+Create an empty public repository called `pr-conflict-demo` on GitHub (no README), then:
 
-    ```bash
-    mkdir pr-conflict-demo && cd pr-conflict-demo
-    git init -b main
-    echo "Welcome to the Sandwich Shop" > announcement.txt
-    git add announcement.txt
-    git commit -m "docs: add initial announcement"
-    git remote add origin https://github.com/YOUR-USERNAME/pr-conflict-demo.git
-    git push -u origin main
-    ```
+```bash
+mkdir pr-conflict-demo && cd pr-conflict-demo
+git init -b main
+echo "Open 9 to 5" > notice.txt
+git add notice.txt
+git commit -m "docs: add notice"
+git remote add origin https://github.com/YOUR-USERNAME/pr-conflict-demo.git
+git push -u origin main
+```
 
-### Part 1 — Creating a conflicting feature branch
+### Part 1 — Open a pull request
 
-1. Create a feature branch called `summer-special` and change the announcement:
+```bash
+git checkout -b weekend-hours
+echo "Open 9 to 5, weekends 10 to 4" > notice.txt
+git add notice.txt
+git commit -m "docs: add weekend hours"
+git push -u origin weekend-hours
+```
 
-    ```bash
-    git checkout -b summer-special
-    echo "Welcome to the Sandwich Shop - 20% off summer subs!" > announcement.txt
-    git add announcement.txt
-    git commit -m "feat: add summer discount"
-    git push -u origin summer-special
-    ```
+On GitHub, open a pull request from `weekend-hours` into `main`. It reports no conflicts. Do not merge it.
 
-2. On GitHub, open a pull request from `summer-special` into `main`. Show students that GitHub reports: "Able to merge. These branches can be automatically merged."
-3. Do not merge the pull request yet.
+### Part 2 — Change the same line on main
 
-### Part 2 — Simulating a concurrent change on main
+This simulates a teammate merging first:
 
-1. Switch back to `main` locally to simulate another developer merging work before you:
+```bash
+git checkout main
+echo "Open 8 to 6" > notice.txt
+git add notice.txt
+git commit -m "docs: extend opening hours"
+git push
+```
 
-    ```bash
-    git checkout main
-    echo "Welcome to the Sandwich Shop - open 7 days a week!" > announcement.txt
-    git add announcement.txt
-    git commit -m "docs: update opening hours on main"
-    git push origin main
-    ```
+Refresh the pull request. GitHub now says "This branch has conflicts that must be resolved" and the merge button is disabled.
 
-2. Return to the open pull request on GitHub and refresh the page.
-3. Show students the change in state:
-    - The green merge button is gone.
-    - GitHub displays a grey box: "This branch has conflicts that must be resolved".
-    - A **Resolve conflicts** button appears next to the warning.
+### Part 3 — Resolve on GitHub
 
-### Part 3 — Resolving the conflict on GitHub
+1. Select **Resolve conflicts**.
+2. Point out the markers: the `weekend-hours` version sits between `<<<<<<<` and `=======`, the `main` version between `=======` and `>>>>>>>`.
+3. Replace everything, markers included, with `Open 8 to 6, weekends 10 to 4`.
+4. Select **Mark as resolved**, then **Commit merge**. This merges `main` into `weekend-hours`.
+5. Back on the pull request, select **Merge pull request**, then **Confirm merge**.
 
-1. Select **Resolve conflicts**. GitHub opens its online conflict editor.
-2. Highlight the conflict markers to the students:
-    - `<<<<<<< summer-special` marks the incoming change.
-    - `=======` separates the conflicting versions.
-    - `>>>>>>> main` marks the existing version on `main`.
-3. Combine the changes into one final version:
+### Part 4 — Update the local copy
 
-    ```text
-    Welcome to the Sandwich Shop - 20% off summer subs! Open 7 days a week.
-    ```
+```bash
+git pull
+git log --oneline --graph --all
+```
 
-4. Delete the conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`).
-5. Select **Mark as resolved** in the top right.
-6. Select **Commit merge**. GitHub automatically creates a merge commit on `summer-special`.
-7. Return to the pull request: the merge button is now green and ready. Select **Merge pull request**, then **Confirm merge**.
-
-### Part 4 — Synchronising your local environment
-
-1. Show students that merging on GitHub does not automatically update your local terminal:
-
-    ```bash
-    git checkout main
-    git pull
-    git log --oneline --graph --all
-    ```
-
-2. Point out the merge commit in the git graph showing the resolution.
+Merging on GitHub does not change the local copy until you pull.
 
 ### Wrap-up
 
-- Pull request conflicts occur when `main` moves ahead while a feature branch is being developed.
-- Simple conflicts can be resolved directly in GitHub's web editor without switching branches locally.
-- Always pull `main` after merging on GitHub to keep your local machine up to date.
-- Encourage students to practise creating and resolving a conflict in a throwaway repository.
+- A pull request conflicts when its base branch changes the same lines after the branch was created.
+- Simple conflicts can be resolved in the browser; complex ones need VS Code.
+- Pull after merging on GitHub.
