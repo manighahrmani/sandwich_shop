@@ -38,27 +38,28 @@ Technically, JSON is semi-structured data:
 - JSON (JavaScript Object Notation) is a plain-text format for data.
 - Data is organised into key-value objects (`{}`) and ordered arrays (`[]`).
 
-An object describing one book:
+A JSON object with different value types:
 
 ```json
 {
-  "title": "Dune",
-  "year": 1965,
-  "available": true
+  "id": "1",
+  "name": "Item A",
+  "count": 10,
+  "active": true
 }
 ```
 
-An array of two objects:
+A JSON array of objects:
 
 ```json
 [
-  { "title": "Dune", "year": 1965 },
-  { "title": "Emma", "year": 1815 }
+  { "id": "1", "name": "Item A" },
+  { "id": "2", "name": "Item B" }
 ]
 ```
 
-- Hardcoded data mixes presentation with data; changing a value requires updating and recompiling Dart code.
-- Moving data to JSON separates content from code so non-developers can update data independently.
+- Hardcoded data lives inside widget code; changing values requires editing and recompiling.
+- Moving data to JSON separates content from code so data updates independently.
 - Dart maps JSON objects to `Map<String, dynamic>` and arrays to `List<dynamic>`.
 - Learn more in the [MDN JSON guide](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON).
 
@@ -91,19 +92,19 @@ final String jsonString =
 
 ## JSON assets — from JSON to a Dart object
 
-A class for the book object above, with a `factory` constructor that reads a map:
+A class for the object, with a `factory` constructor that reads a map:
 
 ```dart
-class Book {
-  final String title;
-  final int year;
+class Item {
+  final String id;
+  final String name;
 
-  Book({required this.title, required this.year});
+  Item({required this.id, required this.name});
 
-  factory Book.fromJson(Map<String, dynamic> json) {
-    return Book(
-      title: json['title'] as String,
-      year: json['year'] as int,
+  factory Item.fromJson(Map<String, dynamic> json) {
+    return Item(
+      id: json['id'] as String,
+      name: json['name'] as String,
     );
   }
 }
@@ -114,7 +115,7 @@ class Book {
 
 ```dart
 Map<String, dynamic> toJson() {
-  return <String, dynamic>{'title': title, 'year': year};
+  return <String, dynamic>{'id': id, 'name': name};
 }
 ```
 
@@ -124,21 +125,21 @@ Map<String, dynamic> toJson() {
 
 ## Async load — futures, async and await
 
-- Reading a file takes time; the app must not freeze while it waits.
+- Reading a file takes time; the app must not freeze while waiting.
 - A `Future<T>` is a value of type `T` that arrives later.
-- Inside an `async` function, `await` waits for a `Future` to finish:
+- Inside an `async` function, `await` pauses until the `Future` completes:
 
 ```dart
-Future<List<Book>> loadBooks() async {
+Future<List<Item>> loadItems() async {
   final String text =
-      await rootBundle.loadString('assets/data/books.json');
+      await rootBundle.loadString('assets/data/data.json');
   final List<dynamic> list = jsonDecode(text) as List<dynamic>;
 
-  final List<Book> books = <Book>[];
+  final List<Item> items = <Item>[];
   for (final dynamic item in list) {
-    books.add(Book.fromJson(item as Map<String, dynamic>));
+    items.add(Item.fromJson(item as Map<String, dynamic>));
   }
-  return books;
+  return items;
 }
 ```
 
@@ -149,7 +150,7 @@ Future<List<Book>> loadBooks() async {
 
 ## Async load — starting the load
 
-- `initState` runs once, when the screen's `State` is created; start the load there, not in `build`:
+- `initState` runs once when the screen's `State` is created; start the load there, not in `build`:
 
 ```dart
 @override
@@ -159,22 +160,23 @@ void initState() {
 }
 ```
 
-- After an `await`, check `mounted` before calling `setState`; the user may have left the screen.
+- Always call `super.initState()` first.
+- After an `await`, check `mounted` before calling `setState`; the user may have navigated away.
 - More detail: [initState](https://api.flutter.dev/flutter/widgets/State/initState.html)
 
 ---
 
 ## Async load — loading and error states
 
-The screen keeps track of what to show:
+The screen tracks state using simple fields:
 
 ```dart
 bool _loading = true;
 String _error = '';
-List<Book> _books = <Book>[];
+List<Item> _items = <Item>[];
 ```
 
-`build` picks a widget based on these fields:
+`build` picks what to show based on state:
 
 ```dart
 if (_loading) {
@@ -183,7 +185,7 @@ if (_loading) {
 if (_error != '') {
   return Text(_error);
 }
-return Text('${_books.length} books');
+return Text('${_items.length} items loaded');
 ```
 
 - More detail: [CircularProgressIndicator](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html)
@@ -192,9 +194,9 @@ return Text('${_books.length} books');
 
 ## Saved preferences — key-value storage
 
-- Fields in memory are lost when the app closes.
-- `shared_preferences` saves small values (`bool`, `int`, `double`, `String`, `List<String>`) under string keys.
-- Not for large or sensitive data.
+- Variables in memory are lost when the app closes.
+- `shared_preferences` saves lightweight values (`bool`, `int`, `double`, `String`, `List<String>`) under string keys.
+- Not intended for large datasets or sensitive credentials.
 
 ```bash
 flutter pub add shared_preferences
@@ -206,19 +208,21 @@ flutter pub add shared_preferences
 
 ## Saved preferences — reading, writing and testing
 
+Access the store asynchronously to save and read values:
+
 ```dart
 final SharedPreferences prefs =
     await SharedPreferences.getInstance();
-await prefs.setString('user_name', 'Alex');
-final String? name = prefs.getString('user_name');
+await prefs.setString('username', 'Alex');
+final String? name = prefs.getString('username');
 ```
 
-- `getString` returns `null` if nothing has been saved under that key yet.
-- In tests, start from a fake store instead of the real one:
+- `getString` returns `null` if nothing has been stored under that key yet.
+- In tests, use an in-memory mock store:
 
 ```dart
 SharedPreferences.setMockInitialValues(
-  <String, Object>{'user_name': 'Alex'},
+  <String, Object>{'username': 'Alex'},
 );
 ```
 
