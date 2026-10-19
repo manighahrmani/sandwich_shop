@@ -52,6 +52,7 @@ class SandwichCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         sandwich.description,
+                        style: const TextStyle(color: Colors.black54),
                       ),
                     ],
                   ),

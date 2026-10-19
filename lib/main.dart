@@ -3,48 +3,16 @@ import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final bool darkMode = prefs.getBool(prefDarkMode) ?? false;
-  runApp(App(initialDarkMode: darkMode));
+void main() {
+  runApp(const App());
 }
 
-class App extends StatefulWidget {
-  final bool initialDarkMode;
-
-  const App({super.key, this.initialDarkMode = false});
-
-  @override
-  State<App> createState() {
-    return _AppState();
-  }
-}
-
-class _AppState extends State<App> {
-  late bool _darkMode;
-
-  @override
-  void initState() {
-    super.initState();
-    _darkMode = widget.initialDarkMode;
-  }
-
-  void _changeDarkMode(bool value) {
-    setState(() {
-      _darkMode = value;
-    });
-  }
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    ThemeMode themeMode = ThemeMode.light;
-    if (_darkMode) {
-      themeMode = ThemeMode.dark;
-    }
-
     return MaterialApp(
       title: appTitle,
       debugShowCheckedModeBanner: false,
@@ -60,13 +28,6 @@ class _AppState extends State<App> {
           elevation: 0,
         ),
       ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: shopBrand,
-          brightness: Brightness.dark,
-        ),
-      ),
-      themeMode: themeMode,
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) {
@@ -76,10 +37,7 @@ class _AppState extends State<App> {
           return const BasketScreen();
         },
         '/settings': (BuildContext context) {
-          return SettingsScreen(
-            darkMode: _darkMode,
-            onDarkModeChanged: _changeDarkMode,
-          );
+          return const SettingsScreen();
         },
       },
     );

@@ -9,17 +9,9 @@ const String prefName = 'user_name';
 const String prefAddress = 'user_address';
 const String prefEmail = 'user_email';
 const String prefNewsletter = 'user_newsletter';
-const String prefDarkMode = 'dark_mode';
 
 class SettingsScreen extends StatefulWidget {
-  final bool darkMode;
-  final ValueChanged<bool> onDarkModeChanged;
-
-  const SettingsScreen({
-    super.key,
-    required this.darkMode,
-    required this.onDarkModeChanged,
-  });
+  const SettingsScreen({super.key});
 
   @override
   State<SettingsScreen> createState() {
@@ -32,13 +24,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late TextEditingController _addressController;
   late TextEditingController _emailController;
   bool _receiveNewsletter = false;
-  late bool _darkMode;
   String _confirmationMessage = '';
 
   @override
   void initState() {
     super.initState();
-    _darkMode = widget.darkMode;
     _nameController = TextEditingController();
     _addressController = TextEditingController();
     _emailController = TextEditingController();
@@ -101,10 +91,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await prefs.setString(prefAddress, address);
     await prefs.setString(prefEmail, email);
     await prefs.setBool(prefNewsletter, _receiveNewsletter);
-    final bool themeSaved = await prefs.setBool(prefDarkMode, _darkMode);
-    if (!themeSaved) {
-      throw StateError('Could not save the theme preference');
-    }
 
     final UserSettings settings = UserSettings(
       name: name,
@@ -116,7 +102,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (!mounted) {
       return;
     }
-    widget.onDarkModeChanged(_darkMode);
     setState(() {
       _confirmationMessage = 'Settings saved for ${settings.name}';
     });
@@ -182,16 +167,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
               ],
-            ),
-            const SizedBox(height: 20),
-            SwitchListTile(
-              title: const Text('Dark mode'),
-              value: _darkMode,
-              onChanged: (bool value) {
-                setState(() {
-                  _darkMode = value;
-                });
-              },
             ),
             const SizedBox(height: 20),
             SizedBox(

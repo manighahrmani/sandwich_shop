@@ -60,10 +60,7 @@ void main() {
             return const MenuScreen();
           },
           '/settings': (BuildContext context) {
-            return SettingsScreen(
-              darkMode: false,
-              onDarkModeChanged: (bool value) {},
-            );
+            return const SettingsScreen();
           },
         },
       ),
