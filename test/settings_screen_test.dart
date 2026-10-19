@@ -34,9 +34,12 @@ void main() {
         find.widgetWithText(TextField, 'Delivery address');
     final Finder emailField = find.widgetWithText(TextField, 'Email address');
 
-    await tester.enterText(nameField, 'Alex Smith');
-    await tester.enterText(addressField, '10 Elm Road, Portsmouth');
-    await tester.enterText(emailField, 'alex@example.com');
+    await tester.enterText(nameField, 'Gerald Vernon-Jackson');
+    await tester.enterText(addressField, 'Guildhall, PO1 2AJ');
+    await tester.enterText(
+      emailField,
+      'gerald.vernon-jackson@portsmouthcc.gov.uk',
+    );
 
     final Finder switchFinder = find.byType(Switch);
     expect(tester.widget<Switch>(switchFinder).value, isFalse);
@@ -47,20 +50,25 @@ void main() {
     await tester.tap(find.text('Save Settings'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Settings saved for Alex Smith'), findsOneWidget);
+    expect(
+      find.text('Settings saved for Gerald Vernon-Jackson'),
+      findsOneWidget,
+    );
 
     final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-    expect(await prefs.getString(prefName), 'Alex Smith');
-    expect(await prefs.getString(prefAddress), '10 Elm Road, Portsmouth');
-    expect(await prefs.getString(prefEmail), 'alex@example.com');
+    expect(await prefs.getString(prefName), 'Gerald Vernon-Jackson');
+    expect(await prefs.getString(prefAddress), 'Guildhall, PO1 2AJ');
+    expect(await prefs.getString(prefEmail),
+        'gerald.vernon-jackson@portsmouthcc.gov.uk');
     expect(await prefs.getBool(prefNewsletter), isTrue);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
-    expect(find.text('Alex Smith'), findsOneWidget);
-    expect(find.text('10 Elm Road, Portsmouth'), findsOneWidget);
-    expect(find.text('alex@example.com'), findsOneWidget);
+    expect(find.text('Gerald Vernon-Jackson'), findsOneWidget);
+    expect(find.text('Guildhall, PO1 2AJ'), findsOneWidget);
+    expect(
+        find.text('gerald.vernon-jackson@portsmouthcc.gov.uk'), findsOneWidget);
     final Switch reopenedSwitch = tester.widget<Switch>(find.byType(Switch));
     expect(reopenedSwitch.value, isTrue);
   });
@@ -70,18 +78,18 @@ void main() {
   ) async {
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.withData(<String, Object>{
-      prefName: 'Jordan Lee',
-      prefAddress: '15 High Street, Portsmouth',
-      prefEmail: 'jordan@example.com',
+      prefName: 'Abdul Kadir',
+      prefAddress: 'Portsmouth Guildhall, PO1 2AJ',
+      prefEmail: 'abdul.kadir@portsmouthcc.gov.uk',
       prefNewsletter: true,
     });
 
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
 
-    expect(find.text('Jordan Lee'), findsOneWidget);
-    expect(find.text('15 High Street, Portsmouth'), findsOneWidget);
-    expect(find.text('jordan@example.com'), findsOneWidget);
+    expect(find.text('Abdul Kadir'), findsOneWidget);
+    expect(find.text('Portsmouth Guildhall, PO1 2AJ'), findsOneWidget);
+    expect(find.text('abdul.kadir@portsmouthcc.gov.uk'), findsOneWidget);
     final Switch switchWidget = tester.widget<Switch>(find.byType(Switch));
     expect(switchWidget.value, isTrue);
   });
