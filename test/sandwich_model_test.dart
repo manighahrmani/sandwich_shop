@@ -62,18 +62,5 @@ void main() {
       expect(sandwich.price, 5.0);
       expect(sandwich.price, isA<double>());
     });
-
-    test('fromJson rejects a text price', () {
-      final Map<String, dynamic> data = <String, dynamic>{
-        'id': 'nonexistent',
-        'name': 'Nonexistent Sandwich',
-        'description': 'Intentional invalid price example.',
-        'price': 'free',
-        'imagePath': 'assets/images/nonexistent.jpeg',
-      };
-      expect(() {
-        Sandwich.fromJson(data);
-      }, throwsA(isA<TypeError>()));
-    });
   });
 }

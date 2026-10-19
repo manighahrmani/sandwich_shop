@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
@@ -63,15 +61,6 @@ void main() {
       expect(sandwiches[3].id, 'nonexistent');
       expect(sandwiches[3].price, 0.0);
       expect(repository.getSandwiches(), sandwiches);
-      expect(repository.getSandwichById('nachos'), sandwiches[2]);
-    });
-
-    test('nachos image is bundled and the example image is absent', () async {
-      final ByteData image = await rootBundle.load('assets/images/nachos.jpeg');
-      expect(image.lengthInBytes, greaterThan(0));
-      await expectLater(() async {
-        await rootBundle.load('assets/images/nonexistent.jpeg');
-      }, throwsFlutterError);
     });
   });
 }

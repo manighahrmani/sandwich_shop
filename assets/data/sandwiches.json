@@ -23,7 +23,7 @@
   {
     "id": "nonexistent",
     "name": "Nonexistent Sandwich",
-    "description": "This sandwich does not exist and is wrongly formatted JSON.",
+    "description": "This item is not on our real menu and its image is missing.",
     "price": 0.00,
     "imagePath": "assets/images/nonexistent.jpeg"
   }
