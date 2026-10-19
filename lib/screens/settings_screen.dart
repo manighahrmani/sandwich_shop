@@ -44,11 +44,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadSettings() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? savedName = prefs.getString(prefName);
-    final String? savedAddress = prefs.getString(prefAddress);
-    final String? savedEmail = prefs.getString(prefEmail);
-    final bool? savedNewsletter = prefs.getBool(prefNewsletter);
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    final String? savedName = await prefs.getString(prefName);
+    final String? savedAddress = await prefs.getString(prefAddress);
+    final String? savedEmail = await prefs.getString(prefEmail);
+    final bool? savedNewsletter = await prefs.getBool(prefNewsletter);
 
     String name = '';
     if (savedName != null) {
@@ -86,7 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final String address = _addressController.text.trim();
     final String email = _emailController.text.trim();
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
     await prefs.setString(prefName, name);
     await prefs.setString(prefAddress, address);
     await prefs.setString(prefEmail, email);
@@ -155,9 +155,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 16),
             Row(
               children: [
-                const Expanded(
-                  child: Text('Receive newsletter and offers'),
-                ),
+                const Expanded(child: Text('Receive newsletter and offers')),
                 Switch(
                   value: _receiveNewsletter,
                   onChanged: (bool value) {

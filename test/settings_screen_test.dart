@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 void main() {
   setUp(() {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
   });
 
   testWidgets('SettingsScreen displays form fields and switches', (
@@ -46,11 +49,11 @@ void main() {
 
     expect(find.text('Settings saved for Alex Smith'), findsOneWidget);
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString(prefName), 'Alex Smith');
-    expect(prefs.getString(prefAddress), '10 Elm Road, Portsmouth');
-    expect(prefs.getString(prefEmail), 'alex@example.com');
-    expect(prefs.getBool(prefNewsletter), isTrue);
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    expect(await prefs.getString(prefName), 'Alex Smith');
+    expect(await prefs.getString(prefAddress), '10 Elm Road, Portsmouth');
+    expect(await prefs.getString(prefEmail), 'alex@example.com');
+    expect(await prefs.getBool(prefNewsletter), isTrue);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
@@ -65,7 +68,8 @@ void main() {
   testWidgets('SettingsScreen pre-fills saved settings on open', (
     WidgetTester tester,
   ) async {
-    SharedPreferences.setMockInitialValues(<String, Object>{
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.withData(<String, Object>{
       prefName: 'Jordan Lee',
       prefAddress: '15 High Street, Portsmouth',
       prefEmail: 'jordan@example.com',
