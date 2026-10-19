@@ -59,7 +59,7 @@ For Demos 1 to 3, if any required functionality item scores zero, your final
 demo mark is capped at 23 out of 25. A lower mark remains unchanged; this is
 not an additional deduction for each missing feature. At Demo 3, one
 understanding question comes from Worksheet 5 and one from Worksheet 6,
-excluding advanced challenges.
+excluding advanced, optional extensions.
 
 Demo 3 covers Worksheets 5 and 6: themed navigation, the ticket basket,
 profile forms, a JSON film catalogue and saved profile preferences.

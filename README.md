@@ -62,7 +62,7 @@ Item 1 is assessed as a portfolio of five live in-person demos of your coursewor
 
 There are five demos across the term, but only your best four demo marks count towards Item 1. Each counted demo is worth 25% of Item 1 (12.5% of the overall module mark). Each demo is assessed on functionality (9% of Item 1), code quality (8%), and your understanding through two questions about your own code (8%).
 
-For Demos 1 to 3, a zero on any required functionality item caps the final demo mark at 23 out of 25. Lower marks remain unchanged. Demo 3 asks one understanding question from Worksheet 5 and one from Worksheet 6, excluding advanced challenges.
+For Demos 1 to 3, a zero on any required functionality item caps the final demo mark at 23 out of 25. Lower marks remain unchanged. Demo 3 asks one understanding question from Worksheet 5 and one from Worksheet 6, excluding advanced, optional extensions.
 
 Demo 3 covers navigation, a ticket basket, profile forms, a JSON film catalogue and saved profile preferences. SQLite booking history and database-backed checkout begin in Worksheet 7 for Demo 4, alongside organised tests and demonstrated editor coverage. Provider and notifiers are not required.
 

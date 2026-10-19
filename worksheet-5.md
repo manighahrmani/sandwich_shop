@@ -1925,7 +1925,7 @@ In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#
 
     The screenshot below shows us what our opened drawer looks like:
 
-    ![Southsea Cinema navigation drawer with Home, My Basket, My Tickets and My Settings](images/5/navbar.png)
+    ![Southsea Cinema navigation drawer with Home, My Basket and My Settings](images/5/navbar.png)
 
 4. The user should be able to add tickets to their basket. Develop and test a basket repository for managing the basket contents, as we build and test a repository for the Sandwich Shop order in [Holding an order in a basket](#holding-an-order-in-a-basket). It should support adding, removing and clearing tickets, and provide the basket contents and total.
 
