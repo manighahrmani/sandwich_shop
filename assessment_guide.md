@@ -82,24 +82,19 @@ Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks
 ## Extenuating Circumstances (ECF)
 
 The University's Extenuating Circumstances procedure supports you if
-circumstances beyond your control prevent you from attending, completing, or
-submitting an assessment on time. You can find it at
-<https://myport.port.ac.uk/my-course/extenuating-circumstances>.
+circumstances beyond your control affect your study for more than one to two
+weeks (for example physical or mental illness, accommodation issues, family
+issues, or equipment breakdown). Follow the guidance and apply online at
+<https://myport.port.ac.uk/my-course/exams/extenuating-circumstances#apply>.
+You must submit supporting evidence with your claim.
 
 An ECF applies to the whole of Item 1, the entire Flutter Coursework worth 50%
 of the module. You cannot submit an ECF for a single demo.
 
-⚠️ If you submit an ECF, you must tell me (<mani.ghahremani@port.ac.uk>).
+⚠️ Once your ECF is approved, you must email me (<mani.ghahremani@port.ac.uk>).
 
-When an approved ECF is in place, your Item 1 mark must be recorded as 0, and you
-are instead expected to take the deferral assessment during the referral/deferral
-period, so your Item 1 mark then comes solely from that deferral coursework and
-not from any demos. If you would prefer to use the retrieval of failure period in
-February instead, email me (<mani.ghahremani@port.ac.uk>) or contact me on
-Discord to arrange this.
-
-If you have an ECF but go on to attend demos and earn marks, those demo marks
-take precedence and your ECF is overwritten.
+Please still attend your timetabled practical sessions and complete as many
+demos as possible during term time.
 
 When completing an ECF, use the correct module code and item number (Item 1) as
 given in the coursework brief.
@@ -107,14 +102,20 @@ given in the coursework brief.
 ## Retrieval of failure
 
 The retrieval of failure period for Term 1 takes place in the week beginning
-Monday 22 February 2027. If you did not pass Item 1 during the term, you have
-the opportunity to complete your coursework and demonstrate it during this
-period. You do not need to start a new coursework; you continue and finish the
-same Southsea Cinema coursework and demo it with me.
+Monday 22 February 2027 (22/02/2027 to 26/02/2027). If your total mark across
+all demos before the Christmas break is under 40%, you must arrange a meeting
+with me during this period.
+
+You do not need to start a new coursework: you continue and finish the same
+Southsea Cinema coursework. If you have already completed some demos, you will
+demonstrate the remaining demos during this meeting; if you have not completed
+any demos, you demonstrate all of them (or as many as you can).
 
 ## Referral and deferral
 
-If you are referred or deferred, the referral and deferral assessment for this
-Flutter Coursework is a separate coursework. It will be added to Moodle nearer
-the time. Referral and deferral dates are on the University Key Dates page at
-<https://www.port.ac.uk/about-us/key-dates>.
+Your mark during the retrieval period in February depends on whether you have an
+approved ECF:
+
+- If you have an approved ECF (deferral), your mark in February is uncapped.
+- If you do not have an approved ECF (referral), your overall mark for Item 1 is
+  capped at 40%.
