@@ -136,12 +136,7 @@ progresses, so that students build the habit of committing on their own.
   a short paragraph that says the exercises apply to the Southsea Cinema
   coursework, states which demo they prepare the reader for, links the formal
   coursework brief, and reminds the reader to commit after each exercise.
-- Do not use the older boilerplate opening ("Complete the exercises below and
-  show your work to a member of staff present at your next practical for a
-  sign-off. Your main guide for the rest of the exercises is the Flutter
-  layout documentation."). Follow the Worksheet 1 wording instead.
-- Number the exercises and write each as prose. Do not instruct students to
-  show their running app or code to a member of staff for sign-off.
+- Number the exercises and write each as prose.
 
 ### Emojis
 

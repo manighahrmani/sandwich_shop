@@ -1,7 +1,8 @@
 extends: existence
-message: "Rewrite the Exercises opening in the Worksheet 1 style (state the demo it prepares for, link the coursework brief, remind to commit). Do not use this boilerplate line."
+message: "Remove this sentence. Worksheets must not tell students to show their work to staff."
 level: error
 nonword: true
+ignorecase: true
 tokens:
-  - 'Complete the exercises below and show your work to a member of staff present at your next practical'
+  - 'show (?:your|the|their) [^.]*(?:member of staff|to staff)'
   - 'Your main guide for the rest of the exercises is the \[?Flutter layout documentation'
