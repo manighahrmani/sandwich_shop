@@ -12,5 +12,19 @@
     "description": "A light 6-inch sandwich made with your favourite toppings.",
     "price": 4.50,
     "imagePath": "assets/images/six_inch.jpeg"
+  },
+  {
+    "id": "nachos",
+    "name": "Loaded Nachos",
+    "description": "Crispy tortilla chips topped with melted cheese, jalapenos, and sour cream.",
+    "price": 6.99,
+    "imagePath": "assets/images/nachos.jpeg"
+  },
+  {
+    "id": "nonexistent",
+    "name": "Nonexistent Sandwich",
+    "description": "This sandwich does not exist and is wrongly formatted JSON.",
+    "price": 0.00,
+    "imagePath": "assets/images/nonexistent.jpeg"
   }
 ]

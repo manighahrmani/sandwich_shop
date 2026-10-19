@@ -3,16 +3,48 @@ import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const App());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final bool darkMode = prefs.getBool(prefDarkMode) ?? false;
+  runApp(App(initialDarkMode: darkMode));
 }
 
-class App extends StatelessWidget {
-  const App({super.key});
+class App extends StatefulWidget {
+  final bool initialDarkMode;
+
+  const App({super.key, this.initialDarkMode = false});
+
+  @override
+  State<App> createState() {
+    return _AppState();
+  }
+}
+
+class _AppState extends State<App> {
+  late bool _darkMode;
+
+  @override
+  void initState() {
+    super.initState();
+    _darkMode = widget.initialDarkMode;
+  }
+
+  void _changeDarkMode(bool value) {
+    setState(() {
+      _darkMode = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    ThemeMode themeMode = ThemeMode.light;
+    if (_darkMode) {
+      themeMode = ThemeMode.dark;
+    }
+
     return MaterialApp(
       title: appTitle,
       debugShowCheckedModeBanner: false,
@@ -28,6 +60,13 @@ class App extends StatelessWidget {
           elevation: 0,
         ),
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: shopBrand,
+          brightness: Brightness.dark,
+        ),
+      ),
+      themeMode: themeMode,
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) {
@@ -37,7 +76,10 @@ class App extends StatelessWidget {
           return const BasketScreen();
         },
         '/settings': (BuildContext context) {
-          return const SettingsScreen();
+          return SettingsScreen(
+            darkMode: _darkMode,
+            onDarkModeChanged: _changeDarkMode,
+          );
         },
       },
     );

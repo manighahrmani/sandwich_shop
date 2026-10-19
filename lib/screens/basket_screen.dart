@@ -65,7 +65,7 @@ class _BasketScreenState extends State<BasketScreen> {
     if (emphasise) {
       style = const TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
     } else {
-      style = const TextStyle(color: shopText);
+      style = const TextStyle();
     }
 
     return Padding(

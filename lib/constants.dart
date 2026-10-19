@@ -15,5 +15,4 @@ const TextStyle shopHeaderStyle = TextStyle(
 const TextStyle shopSectionTitleStyle = TextStyle(
   fontSize: 22,
   fontWeight: FontWeight.bold,
-  color: shopText,
 );

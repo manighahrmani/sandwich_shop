@@ -25,6 +25,17 @@ class SandwichCard extends StatelessWidget {
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
+                  errorBuilder: (
+                    BuildContext context,
+                    Object error,
+                    StackTrace? stackTrace,
+                  ) {
+                    return const SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: Center(child: Text('Image unavailable')),
+                    );
+                  },
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -41,7 +52,6 @@ class SandwichCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         sandwich.description,
-                        style: const TextStyle(color: Colors.black54),
                       ),
                     ],
                   ),
