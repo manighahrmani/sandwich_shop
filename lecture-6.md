@@ -35,7 +35,7 @@ Technically, JSON is semi-structured data:
 
 ## JSON assets — structured data with JSON
 
-- JSON (JavaScript Object Notation) is a plain-text format for data.
+- JSON (JavaScript Object Notation) is a plain-text format for structured data.
 - Data is organised into key-value objects (`{}`) and ordered arrays (`[]`).
 
 A JSON object with different value types:
@@ -58,8 +58,8 @@ A JSON array of objects:
 ]
 ```
 
-- Hardcoded data lives inside widget code; changing values requires editing and recompiling.
-- Moving data to JSON separates content from code so data updates independently.
+- Hardcoded data mixes presentation with data; changing a price or sandwich requires updating and recompiling Dart code.
+- Moving data to JSON separates content from code so non-developers can update data independently.
 - Dart maps JSON objects to `Map<String, dynamic>` and arrays to `List<dynamic>`.
 - Learn more in the [MDN JSON guide](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON).
 
@@ -202,6 +202,8 @@ return Text('${_items.length} items loaded');
 flutter pub add shared_preferences
 ```
 
+- We use `SharedPreferencesAsync`, the package's current API; every read and write is awaited.
+
 - More detail: [Store key-value data on disk](https://docs.flutter.dev/cookbook/persistence/key-value) and [shared_preferences](https://pub.dev/packages/shared_preferences)
 
 ---
@@ -211,20 +213,26 @@ flutter pub add shared_preferences
 Access the store asynchronously to save and read values:
 
 ```dart
-final SharedPreferences prefs =
-    await SharedPreferences.getInstance();
+final SharedPreferencesAsync prefs = SharedPreferencesAsync();
 await prefs.setString('username', 'Alex');
-final String? name = prefs.getString('username');
+final String? name = await prefs.getString('username');
 ```
 
 - `getString` returns `null` if nothing has been stored under that key yet.
-- In tests, use an in-memory mock store:
+- In tests, use an in-memory store from `shared_preferences_platform_interface`:
 
 ```dart
-SharedPreferences.setMockInitialValues(
-  <String, Object>{'username': 'Alex'},
-);
+SharedPreferencesAsyncPlatform.instance =
+    InMemorySharedPreferencesAsync.withData(
+      <String, Object>{'username': 'Alex'},
+    );
 ```
+
+---
+
+## Live coding
+
+- Resolving a pull request conflict on GitHub (see the live demo guide below).
 
 ---
 
