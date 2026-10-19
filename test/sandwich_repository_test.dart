@@ -51,8 +51,8 @@ void main() {
 
     test('loadSandwichesFromAsset reads the bundled JSON menu', () async {
       final SandwichRepository repository = SandwichRepository();
-      final List<Sandwich> sandwiches =
-          await repository.loadSandwichesFromAsset();
+      final List<Sandwich> sandwiches = await repository
+          .loadSandwichesFromAsset();
 
       expect(sandwiches.length, 4);
       expect(sandwiches[0].id, 'footlong');
@@ -69,10 +69,9 @@ void main() {
     test('nachos image is bundled and the example image is absent', () async {
       final ByteData image = await rootBundle.load('assets/images/nachos.jpeg');
       expect(image.lengthInBytes, greaterThan(0));
-      await expectLater(
-        rootBundle.load('assets/images/nonexistent.jpeg'),
-        throwsFlutterError,
-      );
+      await expectLater(() async {
+        await rootBundle.load('assets/images/nonexistent.jpeg');
+      }, throwsFlutterError);
     });
   });
 }
