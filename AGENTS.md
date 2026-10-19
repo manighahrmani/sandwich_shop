@@ -140,9 +140,8 @@ progresses, so that students build the habit of committing on their own.
   show your work to a member of staff present at your next practical for a
   sign-off. Your main guide for the rest of the exercises is the Flutter
   layout documentation."). Follow the Worksheet 1 wording instead.
-- Number the exercises, write each as prose, and end the ones that require a
-  sign-off with a bold instruction to show the running app to a member of
-  staff, matching the existing worksheets.
+- Number the exercises and write each as prose. Do not instruct students to
+  show their running app or code to a member of staff for sign-off.
 
 ### Emojis
 
