@@ -109,7 +109,7 @@ The same loading code can read the updated catalogue each time the app starts, w
 
 You already registered image assets in [Worksheet 3](worksheet-3.md#register-assets-in-pubspec). A JSON file can be an asset too: it is a supporting file that the app reads, rather than Dart source code. It is called a bundled asset because Flutter packages the registered file with the app during the build, in an asset bundle. See the [Flutter assets guide](https://docs.flutter.dev/ui/assets/assets-and-images).
 
-The running app reads this packaged copy; it does not overwrite it when a customer changes settings. To distribute a changed bundled catalogue, you must rebuild and redistribute the app. This makes it suitable for fixed/static data, in our case our starting menu, but not for saving customer edits or keeping a live shop's prices up to date without an app update.
+The running app reads this packaged copy; it does not overwrite it when a customer changes settings. To distribute a changed bundled catalogue, you must rebuild and redistribute the app. This makes it suitable for fixed data, such as our starting menu, but not for saving customer edits or keeping a live shop's prices up to date without an app update.
 
 ## Loading the menu from a JSON asset
 
@@ -171,7 +171,7 @@ Make sure to place this under the existing `flutter:` entry and run `flutter pub
 
 ### Convert a JSON map into a sandwich
 
-Open `lib/models/sandwich.dart`. We will add a named constructor, `Sandwich.fromJson`, to convert the map representing each JSON object into a `Sandwich`:
+Open `lib/models/sandwich.dart`. We will add a named constructor, `Sandwich.fromJson`, to convert the map representing each JSON object into a `Sandwich`.
 
 A `Map` stores values under keys. `Map<String, dynamic>` means that its keys are strings and its values can have different types. Inside `Sandwich`, after its existing constructor, add this factory constructor outline. It will show an error until you add its return statement:
 
@@ -182,9 +182,7 @@ A `Map` stores values under keys. `Map<String, dynamic>` means that its keys are
 
 The `Sandwich` constructor you wrote in Worksheet 3 needs every value to be passed in separately. Here we have a single map instead, so we write a second constructor that takes the map, picks out each value and builds the `Sandwich` for us. The `factory` keyword lets a constructor run some code first and then `return` the new `Sandwich`. The way you can use this constructor is to call `Sandwich.fromJson(someMap)`. See [factory constructors](https://dart.dev/language/constructors#factory-constructors) for more detail.
 
-<!-- TODO: Done till here -->
-
-Inside its braces, read the fields:
+Inside the braces of `Sandwich.fromJson`, add the fields:
 
 ```dart
     final String id = json['id'] as String;
@@ -236,62 +234,35 @@ Replace the empty map `{}` with these entries:
     };
 ```
 
-`toJson` returns a map, not JSON text. `jsonEncode` from `dart:convert` can turn that map into text when needed; we only need to decode text for the catalogue.
+`toJson` returns a map, not JSON text. `jsonEncode` from `dart:convert` can turn that map into text when needed; we only need to decode text for the catalogue. We check `toJson` in the tests below.
+
+Here is the `toJson` method:
+
+![The Sandwich.toJson method in lib/models/sandwich.dart](images/6/sandwich_to_json_code.png)
 
 ### Test both sandwich conversions
 
-Use the [model testing pattern from Worksheet 4](worksheet-4.md#unit-testing-data-models). Inside the existing group in `test/sandwich_model_test.dart`, add a test with a map:
+Let's use the [model testing pattern from Worksheet 4](worksheet-4.md#unit-testing-data-models) to add tests for the `Sandwich` model's newly added `fromJson` and `toJson` methods.
 
-```dart
-    test('JSON conversion preserves every sandwich field', () {
-      final Map<String, dynamic> data = <String, dynamic>{
-        'id': 'veggie',
-        'name': 'Veggie Sub',
-        'description': 'Fresh vegetables.',
-        'price': 5.50,
-        'imagePath': 'assets/images/six_inch.jpeg',
-      };
-    });
-```
+Inside the existing group in `test/sandwich_model_test.dart`, add a test that creates a map as shown below:
 
-Inside that test, after the map declaration, convert it into a `Sandwich`, check each field, and compare the map returned by `toJson` with the original:
+![The map used for testing JSON conversion in test/sandwich_model_test.dart](images/6/sandwich_test_map.png)
 
-```dart
-      final Sandwich sandwich = Sandwich.fromJson(data);
-      expect(sandwich.id, 'veggie');
-      expect(sandwich.name, 'Veggie Sub');
-      expect(sandwich.description, 'Fresh vegetables.');
-      expect(sandwich.price, 5.50);
-      expect(sandwich.imagePath, 'assets/images/six_inch.jpeg');
-      expect(sandwich.toJson(), data);
-```
+Inside that test, after the map declaration, convert it into a `Sandwich`, check each field, and compare the map returned by `toJson` with the original. See below:
 
-Add another test using a whole-number price to exercise the `num` conversion:
+![The test for JSON conversion in test/sandwich_model_test.dart](images/6/sandwich_test_code.png)
 
-```dart
-    test('fromJson accepts a whole-number price', () {
-      final Map<String, dynamic> data = <String, dynamic>{
-        'id': 'test',
-        'name': 'Test Sub',
-        'description': 'Test sandwich.',
-        'price': 5,
-        'imagePath': 'assets/images/footlong.jpeg',
-      };
-      final Sandwich sandwich = Sandwich.fromJson(data);
-      expect(sandwich.price, 5.0);
-      expect(sandwich.price, isA<double>());
-    });
-```
+Add another test that makes another map with a whole-number price to test the `fromJson` method's handling of `num` conversion. See below our example:
 
-Run `flutter test test/sandwich_model_test.dart`.
+![The map used for testing whole-number price conversion in test/sandwich_model_test.dart](images/6/sandwich_test_whole_number_map.png)
 
-All of the model tests should pass, as shown below:
+`isA<double>()` checks that the value is a `double`, even if the original JSON had a whole-number price.
 
-![The terminal showing all sandwich model tests passing](images/6/sandwich_model_tests_passing.png)
+Run `flutter test test/sandwich_model_test.dart` and make sure they pass.
 
 ### Read the asset in the repository
 
-Open `lib/repositories/sandwich_repository.dart` and add these imports:
+Open `lib/repositories/sandwich_repository.dart` and add these imports (try to put `dart:convert` first, followed by package imports).
 
 ```dart
 import 'dart:convert';
@@ -301,22 +272,30 @@ import 'package:flutter/services.dart';
 
 `dart:convert` provides `jsonDecode`, which turns JSON text into Dart lists and maps: a JSON array becomes a `List` and each JSON object becomes a `Map<String, dynamic>`. `package:flutter/services.dart` provides `rootBundle`, an object that reads the files listed under `assets:` in `pubspec.yaml`; see [loading text assets](https://docs.flutter.dev/ui/assets/assets-and-images#loading-text-assets).
 
-Inside `SandwichRepository`, add `_cachedSandwiches` to hold the most recently loaded list, followed by the loader's outline. Complete the method in the steps below:
+At the top of `SandwichRepository`, add a private field `_cachedSandwiches` to hold the most recently loaded list:
 
 ```dart
   List<Sandwich>? _cachedSandwiches;
+```
 
+After the `getSandwichById` method, add the loader's outline:
+
+```dart
   Future<List<Sandwich>> loadSandwichesFromAsset({
     String assetPath = 'assets/data/sandwiches.json',
   }) async {
   }
 ```
 
-`List<Sandwich>?` means the cache is either a list or `null`; it starts as `null` because nothing has been loaded yet. For nullable types, revisit [Worksheet 4](worksheet-4.md#add-getsandwichbyid-to-sandwichrepository).
+See below what the repository code should look like:
 
-Apply the `Future`, `async` and `await` pattern from [Worksheet 4's widget tests](worksheet-4.md#test-orderitemdisplay-in-isolation) to the file read. Here, `Future<List<Sandwich>>` means the operation completes with a sandwich list or an error, rather than handing back a list immediately.
+![The SandwichRepository with the cache field and the empty loader outline](images/6/sandwich_repository_code.png)
 
-Like `maxQuantity` in [Worksheet 2](worksheet-2.md#use-orderscreen-inside-app), `assetPath` is an optional named parameter with a default value. Calling `loadSandwichesFromAsset()` reads `assets/data/sandwiches.json`, while a test could pass a different path.
+`List<Sandwich>?` means that the `_cachedSandwiches` cache (a variable that holds the most recently loaded list) is either a list or `null`; it starts as `null` because nothing has been loaded yet.
+
+Recall the use of `Future`, `async` and `await` in [Worksheet 4's widget tests](worksheet-4.md#understand-widget-tests) and apply the same pattern to the file read. In our repository, `Future<List<Sandwich>>` means that `loadSandwichesFromAsset` eventually completes with a sandwich list or an error, rather than returning a list immediately.
+
+Like `maxQuantity` in [Worksheet 2](worksheet-2.md#use-orderscreen-inside-app), `assetPath` is an optional named parameter with a default value (hence it is in curly brackets). Calling `loadSandwichesFromAsset()` reads `assets/data/sandwiches.json`, while a test could pass a different path.
 
 Inside the loader, read and decode the text:
 
@@ -327,9 +306,15 @@ Inside the loader, read and decode the text:
     final List<Sandwich> loadedSandwiches = [];
 ```
 
-`rootBundle.loadString` returns a `Future<String>`, so `await` waits for the file text. `jsonDecode` returns `dynamic`, because it cannot know in advance whether the text holds a list, a map or a single value. Our file contains an array, so `decodedData as List<dynamic>` checks that the decoded value is a list; it throws an error if the file contains a different kind of value. The empty `loadedSandwiches` list will collect the converted sandwiches.
+`rootBundle.loadString` returns a `Future<String>`, so `await` waits for the JSON file's text to be available before continuing.
 
-After those declarations, convert each entry using the [explicit loop from Worksheet 4](worksheet-4.md#add-getsandwichbyid-to-sandwichrepository):
+Next, `jsonDecode` returns `dynamic`, because it cannot know in advance whether the text holds a list, a map or a single value.
+
+We know that our file contains an array, so `decodedData as List<dynamic>` checks that the decoded value is a list; it throws an error if the file contains a different kind of value.
+
+Finally, we declare the empty `loadedSandwiches` list. The loop below creates a `Sandwich` from each JSON object in `jsonList` and adds it to this list.
+
+After those declarations, convert each entry using the following loop:
 
 ```dart
     for (final dynamic item in jsonList) {
@@ -342,9 +327,13 @@ After those declarations, convert each entry using the [explicit loop from Works
     return loadedSandwiches;
 ```
 
-Each `item` is `dynamic`, so `item as Map<String, dynamic>` checks that it is a JSON object before we pass it to `Sandwich.fromJson`. After the loop, we store the list in the cache and return it. Because the method is `async`, returning a `List<Sandwich>` completes the `Future`.
+Each `item` is `dynamic`, so `item as Map<String, dynamic>` checks that it is a JSON object before we pass it to `Sandwich.fromJson`. After the loop, we store the list in the cache and return it. Because the method is `async`, returning a `List<Sandwich>` completes the `Future`. Otherwise, if at any point in the process an error occurs, the `Future` will complete with an error.
 
-At the beginning of the existing `getSandwiches` method, before its original `return const [...]`, add:
+See below the completed `loadSandwichesFromAsset` method:
+
+![The completed `loadSandwichesFromAsset` method](images/6/load_sandwiches_from_asset.png)
+
+At the beginning of the existing `getSandwiches` method, before its original `return` statement, add the following:
 
 ```dart
     final List<Sandwich>? cachedSandwiches = _cachedSandwiches;
@@ -357,13 +346,15 @@ We copy the field into a local variable first. After the `!= null` check, Dart k
 
 Keep the existing fixed list and `getSandwichById` method so the earlier synchronous lookup tests still work without loading an asset. For each repository instance, `getSandwiches` returns the fixed list until a successful load, then returns the cached list. The menu will await the loader directly and display an error if it fails, rather than fall back to the fixed list.
 
-Your repository should look like this:
+The `getSandwiches` method should look like this:
 
-![The SandwichRepository with the asset loader and the cache check in getSandwiches](images/6/sandwich_repository_asset_loader.png)
+![The `getSandwiches` method with the cache check](images/6/get_sandwiches_with_cache.png)
 
 ### Test the asset loader
 
-Open `test/sandwich_repository_test.dart`. Reading an asset with `rootBundle` needs Flutter's test binding, which connects the test to Flutter services. Plain `test` calls do not initialise it automatically. At the top of `main()`, before the group, add:
+Open `test/sandwich_repository_test.dart`. Reading an asset with `rootBundle` needs Flutter's test binding, which connects the test to Flutter services. Plain `test` calls do not initialise it automatically.
+
+To do this, at the top of `main()`, before the group, add:
 
 ```dart
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -392,7 +383,7 @@ The new test should pass alongside the existing repository tests, as shown below
 
 ### Load the menu when the screen opens
 
-Open `lib/screens/menu_screen.dart`. Convert `MenuScreen` to a `StatefulWidget` using **Ctrl + .** on Windows or **⌘ + .** on macOS and **Convert to StatefulWidget**. Keep its constructor, imports, app bar and list layout. The two-class structure is the one from [Worksheet 2](worksheet-2.md#define-the-orderscreen-stateful-widget).
+Open `lib/screens/menu_screen.dart`. Convert `MenuScreen` to a `StatefulWidget` using **Ctrl + .** on Windows or **⌘ + .** on macOS and **Convert to StatefulWidget**. Keep its constructor, imports, app bar and list layout. If you forgot how to do this, revisit [Worksheet 2 and its exercises](worksheet-2.md#define-the-orderscreen-stateful-widget).
 
 Inside `_MenuScreenState`, declare:
 
@@ -402,7 +393,7 @@ Inside `_MenuScreenState`, declare:
   String _errorMessage = '';
 ```
 
-Add `initState`, using the [lifecycle pattern from Worksheet 5](worksheet-5.md#text-controllers-and-form-lifecycle):
+Also add an `initState` method. Then implement a `_loadSandwiches` method to asynchronously load the menu:
 
 ```dart
   @override
@@ -410,11 +401,7 @@ Add `initState`, using the [lifecycle pattern from Worksheet 5](worksheet-5.md#t
     super.initState();
     _loadSandwiches();
   }
-```
 
-Add the loader shell:
-
-```dart
   Future<void> _loadSandwiches() async {
     try {
     } catch (error) {
@@ -424,7 +411,7 @@ Add the loader shell:
 
 `Future<void>` means the asynchronous method completes without returning a value; it updates the screen's state instead. Keep `initState` synchronous: it starts `_loadSandwiches`, and that separate method awaits the file read.
 
-`try` runs an operation that might fail; if any statement inside it throws an error, Dart jumps to `catch`, and `error` holds what was thrown. Here we display the failure rather than leave a permanent loading indicator. See [Dart error handling](https://dart.dev/language/error-handling#catch).
+`try` runs an operation that might fail; if any statement inside it throws an error, Dart jumps to `catch`, and `error` holds what was thrown. Here we display the failure rather than leave a permanent loading indicator. See [Dart error handling](https://dart.dev/language/error-handling#catch) or [the Dart worksheets linked in Worksheet 1](worksheet-1.md#introduction-to-the-dart-language) for a refresher.
 
 Inside `try`, load the menu and update state:
 
@@ -441,7 +428,7 @@ Inside `try`, load the menu and update state:
       });
 ```
 
-[`mounted`](https://api.flutter.dev/flutter/widgets/State/mounted.html) is true while this state belongs to the widget tree. After an `await`, the user might have left the screen. The guard prevents updating a disposed state; we use the same guard after later storage operations.
+[`mounted`](https://api.flutter.dev/flutter/widgets/State/mounted.html) is a Boolean property declared in the `State` class. It is true while this state belongs to the widget tree. After an `await`, the user might have left the screen. The check prevents updating a disposed state; we use the same guard after later storage operations.
 
 Inside `catch`, add:
 
@@ -454,6 +441,10 @@ Inside `catch`, add:
         _loading = false;
       });
 ```
+
+Here is our completed `_loadSandwiches` method:
+
+![The completed `_loadSandwiches` method](images/6/load_sandwiches_completed.png)
 
 ### Display loading and error states
 
@@ -477,11 +468,86 @@ In `build`, remove the local repository and `sandwiches` declarations. Start the
 
 `final Widget body;` declares a variable without giving it a value yet. Each branch of the `if` statement assigns it exactly once, and Dart reports an error if any branch forgets. [`CircularProgressIndicator`](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html) shows that work is in progress. Keep the existing `Scaffold` and its app bar, but replace its `body` value with `body`. The list now comes from the asset.
 
-When you run the app, the menu should look like this:
+Here is what your `build` method should look like now:
 
-![The menu screen showing the two sandwiches loaded from the JSON asset](images/6/menu_loaded_from_json.png)
+![The updated `build` method showing loading, error, and list states](images/6/build_method_updated.png)
+
+Let's test our loading and error states by adding two more menu items to the JSON asset. One is a real item we sell; the other is a made-up item with an incorrect price type. Replace the contents of `assets/data/sandwiches.json` with this array:
+
+```json
+[
+  {
+    "id": "footlong",
+    "name": "Footlong Sub",
+    "description": "A freshly baked 12-inch sandwich filled with savoury ingredients.",
+    "price": 7.50,
+    "imagePath": "assets/images/footlong.jpeg"
+  },
+  {
+    "id": "six-inch",
+    "name": "Six-Inch Sub",
+    "description": "A light 6-inch sandwich made with your favourite toppings.",
+    "price": 4.50,
+    "imagePath": "assets/images/six_inch.jpeg"
+  },
+  {
+    "id": "nachos",
+    "name": "Loaded Nachos",
+    "description": "Crispy tortilla chips topped with melted cheese, jalapenos, and sour cream.",
+    "price": 6.99,
+    "imagePath": "assets/images/nachos.jpeg"
+  },
+  {
+    "id": "nonexistent",
+    "name": "Nonexistent Sandwich",
+    "description": "This item is not on our real menu and its image is missing.",
+    "price": "free",
+    "imagePath": "assets/images/nonexistent.jpeg"
+  }
+]
+```
+
+Download the [nachos image](images/6/nachos.jpeg) and save it as `assets/images/nachos.jpeg`. The completed branch `6` includes this file. The existing `assets/images/` registration already covers it, so no new `pubspec.yaml` entry is needed. Run `flutter pub get` and fully restart the app after adding the image.
+
+The text is valid JSON, but `"free"` is a string where `Sandwich.fromJson` expects a number. When you run the app, the menu's error message should report this type error, as shown below:
+
+![The error displayed due to the malformed JSON](images/6/json_error.png)
+
+To fix this error, replace the `"price": "free"` line with a valid number, for example `"price": 0.00`, and run the app again. The menu should now look like this:
+
+![The menu screen showing the updated sandwiches loaded from the JSON asset](images/6/menu_loaded_from_json.png)
+
+The screenshot also shows a second, separate error: `assets/images/nonexistent.jpeg` deliberately does not exist. Keep that path so we can test image-loading feedback without breaking the whole menu. In `lib/widgets/sandwich_card.dart`, add an `errorBuilder` argument to the existing `Image.asset`, after `fit`:
+
+```dart
+                  errorBuilder: (
+                    BuildContext context,
+                    Object error,
+                    StackTrace? stackTrace,
+                  ) {
+                    return const SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: Center(child: Text('Image unavailable')),
+                    );
+                  },
+```
+
+Flutter calls `errorBuilder` if the image cannot load. Its parameters supply the widget context, error and optional stack trace. Our builder displays a visible message in the same space as the image, rather than the debug error shown in the screenshot. Restart and scroll down: the nachos should have a photo, while the made-up item should show **Image unavailable**. Leave the final price as `0.00`, not `"free"`, so the completed menu can load.
 
 ### Update the menu and app tests
+
+The bundled menu now has four items. In the asset-loader test in `test/sandwich_repository_test.dart`, change the length expectation from `2` to `4`. After checking the original two IDs, add:
+
+```dart
+      expect(sandwiches[2].id, 'nachos');
+      expect(sandwiches[2].price, 6.99);
+      expect(sandwiches[2].imagePath, 'assets/images/nachos.jpeg');
+      expect(sandwiches[3].id, 'nonexistent');
+      expect(sandwiches[3].price, 0.0);
+```
+
+Keep the earlier synchronous repository tests expecting two sandwiches: each fresh repository still starts with the original fixed list until its asset loader runs. A lookup for `'non-existent'` still returns `null`; it is not the same ID as our added `'nonexistent'` item.
 
 In `test/menu_screen_test.dart` and `test/widget_test.dart`, import the asset services:
 
@@ -499,41 +565,53 @@ Inside `main`, add this setup, or add its single statement to an existing `setUp
 
 `setUp` runs before each test, as in [Worksheet 5's repository tests](worksheet-5.md#unit-test-the-cart-repository). Flutter widget tests control time so that asynchronous behaviour can be tested predictably. `rootBundle.clear()` clears cached asset reads so a later widget test does not reuse an unfinished read from an earlier test.
 
-In every test that opens the menu or app, add `await tester.pumpAndSettle();` after `pumpWidget`, before checking catalogue text or tapping its buttons. The [frame-settling pattern from Worksheet 4](worksheet-4.md#test-initial-menu-screen-rendering) now also allows the asset load to finish.
+In every test that opens the menu or app, add `await tester.pumpAndSettle();` after `pumpWidget`, before checking catalogue text or tapping its buttons. As well as the route transitions from [Worksheet 4](worksheet-4.md#simulating-user-interaction-and-navigation), `pumpAndSettle` now waits for the asset load to finish.
+
+In the app test that checks names and prices, replace `expect(find.text('Order'), findsNWidgets(2));` with `expect(find.text('Order'), findsWidgets);`. `ListView.builder` builds cards as they approach the visible area, so neither two nor four visible buttons is a reliable catalogue count. Keep the exact count in the repository test instead.
+
+At the end of that app test, scroll to the added items and check their prices and image feedback:
+
+```dart
+      await tester.scrollUntilVisible(find.text('Loaded Nachos'), 150);
+      expect(find.text('£6.99'), findsOneWidget);
+      await tester.scrollUntilVisible(find.text('Nonexistent Sandwich'), 150);
+      await tester.pumpAndSettle();
+      expect(find.text('£0.00'), findsOneWidget);
+      expect(find.text('Image unavailable'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+```
+
+`scrollUntilVisible` scrolls the list until the named item is visible. `takeException` retrieves an unhandled Flutter error; expecting `null` checks that the missing image is handled by our builder.
 
 To verify the actual data source, temporarily change a sandwich name in the JSON asset, fully restart the app, and check that the menu changes. Restore the name afterwards. A hot reload alone does not reliably refresh a bundled asset.
-
-During that check, before restoring the name, the menu should look similar to this:
-
-![The menu screen showing a sandwich name changed in the JSON asset](images/6/menu_with_changed_json_name.png)
 
 ## Adding shared preferences
 
 The menu now reads its catalogue from a bundled JSON file. Next, we address a different need: remembering entries in the customer profile form when the app closes. The bundled catalogue is read-only, so it is not where we save those changes.
 
-For these few editable values, we use shared preferences, which stores values under named keys on the device. It does not require JSON conversion: we save text and Boolean values directly, following the [Flutter key-value recipe](https://docs.flutter.dev/cookbook/persistence/key-value). Both approaches keep data available between launches, but the JSON asset supplies the menu while preferences remembers the customer's choices.
+For these few editable values, we use shared preferences, which stores values under named keys on the device. It does not require JSON conversion: we save text and Boolean values directly, following the [Flutter key-value recipe](https://docs.flutter.dev/cookbook/persistence/key-value). The JSON asset supplies the menu, while preferences remember the customer's choices.
 
 Shared preferences suits small, non-critical values, such as whether you want email news. It does not encrypt stored values, so never use it for passwords or payment details, and use fictional profile details when testing. The [package documentation](https://pub.dev/packages/shared_preferences) also warns that a completed save does not guarantee the data has reached permanent storage. Losing a recent preference is inconvenient, but losing a paid order would be unacceptable.
 
-We only add storage for the catalogue and profile in this worksheet. The basket keeps its existing in-memory behaviour: closing the app loses its contents, and checkout shows a temporary confirmation rather than saving a purchase record.
+The only data we save in this worksheet is the customer profile. The basket keeps its existing in-memory behaviour: closing the app loses its contents, and checkout shows a temporary confirmation rather than saving a purchase record.
 
-From the project root, add the preference package:
+From the project root, add the preference package by running the following command in the terminal:
 
 ```bash
-flutter pub add shared_preferences
+flutter pub add 'shared_preferences:^2.5.6'
 ```
 
-This command updates `pubspec.yaml` and fetches a compatible package version. Stop and restart the app after adding the plugin rather than only hot reloading. You can continue using your browser for this worksheet; an Android emulator is not required.
+This command adds `shared_preferences: ^2.5.6` under `dependencies` in `pubspec.yaml` and fetches the package, as shown below:
 
-The terminal output should look similar to this:
+![The shared_preferences dependency in pubspec.yaml](images/6/shared_preferences_pubspec.png)
 
-![The terminal output after adding the shared_preferences package](images/6/flutter_pub_add_shared_preferences.png)
+Stop and restart the app after adding the plugin rather than only hot reloading. You can continue using your browser for this worksheet; an Android emulator is not required.
 
 ## Remembering the customer profile with shared preferences
 
 We extend the [profile form from Worksheet 5](worksheet-5.md#building-the-customer-profile-settings-form). Keep its controllers, `dispose`, fields and switch; only loading and saving change.
 
-We use the package's `SharedPreferences` class, matching the [Flutter key-value recipe](https://docs.flutter.dev/cookbook/persistence/key-value). The [package documentation](https://pub.dev/packages/shared_preferences) calls this the legacy API, meaning an older interface retained for compatibility, and recommends newer APIs for new apps. We use it here to follow the recipe and learn its getters, setters and test support together.
+We use `SharedPreferencesAsync` from the [shared_preferences package](https://pub.dev/packages/shared_preferences). Its reads and writes are asynchronous, so we use `await` when loading or saving each value.
 
 ### Define the preference keys
 
@@ -552,19 +630,23 @@ const String prefEmail = 'user_email';
 const String prefNewsletter = 'user_newsletter';
 ```
 
+Here is what the top of `lib/screens/settings_screen.dart` should look like:
+
+![Top of lib/screens/settings_screen.dart with shared_preferences import and preference keys](images/6/settings_screen_top.png)
+
 ### Read saved values when settings opens
 
 Inside `_SettingsScreenState`, create an empty `Future<void> _loadSettings() async {}` method. Within its braces, obtain the store and read its values:
 
 ```dart
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? savedName = prefs.getString(prefName);
-    final String? savedAddress = prefs.getString(prefAddress);
-    final String? savedEmail = prefs.getString(prefEmail);
-    final bool? savedNewsletter = prefs.getBool(prefNewsletter);
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    final String? savedName = await prefs.getString(prefName);
+    final String? savedAddress = await prefs.getString(prefAddress);
+    final String? savedEmail = await prefs.getString(prefEmail);
+    final bool? savedNewsletter = await prefs.getBool(prefNewsletter);
 ```
 
-Obtaining the store is asynchronous. `getString` reads a text value and `getBool` reads a Boolean value under the supplied key. These getters read cached values synchronously; they return `null` when a key has not been saved.
+Creating `SharedPreferencesAsync` does not need `await`. Its `getString` method reads a text value and `getBool` reads a Boolean value under the supplied key. Await each read; the result is `null` when that key has not been saved.
 
 Below those declarations, resolve each optional string with an explicit check:
 
@@ -614,9 +696,9 @@ Finish `_loadSettings` with the mounted guard and state update:
 
 In the existing `initState`, add `_loadSettings();` after creating all three controllers. Do not create a second `initState` or remove `dispose`.
 
-Your `_loadSettings` method and `initState` should look like this:
+This is what your `_loadSettings` method should look like in its entirety:
 
-![The _loadSettings method and the initState method in lib/screens/settings_screen.dart](images/6/load_settings_method.png)
+![_loadSettings method in lib/screens/settings_screen.dart](images/6/load_settings_complete.png)
 
 ### Save the profile before showing confirmation
 
@@ -625,7 +707,7 @@ Change the existing `_saveSettings` return type from `void` to `Future<void>` an
 After those declarations, before constructing `UserSettings`, write the values:
 
 ```dart
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
     await prefs.setString(prefName, name);
     await prefs.setString(prefAddress, address);
     await prefs.setString(prefEmail, email);
@@ -642,33 +724,42 @@ Keep the existing `UserSettings` construction. Before its confirmation `setState
 
 The existing **Save Settings** button still uses `onPressed: _saveSettings`. The confirmation now follows the awaited writes, rather than only changing the form's in-memory state.
 
-Your `_saveSettings` method should look like this:
-
-![The asynchronous _saveSettings method writing the profile to shared preferences](images/6/save_settings_method.png)
-
 Save a profile in the running app, then stop the app and run it again. When you open the settings screen, the form should be filled with your saved details, as shown below:
 
 ![The settings form filled with saved profile details after restarting the app](images/6/settings_form_after_restart.png)
 
 ### Test loading and saving preferences
 
-Open the existing `test/settings_screen_test.dart` from [Worksheet 5](worksheet-5.md#widget-test-the-settings-screen); do not replace its earlier tests. Add the same package import used in the settings screen:
+Add the package's test storage implementation as a development dependency:
+
+```bash
+flutter pub add --dev 'shared_preferences_platform_interface:^2.4.2'
+```
+
+You should see this change to your `pubspec.yaml` file:
+
+![Change to pubspec.yaml after adding shared_preferences_platform_interface](images/6/pubspec_yaml_change.png)
+
+Open the existing `test/settings_screen_test.dart` from [Worksheet 5](worksheet-5.md#widget-test-the-settings-screen); do not replace its earlier tests. Add these imports:
 
 ```dart
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 ```
 
 Inside `main`, add this setup, or add its statement to an existing `setUp`:
 
 ```dart
   setUp(() {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
   });
 ```
 
-This resets an in-memory test store using the same `setUp` pattern as [Worksheet 5's cart tests](worksheet-5.md#unit-test-the-cart-repository), so tests do not read or change your real profile. `<String, Object>{}` is an empty map whose keys are strings and whose values can be any non-null object, such as a `String` or a `bool`. See the [recipe's testing support](https://docs.flutter.dev/cookbook/persistence/key-value#testing-support).
+This resets an in-memory test store using the same `setUp` pattern as [Worksheet 5's cart tests](worksheet-5.md#unit-test-the-cart-repository), so tests do not read or change your real profile. `SharedPreferencesAsyncPlatform.instance` selects the storage implementation used by `SharedPreferencesAsync`. The package supplies `InMemorySharedPreferencesAsync` for tests; we do not need to write our own storage class.
 
-In each existing settings test, use `await tester.pumpAndSettle();` after opening the screen and after tapping **Save Settings**, before checking the result.
+In each existing settings test, add `await tester.pumpAndSettle();` after opening the screen. In the save test, also replace the `await tester.pump();` after tapping **Save Settings** with `await tester.pumpAndSettle();`, so the saves finish before the result is checked.
 
 Add a new test inside `main`:
 
@@ -676,38 +767,60 @@ Add a new test inside `main`:
   testWidgets('SettingsScreen pre-fills saved settings on open', (
     WidgetTester tester,
   ) async {
-    SharedPreferences.setMockInitialValues(<String, Object>{
-      prefName: 'Jordan Lee',
-      prefAddress: '15 High Street, Portsmouth',
-      prefEmail: 'jordan@example.com',
-      prefNewsletter: true,
-    });
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.withData(<String, Object>{
+          prefName: 'Abdul Kadir',
+          prefAddress: 'Portsmouth Guildhall, PO1 2AJ',
+          prefEmail: 'abdul.kadir@portsmouthcc.gov.uk',
+          prefNewsletter: true,
+        });
   });
 ```
 
-After setting the mock values, render the form and check the result:
+Inside the new test, after setting the mock values and before its closing `});`, render the form and check the result:
 
 ```dart
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
 
-    expect(find.text('Jordan Lee'), findsOneWidget);
-    expect(find.text('15 High Street, Portsmouth'), findsOneWidget);
-    expect(find.text('jordan@example.com'), findsOneWidget);
+    expect(find.text('Abdul Kadir'), findsOneWidget);
+    expect(find.text('Portsmouth Guildhall, PO1 2AJ'), findsOneWidget);
+    expect(find.text('abdul.kadir@portsmouthcc.gov.uk'), findsOneWidget);
     final Switch switchWidget = tester.widget<Switch>(find.byType(Switch));
     expect(switchWidget.value, isTrue);
 ```
 
-`find.byType(Switch)` locates the switch, and `tester.widget<Switch>(...)` returns that widget as a `Switch` so we can read its `value` property.
+As in [Worksheet 4](worksheet-4.md#test-navigating-to-the-order-screen), `find.byType(Switch)` locates the switch by its type. `tester.widget<Switch>(...)` returns that widget as a `Switch` so we can read its `value` property.
 
-At the end of the existing save test, read the mock store to verify persistence, not just the confirmation:
+Next, update the existing save test, `'Toggling switch and saving settings updates state'`, rather than the new pre-fill test. Replace its three `enterText` calls and its confirmation check with these values:
 
 ```dart
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString(prefName), 'Alex Smith');
-    expect(prefs.getString(prefAddress), '10 Elm Road, Portsmouth');
-    expect(prefs.getString(prefEmail), 'alex@example.com');
-    expect(prefs.getBool(prefNewsletter), isTrue);
+    await tester.enterText(nameField, 'Gerald Vernon-Jackson');
+    await tester.enterText(addressField, 'Guildhall, PO1 2AJ');
+    await tester.enterText(
+      emailField,
+      'gerald.vernon-jackson@portsmouthcc.gov.uk',
+    );
+```
+
+```dart
+    expect(
+      find.text('Settings saved for Gerald Vernon-Jackson'),
+      findsOneWidget,
+    );
+```
+
+At the end of the same save test, read the mock store to verify persistence, not just the confirmation:
+
+```dart
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    expect(await prefs.getString(prefName), 'Gerald Vernon-Jackson');
+    expect(await prefs.getString(prefAddress), 'Guildhall, PO1 2AJ');
+    expect(
+      await prefs.getString(prefEmail),
+      'gerald.vernon-jackson@portsmouthcc.gov.uk',
+    );
+    expect(await prefs.getBool(prefNewsletter), isTrue);
 ```
 
 Then remove and recreate the screen to verify the saved profile is loaded again:
@@ -716,16 +829,19 @@ Then remove and recreate the screen to verify the saved profile is loaded again:
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
-    expect(find.text('Alex Smith'), findsOneWidget);
-    expect(find.text('10 Elm Road, Portsmouth'), findsOneWidget);
-    expect(find.text('alex@example.com'), findsOneWidget);
+    expect(find.text('Gerald Vernon-Jackson'), findsOneWidget);
+    expect(find.text('Guildhall, PO1 2AJ'), findsOneWidget);
+    expect(
+      find.text('gerald.vernon-jackson@portsmouthcc.gov.uk'),
+      findsOneWidget,
+    );
     final Switch reopenedSwitch = tester.widget<Switch>(find.byType(Switch));
     expect(reopenedSwitch.value, isTrue);
 ```
 
 Pumping `const SizedBox.shrink()`, an empty widget, removes the settings screen from the test, so the next `pumpWidget` creates a fresh screen that must load the saved values again.
 
-The menu navigation test also opens `SettingsScreen`. Add the package import to `test/menu_screen_test.dart` and add `SharedPreferences.setMockInitialValues(<String, Object>{});` to the `setUp` that already clears `rootBundle`. Keep both setup statements, otherwise the test may reuse an earlier asset read or try to call the real preferences plugin. Use the same mock setup in any other test file that opens the settings screen.
+The menu navigation test also opens `SettingsScreen`. Add the two platform-interface imports to `test/menu_screen_test.dart` and add `SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.empty();` to the `setUp` that already clears `rootBundle`. Keep both setup statements, otherwise the test may reuse an earlier asset read or try to call the real preferences plugin. Use the same mock setup in any other test file that opens the settings screen.
 
 Run the two affected files together:
 
@@ -733,26 +849,26 @@ Run the two affected files together:
 flutter test test/settings_screen_test.dart test/menu_screen_test.dart
 ```
 
-All of the tests in both files should pass, as shown below:
-
-![The terminal showing the settings and menu screen tests passing](images/6/settings_tests_passing.png)
-
-Finish by running `dart analyze` and `flutter test` from the project root to check that the full application still passes static analysis and all tests.
+All of the tests in both files should pass. Finish by running `dart analyze` and `flutter test` from the project root to check that the full application still passes static analysis and all tests.
 
 ## Exercises
 
 The exercises below apply these concepts to your Southsea Cinema coursework. Together with [Worksheet 5's exercises](worksheet-5.md#exercises), they prepare you for Demo 3. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-Continue your cinema work from Worksheet 5, which started from cinema branch `2`. The completed Demo 3 state is cinema branch `3`. Keep the shared app bars, drawer routes, squared buttons, ticket basket and scrollable profile form you already built.
+Build on the cinema app from Worksheet 5. Keep the shared app bars, drawer routes, squared buttons and ticket basket you already built.
 
-1. Following [Loading the menu from a JSON asset](#loading-the-menu-from-a-json-asset), move the films into `assets/data/movies.json` and register the asset. Add `Movie.fromJson` and `Movie.toJson`, with tests for all fields and whole-number prices.
+1. Following [Loading the menu from a JSON asset](#loading-the-menu-from-a-json-asset), move the films into `assets/data/movies.json` and register the asset. Add `Movie.fromJson` and `Movie.toJson`, with tests for all fields and whole-number prices. Then add an asset loader to your movie repository, like `loadSandwichesFromAsset`, and test that it reads every film from the file.
 
-2. In the state class for `HomeView`, start an asynchronous loading method from `initState`, following the menu screen example. Await the repository's asset loader inside that method, not inside `initState`; the displayed film cards must come from its result, not a hard-coded list. Include loading and error feedback, check `mounted` before updating the page after an `await`, and update the home-page and app tests.
+2. In the state class for `HomeView`, start an asynchronous loading method from `initState`, following the menu screen example in this worksheet. Await the repository's asset loader inside that method (not inside `initState`); the displayed film cards must come from its result, not a hard-coded list.
 
-3. Add `shared_preferences`. Following [Remembering the customer profile](#remembering-the-customer-profile-with-shared-preferences), persist the editable cinema profile fields and email-news preference under named keys. Load them when the settings page opens and save them when the patron submits. Use fictional details. Keep the existing controller lifecycle and scrollable form.
+    The home page should look the same as before once the films load. Show a loading indicator while the asset is read and an error message if loading fails, and check `mounted` before updating the page. Update your widget tests so they wait for the films to load.
 
-4. Test loading saved preferences, saving edited values and reopening the settings form with mock preferences. Fully close and reopen the running app to check that profile values remain. Keep `dart analyze` and `flutter test` passing; mock preferences alone do not prove that a real device or browser retains the values.
+3. Check that the JSON change has not broken your booking flow. Add tickets from a film loaded from the JSON asset, remove one from the basket and complete the temporary checkout. Checkout should still clear the in-memory basket without saving a booking history; saved bookings come in Worksheet 7. Then run `dart format`, `dart analyze` and `flutter test`, and fix any issues until the analyser reports none and every test passes.
 
-5. Retain Worksheet 5's basket calculations, removal and temporary checkout confirmation. Checkout clears the in-memory basket, but does not create a saved booking history at this stage. For Demo 3, be ready to explain where film JSON is read, how map conversion works, why asynchronous page updates check `mounted`, and how profile values survive reopening the app. **Show your completed Demo 3 application to a member of staff.**
+4. (Advanced) You must complete [Worksheet 5's Exercise 6](worksheet-5.md#exercises), which builds the customer profile form on the `'/settings'` page, before starting this exercise.
 
-6. As an advanced challenge, follow the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input) to add focus management to the profile form. A `FocusNode` tracks whether an input has keyboard focus. Create one for the name field, attach it through the field's `focusNode` parameter, and add a button that calls its `requestFocus()` method. Dispose of the node alongside the controllers. Add a clear `IconButton` that calls the name controller's `clear()` method. Build and test one control at a time.
+    Add `shared_preferences` and use `SharedPreferencesAsync`, following the [Remembering the customer profile with shared preferences](#remembering-the-customer-profile-with-shared-preferences) section of this worksheet. Persist the editable cinema profile fields and email-news preference under named keys. Load them when the settings page opens and save them when the patron submits. Use fictional details. Keep the existing controller lifecycle and scrollable form. Fully close and reopen the app to check that the profile values remain.
+
+5. (Advanced) Test loading saved preferences, saving edited values and reopening the settings form with in-memory preferences, following [Test loading and saving preferences](#test-loading-and-saving-preferences).
+
+6. (Advanced, optional) Follow the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input) to add focus management to the profile form. A `FocusNode` tracks whether an input has keyboard focus. Create one for the first field of your form, attach it through the field's `focusNode` parameter, and add a button that calls its `requestFocus()` method. Dispose of the node alongside the controllers. Add a clear `IconButton` to that field which calls its controller's `clear()` method. Build and test one control at a time. This extension is not required for Demo 3.

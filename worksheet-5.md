@@ -64,7 +64,7 @@ If you need a fresh copy of the project, open a terminal and move to a folder th
 
 ```bash
 cd ~/Downloads
-git clone https://github.com/manighahrmani/sandwich_shop.git
+git clone https://github.com/manighahrmani/sandwich_shop
 cd sandwich_shop
 ```
 
@@ -175,7 +175,7 @@ Notice the small red or grey ribbon in the top-right corner that reads "DEBUG". 
 
 Add `debugShowCheckedModeBanner: false` directly inside `MaterialApp` as shown below:
 
-![The menu screen with the debug ribbon removed](images/5/debug_banner_removed.png)
+![The debugShowCheckedModeBanner property added to MaterialApp in main.dart](images/5/debug_banner_removed.png)
 
 Save the file and trigger hot reload. The debug ribbon disappears from the top-right corner:
 
@@ -293,7 +293,7 @@ Now update `lib/widgets/sandwich_card.dart` so each menu item uses our new butto
 import 'package:sandwich_shop/widgets/primary_button.dart';
 ```
 
-Then locate the `ElevatedButton` inside the card's `build` method and replace it with `PrimaryButton`. Here what the change should look like:
+Then locate the `ElevatedButton` inside the card's `build` method and replace it with `PrimaryButton`. Here is what the change should look like:
 
 ![The SandwichCard widget using PrimaryButton in VS Code](images/5/sandwich_card_primary_button.png)
 
@@ -338,7 +338,7 @@ class BasketButton extends StatelessWidget {
 }
 ```
 
-`IconButton` displays an icon from Flutter's Material icon set (`Icons.shopping_basket`). You can press **Ctrl + Space** on Windows or **⌘ + Space** on macOS after the dot to browse available icons. For a complete list, consult the [Material icons documentation](https://api.flutter.dev/flutter/material/Icons-class.html).
+`IconButton` displays an icon from Flutter's Material icon set (`Icons.shopping_basket`). You can press **Ctrl + Space** on Windows or **Control + Space** on macOS after the dot to browse available icons. For a complete list, consult the [Material icons documentation](https://api.flutter.dev/flutter/material/Icons-class.html).
 
 ![The list of available Material icons in VS Code](images/5/material_icons.png)
 
@@ -416,7 +416,7 @@ import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 ```
 
-In `MenuScreen.build`, update the `AppBar` to use `appTitle`, `shopHeaderStyle` first. Also add the `BasketButton` to the `actions` list as shown in the screenshot below:
+In `MenuScreen.build`, update the `AppBar` title to use `appTitle` and `shopHeaderStyle`. Then add the `BasketButton` to the `actions` list as shown in the screenshot below:
 
 ![The menu screen app bar with the styled title and basket button in VS Code](images/5/menu_app_bar_basket_button_code.png)
 
@@ -492,7 +492,7 @@ We would like customers to select a sandwich and quantity, add them to a shared 
 
 When a customer orders a sandwich, we need to track their selection and the quantity they wish to buy. A `Sandwich` represents an item in the catalogue, with its name, description, and price. A `CartItem` represents a specific line item in the customer's shopping basket.
 
-As introduced in [Worksheet 1](./worksheet-1.md), we use composition to build `CartItem`: it holds a reference to a `Sandwich` instance along with an integer quantity. (Note that we could have alternatively stored a collection of `Sandwich` instances in a `List<Sandwich>` to represent the quantity in a `CartItem`.)
+We use composition to build `CartItem`: it holds a reference to a `Sandwich` instance along with an integer quantity. (Note that we could have alternatively stored a collection of `Sandwich` instances in a `List<Sandwich>` to represent the quantity in a `CartItem`.)
 
 Create a new file named `lib/models/cart_item.dart` and define a `CartItem` class with two instance variables: `sandwich` and `quantity`. `sandwich` is a `Sandwich` object (make sure to import it at the top of the file), and `quantity` is an integer. Both fields should be marked `final` to ensure instances are immutable once constructed. Add a constructor that requires both fields to be passed in and finally add a getter called `lineTotal` that multiplies the sandwich price by the quantity and returns the result.
 
@@ -536,7 +536,7 @@ Next, add an internal list to hold the customer's items:
   }
 ```
 
-The list `_items` is again marked with a leading underscore to keep it private. To let screens read the basket items safely (without allowing modifications), `getItems()` returns `List<CartItem>.unmodifiable(_items)`. In Dart, [`List.unmodifiable`](https://api.dart.dev/stable/dart-core/List/List.unmodifiable.html) creates an unmodifiable list wrapper. If an external widget attempts to call `.add()` or `.clear()` on the list returned by `getItems()`, Dart throws an `UnsupportedError` at runtime. This practice is known as defensive copying, ensuring that only the repository itself can alter its internal data structure.
+The list `_items` is again marked with a leading underscore to keep it private. To let screens read the basket items safely (without allowing modifications), `getItems()` returns `List<CartItem>.unmodifiable(_items)`. In Dart, [`List.unmodifiable`](https://api.dart.dev/stable/dart-core/List/List.unmodifiable.html) creates an unmodifiable copy of the list. If an external widget attempts to call `.add()` or `.clear()` on the list returned by `getItems()`, Dart throws an `UnsupportedError` at runtime. This practice is known as defensive copying, ensuring that only the repository itself can alter its internal data structure.
 
 Now add methods to add and remove items:
 
@@ -789,7 +789,7 @@ So far, your changes should look like this:
 
 ![The order screen state class with add to basket logic in VS Code](images/5/order_screen_add_to_basket.png)
 
-Add the button and confirmation message below the quantity controls in `build`, add this in the `Column`'s children:
+To add the button and confirmation message below the quantity controls, add this to the `Column`'s children in `build`:
 
 ```dart
             const SizedBox(height: 24),
@@ -1504,9 +1504,9 @@ Now override `dispose()` to release the controllers:
   }
 ```
 
-Calling `.dispose()` on each controller frees the operating system text-editing resources before calling `super.dispose()`. (Recall that we use `super` to invoke the parent class's, `State`, implementation of a method.)
+Calling `.dispose()` on each controller frees the operating system text-editing resources before calling `super.dispose()`. (Recall that we use `super` to invoke the parent class's (`State`) implementation of a method.)
 
-Note that all of these methods are part of the `State` class (hence we are overriding them). For more details on the `State` class, see the [State documentation](https://api.flutter.dev/flutter/widgets/State-class.html). You could also read the what each of these methods does if you hover your mouse over the `State` class as shown below:
+Note that all of these methods are part of the `State` class (hence we are overriding them). For more details on the `State` class, see the [State documentation](https://api.flutter.dev/flutter/widgets/State-class.html). You can also read what each of these methods does if you hover your mouse over the `State` class as shown below:
 
 ![The State class documentation in VS Code](images/5/state_class_documentation.png)
 
@@ -1880,7 +1880,7 @@ flutter test
 
 ## Exercises
 
-As in the previous worksheets, these exercises apply to your Southsea Cinema coursework. They prepare you for the user interface side of Demo 3, where you add a themed look, named-route navigation, a ticket basket, and a customer profile form to your cinema application. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
+As in the previous worksheets, these exercises apply to your Southsea Cinema coursework. They prepare you for the user interface side of Demo 3, where you add a themed look, named-route navigation and a ticket basket to your cinema application. The advanced exercise adds a customer profile form. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
 In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#exercises) you built a browsable home page of film cards backed by a repository and automated tests. These exercises grow that work into a small multi-page booking flow.
 
@@ -1897,7 +1897,7 @@ In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#
 
     Then, in `lib/views/home_view.dart` and `lib/views/movie_listing.dart`, remove the per-page app-bar styling and keep each title. See the [Sandwich Shop menu app bar example](#add-the-basket-button-to-the-menu-app-bar) for how the shared theme supplies the styling consistently across all pages.
 
-    Run the app and check that the app bars on its pages keep the same appearance. The screenshots below show the top of our app on different pages. Notice that all of them look identical in style (and functionality of the `NavBar` is preserved across all pages).
+    Run the app and check that the app bars on its pages keep the same appearance. The screenshots below show the top of our app on different pages. Notice that they all share the same style, and the `NavDrawer` still works on every page.
 
     ![The Southsea Cinema home page with its shared app bar](images/5/home.png)
 
@@ -1911,7 +1911,7 @@ In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#
     ),
     ```
 
-    Replace the booking and all other suitable buttons on your app with this. Write a widget test for it in `test/widgets/`. See [Widget test the primary button](#widget-test-the-primary-button) for an example that checks the label appears and the callback runs when tapped.
+    Replace the booking and all other suitable buttons in your app with this. Write a widget test for it in `test/widgets/`. See [Widget test the primary button](#widget-test-the-primary-button) for an example that checks the label appears and the callback runs when tapped.
 
     The screenshots below show the booking button on the home page and the add-to-order button on the movie listing page. Notice that they both have the same style.
 
@@ -1927,13 +1927,13 @@ In [Worksheet 3](./worksheet-3.md#exercises) and [Worksheet 4](./worksheet-4.md#
 
     ![Southsea Cinema navigation drawer with Home, My Basket, My Tickets and My Settings](images/5/navbar.png)
 
-4. The user should be able to add tickets to their basket. Develop and test a basket repository for managing the basket contents similar to how in [Holding an order in a basket](#holding-an-order-in-a-basket), we build and test a repository for the Sandwich Shop order. It should support adding, removing and clearing tickets, and provide the basket contents and total.
+4. The user should be able to add tickets to their basket. Develop and test a basket repository for managing the basket contents, as we build and test a repository for the Sandwich Shop order in [Holding an order in a basket](#holding-an-order-in-a-basket). It should support adding, removing and clearing tickets, and provide the basket contents and total.
 
 5. Use your basket repository from the previous exercise to build and test a basket page that displays and manages the customer's tickets. We build a similar screen for the Sandwich Shop in [Building the basket screen](#building-the-basket-screen).
 
     ![Cinema basket page with ticket line items, totals, and a checkout button](images/5/cinema_basket_screen.png)
 
-6. Build and test an editable customer profile form on your `'/settings'` page, like the one we create in [Building the customer profile settings form](#building-the-customer-profile-settings-form).
+6. (Advanced) Build and test an editable customer profile form on your `'/settings'` page, like the one we create in [Building the customer profile settings form](#building-the-customer-profile-settings-form).
 
     Here is an example of the customer profile form on the settings page:
 
