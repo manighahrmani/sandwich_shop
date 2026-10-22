@@ -683,7 +683,7 @@ Build on your listing page from the [Worksheet 2 exercises](worksheet-2.md#exerc
 
     The home page should be on `lib/views/home_view.dart`. (Note that the cinema app keeps its pages in `lib/views/`, not `lib/screens/` like the sandwich app.) Keep your app bar and drawer consistent across all these pages.
 
-    (Advanced, optional) Add a third film to the repository and check that the `HomeView` page displays it without changing `MovieCard` or the list layout. This extension is not required for Demo 2.
+    (Advanced) Add a third film to the repository and check that the `HomeView` page displays it without changing `MovieCard` or the list layout.
 
 6. (Advanced) Connect the booking buttons to `MovieListing`, following [Accept a Sandwich in OrderScreen](#accept-a-sandwich-in-orderscreen) and [Connect SandwichCard to OrderScreen](#connect-sandwichcard-to-orderscreen). Remember that the listing page should be in `lib/views/movie_listing.dart`.
 
