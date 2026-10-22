@@ -28,7 +28,11 @@ void main() {
       expect(find.text('£7.50'), findsOneWidget);
       expect(find.text('Six-Inch Sub'), findsOneWidget);
       expect(find.text('£4.50'), findsOneWidget);
-      expect(find.text('Order'), findsNWidgets(2));
+
+      await tester.scrollUntilVisible(find.text('Loaded Nachos'), 150);
+      expect(find.text('Loaded Nachos'), findsOneWidget);
+      expect(find.text('£6.99'), findsOneWidget);
+      expect(find.text('Order'), findsNWidgets(3));
     });
 
     testWidgets(
