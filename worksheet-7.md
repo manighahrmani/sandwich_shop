@@ -106,7 +106,10 @@ irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/
 
 This is the Android bundle release, not a request to build your Flutter app in release mode. It installs a JDK, the Android SDK and a virtual device named `flutter_emulator`, then opens VS Code on your project. The download is several gigabytes and takes longer than the original bundle. Let the installer finish; the university machines provide the hardware acceleration the emulator needs.
 
-In the new VS Code terminal, from your project folder, launch the virtual device:
+You can launch the virtual device using either VS Code or the terminal:
+
+- **Launch from VS Code**: Click the device selector at the bottom right of the status bar (or press `Ctrl+Shift+P` and choose **Flutter: Launch Emulator**), then select **flutter_emulator**.
+- **Launch from the terminal**: In the VS Code terminal (or PowerShell), run:
 
 ```bash
 flutter emulators --launch flutter_emulator
@@ -133,16 +136,28 @@ Optionally, if you are working on macOS, you can run the iOS simulator instead. 
 
 ### Select the emulator and run the app
 
-Use the [device selector introduced in Worksheet 1](worksheet-1.md#selecting-a-target-device) to choose the booted Android emulator.
+Once the virtual device is running, you can start the application using either VS Code or the terminal.
 
-Alternatively, list the devices and run on the emulator:
+#### Option A: Run using VS Code
+
+1. Verify that the device selector at the bottom right of the status bar shows the running Android emulator (for example, `Android SDK built for x86_64` or `emulator-5554`). If another device is selected, click the status bar item and choose the running emulator.
+2. Press **F5** (or select **Run > Start Debugging**) to build, install, and run the app with hot reload enabled.
+
+#### Option B: Run using the terminal
+
+List the active devices to find the running emulator identifier:
 
 ```bash
 flutter devices
+```
+
+Then launch the app targeting the emulator:
+
+```bash
 flutter run -d emulator-5554
 ```
 
-Replace `emulator-5554` with the actual id reported by `flutter devices`. The first build downloads Android build dependencies and can take several minutes. If it fails, read the reported error and check `flutter doctor`; do not assume every warning or failure is harmless.
+Replace `emulator-5554` with the actual id reported by `flutter devices` (or run `flutter run -d flutter_emulator`). The first build downloads Android build dependencies and can take several minutes. If it fails, read the reported error and check `flutter doctor`; do not assume every warning or failure is harmless.
 
 The app should appear inside the emulator, as shown below:
 
