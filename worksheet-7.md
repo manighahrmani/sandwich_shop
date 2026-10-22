@@ -178,7 +178,20 @@ We do not need web database packages or WebAssembly files. Run the app on your e
 
 ### Prevent running on unsupported platforms
 
-`sqflite` does not work in a browser or on Windows or Linux desktop without separate native configurations. Switch your target device to the mobile emulator rather than Edge, Chrome or desktop. To prevent accidental runs on unsupported platforms, we check the platform when the app starts.
+#### Why do we need `isSupportedPlatform()` in `main.dart`?
+
+Up until Worksheet 6, you tested and ran your Flutter applications inside a web browser (**Chrome / Edge**) via Flutter Web.
+
+In Worksheet 7, we introduce local database persistence using the **`sqflite`** package. `sqflite` relies on native mobile SQLite bindings. It directly communicates with SQLite on **Android**, **iOS**, or **macOS**. It **does not work in a web browser, nor does it work on Windows or Linux desktop**.
+
+If a student presses **F5** with **Edge** or **Windows** selected in the VS Code device picker and triggers database operations, the application crashes immediately with a runtime `MissingPluginException`:
+> `MissingPluginException: No implementation found for method openDatabase on channel com.tekartik.sqflite`
+
+To prevent unexpected crashes and remind you to switch to the mobile emulator, we add a platform check directly in `lib/main.dart`:
+
+1. **`kIsWeb`**: A built-in Flutter constant from `package:flutter/foundation.dart`. It evaluates to `true` whenever the app is compiled to run in a web browser (HTML/CanvasKit/WebAssembly). If `kIsWeb` is true, the check immediately returns `false`.
+2. **`defaultTargetPlatform`**: Detects the host operating system. Only `TargetPlatform.android`, `TargetPlatform.iOS`, and `TargetPlatform.macOS` return `true`.
+3. **`UnsupportedPlatformApp`**: If an unsupported target (such as Edge, Chrome, or Windows) is launched, `main()` starts this lightweight fallback screen instead of crashing. It displays a clear message directing you to stop the app and launch it on your Android emulator.
 
 Open `lib/main.dart` and add this import above the existing Material import:
 
@@ -186,7 +199,7 @@ Open `lib/main.dart` and add this import above the existing Material import:
 import 'package:flutter/foundation.dart';
 ```
 
-`kIsWeb` is `true` when the app is compiled for a browser, and `defaultTargetPlatform` tells us which operating system the app runs on. Replace the `main` function with:
+Replace the `main` function with:
 
 ```dart
 // SQLite (sqflite) only works on Android, iOS and macOS, not in a browser.
@@ -215,7 +228,7 @@ void main() {
 }
 ```
 
-At the end of the file, add the small app shown on unsupported platforms:
+At the end of the file, add the fallback widget shown on unsupported platforms:
 
 ```dart
 class UnsupportedPlatformApp extends StatelessWidget {
@@ -243,11 +256,11 @@ class UnsupportedPlatformApp extends StatelessWidget {
 }
 ```
 
-If you run the app on an unsupported browser or desktop target, the fallback screen appears as shown below:
+If you accidentally run the app on an unsupported browser or desktop target, the fallback screen appears as shown below:
 
 ![The fallback screen displayed when running on an unsupported platform](images/7/unsupported_platform_screen.png)
 
-From now on, select your Android emulator before running the app, as described in [Preparing an Android emulator](#preparing-an-android-emulator).
+From now on, ensure your Android emulator is selected before running the app, as described in [Preparing an Android emulator](#preparing-an-android-emulator).
 
 ## Representing a saved order
 
