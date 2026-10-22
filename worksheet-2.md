@@ -438,8 +438,6 @@ The kind of state we use here is called ephemeral state, which is data that live
 
 If you would like a short explanation before coding, read the [StatelessWidget documentation](https://api.flutter.dev/flutter/widgets/StatelessWidget-class.html) and the [StatefulWidget documentation](https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html), and watch the Flutter team's short videos on [StatelessWidget](https://youtu.be/wE7khGHVkYY) and [StatefulWidget](https://youtu.be/AqCMFXEmf3w). Optionally, check out Flutter's [guide to adding interactivity](https://docs.flutter.dev/ui/interactivity).
 
-<!-- TODO done till here -->
-
 ### Add the Add and Remove buttons
 
 Let's add two buttons below the sandwich display. Jump to your `App` widget in `main.dart` (use **Ctrl + Shift + O** on Windows or **⌘ + Shift + O** on macOS, then search for `App`). Select the current content of the `body` property of the `Scaffold` (it should be set to `Center(child: OrderItemDisplay(...))`).
@@ -844,7 +842,7 @@ Choose your own favourite film and include its title, runtime, age rating and de
 
     Declare `String _bookingMessage = '';` above `build` in `_MovieListingState` and display it with `Text(_bookingMessage)`. In `onPressed`, use `setState` to assign `'Added $_ticketQuantity tickets to the order'` to `_bookingMessage`. You can also print the message inside that callback. Select a quantity and press the button to check that the feedback matches.
 
-5. (Advanced, optional) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does.
+5. (Advanced) With all the pieces in place, update the `movie_listing.dart` page so that it resembles the screenshot above and the home page of the provided template. Reuse the colours and text styles from `lib/constants.dart` the same way `home_view.dart` does.
 
     For example, you can apply `cinemaHeaderStyle` directly to your title `Text` widget (`style: cinemaHeaderStyle`), or define custom text styles using colours such as `cinemaFontWhite` and `cinemaFontMuted`.
 
@@ -860,9 +858,7 @@ Choose your own favourite film and include its title, runtime, age rating and de
     ),
     ```
 
-    This styling extension is not required for Demo 1.
-
-6. (Advanced, optional) Make your page adapt to the width of the window to prevent layout overflows.
+6. (Advanced) Make your page adapt to the width of the window to prevent layout overflows.
 
     A `Row` can overflow on narrow screens. A [`LayoutBuilder`](https://api.flutter.dev/flutter/widgets/LayoutBuilder-class.html) provides `constraints.maxWidth`, so you can choose a `Row` on wide screens and a `Column` on narrow ones.
 
@@ -904,5 +900,3 @@ Choose your own favourite film and include its title, runtime, age rating and de
     ```
 
     Resize the browser window and check that your page works at phone widths without overflowing.
-
-    This layout extension is not required for Demo 1.

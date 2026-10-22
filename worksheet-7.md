@@ -4,6 +4,7 @@
 
 - [Getting help](#getting-help)
 - [Getting started](#getting-started)
+  - [Continue from Worksheet 6](#continue-from-worksheet-6)
   - [Clone the Sandwich Shop repository](#clone-the-sandwich-shop-repository)
   - [Switch to branch 6](#switch-to-branch-6)
 - [Choosing a database for completed orders](#choosing-a-database-for-completed-orders)
@@ -53,7 +54,9 @@ To get support with this worksheet, follow the [Discord guide](https://portdotac
 
 ## Getting started
 
-This worksheet is a draft for Demo 4. Continue with the Sandwich Shop application you completed in [Worksheet 6](worksheet-6.md). Keep its JSON catalogue, saved profile preferences, basket and existing navigation. We now save completed purchases in a database; the basket stays in memory until checkout.
+### Continue from Worksheet 6
+
+Open the Sandwich Shop project you completed in [Worksheet 6](worksheet-6.md). Keep its JSON catalogue, saved profile preferences, basket and existing navigation. We now save completed purchases in a database; the basket stays in memory until checkout.
 
 ### Clone the Sandwich Shop repository
 
@@ -69,15 +72,15 @@ Open the folder in VS Code with **File > Open Folder**.
 
 ### Switch to branch 6
 
-Do not switch branches over unfinished work. Select the Worksheet 6 end state and check the existing tests:
+If you cloned a fresh copy, switch to branch `6` so your project matches the state after completing Worksheet 6. If you are continuing your own project, stay on the branch containing your completed work instead:
 
 ```bash
 git checkout 6
-flutter pub get
-flutter test
 ```
 
-Branch `7` contains the draft completed Sandwich Shop application for this worksheet. Use it to compare your work, not as your starting point.
+Run `flutter pub get` to install the project dependencies, then run `flutter test` to confirm that all existing tests pass before continuing.
+
+Do not switch branches over unfinished work. Branch `7` contains the completed Sandwich Shop application for this worksheet. Use it to compare your work, not as your starting point.
 
 ## Choosing a database for completed orders
 
@@ -95,7 +98,7 @@ Automated tests will use an in-memory database and do not need an emulator. Prep
 
 ### Install the Android bundle on university computers
 
-The browser-only bundle from [Worksheet 1](worksheet-1.md#b---using-the-university-machines-on-campus) does not include the Android tools. Use the [Android emulator release of the portable bundle](https://github.com/manighahrmani/flutter_vscode_package#android-emulator-setup-worksheet-6-onwards) instead. Open PowerShell and run its installer:
+The browser-only bundle from [Worksheet 1](worksheet-1.md#b---using-the-university-machines-on-campus) does not include the Android tools. Use the [Android emulator release of the portable bundle](https://github.com/manighahrmani/flutter_vscode_package#android-emulator-setup-worksheet-7-onwards) instead. Open PowerShell and run its installer:
 
 ```powershell
 irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/install-android-beta.ps1 | iex
@@ -109,7 +112,9 @@ In the new VS Code terminal, from your project folder, launch the virtual device
 flutter emulators --launch flutter_emulator
 ```
 
-Wait for the Android home screen before continuing.
+Wait for the Android home screen before continuing, as shown below:
+
+![The Android emulator running on the home screen](images/7/android_emulator_home_screen.png)
 
 ### Set up an emulator on your own computer
 
@@ -137,7 +142,9 @@ flutter run -d emulator-5554
 
 Replace `emulator-5554` with the actual id reported by `flutter devices`. The first build downloads Android build dependencies and can take several minutes. If it fails, read the reported error and check `flutter doctor`; do not assume every warning or failure is harmless.
 
-The app should appear inside the emulator.
+The app should appear inside the emulator, as shown below:
+
+![The Sandwich Shop app running on the Android emulator](images/7/sandwich_shop_on_emulator.png)
 
 ## Adding the SQLite packages
 
@@ -218,6 +225,10 @@ class UnsupportedPlatformApp extends StatelessWidget {
   }
 }
 ```
+
+If you run the app on an unsupported browser or desktop target, the fallback screen appears as shown below:
+
+![The fallback screen displayed when running on an unsupported platform](images/7/unsupported_platform_screen.png)
 
 From now on, select your Android emulator before running the app, as described in [Preparing an Android emulator](#preparing-an-android-emulator).
 
@@ -317,6 +328,10 @@ Return the record:
       date: date,
     );
 ```
+
+Your `order_record.dart` file should look like this:
+
+![The completed OrderRecord class in lib/models/order_record.dart](images/7/order_record_model.png)
 
 ## Creating the SQLite database helper
 
@@ -482,7 +497,7 @@ Add the insert method:
   }
 ```
 
-`insert` returns the generated row id. Add the outline of the read method:
+`insert` returns the generated row id. Next, add the method that retrieves all saved orders:
 
 ```dart
   Future<List<OrderRecord>> getAllOrders() async {
@@ -491,24 +506,20 @@ Add the insert method:
       'orders',
       orderBy: 'order_number DESC',
     );
-  }
-```
 
-`query` builds an SQL `SELECT` statement to retrieve rows. Its `orderBy` argument supplies SQL `ORDER BY`, which sorts the result. `DESC` means descending order, so the highest order number appears first. We sort by number, not the displayed date string.
-
-After the query, convert the rows and return the list:
-
-```dart
     final List<OrderRecord> orders = [];
     for (final Map<String, Object?> row in records) {
       orders.add(OrderRecord.fromMap(row));
     }
     return orders;
+  }
 ```
+
+`query` builds an SQL `SELECT` statement to retrieve rows. Its `orderBy` argument supplies SQL `ORDER BY`, which sorts the result. `DESC` means descending order, so the highest order number appears first. We sort by number, not the displayed date string. The loop converts each returned database row into an `OrderRecord` instance using `fromMap`.
 
 ### Find the next order number and close the connection
 
-`rawQuery` runs an SQL `SELECT` statement that you write yourself. `MAX` finds the largest value in a column, and `as max_num` gives the result a column name. Start with the method and its query:
+`rawQuery` runs an SQL `SELECT` statement that you write yourself. `MAX` finds the largest value in a column, and `as max_num` gives the result a column name. Add `getNextOrderNumber` to calculate the next sequence number:
 
 ```dart
   Future<int> getNextOrderNumber() async {
@@ -516,12 +527,7 @@ After the query, convert the rows and return the list:
     final List<Map<String, Object?>> records = await db.rawQuery(
       'SELECT MAX(order_number) as max_num FROM orders',
     );
-  }
-```
 
-After the query, handle an empty result or a `null` maximum:
-
-```dart
     if (records.isEmpty) {
       return 1001;
     }
@@ -529,16 +535,13 @@ After the query, handle an empty result or a `null` maximum:
     if (maxValue == null) {
       return 1001;
     }
-```
 
-`MAX` returns `null` when the table has no orders. Otherwise, convert the value once and add one:
-
-```dart
     final int currentMax = maxValue as int;
     return currentMax + 1;
+  }
 ```
 
-An empty table starts at `1001`; a new app with our seed data starts at `1004`. This numbering is for our single-user teaching app, not a multi-user payment system.
+`MAX` returns `null` when the table has no orders. Otherwise, convert the value once and add one. An empty table starts at `1001`; a new app with our seed data starts at `1004`. This numbering is for our single-user teaching app, not a multi-user payment system.
 
 Finally, add a method to close an existing connection and reset the field:
 
@@ -552,7 +555,9 @@ Finally, add a method to close an existing connection and reset the field:
   }
 ```
 
-Tests close the connection after each test so no data leaks into the next one.
+Tests close the connection after each test so no data leaks into the next one. Your database helper class in `lib/database/sandwich_db.dart` should look like this:
+
+![The completed SandwichDatabase class in lib/database/sandwich_db.dart](images/7/sandwich_database_helper.png)
 
 ## Displaying saved orders
 
@@ -740,7 +745,10 @@ Replace the `Placeholder` return in `build`. First declare `body` and choose the
         ),
       );
     }
-```
+
+When there are no saved orders, the screen shows its empty state, as shown below:
+
+![The OrdersScreen showing the empty state](images/7/orders_screen_empty.png)
 
 Immediately after that last closing brace, add the populated state:
 
@@ -787,7 +795,9 @@ Keep the existing route-name check so pressing the receipt icon while already on
         actions: const [OrdersButton(), BasketButton()],
 ```
 
-Leave the menu and settings screens unchanged from Worksheet 6. On the emulator, open the basket from the menu, then select the receipt icon. You should see orders `1003`, `1002` and `1001`, in that order, with their summaries, totals, options and dates.
+Leave the menu and settings screens unchanged from Worksheet 6. On the emulator, open the basket from the menu, then select the receipt icon. You should see orders `1003`, `1002` and `1001`, in that order, with their summaries, totals, options and dates, as shown below:
+
+![The OrdersScreen displaying saved orders in descending order](images/7/orders_screen_populated.png)
 
 ## Saving the basket at checkout
 
@@ -830,7 +840,7 @@ The list method `join` combines strings with a separator to create a summary suc
 
 ### Save the order before clearing the basket
 
-Keep the existing `_confirmationMessage` field. Add this checkout method shell inside `_BasketScreenState`:
+Keep the existing `_confirmationMessage` field. Add `_checkout` inside `_BasketScreenState` to persist the purchase before resetting the basket:
 
 ```dart
   Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
@@ -839,16 +849,6 @@ Keep the existing `_confirmationMessage` field. Add this checkout method shell i
     final String date = _formatDate(DateTime.now());
 
     try {
-    } catch (error) {
-    }
-  }
-```
-
-`DateTime.now()` gives the current local date and time. We prepare the summary, total and display date before starting the database work.
-
-Inside `try`, obtain a number and create the record:
-
-```dart
       final SandwichDatabase database = SandwichDatabase.instance;
       final int orderNumber = await database.getNextOrderNumber();
       final OrderRecord record = OrderRecord(
@@ -857,11 +857,7 @@ Inside `try`, obtain a number and create the record:
         total: total,
         date: date,
       );
-```
 
-After creating the record, save it before calling the existing `CartRepository.clear` method:
-
-```dart
       await database.insertOrder(record);
       cart.clear();
       if (!mounted) {
@@ -871,20 +867,18 @@ After creating the record, save it before calling the existing `CartRepository.c
         _confirmationMessage = 'Order $orderNumber saved';
       });
       Navigator.pushNamed(context, '/orders');
-```
-
-Inside `catch`, report the failure:
-
-```dart
+    } catch (error) {
       if (!mounted) {
         return;
       }
       setState(() {
         _confirmationMessage = 'Could not save your order: $error';
       });
+    }
+  }
 ```
 
-If insertion fails, the cart is not cleared and no success navigation occurs. Never use an empty `catch` around a database write.
+`DateTime.now()` gives the current local date and time. We prepare the summary, total and display date before starting the database work. After inserting the record with `database.insertOrder(record)`, the cart is cleared with `cart.clear()` and the app navigates to `/orders`. If insertion fails, the error is caught, the cart is preserved, and an error message is displayed. Never use an empty `catch` around a database write.
 
 ### Connect the checkout button and verify a restart
 
@@ -908,7 +902,11 @@ The callback starts `_checkout`; that method handles its own asynchronous work a
 
 Keep the existing confirmation field, feedback widgets, empty-basket handling and app bar. Do not replace the whole basket screen.
 
-On the emulator, save fictional profile details, add a sandwich and check out. Confirm the new order appears above the seeded history. Fully stop and reopen the app without uninstalling it or clearing its storage. Both the profile values and completed order should still be present.
+On the emulator, save fictional profile details, add a sandwich and check out. Confirm the new order appears above the seeded history, as shown below:
+
+![The basket screen after checkout displaying the confirmation message](images/7/basket_checkout_confirmation.png)
+
+Fully stop and reopen the app without uninstalling it or clearing its storage. Both the profile values and completed order should still be present.
 
 Reopening the app must not duplicate the three seed orders. The basket itself is still in memory; only completed orders and the saved profile persist.
 
@@ -925,7 +923,9 @@ adb pull /data/local/tmp/s.db sandwich_shop.db
 
 `adb` communicates with the Android device. `run-as` reads the debug app's private files, and `pull` copies a file to your computer. If you changed the Android application id, use that id instead.
 
-Open `sandwich_shop.db` in VS Code using the bundle's **SQLite Viewer** extension. Select the `orders` table and check that it contains the three seed rows and your saved order.
+Open `sandwich_shop.db` in VS Code using the bundle's **SQLite Viewer** extension. Select the `orders` table and check that it contains the three seed rows and your saved order, as shown below:
+
+![Inspecting the SQLite database in the SQLite Viewer extension](images/7/sqlite_viewer_orders_table.png)
 
 This is a snapshot, not a live connection. Remove the copied file after inspection; it is runtime data, not an application asset.
 
@@ -935,7 +935,9 @@ The [sqflite FFI package](https://pub.dev/packages/sqflite_common_ffi) runs SQLi
 
 Organise the tests before adding new ones. Move the existing model tests into `test/models/`, repository tests into `test/repositories/`, and screen tests into `test/screens/`. Keep the button test under `test/widgets/`. Rename `sandwich_model_test.dart` to `sandwich_test.dart` so it matches `lib/models/sandwich.dart`.
 
-Rename `test/widget_test.dart` to `test/main_test.dart` for the app tests. Move its `OrderItemDisplay` group and the two quantity-limit tests into `test/screens/order_screen_test.dart`. Remove the now-unused `Sandwich` import from `main_test.dart`. Keep explicit `Sandwich` types in the moved fixtures and add that type to the `const` declarations in the sandwich model tests too. Tests now follow the same folders as the application.
+Rename `test/widget_test.dart` to `test/main_test.dart` for the app tests. Move its `OrderItemDisplay` group and the two quantity-limit tests into `test/screens/order_screen_test.dart`. Remove the now-unused `Sandwich` import from `main_test.dart`. In `test/main_test.dart`, update the smoke test to check the three menu items (Footlong Sub, Six-Inch Sub and Loaded Nachos), removing the temporary check for the non-existent sandwich from Worksheet 6. Keep explicit `Sandwich` types in the moved fixtures and add that type to the `const` declarations in the sandwich model tests too. Your test folder structure in the editor should look like this:
+
+![The mirrored test directory structure in the VS Code explorer](images/7/test_folders_mirrored.png)
 
 ### Prepare a fresh database for each test
 
@@ -1373,6 +1375,10 @@ dart analyze
 flutter test
 ```
 
+All automated tests should pass, as shown below:
+
+![All tests passing in the terminal](images/7/flutter_test_passed.png)
+
 Compare your finished application with branch `7`. Check both the automated tests and the emulator restart behaviour; an in-memory database test cannot prove that a device file survives restarting the app.
 
 ## Organising tests and inspecting coverage
@@ -1389,28 +1395,32 @@ Run the suite with coverage:
 flutter test --coverage
 ```
 
-This writes `coverage/lcov.info`. Install the [Flutter Coverage extension](https://marketplace.visualstudio.com/items?itemName=Flutterando.flutter-coverage) in VS Code and use it to inspect which lines the tests execute. Review the models, repositories, database helper and checkout screens, then add tests for important paths that are not exercised. Executed lines alone do not prove that the assertions check the correct behaviour.
+This writes `coverage/lcov.info`. Install the [Flutter Coverage extension](https://marketplace.visualstudio.com/items?itemName=Flutterando.flutter-coverage) in VS Code and use it to inspect which lines the tests execute, as shown below:
+
+![Inspecting test coverage line-by-line with the Flutter Coverage extension](images/7/flutter_coverage_inspection.png)
+
+Review the models, repositories, database helper and checkout screens, then add tests for important paths that are not exercised. Executed lines alone do not prove that the assertions check the correct behaviour.
 
 Be ready to demonstrate the coverage in your editor at Demo 4, alongside passing tests and the mirrored folder structure.
 
 ## Exercises
 
-The exercises below apply these concepts to your Southsea Cinema coursework. Together with Worksheet 8, they prepare you for Demo 4. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
+The exercises below apply these concepts to your Southsea Cinema coursework. Together with [Worksheet 8](worksheet-8.md), they prepare you for Demo 4. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-Continue from cinema branch `3`, the Demo 3 state after Worksheets 5 and 6. Cinema branch `4` is the draft Demo 4 checkpoint: the same app, except that checkout saves each booking to SQLite and the basket page lists past orders. Keep the existing JSON film catalogue, saved profile settings, drawer navigation and squared buttons. No notifier, Provider package, app-bar basket button or separate bookings page is required.
+Continue from cinema branch `3`, the Demo 3 state after Worksheets 5 and 6. Cinema branch `4` is the Demo 4 checkpoint: the same app, except that checkout saves each booking to SQLite and the basket page lists past orders. Keep the existing JSON film catalogue, saved profile settings, drawer navigation and squared buttons. No notifier, Provider package, app-bar basket button or separate bookings page is required.
 
-1. Set up the [Android emulator](#preparing-an-android-emulator) and add the [SQLite packages](#adding-the-sqlite-packages) to the cinema app. Use the university Android bundle on lab machines or install an emulator on your own computer. Do not add web database packages or copy the Sandwich Shop's Android package id.
+1. Start with configuring your runtime environment by following [Preparing an Android emulator](#preparing-an-android-emulator) and [Adding the SQLite packages](#adding-the-sqlite-packages) in your cinema project. Use the university Android bundle on lab machines or install an emulator on your own computer. Do not add web database packages or copy the Sandwich Shop's Android package identifier.
 
-2. Following [Representing a saved order](#representing-a-saved-order), create `Booking` in `lib/models/booking.dart`, with an optional database `id`, a `summary`, a `total` and a `date`. Add `toMap` and `fromMap` methods and tests. Use `Booking` consistently for a completed ticket purchase rather than creating a second class for the same record.
+2. Create a `Booking` model in `lib/models/booking.dart` using the structure introduced in [Representing a saved order](#representing-a-saved-order). Include an optional database `id`, a `summary`, a `total` and a `date`, along with `toMap` and `fromMap` methods. Add unit tests for map conversion mirroring [Test order map conversion](#test-order-map-conversion). Use `Booking` consistently for a completed ticket purchase rather than creating a second class for the same record.
 
-3. Following [Creating the SQLite database helper](#creating-the-sqlite-database-helper), create `CinemaDatabase` in `lib/database/cinema_db.dart`. Open a file in the app's database folder and create a `bookings` table in `onCreate`. Add one method that inserts a booking and one that reads all bookings, newest first. You do not need seed data or booking numbers.
+3. Build a singleton database manager `CinemaDatabase` in `lib/database/cinema_db.dart` using the patterns demonstrated in [Creating the SQLite database helper](#creating-the-sqlite-database-helper). Open a database file in the application's document folder and define a `bookings` table inside `onCreate`. Provide one method that inserts a booking and one that reads all bookings, newest first. You do not need seed data or booking numbers.
 
-4. Following [Saving the basket at checkout](#saving-the-basket-at-checkout), change the checkout on the basket page so that it saves a `Booking` containing the basket summary and total before clearing the basket. Keep the existing confirmation message on the basket page.
+4. Adapt your basket checkout routine as shown in [Saving the basket at checkout](#saving-the-basket-at-checkout). Persist a `Booking` containing the basket summary and total before clearing the basket, and preserve the existing confirmation message on the basket page.
 
-5. Following [Displaying saved orders](#displaying-saved-orders), add a past orders section below the current order on the basket page. Load the saved bookings when the page opens and again after checkout, and show the date, summary and total of each one. Show a short message when there are no past orders. Fully close and reopen the emulator app, open the basket page, and check that your earlier purchases are still listed.
+5. Add a past orders section below the current order on the basket page, applying the list-rendering approach from [Displaying saved orders](#displaying-saved-orders). Load the saved bookings when the page opens and refresh them after checkout, presenting the date, summary and total of each purchase. Include a short message when there are no past orders. Fully close and reopen the emulator app, navigate to the basket page, and verify that your earlier purchases remain visible.
 
-6. Following [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator), test the actual table definition using an in-memory database. Check that an inserted booking comes back with its generated id and saved fields, and that bookings are read newest first. Add widget tests that check out a basket on the basket page and confirm that a booking was saved, and that the past orders section lists saved bookings or shows its empty message.
+6. Test the real table definition with an in-memory database using the test harness from [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator) and [Prepare a fresh database for each test](#prepare-a-fresh-database-for-each-test). Verify that an inserted booking returns its generated database id, that map conversions preserve every field, and that queries return records in descending order. Add widget tests modelled on [Update the basket checkout test](#update-the-basket-checkout-test) and [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state) to verify that checking out writes to SQLite and the past orders section renders saved bookings or its empty message.
 
-7. Follow [Organising tests and inspecting coverage](#organising-tests-and-inspecting-coverage). Make your test folders mirror `lib/`, run `flutter test --coverage` and demonstrate the results with the Flutter Coverage extension. Keep `dart analyze` and the complete test suite passing.
+7. Structure your tests in accordance with [Organising tests and inspecting coverage](#organising-tests-and-inspecting-coverage), ensuring that the folders under `test/` mirror those in `lib/`. Run `flutter test --coverage` and inspect executed lines using the Flutter Coverage extension. Maintain zero warnings from `dart analyze` and ensure all tests pass.
 
-8. For Demo 4, be ready to explain why profile preferences and the bookings table have different jobs, how a row maps to a `Booking`, why checkout saves before clearing the basket, and how an emulator restart check differs from an in-memory test.
+8. Prepare for the oral assessment questions outlined in [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite) and Demo 4 criteria. Be ready to explain why profile preferences and the bookings table have different roles, how a row maps to a `Booking`, why checkout saves before clearing the basket, and how an emulator restart check differs from an in-memory test.

@@ -293,4 +293,4 @@ These exercises apply to your Southsea Cinema coursework. Together, the exercise
 
 4. Use VS Code's Source Control view to review and stage your change. Commit it with a clear message such as `Change webpage title`, then push the commit to your fork on GitHub. Open your fork in a browser and confirm that the new commit and code change are visible. Demonstrating a regular commit history with descriptive messages is assessed as part of your demo.
 
-5. (Advanced, optional) On GitHub, open your fork's commit history and compare the title change with your earlier commit. Inspect the diff to see which file changed. This extension is not required for Demo 1.
+5. (Advanced) On GitHub, open your fork's commit history and compare the title change with your earlier commit. Inspect the diff to see which file changed.

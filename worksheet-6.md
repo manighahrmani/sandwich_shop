@@ -605,7 +605,7 @@ This command adds `shared_preferences: ^2.5.6` under `dependencies` in `pubspec.
 
 ![The shared_preferences dependency in pubspec.yaml](images/6/shared_preferences_pubspec.png)
 
-Stop and restart the app after adding the plugin rather than only hot reloading. You can continue using your browser for this worksheet; an Android emulator is not required.
+Stop and restart the app after adding the plugin rather than only hot reloading.
 
 ## Remembering the customer profile with shared preferences
 
@@ -871,4 +871,6 @@ Build on the cinema app from Worksheet 5. Keep the shared app bars, drawer route
 
 5. (Advanced) Test loading saved preferences, saving edited values and reopening the settings form with in-memory preferences, following [Test loading and saving preferences](#test-loading-and-saving-preferences).
 
-6. (Advanced, optional) Follow the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input) to add focus management to the profile form. A `FocusNode` tracks whether an input has keyboard focus. Create one for the first field of your form, attach it through the field's `focusNode` parameter, and add a button that calls its `requestFocus()` method. Dispose of the node alongside the controllers. Add a clear `IconButton` to that field which calls its controller's `clear()` method. Build and test one control at a time. This extension is not required for Demo 3.
+6. (Advanced) Follow the [Flutter user-input tutorial](https://docs.flutter.dev/learn/pathway/tutorial/user-input) to add focus management to the profile form.
+
+    A `FocusNode` tracks whether an input has keyboard focus. Create one for the first field of your form, attach it through the field's `focusNode` parameter, and add a button that calls its `requestFocus()` method. Dispose of the node alongside the controllers. Add a clear `IconButton` to that field which calls its controller's `clear()` method. Build and test one control at a time.
