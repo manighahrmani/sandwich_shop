@@ -182,12 +182,17 @@ We do not need web database packages or WebAssembly files. Run the app on your e
 
 Up until Worksheet 6, you tested and ran your Flutter applications inside a web browser (**Chrome / Edge**) via Flutter Web.
 
-In Worksheet 7, we introduce local database persistence using the **`sqflite`** package. `sqflite` relies on native mobile SQLite bindings. It directly communicates with SQLite on **Android**, **iOS**, or **macOS**. It **does not work in a web browser, nor does it work on Windows or Linux desktop**.
+In Worksheet 7, we introduce local database persistence using the **`sqflite`** package. Here is how persistence and execution differ between the two mechanisms:
+
+- **`shared_preferences` (Worksheet 6)**: Saves lightweight key-value pairs (like user settings and flags). On the web, it stores data in browser `localStorage`, which only survives within that browser session and page reloads, but is cleared whenever debug sessions or lab computer profiles reset. On the Android emulator, it writes to an XML file in internal storage that permanently survives app restarts.
+- **`sqflite` (Worksheet 7)**: Stores structured tables and relational data (like full customer order history). It relies on native C bindings to SQLite on the operating system. It **runs natively on Android, iOS, and macOS**, but **does not work in a web browser, nor does it work on Windows or Linux desktop**.
 
 If a student presses **F5** with **Edge** or **Windows** selected in the VS Code device picker and triggers database operations, the application crashes immediately with a runtime `MissingPluginException`:
 > `MissingPluginException: No implementation found for method openDatabase on channel com.tekartik.sqflite`
 
-To prevent unexpected crashes and remind you to switch to the mobile emulator, we add a platform check directly in `lib/main.dart`:
+Running on the **Android emulator** gives you the true, full mobile platform experience: both SQLite database tables and shared preferences files are permanently saved to the emulator disk and persist across stopping, restarting, and reinstalling the app.
+
+To prevent accidental crashes on web or desktop and remind you to switch to the mobile emulator, we add a platform check directly in `lib/main.dart`:
 
 1. **`kIsWeb`**: A built-in Flutter constant from `package:flutter/foundation.dart`. It evaluates to `true` whenever the app is compiled to run in a web browser (HTML/CanvasKit/WebAssembly). If `kIsWeb` is true, the check immediately returns `false`.
 2. **`defaultTargetPlatform`**: Detects the host operating system. Only `TargetPlatform.android`, `TargetPlatform.iOS`, and `TargetPlatform.macOS` return `true`.
