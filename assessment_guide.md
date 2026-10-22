@@ -59,13 +59,12 @@ For Demos 1 to 3, if any required functionality item scores zero, your final
 demo mark is capped at 23 out of 25. A lower mark remains unchanged; this is
 not an additional deduction for each missing feature. At Demo 3, one
 understanding question comes from Worksheet 5 and one from Worksheet 6,
-excluding advanced, optional extensions.
+excluding advanced exercises.
 
 Demo 3 covers Worksheets 5 and 6: themed navigation, the ticket basket,
 profile forms, a JSON film catalogue and saved profile preferences.
 Database-backed checkout and SQLite booking history are introduced in
-Worksheet 7 for Demo 4, not required for Demo 3. Provider and notifiers
-are not assessment requirements.
+Worksheet 7 for Demo 4. Provider and notifiers are not assessment requirements.
 
 ## Demo windows and missing a demo
 
