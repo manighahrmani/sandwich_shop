@@ -13,7 +13,7 @@
   - [Set up an emulator on your own computer](#set-up-an-emulator-on-your-own-computer)
   - [Select the emulator and run the app](#select-the-emulator-and-run-the-app)
 - [Adding the SQLite packages](#adding-the-sqlite-packages)
-  - [Stop the app running in a browser](#stop-the-app-running-in-a-browser)
+  - [Prevent running on unsupported platforms](#prevent-running-on-unsupported-platforms)
 - [Representing a saved order](#representing-a-saved-order)
   - [Create the order record and its constructor](#create-the-order-record-and-its-constructor)
   - [Convert an order into a database row](#convert-an-order-into-a-database-row)
@@ -129,6 +129,8 @@ flutter doctor --android-licenses
 
 Start the device from **Device Manager**, or run `flutter emulators` and then `flutter emulators --launch` followed by the listed emulator name. You only need this setup or the university bundle, not both.
 
+Optionally, if you are working on macOS, you can run the iOS simulator instead. Follow the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup) to install Xcode and its command-line tools. Start the simulator by running `open -a Simulator` in your terminal or choosing it from the device picker. The `sqflite` plugin supports iOS without extra configuration.
+
 ### Select the emulator and run the app
 
 Use the [device selector introduced in Worksheet 1](worksheet-1.md#selecting-a-target-device) to choose the booted Android emulator.
@@ -159,9 +161,9 @@ flutter pub add --dev sqflite_common_ffi
 
 We do not need web database packages or WebAssembly files. Run the app on your emulator. After adding plugins, stop and restart the app rather than only hot reloading.
 
-### Stop the app running in a browser
+### Prevent running on unsupported platforms
 
-`sqflite` does not work in a browser or on Windows or Linux desktop. Remove the `web`, `windows` and `linux` folders from your project so these targets are no longer offered. Flutter can still build a web version without the `web` folder, so we also check the platform when the app starts.
+`sqflite` does not work in a browser or on Windows or Linux desktop without separate native configurations. Switch your target device to the mobile emulator rather than Edge, Chrome or desktop. To prevent accidental runs on unsupported platforms, we check the platform when the app starts.
 
 Open `lib/main.dart` and add this import above the existing Material import:
 
