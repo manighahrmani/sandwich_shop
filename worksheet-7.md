@@ -104,12 +104,9 @@ The browser-only bundle from [Worksheet 1](worksheet-1.md#b---using-the-universi
 irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/install-android-beta.ps1 | iex
 ```
 
-This is the Android bundle release, not a request to build your Flutter app in release mode. It installs a JDK, the Android SDK and a virtual device named `flutter_emulator`, then opens VS Code on your project. The download is several gigabytes and takes longer than the original bundle. Let the installer finish; the university machines provide the hardware acceleration the emulator needs.
+This is the Android bundle release, not a request to build your Flutter app in release mode. The installer sets everything up: it installs a JDK, the Android SDK and a virtual device named `flutter_emulator`, boots that emulator once and leaves it running, then opens VS Code on your project. The download is several gigabytes, so the installer takes several minutes to finish. Let it run to the end; the university machines provide the hardware acceleration the emulator needs.
 
-You can launch the virtual device using either VS Code or the terminal:
-
-- **Launch from VS Code**: Click the device selector at the bottom right of the status bar (or press `Ctrl+Shift+P` and choose **Flutter: Launch Emulator**), then select **flutter_emulator**.
-- **Launch from the terminal**: In the VS Code terminal (or PowerShell), run:
+Because the installer already booted the emulator, you do not repeat its setup. If the emulator is not running, launch it with the command below and wait for the Android home screen. The first cold boot can take a few minutes, and a black screen is normal while it boots.
 
 ```bash
 flutter emulators --launch flutter_emulator
@@ -130,34 +127,21 @@ flutter doctor
 flutter doctor --android-licenses
 ```
 
-Start the device from **Device Manager**, or run `flutter emulators` and then `flutter emulators --launch` followed by the listed emulator name. You only need this setup or the university bundle, not both.
+Start the device from **Device Manager**, or run `flutter emulators --launch` with your emulator name. You only need this setup or the university bundle, not both.
 
 Optionally, if you are working on macOS, you can run the iOS simulator instead. Follow the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup) to install Xcode and its command-line tools. Start the simulator by running `open -a Simulator` in your terminal or choosing it from the device picker. The `sqflite` plugin supports iOS without extra configuration.
 
 ### Select the emulator and run the app
 
-Once the virtual device is running, you can start the application using either VS Code or the terminal.
+Once the virtual device is running, pick it as the run target in VS Code using the device selector in the bottom-right of the status bar. If a different device is selected, click the status bar item and choose the running Android emulator (for example `emulator-5554`). You can also open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and run the command **Flutter: Select Device**. Do not pick the Windows device, as SQLite does not work there. Then press **F5** to build, install and run the app with hot reload.
 
-#### Option A: Run using VS Code
-
-1. Verify that the device selector at the bottom right of the status bar shows the running Android emulator (for example, `Android SDK built for x86_64` or `emulator-5554`). If another device is selected, click the status bar item and choose the running emulator.
-2. Press **F5** (or select **Run > Start Debugging**) to build, install, and run the app with hot reload enabled.
-
-#### Option B: Run using the terminal
-
-List the active devices to find the running emulator identifier:
-
-```bash
-flutter devices
-```
-
-Then launch the app targeting the emulator:
+To run from the terminal instead, target the emulator directly:
 
 ```bash
 flutter run -d emulator-5554
 ```
 
-Replace `emulator-5554` with the actual id reported by `flutter devices` (or run `flutter run -d flutter_emulator`). The first build downloads Android build dependencies and can take several minutes. If it fails, read the reported error and check `flutter doctor`; do not assume every warning or failure is harmless.
+Replace `emulator-5554` with the id reported by `flutter devices`, or run `flutter run -d flutter_emulator`. The first build downloads Android build dependencies and can take several minutes. If it fails, read the reported error and check `flutter doctor`; do not assume every warning or failure is harmless.
 
 The app should appear inside the emulator, as shown below:
 
@@ -177,8 +161,6 @@ flutter pub add --dev sqflite_common_ffi
 We do not need web database packages or WebAssembly files. Run the app on your emulator. After adding plugins, stop and restart the app rather than only hot reloading.
 
 ### Prevent running on unsupported platforms
-
-#### Why do we need `isSupportedPlatform()` in `main.dart`?
 
 Up until Worksheet 6, you tested and ran your Flutter applications inside a web browser (**Chrome / Edge**) via Flutter Web.
 
@@ -941,7 +923,7 @@ On the emulator, save fictional profile details, add a sandwich and check out. C
 
 ![The basket screen after checkout displaying the confirmation message](images/7/basket_checkout_confirmation.png)
 
-Fully stop and reopen the app without uninstalling it or clearing its storage. Both the profile values and completed order should still be present.
+Now fully close the app on the emulator. Terminate it by stopping the debug run and relaunching, or by swiping it away from the emulator's recent-apps list. This is a real cold restart, not a hot reload or hot restart, so do not just save a file and let the app refresh. Reopen the app without uninstalling it or clearing its storage, and confirm both that your past orders are still listed and that the saved profile fields from Worksheet 6 are still populated from the previous session.
 
 Reopening the app must not duplicate the three seed orders. The basket itself is still in memory; only completed orders and the saved profile persist.
 
@@ -1452,10 +1434,10 @@ Continue from cinema branch `3`, the Demo 3 state after Worksheets 5 and 6. Cine
 
 4. Adapt your basket checkout routine as shown in [Saving the basket at checkout](#saving-the-basket-at-checkout). Persist a `Booking` containing the basket summary and total before clearing the basket, and preserve the existing confirmation message on the basket page.
 
-5. Add a past orders section below the current order on the basket page, applying the list-rendering approach from [Displaying saved orders](#displaying-saved-orders). Load the saved bookings when the page opens and refresh them after checkout, presenting the date, summary and total of each purchase. Include a short message when there are no past orders. Fully close and reopen the emulator app, navigate to the basket page, and verify that your earlier purchases remain visible.
+5. Add a past orders section below the current order on the basket page, applying the list-rendering approach from [Displaying saved orders](#displaying-saved-orders). Load the saved bookings when the page opens and refresh them after checkout, presenting the date, summary and total of each purchase. Include a short message when there are no past orders. To check that both stores survive a restart, place an order, then change and save your profile settings. Now fully close and reopen the emulator app: terminate it for a real cold restart, which is not a hot reload or hot restart and is different from an in-memory test. Reopen the app, navigate to the basket page, and verify that both your earlier bookings and your saved profile settings are still present.
 
-6. Test the real table definition with an in-memory database using the test harness from [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator) and [Prepare a fresh database for each test](#prepare-a-fresh-database-for-each-test). Verify that an inserted booking returns its generated database id, that map conversions preserve every field, and that queries return records in descending order. Add widget tests modelled on [Update the basket checkout test](#update-the-basket-checkout-test) and [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state) to verify that checking out writes to SQLite and the past orders section renders saved bookings or its empty message.
+6. Test the real table definition with an in-memory database using the test harness from [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator) and [Prepare a fresh database for each test](#prepare-a-fresh-database-for-each-test). Keep the `Booking` `toMap` and `fromMap` round-trip unit tests. For `CinemaDatabase`, verify that an inserted booking returns its generated database id, that the map conversions preserve every field, and that queries return records newest first. Add a widget test modelled on [Update the basket checkout test](#update-the-basket-checkout-test) and [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state) that checking out writes to SQLite, and cover both states explicitly: the past orders section renders saved bookings when present, and shows the empty-state message when there are none. Add a widget test for the settings flow that saving profile settings stores them and that they are read back and pre-filled when the settings page reopens, following Worksheet 6's in-memory approach in [Test loading and saving preferences](worksheet-6.md#test-loading-and-saving-preferences). Add an end-to-end booking journey widget test where feasible: navigate from the film list through the **BOOK NOW** button to the listing, add tickets to the basket, open the basket, check out, and confirm the past orders list updates. If a single full-journey test is impractical, test each hop instead.
 
-7. Structure your tests in accordance with [Organising tests and inspecting coverage](#organising-tests-and-inspecting-coverage), ensuring that the folders under `test/` mirror those in `lib/`. Run `flutter test --coverage` and inspect executed lines using the Flutter Coverage extension. Maintain zero warnings from `dart analyze` and ensure all tests pass.
+7. Structure your tests in accordance with [Organising tests and inspecting coverage](#organising-tests-and-inspecting-coverage), ensuring that the folders under `test/` mirror the actual application structure in `lib/`. The cinema app keeps its screens under `lib/views/`, so their tests go under `test/views/`. Run `flutter test --coverage` and inspect executed lines using the Flutter Coverage extension. Confirm the coverage shows the `Booking` model, the `CinemaDatabase` database helper and the main screens exercised. Maintain zero warnings from `dart analyze` and ensure all tests pass.
 
 8. Prepare for the oral assessment questions outlined in [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite) and Demo 4 criteria. Be ready to explain why profile preferences and the bookings table have different roles, how a row maps to a `Booking`, why checkout saves before clearing the basket, and how an emulator restart check differs from an in-memory test.
