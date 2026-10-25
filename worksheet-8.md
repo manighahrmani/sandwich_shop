@@ -156,6 +156,8 @@
 
 ### Inspecting final test coverage
 
+<!-- Note: The lecturer will demonstrate how to use AI pair-programming to achieve near-complete test coverage across the application, visualised with the Flutter Coverage extension. -->
+
 <!-- TODO: Reviewing overall coverage:
 - Run `flutter test --coverage`.
 - Inspect combined coverage across models, repositories, database, screens, and integration flows in Flutter Coverage extension.
