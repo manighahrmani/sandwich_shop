@@ -10,9 +10,11 @@ On your own computer, install the following:
 
 - [Git](https://git-scm.com/downloads)
 - [Flutter and VS Code](https://docs.flutter.dev/install/quick), which also sets up the Flutter extension
-- [Android Studio and an Android emulator](https://docs.flutter.dev/platform-integration/android/setup), following the guide up to creating a virtual device in **Device Manager**
+- Android Studio and an Android emulator, following [Set up an emulator on your own computer](https://github.com/manighahrmani/sandwich_shop/blob/main/worksheet-7.md#set-up-an-emulator-on-your-own-computer) in Worksheet 7, or a phone set up as in [Use a physical Android device](https://github.com/manighahrmani/sandwich_shop/blob/main/worksheet-7.md#use-a-physical-android-device)
 
 Run `flutter doctor` afterwards and check that the **Android toolchain** line has a tick.
+
+The app only allows Android. To run it on iOS, macOS, Windows or Linux, update `isSupportedPlatform` in `lib/main.dart` as described in [Run on other platforms](https://github.com/manighahrmani/sandwich_shop/blob/main/worksheet-7.md#run-on-other-platforms).
 
 ## Get the code
 
@@ -53,15 +55,15 @@ flutter run -d emulator-5554
 
 The first build downloads Android build files and can take several minutes. Replace `emulator-5554` with the id shown by `flutter devices` if yours is different.
 
-## Run the tests
+## Format, analyse and test
 
-The tests use an in-memory SQLite database and in-memory preferences, so they do not need the emulator. Run them with coverage:
+Run these commands in the terminal to format the code, check it for problems and run the tests. The tests use an in-memory database, so they do not need the emulator:
 
 ```bash
-flutter test --coverage
+dart format lib test
+dart analyze
+flutter test
 ```
-
-This writes `coverage/lcov.info`. Use the [Flutter Coverage extension](https://marketplace.visualstudio.com/items?itemName=Flutterando.flutter-coverage) in VS Code to see which lines the tests run.
 
 ## Get support
 
