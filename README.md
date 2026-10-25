@@ -43,6 +43,15 @@ Click the device name in the bottom-right corner of the status bar and choose **
 flutter run -d edge
 ```
 
+## Format and analyse
+
+Run these commands in the terminal to format the code and check it for problems:
+
+```bash
+dart format lib
+dart analyze
+```
+
 ## Get support
 
 Ask questions in the [dedicated Discord channel](https://discord.com/channels/760155974467059762/1370633732779933806). Include the error message you see and a screenshot.
