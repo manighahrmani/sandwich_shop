@@ -1,54 +1,28 @@
 # Sandwich Shop
 
-This is a simple Flutter app that allows users to order sandwiches.
-The app is built using Flutter and Dart. Branch `6` loads the menu from a JSON
-asset, saves settings with shared preferences and runs on an Android emulator
-rather than a web browser.
+This branch contains the Sandwich Shop app as it is after completing [Worksheet 6 — JSON assets and saved preferences](https://github.com/manighahrmani/sandwich_shop/blob/main/worksheet-6.md). It runs in a web browser such as Edge or Chrome.
 
-## Install the essential tools
+## Prerequisites
 
-1. **Terminal**:
+On a university computer, follow the setup steps of the [Flutter and VS Code bundle](https://github.com/manighahrmani/flutter_vscode_package#setup). It installs Flutter, Git and VS Code for you. When it asks for a repository URL, press **Enter** to continue with the starter app; VS Code then opens.
 
-    - **macOS** – use the built-in Terminal app by pressing **⌘ + Space**, typing **Terminal**, and pressing **Return**.
-    - **Windows** – open the start menu using the **Windows** key. Then enter **cmd** to open the **Command Prompt**. Alternatively, you can use **Windows PowerShell** or **Windows Terminal**.
+On your own computer, install the following:
 
-2. **Git** – verify that you have `git` installed by entering `git --version`, in the terminal.
-    If this is missing, download the installer from [Git's official site](https://git-scm.com/downloads?utm_source=chatgpt.com).
-
-3. **Package managers**:
-
-    - **Homebrew** (macOS) – verify that you have `brew` installed with `brew --version`; if missing, follow the instructions on the [Homebrew installation page](https://brew.sh/).
-    - **Chocolatey** (Windows) – verify that you have `choco` installed with `choco --version`; if missing, follow the instructions on the [Chocolatey installation page](https://chocolatey.org/install).
-
-4. **Flutter SDK** – verify that you have `flutter` installed and it is working with `flutter doctor`; if missing, install it using your package manager:
-
-    - **macOS**: `brew install --cask flutter`
-    - **Windows**: `choco install flutter`
-
-5. **Visual Studio Code** – verify that you have `code` installed with `code --version`; if missing, use your package manager to install it:
-
-    - **macOS**: `brew install --cask visual-studio-code`
-    - **Windows**: `choco install vscode`
+- [Git](https://git-scm.com/downloads)
+- [Flutter and VS Code](https://docs.flutter.dev/install/quick), which also sets up the Flutter extension
+- [Microsoft Edge](https://www.microsoft.com/edge/download) or [Google Chrome](https://www.google.com/chrome/)
 
 ## Get the code
 
-### If this is your first time working on this project
-
-Enter the following commands in your terminal to clone the repository and
-open it in Visual Studio Code.
-You may want to change directory (`cd`) to the directory where you want to clone the
-repository first.
+In VS Code, open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS, run **Terminal: Create New Terminal**, then enter the following commands. They clone branch `6` into your `Downloads` folder, which is not synchronised to cloud storage, and open it in a new VS Code window:
 
 ```bash
+cd ~/Downloads
 git clone --branch 6 https://github.com/manighahrmani/sandwich_shop
-cd sandwich_shop
-code .
+code sandwich_shop
 ```
 
-### If you have already cloned the repository
-
-Enter the following commands in your terminal to switch to the correct branch.
-Remember to `cd` to the directory where you cloned the repository first.
+If you already have a clone, commit your own work first, then switch to this branch from inside the `sandwich_shop` folder:
 
 ```bash
 git fetch origin
@@ -57,24 +31,21 @@ git checkout 6
 
 ## Run the app
 
-Open the integrated terminal in Visual Studio Code by first opening the Command
-Palette with **⌘ + Shift + P** (macOS) or **Ctrl + Shift + P** (Windows) and
-typing **Terminal: Create New Terminal** then pressing **Enter**.
-
-In the terminal, run the following commands to install the dependencies and run
-the app on your selected Android emulator:
+In the new VS Code window, open a terminal and install the dependencies:
 
 ```bash
 flutter pub get
-flutter run
 ```
 
-On university computers, use the [Android emulator bundle](https://github.com/manighahrmani/flutter_vscode_package#android-emulator-setup-worksheet-6-onwards)
-and launch `flutter_emulator`. On your own computer, follow the
-[Flutter Android setup guide](https://docs.flutter.dev/platform-integration/android/setup).
-Select the booted emulator in VS Code before running.
+Click the device name in the bottom-right corner of the status bar and choose **Edge** or **Chrome**. Then press **F5** to run the app. Alternatively, run it from the terminal:
 
-Tests use mock shared preferences and do not need an emulator:
+```bash
+flutter run -d edge
+```
+
+## Run the tests
+
+Run the unit and widget tests from the terminal:
 
 ```bash
 flutter test
@@ -82,7 +53,4 @@ flutter test
 
 ## Get support
 
-Use [the dedicated Discord channel](https://discord.com/channels/760155974467059762/1370633732779933806)
-to ask your questions and get help from the community.
-Please provide as much context as possible, including the error messages you are seeing and
-screenshots (you can open Discord in your web browser).
+Ask questions in the [dedicated Discord channel](https://discord.com/channels/760155974467059762/1370633732779933806). Include the error message you see and a screenshot.
