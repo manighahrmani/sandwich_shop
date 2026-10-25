@@ -37,9 +37,9 @@ class UnsupportedPlatformApp extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(24.0),
             child: Text(
-              'This app saves orders with SQLite, which does not work in a '
-              'web browser or on Windows or Linux desktop. Stop the app and '
-              'run it on an Android emulator instead.',
+              'This app saves orders with SQLite and is set up to run on '
+              'Android only. Stop the app and run it on an Android emulator '
+              'or device instead.',
               textAlign: TextAlign.center,
             ),
           ),
