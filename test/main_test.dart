@@ -59,17 +59,17 @@ void main() {
     );
   });
 
-  test('Android, iOS and macOS are supported', () {
+  test('Android is supported', () {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
-    expect(isSupportedPlatform(), isTrue);
-    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-    expect(isSupportedPlatform(), isTrue);
-    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
     expect(isSupportedPlatform(), isTrue);
     debugDefaultTargetPlatformOverride = null;
   });
 
-  test('Windows and Linux desktop are not supported', () {
+  test('Other platforms are not supported', () {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    expect(isSupportedPlatform(), isFalse);
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    expect(isSupportedPlatform(), isFalse);
     debugDefaultTargetPlatformOverride = TargetPlatform.windows;
     expect(isSupportedPlatform(), isFalse);
     debugDefaultTargetPlatformOverride = TargetPlatform.linux;
@@ -77,8 +77,9 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  testWidgets('The unsupported platform screen explains what to do',
-      (WidgetTester tester) async {
+  testWidgets('The unsupported platform screen explains what to do', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const UnsupportedPlatformApp());
     expect(find.textContaining('Android emulator'), findsOneWidget);
   });

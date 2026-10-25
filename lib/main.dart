@@ -6,18 +6,12 @@ import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 
-// SQLite (sqflite) only works on Android, iOS and macOS, not in a browser.
+// This app saves orders with SQLite (sqflite), which is set up for Android.
 bool isSupportedPlatform() {
   if (kIsWeb) {
     return false;
   }
   if (defaultTargetPlatform == TargetPlatform.android) {
-    return true;
-  }
-  if (defaultTargetPlatform == TargetPlatform.iOS) {
-    return true;
-  }
-  if (defaultTargetPlatform == TargetPlatform.macOS) {
     return true;
   }
   return false;
@@ -43,9 +37,9 @@ class UnsupportedPlatformApp extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(24.0),
             child: Text(
-              'This app saves orders with SQLite, which does not work in a '
-              'web browser or on Windows or Linux desktop. Stop the app and '
-              'run it on an Android emulator instead.',
+              'This app saves orders with SQLite and is set up to run on '
+              'Android only. Stop the app and run it on an Android emulator '
+              'instead.',
               textAlign: TextAlign.center,
             ),
           ),
