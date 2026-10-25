@@ -43,11 +43,13 @@ Click the device name in the bottom-right corner of the status bar and choose **
 flutter run -d edge
 ```
 
-## Run the tests
+## Format, analyse and test
 
-Run the unit and widget tests from the terminal:
+Run these commands in the terminal to format the code, check it for problems and run the tests:
 
 ```bash
+dart format lib test
+dart analyze
 flutter test
 ```
 
