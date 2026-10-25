@@ -8,10 +8,11 @@
   - [Clone the Sandwich Shop repository](#clone-the-sandwich-shop-repository)
   - [Switch to branch 6](#switch-to-branch-6)
 - [Choosing a database for completed orders](#choosing-a-database-for-completed-orders)
-- [Preparing an Android emulator](#preparing-an-android-emulator)
+- [Preparing an Android emulator or device](#preparing-an-android-emulator-or-device)
   - [Install the Android bundle on university computers](#install-the-android-bundle-on-university-computers)
   - [Set up an emulator on your own computer](#set-up-an-emulator-on-your-own-computer)
-  - [Select the emulator and run the app](#select-the-emulator-and-run-the-app)
+  - [Use a physical Android device](#use-a-physical-android-device)
+  - [Select the device and run the app](#select-the-device-and-run-the-app)
 - [Adding the SQLite packages](#adding-the-sqlite-packages)
   - [Prevent running on unsupported platforms](#prevent-running-on-unsupported-platforms)
   - [Run on other platforms](#run-on-other-platforms)
@@ -91,9 +92,9 @@ A table has named columns. Each row holds one order, and its primary key identif
 
 We record completed purchases rather than edit or delete purchase history. Updating and deleting records are not required for this checkout flow. No Provider package, notifier or new state-management layer is needed.
 
-## Preparing an Android emulator
+## Preparing an Android emulator or device
 
-For this worksheet, run the app on an Android emulator, not Edge, Chrome or Windows desktop. An emulator is a virtual Android device running on your computer. The standard `sqflite` plugin works on Android without a separate database server or browser database setup.
+For this worksheet, run the app on an Android emulator or a physical Android device, not Edge, Chrome or Windows desktop. An emulator is a virtual Android device running on your computer. The standard `sqflite` plugin works on Android without a separate database server or browser database setup.
 
 Automated tests will use an in-memory database and do not need an emulator. Prepare your emulator now, before adding database code.
 
@@ -119,7 +120,17 @@ Wait for the Android home screen before continuing, as shown below:
 
 ### Set up an emulator on your own computer
 
-If Flutter is already installed on your own Windows, macOS or Linux computer, follow the [Flutter Android setup guide](https://docs.flutter.dev/platform-integration/android/setup). Install Android Studio and its Android SDK tools, then create a virtual device in **Device Manager** using a system image suitable for your computer.
+On your own Windows, macOS or Linux computer, install Flutter first by following the [Flutter installation guide](https://docs.flutter.dev/install/quick). Then follow the [Flutter Android setup guide](https://docs.flutter.dev/platform-integration/android/setup) to install Android Studio. You only need this setup or the university bundle, not both.
+
+Open Android Studio and complete its setup wizard, which downloads the Android SDK. From the welcome screen, open **More Actions** and then **SDK Manager**. On the **SDK Tools** tab, tick **Android SDK Command-line Tools** and click **Apply**, because Flutter needs these tools to accept the SDK licences.
+
+Next, open **More Actions** and then **Virtual Device Manager**, and create a virtual device:
+
+1. Choose a phone, such as a Pixel, and click **Next**.
+2. Choose a recent system image and download it. Pick an `x86_64` image on an Intel or AMD computer, and an `arm64` image on an Apple silicon Mac or an ARM-based Windows computer.
+3. Finish the wizard, then start the device with its play button.
+
+The emulator needs hardware acceleration. If it reports that acceleration is missing, follow the [Android emulator acceleration guide](https://developer.android.com/studio/run/emulator-acceleration). On Windows this usually means turning on **Windows Hypervisor Platform** in **Turn Windows features on or off**, which needs administrator rights.
 
 Check the toolchain and accept the SDK licences:
 
@@ -128,21 +139,38 @@ flutter doctor
 flutter doctor --android-licenses
 ```
 
-Start the device from **Device Manager**, or run `flutter emulators --launch` with your emulator name. You only need this setup or the university bundle, not both.
-
-Optionally, if you are working on macOS, you can run the iOS simulator instead. Follow the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup) to install Xcode and its command-line tools. Start the simulator by running `open -a Simulator` in your terminal or choosing it from the device picker. The `sqflite` plugin supports iOS, but the app we build only allows Android until you follow [Run on other platforms](#run-on-other-platforms).
-
-### Select the emulator and run the app
-
-Once the virtual device is running, pick it as the run target in VS Code using the device selector in the bottom-right of the status bar. If a different device is selected, click the status bar item and choose the running Android emulator (for example `emulator-5554`). You can also open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and run the command **Flutter: Select Device**. Do not pick the Windows device, as the app is set up for Android only. Then press **F5** to build, install and run the app with hot reload.
-
-To run from the terminal instead, target the emulator directly:
+The **Android toolchain** line of `flutter doctor` should show a tick. Next time, you can start the emulator without opening Android Studio. List your emulators, then launch one by its id:
 
 ```bash
+flutter emulators
+flutter emulators --launch <emulator id>
+```
+
+### Use a physical Android device
+
+On your own computer, you can run the app on an Android phone or tablet instead of an emulator. This uses the same Android setup as above, apart from the virtual device. University computers may not allow USB devices, so use the emulator there.
+
+1. On the phone, open **Settings**, then **About phone**, and tap **Build number** seven times to turn on developer options. The location of **Build number** varies between manufacturers.
+2. Open **Developer options**, usually under **Settings** and **System**, and turn on **USB debugging**.
+3. Connect the phone to your computer with a USB cable that supports data, unlock the phone and allow USB debugging when it asks.
+4. Run `flutter devices` in the terminal and check that your phone is listed.
+
+If the phone is not listed on Windows, install its USB driver using the [OEM USB drivers page](https://developer.android.com/studio/run/oem-usb). On Android 11 and later, you can connect without a cable by following the [wireless debugging steps](https://developer.android.com/studio/run/device#wireless).
+
+To run on an iPhone or the iOS simulator instead, you need a Mac with Xcode; follow the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup). The app we build only allows Android until you follow [Run on other platforms](#run-on-other-platforms).
+
+### Select the device and run the app
+
+Once the emulator or phone is running, pick it as the run target in VS Code using the device selector in the bottom-right of the status bar. If a different device is selected, click the status bar item and choose the Android emulator (for example `sdk gphone64 x86 64`) or your phone. You can also open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and run the command **Flutter: Select Device**. Do not pick Edge, Chrome or Windows, as the app is set up for Android only. Then press **F5** to build, install and run the app with hot reload.
+
+To run from the terminal instead, list the devices and target yours by its id:
+
+```bash
+flutter devices
 flutter run -d emulator-5554
 ```
 
-Replace `emulator-5554` with the id reported by `flutter devices`, or run `flutter run -d flutter_emulator`. The first build downloads Android build dependencies and can take several minutes. If it fails, read the reported error and check `flutter doctor`; do not assume every warning or failure is harmless.
+Replace `emulator-5554` with the id that `flutter devices` reports for your emulator or phone. The first build downloads Android build dependencies and can take several minutes. If it fails, read the reported error and check `flutter doctor`; do not assume every warning or failure is harmless.
 
 The app should appear inside the emulator, as shown below:
 
@@ -179,7 +207,7 @@ To prevent accidental crashes on web or desktop and remind you to switch to the 
 
 1. **`kIsWeb`**: A built-in Flutter constant from `package:flutter/foundation.dart`. It evaluates to `true` whenever the app is compiled to run in a web browser (HTML/CanvasKit/WebAssembly). If `kIsWeb` is true, the check immediately returns `false`.
 2. **`defaultTargetPlatform`**: Detects the host operating system. Only `TargetPlatform.android` returns `true`, because this worksheet runs the app on an Android emulator. You can add other platforms later by following [Run on other platforms](#run-on-other-platforms).
-3. **`UnsupportedPlatformApp`**: If an unsupported target (such as Edge, Chrome, or Windows) is launched, `main()` starts this lightweight fallback screen instead of crashing. It displays a clear message directing you to stop the app and launch it on your Android emulator.
+3. **`UnsupportedPlatformApp`**: If an unsupported target (such as Edge, Chrome, or Windows) is launched, `main()` starts this lightweight fallback screen instead of crashing. It displays a clear message directing you to stop the app and launch it on your Android emulator or device.
 
 Open `lib/main.dart` and add this import above the existing Material import:
 
@@ -225,9 +253,9 @@ class UnsupportedPlatformApp extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(24.0),
             child: Text(
-              'This app saves orders with SQLite, which does not work in a '
-              'web browser or on Windows or Linux desktop. Stop the app and '
-              'run it on an Android emulator instead.',
+              'This app saves orders with SQLite and is set up to run on '
+              'Android only. Stop the app and run it on an Android emulator '
+              'or device instead.',
               textAlign: TextAlign.center,
             ),
           ),
@@ -242,7 +270,7 @@ If you accidentally run the app on an unsupported browser or desktop target, the
 
 ![The fallback screen displayed when running on an unsupported platform](images/7/unsupported_platform_screen.png)
 
-From now on, ensure your Android emulator is selected before running the app, as described in [Preparing an Android emulator](#preparing-an-android-emulator).
+From now on, ensure your Android emulator is selected before running the app, as described in [Preparing an Android emulator or device](#preparing-an-android-emulator-or-device).
 
 ### Run on other platforms
 
@@ -259,7 +287,7 @@ On a Mac, `sqflite` also runs on the iOS simulator and on macOS desktop. Install
   }
 ```
 
-On Windows, `sqflite` has no desktop implementation, so we use the same `sqflite_common_ffi` package that the tests use. You need Visual Studio (not VS Code) with the **Desktop development with C++** workload, as described in the [Flutter Windows setup guide](https://docs.flutter.dev/platform-integration/windows/setup). The university computers do not have it. Run `flutter doctor` and check that the **Visual Studio** line has a tick.
+On Windows, `sqflite` has no desktop implementation, so we use the same `sqflite_common_ffi` package that the tests use. You need Visual Studio (not VS Code) with the **Desktop development with C++** workload, as described in the [Flutter Windows setup guide](https://docs.flutter.dev/platform-integration/windows/setup). The university computers do not have it. Run `flutter doctor` and check that the **Visual Studio** line has a tick. Building a Windows app with plugins also needs **Developer Mode**; run `start ms-settings:developers` and turn it on, which needs administrator rights.
 
 In the terminal, add Windows support to the project and move `sqflite_common_ffi` from the development dependencies to the app dependencies:
 
@@ -294,6 +322,8 @@ At the start of `main`, before the existing `if` statement, point the database c
 ```
 
 `databaseFactory` decides how `openDatabase` reaches SQLite. Setting it to `databaseFactoryFfi` makes the existing `SandwichDatabase` code work on Windows without other changes. The `!kIsWeb` check matters because `defaultTargetPlatform` reports the computer's operating system even when the app runs in a browser. Select **Windows** in the device selector and run the app. The database file is saved in the project's `.dart_tool/sqflite_common_ffi/databases` folder.
+
+On Linux, install the build tools listed in the [Flutter Linux setup guide](https://docs.flutter.dev/platform-integration/linux/setup), then follow the same steps as for Windows. Use `flutter create --platforms=linux .` and `TargetPlatform.linux` in place of the Windows values, and select **Linux** in the device selector. If the app reports that it cannot load the SQLite library, install it with `sudo apt-get install libsqlite3-dev`.
 
 Whenever you add a platform, update the platform tests in [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite) so that platform expects `isTrue`.
 
@@ -1474,7 +1504,7 @@ The exercises below apply these concepts to your Southsea Cinema coursework. Tog
 
 Continue from cinema branch `3`, the Demo 3 state after Worksheets 5 and 6. Cinema branch `4` is the Demo 4 checkpoint: the same app, except that checkout saves each booking to SQLite and the basket page lists past orders. Keep the existing JSON film catalogue, saved profile settings, drawer navigation and squared buttons. No notifier, Provider package, app-bar basket button or separate bookings page is required.
 
-1. Start with configuring your runtime environment by following [Preparing an Android emulator](#preparing-an-android-emulator) and [Adding the SQLite packages](#adding-the-sqlite-packages) in your cinema project. Use the university Android bundle on lab machines or install an emulator on your own computer. Do not add web database packages or copy the Sandwich Shop's Android package identifier.
+1. Start with configuring your runtime environment by following [Preparing an Android emulator or device](#preparing-an-android-emulator-or-device) and [Adding the SQLite packages](#adding-the-sqlite-packages) in your cinema project. Use the university Android bundle on lab machines or install an emulator on your own computer. Do not add web database packages or copy the Sandwich Shop's Android package identifier.
 
 2. Create a `Booking` model in `lib/models/booking.dart` using the structure introduced in [Representing a saved order](#representing-a-saved-order). Include an optional database `id`, a `summary`, a `total` and a `date`, along with `toMap` and `fromMap` methods. Add unit tests for map conversion mirroring [Test order map conversion](#test-order-map-conversion). Use `Booking` consistently for a completed ticket purchase rather than creating a second class for the same record.
 
