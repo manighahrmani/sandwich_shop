@@ -14,6 +14,7 @@
   - [Select the emulator and run the app](#select-the-emulator-and-run-the-app)
 - [Adding the SQLite packages](#adding-the-sqlite-packages)
   - [Prevent running on unsupported platforms](#prevent-running-on-unsupported-platforms)
+  - [Run on other platforms](#run-on-other-platforms)
 - [Representing a saved order](#representing-a-saved-order)
   - [Create the order record and its constructor](#create-the-order-record-and-its-constructor)
   - [Convert an order into a database row](#convert-an-order-into-a-database-row)
@@ -129,11 +130,11 @@ flutter doctor --android-licenses
 
 Start the device from **Device Manager**, or run `flutter emulators --launch` with your emulator name. You only need this setup or the university bundle, not both.
 
-Optionally, if you are working on macOS, you can run the iOS simulator instead. Follow the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup) to install Xcode and its command-line tools. Start the simulator by running `open -a Simulator` in your terminal or choosing it from the device picker. The `sqflite` plugin supports iOS without extra configuration.
+Optionally, if you are working on macOS, you can run the iOS simulator instead. Follow the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup) to install Xcode and its command-line tools. Start the simulator by running `open -a Simulator` in your terminal or choosing it from the device picker. The `sqflite` plugin supports iOS, but the app we build only allows Android until you follow [Run on other platforms](#run-on-other-platforms).
 
 ### Select the emulator and run the app
 
-Once the virtual device is running, pick it as the run target in VS Code using the device selector in the bottom-right of the status bar. If a different device is selected, click the status bar item and choose the running Android emulator (for example `emulator-5554`). You can also open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and run the command **Flutter: Select Device**. Do not pick the Windows device, as SQLite does not work there. Then press **F5** to build, install and run the app with hot reload.
+Once the virtual device is running, pick it as the run target in VS Code using the device selector in the bottom-right of the status bar. If a different device is selected, click the status bar item and choose the running Android emulator (for example `emulator-5554`). You can also open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and run the command **Flutter: Select Device**. Do not pick the Windows device, as the app is set up for Android only. Then press **F5** to build, install and run the app with hot reload.
 
 To run from the terminal instead, target the emulator directly:
 
@@ -167,7 +168,7 @@ Up until Worksheet 6, you tested and ran your Flutter applications inside a web 
 In Worksheet 7, we introduce local database persistence using the **`sqflite`** package. Here is how persistence and execution differ between the two mechanisms:
 
 - **`shared_preferences` (Worksheet 6)**: Saves lightweight key-value pairs (like user settings and flags). On the web, it stores data in browser `localStorage`, which only survives within that browser session and page reloads, but is cleared whenever debug sessions or lab computer profiles reset. On the Android emulator, it writes to an XML file in internal storage that permanently survives app restarts.
-- **`sqflite` (Worksheet 7)**: Stores structured tables and relational data (like full customer order history). It relies on native C bindings to SQLite on the operating system. It **runs natively on Android, iOS, and macOS**, but **does not work in a web browser, nor does it work on Windows or Linux desktop**.
+- **`sqflite` (Worksheet 7)**: Stores structured tables and relational data (like full customer order history). It relies on native C bindings to SQLite on the operating system. It runs natively on Android, iOS and macOS. It does not work in a web browser, and Windows or Linux desktop need the extra set-up described in [Run on other platforms](#run-on-other-platforms).
 
 If a student presses **F5** with **Edge** or **Windows** selected in the VS Code device picker and triggers database operations, the application crashes immediately with a runtime `MissingPluginException`:
 > `MissingPluginException: No implementation found for method openDatabase on channel com.tekartik.sqflite`
@@ -177,7 +178,7 @@ Running on the **Android emulator** gives you the true, full mobile platform exp
 To prevent accidental crashes on web or desktop and remind you to switch to the mobile emulator, we add a platform check directly in `lib/main.dart`:
 
 1. **`kIsWeb`**: A built-in Flutter constant from `package:flutter/foundation.dart`. It evaluates to `true` whenever the app is compiled to run in a web browser (HTML/CanvasKit/WebAssembly). If `kIsWeb` is true, the check immediately returns `false`.
-2. **`defaultTargetPlatform`**: Detects the host operating system. Only `TargetPlatform.android`, `TargetPlatform.iOS`, and `TargetPlatform.macOS` return `true`.
+2. **`defaultTargetPlatform`**: Detects the host operating system. Only `TargetPlatform.android` returns `true`, because this worksheet runs the app on an Android emulator. You can add other platforms later by following [Run on other platforms](#run-on-other-platforms).
 3. **`UnsupportedPlatformApp`**: If an unsupported target (such as Edge, Chrome, or Windows) is launched, `main()` starts this lightweight fallback screen instead of crashing. It displays a clear message directing you to stop the app and launch it on your Android emulator.
 
 Open `lib/main.dart` and add this import above the existing Material import:
@@ -189,18 +190,12 @@ import 'package:flutter/foundation.dart';
 Replace the `main` function with:
 
 ```dart
-// SQLite (sqflite) only works on Android, iOS and macOS, not in a browser.
+// This app saves orders with SQLite (sqflite), which is set up for Android.
 bool isSupportedPlatform() {
   if (kIsWeb) {
     return false;
   }
   if (defaultTargetPlatform == TargetPlatform.android) {
-    return true;
-  }
-  if (defaultTargetPlatform == TargetPlatform.iOS) {
-    return true;
-  }
-  if (defaultTargetPlatform == TargetPlatform.macOS) {
     return true;
   }
   return false;
@@ -248,6 +243,59 @@ If you accidentally run the app on an unsupported browser or desktop target, the
 ![The fallback screen displayed when running on an unsupported platform](images/7/unsupported_platform_screen.png)
 
 From now on, ensure your Android emulator is selected before running the app, as described in [Preparing an Android emulator](#preparing-an-android-emulator).
+
+### Run on other platforms
+
+This section is optional. Complete the rest of the worksheet on the Android emulator first, and skip this section if you only use the university computers.
+
+On a Mac, `sqflite` also runs on the iOS simulator and on macOS desktop. Install Xcode by following the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup) or the [Flutter macOS setup guide](https://docs.flutter.dev/platform-integration/macos/setup). Then add a check for each platform you want to `isSupportedPlatform`, below the Android check:
+
+```dart
+  if (defaultTargetPlatform == TargetPlatform.iOS) {
+    return true;
+  }
+  if (defaultTargetPlatform == TargetPlatform.macOS) {
+    return true;
+  }
+```
+
+On Windows, `sqflite` has no desktop implementation, so we use the same `sqflite_common_ffi` package that the tests use. You need Visual Studio (not VS Code) with the **Desktop development with C++** workload, as described in the [Flutter Windows setup guide](https://docs.flutter.dev/platform-integration/windows/setup). The university computers do not have it. Run `flutter doctor` and check that the **Visual Studio** line has a tick.
+
+In the terminal, add Windows support to the project and move `sqflite_common_ffi` from the development dependencies to the app dependencies:
+
+```bash
+flutter create --platforms=windows .
+flutter pub add sqflite_common_ffi
+```
+
+The first command creates a `windows` folder. It also creates a `test/widget_test.dart` template that does not match our app, so delete that file.
+
+In `lib/main.dart`, add this import:
+
+```dart
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+```
+
+Add a Windows check to `isSupportedPlatform`, below the Android check:
+
+```dart
+  if (defaultTargetPlatform == TargetPlatform.windows) {
+    return true;
+  }
+```
+
+At the start of `main`, before the existing `if` statement, point the database code at the FFI implementation when the app runs on Windows:
+
+```dart
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+```
+
+`databaseFactory` decides how `openDatabase` reaches SQLite. Setting it to `databaseFactoryFfi` makes the existing `SandwichDatabase` code work on Windows without other changes. The `!kIsWeb` check matters because `defaultTargetPlatform` reports the computer's operating system even when the app runs in a browser. Select **Windows** in the device selector and run the app. The database file is saved in the project's `.dart_tool/sqflite_common_ffi/databases` folder.
+
+Whenever you add a platform, update the platform tests in [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite) so that platform expects `isTrue`.
 
 ## Representing a saved order
 
@@ -1353,19 +1401,19 @@ import 'package:flutter/foundation.dart';
 Keep its existing app tests. Inside `main`, add checks for the platform helper. `debugDefaultTargetPlatformOverride` lets a test choose a target platform without changing computers; reset it to `null` afterwards:
 
 ```dart
-  test('Android, iOS and macOS are supported', () {
+  test('Android is supported', () {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
-    expect(isSupportedPlatform(), isTrue);
-    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-    expect(isSupportedPlatform(), isTrue);
-    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
     expect(isSupportedPlatform(), isTrue);
     debugDefaultTargetPlatformOverride = null;
   });
 ```
 
 ```dart
-  test('Windows and Linux desktop are not supported', () {
+  test('Other platforms are not supported', () {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    expect(isSupportedPlatform(), isFalse);
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    expect(isSupportedPlatform(), isFalse);
     debugDefaultTargetPlatformOverride = TargetPlatform.windows;
     expect(isSupportedPlatform(), isFalse);
     debugDefaultTargetPlatformOverride = TargetPlatform.linux;
