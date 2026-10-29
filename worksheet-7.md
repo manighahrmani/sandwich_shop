@@ -953,7 +953,7 @@ adb shell "run-as com.example.sandwich_shop cat databases/sandwich_data.db > /da
 adb pull /data/local/tmp/s.db sandwich_shop.db
 ```
 
-`adb` communicates with the Android device. `run-as` reads the debug app's private files, and `pull` copies a file to your computer. If you changed the Android application id, use that id instead.
+`adb` communicates with the Android device. `run-as` reads the debug app's private files, and `pull` copies a file to your computer. If you changed the Android application id, use that id instead. You can chain both commands with `;` in PowerShell or `&&` on macOS so you can refresh the file with a single keystroke after each database change.
 
 Open `sandwich_shop.db` in VS Code using the bundle's **SQLite Viewer** extension. Select the `orders` table and check that it contains the three seed rows and your saved order, as shown below:
 
