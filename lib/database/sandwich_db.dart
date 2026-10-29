@@ -40,9 +40,6 @@ class SandwichDatabase {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         order_number INTEGER NOT NULL,
         summary TEXT NOT NULL,
-        note TEXT NOT NULL,
-        toasted INTEGER NOT NULL,
-        vegan INTEGER NOT NULL,
         total REAL NOT NULL,
         date TEXT NOT NULL
       )
@@ -54,29 +51,20 @@ class SandwichDatabase {
     await db.insert('orders', <String, Object?>{
       'order_number': 1003,
       'summary': '2 x Footlong Sub',
-      'note': 'Extra napkins please',
-      'toasted': 1,
-      'vegan': 0,
       'total': 15.00,
-      'date': '18 Apr 2026 12:45',
+      'date': '18/04/2026 12:45',
     });
     await db.insert('orders', <String, Object?>{
       'order_number': 1002,
       'summary': '1 x Six-Inch Sub',
-      'note': '',
-      'toasted': 0,
-      'vegan': 1,
       'total': 4.50,
-      'date': '2 Mar 2026 18:10',
+      'date': '02/03/2026 18:10',
     });
     await db.insert('orders', <String, Object?>{
       'order_number': 1001,
       'summary': '3 x Footlong Sub',
-      'note': 'No onions',
-      'toasted': 1,
-      'vegan': 0,
       'total': 22.50,
-      'date': '11 Jan 2026 13:02',
+      'date': '11/01/2026 13:02',
     });
   }
 

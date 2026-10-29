@@ -47,31 +47,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
     }
   }
 
-  Widget _buildOptionsText(OrderRecord order) {
-    final List<String> parts = [];
-    if (order.toasted == 1) {
-      parts.add('Toasted');
-    }
-    if (order.vegan == 1) {
-      parts.add('Vegan');
-    }
-    if (order.note.isNotEmpty) {
-      parts.add('Note: ${order.note}');
-    }
-
-    if (parts.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: Text(
-        parts.join(' • '),
-        style: const TextStyle(fontSize: 12, color: Colors.black54),
-      ),
-    );
-  }
-
   Widget _buildOrderCard(OrderRecord order) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -92,7 +67,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ),
             const SizedBox(height: 4),
             Text(order.summary),
-            _buildOptionsText(order),
             const SizedBox(height: 4),
             Text(
               order.date,

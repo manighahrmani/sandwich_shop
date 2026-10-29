@@ -2,9 +2,6 @@ class OrderRecord {
   final int? id;
   final int orderNumber;
   final String summary;
-  final String note;
-  final int toasted;
-  final int vegan;
   final double total;
   final String date;
 
@@ -12,9 +9,6 @@ class OrderRecord {
     this.id,
     required this.orderNumber,
     required this.summary,
-    this.note = '',
-    this.toasted = 0,
-    this.vegan = 0,
     required this.total,
     required this.date,
   });
@@ -23,9 +17,6 @@ class OrderRecord {
     final Map<String, Object?> data = <String, Object?>{
       'order_number': orderNumber,
       'summary': summary,
-      'note': note,
-      'toasted': toasted,
-      'vegan': vegan,
       'total': total,
       'date': date,
     };
@@ -38,9 +29,6 @@ class OrderRecord {
   factory OrderRecord.fromMap(Map<String, Object?> map) {
     final int orderNumber = map['order_number'] as int;
     final String summary = map['summary'] as String;
-    final String note = map['note'] as String;
-    final int toasted = map['toasted'] as int;
-    final int vegan = map['vegan'] as int;
     final num totalNumber = map['total'] as num;
     final double total = totalNumber.toDouble();
     final String date = map['date'] as String;
@@ -49,9 +37,6 @@ class OrderRecord {
       id: map['id'] as int?,
       orderNumber: orderNumber,
       summary: summary,
-      note: note,
-      toasted: toasted,
-      vegan: vegan,
       total: total,
       date: date,
     );
