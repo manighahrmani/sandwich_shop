@@ -158,10 +158,14 @@
 
 <!-- Note: The lecturer will demonstrate how to use AI pair-programming to achieve near-complete test coverage across the application, visualised with the Flutter Coverage extension. -->
 
-<!-- TODO: Reviewing overall coverage:
-- Run `flutter test --coverage`.
-- Inspect combined coverage across models, repositories, database, screens, and integration flows in Flutter Coverage extension.
-- Achieve near-complete test coverage across the application. -->
+<!-- Technical guidance notes for drafting this section:
+- Command: Run `flutter test --coverage` in the terminal to generate `coverage/lcov.info`.
+- VS Code UI location: The Flutter Coverage extension (`Flutterando.flutter-coverage`) lives in the Testing side bar (the flask/beaker icon in the Activity Bar), under the "FLUTTER COVERAGE" tree view. It displays the project folder and file hierarchy with percentage bars and status icons (error, warning, success).
+- Accurate interaction:
+  * There is no `Flutter Coverage: Watch` command in the Command Palette (that command belongs to the unrelated Coverage Gutters extension). Do not instruct students to type this.
+  * There is no coverage percentage indicator in the bottom status bar (Flutter Coverage does not add status bar items; all metrics are in the Testing side bar).
+  * Clicking any file in the Flutter Coverage tree view opens the file in the editor with covered lines highlighted.
+- Review: Review uncovered branches and use AI pair-programming to generate targeted tests to achieve near-complete coverage across models, repositories, database helpers, screens, and integration flows. -->
 
 ## Exercises
 

@@ -1419,7 +1419,7 @@ Run the suite with coverage:
 flutter test --coverage
 ```
 
-This writes `coverage/lcov.info`. Install the [Flutter Coverage extension](https://marketplace.visualstudio.com/items?itemName=Flutterando.flutter-coverage) in VS Code and use it to inspect which lines the tests execute, as shown below:
+This writes `coverage/lcov.info`. Install the [Flutter Coverage extension](https://marketplace.visualstudio.com/items?itemName=Flutterando.flutter-coverage) in VS Code and open the Testing side bar (the flask icon in the Activity Bar) to inspect folder coverage and see which lines the tests execute, as shown below:
 
 ![Inspecting test coverage line-by-line with the Flutter Coverage extension](images/7/flutter_coverage_inspection.png)
 
