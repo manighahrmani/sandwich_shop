@@ -9,7 +9,7 @@
   - [Switch to branch 6](#switch-to-branch-6)
 - [Choosing a database for completed orders](#choosing-a-database-for-completed-orders)
 - [Preparing an Android emulator or device](#preparing-an-android-emulator-or-device)
-  - [Install the Android bundle on university computers](#install-the-android-bundle-on-university-computers)
+  - [Install the Android bundle on university computers or Windows 11](#install-the-android-bundle-on-university-computers-or-windows-11)
   - [Set up an emulator on your own computer](#set-up-an-emulator-on-your-own-computer)
   - [Use a physical Android device](#use-a-physical-android-device)
   - [Select the device and run the app](#select-the-device-and-run-the-app)
@@ -46,7 +46,7 @@
   - [Test that a failed save keeps the basket](#test-that-a-failed-save-keeps-the-basket)
   - [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state)
   - [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite)
-- [Organising tests and inspecting coverage](#organising-tests-and-inspecting-coverage)
+- [Organising tests](#organising-tests)
 - [Exercises](#exercises)
 
 ## Getting help
@@ -97,15 +97,15 @@ For this worksheet, run the app on an Android emulator or a physical Android dev
 
 Automated tests will use an in-memory database and do not need an emulator. Prepare your emulator now, before adding database code.
 
-### Install the Android bundle on university computers
+### Install the Android bundle on university computers or Windows 11
 
-The browser-only bundle from [Worksheet 1](worksheet-1.md#b---using-the-university-machines-on-campus) does not include the Android tools. Use the [Android emulator release of the portable bundle](https://github.com/manighahrmani/flutter_vscode_package#android-emulator-setup-worksheet-7-onwards) instead. Open PowerShell and run its installer:
+The browser-only bundle from [Worksheet 1](worksheet-1.md#b---using-the-university-machines-on-campus) does not include the Android tools. If you are working on a university lab machine or on your own Windows 11 computer, use the [Android emulator release of the portable bundle](https://github.com/manighahrmani/flutter_vscode_package#android-emulator-setup-worksheet-7-onwards). It sets up VS Code Portable, the Flutter SDK, Android SDK command-line tools, and a virtual device without needing manual toolchain configuration. Open PowerShell and run its installer:
 
 ```powershell
 irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/install-android-beta.ps1 | iex
 ```
 
-This is the Android bundle release, not a request to build your Flutter app in release mode. The installer sets everything up: it installs a JDK, the Android SDK and a virtual device named `flutter_emulator`, boots that emulator once and leaves it running, then opens VS Code on your project. The download is several gigabytes, so the installer takes several minutes to finish. Let it run to the end; the university machines provide the hardware acceleration the emulator needs.
+This installer configures a JDK, the Android SDK and a virtual device named `flutter_emulator`, tests the emulator boot with an extended timeout, and opens VS Code on your project. The download is several gigabytes, so let it run to completion. Windows 11 machines and university lab computers provide the hardware virtualisation (Windows Hypervisor Platform) the emulator needs.
 
 Because the installer already booted the emulator, you do not repeat its setup. If the emulator is not running, launch it with the command below and wait for the Android home screen. The first cold boot can take a few minutes, and a black screen is normal while it boots.
 
@@ -946,14 +946,28 @@ Reopening the app must not duplicate the three seed orders. The basket itself is
 
 This optional check opens a copy of the actual SQLite file. Stop the app's debug run first so there are no writes in progress, but leave the emulator running.
 
-For the supplied Android project, the debug package is `com.example.sandwich_shop`. Copy the database to a temporary location on the emulator, then pull the copy into your project folder:
+Before inspecting the database, confirm these prerequisites:
 
-```bash
-adb shell "run-as com.example.sandwich_shop cat databases/sandwich_data.db > /data/local/tmp/s.db"
-adb pull /data/local/tmp/s.db sandwich_shop.db
+- The Android emulator or physical device is running and visible when you run `adb devices` in your terminal.
+- The app has been launched on the device in debug mode (**F5** in VS Code or `flutter run`). Android security prevents `run-as` from reading files of release builds.
+- The app has initialised and created `sandwich_data.db` (for example by opening the orders screen or checking out).
+- The `adb` tool is available in your terminal path, which the portable bundle or Android SDK provides.
+
+For the supplied Android project, the debug package is `com.example.sandwich_shop`. Copy the database to a temporary location on the emulator, then pull the copy into your project folder.
+
+On Windows PowerShell:
+
+```powershell
+adb shell "run-as com.example.sandwich_shop cat databases/sandwich_data.db > /data/local/tmp/s.db"; adb pull /data/local/tmp/s.db sandwich_shop.db
 ```
 
-`adb` communicates with the Android device. `run-as` reads the debug app's private files, and `pull` copies a file to your computer. If you changed the Android application id, use that id instead. You can chain both commands with `;` in PowerShell or `&&` on macOS so you can refresh the file with a single keystroke after each database change.
+On macOS, Linux or Bash:
+
+```bash
+adb shell "run-as com.example.sandwich_shop cat databases/sandwich_data.db > /data/local/tmp/s.db" && adb pull /data/local/tmp/s.db sandwich_shop.db
+```
+
+`adb` communicates with the Android device. `run-as` reads the debug app's private files by executing inside its application sandbox, copying the database to `/data/local/tmp/`, and `pull` downloads that copy to your computer. If you changed the Android application id, use that id instead. Re-running the chained command refreshes `sandwich_shop.db` whenever you make further database changes.
 
 Open `sandwich_shop.db` in VS Code using the bundle's **SQLite Viewer** extension. Select the `orders` table and check that it contains the three seed rows and your saved order, as shown below:
 
@@ -1405,27 +1419,13 @@ All automated tests should pass, as shown below:
 
 Compare your finished application with branch `7`. Check both the automated tests and the emulator restart behaviour; an in-memory database test cannot prove that a device file survives restarting the app.
 
-## Organising tests and inspecting coverage
+## Organising tests
 
 From Demo 4 onwards, your test folders must mirror the folders under `lib/`, as we arranged in the preceding section. Keep model, repository, screen, widget and database tests in their matching subfolders under `test/`.
 
 For Sandwich Shop, screen tests belong under `test/screens/` because the application uses `lib/screens/`. The cinema application uses `lib/views/`, so its view tests belong under `test/views/`. Match the actual application structure rather than renaming folders to copy the example.
 
 Tests for the root-level `lib/main.dart` may remain at the root of `test/`; model, repository and screen tests should not remain there.
-
-Run the suite with coverage:
-
-```bash
-flutter test --coverage
-```
-
-This writes `coverage/lcov.info`. Install the [Flutter Coverage extension](https://marketplace.visualstudio.com/items?itemName=Flutterando.flutter-coverage) in VS Code and open the Testing side bar (the flask icon in the Activity Bar) to inspect folder coverage and see which lines the tests execute, as shown below:
-
-![Inspecting test coverage line-by-line with the Flutter Coverage extension](images/7/flutter_coverage_inspection.png)
-
-Review the models, repositories, database helper and checkout screens, then add tests for important paths that are not exercised. Executed lines alone do not prove that the assertions check the correct behaviour.
-
-Be ready to demonstrate the coverage in your editor at Demo 4, alongside passing tests and the mirrored folder structure.
 
 ## Exercises
 
@@ -1445,6 +1445,6 @@ Continue from cinema branch `3`, the Demo 3 state after Worksheets 5 and 6. Cine
 
 6. Test the real table definition with an in-memory database using the test harness from [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator) and [Prepare a fresh database for each test](#prepare-a-fresh-database-for-each-test). Keep the `Booking` `toMap` and `fromMap` round-trip unit tests. For `CinemaDatabase`, verify that an inserted booking returns its generated database id, that the map conversions preserve every field, and that queries return records newest first. Add a widget test modelled on [Update the basket checkout test](#update-the-basket-checkout-test) and [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state) that checking out writes to SQLite, and cover both states explicitly: the past orders section renders saved bookings when present, and shows the empty-state message when there are none. Add a widget test for the settings flow that saving profile settings stores them and that they are read back and pre-filled when the settings page reopens, following Worksheet 6's in-memory approach in [Test loading and saving preferences](worksheet-6.md#test-loading-and-saving-preferences). Add an end-to-end booking journey widget test where feasible: navigate from the film list through the **BOOK NOW** button to the listing, add tickets to the basket, open the basket, check out, and confirm the past orders list updates. If a single full-journey test is impractical, test each hop instead.
 
-7. Structure your tests in accordance with [Organising tests and inspecting coverage](#organising-tests-and-inspecting-coverage), ensuring that the folders under `test/` mirror the actual application structure in `lib/`. The cinema app keeps its screens under `lib/views/`, so their tests go under `test/views/`. Run `flutter test --coverage` and inspect executed lines using the Flutter Coverage extension. Confirm the coverage shows the `Booking` model, the `CinemaDatabase` database helper and the main screens exercised. Maintain zero warnings from `dart analyze` and ensure all tests pass.
+7. Structure your tests in accordance with [Organising tests](#organising-tests), ensuring that the folders under `test/` mirror the actual application structure in `lib/`. The cinema app keeps its screens under `lib/views/`, so their tests go under `test/views/`. Confirm that tests for the `Booking` model, the `CinemaDatabase` database helper and the main views are organised in their matching subfolders. Maintain zero warnings from `dart analyze` and ensure all tests pass.
 
 8. Prepare for the oral assessment questions outlined in [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite) and Demo 4 criteria. Be ready to explain why profile preferences and the bookings table have different roles, how a row maps to a `Booking`, why checkout saves before clearing the basket, and how an emulator restart check differs from an in-memory test.
