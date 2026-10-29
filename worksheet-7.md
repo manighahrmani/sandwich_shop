@@ -30,7 +30,6 @@
 - [Displaying saved orders](#displaying-saved-orders)
   - [Create the orders screen and its state](#create-the-orders-screen-and-its-state)
   - [Load orders and report a database error](#load-orders-and-report-a-database-error)
-  - [Build the options line for an order](#build-the-options-line-for-an-order)
   - [Build an order card in stages](#build-an-order-card-in-stages)
   - [Choose the loading, error, empty or list body](#choose-the-loading-error-empty-or-list-body)
   - [Register the orders route and add navigation buttons](#register-the-orders-route-and-add-navigation-buttons)
@@ -339,14 +338,11 @@ Create `lib/models/order_record.dart` with `class OrderRecord {}`. Use the [mode
   final int? id;
   final int orderNumber;
   final String summary;
-  final String note;
-  final int toasted;
-  final int vegan;
   final double total;
   final String date;
 ```
 
-`id` is absent before insertion; SQLite assigns it when saving the row. The `note`, `toasted` and `vegan` fields describe the sample order history. SQLite does not accept Dart `bool` values, so we store `1` for true and `0` for false, as explained in the [sqflite supported types](https://pub.dev/packages/sqflite#supported-sqlite-types).
+`id` is absent before insertion; SQLite assigns it when saving the row. `orderNumber` tracks the order sequence, while `summary`, `total` and `date` store the purchase details.
 
 Add the constructor:
 
@@ -355,15 +351,12 @@ Add the constructor:
     this.id,
     required this.orderNumber,
     required this.summary,
-    this.note = '',
-    this.toasted = 0,
-    this.vegan = 0,
     required this.total,
     required this.date,
   });
 ```
 
-The optional fields have defaults so checkout can record a basket without inventing sandwich options. `CartItem` still contains only a sandwich and quantity; do not add option controls or change that model.
+Each completed purchase is saved as one row in SQLite. Rather than building a multi-table relational schema with joins, we flatten the basket into a plain text summary, keeping our database design simple and focused. `CartItem` still contains only a sandwich and quantity; do not change that model.
 
 ### Convert an order into a database row
 
@@ -375,9 +368,6 @@ Inside the method, build the row:
     final Map<String, Object?> data = <String, Object?>{
       'order_number': orderNumber,
       'summary': summary,
-      'note': note,
-      'toasted': toasted,
-      'vegan': vegan,
       'total': total,
       'date': date,
     };
@@ -401,9 +391,6 @@ Add `factory OrderRecord.fromMap(Map<String, Object?> map) {}`. Inside it, read 
 ```dart
     final int orderNumber = map['order_number'] as int;
     final String summary = map['summary'] as String;
-    final String note = map['note'] as String;
-    final int toasted = map['toasted'] as int;
-    final int vegan = map['vegan'] as int;
     final num totalNumber = map['total'] as num;
     final double total = totalNumber.toDouble();
     final String date = map['date'] as String;
@@ -416,9 +403,6 @@ Return the record:
       id: map['id'] as int?,
       orderNumber: orderNumber,
       summary: summary,
-      note: note,
-      toasted: toasted,
-      vegan: vegan,
       total: total,
       date: date,
     );
@@ -511,9 +495,6 @@ SQL is the language used to define and query database tables. `CREATE TABLE` def
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         order_number INTEGER NOT NULL,
         summary TEXT NOT NULL,
-        note TEXT NOT NULL,
-        toasted INTEGER NOT NULL,
-        vegan INTEGER NOT NULL,
         total REAL NOT NULL,
         date TEXT NOT NULL
       )
@@ -540,9 +521,6 @@ After the table call, insert the first sample order:
     await db.insert('orders', <String, Object?>{
       'order_number': 1003,
       'summary': '2 x Footlong Sub',
-      'note': 'Extra napkins please',
-      'toasted': 1,
-      'vegan': 0,
       'total': 15.00,
       'date': '18/04/2026 12:45',
     });
@@ -554,9 +532,6 @@ After the table call, insert the first sample order:
     await db.insert('orders', <String, Object?>{
       'order_number': 1002,
       'summary': '1 x Six-Inch Sub',
-      'note': '',
-      'toasted': 0,
-      'vegan': 1,
       'total': 4.50,
       'date': '02/03/2026 18:10',
     });
@@ -568,9 +543,6 @@ Then add the third:
     await db.insert('orders', <String, Object?>{
       'order_number': 1001,
       'summary': '3 x Footlong Sub',
-      'note': 'No onions',
-      'toasted': 1,
-      'vegan': 0,
       'total': 22.50,
       'date': '11/01/2026 13:02',
     });
@@ -738,40 +710,6 @@ Inside `catch`, add:
 
 This uses the same asynchronous loading pattern once again, rather than introducing another widget or state-management approach.
 
-### Build the options line for an order
-
-Add `Widget _buildOptionsText(OrderRecord order) {}` inside the state class. In its braces, collect the applicable options:
-
-```dart
-    final List<String> parts = [];
-    if (order.toasted == 1) {
-      parts.add('Toasted');
-    }
-    if (order.vegan == 1) {
-      parts.add('Vegan');
-    }
-    if (order.note.isNotEmpty) {
-      parts.add('Note: ${order.note}');
-    }
-```
-
-After those checks, choose the output:
-
-```dart
-    if (parts.isEmpty) {
-      return const SizedBox.shrink();
-    }
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: Text(
-        parts.join(' • '),
-        style: const TextStyle(fontSize: 12, color: Colors.black54),
-      ),
-    );
-```
-
-`join` combines the list of strings with the given separator. `SizedBox.shrink` is a zero-sized box, so orders without options do not show an extra line. These fields display the seeded history; newly checked-out baskets use their default values.
-
 ### Build an order card in stages
 
 Add this helper:
@@ -806,12 +744,11 @@ The layout reuses the [card, padding and column from Worksheet 3](worksheet-3.md
             ),
 ```
 
-After the row, add the summary, options and date:
+After the row, add the summary and date:
 
 ```dart
             const SizedBox(height: 4),
             Text(order.summary),
-            _buildOptionsText(order),
             const SizedBox(height: 4),
             Text(
               order.date,
@@ -1152,20 +1089,14 @@ Create `test/models/order_record_test.dart` with the test tools and `OrderRecord
   );
 ```
 
-Check that a new order omits its database id and uses the optional defaults:
+Check that a new order omits its database id and converts to a map:
 
 ```dart
-  test('New orders omit database ids and default optional values', () {
+  test('New orders omit database ids and convert to map', () {
     expect(order.id, isNull);
-    expect(order.note, isEmpty);
-    expect(order.toasted, 0);
-    expect(order.vegan, 0);
     expect(order.toMap(), <String, Object?>{
       'order_number': 1004,
       'summary': '2 x Footlong Sub',
-      'note': '',
-      'toasted': 0,
-      'vegan': 0,
       'total': 16.50,
       'date': '01/01/2026 09:05',
     });
@@ -1180,17 +1111,15 @@ Check the reverse conversion with a complete database row:
       'id': 7,
       'order_number': 1010,
       'summary': '1 x Six-Inch Sub',
-      'note': 'No onions',
-      'toasted': 1,
-      'vegan': 1,
       'total': 6.0,
       'date': '02/01/2026 10:20',
     };
     final OrderRecord restored = OrderRecord.fromMap(row);
     expect(restored.id, 7);
-    expect(restored.note, 'No onions');
-    expect(restored.toasted, 1);
-    expect(restored.vegan, 1);
+    expect(restored.orderNumber, 1010);
+    expect(restored.summary, '1 x Six-Inch Sub');
+    expect(restored.total, 6.0);
+    expect(restored.date, '02/01/2026 10:20');
     expect(restored.toMap(), row);
   });
 ```
