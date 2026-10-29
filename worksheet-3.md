@@ -49,7 +49,7 @@ To get support with this worksheet, follow the [Discord guide](https://portdotac
 
 ### Continue from Worksheet 2
 
-You can continue directly with the Sandwich Shop project you made in Worksheet 2. Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
+You can continue directly with the Sandwich Shop project you completed in [Worksheet 2](worksheet-2.md). Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
 
 ### Clone the Sandwich Shop repository
 

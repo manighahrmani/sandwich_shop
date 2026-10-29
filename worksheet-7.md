@@ -58,11 +58,11 @@ To get support with this worksheet, follow the [Discord guide](https://portdotac
 
 ### Continue from Worksheet 6
 
-Open the Sandwich Shop project you completed in [Worksheet 6](worksheet-6.md). Keep its JSON catalogue, saved profile preferences, basket and existing navigation. We now save completed purchases in a database; the basket stays in memory until checkout.
+You can continue directly with the Sandwich Shop project you completed in [Worksheet 6](worksheet-6.md). Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
 
 ### Clone the Sandwich Shop repository
 
-If you need a fresh copy, clone the [Sandwich Shop repository](https://github.com/manighahrmani/sandwich_shop) into a folder that is not synchronised to cloud storage, such as your `Downloads` folder:
+If you need a fresh copy of the project, clone the [Sandwich Shop repository](https://github.com/manighahrmani/sandwich_shop). Open a terminal and move to a folder that is not synchronised to cloud storage, such as your `Downloads` folder:
 
 ```bash
 cd ~/Downloads
@@ -70,7 +70,7 @@ git clone https://github.com/manighahrmani/sandwich_shop
 cd sandwich_shop
 ```
 
-Open the folder in VS Code with **File > Open Folder**.
+Open the cloned folder in VS Code with **File > Open Folder**.
 
 ### Switch to branch 6
 
@@ -82,7 +82,7 @@ git checkout 6
 
 Run `flutter pub get` to install the project dependencies, then run `flutter test` to confirm that all existing tests pass before continuing.
 
-Do not switch branches over unfinished work. Branch `7` contains the completed Sandwich Shop application for this worksheet. Use it to compare your work, not as your starting point.
+Do not switch branches over unfinished work. Branch `7` contains the completed Sandwich Shop application for this worksheet; use it to compare your finished work, not as your starting point.
 
 ## Choosing a database for completed orders
 
@@ -544,7 +544,7 @@ After the table call, insert the first sample order:
       'toasted': 1,
       'vegan': 0,
       'total': 15.00,
-      'date': '18 Apr 2026 12:45',
+      'date': '18/04/2026 12:45',
     });
 ```
 
@@ -558,7 +558,7 @@ After the table call, insert the first sample order:
       'toasted': 0,
       'vegan': 1,
       'total': 4.50,
-      'date': '2 Mar 2026 18:10',
+      'date': '02/03/2026 18:10',
     });
 ```
 
@@ -572,7 +572,7 @@ Then add the third:
       'toasted': 1,
       'vegan': 0,
       'total': 22.50,
-      'date': '11 Jan 2026 13:02',
+      'date': '11/01/2026 13:02',
     });
 ```
 
@@ -997,7 +997,7 @@ The callback starts `_checkout`; that method handles its own asynchronous work a
 
 Keep the existing confirmation field, feedback widgets, empty-basket handling and app bar. Do not replace the whole basket screen.
 
-On the emulator, save fictional profile details, add a sandwich and check out. Confirm the new order appears above the seeded history, as shown below:
+On the emulator, save fictional profile details, add a sandwich and check out. Checkout saves the order and opens the orders screen, where your new order appears above the seeded history. If you return to the basket screen, the basket is empty and displays the confirmation message, as shown below:
 
 ![The basket screen after checkout displaying the confirmation message](images/7/basket_checkout_confirmation.png)
 
@@ -1030,7 +1030,7 @@ The [sqflite FFI package](https://pub.dev/packages/sqflite_common_ffi) runs SQLi
 
 Organise the tests before adding new ones. Move the existing model tests into `test/models/`, repository tests into `test/repositories/`, and screen tests into `test/screens/`. Keep the button test under `test/widgets/`. Rename `sandwich_model_test.dart` to `sandwich_test.dart` so it matches `lib/models/sandwich.dart`.
 
-Rename `test/widget_test.dart` to `test/main_test.dart` for the app tests. Move its `OrderItemDisplay` group and the two quantity-limit tests into `test/screens/order_screen_test.dart`. Remove the now-unused `Sandwich` import from `main_test.dart`. In `test/main_test.dart`, update the smoke test to check the three menu items (Footlong Sub, Six-Inch Sub and Loaded Nachos), removing the temporary check for the non-existent sandwich from Worksheet 6. Keep explicit `Sandwich` types in the moved fixtures and add that type to the `const` declarations in the sandwich model tests too. Your test folder structure in the editor should look like this:
+Rename `test/widget_test.dart` to `test/main_test.dart` for the app tests. Move its `OrderItemDisplay` group and the two quantity-limit tests into `test/screens/order_screen_test.dart`. Remove the now-unused `Sandwich` import from `main_test.dart`. In `assets/data/sandwiches.json`, remove the temporary `Nonexistent Sandwich` entry so the menu catalogue contains only the three real items. In `test/main_test.dart`, update the smoke test to check the three menu items (Footlong Sub, Six-Inch Sub and Loaded Nachos), removing the temporary check for the non-existent sandwich from Worksheet 6. Keep explicit `Sandwich` types in the moved fixtures and add that type to the `const` declarations in the sandwich model tests too. Your test folder structure in the editor should look like this:
 
 ![The mirrored test directory structure in the VS Code explorer](images/7/test_folders_mirrored.png)
 

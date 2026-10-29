@@ -56,11 +56,11 @@ To get support with this worksheet, follow the [Discord guide](https://portdotac
 
 ### Continue from Worksheet 4
 
-You can continue directly with the Sandwich Shop project you completed in [Worksheet 4](./worksheet-4.md). Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again if your working tree is clean.
+You can continue directly with the Sandwich Shop project you completed in [Worksheet 4](worksheet-4.md). Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
 
 ### Clone the Sandwich Shop repository
 
-If you need a fresh copy of the project, open a terminal and move to a folder that is not synchronised to cloud storage, such as your `Downloads` folder, then clone the repository:
+If you need a fresh copy of the project, clone the [Sandwich Shop repository](https://github.com/manighahrmani/sandwich_shop). Open a terminal and move to a folder that is not synchronised to cloud storage, such as your `Downloads` folder:
 
 ```bash
 cd ~/Downloads
@@ -72,13 +72,15 @@ Open the cloned folder in VS Code with **File > Open Folder**.
 
 ### Switch to branch 4
 
-Switch to branch `4` so your project matches the state after completing Worksheet 4:
+If you cloned a fresh copy, switch to branch `4` so your project matches the state after completing Worksheet 4. If you are continuing your own project, stay on the branch containing your completed work instead:
 
 ```bash
 git checkout 4
 ```
 
-Run `flutter test` in your terminal to confirm that all existing tests pass before continuing.
+Run `flutter pub get` to install the project dependencies, then run `flutter test` to confirm that all existing tests pass before continuing.
+
+Do not switch branches over unfinished work. Branch `5` contains the completed Sandwich Shop application for this worksheet; use it to compare your finished work, not as your starting point.
 
 ## Shared constants and the Subway theme
 
