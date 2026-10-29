@@ -47,13 +47,13 @@
 
 ## Getting help
 
-To get support with this worksheet, follow the [Discord guide](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and ask your questions there. Otherwise, attend your timetabled session and ask a member of staff for help.
+To get support with this worksheet, follow the [Discord guide](https://portdotacdotuk-my.sharepoint.com/:p:/g/personal/mani_ghahremani_port_ac_uk/IQCMJP6IiR_bQoYUMdXJSRDYAWnajEALZYEXFZyrJkHS1QU) and post your questions there. You can also attend your timetabled practical sessions and ask a member of teaching staff for guidance.
 
 ## Getting started
 
 ### Continue from Worksheet 1
 
-If you completed Worksheet 1 on this computer, you can continue with the Sandwich Shop project you created. Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
+You can continue directly with the Sandwich Shop project you completed in [Worksheet 1](worksheet-1.md). Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
 
 ### Clone the Sandwich Shop repository
 

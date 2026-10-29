@@ -37,7 +37,7 @@ To get support with this worksheet, follow the [Discord guide](https://portdotac
 
 ### Continue from Worksheet 5
 
-Open the Sandwich Shop project you completed in [Worksheet 5](worksheet-5.md). We keep its basket, customer profile form, shared theme and navigation, then add local storage.
+You can continue directly with the Sandwich Shop project you completed in [Worksheet 5](worksheet-5.md). Open the project folder in VS Code with **File > Open Folder**. You do not need to clone the repository again.
 
 ### Clone the Sandwich Shop repository
 
@@ -866,7 +866,7 @@ Build on the cinema app from Worksheet 5. Keep the shared app bars, drawer route
 3. Check that the JSON change has not broken your booking flow. Add tickets from a film loaded from the JSON asset, remove one from the basket and complete the temporary checkout. Checkout should still clear the in-memory basket without saving a booking history; saved bookings come in Worksheet 7. Then run `dart format`, `dart analyze` and `flutter test`, and fix any issues until the analyser reports none and every test passes.
 
 4. (Advanced) You must complete [Worksheet 5's Exercise 6](worksheet-5.md#exercises), which builds the customer profile form on the `'/settings'` page, before starting this exercise.
- 
+
     Add `shared_preferences` and use `SharedPreferencesAsync`, following the [Remembering the customer profile with shared preferences](#remembering-the-customer-profile-with-shared-preferences) section of this worksheet. Persist the editable cinema profile fields and email-news preference under named keys. Load them when the settings page opens and save them when the patron submits. Use fictional details. Keep the existing controller lifecycle and scrollable form. Reload the page in your browser to check that the profile values remain.
 
 5. (Advanced) Test loading saved preferences, saving edited values and reopening the settings form with in-memory preferences, following [Test loading and saving preferences](#test-loading-and-saving-preferences).
