@@ -88,27 +88,35 @@ Do not switch branches over unfinished work. Branch `7` contains the completed S
 
 ## Choosing a database for completed orders
 
-JSON assets supply the catalogue and shared preferences remembers profile settings. Neither is a suitable store for a growing purchase history. SQLite stores completed orders as rows in a table on the device, without a separate database server.
+So far, we have used JSON assets for the catalogue and shared preferences for profile settings. Neither is a suitable store for a growing purchase history because JSON assets are read-only and shared preferences are intended for small key-value pairs, not structured, queryable data.
 
-A table has named columns. Each row holds one order, and its primary key identifies that row. We create the table with `CREATE TABLE`, insert purchases with `insert` and read them with `query`; these helper methods build SQL `INSERT` and `SELECT` statements. Read the [Flutter SQLite recipe](https://docs.flutter.dev/cookbook/persistence/sqlite) alongside this example.
+SQL databases, on the other hand, are designed for reading, writing and querying structured data efficiently. There are different SQL database engines, such as MySQL, PostgreSQL and SQLite, each with its own features and use cases. For mobile applications, SQLite is commonly used because it is lightweight and runs directly on the device. It is serverless, which means that it does not require a separate database server.
 
-We record completed purchases rather than edit or delete purchase history. Updating and deleting records are not required for this checkout flow. No Provider package, notifier or new state-management layer is needed.
+We will therefore use SQLite to store completed orders locally on the device. A table has named columns, and each row holds one order, with a primary key that identifies that row. We create the table with `CREATE TABLE`, insert purchases with `insert` and read them with `query`; these helper methods build SQL `INSERT` and `SELECT` statements. Read the [Flutter SQLite recipe](https://docs.flutter.dev/cookbook/persistence/sqlite) alongside this example.
+
+We record completed purchases rather than edit or delete purchase history. Updating and deleting records are not required for now, but you can investigate them later if you wish. No Provider package, notifier or new state-management layer is needed.
 
 ## Preparing an Android emulator or device
 
-For this worksheet, run the app on an Android emulator or a physical Android device, not Edge, Chrome or Windows desktop. An emulator is a virtual Android device running on your computer. The standard `sqflite` plugin works on Android without a separate database server or browser database setup.
+The standard `sqflite` plugin we use to access SQLite does not support web browsers. For this worksheet, we will run the app on an Android emulator or a physical Android device instead.
 
-Automated tests will use an in-memory database and do not need an emulator. Prepare your emulator now, before adding database code.
+An emulator is a virtual Android device running on your computer.
+
+Our automated tests will use an in-memory database and do not need an emulator. Prepare your emulator or device now, before adding database code. Follow the appropriate section below:
+
+1. [Install the Android bundle on university computers or Windows 11](#install-the-android-bundle-on-university-computers-or-windows-11)
+2. [Set up an emulator on your own computer](#set-up-an-emulator-on-your-own-computer)
+3. [Use a physical Android device](#use-a-physical-android-device)
 
 ### Install the Android bundle on university computers or Windows 11
 
-The browser-only bundle from [Worksheet 1](worksheet-1.md#b---using-the-university-machines-on-campus) does not include the Android tools. If you are working on a university lab machine or on your own Windows 11 computer, use the [Android emulator release of the portable bundle](https://github.com/manighahrmani/flutter_vscode_package#android-emulator-setup-worksheet-7-onwards). It sets up VS Code Portable, the Flutter SDK, Android SDK command-line tools, and a virtual device without needing manual toolchain configuration. Open PowerShell and run its installer:
+The browser-only bundle from [Worksheet 1](worksheet-1.md#b---using-the-university-machines-on-campus) does not include the Android tools. If you are working on a university lab machine or on your own Windows 11 computer, use the [Android emulator release of the portable bundle](https://github.com/manighahrmani/flutter_vscode_package#android-emulator-setup-worksheet-7-onwards). It sets up VS Code, the Flutter SDK, the Android SDK command-line tools and a virtual device without needing manual toolchain configuration. Open PowerShell and run its installer:
 
 ```powershell
 irm https://raw.githubusercontent.com/manighahrmani/flutter_vscode_package/main/install-android-beta.ps1 | iex
 ```
 
-This installer configures a JDK, the Android SDK and a virtual device named `flutter_emulator`, tests the emulator boot with an extended timeout, and opens VS Code on your project. The download is several gigabytes, so let it run to completion. Windows 11 machines and university lab computers provide the hardware virtualisation (Windows Hypervisor Platform) the emulator needs.
+This installer configures a JDK, the Android SDK and a virtual device named `flutter_emulator`, tests the emulator boot with an extended timeout, and opens VS Code on your project. The download is several gigabytes, so let it run to completion.
 
 Because the installer already booted the emulator, you do not repeat its setup. If the emulator is not running, launch it with the command below and wait for the Android home screen. The first cold boot can take a few minutes, and a black screen is normal while it boots.
 
@@ -122,46 +130,45 @@ Wait for the Android home screen before continuing, as shown below:
 
 ### Set up an emulator on your own computer
 
-On your own Windows, macOS or Linux computer, install Flutter first by following the [Flutter installation guide](https://docs.flutter.dev/install/quick). Then follow the [Flutter Android setup guide](https://docs.flutter.dev/platform-integration/android/setup) to install Android Studio. You only need this setup or the university bundle, not both.
+On your own Windows, macOS or Linux computer, you need to have Flutter installed already, as in [Worksheet 1](worksheet-1.md#a---on-your-own-device). If not, follow the [Flutter installation guide](https://docs.flutter.dev/install/quick).
 
-Open Android Studio and complete its setup wizard, which downloads the Android SDK. From the welcome screen, open **More Actions** and then **SDK Manager**. On the **SDK Tools** tab, tick **Android SDK Command-line Tools** and click **Apply**, because Flutter needs these tools to accept the SDK licences.
+Follow the [Flutter Android setup guide](https://docs.flutter.dev/platform-integration/android/setup) for your operating system, including the tooling, SDK licences, emulator setup and validation steps. You only need this setup or the university bundle, not both.
 
-Next, open **More Actions** and then **Virtual Device Manager**, and create a virtual device:
-
-1. Choose a phone, such as a Pixel, and click **Next**.
-2. Choose a recent system image and download it. Pick an `x86_64` image on an Intel or AMD computer, and an `arm64` image on an Apple silicon Mac or an ARM-based Windows computer.
-3. Finish the wizard, then start the device with its play button.
-
-The emulator needs hardware acceleration. If it reports that acceleration is missing, follow the [Android emulator acceleration guide](https://developer.android.com/studio/run/emulator-acceleration). On Windows this usually means turning on **Windows Hypervisor Platform** in **Turn Windows features on or off**, which needs administrator rights.
-
-Check the toolchain and accept the SDK licences:
+Return to this worksheet once the emulator shows the Android home screen. Check your setup in the terminal:
 
 ```bash
 flutter doctor
-flutter doctor --android-licenses
-```
-
-The **Android toolchain** line of `flutter doctor` should show a tick. Next time, you can start the emulator without opening Android Studio. List your emulators, then launch one by its id:
-
-```bash
+flutter devices
 flutter emulators
-flutter emulators --launch <emulator id>
 ```
+
+Resolve any issues reported under **Android toolchain** or **Android Studio** before continuing. The output of `flutter devices` should include your running emulator with the platform marked as `android`.
+
+The screenshot below shows `flutter doctor` output on macOS with a working Android toolchain:
+
+![Flutter doctor output on macOS showing a working Android toolchain and an Xcode warning](images/7/flutter_doctor_macos.png)
+
+The Xcode warning concerns iOS and macOS development; you do not need to resolve it to run this worksheet's app on Android.
+
+The screenshot below shows `flutter devices` and `flutter emulators` output with a running Android emulator:
+
+![Flutter devices and emulators output on macOS showing a running Android emulator](images/7/flutter_devices_emulators_macos.png)
+
+You only need one Android emulator or physical Android device for this worksheet. The screenshot also lists an iOS simulator, but you do not need to set one up.
 
 ### Use a physical Android device
 
-On your own computer, you can run the app on an Android phone or tablet instead of an emulator. This uses the same Android setup as above, apart from the virtual device. University computers may not allow USB devices, so use the emulator there.
+On your own computer, you can run the app on an Android phone or tablet instead of an emulator. Follow the [Flutter Android setup guide](https://docs.flutter.dev/platform-integration/android/setup), choosing the physical device instructions rather than the emulator instructions. University computers may not allow USB devices, so use the emulator there.
 
-1. On the phone, open **Settings**, then **About phone**, and tap **Build number** seven times to turn on developer options. The location of **Build number** varies between manufacturers.
-2. Open **Developer options**, usually under **Settings** and **System**, and turn on **USB debugging**.
-3. Connect the phone to your computer with a USB cable that supports data, unlock the phone and allow USB debugging when it asks.
-4. Run `flutter devices` in the terminal and check that your phone is listed.
-
-If the phone is not listed on Windows, install its USB driver using the [OEM USB drivers page](https://developer.android.com/studio/run/oem-usb). On Android 11 and later, you can connect without a cable by following the [wireless debugging steps](https://developer.android.com/studio/run/device#wireless).
+Before continuing, run `flutter doctor` and resolve any issues reported under **Android toolchain** or **Android Studio**. Run `flutter devices` and check that your connected phone or tablet is listed with the platform marked as `android`.
 
 To run on an iPhone or the iOS simulator instead, you need a Mac with Xcode; follow the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup). The app we build only allows Android until you follow [Run on other platforms](#run-on-other-platforms).
 
 ### Add Android support to the project
+
+Before continuing, check that your Android emulator or connected physical Android device appears in `flutter devices`.
+
+<!-- TODO: Done till here. -->
 
 Until now, the project could only run in a browser, so it has a `web` folder but no `android` folder. Flutter keeps the native project for each platform in a folder named after it. From the project root, add the Android project:
 
@@ -205,7 +212,7 @@ We do not need web database packages or WebAssembly files. Run the app on your e
 
 Up to Worksheet 6, you ran and tested the app in a web browser with Flutter Web. The `shared_preferences` package you added in Worksheet 6 works there because, on the web, it stores its key-value pairs in the browser's `localStorage`. That storage survives a page reload, but a lab computer clears it when the profile resets.
 
-In this worksheet we store a growing order history with `sqflite`, which is a different kind of storage. It keeps structured tables through native bindings to SQLite in the operating system, so it runs on Android, iOS and macOS but not in a web browser. Windows and Linux desktop need the extra set-up described in [Run on other platforms](#run-on-other-platforms). On the Android emulator, both the orders table and the preferences file are written to the emulator's internal storage and survive stopping, restarting and reinstalling the app.
+In this worksheet we store a growing order history with `sqflite`, which is a different kind of storage. It keeps structured tables through native bindings to SQLite in the operating system, so it runs on Android, iOS and macOS but not in a web browser. Windows and Linux desktop need the extra set-up described in [Run on other platforms](#run-on-other-platforms). On the Android emulator, both the orders table and the preferences file are written to the emulator's internal storage and survive stopping and restarting the app. Uninstalling the app or clearing its storage removes these data.
 
 `sqflite` connects itself to SQLite only when the app starts on a platform it supports. If you selected Edge or Windows and pressed **F5** once the database code is in place, the app would still open, but every database call would fail. The orders screen would show an error like the one below instead of the saved orders, and checkout would never save anything:
 
