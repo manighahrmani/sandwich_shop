@@ -5,8 +5,8 @@ import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// This app saves orders with SQLite (sqflite), which is set up for Android.
 bool isSupportedPlatform() {
   if (kIsWeb) {
     return false;
@@ -49,14 +49,57 @@ class UnsupportedPlatformApp extends StatelessWidget {
   }
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
+
+  @override
+  State<App> createState() {
+    return _AppState();
+  }
+}
+
+class _AppState extends State<App> {
+  bool _largeText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTextSize();
+  }
+
+  Future<void> _loadTextSize() async {
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    final bool? savedLargeText = await prefs.getBool(prefLargeText);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _largeText = savedLargeText ?? false;
+    });
+  }
+
+  void _updateTextSize(bool largeText) {
+    setState(() {
+      _largeText = largeText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: appTitle,
       debugShowCheckedModeBanner: false,
+      builder: (BuildContext context, Widget? child) {
+        final MediaQueryData mediaQuery = MediaQuery.of(context);
+        TextScaler textScaler = mediaQuery.textScaler;
+        if (_largeText) {
+          textScaler = _BiggerTextScaler(textScaler);
+        }
+        return MediaQuery(
+          data: mediaQuery.copyWith(textScaler: textScaler),
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: shopBrand,
@@ -78,12 +121,31 @@ class App extends StatelessWidget {
           return const BasketScreen();
         },
         '/settings': (BuildContext context) {
-          return const SettingsScreen();
+          return SettingsScreen(
+            largeText: _largeText,
+            onLargeTextChanged: _updateTextSize,
+          );
         },
         '/orders': (BuildContext context) {
           return const OrdersScreen();
         },
       },
     );
+  }
+}
+
+class _BiggerTextScaler extends TextScaler {
+  const _BiggerTextScaler(this.systemTextScaler);
+
+  final TextScaler systemTextScaler;
+
+  @override
+  double scale(double fontSize) {
+    return systemTextScaler.scale(fontSize) * 1.2;
+  }
+
+  @override
+  double get textScaleFactor {
+    return scale(14) / 14;
   }
 }

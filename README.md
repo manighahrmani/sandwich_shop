@@ -1,6 +1,6 @@
 # Sandwich Shop
 
-This branch contains the Sandwich Shop app as it is after completing [Worksheet 7 — SQLite and order history](https://github.com/manighahrmani/sandwich_shop/blob/main/worksheet-7.md). It saves orders in an SQLite database, so it must run on an Android emulator. SQLite does not work in a web browser or on Windows desktop.
+This branch contains the Sandwich Shop app as it is after completing [Worksheet 7 — SQLite and order history](https://github.com/manighahrmani/sandwich_shop/blob/dev/worksheet-7.md). It saves orders in an SQLite database and is set up to run on an Android emulator or device, not in a web browser or on Windows desktop.
 
 ## Prerequisites
 
@@ -10,11 +10,11 @@ On your own computer, install the following:
 
 - [Git](https://git-scm.com/downloads)
 - [Flutter and VS Code](https://docs.flutter.dev/install/quick), which also sets up the Flutter extension
-- Android Studio and an Android emulator, following [Set up an emulator on your own computer](https://github.com/manighahrmani/sandwich_shop/blob/main/worksheet-7.md#set-up-an-emulator-on-your-own-computer) in Worksheet 7, or a phone set up as in [Use a physical Android device](https://github.com/manighahrmani/sandwich_shop/blob/main/worksheet-7.md#use-a-physical-android-device)
+- Android Studio and an Android emulator, following [Set up an emulator on your own computer](https://github.com/manighahrmani/sandwich_shop/blob/dev/worksheet-7.md#set-up-an-emulator-on-your-own-computer) in Worksheet 7, or a phone set up as in [Use a physical Android device](https://github.com/manighahrmani/sandwich_shop/blob/dev/worksheet-7.md#use-a-physical-android-device)
 
 Run `flutter doctor` afterwards and check that the **Android toolchain** line has a tick.
 
-The app only allows Android. To run it on iOS, macOS, Windows or Linux, update `isSupportedPlatform` in `lib/main.dart` as described in [Run on other platforms](https://github.com/manighahrmani/sandwich_shop/blob/main/worksheet-7.md#run-on-other-platforms).
+The app only allows Android. To run it on iOS, macOS, Windows or Linux, see [Run on other platforms](https://github.com/manighahrmani/sandwich_shop/blob/dev/worksheet-7.md#run-on-other-platforms).
 
 ## Get the code
 

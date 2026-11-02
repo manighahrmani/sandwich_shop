@@ -9,9 +9,17 @@ const String prefName = 'user_name';
 const String prefAddress = 'user_address';
 const String prefEmail = 'user_email';
 const String prefNewsletter = 'user_newsletter';
+const String prefLargeText = 'large_text';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final bool largeText;
+  final ValueChanged<bool>? onLargeTextChanged;
+
+  const SettingsScreen({
+    super.key,
+    this.largeText = false,
+    this.onLargeTextChanged,
+  });
 
   @override
   State<SettingsScreen> createState() {
@@ -25,6 +33,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late TextEditingController _emailController;
   bool _receiveNewsletter = false;
   String _confirmationMessage = '';
+  bool _largeText = false;
 
   @override
   void initState() {
@@ -32,7 +41,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _nameController = TextEditingController();
     _addressController = TextEditingController();
     _emailController = TextEditingController();
+    _largeText = widget.largeText;
     _loadSettings();
+  }
+
+  @override
+  void didUpdateWidget(SettingsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.onLargeTextChanged != null &&
+        oldWidget.largeText != widget.largeText) {
+      _largeText = widget.largeText;
+    }
   }
 
   @override
@@ -49,35 +68,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final String? savedAddress = await prefs.getString(prefAddress);
     final String? savedEmail = await prefs.getString(prefEmail);
     final bool? savedNewsletter = await prefs.getBool(prefNewsletter);
-
-    String name = '';
-    if (savedName != null) {
-      name = savedName;
-    }
-
-    String address = '';
-    if (savedAddress != null) {
-      address = savedAddress;
-    }
-
-    String email = '';
-    if (savedEmail != null) {
-      email = savedEmail;
-    }
-
-    bool newsletter = false;
-    if (savedNewsletter != null) {
-      newsletter = savedNewsletter;
-    }
+    final bool? savedLargeText = await prefs.getBool(prefLargeText);
 
     if (!mounted) {
       return;
     }
     setState(() {
-      _nameController.text = name;
-      _addressController.text = address;
-      _emailController.text = email;
-      _receiveNewsletter = newsletter;
+      _nameController.text = savedName ?? '';
+      _addressController.text = savedAddress ?? '';
+      _emailController.text = savedEmail ?? '';
+      _receiveNewsletter = savedNewsletter ?? false;
+      if (widget.onLargeTextChanged == null) {
+        _largeText = savedLargeText ?? false;
+      }
     });
   }
 
@@ -91,6 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await prefs.setString(prefAddress, address);
     await prefs.setString(prefEmail, email);
     await prefs.setBool(prefNewsletter, _receiveNewsletter);
+    await prefs.setBool(prefLargeText, _largeText);
 
     final UserSettings settings = UserSettings(
       name: name,
@@ -153,10 +157,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 16),
+            CheckboxListTile(
+              key: const Key('largeTextCheckbox'),
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Bigger text'),
+              value: _largeText,
+              onChanged: (bool? value) {
+                if (value != null) {
+                  setState(() {
+                    _largeText = value;
+                  });
+                  final ValueChanged<bool>? onChanged =
+                      widget.onLargeTextChanged;
+                  if (onChanged != null) {
+                    onChanged(value);
+                  }
+                }
+              },
+            ),
             Row(
               children: [
                 const Expanded(child: Text('Receive newsletter and offers')),
                 Switch(
+                  key: const Key('newsletterSwitch'),
                   value: _receiveNewsletter,
                   onChanged: (bool value) {
                     setState(() {
