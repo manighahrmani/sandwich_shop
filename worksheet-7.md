@@ -12,6 +12,7 @@
   - [Install the Android bundle on university computers or Windows 11](#install-the-android-bundle-on-university-computers-or-windows-11)
   - [Set up an emulator on your own computer](#set-up-an-emulator-on-your-own-computer)
   - [Use a physical Android device](#use-a-physical-android-device)
+  - [Add Android support to the project](#add-android-support-to-the-project)
   - [Select the device and run the app](#select-the-device-and-run-the-app)
 - [Adding the SQLite packages](#adding-the-sqlite-packages)
   - [Prevent running on unsupported platforms](#prevent-running-on-unsupported-platforms)
@@ -39,6 +40,8 @@
   - [Connect the checkout button and verify a restart](#connect-the-checkout-button-and-verify-a-restart)
   - [Inspect the database on the emulator](#inspect-the-database-on-the-emulator)
 - [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator)
+  - [Remove the temporary menu item](#remove-the-temporary-menu-item)
+  - [Move the tests into mirrored folders](#move-the-tests-into-mirrored-folders)
   - [Prepare a fresh database for each test](#prepare-a-fresh-database-for-each-test)
   - [Test inserting, reading and numbering orders](#test-inserting-reading-and-numbering-orders)
   - [Test order map conversion](#test-order-map-conversion)
@@ -158,6 +161,16 @@ If the phone is not listed on Windows, install its USB driver using the [OEM USB
 
 To run on an iPhone or the iOS simulator instead, you need a Mac with Xcode; follow the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup). The app we build only allows Android until you follow [Run on other platforms](#run-on-other-platforms).
 
+### Add Android support to the project
+
+Until now, the project could only run in a browser, so it has a `web` folder but no `android` folder. Flutter keeps the native project for each platform in a folder named after it. From the project root, add the Android project:
+
+```bash
+flutter create --platforms=android .
+```
+
+The `.` means the current folder. The command adds the `android` folder and leaves your existing `lib`, `test` and `assets` files unchanged. If your project already has an `android` folder, you can skip this step.
+
 ### Select the device and run the app
 
 Once the emulator or phone is running, pick it as the run target in VS Code using the device selector in the bottom-right of the status bar. If a different device is selected, click the status bar item and choose the Android emulator (for example `sdk gphone64 x86 64`) or your phone. You can also open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and run the command **Flutter: Select Device**. Do not pick Edge, Chrome or Windows, as the app is set up for Android only. Then press **F5** to build, install and run the app with hot reload.
@@ -190,23 +203,21 @@ We do not need web database packages or WebAssembly files. Run the app on your e
 
 ### Prevent running on unsupported platforms
 
-Up until Worksheet 6, you tested and ran your Flutter applications inside a web browser (**Chrome / Edge**) via Flutter Web.
+Up to Worksheet 6, you ran and tested the app in a web browser with Flutter Web. The `shared_preferences` package you added in Worksheet 6 works there because, on the web, it stores its key-value pairs in the browser's `localStorage`. That storage survives a page reload, but a lab computer clears it when the profile resets.
 
-In Worksheet 7, we introduce local database persistence using the **`sqflite`** package. Here is how persistence and execution differ between the two mechanisms:
+In this worksheet we store a growing order history with `sqflite`, which is a different kind of storage. It keeps structured tables through native bindings to SQLite in the operating system, so it runs on Android, iOS and macOS but not in a web browser. Windows and Linux desktop need the extra set-up described in [Run on other platforms](#run-on-other-platforms). On the Android emulator, both the orders table and the preferences file are written to the emulator's internal storage and survive stopping, restarting and reinstalling the app.
 
-- **`shared_preferences` (Worksheet 6)**: Saves lightweight key-value pairs (like user settings and flags). On the web, it stores data in browser `localStorage`, which only survives within that browser session and page reloads, but is cleared whenever debug sessions or lab computer profiles reset. On the Android emulator, it writes to an XML file in internal storage that permanently survives app restarts.
-- **`sqflite` (Worksheet 7)**: Stores structured tables and relational data (like full customer order history). It relies on native C bindings to SQLite on the operating system. It runs natively on Android, iOS and macOS. It does not work in a web browser, and Windows or Linux desktop need the extra set-up described in [Run on other platforms](#run-on-other-platforms).
+`sqflite` connects itself to SQLite only when the app starts on a platform it supports. If you selected Edge or Windows and pressed **F5** once the database code is in place, the app would still open, but every database call would fail. The orders screen would show an error like the one below instead of the saved orders, and checkout would never save anything:
 
-If a student presses **F5** with **Edge** or **Windows** selected in the VS Code device picker and triggers database operations, the application crashes immediately with a runtime `MissingPluginException`:
-> `MissingPluginException: No implementation found for method openDatabase on channel com.tekartik.sqflite`
+```text
+Could not load orders: Bad state: databaseFactory not initialized
+```
 
-Running on the **Android emulator** gives you the true, full mobile platform experience: both SQLite database tables and shared preferences files are permanently saved to the emulator disk and persist across stopping, restarting, and reinstalling the app.
+To stop you from running the app where it cannot work, we add a platform check to `lib/main.dart`. The check uses three pieces:
 
-To prevent accidental crashes on web or desktop and remind you to switch to the mobile emulator, we add a platform check directly in `lib/main.dart`:
-
-1. **`kIsWeb`**: A built-in Flutter constant from `package:flutter/foundation.dart`. It evaluates to `true` whenever the app is compiled to run in a web browser (HTML/CanvasKit/WebAssembly). If `kIsWeb` is true, the check immediately returns `false`.
-2. **`defaultTargetPlatform`**: Detects the host operating system. Only `TargetPlatform.android` returns `true`, because this worksheet runs the app on an Android emulator. You can add other platforms later by following [Run on other platforms](#run-on-other-platforms).
-3. **`UnsupportedPlatformApp`**: If an unsupported target (such as Edge, Chrome, or Windows) is launched, `main()` starts this lightweight fallback screen instead of crashing. It displays a clear message directing you to stop the app and launch it on your Android emulator or device.
+1. `kIsWeb` is a built-in Flutter constant from `package:flutter/foundation.dart`. It is `true` whenever the app runs in a web browser, so the check returns `false` in that case.
+2. `defaultTargetPlatform` reports the host operating system. Only `TargetPlatform.android` returns `true` here, because this worksheet runs on an Android emulator. You can allow more platforms later by following [Run on other platforms](#run-on-other-platforms).
+3. `UnsupportedPlatformApp` is a small fallback screen. When the target is not supported, `main` starts this screen instead of the app, so the database code never runs where it would fail.
 
 Open `lib/main.dart` and add this import above the existing Material import:
 
@@ -286,6 +297,8 @@ On a Mac, `sqflite` also runs on the iOS simulator and on macOS desktop. Install
   }
 ```
 
+As with Android, the project needs a folder for each new platform. Add them with `flutter create --platforms=ios,macos .`, leaving out any platform you do not need. The command also creates a `test/widget_test.dart` template that does not match our app, so delete that file. Then select the iOS simulator or **macOS** in the device selector and run the app.
+
 On Windows, `sqflite` has no desktop implementation, so we use the same `sqflite_common_ffi` package that the tests use. You need Visual Studio (not VS Code) with the **Desktop development with C++** workload, as described in the [Flutter Windows setup guide](https://docs.flutter.dev/platform-integration/windows/setup). The university computers do not have it. Run `flutter doctor` and check that the **Visual Studio** line has a tick. Building a Windows app with plugins also needs **Developer Mode**; run `start ms-settings:developers` and turn it on, which needs administrator rights.
 
 In the terminal, add Windows support to the project and move `sqflite_common_ffi` from the development dependencies to the app dependencies:
@@ -295,7 +308,7 @@ flutter create --platforms=windows .
 flutter pub add sqflite_common_ffi
 ```
 
-The first command creates a `windows` folder. It also creates a `test/widget_test.dart` template that does not match our app, so delete that file.
+The first command creates a `windows` folder. It also creates the `test/widget_test.dart` template, so delete that file.
 
 In `lib/main.dart`, add this import:
 
@@ -777,12 +790,9 @@ Replace the `Placeholder` return in `build`. First declare `body` and choose the
         ),
       );
     }
+```
 
-When there are no saved orders, the screen shows its empty state, as shown below:
-
-![The OrdersScreen showing the empty state](images/7/orders_screen_empty.png)
-
-Immediately after that last closing brace, add the populated state:
+This follows the [loading and error states from Worksheet 6](worksheet-6.md#display-loading-and-error-states), with one extra branch for a table that has no rows. The editor still reports an error, because `body` is not assigned when there are orders to show. Immediately after the last closing brace, add the populated state:
 
 ```dart
     else {
@@ -795,7 +805,7 @@ Immediately after that last closing brace, add the populated state:
     }
 ```
 
-After the conditional, return the screen:
+Every branch now assigns `body` exactly once. After the conditional, return the screen:
 
 ```dart
     return Scaffold(
@@ -806,6 +816,12 @@ After the conditional, return the screen:
       body: body,
     );
 ```
+
+Your `build` method should look like this:
+
+![The completed build method of OrdersScreen with its loading, error, empty and list states](images/7/orders_screen_build_method.png)
+
+You cannot see the empty state in the app yet, because the database starts with three sample orders. We check it with a widget test in [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state).
 
 ### Register the orders route and add navigation buttons
 
@@ -827,7 +843,7 @@ Keep the existing route-name check so pressing the receipt icon while already on
         actions: const [OrdersButton(), BasketButton()],
 ```
 
-Leave the menu and settings screens unchanged from Worksheet 6. On the emulator, open the basket from the menu, then select the receipt icon. You should see orders `1003`, `1002` and `1001`, in that order, with their summaries, totals, options and dates, as shown below:
+Leave the menu and settings screens unchanged from Worksheet 6. On the emulator, open the basket from the menu, then select the receipt icon. You should see orders `1003`, `1002` and `1001`, in that order, with their summaries, totals and dates, as shown below:
 
 ![The OrdersScreen displaying saved orders in descending order](images/7/orders_screen_populated.png)
 
@@ -979,9 +995,35 @@ This is a snapshot, not a live connection. Remove the copied file after inspecti
 
 The [sqflite FFI package](https://pub.dev/packages/sqflite_common_ffi) runs SQLite directly on the test computer. FFI means foreign function interface: Dart calls a native library. We use it only in tests, with a fresh in-memory database rather than the user's file.
 
-Organise the tests before adding new ones. Move the existing model tests into `test/models/`, repository tests into `test/repositories/`, and screen tests into `test/screens/`. Keep the button test under `test/widgets/`. Rename `sandwich_model_test.dart` to `sandwich_test.dart` so it matches `lib/models/sandwich.dart`.
+Before adding database tests, we tidy the menu and the existing tests.
 
-Rename `test/widget_test.dart` to `test/main_test.dart` for the app tests. Move its `OrderItemDisplay` group and the two quantity-limit tests into `test/screens/order_screen_test.dart`. Remove the now-unused `Sandwich` import from `main_test.dart`. In `assets/data/sandwiches.json`, remove the temporary `Nonexistent Sandwich` entry so the menu catalogue contains only the three real items. In `test/main_test.dart`, update the smoke test to check the three menu items (Footlong Sub, Six-Inch Sub and Loaded Nachos), removing the temporary check for the non-existent sandwich from Worksheet 6. Keep explicit `Sandwich` types in the moved fixtures and add that type to the `const` declarations in the sandwich model tests too. Your test folder structure in the editor should look like this:
+### Remove the temporary menu item
+
+In [Worksheet 6](worksheet-6.md#display-loading-and-error-states), we added a `Nonexistent Sandwich` to `assets/data/sandwiches.json` to test the image error message. The real menu does not sell it, so delete that object from the array, together with the comma before it. The file should end with the `Loaded Nachos` object.
+
+Run the tests to see which ones depend on the old catalogue:
+
+```bash
+flutter test
+```
+
+Two tests now fail on purpose, as shown below. The asset loader test in `test/sandwich_repository_test.dart` still expects four sandwiches, and the app test in `test/widget_test.dart` still scrolls to a sandwich that no longer exists:
+
+![The terminal showing the repository and app tests failing after removing the temporary menu item](images/7/tests_failing_after_menu_change.png)
+
+A failing test is useful here: it points to every place that relied on the item we removed. In the asset loader test, change the length expectation from `4` to `3`, and delete the two expectations that read `sandwiches[3]`.
+
+In the app test that checks names and prices, delete the lines from `scrollUntilVisible(find.text('Nonexistent Sandwich'), 150)` to the end of the test. Keep the checks for `Loaded Nachos` and `£6.99`. Run `flutter test` again and check that every test passes.
+
+### Move the tests into mirrored folders
+
+Each test file should sit in a folder that matches the file it tests, so `test/` mirrors `lib/`. In the VS Code explorer, create `test/models/`, `test/repositories/` and `test/screens/`, then drag the existing test files into them. The two model tests, `sandwich_model_test.dart` and `user_settings_test.dart`, go into `test/models/`. The two repository tests go into `test/repositories/`, and the four screen tests for the basket, menu, order and settings screens go into `test/screens/`. Our tests import the app with `package:sandwich_shop/...` paths, so moving them does not break their imports.
+
+The button test already lives under `test/widgets/`. Rename `sandwich_model_test.dart` to `sandwich_test.dart` so it matches `lib/models/sandwich.dart`. In the sandwich model tests, write the type in each `const` declaration, for example `const Sandwich sandwich = Sandwich(...)`, as our code style prefers explicit types.
+
+`test/widget_test.dart` holds two kinds of test. Its `App smoke tests` group checks `lib/main.dart`, so rename the file to `test/main_test.dart`. Its `OrderItemDisplay` group and the two quantity-limit tests at the end of the smoke tests group check `lib/screens/order_screen.dart`, so cut them and paste them at the end of `main` in `test/screens/order_screen_test.dart`. Then remove the unused `Sandwich` import from `main_test.dart`.
+
+Run `flutter test` once more. The same tests should pass from their new folders. Your test folder structure in the editor should look like this:
 
 ![The mirrored test directory structure in the VS Code explorer](images/7/test_folders_mirrored.png)
 
@@ -1421,7 +1463,7 @@ Compare your finished application with branch `7`. Check both the automated test
 
 ## Organising tests
 
-From Demo 4 onwards, your test folders must mirror the folders under `lib/`, as we arranged in the preceding section. Keep model, repository, screen, widget and database tests in their matching subfolders under `test/`.
+From Demo 4 onwards, your test folders must mirror the folders under `lib/`, as we arranged in [Move the tests into mirrored folders](#move-the-tests-into-mirrored-folders). Keep model, repository, screen, widget and database tests in their matching subfolders under `test/`.
 
 For Sandwich Shop, screen tests belong under `test/screens/` because the application uses `lib/screens/`. The cinema application uses `lib/views/`, so its view tests belong under `test/views/`. Match the actual application structure rather than renaming folders to copy the example.
 
@@ -1429,22 +1471,32 @@ Tests for the root-level `lib/main.dart` may remain at the root of `test/`; mode
 
 ## Exercises
 
-The exercises below apply these concepts to your Southsea Cinema coursework. Together with [Worksheet 8](worksheet-8.md), they prepare you for Demo 4. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
+The exercises below apply these concepts to your Southsea Cinema coursework. Together with the exercises in Worksheet 8, they prepare you for Demo 4. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-Continue from cinema branch `3`, the Demo 3 state after Worksheets 5 and 6. Cinema branch `4` is the Demo 4 checkpoint: the same app, except that checkout saves each booking to SQLite and the basket page lists past orders. Keep the existing JSON film catalogue, saved profile settings, drawer navigation and squared buttons. No notifier, Provider package, app-bar basket button or separate bookings page is required.
+Build on the cinema app from Worksheet 6. Keep the JSON film catalogue, saved profile settings, drawer navigation, squared buttons and ticket basket you already built. Past bookings appear on the basket page, so you do not need a separate bookings page.
 
-1. Start with configuring your runtime environment by following [Preparing an Android emulator or device](#preparing-an-android-emulator-or-device) and [Adding the SQLite packages](#adding-the-sqlite-packages) in your cinema project. Use the university Android bundle on lab machines or install an emulator on your own computer. Do not add web database packages or copy the Sandwich Shop's Android package identifier.
+1. Set up an Android emulator or device by following [Preparing an Android emulator or device](#preparing-an-android-emulator-or-device), using the university Android bundle on lab machines. If your cinema project has no `android` folder, add one as in [Add Android support to the project](#add-android-support-to-the-project). Then add the SQLite packages to your cinema project, as in [Adding the SQLite packages](#adding-the-sqlite-packages), and check that the app runs on the emulator.
 
-2. Create a `Booking` model in `lib/models/booking.dart` using the structure introduced in [Representing a saved order](#representing-a-saved-order). Include an optional database `id`, a `summary`, a `total` and a `date`, along with `toMap` and `fromMap` methods. Add unit tests for map conversion mirroring [Test order map conversion](#test-order-map-conversion). Use `Booking` consistently for a completed ticket purchase rather than creating a second class for the same record.
+2. Create a `Booking` model in `lib/models/booking.dart`, following [Representing a saved order](#representing-a-saved-order). Give it an optional database `id`, a `summary`, a `total` and a `date`, with `toMap` and `fromMap` methods. Add unit tests for both conversions, including a whole-number total, as in [Test order map conversion](#test-order-map-conversion).
 
-3. Build a singleton database manager `CinemaDatabase` in `lib/database/cinema_db.dart` using the patterns demonstrated in [Creating the SQLite database helper](#creating-the-sqlite-database-helper). Open a database file in the application's document folder and define a `bookings` table inside `onCreate`. Provide one method that inserts a booking and one that reads all bookings, newest first. You do not need seed data or booking numbers.
+3. Create a `CinemaDatabase` singleton in `lib/database/cinema_db.dart`, following [Creating the SQLite database helper](#creating-the-sqlite-database-helper). Open a database file in the folder returned by `getDatabasesPath`, and create a `bookings` table in a public `createTables` method so your tests can reuse it. Add one method that inserts a booking and one that reads every booking, newest first. You do not need sample bookings or booking numbers; Exercise 8 adds them.
 
-4. Adapt your basket checkout routine as shown in [Saving the basket at checkout](#saving-the-basket-at-checkout). Persist a `Booking` containing the basket summary and total before clearing the basket, and preserve the existing confirmation message on the basket page.
+4. Update the checkout on your basket page, following [Saving the basket at checkout](#saving-the-basket-at-checkout). Build a `Booking` from the basket summary and total, and await saving it before you clear the basket. Keep your existing confirmation message.
 
-5. Add a past orders section below the current order on the basket page, applying the list-rendering approach from [Displaying saved orders](#displaying-saved-orders). Load the saved bookings when the page opens and refresh them after checkout, presenting the date, summary and total of each purchase. Include a short message when there are no past orders. To check that both stores survive a restart, place an order, then change and save your profile settings. Now fully close and reopen the emulator app: terminate it for a real cold restart, which is not a hot reload or hot restart and is different from an in-memory test. Reopen the app, navigate to the basket page, and verify that both your earlier bookings and your saved profile settings are still present.
+5. Below the current basket, add a past orders section that lists every saved booking with its date, summary and total, following [Displaying saved orders](#displaying-saved-orders). Load the bookings when the page opens and reload them after checkout, and show a short message when there are none.
 
-6. Test the real table definition with an in-memory database using the test harness from [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator) and [Prepare a fresh database for each test](#prepare-a-fresh-database-for-each-test). Keep the `Booking` `toMap` and `fromMap` round-trip unit tests. For `CinemaDatabase`, verify that an inserted booking returns its generated database id, that the map conversions preserve every field, and that queries return records newest first. Add a widget test modelled on [Update the basket checkout test](#update-the-basket-checkout-test) and [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state) that checking out writes to SQLite, and cover both states explicitly: the past orders section renders saved bookings when present, and shows the empty-state message when there are none. Add a widget test for the settings flow that saving profile settings stores them and that they are read back and pre-filled when the settings page reopens, following Worksheet 6's in-memory approach in [Test loading and saving preferences](worksheet-6.md#test-loading-and-saving-preferences). Add an end-to-end booking journey widget test where feasible: navigate from the film list through the **BOOK NOW** button to the listing, add tickets to the basket, open the basket, check out, and confirm the past orders list updates. If a single full-journey test is impractical, test each hop instead.
+    Check that both kinds of saved data survive a restart. Place an order, then change and save your profile. Fully close the app on the emulator and reopen it, as in [Connect the checkout button and verify a restart](#connect-the-checkout-button-and-verify-a-restart). The basket page should still list your booking, and the settings page should still show your profile.
 
-7. Structure your tests in accordance with [Organising tests](#organising-tests), ensuring that the folders under `test/` mirror the actual application structure in `lib/`. The cinema app keeps its screens under `lib/views/`, so their tests go under `test/views/`. Confirm that tests for the `Booking` model, the `CinemaDatabase` database helper and the main views are organised in their matching subfolders. Maintain zero warnings from `dart analyze` and ensure all tests pass.
+6. Test `CinemaDatabase` with an in-memory database, using the `setUp` and `tearDown` from [Prepare a fresh database for each test](#prepare-a-fresh-database-for-each-test). Check that an inserted booking returns its generated id and is read back with every field, and that bookings come back newest first. Then add widget tests for the basket page, following [Update the basket checkout test](#update-the-basket-checkout-test) and [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state). Check that checkout saves a booking and clears the basket, that saved bookings appear in the past orders section, and that the message appears when there are none.
 
-8. Prepare for the oral assessment questions outlined in [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite) and Demo 4 criteria. Be ready to explain why profile preferences and the bookings table have different roles, how a row maps to a `Booking`, why checkout saves before clearing the basket, and how an emulator restart check differs from an in-memory test.
+7. Arrange your tests as in [Organising tests](#organising-tests), so that the folders under `test/` mirror those under `lib/`. The cinema app keeps its pages in `lib/views/`, so their tests go in `test/views/`. Run `dart format lib test`, `dart analyze` and `flutter test`, and fix any issues until the analyser reports none and every test passes.
+
+8. (Advanced) Number each booking in the same way as the Sandwich Shop numbers its orders. Add a `bookingNumber` field to `Booking` and a `booking_number` column to the `bookings` table. Then add a `getNextBookingNumber` method and a `close` method to `CinemaDatabase`, following [Find the next order number and close the connection](#find-the-next-order-number-and-close-the-connection). The first booking in an empty table should be `1001`.
+
+    At checkout, get the next number before saving the booking, and show it in the confirmation message and in each past order. Sort past orders by booking number rather than by `id`. When the database is first created, add two or three sample bookings, following [Seed past orders only when creating the database](#seed-past-orders-only-when-creating-the-database).
+
+    Your emulator already has a `bookings` table without the new column, and `onCreate` only runs for a new database file. Uninstall the app from the emulator once before you run the new version; this deletes the bookings and profile you saved earlier. Then fully close and reopen the app, and check that the sample bookings appear only once.
+
+9. (Advanced) Test the numbering from Exercise 8, following [Test inserting, reading and numbering orders](#test-inserting-reading-and-numbering-orders). An empty table should give `1001`, and after you insert booking `1005` the next number should be `1006`. Use your new `close` method in `tearDown`, and update your earlier `Booking` and `CinemaDatabase` tests for the new field.
+
+10. (Advanced) `findsWidgets` passes whether a finder matches one widget or many, so it cannot catch an item that appears twice. Replace every `findsWidgets` in your cinema tests with a matcher that states the exact number you expect, and check that a widget is gone after it should disappear. Use at least one finder other than `find.text`. The [Flutter finders recipe](https://docs.flutter.dev/cookbook/testing/widget/finders) lists the options.

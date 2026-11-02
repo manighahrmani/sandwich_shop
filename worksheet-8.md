@@ -125,6 +125,12 @@
 - Ask Copilot to identify untested boundary conditions (e.g. theme preference defaults, corrupted preferences, extreme screen sizes).
 - Generate targeted unit tests in `test/models/` and widget tests in `test/screens/`. -->
 
+<!-- TODO (failed save at checkout): Worksheet 7 already wraps the Sandwich Shop checkout in try/catch and tests it in "Test that a failed save keeps the basket" (drop the orders table, tap Checkout, expect the basket to keep its item and show "Could not save your order"). The Worksheet 7 cinema exercises do not require this, so teach it here as an edge case:
+- Prompt Copilot to find what happens in the cinema checkout when the insert throws (the model answer on branch 4 has no try/catch).
+- Review its fix: save before clearing, catch the error, keep the basket, show an error message.
+- Review its test: it should use the DROP TABLE technique from Worksheet 7 and check that the basket still holds its items.
+- Add a matching exercise below; the sign-off app's Demo 4 marks it under func_checkout_persistence and u_ws8_checkout_error. -->
+
 ### Auditing tests against false positives and weak assertions
 
 <!-- TODO: Critical test audit:
@@ -178,5 +184,6 @@ The exercises below apply Review-Driven Development to your Southsea Cinema cour
 3. Prompt Copilot to implement a dark mode theme switch on the cinema settings page, persisting the choice in `shared_preferences`.
 4. Review the AI-generated code diff line by line, ensuring squared buttons (`BorderRadius.zero`) and existing theme constants are preserved.
 5. Prompt Copilot to generate boundary-condition unit and widget tests for the new theme setting and booking models.
+5a. Use Copilot to make cinema checkout handle a failed save: catch the error, keep the basket, show an error message, and add a widget test that drops the bookings table before checkout (see the TODO under "Generating edge-case unit and widget tests").
 6. Set up `integration_test` in Southsea Cinema and prompt Copilot to write an end-to-end user journey test (`integration_test/booking_flow_test.dart`) that selects a movie, adds tickets, completes checkout, and confirms the booking in SQLite.
 7. Run the integration test on your Android emulator, confirm zero warnings in `dart analyze`, and verify high coverage in the Flutter Coverage extension. -->
