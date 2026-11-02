@@ -16,7 +16,10 @@
   - [Select the device and run the app](#select-the-device-and-run-the-app)
 - [Adding the SQLite packages](#adding-the-sqlite-packages)
   - [Prevent running on unsupported platforms](#prevent-running-on-unsupported-platforms)
-  - [Run on other platforms](#run-on-other-platforms)
+- [Run on other platforms](#run-on-other-platforms)
+  - [iOS and macOS support](#ios-and-macos-support)
+  - [Windows support](#windows-support)
+  - [Linux support](#linux-support)
 - [Representing a saved order](#representing-a-saved-order)
   - [Create the order record and its constructor](#create-the-order-record-and-its-constructor)
   - [Convert an order into a database row](#convert-an-order-into-a-database-row)
@@ -168,8 +171,6 @@ To run on an iPhone or the iOS simulator instead, you need a Mac with Xcode; fol
 
 Before continuing, check that your Android emulator or connected physical Android device appears in `flutter devices`.
 
-<!-- TODO: Done till here. -->
-
 Until now, the project could only run in a browser, so it has a `web` folder but no `android` folder. Flutter keeps the native project for each platform in a folder named after it. From the project root, add the Android project:
 
 ```bash
@@ -180,7 +181,7 @@ The `.` means the current folder. The command adds the `android` folder and leav
 
 ### Select the device and run the app
 
-Once the emulator or phone is running, pick it as the run target in VS Code using the device selector in the bottom-right of the status bar. If a different device is selected, click the status bar item and choose the Android emulator (for example `sdk gphone64 x86 64`) or your phone. You can also open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and run the command **Flutter: Select Device**. Do not pick Edge, Chrome or Windows, as the app is set up for Android only. Then press **F5** to build, install and run the app with hot reload.
+Once the emulator or phone is running, pick it as the run target in VS Code using the device selector in the bottom-right of the status bar. If a different device is selected, click the status bar item and choose the Android emulator (for example `sdk gphone64 x86 64`) or your phone. You can also open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and run the command **Flutter: Select Device**. Do not pick Edge, Chrome or Windows, as we use Android for this worksheet. Then press **F5** to build, install and run the app with hot reload.
 
 To run from the terminal instead, list the devices and target yours by its id:
 
@@ -197,7 +198,11 @@ The app should appear inside the emulator, as shown below:
 
 ## Adding the SQLite packages
 
-From the project root, add the mobile database packages and the separate test dependency:
+If the terminal is already running the app, click the **+** button to open a new terminal, as shown below:
+
+![The new terminal button highlighted in the VS Code terminal panel](images/7/new_terminal_tab.png)
+
+Alternatively, open the Command Palette and run **Terminal: Create New Terminal**. From the project root, run these commands to add the mobile database packages and the separate test dependency:
 
 ```bash
 flutter pub add sqflite path
@@ -206,11 +211,15 @@ flutter pub add --dev sqflite_common_ffi
 
 `sqflite` opens SQLite on Android. `path` provides `join` to build a file path, and `sqflite_common_ffi` supplies SQLite for tests on your computer, not the mobile app. Keep the `shared_preferences` dependency from Worksheet 6.
 
-We do not need web database packages or WebAssembly files. Run the app on your emulator. After adding plugins, stop and restart the app rather than only hot reloading.
+You should see the following changes in your `pubspec.yaml` file:
+
+![Changes in pubspec.yaml after adding SQLite packages](images/7/pubspec_yaml_changes.png)
+
+The `flutter pub add` commands also fetch the dependencies, so you do not need to run `flutter pub get` separately. After adding the plugins, stop and restart the app rather than only hot reloading.
 
 ### Prevent running on unsupported platforms
 
-Up to Worksheet 6, you ran and tested the app in a web browser with Flutter Web. The `shared_preferences` package you added in Worksheet 6 works there because, on the web, it stores its key-value pairs in the browser's `localStorage`. That storage survives a page reload, but a lab computer clears it when the profile resets.
+Up to Worksheet 6, you ran and tested the app in a web browser with Flutter Web. The `shared_preferences` package you added in Worksheet 6 works there because, on the web, it stores its key-value pairs in the browser's `localStorage`. That storage survives a page reload, but a university computer clears it when the profile resets.
 
 In this worksheet we store a growing order history with `sqflite`, which is a different kind of storage. It keeps structured tables through native bindings to SQLite in the operating system, so it runs on Android, iOS and macOS but not in a web browser. Windows and Linux desktop need the extra set-up described in [Run on other platforms](#run-on-other-platforms). On the Android emulator, both the orders table and the preferences file are written to the emulator's internal storage and survive stopping and restarting the app. Uninstalling the app or clearing its storage removes these data.
 
@@ -223,10 +232,10 @@ Could not load orders: Bad state: databaseFactory not initialized
 To stop you from running the app where it cannot work, we add a platform check to `lib/main.dart`. The check uses three pieces:
 
 1. `kIsWeb` is a built-in Flutter constant from `package:flutter/foundation.dart`. It is `true` whenever the app runs in a web browser, so the check returns `false` in that case.
-2. `defaultTargetPlatform` reports the host operating system. Only `TargetPlatform.android` returns `true` here, because this worksheet runs on an Android emulator. You can allow more platforms later by following [Run on other platforms](#run-on-other-platforms).
+2. `defaultTargetPlatform` reports the target operating system. Our helper returns `true` only when this is `TargetPlatform.android`, allowing an Android emulator or physical Android device. You can allow more platforms later by following [Run on other platforms](#run-on-other-platforms).
 3. `UnsupportedPlatformApp` is a small fallback screen. When the target is not supported, `main` starts this screen instead of the app, so the database code never runs where it would fail.
 
-Open `lib/main.dart` and add this import above the existing Material import:
+Open `lib/main.dart` and add this import alongside the existing Material import:
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -235,7 +244,6 @@ import 'package:flutter/foundation.dart';
 Replace the `main` function with:
 
 ```dart
-// This app saves orders with SQLite (sqflite), which is set up for Android.
 bool isSupportedPlatform() {
   if (kIsWeb) {
     return false;
@@ -255,7 +263,7 @@ void main() {
 }
 ```
 
-At the end of the file, add the fallback widget shown on unsupported platforms:
+Also, add the fallback widget shown on unsupported platforms:
 
 ```dart
 class UnsupportedPlatformApp extends StatelessWidget {
@@ -283,15 +291,23 @@ class UnsupportedPlatformApp extends StatelessWidget {
 }
 ```
 
+Your changes in `main.dart` should look like this:
+
+![Changes in main.dart after adding platform checks and fallback widget](images/7/main_dart_changes.png)
+
 If you accidentally run the app on an unsupported browser or desktop target, the fallback screen appears as shown below:
 
 ![The fallback screen displayed when running on an unsupported platform](images/7/unsupported_platform_screen.png)
 
-From now on, ensure your Android emulator is selected before running the app, as described in [Preparing an Android emulator or device](#preparing-an-android-emulator-or-device).
+From now on, ensure your Android emulator or physical Android device is selected before running the app, as described in [Select the device and run the app](#select-the-device-and-run-the-app).
 
-### Run on other platforms
+## Run on other platforms
 
-This section is optional. Complete the rest of the worksheet on the Android emulator first, and skip this section if you only use the university computers.
+This section is optional and applies only if you are working on your own computer. If you are using a university computer or only need Android, continue with [Representing a saved order](#representing-a-saved-order). Otherwise, complete the rest of the worksheet on Android first, then return here to add another platform.
+
+Whenever you add a platform, update the platform tests in [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite) so that platform expects `isTrue`.
+
+### iOS and macOS support
 
 On a Mac, `sqflite` also runs on the iOS simulator and on macOS desktop. Install Xcode by following the [Flutter iOS setup guide](https://docs.flutter.dev/platform-integration/ios/setup) or the [Flutter macOS setup guide](https://docs.flutter.dev/platform-integration/macos/setup). Then add a check for each platform you want to `isSupportedPlatform`, below the Android check:
 
@@ -305,6 +321,8 @@ On a Mac, `sqflite` also runs on the iOS simulator and on macOS desktop. Install
 ```
 
 As with Android, the project needs a folder for each new platform. Add them with `flutter create --platforms=ios,macos .`, leaving out any platform you do not need. The command also creates a `test/widget_test.dart` template that does not match our app, so delete that file. Then select the iOS simulator or **macOS** in the device selector and run the app.
+
+### Windows support
 
 On Windows, `sqflite` has no desktop implementation, so we use the same `sqflite_common_ffi` package that the tests use. You need Visual Studio (not VS Code) with the **Desktop development with C++** workload, as described in the [Flutter Windows setup guide](https://docs.flutter.dev/platform-integration/windows/setup). The university computers do not have it. Run `flutter doctor` and check that the **Visual Studio** line has a tick. Building a Windows app with plugins also needs **Developer Mode**; run `start ms-settings:developers` and turn it on, which needs administrator rights.
 
@@ -342,11 +360,13 @@ At the start of `main`, before the existing `if` statement, point the database c
 
 `databaseFactory` decides how `openDatabase` reaches SQLite. Setting it to `databaseFactoryFfi` makes the existing `SandwichDatabase` code work on Windows without other changes. The `!kIsWeb` check matters because `defaultTargetPlatform` reports the computer's operating system even when the app runs in a browser. Select **Windows** in the device selector and run the app. The database file is saved in the project's `.dart_tool/sqflite_common_ffi/databases` folder.
 
+### Linux support
+
 On Linux, install the build tools listed in the [Flutter Linux setup guide](https://docs.flutter.dev/platform-integration/linux/setup), then follow the same steps as for Windows. Use `flutter create --platforms=linux .` and `TargetPlatform.linux` in place of the Windows values, and select **Linux** in the device selector. If the app reports that it cannot load the SQLite library, install it with `sudo apt-get install libsqlite3-dev`.
 
-Whenever you add a platform, update the platform tests in [Test supported platforms and run the complete suite](#test-supported-platforms-and-run-the-complete-suite) so that platform expects `isTrue`.
-
 ## Representing a saved order
+
+<!-- TODO: Done till here. -->
 
 SQLite is a local database engine: it stores tables in a file without a separate server. A table contains rows, and each row has named columns. Our `orders` table will store one completed basket per row.
 
