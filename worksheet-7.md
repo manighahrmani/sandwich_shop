@@ -79,11 +79,13 @@ Open the cloned folder in VS Code with **File > Open Folder**.
 
 ### Switch to branch 6
 
-If you cloned a fresh copy, switch to branch `6` so your project matches the state after completing Worksheet 6. If you are continuing your own project, stay on the branch containing your completed work instead:
+If you cloned a fresh copy, switch to branch `6` so your project matches the state after completing Worksheet 6:
 
 ```bash
 git checkout 6
 ```
+
+If you are continuing your own project, stay on the branch containing your completed work instead.
 
 Run `flutter pub get` to install the project dependencies, then run `flutter test` to confirm that all existing tests pass before continuing.
 
@@ -171,13 +173,13 @@ To run on an iPhone or the iOS simulator instead, you need a Mac with Xcode; fol
 
 Before continuing, check that your Android emulator or connected physical Android device appears in `flutter devices`.
 
-Until now, the project could only run in a browser, so it has a `web` folder but no `android` folder. Flutter keeps the native project for each platform in a folder named after it. From the project root, add the Android project:
+Until now, you ran the project in a browser. Flutter keeps the native project for each platform in a folder named after it. Branch `6` has a `web` folder but no `android` folder. If your project does not already have an `android` folder, add the Android project from the project root:
 
 ```bash
 flutter create --platforms=android .
 ```
 
-The `.` means the current folder. The command adds the `android` folder and leaves your existing `lib`, `test` and `assets` files unchanged. If your project already has an `android` folder, you can skip this step.
+The `.` means the current folder. The command adds the `android` folder and leaves your existing `lib`, `test` and `assets` files unchanged.
 
 ### Select the device and run the app
 
@@ -211,7 +213,7 @@ flutter pub add --dev sqflite_common_ffi
 
 `sqflite` opens SQLite on Android. `path` provides `join` to build a file path, and `sqflite_common_ffi` supplies SQLite for tests on your computer, not the mobile app. Keep the `shared_preferences` dependency from Worksheet 6.
 
-You should see the following changes in your `pubspec.yaml` file:
+You should see the following changes in your `pubspec.yaml` file. Your version numbers may differ:
 
 ![Changes in pubspec.yaml after adding SQLite packages](images/7/pubspec_yaml_changes.png)
 
@@ -320,7 +322,7 @@ On a Mac, `sqflite` also runs on the iOS simulator and on macOS desktop. Install
   }
 ```
 
-As with Android, the project needs a folder for each new platform. Add them with `flutter create --platforms=ios,macos .`, leaving out any platform you do not need. The command also creates a `test/widget_test.dart` template that does not match our app, so delete that file. Then select the iOS simulator or **macOS** in the device selector and run the app.
+As with Android, the project needs a folder for each new platform. Add them with `flutter create --platforms=ios,macos .`, leaving out any platform you do not need. If the command creates a new `test/widget_test.dart` template, delete that template; keep any existing tests. Then select the iOS simulator or **macOS** in the device selector and run the app.
 
 ### Windows support
 
@@ -333,7 +335,7 @@ flutter create --platforms=windows .
 flutter pub add sqflite_common_ffi
 ```
 
-The first command creates a `windows` folder. It also creates the `test/widget_test.dart` template, so delete that file.
+The first command creates a `windows` folder. If it also creates a new `test/widget_test.dart` template, delete that template; keep any existing tests.
 
 In `lib/main.dart`, add this import:
 
@@ -366,13 +368,11 @@ On Linux, install the build tools listed in the [Flutter Linux setup guide](http
 
 ## Representing a saved order
 
-<!-- TODO: Done till here. -->
-
-SQLite is a local database engine: it stores tables in a file without a separate server. A table contains rows, and each row has named columns. Our `orders` table will store one completed basket per row.
+A SQL table has named columns, and each row contains values for those columns. Our `orders` table will store one completed basket per row.
 
 ### Create the order record and its constructor
 
-Create `lib/models/order_record.dart` with `class OrderRecord {}`. Use the [model-building pattern from Worksheet 3](worksheet-3.md#define-the-sandwich-data-model). Inside its braces, declare:
+Create a `lib/models/order_record.dart` file with a class called `OrderRecord`. Inside its braces, declare:
 
 ```dart
   final int? id;
@@ -382,7 +382,7 @@ Create `lib/models/order_record.dart` with `class OrderRecord {}`. Use the [mode
   final String date;
 ```
 
-`id` is absent before insertion; SQLite assigns it when saving the row. `orderNumber` tracks the order sequence, while `summary`, `total` and `date` store the purchase details.
+The `id` instance variable is `null` for a new order. SQLite assigns an id to its row when it is inserted. `orderNumber` tracks the order sequence, while `summary`, `total` and `date` store the purchase details.
 
 Add the constructor:
 
@@ -396,11 +396,11 @@ Add the constructor:
   });
 ```
 
-Each completed purchase is saved as one row in SQLite. Rather than building a multi-table relational schema with joins, we flatten the basket into a plain text summary, keeping our database design simple and focused. `CartItem` still contains only a sandwich and quantity; do not change that model.
+Each completed purchase is saved as one row in SQLite. To keep things simple, rather than building a multi-table relational schema with joins, we flatten the basket (the list of `CartItem` objects, which includes the sandwiches and their quantities) into a plain text summary. `CartItem` still contains only a sandwich and quantity; do not change that model.
 
 ### Convert an order into a database row
 
-A `Map<String, Object?>` pairs string keys with values: each key is a column name, and each value is the data for that column. `Object?` allows any Dart value, including `null`; here we only use SQLite-supported values. Inside `OrderRecord`, add an empty `Map<String, Object?> toMap() {}` method.
+A `Map<String, Object?>` pairs string keys with values: each key is a column name, and each value is the data for that column. `Object?` allows any Dart value (`Object`), including `null`; here we only use SQLite-supported values. Inside `OrderRecord`, add an empty `Map<String, Object?> toMap() {}` method.
 
 Inside the method, build the row:
 
@@ -422,11 +422,11 @@ After the map, add the id only if it exists, then return the row:
     return data;
 ```
 
-The keys are column names, not necessarily Dart field names. Leaving out a new order's id lets SQLite generate it.
+The keys are column names, not necessarily the Dart instance variable names. Leaving out a new order's id lets SQLite generate a unique id automatically.
 
 ### Convert a database row into an order
 
-Add `factory OrderRecord.fromMap(Map<String, Object?> map) {}`. Inside it, read the values using the same conversion pattern as [the sandwich JSON constructor](worksheet-6.md#convert-a-json-map-into-a-sandwich). A map lookup returns `Object?`; `as int` tells Dart that this value must be an integer, and fails if it is not. We know the types because our table defines them:
+Add `factory OrderRecord.fromMap(Map<String, Object?> map) {}`. Inside it, we will read the values using the same conversion pattern as [the sandwich JSON constructor](worksheet-6.md#convert-a-json-map-into-a-sandwich). A map lookup returns `Object?`; `as int` tells Dart that this value must be an integer, and fails if it is not. We know the types because our table defines them:
 
 ```dart
     final int orderNumber = map['order_number'] as int;
@@ -454,11 +454,11 @@ Your `order_record.dart` file should look like this:
 
 ## Creating the SQLite database helper
 
-We keep database operations in `lib/database/sandwich_db.dart`, following the [SQLite cookbook recipe](https://docs.flutter.dev/cookbook/persistence/sqlite). Screens call this helper instead of repeating SQL.
+Create a file `lib/database/sandwich_db.dart`. Following the [SQLite cookbook recipe](https://docs.flutter.dev/cookbook/persistence/sqlite), we will keep database operations in this helper class rather than scattering SQL queries throughout the app. Screens call this helper instead of repeating SQL.
 
 ### Create one shared database helper
 
-Create the file with these imports and an empty class:
+In `lib/database/sandwich_db.dart`, start with these imports and an empty class:
 
 ```dart
 import 'package:path/path.dart';
@@ -468,7 +468,9 @@ import 'package:sqflite/sqflite.dart';
 class SandwichDatabase {}
 ```
 
-Inside the class, reuse the [singleton pattern from Worksheet 5](worksheet-5.md#create-the-cart-repository-singleton). A singleton gives the screens one shared helper, just as `CartRepository.instance` gives them one shared basket. `_internal` is a private named constructor, so other files cannot create their own helper:
+Recall the [singleton pattern from Worksheet 5](worksheet-5.md#create-the-cart-repository-singleton). A singleton gives the screens one shared helper, just as `CartRepository.instance` gives them one shared basket. The `_internal` named constructor is private, so other files cannot create their own helper.
+
+Add the following code inside the `SandwichDatabase` class to implement the singleton pattern:
 
 ```dart
   SandwichDatabase._internal();
@@ -504,7 +506,9 @@ This reuses the connection after the first call. Checking the local `cachedDatab
 
 ### Open the database in the app folder
 
-`getDatabasesPath` finds the app's writable database folder. `join` from the `path` package combines that folder with a file name using the operating system's path separator. `openDatabase` opens the file, creating it if necessary. Inside `SandwichDatabase`, add `_initDB`:
+In the following code, `getDatabasesPath` finds the app's writable database folder. `join` from the `path` package combines that folder with a file name using the operating system's path separator. The separator is `/` on macOS and Linux and `\` on Windows; `path` handles this automatically.
+
+Next, `openDatabase` opens the file, creating it if necessary. Inside `SandwichDatabase`, add `_initDB`:
 
 ```dart
   Future<Database> _initDB(String fileName) async {
@@ -519,15 +523,13 @@ This reuses the connection after the first call. Checking the local `cachedDatab
   }
 ```
 
-`version` identifies the table structure. `onCreate` receives a callback, `_createDB`, which runs only when the database is first created.
-
-We define `_createDB` below. There is no platform switch here: the app uses the Android plugin, and tests supply their own connection through `setDatabase`.
+`version` identifies the table structure. `onCreate` receives a callback, `_createDB`, which runs only when the database is first created. We define `_createDB` below.
 
 ### Create the orders table
 
-Add an empty `Future<void> createTables(Database db, int version) async {}` method. We give it a public name so tests can create the exact same table without duplicating SQL.
+Add an empty `Future<void> createTables(Database db, int version) async {}` method inside `SandwichDatabase`. Unlike `_initDB`, its name does not start with an underscore, so tests can call it directly to create the same table without adding sample orders.
 
-SQL is the language used to define and query database tables. `CREATE TABLE` defines the columns of a new table; `IF NOT EXISTS` leaves an existing table alone. Inside the method, use `execute` to run this statement:
+`CREATE TABLE` defines the columns of a new table; `IF NOT EXISTS` leaves an existing table alone. Inside `createTables`, use `execute` to run this SQL statement:
 
 ```dart
     await db.execute('''
@@ -543,11 +545,15 @@ SQL is the language used to define and query database tables. `CREATE TABLE` def
 
 `execute` runs the statement without returning rows. `INTEGER`, `TEXT` and `REAL` store whole numbers, strings and decimal numbers. `PRIMARY KEY` uniquely identifies a row; `AUTOINCREMENT` assigns ids without reusing earlier automatically generated ids. `NOT NULL` requires a value.
 
-The triple quotes let a Dart string span several lines. Each column matches a key in `OrderRecord.toMap`. See [creating a table in the SQLite recipe](https://docs.flutter.dev/cookbook/persistence/sqlite#4-create-the-dogs-table).
+The triple quotes let a Dart string span several lines. The column names match the keys used by `OrderRecord.toMap`, including `id` when it is present.
 
 ### Seed past orders only when creating the database
 
-Add `_createDB`:
+Seeding means adding initial data to a database. We will add three sample orders when the database is first created.
+
+Add the private `_createDB` method inside `SandwichDatabase`. As the `onCreate` callback, it creates the table and inserts the sample orders.
+
+First, call `createTables` inside `_createDB`:
 
 ```dart
   Future<void> _createDB(Database db, int version) async {
@@ -588,11 +594,13 @@ Then add the third:
     });
 ```
 
-These are seed data: example rows added once to populate a new database. Reopening the app does not add them again. Tests call `createTables` directly when they need an empty table.
+Reopening the app does not add the sample orders again. Tests call `createTables` directly when they need an empty table.
 
-Changing this SQL or the seed values does not change an existing database. During development, clearing the emulator app's storage or uninstalling it creates a fresh start, but also deletes saved orders and preferences. Real updates need a schema migration rather than deleting user data.
+Changing this SQL or the seed values does not change an existing database. During development, clearing the emulator app's storage or uninstalling it creates a fresh start, but also deletes saved orders and preferences.
 
 ### Insert an order and read saved orders
+
+The screens need methods to insert new orders and read saved orders.
 
 Add the insert method:
 
@@ -626,6 +634,8 @@ Add the insert method:
 
 ### Find the next order number and close the connection
 
+For demonstration purposes, order numbers start at `1001`. The next order number is one greater than the current maximum in the database.
+
 `rawQuery` runs an SQL `SELECT` statement that you write yourself. `MAX` finds the largest value in a column, and `as max_num` gives the result a column name. Add `getNextOrderNumber` to calculate the next sequence number:
 
 ```dart
@@ -648,7 +658,7 @@ Add the insert method:
   }
 ```
 
-`MAX` returns `null` when the table has no orders. Otherwise, convert the value once and add one. An empty table starts at `1001`; a new app with our seed data starts at `1004`. This numbering is for our single-user teaching app, not a multi-user payment system.
+`MAX` returns `null` when the table has no orders. Otherwise, convert the value once and add one. An empty table starts at `1001`; a new app with our seed data starts at `1004`. This approach assumes orders are saved one at a time.
 
 Finally, add a method to close an existing connection and reset the field:
 
@@ -722,7 +732,17 @@ Inside the state class, add `initState`:
   }
 ```
 
-`try` contains work that might fail; `catch (error)` runs if that work throws an error. Following [the menu loader from Worksheet 6](worksheet-6.md#load-the-menu-when-the-screen-opens), add `Future<void> _loadOrders() async {}` with empty `try` and `catch (error)` blocks. `mounted` tells us whether this state still belongs to a widget on screen. After an `await`, check it before calling `setState`, because the user might have left the screen. Inside `try`, add:
+`try` contains work that might fail; `catch` runs if that work throws an error. Similar to [the menu loader from Worksheet 6](worksheet-6.md#load-the-menu-when-the-screen-opens), add `Future<void> _loadOrders() async {}`. Inside it, type `try` and select the `try` snippet as shown below:
+
+![VS Code suggesting the try snippet in the orders loader](images/7/load_orders_try_catch.png)
+
+Press **Enter** to insert the empty `try` and `catch (e)` blocks, as shown below:
+
+![Structure after adding empty try and catch blocks](images/7/load_orders_structure.png)
+
+If the snippet does not appear, type `try {} catch (e) {}` yourself. Rename `e` to `error` so it matches the code below.
+
+Inside `try`, add the following. `mounted` tells us whether this state still belongs to a widget on screen. After an `await`, check it before calling `setState`, because the user might have left the screen:
 
 ```dart
       final List<OrderRecord> orders =
@@ -736,7 +756,7 @@ Inside the state class, add `initState`:
       });
 ```
 
-Inside `catch`, add:
+Inside `catch`, add the following code to report the error and update the state:
 
 ```dart
       if (!mounted) {
@@ -752,7 +772,7 @@ This uses the same asynchronous loading pattern once again, rather than introduc
 
 ### Build an order card in stages
 
-Add this helper:
+Add this helper in the `_OrdersScreenState` class, below `_loadOrders`:
 
 ```dart
   Widget _buildOrderCard(OrderRecord order) {
@@ -769,7 +789,9 @@ Add this helper:
   }
 ```
 
-The layout reuses the [card, padding and column from Worksheet 3](worksheet-3.md#lay-out-the-image-and-text). Inside the empty `children` list, add a row for the number and total:
+We will do the same thing we did on the home screen when we displayed [sandwich cards in Worksheet 3](worksheet-3.md#create-the-sandwichcard-widget).
+
+Inside the empty `children` list, add a row for the number and total:
 
 ```dart
             Row(
@@ -796,9 +818,13 @@ After the row, add the summary and date:
             ),
 ```
 
+This is the finished `_buildOrderCard` method:
+
+![The completed order card widget](images/7/order_card.png)
+
 ### Choose the loading, error, empty or list body
 
-Replace the `Placeholder` return in `build`. First declare `body` and choose the first three states:
+In `build`, replace `return const Placeholder();` with the following code to declare `body` and choose the first three states:
 
 ```dart
     final Widget body;
@@ -819,7 +845,13 @@ Replace the `Placeholder` return in `build`. First declare `body` and choose the
     }
 ```
 
-This follows the [loading and error states from Worksheet 6](worksheet-6.md#display-loading-and-error-states), with one extra branch for a table that has no rows. The editor still reports an error, because `body` is not assigned when there are orders to show. Immediately after the last closing brace, add the populated state:
+After the conditional, add `return body;`. This is similar to the [loading and error states from Worksheet 6](worksheet-6.md#display-loading-and-error-states), with one extra branch for a table that has no rows.
+
+This is what your code should look like now:
+
+![The orders screen with loading, error and empty states](images/7/orders_screen_states.png)
+
+The editor still reports an error, because `body` is not assigned when there are orders to show. Immediately after the closing brace of the `if` statement, add an `else` block for the populated state:
 
 ```dart
     else {
@@ -832,7 +864,7 @@ This follows the [loading and error states from Worksheet 6](worksheet-6.md#disp
     }
 ```
 
-Every branch now assigns `body` exactly once. After the conditional, return the screen:
+Every branch now assigns `body` exactly once. Replace `return body;` with a `Scaffold`:
 
 ```dart
     return Scaffold(
@@ -852,13 +884,15 @@ You cannot see the empty state in the app yet, because the database starts with 
 
 ### Register the orders route and add navigation buttons
 
-In `lib/main.dart`, import `orders_screen.dart` and add this entry to the existing `routes` map, following [named routes in Worksheet 5](worksheet-5.md#register-named-routes):
+In `lib/main.dart`, import `orders_screen.dart` and add this entry to the existing `routes` map:
 
 ```dart
         '/orders': (BuildContext context) {
           return const OrdersScreen();
         },
 ```
+
+<!-- TODO: done till here -->
 
 Create `lib/widgets/orders_button.dart` by copying the completed [BasketButton from Worksheet 5](worksheet-5.md#create-the-basket-button). Rename the class and constructor to `OrdersButton`, replace `Icons.shopping_basket` with `Icons.receipt_long`, and replace both occurrences of `'/basket'` with `'/orders'`.
 
