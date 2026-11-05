@@ -252,25 +252,112 @@ This section practises [planning first](#explore-and-plan-before-changing-code) 
 
 ## End-to-end integration testing with AI
 
+Your unit tests check one class and your widget tests check one screen. Both run on your computer, with a simulated screen and an in-memory database. An integration test checks a whole user journey instead. It installs the real app on the emulator, taps through several screens the way a user would and saves to the real SQLite database on the device.
+
+Integration tests are long and repetitive to write, and every step depends on the exact labels and screens of your app. This makes them a good task to give to an AI agent, as long as you [give it a check to run](#give-the-assistant-a-check-to-run) and [review every change](#review-and-understand-every-change). In this section, you let Copilot write and run one for the Sandwich Shop.
+
 ### Setting up the Flutter integration test package
 
-<!-- TODO: Introduce integration_test:
-- Contrast widget tests (isolated, simulated clock) with integration tests (running on actual Android emulator or device).
-- Add `integration_test` to `dev_dependencies` in `pubspec.yaml`.
-- Create `integration_test/app_test.dart` entry point with `IntegrationTestWidgetsFlutterBinding.ensureInitialized()`. -->
+Integration tests use the `integration_test` package, which comes with the Flutter SDK. Add it under `dev_dependencies` in `pubspec.yaml`, below `flutter_test`:
+
+```yaml
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+```
+
+Save the file and run `flutter pub get` in the terminal. Integration tests live in a folder called `integration_test` at the root of the project, next to `lib` and `test`. Keeping them separate matters, because `flutter test` on its own runs only the `test` folder.
+
+An integration test file looks like a widget test file with two differences. It first calls `IntegrationTestWidgetsFlutterBinding.ensureInitialized()` so that the test can drive the app on a device, and it starts the whole app with `runApp` instead of pumping a single screen. Create `integration_test/app_test.dart` with a first test that only checks that the menu opens:
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:sandwich_shop/main.dart';
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets('the menu opens on the emulator', (WidgetTester tester) async {
+    runApp(const App());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Footlong Sub'), findsOneWidget);
+  });
+}
+```
 
 ### Prompting Copilot for complete user flow integration tests
 
-<!-- TODO: Prompting Copilot for end-to-end flows:
-- End-to-end journey: launch app -> select sandwich -> add to basket -> checkout -> verify order appears in SQLite history -> toggle dark mode in settings.
-- Guide Copilot to use real UI taps (`tester.tap`), scrolling (`tester.scrollUntilVisible`), and waiting for animations (`tester.pumpAndSettle`). -->
+Open Copilot Chat and switch it to Agent mode, so that it can edit files and run commands in the terminal. Describe the journey step by step, name the files it should read and tell it how to check its own work:
+
+```text
+Read lib/main.dart, the files in lib/screens and the widget tests in
+test/screens. Add a second test to integration_test/app_test.dart that runs
+the real app on the Android emulator and:
+1. orders one Footlong Sub from the menu,
+2. opens the basket and checks out,
+3. checks that the orders page shows the order that was just saved.
+Do not change any file in lib. Run the test with
+flutter test integration_test/app_test.dart -d <emulator-id>
+and keep fixing the test until it passes.
+```
+
+Replace `<emulator-id>` with the id of your emulator. Run `flutter devices` in the terminal to find it; it usually looks like `emulator-5554`. The agent asks for permission before it runs each command, so read the command before you allow it.
+
+Do not expect the first attempt to pass. When we tried this prompt, the first run failed because the order page starts with a quantity of 0, so the test had to tap **Add** before **Add to Basket**. The agent should read the error, fix the test and run it again. Your job is to check that each fix changes the test, not `lib`, and that it does not hide a real bug in the app.
+
+When the test passes, read it line by line. The version the agent wrote for us ended like this:
+
+```dart
+    final int expectedOrderNumber =
+        await SandwichDatabase.instance.getNextOrderNumber();
+
+    final Finder firstOrderButton = find.text('Order').first;
+    await tester.tap(firstOrderButton);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Add'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Add to Basket'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.shopping_basket));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Checkout'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Order #$expectedOrderNumber'), findsOneWidget);
+```
+
+The emulator keeps its database between runs, so every run saves one more order. That is why the test reads the next order number before checkout and then looks for exactly that order. A weaker test that only checks that some `Order #` text is visible would also pass on the sample orders, even if checkout saved nothing. Look out for these weak spots in your agent's test too:
+
+- Assertions that would still pass if the feature were broken.
+- Fixed waits such as `Future.delayed` instead of `pumpAndSettle`.
+- Finders such as `find.text('Order')` that match several widgets, without `first`, `last` or a key to pick the right one.
+- Any change outside `integration_test`, such as a new key or a changed label in `lib`, which you did not ask for.
+
+To prove that the test can fail, comment out the line in `basket_screen.dart` that inserts the order and run it again. The test should now fail. Undo your change before you continue.
 
 ### Running integration tests on the Android emulator
 
-<!-- TODO: Running integration tests:
-- Command: `flutter test integration_test/app_test.dart -d <emulator-id>`.
-- Observing the automated execution live on the Android emulator screen.
-- Debugging timing issues and test timeouts. -->
+Start your emulator, then run the test file from the terminal:
+
+```bash
+flutter test integration_test/app_test.dart -d emulator-5554
+```
+
+Flutter builds the app, installs it on the emulator and runs each test while you watch the taps happen on the emulator screen. The first run takes a minute or so because of the build. When it finishes, the terminal should show this:
+
+```text
+00:23 +2: All tests passed!
+```
+
+If a test times out or cannot find a widget, look at what the emulator showed when it stopped. Usually the test tapped too early or the expected text is slightly different from what the app shows. Integration tests do not count towards the coverage report from `flutter test --coverage`, so keep your unit and widget tests as well. Integration tests are slower, so use a few of them for the most important journeys only.
 
 ## Exercises
 
