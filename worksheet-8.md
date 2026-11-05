@@ -6,11 +6,15 @@
   - [Continue from Worksheet 7](#continue-from-worksheet-7)
   - [Clone the Sandwich Shop repository](#clone-the-sandwich-shop-repository)
   - [Switch to branch 7](#switch-to-branch-7)
-- [Ways of working with an AI assistant](#ways-of-working-with-an-ai-assistant)
-  - [Prompt-driven development](#prompt-driven-development)
-  - [Review-driven development](#review-driven-development)
-  - [Test-driven development with AI](#test-driven-development-with-ai)
-  - [Large and repetitive changes](#large-and-repetitive-changes)
+- [Working with an AI assistant](#working-with-an-ai-assistant)
+  - [What employers expect](#what-employers-expect)
+  - [Give the assistant context](#give-the-assistant-context)
+  - [Explore and plan before changing code](#explore-and-plan-before-changing-code)
+  - [Work in small steps](#work-in-small-steps)
+  - [Give the assistant a check to run](#give-the-assistant-a-check-to-run)
+  - [Review and understand every change](#review-and-understand-every-change)
+  - [Keep learning while you use AI](#keep-learning-while-you-use-ai)
+  - [Use AI responsibly and sustainably](#use-ai-responsibly-and-sustainably)
 - [Introducing GitHub Copilot and workspace context](#introducing-github-copilot-and-workspace-context)
   - [Understanding workspace context and chat participants](#understanding-workspace-context-and-chat-participants)
   - [Crafting bounded and specific prompts](#crafting-bounded-and-specific-prompts)
@@ -56,25 +60,51 @@
 
 <!-- TODO: Command to check out branch 7 (`git checkout 7`). -->
 
-## Ways of working with an AI assistant
+## Working with an AI assistant
 
-<!-- TODO: Short overview of the four ways of working used in this worksheet. Each later section names which one it practises. Students already know Dart, Flutter, testing and SQLite from Worksheets 1 to 7, so they can now judge AI output instead of copying it. -->
+<!-- TODO: Introduce one workflow that the official guidance from GitHub, Anthropic, OpenAI and Google agrees on, rather than a list of named "styles". Each later section of this worksheet practises one or more of the steps below and should link back to it. Sources to cite and link:
+- GitHub Docs, Best practices for using GitHub Copilot: https://docs.github.com/copilot/get-started/best-practices-for-using-github-copilot
+- GitHub Docs, Prompt engineering for GitHub Copilot Chat: https://docs.github.com/en/copilot/concepts/prompting-and-context/prompt-engineering
+- Claude Code Docs, Best practices: https://code.claude.com/docs/en/best-practices
+- OpenAI Cookbook, Iterating development workflows with Codex: https://developers.openai.com/cookbook/examples/codex/iterating-development-workflows-with-codex
+- Google DORA, State of AI-assisted Software Development 2025 and the DORA AI Capabilities Model: https://dora.dev/research/2025/dora-report/
+- Anthropic, How AI assistance impacts the formation of coding skills (2026): https://www.anthropic.com/research/AI-assistance-coding-skills
+- Google Cloud, Measuring the environmental impact of AI inference (2025): https://cloud.google.com/blog/products/infrastructure/measuring-the-environmental-impact-of-ai-inference -->
 
-### Prompt-driven development
+### What employers expect
 
-<!-- TODO: The developer describes a small, bounded change and the assistant writes the first draft. Practised in the README and dark mode sections. Stress: name the files, the goal and the constraints; ask for one step at a time. -->
+<!-- TODO: DORA 2025 (nearly 5,000 professionals): about 90% use AI at work, yet about 30% report little or no trust in AI-generated code. Its key finding is that "AI is an amplifier": it magnifies good engineering practice and bad practice alike. Two of its seven AI capabilities are strong version control and working in small batches, which students already practise. Employers want graduates who can direct an assistant and judge its output, not graduates who can only prompt. -->
 
-### Review-driven development
+### Give the assistant context
 
-<!-- TODO: The developer treats every AI change like a pull request from a colleague: read every changed line in the diff, reject unrequested edits, run `dart analyze` and `flutter test`, and check the behaviour in the running app. Practised in the dark mode section and again for every later change. -->
+<!-- TODO: The assistant only knows what it can see. Name the files, the goal and the constraints (GitHub: "be specific about your requirements", "provide examples"). Keep durable project rules in a repository instructions file such as `.github/copilot-instructions.md` or `AGENTS.md` (for example: verbose Dart, no arrow syntax, squared buttons, test folders mirror lib). Practised in "Introducing GitHub Copilot and workspace context" and "Connecting external tools with Model Context Protocol". -->
 
-### Test-driven development with AI
+### Explore and plan before changing code
 
-<!-- TODO: Red, green, review. The developer writes (or asks for) a test that describes the wanted behaviour, runs it and watches it fail, and only then asks the assistant to change `lib/`. A test that passes before the change proves nothing. The test then guards against the assistant "fixing" the problem by weakening the test. Practised in "Adding a feature test first". -->
+<!-- TODO: Claude Code, Codex and Copilot all recommend a read-only exploration and an agreed plan before edits for anything larger than a one-line fix (Copilot's Plan agent, Claude's plan mode, Codex's read-only preflight). Ask the assistant to explain the relevant code and propose a plan, then correct the plan before any file changes. Practised in "Storing order items in a related table". -->
 
-### Large and repetitive changes
+### Work in small steps
 
-<!-- TODO: Changes that touch many files (a new table, a renamed field, updating every test) are tedious by hand but quick with an assistant. Because the change is large, plan it first, ask for it in stages, commit between stages and review each diff. Practised in "Storing order items in a related table". -->
+<!-- TODO: Break a large task into small, separately verifiable steps (GitHub: "break down complex tasks"; DORA: working in small batches). Commit after each reviewed step so `git diff` shows only the next change and any step can be undone. This is also what makes large, repetitive changes (renaming a field everywhere, adding a table and updating every test) safe to hand to an assistant. -->
+
+### Give the assistant a check to run
+
+<!-- TODO: Claude Code's docs: "give Claude a check to run". The strongest check is a test written first: write or ask for a test of the wanted behaviour, run it and watch it fail, commit it, then ask the assistant to make it pass without editing the test (test-driven development). `dart analyze`, `dart format` and `flutter test` are checks the assistant can run after every change. Practised in "Adding a feature test first". -->
+
+### Review and understand every change
+
+<!-- TODO: GitHub: "Understand suggested code before you implement it" and "Review Copilot's suggestions carefully", considering functionality, security, readability and maintainability. Read every line of the diff as you would a colleague's pull request, reject edits you did not ask for, run the checks, and try the feature in the running app. You are responsible for any code you commit, whoever wrote it. Practised in "Reviewing inline diffs and code suggestions" and "Auditing tests and checking coverage". -->
+
+### Keep learning while you use AI
+
+<!-- TODO: Anthropic's 2026 randomised trial found that developers who handed a new task fully to AI understood the code less well and were worse at reading and debugging it, with no significant time saving on average. Those who asked for explanations and conceptual help kept their learning. For students: use AI to explain and to check your thinking, write the first attempt yourself when learning something new, and make sure you can explain every line in your demo. -->
+
+### Use AI responsibly and sustainably
+
+<!-- TODO: Short guidance:
+- Never paste secrets, personal data or other people's private code into an assistant; check what your tool sends and stores.
+- Follow the university's academic integrity rules and say where you used AI.
+- Each prompt has a small energy and water cost (Google estimates about 0.24 Wh for a median Gemini text prompt in 2025), and long agent runs use many prompts. Prefer focused prompts, a smaller model for simple tasks, and your own knowledge for things you already know. -->
 
 ## Introducing GitHub Copilot and workspace context
 
@@ -151,7 +181,7 @@
 
 ## Adding a feature test first
 
-This section practises [test-driven development with AI](#test-driven-development-with-ai).
+This section practises [giving the assistant a check to run](#give-the-assistant-a-check-to-run).
 
 ### Writing a failing test
 
@@ -168,7 +198,7 @@ This section practises [test-driven development with AI](#test-driven-developmen
 
 ## Storing order items in a related table
 
-This section practises [large and repetitive changes](#large-and-repetitive-changes) with review at every stage.
+This section practises [planning first](#explore-and-plan-before-changing-code) and [working in small steps](#work-in-small-steps) on a large change, with review at every stage.
 
 ### Why one summary string is not enough
 
