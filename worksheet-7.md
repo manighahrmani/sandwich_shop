@@ -301,7 +301,7 @@ If you accidentally run the app on an unsupported browser or desktop target, the
 
 ![The fallback screen displayed when running on an unsupported platform](images/7/unsupported_platform_screen.png)
 
-From now on, ensure your Android emulator or physical Android device is selected before running the app, as described in [Select the device and run the app](#select-the-device-and-run-the-app).
+From now on, ensure your Android emulator or physical Android device is selected before running the app, as described in [Select the device and run the app](#select-the-device-and-run-the-app). The app no longer runs in a browser, so you can delete the `web` folder, as branch `7` does.
 
 ## Run on other platforms
 
@@ -892,17 +892,29 @@ In `lib/main.dart`, import `orders_screen.dart` and add this entry to the existi
         },
 ```
 
-<!-- TODO: done till here -->
+Create `lib/widgets/orders_button.dart`. In it, copy the completed [BasketButton from `basket_button` which we made in Worksheet 5](worksheet-5.md#create-the-basket-button). Rename the class and constructor to `OrdersButton`, by right clicking on its name, then selecting "Rename Symbol" (or pressing `F2`) and entering `OrdersButton` as shown below:
 
-Create `lib/widgets/orders_button.dart` by copying the completed [BasketButton from Worksheet 5](worksheet-5.md#create-the-basket-button). Rename the class and constructor to `OrdersButton`, replace `Icons.shopping_basket` with `Icons.receipt_long`, and replace both occurrences of `'/basket'` with `'/orders'`.
+![Renaming the BasketButton class to OrdersButton](images/7/rename_basket_button_to_orders_button.png)
+
+Replace `Icons.shopping_basket` with the receipt icon `Icons.receipt_long`, and replace both occurrences of `'/basket'` with `'/orders'`. To do this open the Search panel in your editor, search for `'/basket'` in the `orders_button.dart` file, and replace them with `'/orders'`. (Make sure to only replace it in the `orders_button.dart` file.) See below:
+
+![Replacing the route and icon in OrdersButton](images/7/orders_button_route_and_icon.png)
 
 Keep the existing route-name check so pressing the receipt icon while already on orders does not push a second orders screen. No new navigation mechanism is needed.
 
-`Navigator.pushNamed` opens the screen registered under a route name, just as it does for the basket in Worksheet 5. Import `orders_button.dart` into the order, basket and orders screens. In those three app bars, use:
+`Navigator.pushNamed` opens the screen registered under a route name, just as it does for the basket in Worksheet 5. Import `orders_button.dart` into the order, basket and orders screens as shown below:
+
+![Importing the OrdersButton into the order, basket and orders screens](images/7/import_orders_button.png)
+
+In those three app bars, use:
 
 ```dart
         actions: const [OrdersButton(), BasketButton()],
 ```
+
+See below the changes that you need to make:
+
+![Changes to the app bars to include the OrdersButton](images/7/app_bar_changes.png)
 
 Leave the menu and settings screens unchanged from Worksheet 6. On the emulator, open the basket from the menu, then select the receipt icon. You should see orders `1003`, `1002` and `1001`, in that order, with their summaries, totals and dates, as shown below:
 
@@ -933,7 +945,11 @@ Inside `_BasketScreenState`, add:
   }
 ```
 
-The list method `join` combines strings with a separator to create a summary such as `2 x Footlong Sub, 1 x Six-Inch Sub`. This is different from the file-path function imported in the database helper. Add a helper for the display date:
+This is what `basket_screen.dart` should look like:
+
+![Updated basket_screen.dart with the database imports and the order summary helper](images/7/basket_screen_updated.png)
+
+The list method `join` combines strings with a separator to create a summary such as `2 x Footlong Sub, 1 x Six-Inch Sub`. This is different from the file-path function imported in the database helper. Add a helper method to format the current date and time for the display date:
 
 ```dart
   String _formatDate(DateTime now) {
@@ -999,6 +1015,10 @@ Keep `PrimaryButton` unchanged from Worksheet 6: its `onPressed` is a non-nullab
           },
 ```
 
+This is what the changes should look like:
+
+![Updated checkout button callback in the basket screen](images/7/checkout_button_callback.png)
+
 The callback starts `_checkout`; that method handles its own asynchronous work and errors. Keep the delete button's existing callback:
 
 ```dart
@@ -1046,9 +1066,7 @@ adb shell "run-as com.example.sandwich_shop cat databases/sandwich_data.db > /da
 
 `adb` communicates with the Android device. `run-as` reads the debug app's private files by executing inside its application sandbox, copying the database to `/data/local/tmp/`, and `pull` downloads that copy to your computer. If you changed the Android application id, use that id instead. Re-running the chained command refreshes `sandwich_shop.db` whenever you make further database changes.
 
-Open `sandwich_shop.db` in VS Code using the bundle's **SQLite Viewer** extension. Select the `orders` table and check that it contains the three seed rows and your saved order, as shown below:
-
-![Inspecting the SQLite database in the SQLite Viewer extension](images/7/sqlite_viewer_orders_table.png)
+Open `sandwich_shop.db` in VS Code using the bundle's **SQLite Viewer** extension. Select the `orders` table and check that it contains the three seed rows and your saved order.
 
 This is a snapshot, not a live connection. Remove the copied file after inspection; it is runtime data, not an application asset.
 
@@ -1062,6 +1080,10 @@ Before adding database tests, we tidy the menu and the existing tests.
 
 In [Worksheet 6](worksheet-6.md#display-loading-and-error-states), we added a `Nonexistent Sandwich` to `assets/data/sandwiches.json` to test the image error message. The real menu does not sell it, so delete that object from the array, together with the comma before it. The file should end with the `Loaded Nachos` object.
 
+See below:
+
+![The sandwiches.json file after removing the temporary menu item](images/7/sandwiches_json_after_removal.png)
+
 Run the tests to see which ones depend on the old catalogue:
 
 ```bash
@@ -1074,19 +1096,33 @@ Two tests now fail on purpose, as shown below. The asset loader test in `test/sa
 
 A failing test is useful here: it points to every place that relied on the item we removed. In the asset loader test, change the length expectation from `4` to `3`, and delete the two expectations that read `sandwiches[3]`.
 
-In the app test that checks names and prices, delete the lines from `scrollUntilVisible(find.text('Nonexistent Sandwich'), 150)` to the end of the test. Keep the checks for `Loaded Nachos` and `£6.99`. Run `flutter test` again and check that every test passes.
+In `test/widget_test.dart`, find the test named `Displays sandwich cards with names and prices` inside the `App smoke tests` group. Delete the five lines from `scrollUntilVisible(find.text('Nonexistent Sandwich'), 150)` to `expect(tester.takeException(), isNull);`, but keep the closing `});` of the test. Keep the checks for `Loaded Nachos` and `£6.99`. Run `flutter test` again and check that every test passes.
+
+This is what `test/widget_test.dart` should look like after removing the lines related to the `Nonexistent Sandwich` test:
+
+![The updated widget_test.dart after removing the Nonexistent Sandwich test lines](images/7/widget_test_after_removal.png)
 
 ### Move the tests into mirrored folders
 
-Each test file should sit in a folder that matches the file it tests, so `test/` mirrors `lib/`. In the VS Code explorer, create `test/models/`, `test/repositories/` and `test/screens/`, then drag the existing test files into them. The two model tests, `sandwich_model_test.dart` and `user_settings_test.dart`, go into `test/models/`. The two repository tests go into `test/repositories/`, and the four screen tests for the basket, menu, order and settings screens go into `test/screens/`. Our tests import the app with `package:sandwich_shop/...` paths, so moving them does not break their imports.
+Each test file should sit in a folder that matches the file it tests, so `test/` mirrors `lib/`.
 
-The button test already lives under `test/widgets/`. Rename `sandwich_model_test.dart` to `sandwich_test.dart` so it matches `lib/models/sandwich.dart`. In the sandwich model tests, write the type in each `const` declaration, for example `const Sandwich sandwich = Sandwich(...)`, as our code style prefers explicit types.
+Moving files is another form of [refactoring](worksheet-3.md#move-orderscreen-into-its-own-file). When you move or rename a Dart file in the VS Code explorer, the Dart extension can update affected imports so they still point to the right files. Its [`dart.updateImportsOnRename`](https://dartcode.org/docs/settings/#dartupdateimportsonrename) setting is enabled by default and supports one file at a time. Not every move requires an import to change.
+
+For example, if `test/sandwich_model_test.dart` used `import '../lib/models/sandwich.dart';`, moving it into `test/models/` would require changing the relative import to `import '../../lib/models/sandwich.dart';` because the path starts from the test file's folder. The Dart extension can make this update, but [Dart discourages relative imports that reach into `lib/`](https://dart.dev/effective-dart/usage#dont-allow-an-import-path-to-reach-into-or-out-of-lib).
+
+Open `test/sandwich_model_test.dart` and find `import 'package:sandwich_shop/models/sandwich.dart';`. This package-absolute import uses the package name from `pubspec.yaml` to identify a file inside `lib/`, rather than a location on your computer. Prefer package imports when tests import app code: moving the test will not change this import. If the imported file itself moves or is renamed, the package import still needs updating.
+
+In the VS Code explorer, create `test/models/`, `test/repositories/` and `test/screens/`, then drag the existing test files into them one at a time. The two model tests, `sandwich_model_test.dart` and `user_settings_test.dart`, go into `test/models/`. The two repository tests go into `test/repositories/`, and the four screen tests for the basket, menu, order and settings screens go into `test/screens/`. After moving `sandwich_model_test.dart`, check that its `Sandwich` import is unchanged.
+
+The button test already lives under `test/widgets/`. Rename `sandwich_model_test.dart` to `sandwich_test.dart` so it matches `lib/models/sandwich.dart`. In the sandwich model tests, and in the tests you move below, write the type in each `const` declaration, for example `const Sandwich sandwich = Sandwich(...)`, as our code style prefers explicit types.
 
 `test/widget_test.dart` holds two kinds of test. Its `App smoke tests` group checks `lib/main.dart`, so rename the file to `test/main_test.dart`. Its `OrderItemDisplay` group and the two quantity-limit tests at the end of the smoke tests group check `lib/screens/order_screen.dart`, so cut them and paste them at the end of `main` in `test/screens/order_screen_test.dart`. Then remove the unused `Sandwich` import from `main_test.dart`.
 
 Run `flutter test` once more. The same tests should pass from their new folders. Your test folder structure in the editor should look like this:
 
 ![The mirrored test directory structure in the VS Code explorer](images/7/test_folders_mirrored.png)
+
+We have not written the database tests yet, and `constants.dart` only contains shared values, so it does not need a separate test file.
 
 ### Prepare a fresh database for each test
 
@@ -1101,7 +1137,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 void main() {}
 ```
 
-`setUp` runs before every test; `tearDown` runs afterwards, even when a test fails. Use them to give each test an empty database and close it afterwards. Add these inside `main`:
+The `setUp` function runs before every test; the `tearDown` function runs afterwards, even when a test fails. Use them to give each test an empty database and close it afterwards. Add these inside `main`:
 
 ```dart
   setUp(() async {
@@ -1127,7 +1163,7 @@ We pass the application's `createTables` method to `onCreate`, so tests exercise
 
 ### Test inserting, reading and numbering orders
 
-Inside `main`, add a small fixture builder:
+Inside `main`, add a small fixture builder to create reusable `OrderRecord` instances for your tests (recall that fixtures are reusable pieces of test data, in this case a function that returns an `OrderRecord` with specified fields).
 
 ```dart
   OrderRecord buildRecord(int orderNumber, String summary, double total) {
@@ -1193,9 +1229,20 @@ Add a third test for descending order:
   });
 ```
 
+Make sure to run all the database tests after adding them to verify that insertion, retrieval, and ordering of `OrderRecord` instances work correctly with your SQLite setup.
+
 ### Test order map conversion
 
-Create `test/models/order_record_test.dart` with the test tools and `OrderRecord` imports. Start with an empty `main`. Inside it, add this fixture:
+Create `test/models/order_record_test.dart` with the test tools and `OrderRecord` imports and an empty `main`:
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/models/order_record.dart';
+
+void main() {}
+```
+
+Inside `main`, add this fixture:
 
 ```dart
   const OrderRecord order = OrderRecord(
@@ -1206,7 +1253,7 @@ Create `test/models/order_record_test.dart` with the test tools and `OrderRecord
   );
 ```
 
-Check that a new order omits its database id and converts to a map:
+Check that a new order omits its database id and converts to a map (recall that the `id` is assigned by the database upon insertion and is not part of the initial order data, so it should be `null` before insertion):
 
 ```dart
   test('New orders omit database ids and convert to map', () {
@@ -1241,7 +1288,7 @@ Check the reverse conversion with a complete database row:
   });
 ```
 
-SQLite may return a whole number for a total. Check that our `num` conversion still produces a `double`:
+SQLite may return a whole number for a total. Check that our `num` conversion still produces a `double` since the `total` field in `OrderRecord` is expected to be a `double` regardless of how SQLite stores it:
 
 ```dart
   test('Whole-number SQLite totals become doubles', () {
@@ -1252,6 +1299,8 @@ SQLite may return a whole number for a total. Check that our `num` conversion st
     expect(restored.total, isA<double>());
   });
 ```
+
+Run `flutter test test/models/order_record_test.dart` and check that all three tests pass.
 
 ### Update the basket checkout test
 
@@ -1264,7 +1313,7 @@ import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 ```
 
-Replace its `setUp` with the database setup above, keeping `CartRepository.instance.clear();` as the first statement inside it. Add the same `tearDown` to close the database. This keeps tests independent without changing their basket fixtures.
+Replace its `setUp` with the setup from [Prepare a fresh database for each test](#prepare-a-fresh-database-for-each-test), keeping `CartRepository.instance.clear();` as the first statement inside it. Add the same `tearDown` to close the database. This keeps tests independent without changing their basket fixtures.
 
 Add a checkout test shell inside `main`:
 
@@ -1293,7 +1342,7 @@ Inside the test, add two sandwiches and render a basket with an orders route:
     );
 ```
 
-[`runAsync`](https://api.flutter.dev/flutter/flutter_test/WidgetTester/runAsync.html) allows real asynchronous work inside a widget test, which otherwise controls time itself. Use it while checkout writes to SQLite, then let the navigation frames settle:
+Widget tests control when the app updates, but the SQLite save needs real asynchronous work to finish. Use [`runAsync`](https://api.flutter.dev/flutter/flutter_test/WidgetTester/runAsync.html) for checkout, then use `pumpAndSettle` to wait for the app to finish opening the orders screen:
 
 ```dart
     await tester.runAsync(() async {
@@ -1536,16 +1585,22 @@ The exercises below apply these concepts to your Southsea Cinema coursework. Tog
 
 Build on the cinema app from Worksheet 6. Keep the JSON film catalogue, saved profile settings, drawer navigation, squared buttons and ticket basket you already built. Past bookings appear on the basket page, so you do not need a separate bookings page.
 
-1. Set up an Android emulator or device, following [Preparing an Android emulator or device](#preparing-an-android-emulator-or-device). If your cinema project has no `android` folder, add one as in [Add Android support to the project](#add-android-support-to-the-project). Add the SQLite packages, as in [Adding the SQLite packages](#adding-the-sqlite-packages), and check that the app runs on the emulator.
+1. Set up an Android emulator or device, as shown in the [Preparing an Android emulator or device section of this worksheet](#preparing-an-android-emulator-or-device). If your cinema project has no `android` folder, add one as in [Add Android support to the project section](#add-android-support-to-the-project). Add the SQLite packages too, as shown in [Adding the SQLite packages](#adding-the-sqlite-packages). Make sure to check that the app runs on the emulator.
 
-2. Create a `Booking` model in `lib/models/booking.dart` with an optional `id`, a `bookingNumber`, a `summary`, a `total` and a `date`, following [Representing a saved order](#representing-a-saved-order). Add `toMap` and `fromMap`, and test both conversions, including a whole-number total, as in [Test order map conversion](#test-order-map-conversion).
+2. Create a `Booking` model in `lib/models/booking.dart` with an optional `id`, a `bookingNumber`, a `summary`, a `total` and a `date`. See the example in the [Representing a saved order section](#representing-a-saved-order).
+  
+    Make sure to test your `Booking` model thoroughly as we did for `OrderRecord` in the Sandwich Shop, including the `toMap` and `fromMap` conversions and handling of whole-number totals.
 
-3. Create a `CinemaDatabase` singleton in `lib/database/cinema_db.dart`, following [Creating the SQLite database helper](#creating-the-sqlite-database-helper). It should create a `bookings` table, add two or three sample bookings only when the database is first created, save a booking, read all bookings with the highest booking number first, return the next booking number (`1001` for an empty table) and close the connection. Test it with an in-memory database, as in [Test inserting, reading and numbering orders](#test-inserting-reading-and-numbering-orders).
+3. Create a `CinemaDatabase` in `lib/database/cinema_db.dart`. See the example in [Creating the SQLite database helper section](#creating-the-sqlite-database-helper) for reference.
 
-4. Make checkout on the basket page save a numbered `Booking` before it clears the basket, and show the booking number in the confirmation message, following [Saving the basket at checkout](#saving-the-basket-at-checkout). Below the basket, list past bookings with their number, date, summary and total, with a short message when there are none. Add widget tests for both, as in [Update the basket checkout test](#update-the-basket-checkout-test) and [Test the orders list and its empty state](#test-the-orders-list-and-its-empty-state).
+    It should create a `bookings` table, add more than one sample booking when the database is first created, save a booking, read all bookings with the highest booking number first, return the next booking number (follow the same numbering scheme as we did for orders in this worksheet) and close the connection.
 
-    Fully close and reopen the app on the emulator. Your booking and saved profile should still be there, and the sample bookings should appear only once. If you change the table after the first run, uninstall the app from the emulator so that the database is created again.
+    Make sure to test it with an in-memory database, as in [Test inserting, reading and numbering orders](#test-inserting-reading-and-numbering-orders).
 
-5. Arrange your tests so that `test/` mirrors `lib/`, as in [Organising tests](#organising-tests). Run `dart format lib test`, `dart analyze` and `flutter test`, and fix any issues until the analyser reports none and every test passes.
+4. Make checkout on the basket page save a numbered `Booking` before it clears the basket, and show the booking number in the confirmation, as in [Saving the basket at checkout](#saving-the-basket-at-checkout). Below the basket, list past bookings with a message when there are none, as in [Displaying saved orders](#displaying-saved-orders).
 
-6. (Advanced) `findsWidgets` passes as long as at least one widget matches, so a test that uses it cannot tell one delete button from five. Read the [Flutter finders recipe](https://docs.flutter.dev/cookbook/testing/widget/finders), then write a basket page test that adds two different films and checks that exactly two delete buttons appear, and that exactly one remains after you delete a film.
+    Test both as you did in [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator), then check that your bookings and saved profile survive a full restart, as in [Connect the checkout button and verify a restart](#connect-the-checkout-button-and-verify-a-restart).
+
+5. Organise your cinema project's `lib/` into folders and make `test/` mirror it, as in [Move the tests into mirrored folders](#move-the-tests-into-mirrored-folders). Run `dart format lib test`, `dart analyze` and `flutter test` until there are no issues and every test passes.
+
+6. (Advanced) Write a widget test for the basket page that adds three different films, taps the delete button of the middle one and checks that only the other two remain. `.first` and `.last` cannot reach the middle delete button, so investigate how to give each delete button a [`Key`](https://api.flutter.dev/flutter/foundation/Key-class.html) that a test can find, using the [Flutter finders recipe](https://docs.flutter.dev/cookbook/testing/widget/finders).
