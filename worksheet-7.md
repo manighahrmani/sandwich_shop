@@ -896,7 +896,7 @@ Create `lib/widgets/orders_button.dart`. In it, copy the completed [BasketButton
 
 ![Renaming the BasketButton class to OrdersButton](images/7/rename_basket_button_to_orders_button.png)
 
-Replace `Icons.shopping_basket` with the receipt icon `Icons.receipt_long`, and replace both occurrences of `'/basket'` with `'/orders'`. To do this open the Search panel in your editor, search for `'/basket'` in the `orders_button.dart` file, and replace them with `'/orders'`. (Make sure to only replace it in the `orders_button.dart` file.) See below:
+Replace `Icons.shopping_basket` with `Icons.receipt_long`, and replace both occurrences of `'/basket'` with `'/orders'`. To do this open the Search panel in your editor, search for `'/basket'` in the `orders_button.dart` file, and replace them with `'/orders'`. (Make sure to only replace it in the `orders_button.dart` file.) See below:
 
 ![Replacing the route and icon in OrdersButton](images/7/orders_button_route_and_icon.png)
 
@@ -1114,7 +1114,7 @@ Open `test/sandwich_model_test.dart` and find `import 'package:sandwich_shop/mod
 
 In the VS Code explorer, create `test/models/`, `test/repositories/` and `test/screens/`, then drag the existing test files into them one at a time. The two model tests, `sandwich_model_test.dart` and `user_settings_test.dart`, go into `test/models/`. The two repository tests go into `test/repositories/`, and the four screen tests for the basket, menu, order and settings screens go into `test/screens/`. After moving `sandwich_model_test.dart`, check that its `Sandwich` import is unchanged.
 
-The button test already lives under `test/widgets/`. Rename `sandwich_model_test.dart` to `sandwich_test.dart` so it matches `lib/models/sandwich.dart`. In the sandwich model tests, and in the tests you move below, write the type in each `const` declaration, for example `const Sandwich sandwich = Sandwich(...)`, as our code style prefers explicit types.
+The button test already lives under `test/widgets/`. Rename `sandwich_model_test.dart` to `sandwich_test.dart` so it matches `lib/models/sandwich.dart`. In the sandwich model tests, write the type in each `const` declaration, for example `const Sandwich sandwich = Sandwich(...)`, as our code style prefers explicit types.
 
 `test/widget_test.dart` holds two kinds of test. Its `App smoke tests` group checks `lib/main.dart`, so rename the file to `test/main_test.dart`. Its `OrderItemDisplay` group and the two quantity-limit tests at the end of the smoke tests group check `lib/screens/order_screen.dart`, so cut them and paste them at the end of `main` in `test/screens/order_screen_test.dart`. Then remove the unused `Sandwich` import from `main_test.dart`.
 
@@ -1585,22 +1585,18 @@ The exercises below apply these concepts to your Southsea Cinema coursework. Tog
 
 Build on the cinema app from Worksheet 6. Keep the JSON film catalogue, saved profile settings, drawer navigation, squared buttons and ticket basket you already built. Past bookings appear on the basket page, so you do not need a separate bookings page.
 
-1. Set up an Android emulator or device, as shown in the [Preparing an Android emulator or device section of this worksheet](#preparing-an-android-emulator-or-device). If your cinema project has no `android` folder, add one as in [Add Android support to the project section](#add-android-support-to-the-project). Add the SQLite packages too, as shown in [Adding the SQLite packages](#adding-the-sqlite-packages). Make sure to check that the app runs on the emulator.
+1. Set up an Android emulator or device by following [Preparing an Android emulator or device](#preparing-an-android-emulator-or-device). If your cinema project has no `android` folder, take a look at [Add Android support to the project](#add-android-support-to-the-project). Then add the [SQLite packages](#adding-the-sqlite-packages) and check that the app runs on the emulator.
 
-2. Create a `Booking` model in `lib/models/booking.dart` with an optional `id`, a `bookingNumber`, a `summary`, a `total` and a `date`. See the example in the [Representing a saved order section](#representing-a-saved-order).
-  
-    Make sure to test your `Booking` model thoroughly as we did for `OrderRecord` in the Sandwich Shop, including the `toMap` and `fromMap` conversions and handling of whole-number totals.
+2. In [Representing a saved order](#representing-a-saved-order), we created an `OrderRecord` model for the Sandwich Shop. Your task is to create a `Booking` model in `lib/models/booking.dart` with an optional `id`, a `bookingNumber`, a `summary`, a `total` and a `date`. Test it as thoroughly as we tested `OrderRecord`.
 
-3. Create a `CinemaDatabase` in `lib/database/cinema_db.dart`. See the example in [Creating the SQLite database helper section](#creating-the-sqlite-database-helper) for reference.
+3. Create a `CinemaDatabase` in `lib/database/cinema_db.dart`, using our [SQLite database helper](#creating-the-sqlite-database-helper) as a guide.
 
-    It should create a `bookings` table, add more than one sample booking when the database is first created, save a booking, read all bookings with the highest booking number first, return the next booking number (follow the same numbering scheme as we did for orders in this worksheet) and close the connection.
+    It should create a `bookings` table, add a few sample bookings when the database is first created, save a booking, read all bookings with the highest booking number first, return the next booking number using the same scheme as our orders, and close the connection. Following [Test inserting, reading and numbering orders](#test-inserting-reading-and-numbering-orders), test it with an in-memory database.
 
-    Make sure to test it with an in-memory database, as in [Test inserting, reading and numbering orders](#test-inserting-reading-and-numbering-orders).
+4. Checkout on your basket page should now save a numbered `Booking` before it clears the basket, and show the booking number in its confirmation. We did the same for sandwich orders in [Saving the basket at checkout](#saving-the-basket-at-checkout). Below the basket, list past bookings with a message when there are none; [Displaying saved orders](#displaying-saved-orders) is a useful reference.
 
-4. Make checkout on the basket page save a numbered `Booking` before it clears the basket, and show the booking number in the confirmation, as in [Saving the basket at checkout](#saving-the-basket-at-checkout). Below the basket, list past bookings with a message when there are none, as in [Displaying saved orders](#displaying-saved-orders).
+    Write widget tests for both. Finally, fully close and reopen the app and check that your bookings and saved profile are still there, just as we did in [Connect the checkout button and verify a restart](#connect-the-checkout-button-and-verify-a-restart).
 
-    Test both as you did in [Testing SQLite without an emulator](#testing-sqlite-without-an-emulator), then check that your bookings and saved profile survive a full restart, as in [Connect the checkout button and verify a restart](#connect-the-checkout-button-and-verify-a-restart).
+5. Make your cinema project's `test/` folder mirror `lib/`, in the same way that we [moved the Sandwich Shop tests into mirrored folders](#move-the-tests-into-mirrored-folders). When you have finished, `dart format lib test`, `dart analyze` and `flutter test` should report no issues and no failing tests.
 
-5. Organise your cinema project's `lib/` into folders and make `test/` mirror it, as in [Move the tests into mirrored folders](#move-the-tests-into-mirrored-folders). Run `dart format lib test`, `dart analyze` and `flutter test` until there are no issues and every test passes.
-
-6. (Advanced) Write a widget test for the basket page that adds three different films, taps the delete button of the middle one and checks that only the other two remain. `.first` and `.last` cannot reach the middle delete button, so investigate how to give each delete button a [`Key`](https://api.flutter.dev/flutter/foundation/Key-class.html) that a test can find, using the [Flutter finders recipe](https://docs.flutter.dev/cookbook/testing/widget/finders).
+6. (Advanced) Write a widget test for the basket page that adds three different films, deletes the middle one and checks that only the other two remain. `.first` and `.last` cannot reach the middle delete button. Read the [Flutter finders recipe](https://docs.flutter.dev/cookbook/testing/widget/finders) and find out how a [`Key`](https://api.flutter.dev/flutter/foundation/Key-class.html) lets a test pick out one particular button.
