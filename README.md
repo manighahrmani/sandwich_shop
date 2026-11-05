@@ -28,7 +28,7 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 | 19/10/2026 | 23/10/2026 | [Worksheet 5](https://manighahrmani.github.io/sandwich_shop/worksheet-5.html) | [Lecture 5](https://docs.google.com/presentation/d/1O3wcAsfoCyju2lxdG0etLIONCe4E6SR80h-0PeIG6Bs/edit?usp=sharing) | Demo Window 3 |
 | 26/10/2026 | 30/10/2026 | Reading week (break) | | |
 | 02/11/2026 | 06/11/2026 | [Worksheet 6](./worksheet-6.md) | [Lecture 6](https://docs.google.com/presentation/d/1TtPcHKtu1JIsxfUacsTPB2cjTj1fNH-kj31uhefD1uo/edit?usp=sharing) | Demo Window 3 |
-| 09/11/2026 | 13/11/2026 | Worksheet 7 | Lecture 7 | Demo Window 4 |
+| 09/11/2026 | 13/11/2026 | [Worksheet 7](./worksheet-7.md) | Lecture 7 | Demo Window 4 |
 | 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo Window 4 |
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo Window 5 |
 | 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | Demo Window 5 |
@@ -47,7 +47,7 @@ Each week has a worksheet and a lecture. You should aim to complete the workshee
 - [Worksheet 4: Unit and Widget Testing](./worksheet-4.md)
 - [Worksheet 5: Navigation, State and Forms](https://manighahrmani.github.io/sandwich_shop/worksheet-5.html)
 - [Worksheet 6: JSON Assets and Saved Preferences](./worksheet-6.md)
-- Worksheet 7: SQLite and Order History (under revision)
+- [Worksheet 7: SQLite and Order History](./worksheet-7.md)
 - Worksheet 8: AI-Driven Development (under revision)
 - Worksheet 9: Web Services and Integration Testing (under revision)
 - Worksheet 10: Cloud Services, Deployment, and DevOps (under revision)
