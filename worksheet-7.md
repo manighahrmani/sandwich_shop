@@ -147,7 +147,15 @@ flutter devices
 flutter emulators
 ```
 
-Resolve any issues reported under **Android toolchain** or **Android Studio** before continuing. The output of `flutter devices` should include your running emulator with the platform marked as `android`.
+Resolve any issues reported under **Android toolchain** or **Android Studio** before continuing. On Windows, if `flutter doctor` reports that it cannot execute `java` to determine the version, point Flutter to the `jbr` subfolder inside your Android Studio installation:
+
+```bash
+flutter config --jdk-dir "C:\Program Files\Android\Android Studio\jbr"
+```
+
+If you installed Android Studio in a custom location, replace `C:\Program Files\Android\Android Studio` with your installation folder, keeping `\jbr` at the end.
+
+The output of `flutter devices` should include your running emulator with the platform marked as `android`.
 
 The screenshot below shows `flutter doctor` output on macOS with a working Android toolchain:
 
