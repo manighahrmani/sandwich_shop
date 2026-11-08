@@ -11,7 +11,7 @@
   - [Plan before making changes](#plan-before-making-changes)
   - [Make a small change and test it](#make-a-small-change-and-test-it)
   - [Review and explain the result](#review-and-explain-the-result)
-  - [Finish, test and commit the changes](#finish-test-and-commit-the-changes)
+  - [Review changes, discard if needed, question anything unclear and commit when satisfied](#review-changes-discard-if-needed-question-anything-unclear-and-commit-when-satisfied)
 - [Giving Copilot context](#giving-copilot-context)
   - [Attach files and errors](#attach-files-and-errors)
   - [Use documentation and screenshots](#use-documentation-and-screenshots)
@@ -171,29 +171,35 @@ Again, remember that if a change is unnecessary or hard to follow, edit it yours
 
 ![A review comment and the revised font size code after a requested correction](images/8/font_size_review_correction.png)
 
-<!-- TODO: Done till here -->
+### Review changes, discard if needed, question anything unclear and commit when satisfied
 
-### Finish, test and commit the changes
+Ask Copilot to complete the remaining steps of the agreed plan, one by one, including their tests. Review the changed files as before. If you do not want Copilot to make a particular change, edit it or discard it before committing. In the example shown below, it changed `README.md` and we clicked **Undo** to discard the unwanted changes; we will update `README.md` later in this worksheet.
 
-Ask Copilot to complete the remaining steps of the agreed plan, including their tests. Review the changed files as before, then ask it to run `dart analyze` and `flutter test`. Expand the output to check the results, as shown below.
+![Discarding unwanted changes before committing](images/8/discard_changes.png)
 
-<!-- Capture: ask Copilot to finish app-wide scaling and the Settings control,
-then run analysis and tests. Show the remaining steps completed and real results. -->
+If any choice does not make sense, question it and seek clarification before proceeding. You can also ask for an alternative solution or approach before accepting the change. In the example below, we questioned why the `rendering.dart` library was imported.
+
+![Questioning and seeking clarification about an unexpected change](images/8/question_clarification.png)
+
+If you are unhappy with an implementation, ask Copilot to undo or modify the changes before committing. In the example below, instead of an `enum` used with a `ChoiceChip`, we asked for a simpler approach: a toggle switch to increase the font size.
+
+![Undoing or modifying an unwanted implementation before committing](images/8/undo_modify_changes.png)
+
+Remember to run `dart analyze` and `flutter test`. Expand the output to check the results, as shown below.
+
 ![Copilot completing the font size feature with analysis and test results](images/8/font_size_final_tests.png)
 
 On the emulator, change the font size, visit each screen and close and reopen the app. Check that the choice is saved, text and controls fit, and your profile and basket still work, as shown below.
 
-<!-- Capture: show the Settings size choice and another screen using larger text
-after a full restart. Also check Android accessibility scaling before capture. -->
-![The saved larger font size applied to Settings and another app screen after reopening](images/8/font_size_emulator_check.png)
+![The saved larger font size setting enabled on the Settings screen](images/8/font_size_emulator_check.png)
 
-Once you understand the changes and the checks pass, stage all the files belonging to this feature in **Source Control**. Write your own commit message, such as `Add a saved app-wide font size setting`, then commit and push to your own branch, as shown below.
+Once you understand the changes and the checks pass, stage all the files belonging to this feature in **Source Control**. Write your own commit message, then commit and push to your own branch, as shown below.
 
-<!-- Capture: stage only the complete font-size feature and its tests. Show your
-commit message and the Push action, keeping unrelated edits out of the commit. -->
 ![The completed font size feature staged for a single commit and push](images/8/font_size_feature_commit.png)
 
 ## Giving Copilot context
+
+<!-- TODO: done till here -->
 
 Now extend the feature Copilot has just made with an extra-large font-size choice. Give it the relevant files so it can review and update its latest implementation. The [context guide](https://code.visualstudio.com/docs/chat/copilot-chat-context) explains the available attachments.
 
