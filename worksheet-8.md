@@ -12,32 +12,9 @@
   - [Make a small change and test it](#make-a-small-change-and-test-it)
   - [Review and explain the result](#review-and-explain-the-result)
   - [Review changes, discard if needed, question anything unclear and commit when satisfied](#review-changes-discard-if-needed-question-anything-unclear-and-commit-when-satisfied)
-- [Giving Copilot context](#giving-copilot-context)
-  - [Attach files and errors](#attach-files-and-errors)
-  - [Use documentation and screenshots](#use-documentation-and-screenshots)
-- [Choosing agents, commands and tools](#choosing-agents-commands-and-tools)
-  - [Choose how to work](#choose-how-to-work)
-  - [Run commands and inspect their output](#run-commands-and-inspect-their-output)
-  - [Manage permissions](#manage-permissions)
-  - [Understand usage and costs](#understand-usage-and-costs)
-- [Using AI safely](#using-ai-safely)
-  - [Protect private information](#protect-private-information)
-  - [Preserve existing behaviour and data](#preserve-existing-behaviour-and-data)
-- [Writing a README with Copilot](#writing-a-readme-with-copilot)
-  - [Explore and plan the document](#explore-and-plan-the-document)
-  - [Check the generated instructions](#check-the-generated-instructions)
-- [Saving a reusable workflow](#saving-a-reusable-workflow)
-  - [Add project instructions](#add-project-instructions)
-  - [Use an agent skill](#use-an-agent-skill)
-  - [Distinguish skills from prompt files](#distinguish-skills-from-prompt-files)
-- [Connecting tools with MCP](#connecting-tools-with-mcp)
-  - [Connect the Dart and Flutter tools](#connect-the-dart-and-flutter-tools)
-  - [Use GitHub tools when needed](#use-github-tools-when-needed)
-- [Adding dark mode test first](#adding-dark-mode-test-first)
-  - [Understand test-driven development](#understand-test-driven-development)
-  - [Plan the saved theme setting](#plan-the-saved-theme-setting)
-  - [Write and run a failing test](#write-and-run-a-failing-test)
-  - [Implement and review the feature](#implement-and-review-the-feature)
+- [Giving Copilot context and updating the README](#giving-copilot-context-and-updating-the-readme)
+  - [Attach files and plan the document](#attach-files-and-plan-the-document)
+  - [Check the generated instructions and diff](#check-the-generated-instructions-and-diff)
 - [Debugging with evidence](#debugging-with-evidence)
   - [Pause and inspect a value](#pause-and-inspect-a-value)
   - [Investigate a missing saved setting](#investigate-a-missing-saved-setting)
@@ -45,6 +22,7 @@
 - [Storing order items in a related table](#storing-order-items-in-a-related-table)
   - [Understand the relationship](#understand-the-relationship)
   - [Plan an upgrade that keeps existing orders](#plan-an-upgrade-that-keeps-existing-orders)
+  - [Connect Dart tools with MCP](#connect-dart-tools-with-mcp)
   - [Save related rows together](#save-related-rows-together)
   - [Implement in small steps](#implement-in-small-steps)
 - [Auditing tests and checking coverage](#auditing-tests-and-checking-coverage)
@@ -149,7 +127,7 @@ Click on the implement button or switch to **Interactive** and ask it to impleme
 
 ![Copilot completing only the font size preference step and listing its changed files](images/8/font_size_first_step.png)
 
-Copilot may ask you for permission to run commands as shown below. Use the **Explain** button to understand why it needs to run the command before granting permission.
+Copilot may ask you for permission to run commands as shown below. Use the **Explain** button to understand why it needs to run the command before granting permission. Select **Allow Once** to approve the command for that single execution; avoid selecting **Allow all** so that you remain in control of what executes in your environment.
 
 ![Copilot asking for permission to run commands](images/8/copilot_run_command_permission.png)
 
@@ -197,233 +175,37 @@ Once you understand the changes and the checks pass, stage all the files belongi
 
 ![The completed font size feature staged for a single commit and push](images/8/font_size_feature_commit.png)
 
-## Giving Copilot context
+## Giving Copilot context and updating the README
 
 <!-- TODO: done till here -->
 
-Now extend the feature Copilot has just made with an extra-large font-size choice. Give it the relevant files so it can review and update its latest implementation. The [context guide](https://code.visualstudio.com/docs/chat/copilot-chat-context) explains the available attachments.
+Now update the project documentation to include the completed font-size setting. A `README.md` file should help another person understand the app and run it. Rather than asking Copilot to guess what changed, give it the relevant files so it has accurate context.
 
-### Attach files and errors
+### Attach files and plan the document
 
-Type `#` or use **Add Context** to attach `main.dart`, `settings_screen.dart`, the generated font-size type and their tests. Ask Copilot to review how these files work together and propose where the extra-large choice belongs before editing, as shown below.
+Type `#` or click **Add Context** to attach the files relevant to the completed feature: `README.md`, `pubspec.yaml`, `lib/main.dart`, and `lib/screens/settings_screen.dart`, as shown below. The [context guide](https://code.visualstudio.com/docs/chat/copilot-chat-context) explains the available attachment types.
 
-<!-- Capture: attach the actual files involved in the font-size change using
-Add Context. Ask it to review the latest implementation and plan an extra-large
-choice without changing existing choices or Android accessibility scaling. -->
-![Copilot Chat with the app, settings and font size test files attached](images/8/font_size_file_context.png)
+<!-- Capture: attach README.md, pubspec.yaml, main.dart and settings_screen.dart using Add Context in chat. -->
+![Copilot Chat with README.md and relevant project files attached as context](images/8/readme_file_context.png)
 
-Review its proposal, then ask it to update the feature and tests. If a test fails, include the command and error text in your feedback, as shown below.
+Attached code and prompts are sent to the AI service. Never attach private keys, passwords, student records or private data. A gitignored file is not automatically protected from being sent when explicitly attached.
 
-<!-- Capture: approve the focused update, then show the extra-large choice diff
-and its test result. Preserve tests for the existing choices and saved values. -->
-![Copilot updating the font size choices and tests after reviewing the attached files](images/8/font_size_context_update.png)
+Write your prompt asking Copilot to inspect the attached files and outline an accurate update for `README.md`. Ask it to focus strictly on what the app currently does, including the font-size setting, without inventing features not yet implemented.
 
-### Use documentation and screenshots
+### Check the generated instructions and diff
 
-Try the extra-large choice on the emulator. If it causes a layout problem, attach a cropped screenshot and ask Copilot to update the affected layout, as shown below. Use invented profile details and remove private information.
+Once you approve the outline, ask Copilot to draft the changes to `README.md`. Read every claim carefully against your project:
 
-![Copilot Chat with relevant Dart files and a cropped emulator screenshot attached as context](images/8/copilot_context_attachments.png)
+- Check supported platforms: does it state the app runs on Android, or does it incorrectly claim browser or desktop support?
+- Check setup and run commands: do they match the commands you actually ran?
+- Check test instructions: does it distinguish emulator-dependent tasks from unit tests?
 
-Ask Copilot to check its scaling approach against Flutter's [TextScaler documentation](https://api.flutter.dev/flutter/painting/TextScaler-class.html). Expand the web result to confirm it read the page, as shown below.
+Try any instruction you have not already verified. Correct inaccuracies yourself or give Copilot specific feedback. Review the diff in **Source Control** to confirm the edits are limited to `README.md`, as shown below.
 
-![Copilot retrieving a Flutter API documentation page and showing the result in chat](images/8/copilot_fetch_documentation.png)
-
-Review and test the update, including reopening the app with the extra-large choice saved. Commit and push it separately from the original feature.
-
-## Choosing agents, commands and tools
-
-### Choose how to work
-
-Use **Plan** to discuss the font-size approach and **Agent** to implement an agreed step. Keep the session in your local project so it can use your files and emulator. You do not need cloud or parallel agents for this change; the [agent guide](https://code.visualstudio.com/docs/agents/concepts/agents) explains those options.
-
-### Run commands and inspect their output
-
-For the final font-size checks, ask Copilot to run these commands in your project folder:
-
-```bash
-dart format lib test
-dart analyze
-flutter test
-```
-
-Expand the tool calls and check the working directory, command and result. Type `/` to see chat commands, which are different from terminal commands such as `flutter test`. See the [tools guide](https://code.visualstudio.com/docs/agents/run/tools) for the available controls.
-
-### Manage permissions
-
-Keep **Manual permissions**. When Copilot requests permission to run a font-size test, read the command and working directory before selecting **Allow Once**, as shown below. Previously approved actions may run without another prompt.
-
-![A VS Code approval request showing the command and the Allow Once action](images/8/copilot_command_approval.png)
-
-Approving a plan does not approve every tool action. Do not enable **Allow all** or disable university restrictions to bypass a problem. See the [permissions guide](https://code.visualstudio.com/docs/agents/run/approvals) and [security guidance](https://code.visualstudio.com/docs/agents/run/security).
-
-### Understand usage and costs
-
-Keep **Auto** selected and check your account's remaining usage. Student access is not unlimited; keep additional paid usage disabled. If you reach the limit, continue reviewing and testing yourself. The [billing page](https://docs.github.com/en/copilot/concepts/billing-and-usage/individuals/billing) and [usage guide](https://code.visualstudio.com/docs/agents/guides/optimize-usage) describe the current allowances.
-
-## Using AI safely
-
-### Protect private information
-
-Running an agent locally does not mean its model runs locally. Attached code, prompts and tool results can be sent to a hosted service. Follow university rules and consult the [Copilot Trust Center](https://resources.github.com/copilot-trust-center/) for data handling, rather than assuming every account has the same policy.
-
-Do not share passwords, API keys, recovery codes, student records or other people's private code. Use invented data for this app. A gitignored file is not automatically safe from being read by an agent or included in its context.
-
-Documents, web pages and tool results can contain misleading instructions. This is called prompt injection when content tries to make the agent do something outside your request. Treat fetched content as evidence to inspect, not authority to grant permissions or expose secrets.
-
-Check extension and MCP publishers before installation. Review their files, scripts and requested access. Use the [VS Code security guidance](https://code.visualstudio.com/docs/agents/run/security), and follow the module's rules for acknowledging AI assistance.
-
-### Preserve existing behaviour and data
-
-A change should add the agreed behaviour without breaking the rest of the app. This is why the [VS Code planning guide](https://code.visualstudio.com/docs/agents/run/planning) asks you to check compatibility and verification, and its [review guide](https://code.visualstudio.com/docs/agents/run/review-code-edits) asks you to inspect the complete diff.
-
-For dark mode, existing profile settings should still load and save. For a database upgrade, orders saved before the change must still be readable. Include these requirements in your plan and check them, rather than assuming the agent will remember.
-
-Git can restore source code, but not database contents lost by uninstalling the app. Do not accept deleting saved data as a migration strategy. The [sqflite documentation](https://pub.dev/packages/sqflite) describes database upgrades and transactions; we will use them below.
-
-## Writing a README with Copilot
-
-### Explore and plan the document
-
-Now update the documentation to include the completed font-size setting. A `README.md` should help another person understand the app and run it. Ask Copilot to inspect the existing README, `pubspec.yaml`, `main.dart` and relevant tests before suggesting an outline.
-
-Write your own prompt for an accurate README of the current Sandwich Shop app. Limit the proposed edit to the README and decide which setup, run and test instructions a new developer needs.
-
-Read the outline before asking for the draft. It should describe what the app does now, not features planned later in this worksheet.
-
-### Check the generated instructions
-
-Read every claim against the project. Check the package name, supported platform, assets and test paths. A statement that the app works in a browser is wrong for our current setup, even if it sounds plausible for Flutter generally.
-
-Try any setup or run instruction you have not already verified. Do not reinstall dependencies or run every test again merely to repeat a known result. Check that the README explains which commands need an emulator and which do not.
-
-Correct inaccuracies yourself or give Copilot specific feedback. Review the final diff and explain one correction you made before accepting the document.
-
-Compare an app-platform claim with the code that decides which platforms are supported, as shown below.
-
+<!-- Capture: README diff beside isSupportedPlatform in main.dart -->
 ![The README diff beside the code that checks supported app platforms](images/8/readme_claim_review.png)
 
-## Saving a reusable workflow
-
-### Add project instructions
-
-Project instructions record stable rules that should not be repeated in every prompt. Follow the [custom instructions guide](https://code.visualstudio.com/docs/agent-customization/custom-instructions). Open **Chat: Open Customizations** from the Command Palette and check whether the project already has an instructions file.
-
-If it does, update that file rather than creating a competing copy. Otherwise, `.github/copilot-instructions.md` is a supported project location for Copilot. Describe the rules your project actually uses: beginner-readable Dart, existing dependencies, test commands and where code belongs.
-
-Keep the file short and check that it appears under **Instructions** in a fresh session, as shown below. Then inspect whether the agent follows it on your next task. Instructions guide a model; tests and permission controls enforce checks and boundaries.
-
-![The VS Code Agent Customizations editor showing the project Instructions list](images/8/copilot_project_instructions.png)
-
-### Use an agent skill
-
-A skill is a reusable procedure, loaded when relevant or selected as a slash command. It differs from project instructions because it describes how to perform a particular task. Follow the [skills guide](https://code.visualstudio.com/docs/agent-customization/agent-skills) and use **Chat: Open Customizations**, then **Skills**.
-
-For example, a project skill called `review-change` could tell Copilot to inspect a diff, identify relevant tests and report evidence without editing code. Create it under `.github/skills/review-change/SKILL.md` with this metadata and a procedure you write yourself:
-
-```yaml
----
-name: review-change
-description: Review a small code change and its test evidence without editing files.
----
-```
-
-Below the metadata, write what the skill should check and how it should report an unverified claim. Do not add a command you have not understood. Use `/review-change` on your next small change and inspect the result to confirm that it cites actual code and checks.
-
-You can instead adapt a trusted existing skill. Review the whole skill folder, including scripts, before using it. Flutter publishes [official AI tools and skills](https://docs.flutter.dev/ai/get-started); choose a relevant one rather than installing everything.
-
-After saving the skill, type `/review-change` in a new chat to check that it is available, as shown below.
-
-![The Copilot slash-command menu showing the review-change skill](images/8/copilot_skill_command.png)
-
-Then run the skill on a small change and check that its review refers to the actual diff, as shown below.
-
-![The review-change skill reporting a finding against a small code diff](images/8/copilot_skill_review.png)
-
-### Distinguish skills from prompt files
-
-Prompt files save requests as `.prompt.md` files invoked with slash commands. In the current [prompt-file documentation](https://code.visualstudio.com/docs/agent-customization/prompt-files), these run in **Local** sessions, not the **Copilot** session used here.
-
-Use a skill for this worksheet's reusable workflow. If an older tutorial tells you to create `.github/prompts`, check which session it targets before following it. A custom agent, a skill, a prompt and a terminal command are different things, even when some appear in the same menu.
-
-## Connecting tools with MCP
-
-MCP stands for Model Context Protocol. It connects an assistant to tools and data, such as live analyser results or a repository service. It is not another model, and installing a server does not improve the model's knowledge unless it uses that server's output.
-
-The [VS Code MCP guide](https://code.visualstudio.com/docs/agent-customization/mcp-servers) recommends starting with existing tools. You do not need an external server to run `flutter test` in a terminal.
-
-### Connect the Dart and Flutter tools
-
-The [Dart and Flutter MCP server](https://github.com/dart-lang/ai/tree/main/pkgs/dart_mcp_server) supplies project diagnostics and other development tools. Check its current SDK requirements first. In the terminal, `dart --version` shows your installed version; `dart mcp-server --help` checks whether the command is available without starting a server.
-
-With **Copilot** selected, run **MCP: Add Server** from the Command Palette. Choose **Command (stdio)**, enter `dart mcp-server` and name it `dart`. Select the personal **Copilot Global** destination where offered so this demonstration does not add machine-specific configuration to your repository.
-
-Review the trust prompt before starting it. Ask Copilot to use the Dart MCP tools to report analyser issues in the current project without editing files. Expand the tool call and confirm that it came from that server and returned real diagnostics.
-
-If the SDK or university policy prevents setup, report that limitation and run `dart analyze` instead. Do not bypass restrictions. Some runtime tools require a debug connection and additional setup; a successful diagnostics request does not prove every tool is available.
-
-Check that Copilot called the Dart server and returned diagnostics from the open project, as shown below.
-
-![The Copilot tool call showing Dart MCP diagnostics from the open Flutter project](images/8/dart_mcp_diagnostics.png)
-
-### Use GitHub tools when needed
-
-The [official GitHub MCP server](https://github.com/github/github-mcp-server) can retrieve repository information and perform write actions. Its remote endpoint is `https://api.githubcopilot.com/mcp/`. If it is not already available, use the MCP guided setup with **HTTP** and follow GitHub's sign-in instructions.
-
-Try a read-only request about your repository's recent commits. Inspect the tool output and compare it with the history you see in **Source Control**. Do not paste a token into chat, and do not grant write access just to read history.
-
-This connection is optional: `git log` provides local history without it. Disable unused servers after the demonstration. A server can use your account's permissions, so check its capabilities and available read-only options before approving actions.
-
-## Adding dark mode test first
-
-### Understand test-driven development
-
-In test-driven development, or TDD, you write a test for the desired behaviour before implementing it. Run it and confirm that it fails for the right reason. Then make the smallest change that passes, and improve the code without changing its behaviour.
-
-These stages are often called red, green and refactor. Red means the expected behaviour is missing, not that the test has a broken import. Green means the test passes. Refactoring improves the structure while the tests remain green.
-
-Copilot can help write both tests and implementation, but you must judge the test independently. GitHub lists [generating tests for TDD](https://docs.github.com/en/copilot/get-started/best-practices) as a useful application. An agent that changes an assertion to fit its incorrect implementation has not completed TDD.
-
-### Plan the saved theme setting
-
-Our task is to give the Sandwich Shop a dark mode setting that survives closing the app. Before prompting, compare `main.dart`, `settings_screen.dart` and the existing settings tests. Read Flutter's [ThemeMode API](https://api.flutter.dev/flutter/material/ThemeMode.html) and [MaterialApp themeMode property](https://api.flutter.dev/flutter/material/MaterialApp/themeMode.html).
-
-`ThemeMode` selects the light, dark or system theme. `MaterialApp` receives the light configuration through `theme`, the dark configuration through `darkTheme`, and the choice through `themeMode`. The app must rebuild when that choice changes.
-
-Decide how you will demonstrate the setting: it should change the whole app, work in both directions and load at startup. Keep light mode as the default when nothing is saved. Existing profile values and the basket should remain intact.
-
-Ask Copilot to plan this using `SharedPreferencesAsync` and the state and callbacks you already know. The saved choice must be connected to `MaterialApp`, not just to a switch on the settings page. Challenge a plan that adds a state-management package solely for this change.
-
-### Write and run a failing test
-
-Choose one visible behaviour from your plan and ask Copilot to add a test for it before editing `lib`. For example, a settings test can find the new switch by its label rather than assuming it is the only `Switch`.
-
-Use the in-memory preferences setup from the existing tests. Read the arrange, action and assertions yourself, then run only the new test. Confirm that it fails because the feature is missing.
-
-You may need to update an old assertion that counted one switch, because the new screen has two. Replace the generic finder with one that still checks the newsletter switch. Do not remove the old behaviour's test.
-
-Once the first behaviour passes, repeat this process for saving the choice, loading it into a fresh app and changing the theme throughout navigation. Recreating only the settings page does not prove that startup applies the saved theme.
-
-### Implement and review the feature
-
-Let Copilot implement the first tested behaviour, leaving the agreed assertion unchanged. Review that step before continuing. Add the remaining behaviours in the same test-first order.
-
-Test both enabled and disabled saved values, plus the missing-value default. Reuse the existing preference APIs and report a save or load error rather than hiding it. Check that existing profile tests still pass.
-
-After the focused checks, run analysis and the full test suite once. Try the app on the emulator, switch themes, visit the other screens and fully close and reopen it. Hot reload is not a persistence check.
-
-Use your review skill if it is helpful, but judge its findings yourself. Explain how the stored value reaches `MaterialApp` and why the app rebuilds when it changes.
-
-First confirm that the new test fails because the app does not yet support the expected theme, as shown below.
-
-![The new dark mode test failing before the feature is implemented](images/8/dark_mode_red_test.png)
-
-After implementation, run the unchanged test and review the code that saves and loads the choice, as shown below.
-
-![The dark mode test passing after the implementation, with the reviewed change visible](images/8/dark_mode_green_test.png)
-
-Close and reopen the app to check the saved theme, as shown below.
-
-![The reopened app displaying the saved dark theme with readable text and cards](images/8/dark_mode_after_restart.png)
+Once satisfied, commit and push your updated `README.md`.
 
 ## Debugging with evidence
 
@@ -437,7 +219,7 @@ Open `order_screen.dart` and find `_addToBasket`. Click the margin beside its qu
 
 When execution pauses, inspect `_quantity` in **VARIABLES**. Use **Step Over** to see which branch executes, then **Continue** to resume the app. Try again after increasing the quantity and compare the result.
 
-You should see why an order with quantity 0 is rejected. This is existing behaviour, not a bug to “fix”. Explain it before asking Copilot for help.
+You should see why an order with quantity 0 is rejected. This is existing behaviour, not a bug to "fix". Explain it before asking Copilot for help.
 
 When the breakpoint pauses with `_quantity` set to 0, inspect the rejected path, as shown below.
 
@@ -449,11 +231,11 @@ Increase the quantity and repeat the check to compare the accepted path, as show
 
 ### Investigate a missing saved setting
 
-If your new theme resets after reopening, do not request a rewrite of the settings screen. Break at the preference read and inspect the returned value after `await`. Compare the key used to save it with the key used to load it.
+If a saved setting resets after reopening, do not request a rewrite of the settings screen. Break at the preference read and inspect the returned value after `await`. Compare the key used to save it with the key used to load it.
 
-If the saved value is correct, follow how it reaches the app's theme. If it is missing, investigate the write path. Attach the relevant code and observed value to Copilot and ask for a diagnosis before a change.
+If the saved value is correct, follow how it reaches the app. If it is missing, investigate the write path. Attach the relevant code and observed value to Copilot and ask for a diagnosis before a change.
 
-In a disposable copy, use different keys to save and read the setting. Inspect the missing value, find the mismatch and add a test for loading the saved theme, as shown below.
+In a disposable copy, use different keys to save and read the setting. Inspect the missing value, find the mismatch and add a test for loading the saved setting, as shown below.
 
 ![The debugger showing a missing preference value and the different save and read keys](images/8/debug_preference_key_mismatch.png)
 
@@ -524,6 +306,16 @@ Compare the saved order before and after the upgrade, as shown below.
 
 ![The same order preserved after migration, alongside the related order_items table](images/8/order_after_migration.png)
 
+### Connect Dart tools with MCP
+
+Model Context Protocol (MCP) connects Copilot to development tools such as live project diagnostics. The [Dart and Flutter MCP server](https://github.com/dart-lang/ai/tree/main/pkgs/dart_mcp_server) allows Copilot to inspect analyser warnings and project diagnostics directly without copy-pasting terminal output.
+
+With **Copilot** selected, run **MCP: Add Server** from the Command Palette. Choose **Command (stdio)**, enter `dart mcp-server` and name it `dart`. Select the personal **Copilot Global** destination where offered.
+
+Ask Copilot to use the Dart MCP tools to report any diagnostics on the database migration code. Check that Copilot called the Dart server and returned diagnostics from your open project, as shown below.
+
+![The Copilot tool call showing Dart MCP diagnostics from the open Flutter project](images/8/dart_mcp_diagnostics.png)
+
 ### Save related rows together
 
 A transaction groups related database writes. If an item insert fails, the order and its other items should not be left half saved. The [sqflite transaction guidance](https://pub.dev/packages/sqflite#transaction) explains how an exception causes rollback.
@@ -550,7 +342,7 @@ Check that a new order with two items creates two linked rows and that a failed 
 
 ### Check what the assertions prove
 
-Tests can pass without checking the behaviour that matters. A test that finds a settings title does not prove dark mode is saved. A history test that finds a seeded order does not prove checkout saved a new one.
+Tests can pass without checking the behaviour that matters. A test that finds a settings title does not prove the larger font size setting is saved. A history test that finds a seeded order does not prove checkout saved a new one.
 
 Ask Copilot to review the assertions for one changed feature before requesting more tests. Compare each assertion with the requirement yourself. Check success, empty and error paths where they apply.
 
@@ -655,11 +447,11 @@ The exercises below apply this workflow to your Southsea Cinema coursework. Toge
 
 Use your own prompts and acceptance criteria. For each change, be ready to explain the plan, a decision you reviewed and the evidence that it works. Apply the [review workflow](#review-and-explain-the-result), including writing your own commit messages.
 
-1. Write and verify your cinema README with Copilot, following [Writing a README with Copilot](#writing-a-readme-with-copilot). Correct any claim that does not match your app.
+1. Update your cinema `README.md` with Copilot, following [Giving Copilot context and updating the README](#giving-copilot-context-and-updating-the-readme). Attach your cinema project files as context and correct any generated claim that does not match your app.
 
-2. Use [TDD](#adding-dark-mode-test-first) to add a saved dark mode setting across your cinema app. Keep your existing profile and squared buttons working.
+2. Use test-driven development to add a saved dark mode setting across your cinema app using `ThemeMode` and `SharedPreferencesAsync`. Keep your existing profile settings and squared buttons intact, and verify that the theme persists across app restarts.
 
-3. Give bookings related item rows. [Our order upgrade](#storing-order-items-in-a-related-table) shows the approach; your `booking_items` must preserve earlier bookings and leave no partial booking when saving fails.
+3. Give bookings related item rows. Our [order upgrade](#storing-order-items-in-a-related-table) shows the approach; your `booking_items` must preserve earlier bookings and leave no partial booking when saving fails.
 
 4. Inspect your [coverage](#inspect-test-coverage) in the editor and address important gaps. Be ready to show what the new assertions prove.
 
