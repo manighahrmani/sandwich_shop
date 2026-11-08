@@ -6,23 +6,23 @@
 - [Getting started](#getting-started)
   - [Continue from Worksheet 7](#continue-from-worksheet-7)
   - [Set up Copilot](#set-up-copilot)
+  - [Connect Dart tools with MCP](#connect-dart-tools-with-mcp)
 - [Working with an AI assistant](#working-with-an-ai-assistant)
   - [Understand the task and write your prompt](#understand-the-task-and-write-your-prompt)
   - [Plan before making changes](#plan-before-making-changes)
   - [Make a small change and test it](#make-a-small-change-and-test-it)
   - [Review and explain the result](#review-and-explain-the-result)
   - [Review changes, discard if needed, question anything unclear and commit when satisfied](#review-changes-discard-if-needed-question-anything-unclear-and-commit-when-satisfied)
-- [Giving Copilot context and updating the README](#giving-copilot-context-and-updating-the-readme)
-  - [Attach files and plan the document](#attach-files-and-plan-the-document)
-  - [Check the generated instructions and diff](#check-the-generated-instructions-and-diff)
 - [Debugging with evidence](#debugging-with-evidence)
   - [Pause and inspect a value](#pause-and-inspect-a-value)
   - [Investigate a missing saved setting](#investigate-a-missing-saved-setting)
   - [Investigate a failed checkout](#investigate-a-failed-checkout)
+- [Giving Copilot context and updating the README](#giving-copilot-context-and-updating-the-readme)
+  - [Attach files and plan the document](#attach-files-and-plan-the-document)
+  - [Check the generated instructions and diff](#check-the-generated-instructions-and-diff)
 - [Storing order items in a related table](#storing-order-items-in-a-related-table)
   - [Understand the relationship](#understand-the-relationship)
   - [Plan an upgrade that keeps existing orders](#plan-an-upgrade-that-keeps-existing-orders)
-  - [Connect Dart tools with MCP](#connect-dart-tools-with-mcp)
   - [Save related rows together](#save-related-rows-together)
   - [Implement in small steps](#implement-in-small-steps)
 - [Auditing tests and checking coverage](#auditing-tests-and-checking-coverage)
@@ -73,6 +73,18 @@ The current student plan uses **Auto** model selection (or "Copilot Fusion"). Us
 You can also change settings of the model like effort level as shown below but note that this affects the quota and usage limits of your Copilot plan.
 
 ![Changing Copilot model settings](images/8/copilot_model_settings.png)
+
+### Connect Dart tools with MCP
+
+Model Context Protocol (MCP) lets Copilot call development tools. The [Dart and Flutter MCP server](https://github.com/dart-lang/ai/tree/main/pkgs/dart_mcp_server) appears in VS Code as **Dart SDK MCP Server**. It can help Copilot look up code and inspect a running Flutter app; it does not replace your own review or tests.
+
+Click **Open Customizations** (the puzzle icon) in the Chat panel, select **MCP Servers** and search for `dart`. Enable **Dart SDK MCP Server** using its toggle, as shown below. If it is already enabled, leave it enabled rather than adding a second copy.
+
+![The Customizations view showing Dart SDK MCP Server enabled under MCP Servers after searching for dart](images/8/dart_mcp_server.png)
+
+If the server is missing, check that you have Dart 3.9 or later and version 3.114 or later of the Dart extension. The [Dart extension setting](https://dartcode.org/docs/settings/#dartmcpserver) `dart.mcpServer` should be enabled.
+
+Review any trust request before approving it. Use the server's menu to start it or view its output if needed; the [VS Code server controls](https://code.visualstudio.com/docs/agents/run/manage-mcp-servers) explain these actions.
 
 ## Working with an AI assistant
 
@@ -175,39 +187,9 @@ Once you understand the changes and the checks pass, stage all the files belongi
 
 ![The completed font size feature staged for a single commit and push](images/8/font_size_feature_commit.png)
 
-## Giving Copilot context and updating the README
+## Debugging with evidence
 
 <!-- TODO: done till here -->
-
-Now update the project documentation to include the completed font-size setting. A `README.md` file should help another person understand the app and run it. Rather than asking Copilot to guess what changed, give it the relevant files so it has accurate context.
-
-### Attach files and plan the document
-
-Type `#` or click **Add Context** to attach the files relevant to the completed feature: `README.md`, `pubspec.yaml`, `lib/main.dart`, and `lib/screens/settings_screen.dart`, as shown below. The [context guide](https://code.visualstudio.com/docs/chat/copilot-chat-context) explains the available attachment types.
-
-<!-- Capture: attach README.md, pubspec.yaml, main.dart and settings_screen.dart using Add Context in chat. -->
-![Copilot Chat with README.md and relevant project files attached as context](images/8/readme_file_context.png)
-
-Attached code and prompts are sent to the AI service. Never attach private keys, passwords, student records or private data. A gitignored file is not automatically protected from being sent when explicitly attached.
-
-Write your prompt asking Copilot to inspect the attached files and outline an accurate update for `README.md`. Ask it to focus strictly on what the app currently does, including the font-size setting, without inventing features not yet implemented.
-
-### Check the generated instructions and diff
-
-Once you approve the outline, ask Copilot to draft the changes to `README.md`. Read every claim carefully against your project:
-
-- Check supported platforms: does it state the app runs on Android, or does it incorrectly claim browser or desktop support?
-- Check setup and run commands: do they match the commands you actually ran?
-- Check test instructions: does it distinguish emulator-dependent tasks from unit tests?
-
-Try any instruction you have not already verified. Correct inaccuracies yourself or give Copilot specific feedback. Review the diff in **Source Control** to confirm the edits are limited to `README.md`, as shown below.
-
-<!-- Capture: README diff beside isSupportedPlatform in main.dart -->
-![The README diff beside the code that checks supported app platforms](images/8/readme_claim_review.png)
-
-Once satisfied, commit and push your updated `README.md`.
-
-## Debugging with evidence
 
 Testing tells you that a result is wrong. Debugging helps you find why. The debugger pauses execution so you can inspect actual values instead of asking an agent to guess.
 
@@ -228,6 +210,8 @@ When the breakpoint pauses with `_quantity` set to 0, inspect the rejected path,
 Increase the quantity and repeat the check to compare the accepted path, as shown below.
 
 ![The Flutter debugger paused at the quantity check with _quantity set to 1](images/8/debug_quantity_one.png)
+
+For user interface problems, use the Flutter Widget Inspector. In VS Code, search for **Flutter: Inspect Widget** in the Command Palette or click **Flutter Inspector** in the debug toolbar. Select any widget on the emulator screen to view its place in the widget tree, inspect its layout properties and check its padding and sizing constraints.
 
 ### Investigate a missing saved setting
 
@@ -250,6 +234,36 @@ The correct result on failure is visible feedback with the basket retained. Do n
 Use a disposable app copy with an old database schema to observe the failed save, error and retained basket, as shown below.
 
 ![The emulator showing checkout error feedback while the basket contents remain](images/8/debug_checkout_failure.png)
+
+## Giving Copilot context and updating the README
+
+Now update the project documentation to include the completed font-size setting. A `README.md` file helps another person understand the app, install dependencies, run it and test it. Rather than asking Copilot to guess what changed, give it the relevant files so it has accurate context.
+
+### Attach files and plan the document
+
+Type `#` or click **Add Context** to attach the files relevant to the completed feature: `README.md`, `pubspec.yaml`, `lib/main.dart` and `lib/screens/settings_screen.dart`, as shown below. The [context guide](https://code.visualstudio.com/docs/chat/copilot-chat-context) explains the available attachment types.
+
+<!-- Capture: attach README.md, pubspec.yaml, main.dart and settings_screen.dart using Add Context in chat. -->
+![Copilot Chat with README.md and relevant project files attached as context](images/8/readme_file_context.png)
+
+In Git, `.gitignore` is a configuration file that tells Git which files and folders to ignore so that they are not tracked or committed to version control. This includes build outputs, temporary cache files and personal configuration files. However, `.gitignore` only stops Git from tracking files; it does not stop an AI assistant from reading them. When you attach a file to Copilot Chat, its contents are sent across the network to the AI model even if that file is listed in `.gitignore`. Only attach files that are necessary for the task, and never attach files containing personal data or passwords.
+
+Write your prompt asking Copilot to inspect the attached files and outline an accurate update for `README.md`. Ask it to focus strictly on what the app currently does, including the font-size setting, without inventing features not yet implemented.
+
+### Check the generated instructions and diff
+
+Once you approve the outline, ask Copilot to draft the changes to `README.md`. Read every claim carefully against your project:
+
+- Check supported platforms: does it state the app runs on Android, or does it incorrectly claim browser or desktop support?
+- Check setup and run commands: do they match the commands you actually ran?
+- Check test instructions: does it distinguish emulator-dependent tasks from unit tests?
+
+Try any instruction you have not already verified. Correct inaccuracies yourself or give Copilot specific feedback. Review the diff in **Source Control** to confirm the edits are limited to `README.md`, as shown below.
+
+<!-- Capture: README diff beside isSupportedPlatform in main.dart -->
+![The README diff beside the code that checks supported app platforms](images/8/readme_claim_review.png)
+
+Once satisfied, commit and push your updated `README.md`. Remember to keep this document updated as you add new features and tests throughout this worksheet.
 
 ## Storing order items in a related table
 
@@ -306,16 +320,6 @@ Compare the saved order before and after the upgrade, as shown below.
 
 ![The same order preserved after migration, alongside the related order_items table](images/8/order_after_migration.png)
 
-### Connect Dart tools with MCP
-
-Model Context Protocol (MCP) connects Copilot to development tools such as live project diagnostics. The [Dart and Flutter MCP server](https://github.com/dart-lang/ai/tree/main/pkgs/dart_mcp_server) allows Copilot to inspect analyser warnings and project diagnostics directly without copy-pasting terminal output.
-
-With **Copilot** selected, run **MCP: Add Server** from the Command Palette. Choose **Command (stdio)**, enter `dart mcp-server` and name it `dart`. Select the personal **Copilot Global** destination where offered.
-
-Ask Copilot to use the Dart MCP tools to report any diagnostics on the database migration code. Check that Copilot called the Dart server and returned diagnostics from your open project, as shown below.
-
-![The Copilot tool call showing Dart MCP diagnostics from the open Flutter project](images/8/dart_mcp_diagnostics.png)
-
 ### Save related rows together
 
 A transaction groups related database writes. If an item insert fails, the order and its other items should not be left half saved. The [sqflite transaction guidance](https://pub.dev/packages/sqflite#transaction) explains how an exception causes rollback.
@@ -331,6 +335,8 @@ The order total can include delivery, so it need not equal just the item prices 
 Use the same workflow for this larger change. Agree on the model and conversion tests first, then the database upgrade and transaction tests, then the checkout and history screens.
 
 Have Copilot implement one part at a time. Check new installs, upgrades, two items linked to one order, invalid parent ids and rollback when an item cannot be saved. The tests should call the application's actual schema and migration code, not a separately rewritten version.
+
+Copilot can use the [Dart tools configured earlier](#connect-dart-tools-with-mcp) to look up unfamiliar APIs. Use analysis and migration tests to check the database change; the MCP server does not prove that saved orders survive an upgrade.
 
 Update screen tests to verify detailed items for new orders and the summary for older ones. Keep the existing empty state, navigation and failure checks. Finish by making a new purchase and reopening the app; both the older history and new details should remain.
 
@@ -447,14 +453,14 @@ The exercises below apply this workflow to your Southsea Cinema coursework. Toge
 
 Use your own prompts and acceptance criteria. For each change, be ready to explain the plan, a decision you reviewed and the evidence that it works. Apply the [review workflow](#review-and-explain-the-result), including writing your own commit messages.
 
-1. Update your cinema `README.md` with Copilot, following [Giving Copilot context and updating the README](#giving-copilot-context-and-updating-the-readme). Attach your cinema project files as context and correct any generated claim that does not match your app.
+1. Use test-driven development to add a saved dark mode setting across your cinema app using `ThemeMode` and `SharedPreferencesAsync`. Keep your existing profile settings and squared buttons intact (`shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)`), and verify that the theme persists across app restarts.
 
-2. Use test-driven development to add a saved dark mode setting across your cinema app using `ThemeMode` and `SharedPreferencesAsync`. Keep your existing profile settings and squared buttons intact, and verify that the theme persists across app restarts.
+2. Practise using the debugging tools in your Southsea Cinema project. Set breakpoints to step through a user action, such as booking a ticket or updating settings, and inspect runtime variables. Open the Flutter Widget Inspector to explore the widget tree and examine layout constraints. During your Demo 4 assessment, the marker will ask an understanding question where they introduce an intentional defect or layout error into your app and ask you to inspect, diagnose and resolve it live using the debugger and Flutter Widget Inspector.
 
-3. Give bookings related item rows. Our [order upgrade](#storing-order-items-in-a-related-table) shows the approach; your `booking_items` must preserve earlier bookings and leave no partial booking when saving fails.
+3. Update your cinema `README.md` with Copilot, following [Giving Copilot context and updating the README](#giving-copilot-context-and-updating-the-readme). Attach your cinema project files as context and verify every generated instruction against your actual codebase. Document the supported platform, prerequisites, how to run the app and how to execute the tests. Keep this document updated as you complete each exercise.
 
-4. Inspect your [coverage](#inspect-test-coverage) in the editor and address important gaps. Be ready to show what the new assertions prove.
+4. Give bookings related item rows in your SQLite database, mirroring [Storing order items in a related table](#storing-order-items-in-a-related-table). Create a `booking_items` table linked to `bookings` through a foreign key. Write an `onUpgrade` database migration that preserves all existing bookings, and use transactions to ensure no partial booking is saved if an item insert fails.
 
-5. Use the [debugger](#debugging-with-evidence) to investigate one behaviour in your app. Show an observed value and explain how it supports your diagnosis.
+5. Generate test coverage for your Southsea Cinema app with `flutter test --coverage` and inspect the results in the Flutter Coverage extension, following [Auditing tests and checking coverage](#auditing-tests-and-checking-coverage). Identify uncovered branches in your models, repositories, database helpers and screens. Add meaningful tests that prove critical behaviour rather than trivial assertions to inflate percentages.
 
-6. (Advanced) Ask Copilot to develop and run an [integration test](#end-to-end-integration-testing-with-ai) for booking a film. Prove that the new booking reaches history and the basket is cleared.
+6. (Advanced) Add the `integration_test` package to your cinema app and ask Copilot to develop an end-to-end test for booking a cinema ticket, following [End-to-end integration testing with AI](#end-to-end-integration-testing-with-ai). Run the test on your emulator and verify that the booking reaches history and the basket is cleared.
