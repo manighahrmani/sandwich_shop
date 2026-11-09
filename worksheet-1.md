@@ -186,7 +186,7 @@ VS Code will build and run your application, which should open in a browser wind
 
 For the purpose of this module, you will primarily be developing applications designed for mobile devices. To see your app in a mobile layout, you can either use your browser's developer tools or run a device emulator (more on the emulator setup is provided in later worksheets).
 
-When your app is running in the browser (Chrome, Edge or a similar browser, but not Safari!), you can simulate a mobile view. Right-click anywhere on the page and select `Inspect` or `Developer Tools`. You could alternatively press the **F12** key. This will open the developer tools.
+When your app is running in the browser (Chrome, Edge or a similar browser, but not Safari!), you can simulate a mobile view. Right-click anywhere on the page and select `Inspect` or `Developer Tools`. This will open the developer tools.
 
 In the developer tools panel, look for an icon that looks like a phone and tablet, often called the `Toggle device toolbar`. Click it to switch to a mobile device view. Below is an example of how it looks in Chrome.
 

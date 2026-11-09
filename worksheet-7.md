@@ -900,7 +900,7 @@ In `lib/main.dart`, import `orders_screen.dart` and add this entry to the existi
         },
 ```
 
-Create `lib/widgets/orders_button.dart`. In it, copy the completed [BasketButton from `basket_button` which we made in Worksheet 5](worksheet-5.md#create-the-basket-button). Rename the class and constructor to `OrdersButton`, by right clicking on its name, then selecting "Rename Symbol" (or pressing `F2`) and entering `OrdersButton` as shown below:
+Create `lib/widgets/orders_button.dart`. In it, copy the completed [BasketButton from `basket_button` which we made in Worksheet 5](worksheet-5.md#create-the-basket-button). Rename the class and constructor to `OrdersButton`, by right clicking on its name, then selecting "Rename Symbol" and entering `OrdersButton` as shown below:
 
 ![Renaming the BasketButton class to OrdersButton](images/7/rename_basket_button_to_orders_button.png)
 

@@ -340,7 +340,7 @@ class BasketButton extends StatelessWidget {
 }
 ```
 
-`IconButton` displays an icon from Flutter's Material icon set (`Icons.shopping_basket`). You can press **Ctrl + Space** on Windows or **Control + Space** on macOS after the dot to browse available icons. For a complete list, consult the [Material icons documentation](https://api.flutter.dev/flutter/material/Icons-class.html).
+`IconButton` displays an icon from Flutter's Material icon set (`Icons.shopping_basket`). After you type the dot, VS Code suggests the available icons. For a complete list, consult the [Material icons documentation](https://api.flutter.dev/flutter/material/Icons-class.html).
 
 ![The list of available Material icons in VS Code](images/5/material_icons.png)
 

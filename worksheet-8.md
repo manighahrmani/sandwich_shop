@@ -14,9 +14,12 @@
   - [Review and explain the result](#review-and-explain-the-result)
   - [Review changes, discard if needed, question anything unclear and commit when satisfied](#review-changes-discard-if-needed-question-anything-unclear-and-commit-when-satisfied)
 - [Debugging with evidence](#debugging-with-evidence)
-  - [Pause and inspect a value](#pause-and-inspect-a-value)
-  - [Investigate a missing saved setting](#investigate-a-missing-saved-setting)
-  - [Investigate a failed checkout](#investigate-a-failed-checkout)
+  - [Introduce a defect to investigate](#introduce-a-defect-to-investigate)
+  - [Start a debugging session and set breakpoints](#start-a-debugging-session-and-set-breakpoints)
+  - [Step through execution and inspect state](#step-through-execution-and-inspect-state)
+  - [Diagnose layout issues with the Flutter Inspector](#diagnose-layout-issues-with-the-flutter-inspector)
+  - [Use visual debugging aids and the property editor](#use-visual-debugging-aids-and-the-property-editor)
+  - [Fix the defect and verify with hot reload](#fix-the-defect-and-verify-with-hot-reload)
 - [Giving Copilot context and updating the README](#giving-copilot-context-and-updating-the-readme)
   - [Attach files and plan the document](#attach-files-and-plan-the-document)
   - [Check the generated instructions and diff](#check-the-generated-instructions-and-diff)
@@ -189,66 +192,161 @@ Once you understand the changes and the checks pass, stage all the files belongi
 
 ## Debugging with evidence
 
-<!-- TODO: done till here -->
+As you know already, your application will not run if it has errors and warnings will show up with `dart analyze` or in the IDE's problems panel, providing immediate feedback on potential issues in your code.
 
-Testing tells you that a result is wrong. Debugging helps you find why. The debugger pauses execution so you can inspect actual values instead of asking an agent to guess.
+However if your app runs but produces unexpected behaviour, such as incorrect calculations or layout issues, you will need to employ debugging techniques to identify and resolve the underlying problems.
 
-Flutter's [debugging guide](https://docs.flutter.dev/testing/debugging) and the [VS Code debugger guide](https://code.visualstudio.com/docs/debugtest/debugging) describe breakpoints, stepping and variable inspection. Keep your investigation to one symptom at a time.
+In this section, we will deliberately introduce an issue (bug) into the app and demonstrate how to use debugging tools to identify and resolve it. As you will see, running the app under a debugger lets you pause execution, inspect runtime state, step through control flow and explore layout constraints directly.
 
-### Pause and inspect a value
+Flutter's [debugging guide](https://docs.flutter.dev/testing/debugging), [VS Code running and debugging guide](https://docs.flutter.dev/tools/vs-code#running-and-debugging) and [Flutter DevTools documentation](https://docs.flutter.dev/tools/devtools) describe these capabilities in detail. Feel free to visit these resources at your own time.
 
-Open `order_screen.dart` and find `_addToBasket`. Click the margin beside its quantity check to set a breakpoint, then start the app through **Run and Debug** on your emulator. Open an order and try **Add to Basket** before increasing the quantity.
+### Introduce a defect to investigate
 
-When execution pauses, inspect `_quantity` in **VARIABLES**. Use **Step Over** to see which branch executes, then **Continue** to resume the app. Try again after increasing the quantity and compare the result.
+Suppose we want to show a live subtotal on the order screen before adding an item to the basket. Open `lib/screens/order_screen.dart`, locate the `build` method in `_OrderScreenState`, and add this subtotal row directly above the `PrimaryButton`:
 
-You should see why an order with quantity 0 is rejected. This is existing behaviour, not a bug to "fix". Explain it before asking Copilot for help.
+```dart
+Row(
+  children: [
+    Text(
+      'Current order subtotal for ${widget.sandwich.name}:',
+      style: const TextStyle(fontWeight: FontWeight.bold),
+    ),
+    const SizedBox(width: 8),
+    Text(
+      '£$widget.sandwich.price * _quantity',
+      style: const TextStyle(fontWeight: FontWeight.bold),
+    ),
+  ],
+),
+const SizedBox(height: 12),
+```
 
-When the breakpoint pauses with `_quantity` set to 0, inspect the rejected path, as shown below.
+Save the file and run the app. On the emulator, you will notice two problems immediately: the subtotal prints raw text instead of calculating the price, and the row overflows the right edge of the screen with yellow-and-black hazard stripes, as shown below.
 
-![The Flutter debugger paused at the quantity check with _quantity set to 0](images/8/debug_quantity_zero.png)
+![The order screen displaying raw widget text and a RenderFlex overflow on the emulator](images/8/debug_layout_overflow.png)
 
-Increase the quantity and repeat the check to compare the accepted path, as shown below.
+This happens because Dart's `$` interpolates only the identifier directly after it unless enclosed in curly braces `${...}`, treating `.sandwich.price * _quantity` as literal text. Because the resulting string is so long and the `Row` does not constrain its children, the text exceeds the screen width. We will now diagnose both issues using the debugger and Flutter DevTools.
 
-![The Flutter debugger paused at the quantity check with _quantity set to 1](images/8/debug_quantity_one.png)
+### Start a debugging session and set breakpoints
 
-For user interface problems, use the Flutter Widget Inspector. In VS Code, search for **Flutter: Inspect Widget** in the Command Palette or click **Flutter Inspector** in the debug toolbar. Select any widget on the emulator screen to view its place in the widget tree, inspect its layout properties and check its padding and sizing constraints.
+Make sure your Android emulator is selected in the bottom-right corner of the VS Code status bar, or open the Command Palette with **Ctrl + Shift + P** on Windows or **⌘ + Shift + P** on macOS and run **Flutter: Select Device**.
 
-### Investigate a missing saved setting
+Start debugging by pressing **F5** or selecting **Run > Start Debugging**. Alternatively click on the **Debug** button on top of the `main` function in `lib/main.dart` as shown below:
 
-If a saved setting resets after reopening, do not request a rewrite of the settings screen. Break at the preference read and inspect the returned value after `await`. Compare the key used to save it with the key used to load it.
+![Click the Debug button on top of the main function in lib/main.dart to start debugging](images/8/debug_start.png)
 
-If the saved value is correct, follow how it reaches the app. If it is missing, investigate the write path. Attach the relevant code and observed value to Copilot and ask for a diagnosis before a change.
+The status bar turns orange and the debug toolbar appears as shown below:
 
-In a disposable copy, use different keys to save and read the setting. Inspect the missing value, find the mismatch and add a test for loading the saved setting, as shown below.
+![The VS Code status bar turns orange and the debug toolbar appears when starting a debugging session](images/8/debug_toolbar.png)
 
-![The debugger showing a missing preference value and the different save and read keys](images/8/debug_preference_key_mismatch.png)
+A breakpoint pauses execution at a specific line so you can inspect variables before that line runs. In `lib/screens/order_screen.dart`, click the gutter margin next to the line number of the subtotal `Row` inside `build()` to set a breakpoint. See below:
 
-### Investigate a failed checkout
+![Setting a breakpoint in the gutter margin next to the subtotal Row in order_screen.dart](images/8/debug_set_breakpoint.png)
 
-When checkout fails, inspect the exception and the row being inserted before changing the UI. In `basket_screen.dart`, break at the save and in its error handler. Check whether the basket is cleared before or after the awaited save.
+In the emulator, tap any sandwich from the menu. Execution halts at your breakpoint, as shown below.
 
-In a disposable test copy, an old table missing a required column can cause a real save failure even while in-memory tests pass against the current schema. Use that difference to ask Copilot which environment each test covers.
+![VS Code paused at the breakpoint in order_screen.dart](images/8/debug_breakpoint_paused.png)
 
-The correct result on failure is visible feedback with the basket retained. Do not silence the exception or show a success message to make the symptom disappear.
+### Step through execution and inspect state
 
-Use a disposable app copy with an old database schema to observe the failed save, error and retained basket, as shown below.
+The floating debug toolbar lets you control execution: **Continue** that has a play icon resumes execution.
+You also see **Step Over** that looks like a curved arrow pointing down and to the right advances to the next line. **Step Into** that looks like an arrow pointing down enters a called method. **Step Out** that looks like an arrow pointing up exits the current method. The last button is **Hot Restart** which restarts the app.
 
-![The emulator showing checkout error feedback while the basket contents remain](images/8/debug_checkout_failure.png)
+In the **Run and Debug** view on the left, open the **VARIABLES** panel and expand `this` to inspect `_quantity` and `widget.sandwich.price` as shown below:
+
+![Inspecting variables in the VARIABLES panel](images/8/debug_variables.png)
+
+In the **WATCH** panel, click **+** and add `widget.toString()` and `widget.sandwich.price * _quantity` to compare the raw widget string with the intended calculation. See below:
+
+![Watch expressions showing widget.toString() and widget.sandwich.price * _quantity](images/8/debug_watch.png)
+
+You can also evaluate expressions in the `Debug Console` (**Ctrl + Shift + Y** on Windows or **⌘ + Shift + Y** on macOS). Type `widget.sandwich.price * _quantity` at the `>` prompt and press **Enter** to see the result, as shown below.
+
+![Inspecting variables, watch expressions and evaluated expressions](images/8/debug_variables_watch.png)
+
+### Diagnose layout issues with the Flutter Inspector
+
+Press **Continue** to let the screen finish rendering. Notice the hazard stripes and the error in the `Debug Console` reporting that a `RenderFlex` overflowed by 176 pixels.
+
+In Command Palette type in **Flutter DevTools: Inspector: Focus on View** to to open the Flutter DevTools. Alternatively you can click on its icon on the sidebar or by clicking on the DevTools button in the debug toolbar (the blue icon with a magnifying glass) as shown below:
+
+![Flutter DevTools icon in the sidebar](images/8/debug_devtools_icon.png)
+
+Click **Select Widget Mode** (the crosshair icon) in DevTools and tap the overflowing text on the emulator. The inspector selects the `Text` and its parent `Row` in the widget tree.
+
+![DevTools showing the selected Text widget and its parent Row](images/8/debug_selected_widget.png)
+
+Open the **Layout Explorer** tab as shown below.
+
+![Flutter DevTools Layout Explorer highlighting the RenderFlex overflow](images/8/debug_layout_explorer.png)
+
+Then switch to the Flex Explorer tab to get a detailed view of the flex layout and the constraints applied to each child. It visualises the flex layout of the `Row`, displays the constraints of its children, and highlights the overflow in red with the exact number of overflowed pixels, as shown below.
+
+![Flutter DevTools Flex Explorer showing the detailed flex layout and constraints](images/8/debug_flex_explorer.png)
+
+This shows why the overflow happens: the children of an unconstrained `Row` try to take all the width they need. Because the text is not wrapped in a flexible container, it cannot shrink or wrap onto multiple lines.
+
+### Use visual debugging aids and the property editor
+
+Flutter includes several visual debugging aids you can toggle from the Command Palette:
+
+Run **Flutter: Toggle Debug Painting** (or click **Show Guidelines** in DevTools) to display render boxes, padding margins and tap boundaries on the screen, as shown below.
+
+![The emulator displaying visual debug painting guidelines and bounds](images/8/debug_painting_guidelines.png)
+
+### Fix the defect and verify with hot reload
+
+Now that we understand both issues, update the subtotal row in `lib/screens/order_screen.dart` to enclose the calculation in curly braces and wrap the label in an `Expanded` widget:
+
+```dart
+Row(
+  children: [
+    Expanded(
+      child: Text(
+        'Current order subtotal for ${widget.sandwich.name}:',
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
+    ),
+    Text(
+      '£${(widget.sandwich.price * _quantity).toStringAsFixed(2)}',
+      style: const TextStyle(fontWeight: FontWeight.bold),
+    ),
+  ],
+),
+const SizedBox(height: 12),
+```
+
+Save the file and click **Hot Reload** in the debug toolbar.
+
+Flutter updates the running app immediately without losing screen state. The hazard stripes disappear, the text wraps neatly within the screen, and the subtotal updates accurately as you tap **Add** and **Remove**, as shown below.
+
+![The resolved order screen displaying the subtotal with correct constraints and calculations](images/8/debug_resolved_fix.png)
+
+Remove your breakpoint by clicking the red dot in the gutter margin before moving on otherwise you have to click on the Continue button every time you add or remove an item from the order.
 
 ## Giving Copilot context and updating the README
 
-Now update the project documentation to include the completed font-size setting. A `README.md` file helps another person understand the app, install dependencies, run it and test it. Rather than asking Copilot to guess what changed, give it the relevant files so it has accurate context.
+It's time to update the project documentation of our sandwich shop. A `README.md` file helps another person understand the app, install dependencies, run it and test it.
+
+As an example, check out the README of Flutter itself: [Flutter README](https://github.com/flutter/flutter/blob/main/README.md)
+
+This page gets opened when someone visits the GitHub repository of Flutter: [Flutter GitHub Repository](https://github.com/flutter/flutter)
+
+Similarly, for Sandwich Shop, the current README at the main branch is [Sandwich Shop README](https://github.com/manighahrmani/sandwich_shop/blob/main/README.md) which is essentially the home page for our module's website.
+
+Instead we would like it to document the actual features and usage of our Sandwich Shop app accurately. Rather than asking Copilot to guess the features and behavior, we will provide it with the relevant files so it can generate precise and context-aware documentation.
 
 ### Attach files and plan the document
 
-Type `#` or click **Add Context** to attach the files relevant to the completed feature: `README.md`, `pubspec.yaml`, `lib/main.dart` and `lib/screens/settings_screen.dart`, as shown below. The [context guide](https://code.visualstudio.com/docs/chat/copilot-chat-context) explains the available attachment types.
+Only share files needed for the README update, and check that they contain no passwords or personal data before attaching them. Listing a file in `.gitignore` does not prevent you from sharing it with Copilot by the way. (`.gitignore` lists files such as build outputs, temporary cache files, and personal configuration files that Git should ignore and not upload to GitHub.)
 
-<!-- Capture: attach README.md, pubspec.yaml, main.dart and settings_screen.dart using Add Context in chat. -->
+Type `#` or click **Add Context** to attach the files relevant to the completed feature: `README.md`, `pubspec.yaml`, `lib/main.dart` and the folder `lib/screens/`, as shown below. The [context guide](https://code.visualstudio.com/docs/chat/copilot-chat-context) explains the available attachment types.
+
 ![Copilot Chat with README.md and relevant project files attached as context](images/8/readme_file_context.png)
 
-In Git, `.gitignore` is a configuration file that tells Git which files and folders to ignore so that they are not tracked or committed to version control. This includes build outputs, temporary cache files and personal configuration files. However, `.gitignore` only stops Git from tracking files; it does not stop an AI assistant from reading them. When you attach a file to Copilot Chat, its contents are sent across the network to the AI model even if that file is listed in `.gitignore`. Only attach files that are necessary for the task, and never attach files containing personal data or passwords.
+Write your prompt asking Copilot to inspect the attached files and outline an accurate update for `README.md`. Ask it to focus strictly on the details of the app as implemented in the attached files, without assuming any unimplemented features. You can also ask it to leave placeholders for images as shown in our prompt below:
 
-Write your prompt asking Copilot to inspect the attached files and outline an accurate update for `README.md`. Ask it to focus strictly on what the app currently does, including the font-size setting, without inventing features not yet implemented.
+![Placeholder for images showing the app's features](images/8/app_features.png)
 
 ### Check the generated instructions and diff
 
@@ -258,12 +356,17 @@ Once you approve the outline, ask Copilot to draft the changes to `README.md`. R
 - Check setup and run commands: do they match the commands you actually ran?
 - Check test instructions: does it distinguish emulator-dependent tasks from unit tests?
 
-Try any instruction you have not already verified. Correct inaccuracies yourself or give Copilot specific feedback. Review the diff in **Source Control** to confirm the edits are limited to `README.md`, as shown below.
+Try any instruction you have not already verified. Correct inaccuracies yourself or give Copilot specific feedback. Review the diff in **Source Control** to confirm the edits are limited to `README.md`.
 
-<!-- Capture: README diff beside isSupportedPlatform in main.dart -->
-![The README diff beside the code that checks supported app platforms](images/8/readme_claim_review.png)
+You can preview the README by clicking on the **Open Preview** button in the top right corner of the editor, or by pressing **Ctrl + Shift + V** on Windows or **⌘ + Shift + V** on macOS.
 
-Once satisfied, commit and push your updated `README.md`. Remember to keep this document updated as you add new features and tests throughout this worksheet.
+![Preview the README to check your updates](images/8/readme_preview.png)
+
+To add images (screenshots) to your README, place them in the `images` folder and reference them using the Markdown syntax `![Alt text](images/filename.png)` (Alt text describes the image for accessibility, in case the image cannot be displayed or the user is using a screen reader). Take a look at ours:
+
+![Example of adding images to the README](images/8/readme_images_example.png)
+
+Once satisfied, commit and push your updated `README.md`. Remember to keep this document updated as you add new features and tests throughout this worksheet's tasks as well as the following worksheets.
 
 ## Storing order items in a related table
 
@@ -271,13 +374,15 @@ Once satisfied, commit and push your updated `README.md`. Remember to keep this 
 
 Worksheet 7 stores an order's items in one summary string. That is easy to display but awkward to query: counting how many of one sandwich were sold would require interpreting text.
 
-Our next task is to store each purchased item separately while keeping it linked to its order. One order can have several items; this is a one-to-many relationship. Sketch an example order with two basket lines before asking Copilot to plan it.
+Our next task is to store each purchased item separately while keeping it linked to its order. One order can have several items; this is a one-to-many relationship. Consider an example order with two basket lines before asking Copilot to plan it. See the screenshot below with the basket containing two lines (the sandwiches and the nachos):
 
-We can use an `order_items` table whose `order_id` refers to the `id` primary key in `orders`. This is a foreign key. It uses the database row id, not the displayed order number.
+![Example basket with two lines](images/8/basket_two_lines.png)
 
-The new table can record a sandwich id, its name and unit price at purchase, and its quantity. These are snapshots: changing the current menu must not change a past purchase. Our current app has no bread or size selections, so do not ask the agent to invent those fields.
+Think about how each line would be represented in the new `order_items` table and how it relates to the parent order in `orders`. We can use an `order_items` table whose `order_id` refers to the `id` primary key in `orders`. This is a foreign key. It uses the database row id, not the displayed order number.
 
-Here is the relationship in SQL, which you should read before using it:
+The new table can record a sandwich id, its name and unit price at purchase, and its quantity. These are snapshots: changing the current menu must not change a past purchase. Our current app has no bread or size selections, so do not ask Copilot, the AI agent, to invent those fields.
+
+Here is the relationship in SQL, which you should hopefully be familiar with before asking Copilot to implement it:
 
 ```sql
 CREATE TABLE order_items (
@@ -302,11 +407,15 @@ final List<Map<String, Object?>> rows = await db.query(
 );
 ```
 
+With all this in mind, let's ask Copilot to plan the implementation of the `order_items` table and the necessary changes to save and read related rows in transactions.
+
 ### Plan an upgrade that keeps existing orders
+
+<!-- TODO: Done till here. -->
 
 The app already has a version 1 database. Editing `onCreate` alone will not update that existing file. A migration changes its structure while preserving its contents.
 
-Read the [sqflite migration example](https://github.com/tekartik/sqflite/blob/master/sqflite/doc/migration_example.md). Plan version 2 with both a fresh-install path and an `onUpgrade` path. Enable foreign keys in `onConfigure`, before creation or upgrade.
+For more information, read the [sqflite migration example](https://github.com/tekartik/sqflite/blob/master/sqflite/doc/migration_example.md). Plan version 2 with both a fresh-install path and an `onUpgrade` path. Enable foreign keys in `onConfigure`, before creation or upgrade.
 
 Keep existing order numbers, summaries, dates and totals. Old summaries do not reliably contain every new item field, so do not invent detailed rows by guessing from that text. Show the old summary when no detailed items exist; show stored items for new purchases.
 
@@ -457,7 +566,7 @@ Use your own prompts and acceptance criteria. For each change, be ready to expla
 
 2. Practise using the debugging tools in your Southsea Cinema project. Set breakpoints to step through a user action, such as booking a ticket or updating settings, and inspect runtime variables. Open the Flutter Widget Inspector to explore the widget tree and examine layout constraints. During your Demo 4 assessment, the marker will ask an understanding question where they introduce an intentional defect or layout error into your app and ask you to inspect, diagnose and resolve it live using the debugger and Flutter Widget Inspector.
 
-3. Update your cinema `README.md` with Copilot, following [Giving Copilot context and updating the README](#giving-copilot-context-and-updating-the-readme). Attach your cinema project files as context and verify every generated instruction against your actual codebase. Document the supported platform, prerequisites, how to run the app and how to execute the tests. Keep this document updated as you complete each exercise.
+3. Update your cinema `README.md` with Copilot, following [Giving Copilot context and updating the README](#giving-copilot-context-and-updating-the-readme). Attach your cinema project files as context and verify every generated instruction against your actual codebase. Document the supported platform, prerequisites, how to run the app and how to execute the tests. You must showcase all the main features of your app with screenshots captured from your running app, each accompanied by a short explanation and descriptive alt text. Include browsing films, selecting tickets, managing the basket, completing a booking, viewing booking history, and using profile and settings features. Store the screenshots in your repository and embed them in the README using relative paths, then check that they display correctly in the preview. Keep the text and screenshots updated as you complete each exercise.
 
 4. Give bookings related item rows in your SQLite database, mirroring [Storing order items in a related table](#storing-order-items-in-a-related-table). Create a `booking_items` table linked to `bookings` through a foreign key. Write an `onUpgrade` database migration that preserves all existing bookings, and use transactions to ensure no partial booking is saved if an item insert fails.
 
