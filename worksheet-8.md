@@ -26,8 +26,8 @@
 - [Storing order items in a related table](#storing-order-items-in-a-related-table)
   - [Understand the relationship](#understand-the-relationship)
   - [Plan an upgrade that keeps existing orders](#plan-an-upgrade-that-keeps-existing-orders)
-  - [Save related rows together](#save-related-rows-together)
-  - [Implement in small steps](#implement-in-small-steps)
+  - [Implement the changes in small steps](#implement-the-changes-in-small-steps)
+  - [Verify with tests and the emulator](#verify-with-tests-and-the-emulator)
 - [Auditing tests and checking coverage](#auditing-tests-and-checking-coverage)
   - [Check what the assertions prove](#check-what-the-assertions-prove)
   - [Inspect test coverage](#inspect-test-coverage)
@@ -334,7 +334,7 @@ This page gets opened when someone visits the GitHub repository of Flutter: [Flu
 
 Similarly, for Sandwich Shop, the current README at the main branch is [Sandwich Shop README](https://github.com/manighahrmani/sandwich_shop/blob/main/README.md) which is essentially the home page for our module's website.
 
-Instead we would like it to document the actual features and usage of our Sandwich Shop app accurately. Rather than asking Copilot to guess the features and behavior, we will provide it with the relevant files so it can generate precise and context-aware documentation.
+Instead we would like it to document the actual features and usage of our Sandwich Shop app accurately. Rather than asking Copilot to guess the features and behaviour, we will provide it with the relevant files so it can generate precise and context-aware documentation.
 
 ### Attach files and plan the document
 
@@ -346,7 +346,7 @@ Type `#` or click **Add Context** to attach the files relevant to the completed 
 
 Write your prompt asking Copilot to inspect the attached files and outline an accurate update for `README.md`. Ask it to focus strictly on the details of the app as implemented in the attached files, without assuming any unimplemented features. You can also ask it to leave placeholders for images as shown in our prompt below:
 
-![Placeholder for images showing the app's features](images/8/app_features.png)
+![Prompt asking Copilot to outline the README with image attachments](images/8/app_features.png)
 
 ### Check the generated instructions and diff
 
@@ -411,49 +411,65 @@ With all this in mind, let's ask Copilot to plan the implementation of the `orde
 
 ### Plan an upgrade that keeps existing orders
 
-<!-- TODO: Done till here. -->
+You can try **Interactive** or **Autopilot** mode in Copilot later, although we don't recommend Autopilot at this stage because it may generate changes that are not fully aligned with the existing project structure and conventions.
 
-The app already has a version 1 database. Editing `onCreate` alone will not update that existing file. A migration changes its structure while preserving its contents.
+So in the Chat pannel, switch Copilot to **Plan** mode or type `/plan` in Copilot Chat. Provide Copilot with the necessary context by attaching the relevant files. Since we are planning a database migration that affects multiple files, it is crucial to attach all related files to give Copilot the full context.
 
-For more information, read the [sqflite migration example](https://github.com/tekartik/sqflite/blob/master/sqflite/doc/migration_example.md). Plan version 2 with both a fresh-install path and an `onUpgrade` path. Enable foreign keys in `onConfigure`, before creation or upgrade.
+Attach the following files in Copilot Chat: `#lib/database/sandwich_db.dart`, `#lib/models/order_record.dart`, `#lib/models/cart_item.dart`, `#lib/screens/basket_screen.dart`, and `#lib/screens/orders_screen.dart`. Close unrelated editor tabs so Copilot focuses only on the relevant files.
 
-Keep existing order numbers, summaries, dates and totals. Old summaries do not reliably contain every new item field, so do not invent detailed rows by guessing from that text. Show the old summary when no detailed items exist; show stored items for new purchases.
+Write a specific prompt that defines the requirements and constraints clearly:
 
-Before approving the plan, require a test that opens a version 1 database containing an order, closes it and reopens it through the version 2 upgrade. Use a temporary file for this test: a new in-memory version 2 database cannot prove that an upgrade preserved version 1 data.
+- Upgrade the SQLite database from version 1 to 2 (see above discussion on migration strategy)
+- Create an `order_items` table with foreign key `order_id` referencing `orders(id)`.
+- Enable SQLite foreign keys in `onConfigure` with `PRAGMA foreign_keys = ON`.
+- Add an `onUpgrade` migration path that preserves all existing version 1 orders without data loss.
+- Wrap checkout saves in a database transaction so an order and its items save together, rolling back if an insert fails.
 
-A development uninstall would erase the evidence you need. Verify on the existing emulator installation without uninstalling or clearing storage.
+The more details you specify in your prompt, the better Copilot can generate an accurate and reliable migration plan that aligns with your project requirements and preserves existing data. See below our prompt:
 
-Compare the saved order before and after the upgrade, as shown below.
+![Our prompt for Copilot to plan the database migration](images/8/copilot_db_plan_prompt.png)
 
-![The existing order record in the version 1 database before migration](images/8/order_before_migration.png)
+Review the plan Copilot proposes. Make sure it preserves existing order records, uses transactions for multi-row writes, and explains how to test the migration, as shown below.
 
-![The same order preserved after migration, alongside the related order_items table](images/8/order_after_migration.png)
+![Copilot proposing a migration plan for the database with context files attached](images/8/copilot_db_plan_proposal.png)
 
-### Save related rows together
+### Implement the changes in small steps
 
-A transaction groups related database writes. If an item insert fails, the order and its other items should not be left half saved. The [sqflite transaction guidance](https://pub.dev/packages/sqflite#transaction) explains how an exception causes rollback.
+Approve the plan once happy or switch Copilot to **Agent** mode to execute the plan. Rather than asking Copilot to generate all changes at once, guide it through small, verifiable steps:
 
-The parent insert returns the id needed for the item rows. Ask Copilot to use the transaction object for every write inside the transaction, not the outer database connection. The latter can cause a deadlock.
+Ideally, you should first, ask Copilot to update the model classes to represent individual order items alongside the parent order. Review the generated code to ensure field types and nullability match your schema.
 
-The save must finish before the basket is cleared. Keep the existing failure feedback and basket-retention behaviour. Do not catch an item error inside the transaction and continue as though the whole purchase succeeded.
+In our case, Copilot updated README. This is good as you want to ensure that the documentation reflects the new database structure and any changes in how orders and order items are represented, which helps maintain clarity for future developers and for testing purposes. However, as shown below, we have asked Copilot to reduce the over-writing and verbosity, keeping the README concise.
 
-The order total can include delivery, so it need not equal just the item prices multiplied by quantities. Preserve the existing checkout calculation.
+![Copilot updating the README to reflect the new database structure](images/8/copilot_readme_update.png)
 
-### Implement in small steps
+Have Copilot implement the database, checkout and order history changes from the approved plan, as shown below. Check that existing orders and totals are preserved, failed saves leave the basket intact, and new orders display their saved item details.
 
-Use the same workflow for this larger change. Agree on the model and conversion tests first, then the database upgrade and transaction tests, then the checkout and history screens.
+![Copilot implementing the database upgrade in small steps](images/8/copilot_db_implementation.png)
 
-Have Copilot implement one part at a time. Check new installs, upgrades, two items linked to one order, invalid parent ids and rollback when an item cannot be saved. The tests should call the application's actual schema and migration code, not a separately rewritten version.
+Inspect every changed file in **Source Control** before accepting it. If Copilot introduces unfamiliar syntax or unnecessary packages, ask it to explain the code or rephrase your prompt to follow existing project conventions.
 
-Copilot can use the [Dart tools configured earlier](#connect-dart-tools-with-mcp) to look up unfamiliar APIs. Use analysis and migration tests to check the database change; the MCP server does not prove that saved orders survive an upgrade.
+### Verify with tests and the emulator
 
-Update screen tests to verify detailed items for new orders and the summary for older ones. Keep the existing empty state, navigation and failure checks. Finish by making a new purchase and reopening the app; both the older history and new details should remain.
+AI-generated code requires validation. Ask Copilot to write automated tests that prove the migration and transactions work as intended:
 
-Check that a new order with two items creates two linked rows and that a failed transaction leaves no partial order, as shown below.
+1. A migration test that creates a file-backed version 1 database containing sample orders, closes it and reopens it through the application's version 2 migration code. Verify that the existing orders remain intact; a fresh in-memory database cannot prove this.
+2. A transaction test verifying that saving an order with multiple items inserts rows into both `orders` and `order_items`.
+3. A rollback test proving that if an item insert fails, the parent order is not saved.
 
-![A new order and its two related item rows in the database inspector](images/8/order_with_related_items.png)
+Run your test suite in the terminal to verify the implementation:
+
+```bash
+flutter test
+```
+
+Once tests pass, launch the app on your emulator without clearing app storage. Place a new order with multiple items, open past orders to verify that both your older purchases and the new itemised order are displayed, and inspect the database, as shown below.
+
+![The emulator displaying preserved past orders alongside newly itemised purchases](images/8/db_migration_orders_verified.png)
 
 ## Auditing tests and checking coverage
+
+<!-- TODO: Done till here -->
 
 ### Check what the assertions prove
 
@@ -473,17 +489,18 @@ Generate the report with:
 flutter test --coverage
 ```
 
-Flutter writes `coverage/lcov.info`. Install the [Flutter Coverage extension](https://marketplace.visualstudio.com/items?itemName=Flutterando.flutter-coverage) used for your demo and open its tree in the **Testing** view. It reports coverage by folder and file.
+Flutter writes `coverage/lcov.info`. We have added the [Flutter Coverage extension](https://marketplace.visualstudio.com/items?itemName=Flutterando.flutter-coverage) to the workspace recommendations in `.vscode/extensions.json`. When prompted by VS Code, click **Install**, or open the Extensions view (**Ctrl + Shift + X** on Windows or **⌘ + Shift + X** on macOS), filter by `@recommended` and install it.
 
-Its documented defaults look for `lcov.info` inside `coverage`. If the tree is empty, check `flutter-coverage.coverageFilePaths` and `flutter-coverage.coverageFileNames` against those values and follow the extension's instructions. Do not confuse this tree with coloured editor gutters supplied by a different extension.
+Once installed, open the **Testing** view in the sidebar to inspect the coverage tree. It reports coverage by folder and file, as shown below.
+
+<!-- Capture: The Flutter Coverage extension showing coverage by folder and file in the Testing view. -->
+![The Flutter Coverage extension showing coverage by folder and file in the Testing view](images/8/flutter_coverage_tree.png)
+
+Its documented defaults look for `lcov.info` inside `coverage`. If the tree is empty, check `flutter-coverage.coverageFilePaths` and `flutter-coverage.coverageFileNames` against those values and follow the extension's instructions.
 
 Inspect an uncovered model, repository, database helper or screen with Copilot. Decide which missing behaviour deserves a test before generating one. Give priority to methods, navigation, save/load paths and error handling, not trivial tests written only to increase a percentage.
 
 After adding focused tests, regenerate the report once and compare it. Explain a gap you addressed and what its assertion now proves. Keep the test folder organisation from Worksheet 7.
-
-The extension's controls can differ by version. Follow the current extension instructions if a label or view is different from the example below.
-
-![The Flutter Coverage extension showing coverage by folder and file in the Testing view](images/8/flutter_coverage_tree.png)
 
 ## End-to-end integration testing with AI
 

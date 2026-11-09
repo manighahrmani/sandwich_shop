@@ -2,7 +2,8 @@
 .DS_Store
 
 # VS Code
-.vscode/
+.vscode/*
+!.vscode/extensions.json
 
 # Scratch / personal notes
 prompt.md
