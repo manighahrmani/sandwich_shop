@@ -24,7 +24,8 @@ void main() {
     final Database database = await databaseFactoryFfiNoIsolate.openDatabase(
       inMemoryDatabasePath,
       options: OpenDatabaseOptions(
-        version: 1,
+        version: 2,
+        onConfigure: SandwichDatabase.instance.configureDatabase,
         onCreate: SandwichDatabase.instance.createTables,
       ),
     );
@@ -98,10 +99,18 @@ void main() {
       expect(orders[0].orderNumber, 1001);
       expect(orders[0].summary, '2 x Footlong Sub');
       expect(orders[0].total, 21.50);
+      expect(orders[0].items, hasLength(1));
+      expect(orders[0].items[0].sandwichId, 'footlong');
+      expect(orders[0].items[0].sandwichName, 'Footlong Sub');
+      expect(orders[0].items[0].unitPrice, 10.0);
+      expect(orders[0].items[0].quantity, 2);
     }
     expect(CartRepository.instance.getItems(), isEmpty);
     expect(find.byType(OrdersScreen), findsOneWidget);
     expect(find.text('Order #1001'), findsOneWidget);
+    expect(
+        find.text('2 x Footlong Sub at £10.00 each: £20.00'), findsOneWidget);
+    expect(find.text('£21.50'), findsOneWidget);
   });
 
   testWidgets('Checkout keeps the basket when saving fails', (
@@ -112,7 +121,7 @@ void main() {
     );
     await tester.runAsync(() async {
       final Database database = await SandwichDatabase.instance.database;
-      await database.execute('DROP TABLE orders');
+      await database.execute('DROP TABLE order_items');
     });
     await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
     await tester.runAsync(() async {
@@ -124,5 +133,10 @@ void main() {
     expect(CartRepository.instance.getItems().length, 1);
     expect(find.text('2 x Footlong Sub'), findsOneWidget);
     expect(find.textContaining('Could not save your order'), findsOneWidget);
+    final List<Map<String, Object?>>? orders = await tester.runAsync(() async {
+      final Database database = await SandwichDatabase.instance.database;
+      return database.query('orders');
+    });
+    expect(orders, isEmpty);
   });
 }

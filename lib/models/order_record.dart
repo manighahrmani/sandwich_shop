@@ -1,9 +1,12 @@
+import 'package:sandwich_shop/models/order_item.dart';
+
 class OrderRecord {
   final int? id;
   final int orderNumber;
   final String summary;
   final double total;
   final String date;
+  final List<OrderItem> items;
 
   const OrderRecord({
     this.id,
@@ -11,6 +14,7 @@ class OrderRecord {
     required this.summary,
     required this.total,
     required this.date,
+    this.items = const [],
   });
 
   Map<String, Object?> toMap() {
@@ -26,7 +30,10 @@ class OrderRecord {
     return data;
   }
 
-  factory OrderRecord.fromMap(Map<String, Object?> map) {
+  factory OrderRecord.fromMap(
+    Map<String, Object?> map, {
+    List<OrderItem> items = const [],
+  }) {
     final int orderNumber = map['order_number'] as int;
     final String summary = map['summary'] as String;
     final num totalNumber = map['total'] as num;
@@ -39,6 +46,7 @@ class OrderRecord {
       summary: summary,
       total: total,
       date: date,
+      items: items,
     );
   }
 }

@@ -74,7 +74,8 @@ void main() {
       final Database database = await databaseFactoryFfiNoIsolate.openDatabase(
         inMemoryDatabasePath,
         options: OpenDatabaseOptions(
-          version: 1,
+          version: 2,
+          onConfigure: SandwichDatabase.instance.configureDatabase,
           onCreate: SandwichDatabase.instance.createTables,
         ),
       );

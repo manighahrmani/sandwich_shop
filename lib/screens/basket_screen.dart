@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
+import 'package:sandwich_shop/models/order_item.dart';
 import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
@@ -52,6 +53,17 @@ class _BasketScreenState extends State<BasketScreen> {
     final String summary = _buildSummary(items);
     final double total = cart.getTotalDue();
     final String date = _formatDate(DateTime.now());
+    final List<OrderItem> orderItems = [];
+    for (final CartItem item in items) {
+      orderItems.add(
+        OrderItem(
+          sandwichId: item.sandwich.id,
+          sandwichName: item.sandwich.name,
+          unitPrice: item.sandwich.price,
+          quantity: item.quantity,
+        ),
+      );
+    }
 
     try {
       final SandwichDatabase database = SandwichDatabase.instance;
@@ -61,6 +73,7 @@ class _BasketScreenState extends State<BasketScreen> {
         summary: summary,
         total: total,
         date: date,
+        items: orderItems,
       );
       await database.insertOrder(record);
       cart.clear();

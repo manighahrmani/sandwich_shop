@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
+import 'package:sandwich_shop/models/order_item.dart';
 import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/orders_button.dart';
@@ -48,6 +49,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _buildOrderCard(OrderRecord order) {
+    final List<Widget> itemDetails = [];
+    if (order.items.isEmpty) {
+      itemDetails.add(Text(order.summary));
+    } else {
+      for (final OrderItem item in order.items) {
+        itemDetails.add(
+          Text(
+            '${item.quantity} x ${item.sandwichName} '
+            'at £${item.unitPrice.toStringAsFixed(2)} each: '
+            '£${item.lineTotal.toStringAsFixed(2)}',
+          ),
+        );
+      }
+    }
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Padding(
@@ -66,7 +81,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ],
             ),
             const SizedBox(height: 4),
-            Text(order.summary),
+            ...itemDetails,
             const SizedBox(height: 4),
             Text(
               order.date,

@@ -1,4 +1,5 @@
 import 'package:path/path.dart';
+import 'package:sandwich_shop/models/order_item.dart';
 import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -26,12 +27,22 @@ class SandwichDatabase {
   Future<Database> _initDB(String fileName) async {
     final String folder = await getDatabasesPath();
     final String filePath = join(folder, fileName);
+    return open(filePath);
+  }
+
+  Future<Database> open(String filePath) async {
     final Database db = await openDatabase(
       filePath,
-      version: 1,
+      version: 2,
+      onConfigure: configureDatabase,
       onCreate: _createDB,
+      onUpgrade: upgradeDatabase,
     );
     return db;
+  }
+
+  Future<void> configureDatabase(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
   }
 
   Future<void> createTables(Database db, int version) async {
@@ -44,6 +55,27 @@ class SandwichDatabase {
         date TEXT NOT NULL
       )
     ''');
+    await _createOrderItemsTable(db);
+  }
+
+  Future<void> _createOrderItemsTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS order_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_id INTEGER NOT NULL REFERENCES orders(id),
+        sandwich_id TEXT NOT NULL,
+        sandwich_name TEXT NOT NULL,
+        unit_price REAL NOT NULL CHECK (unit_price >= 0),
+        quantity INTEGER NOT NULL CHECK (quantity > 0)
+      )
+    ''');
+  }
+
+  Future<void> upgradeDatabase(
+      Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await _createOrderItemsTable(db);
+    }
   }
 
   Future<void> _createDB(Database db, int version) async {
@@ -70,7 +102,13 @@ class SandwichDatabase {
 
   Future<int> insertOrder(OrderRecord order) async {
     final Database db = await database;
-    final int id = await db.insert('orders', order.toMap());
+    final int id = await db.transaction((Transaction transaction) async {
+      final int orderId = await transaction.insert('orders', order.toMap());
+      for (final OrderItem item in order.items) {
+        await transaction.insert('order_items', item.toMap(orderId));
+      }
+      return orderId;
+    });
     return id;
   }
 
@@ -82,7 +120,17 @@ class SandwichDatabase {
     );
     final List<OrderRecord> orders = [];
     for (final Map<String, Object?> row in records) {
-      orders.add(OrderRecord.fromMap(row));
+      final List<Map<String, Object?>> itemRecords = await db.query(
+        'order_items',
+        where: 'order_id = ?',
+        whereArgs: [row['id']],
+        orderBy: 'id',
+      );
+      final List<OrderItem> items = [];
+      for (final Map<String, Object?> itemRow in itemRecords) {
+        items.add(OrderItem.fromMap(itemRow));
+      }
+      orders.add(OrderRecord.fromMap(row, items: items));
     }
     return orders;
   }
