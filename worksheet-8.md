@@ -1,4 +1,4 @@
-# Worksheet 8 — AI-assisted development with Copilot
+# Worksheet 8 — AI-assisted development and test coverage
 
 ## Table of contents
 
@@ -455,18 +455,17 @@ Once tests pass, launch the app on your emulator without clearing app storage. P
 
 ## Test coverage
 
-A passing test suite only proves what the tests actually check. Coverage reports which lines of your app ran while the tests ran, so it shows you what nobody has tested yet. Our aim is a suite that opens every screen, uses every feature and reaches close to 100% of the lines in `lib`.
-
-Copilot can write most of these tests, but you remain responsible for them: you must understand each one, run it and be able to explain what it proves. From Demo 4 onwards you are asked to run the report and show it with the Flutter Coverage extension. We will do that here for Sandwich Shop, and you will repeat it for Southsea Cinema in the exercises.
+Test coverage shows which lines of your app ran while your tests ran. A line that never ran has not been tested. In this section you will use Copilot to write unit tests and widget tests until almost every line in the `lib` folder has run. Copilot writes the tests, but you must read each one and understand what it checks.
 
 ### Install the extension
 
-Open the Extensions view with **Ctrl + Shift + X** on Windows or **⌘ + Shift + X** on macOS, search for `Flutter Coverage` by Flutterando and click **Install**, as shown below. Branch `8` recommends this extension in `.vscode/extensions.json`, so VS Code may offer it to you automatically.
+The Flutter Coverage extension shows the coverage of every folder and file inside VS Code. Open the Extensions view with **Ctrl + Shift + X** on Windows or **⌘ + Shift + X** on macOS, search for `Flutter Coverage`, find the extension by Flutterando and click **Install**, as shown below.
 
-<!-- Capture: the Extensions view showing Flutter Coverage by Flutterando with the Install button. -->
 ![The Extensions view showing the Flutter Coverage extension by Flutterando](images/8/flutter_coverage_install.png)
 
 ### Measure coverage
+
+To measure your starting point:
 
 Run the tests with coverage in the terminal:
 
@@ -474,73 +473,57 @@ Run the tests with coverage in the terminal:
 flutter test --coverage
 ```
 
-Flutter writes the report to `coverage/lcov.info`, a plain text file with a count for every executable line. It is generated output, so make sure `coverage/` is listed in your `.gitignore`. Open the **Testing** view from the flask icon, which [Running test suites and static analysis](worksheet-4.md#running-test-suites-and-static-analysis) introduced. The extension adds a tree that shows the coverage of every folder and file, as shown below.
+This runs every test and creates the file `coverage/lcov.info`, which lists every line of your app and how many times it ran. (Check that `.gitignore` contains the line `coverage/`. The report is generated again each time, so it does not belong on GitHub.)
 
-<!-- Capture: the Flutter Coverage tree in the Testing view for your starting point, before adding any tests. -->
+Open the **Testing** view by clicking the flask icon in the Activity Bar. The extension shows a tree with the coverage percentage of every folder and file, as shown below. Observe the total percentage and the three files with the lowest percentage.
+
 ![The Flutter Coverage tree in the Testing view showing the percentage for each folder and file](images/8/flutter_coverage_tree.png)
 
-Write down your starting percentage and the files with the lowest coverage. The report does not update by itself, so run the command again after changing your tests. If the tree is empty, check that `flutter-coverage.coverageFilePaths` and `flutter-coverage.coverageFileNames` in the extension settings point to `coverage` and `lcov.info`.
+The tree does not update by itself, so run `flutter test --coverage` again after you change your tests. If the tree is empty, open the extension settings and check that `flutter-coverage.coverageFilePaths` is `coverage` and `flutter-coverage.coverageFileNames` includes `lcov.info`.
 
-The report has two limits. A file that no test imports does not appear in it at all, so compare the tree with the files in `lib` rather than trusting a high total. And a line can run without being checked: a project can have 100% coverage and still have bugs, so coverage is only useful together with good assertions.
+Coverage has two limits, so a high percentage is not enough on its own. First, a file that no test imports does not appear in the tree. Compare the tree with the files in `lib` and, if a file is missing, write a test that imports it. A file that only holds `const` values has no lines to run and can stay out of the tree. Second, coverage only shows that a line ran, not that a test checked the result. A test without an `expect` line can reach 100% and prove nothing, so read your tests and make sure each one checks a specific result, for example `findsOneWidget` or `equals(3)`, not just `isTrue` or `isNotNull`. You will break the code on purpose in the [Check the tests](#check-the-tests) section to prove that your tests notice.
 
 ### Plan the tests
 
-Do not ask Copilot to "write all the tests". Switch to **Plan** mode and attach `coverage/lcov.info`, the `lib` folder and your existing `test` folder. Ask it to list the screens, widgets, models, repositories, database methods and user actions in the app, which of them already have tests, and what is missing. Check its list against your own knowledge of the app. These gaps are usually the most important:
+First find out what is not tested yet. Switch Copilot to **Plan** mode, attach the `lib` folder, the `test` folder and the file `coverage/lcov.info`, and write a prompt in your own words. Ask Copilot to match every part of your app with the test that covers it and to say what is still untested. Tell it not to write any code yet, as shown below.
 
-- every route in `lib/main.dart`, reached by tapping the real buttons and returning with the back button
-- every button, switch, text field and form action on each screen
-- empty, loading and error states, such as a menu that cannot load or an order that fails to save
-- each database method and each model conversion, including values that should be rejected
+![Copilot Plan mode with the three attachments and the prompt asking for a test plan](images/8/copilot_plan_mode.png)
 
-Keep the tests in folders that mirror `lib`, the layout described in [Organising tests](worksheet-7.md#organising-tests). For example, `lib/screens/orders_screen.dart` is tested by `test/screens/orders_screen_test.dart`. Ask Copilot to follow the style of your existing tests, including explicit types and simple statements, so that the new tests read like the ones you already understand.
+Copilot may ask a question before it answers. Choose the most thorough option. Its reply will probably be a set of tables, and it will differ from your classmates' replies, so treat it as a draft.
+
+Check the reply against your `lib` and `test` folders, because Copilot can miss parts of the app or invent test files. Make sure it covers every screen, button and error message, every database method and every `toMap` and `fromMap` conversion, and notice any file in `lib` with no test file of its own. If something is missing or vague, send a follow-up prompt about it.
+
+If your coverage is already high, the "not tested yet" column lists missing checks, not lines that never ran. Write a test for anything a user can see or lose, such as a total, an error message or a saved order. Skip rare internal cases. Put each new test in a folder that matches the file it tests, as described in [Organising tests](worksheet-7.md#organising-tests). For example, `lib/screens/orders_screen.dart` is tested by `test/screens/orders_screen_test.dart`.
 
 ### Write unit tests
 
-Unit tests check logic without building any widgets, which is how [Worksheet 4](worksheet-4.md) introduced them. Start with the files that contain logic: the models, the repositories and the database helper. Work on one file at a time. Ask Copilot to write the tests for it, run only that file, then read the result before moving on:
+A unit test runs a small piece of code, such as a model or a database method, without showing a screen. [Worksheet 4](worksheet-4.md) introduced them. Start with the files in `lib/models`, `lib/repositories` and `lib/database`, and work on one file at a time. Switch Copilot to **Interactive** mode and write a prompt that asks for tests of that one file in the style of your existing tests. Copilot may write more or fewer tests than you expected, or use a different style. Check the result against your plan and send a follow-up prompt to steer it. Then run only that test file, for example `flutter test test/models/order_item_test.dart`.
 
-```bash
-flutter test test/models/order_item_test.dart
-```
-
-For the database, reuse the in-memory setup shown in [Prepare a fresh database for each test](worksheet-7.md#prepare-a-fresh-database-for-each-test). If a test needs a failing database, cause a real failure, such as inserting an invalid row, instead of replacing the code under test.
+Read every new test before you move on. If you cannot say in one sentence what a test does, ask Copilot to explain it. For the database, copy the in-memory setup shown in [Prepare a fresh database for each test](worksheet-7.md#prepare-a-fresh-database-for-each-test). To test a failure, cause a real one, such as saving an item with a quantity of 0.
 
 ### Write widget tests
 
-Widget tests build a screen, interact with it and check what appears. Ask Copilot for one test per behaviour, for example opening the order screen from the menu, adding items, checking out, and finding the new order in the history. Use the screens' own keys or finders scoped to one card, because a generic **Order** finder can match several buttons.
-
-Error states need a real failure. In the reference solution on branch `8`, the menu error is triggered by an asset bundle that returns nothing, and the orders error by dropping the database tables before the screen opens. Database calls need `tester.runAsync` so that they complete, as in the existing tests.
-
-Stop after each file and run `dart analyze` and `flutter test`. If a generated test fails, decide whether the test or the app is wrong before changing either. Never delete an assertion or change the app's behaviour just to get a green result.
+A widget test shows a screen inside the test, taps buttons and checks what appears. Use Copilot and what you know about testing to cover the journeys in your plan, one screen at a time. Use a `Key` or a finder inside one card when `find.text` matches several widgets, run database code inside `tester.runAsync`, and cause real failures to test error messages. After each file, run `dart analyze` and `flutter test`. If a new test fails, decide whether the test or the app is wrong, and never delete an `expect` line just to make a test pass.
 
 ### Check the tests
 
-Tests can pass without checking the behaviour that matters. A test that finds a settings title does not prove the larger font size setting is saved, and a history test that finds a seeded order does not prove checkout saved a new one. Ask Copilot to explain each new test, then check these things yourself:
-
-- the test has at least one assertion that would fail if the feature broke
-- it covers the success path and any empty or error path
-- a seeded value cannot satisfy it by accident
-- you can explain its setup, action and expected result in your own words
-
-In a disposable change, break one important line and run its test. It should fail for the missing behaviour. Restore the line immediately and confirm that the test passes again.
+Coverage only proves that lines ran, so check that your tests would notice a bug. For at least one unit test and one widget test, break the app on purpose, for example change `unitPrice * quantity` to `unitPrice + quantity` in `lineTotal`. Run the test. It should fail. If it passes, strengthen it, then undo your change and run it again. Also read each new test and check that it has an `expect` line, creates its own data and checks the result of the action, not only that the screen opened.
 
 ### Close the gaps
 
-Run `flutter test --coverage` again and compare the tree with your starting point. Open each file that is still below 100% and find the lines that did not run; in `coverage/lcov.info` these are the `DA:` entries that end in `,0`, and Copilot can list them for you. For each gap, decide whether it deserves a test and write it. Do not write trivial tests only to increase the percentage.
-
-In the reference solution, the last gaps were the menu and orders error messages, the missing image message, the default database path and the `main` function. They are typical: the last few percent are usually error paths and start-up code. Finish when your suite passes, analysis is clean and you can explain the remaining uncovered lines, if any.
+Run `flutter test --coverage`, pick a file below 100%, find the lines that did not run and ask Copilot for tests of that behaviour. Check what it writes, then run the tests and the coverage again. The last few percent are usually error messages and start-up code. You are finished when `dart analyze` reports no issues, `flutter test` passes, your coverage is close to 100% and you trust it. Write down your final percentage and compare it with your starting point.
 
 ## Exercises
 
-The exercises below apply this workflow to your Southsea Cinema coursework. Together with Worksheet 7, they prepare you for Demo 4. See the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw) for the formal requirements.
+<!-- TODO (Mani): come back on 2026-11-11 to verify the Worksheet 8 changes (test coverage sections, exercises, Demo 4 reliability question in sign-off-app) and take any remaining screenshots. Then delete this comment. -->
 
-Use your own prompts and acceptance criteria. For each change, be ready to explain the plan, a decision you reviewed and the evidence that it works. Use the [review workflow](#review-the-result) for each one.
+The exercises below apply this workflow to your Southsea Cinema coursework. Together with the exercises in [Worksheet 7](worksheet-7.md#exercises), they prepare you for Demo 4. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-1. Use test-driven development to add a saved dark mode setting across your cinema app using `ThemeMode` and `SharedPreferencesAsync`. Keep your existing profile settings and squared buttons intact (`shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)`), and verify that the theme persists across app restarts.
+Build on the cinema app from Worksheet 7. For each change, be ready to explain the plan, a decision you reviewed and the evidence that it works, using the [review workflow](#review-the-result).
 
-2. Practise using the debugging tools in your Southsea Cinema project. Set breakpoints to step through a user action, such as booking a ticket or updating settings, and inspect runtime variables. Open the Flutter Widget Inspector to explore the widget tree and examine layout constraints. During your Demo 4 assessment, the marker will ask an understanding question where they introduce an intentional defect or layout error into your app and ask you to inspect, diagnose and resolve it live using the debugger and Flutter Widget Inspector.
-
-3. Update your cinema `README.md` with Copilot, using [Updating the README](#updating-the-readme) as your guide. Attach your cinema project files as context and verify every generated instruction against your actual codebase. Document the supported platform, prerequisites, how to run the app and how to execute the tests. You must showcase all the main features of your app with screenshots captured from your running app, each accompanied by a short explanation and descriptive alt text. Include browsing films, selecting tickets, managing the basket, completing a booking, viewing booking history, and using profile and settings features. Store the screenshots in your repository and embed them in the README using relative paths, then check that they display correctly in the preview. Keep the text and screenshots updated as you complete each exercise.
-
-4. (Advanced) Give bookings related item rows in your SQLite database, modelled on [Order items table](#order-items-table). Create a `booking_items` table linked to `bookings` through a foreign key. Write an `onUpgrade` database migration that preserves all existing bookings, and use transactions to ensure no partial booking is saved if an item insert fails.
-
-5. (Advanced) Measure and raise test coverage in your Southsea Cinema app, working through [Test coverage](#test-coverage). Install the Flutter Coverage extension, run `flutter test --coverage` and record your starting percentage. Use Copilot to plan and write unit and widget tests, organised in folders that mirror `lib`, that open every screen, use every feature and cover the loading, empty and error states. Aim for close to 100% and be ready to explain every test. At Demo 4 you can be asked to run the report, show the Flutter Coverage tree and explain a test of your choice.
+1. Use test-driven development to add a dark mode setting to your Southsea Cinema app. Implement it using `ThemeMode` and `SharedPreferencesAsync`.
+    Observe how we used Copilot to add a larger font size setting in [Working with Copilot](#working-with-copilot), and follow the same workflow.
+2. Practise debugging your Southsea Cinema app, following [Debugging](#debugging). Step through a user action, such as booking a ticket or updating settings, and use the Flutter Widget Inspector to examine the widget tree and layout. At Demo 4, the marker will introduce a defect into your app and ask you to find and fix it live.
+3. Update your cinema `README.md` with Copilot, following [Updating the README](#updating-the-readme). Include screenshots of the main features of your running app, each with a short explanation and descriptive alt text. Keep the README up to date as you complete each exercise.
+4. (Advanced) Give bookings related item rows in your SQLite database, modelled on [Order items table](#order-items-table). Create a `booking_items` table linked to `bookings` through a foreign key, migrate existing bookings and make sure no partial booking is saved if an item insert fails.
+5. (Advanced) Measure and raise the test coverage of your cinema app, following [Test coverage](#test-coverage). Record your starting and final percentages, and make sure you can trust the final one. At Demo 4, you can be asked to show the Flutter Coverage tree, explain a test of your choice and show a test failing after the marker changes a line in `lib`.
