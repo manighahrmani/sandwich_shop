@@ -48,9 +48,9 @@ Each week has a worksheet and a lecture. You should aim to complete the workshee
 - [Worksheet 5: Navigation, State and Forms](./worksheet-5.md)
 - [Worksheet 6: JSON Assets and Saved Preferences](./worksheet-6.md)
 - [Worksheet 7: SQLite and Order History](./worksheet-7.md)
-- Worksheet 8: AI-Driven Development (under revision)
-- Worksheet 9: Web Services and Integration Testing (under revision)
-- Worksheet 10: Cloud Services, Deployment, and DevOps (under revision)
+- [Worksheet 8: AI-Assisted Development and Test Coverage](./worksheet-8.md) (draft)
+- [Worksheet 9: Web and Cloud Services](./worksheet-9.md) (draft)
+- [Worksheet 10: Integration Testing and CI/CD](./worksheet-10.md) (draft)
 
 ## **Assessment**
 

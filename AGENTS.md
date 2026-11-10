@@ -199,8 +199,12 @@ clarity, expressiveness, and ease of understanding for students:
     `sqflite_common_ffi`), order records, database-backed checkout and
     saved purchase history on an Android emulator. No Provider package,
     notifiers or app-bar basket badge is required.
-  - Worksheet 8 covers Review-Driven Development. Integration testing and
-    cloud services belong to the later worksheets, not Worksheet 7.
+  - Worksheet 8 covers AI-assisted development with Copilot: reviewing
+    changes, debugging, the README, the related order items table and test
+    coverage with the Flutter Coverage extension. Integration testing and
+    cloud services belong to the later worksheets, not Worksheet 7 or 8.
+  - Worksheet 9 covers web and cloud services. Worksheet 10 covers
+    integration testing (`integration_test`) and CI/CD with GitHub Actions.
   - Sandwich Shop branch `6` ends after JSON and preferences; branch `7`
     adds SQLite orders. Southsea Cinema Private uses demo checkpoints:
     branch `3` ends after Worksheets 5 and 6, while branch `4` adds
