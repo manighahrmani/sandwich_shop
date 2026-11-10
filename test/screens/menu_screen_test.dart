@@ -74,4 +74,21 @@ void main() {
 
     expect(find.byType(SettingsScreen), findsOneWidget);
   });
+
+  testWidgets('MenuScreen shows a message when the menu cannot be loaded', (
+    WidgetTester tester,
+  ) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMessageHandler('flutter/assets', (ByteData? message) async {
+      return null;
+    });
+    addTearDown(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMessageHandler('flutter/assets', null);
+    });
+    await tester.pumpWidget(const MaterialApp(home: MenuScreen()));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Could not load the menu'), findsOneWidget);
+    expect(find.byType(SandwichCard), findsNothing);
+  });
 }

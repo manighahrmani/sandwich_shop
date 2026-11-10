@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +12,7 @@ void main() {
         InMemorySharedPreferencesAsync.empty();
   });
 
-  testWidgets('SettingsScreen displays form fields, checkbox and switch', (
+  testWidgets('SettingsScreen displays form fields and two switches', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
@@ -19,30 +20,30 @@ void main() {
 
     expect(find.text('Customer Profile'), findsOneWidget);
     expect(find.byType(TextField), findsNWidgets(3));
-    expect(find.byType(Switch), findsOneWidget);
-    expect(find.byType(Checkbox), findsOneWidget);
-    expect(find.byType(SwitchListTile), findsNothing);
+    expect(find.byType(Switch), findsNWidgets(2));
+    expect(find.byType(SwitchListTile), findsOneWidget);
     expect(find.text('Bigger text'), findsOneWidget);
+    expect(find.text('Make text easier to read'), findsOneWidget);
     expect(find.text('Save Settings'), findsOneWidget);
   });
 
-  testWidgets('Bigger text checkbox defaults off and can be toggled', (
+  testWidgets('Bigger text switch defaults off and can be toggled', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
 
-    final Finder largeTextCheckbox = find.byKey(const Key('largeTextCheckbox'));
-    expect(tester.widget<CheckboxListTile>(largeTextCheckbox).value, isFalse);
+    final Finder largeTextSwitch = find.byKey(const Key('largeTextSwitch'));
+    expect(tester.widget<SwitchListTile>(largeTextSwitch).value, isFalse);
 
     await tester.tap(find.text('Bigger text'));
     await tester.pump();
 
-    expect(tester.widget<CheckboxListTile>(largeTextCheckbox).value, isTrue);
+    expect(tester.widget<SwitchListTile>(largeTextSwitch).value, isTrue);
 
-    await tester.tap(find.byType(Checkbox));
+    await tester.tap(find.byType(Switch).first);
     await tester.pump();
-    expect(tester.widget<CheckboxListTile>(largeTextCheckbox).value, isFalse);
+    expect(tester.widget<SwitchListTile>(largeTextSwitch).value, isFalse);
   });
 
   testWidgets('Bigger text previews changes without saving them', (
@@ -56,12 +57,12 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final Finder largeTextCheckbox = find.byKey(const Key('largeTextCheckbox'));
-    expect(tester.widget<CheckboxListTile>(largeTextCheckbox).value, isTrue);
+    final Finder largeTextSwitch = find.byKey(const Key('largeTextSwitch'));
+    expect(tester.widget<SwitchListTile>(largeTextSwitch).value, isTrue);
 
-    await tester.tap(largeTextCheckbox);
+    await tester.tap(largeTextSwitch);
     await tester.pump();
-    expect(tester.widget<CheckboxListTile>(largeTextCheckbox).value, isFalse);
+    expect(tester.widget<SwitchListTile>(largeTextSwitch).value, isFalse);
     expect(changes, [false]);
     expect(await SharedPreferencesAsync().getBool(prefLargeText), isNull);
 
@@ -77,11 +78,11 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(tester.widget<CheckboxListTile>(largeTextCheckbox).value, isTrue);
+    expect(tester.widget<SwitchListTile>(largeTextSwitch).value, isTrue);
     expect(changes, [false]);
   });
 
-  testWidgets('Bigger text checkbox has an accessible label', (
+  testWidgets('Bigger text switch has an accessible label', (
     WidgetTester tester,
   ) async {
     final SemanticsHandle semantics = tester.ensureSemantics();
@@ -89,19 +90,11 @@ void main() {
       await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
       await tester.pumpAndSettle();
 
-      expect(
-        tester.getSemantics(find.byType(Checkbox)),
-        matchesSemantics(
-          label: 'Bigger text',
-          hasCheckedState: true,
-          hasSelectedState: true,
-          isEnabled: true,
-          hasEnabledState: true,
-          isFocusable: true,
-          hasFocusAction: true,
-          hasTapAction: true,
-        ),
+      final node = tester.getSemantics(
+        find.byKey(const Key('largeTextSwitch')),
       );
+      expect(node.label, 'Bigger text\nMake text easier to read');
+      expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
     } finally {
       semantics.dispose();
     }
@@ -126,7 +119,7 @@ void main() {
       emailField,
       'gerald.vernon-jackson@portsmouthcc.gov.uk',
     );
-    await tester.tap(find.byKey(const Key('largeTextCheckbox')));
+    await tester.tap(find.byKey(const Key('largeTextSwitch')));
     await tester.pump();
 
     final Finder switchFinder = find.byKey(const Key('newsletterSwitch'));
@@ -168,7 +161,7 @@ void main() {
     expect(reopenedSwitch.value, isTrue);
     expect(
       tester
-          .widget<CheckboxListTile>(find.byKey(const Key('largeTextCheckbox')))
+          .widget<SwitchListTile>(find.byKey(const Key('largeTextSwitch')))
           .value,
       isTrue,
     );
@@ -179,12 +172,12 @@ void main() {
   ) async {
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.withData(<String, Object>{
-          prefName: 'Abdul Kadir',
-          prefAddress: 'Portsmouth Guildhall, PO1 2AJ',
-          prefEmail: 'abdul.kadir@portsmouthcc.gov.uk',
-          prefNewsletter: true,
-          prefLargeText: true,
-        });
+      prefName: 'Abdul Kadir',
+      prefAddress: 'Portsmouth Guildhall, PO1 2AJ',
+      prefEmail: 'abdul.kadir@portsmouthcc.gov.uk',
+      prefNewsletter: true,
+      prefLargeText: true,
+    });
 
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
@@ -198,7 +191,7 @@ void main() {
     expect(switchWidget.value, isTrue);
     expect(
       tester
-          .widget<CheckboxListTile>(find.byKey(const Key('largeTextCheckbox')))
+          .widget<SwitchListTile>(find.byKey(const Key('largeTextSwitch')))
           .value,
       isTrue,
     );

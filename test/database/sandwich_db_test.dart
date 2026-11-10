@@ -313,4 +313,20 @@ void main() {
     expect(await db.query('order_items'), isEmpty);
     expect(await SandwichDatabase.instance.getNextOrderNumber(), 1002);
   });
+
+  test('the shared database opens at the default path with version 2',
+      () async {
+    await SandwichDatabase.instance.close();
+    final Directory folder = Directory.systemTemp.createTempSync('sandwich');
+    await databaseFactoryFfiNoIsolate.setDatabasesPath(folder.path);
+    try {
+      final Database db = await SandwichDatabase.instance.database;
+      expect(await db.getVersion(), 2);
+      expect(await SandwichDatabase.instance.getAllOrders(), isNotEmpty);
+      expect(File(join(folder.path, 'sandwich_data.db')).existsSync(), isTrue);
+    } finally {
+      await SandwichDatabase.instance.close();
+      folder.deleteSync(recursive: true);
+    }
+  });
 }

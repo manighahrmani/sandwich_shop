@@ -121,4 +121,18 @@ void main() {
     expect(find.text('£21.00'), findsOneWidget);
     expect(find.text('£9.00'), findsOneWidget);
   });
+
+  testWidgets('OrdersScreen shows a message when orders cannot be loaded', (
+    WidgetTester tester,
+  ) async {
+    await tester.runAsync(() async {
+      final Database db = await SandwichDatabase.instance.database;
+      await db.execute('DROP TABLE order_items');
+      await db.execute('DROP TABLE orders');
+      await tester.pumpWidget(const MaterialApp(home: OrdersScreen()));
+      await tester.pumpAndSettle();
+    });
+    await tester.pump();
+    expect(find.textContaining('Could not load orders'), findsOneWidget);
+  });
 }

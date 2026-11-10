@@ -157,21 +157,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            CheckboxListTile(
-              key: const Key('largeTextCheckbox'),
+            SwitchListTile(
+              key: const Key('largeTextSwitch'),
               contentPadding: EdgeInsets.zero,
               title: const Text('Bigger text'),
+              subtitle: const Text('Make text easier to read'),
               value: _largeText,
-              onChanged: (bool? value) {
-                if (value != null) {
-                  setState(() {
-                    _largeText = value;
-                  });
-                  final ValueChanged<bool>? onChanged =
-                      widget.onLargeTextChanged;
-                  if (onChanged != null) {
-                    onChanged(value);
-                  }
+              onChanged: (bool value) {
+                setState(() {
+                  _largeText = value;
+                });
+                final ValueChanged<bool>? onChanged = widget.onLargeTextChanged;
+                if (onChanged != null) {
+                  onChanged(value);
                 }
               },
             ),
