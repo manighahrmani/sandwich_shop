@@ -9,12 +9,36 @@ A Flutter app for browsing a small menu, adding items to a basket, and saving co
 - View saved orders. Orders are stored locally in SQLite; the basket is held in memory.
 - Save customer profile details and preferences on the device, including a bigger-text setting.
 
-## Run
+## Platform
 
-Install Flutter and set up an Android emulator or device. From the project directory, run:
+The app runs on Android only, because it saves orders in a SQLite database file on the device. Use an Android emulator or a physical Android device. Running it in a browser or on a desktop is not supported.
+
+## Getting started
+
+### Prerequisites
+
+- [Flutter](https://docs.flutter.dev/get-started/install) with the Android toolchain set up.
+- An Android emulator or device.
+- Git.
+
+### Clone
+
+```bash
+git clone https://github.com/manighahrmani/sandwich_shop.git
+cd sandwich_shop
+```
+
+### Install dependencies
 
 ```bash
 flutter pub get
+```
+
+### Run
+
+Start an Android emulator or connect a device, then run:
+
+```bash
 flutter run
 ```
 
@@ -27,6 +51,17 @@ flutter test
 ```
 
 These tests use in-memory and temporary file-backed SQLite databases and do not require an Android emulator. Running the app itself does require an Android emulator or device.
+
+To measure test coverage, run `flutter test --coverage`. The report is written to `coverage/lcov.info`.
+
+## Project structure
+
+- `lib/models/` holds the data classes, such as `Sandwich`, `OrderRecord` and `UserSettings`.
+- `lib/repositories/` holds the menu and the in-memory basket.
+- `lib/database/` holds the SQLite database for saved orders.
+- `lib/screens/` holds the menu, basket, orders and settings screens.
+- `lib/widgets/` holds the reusable buttons and the sandwich card.
+- `test/` mirrors the folders in `lib/`.
 
 ## Screenshots
 
