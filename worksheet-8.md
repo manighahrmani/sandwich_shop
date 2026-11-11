@@ -104,7 +104,6 @@ Run the app and look at the text on its screens. We want users to choose a font 
 
 Write a prompt describing that outcome and ask for a plan rather than code, as shown below. Use your own words; deciding what a task means is part of your work. GitHub's [prompt guide](https://docs.github.com/en/copilot/concepts/prompting-and-context/prompt-engineering) gives further advice.
 
-<!-- Capture: enter your font-size request in Plan mode, before sending it. -->
 ![The font size request in Copilot Chat before planning begins](images/8/copilot_font_size_prompt.png)
 
 ### Plan first
@@ -138,6 +137,8 @@ To change the plan, type your feedback and select **Submit Feedback** instead of
 Instead of **Implement with Autopilot**, switch to **Interactive** and ask Copilot to implement only the first agreed step, including its tests, then stop for review. For our revised plan, this first step is adding the size choices to the Settings screen, not completing the whole feature, as shown below.
 
 ![The agent mode menu with Interactive selected beside the revised plan, whose first step adds and tests the size choices](images/8/font_size_first_step.png)
+
+You can also ask Copilot to write the test for a step before the code. Run that test and check that it fails, then ask Copilot to make the change that passes it. This is test-driven development, and a test that has never failed has not shown that it can detect the missing feature. Exercise 1 asks you to work this way.
 
 Copilot may ask you for permission to run commands as shown below. Use the **Explain** button to understand why it needs to run the command before granting permission. Select **Allow Once** to approve the command for that single execution; avoid selecting **Allow all** so that you remain in control of what executes in your environment.
 
@@ -465,9 +466,7 @@ The Flutter Coverage extension shows the coverage of every folder and file insid
 
 ### Measure coverage
 
-To measure your starting point:
-
-Run the tests with coverage in the terminal:
+To measure your starting point, run the tests with coverage in the terminal:
 
 ```bash
 flutter test --coverage
@@ -520,11 +519,8 @@ The exercises below apply this workflow to your Southsea Cinema coursework. Toge
 Build on the cinema app from Worksheet 7. For each change, be ready to explain the plan, a decision you reviewed and the evidence that it works, using the [review workflow](#review-the-result).
 
 1. Use test-driven development to add a setting to your Southsea Cinema app that lets the user switch between light and dark mode. The app currently has dark colours, so add the light mode. Implement it using [`ThemeMode`](https://api.flutter.dev/flutter/material/MaterialApp/themeMode.html) and `SharedPreferencesAsync`. ([View the Flutter documentation](https://docs.flutter.dev/cookbook/design/themes#apply-a-theme) page for more guidance.)
-
-    For this change, you must follow the example provided in this worksheet. Observe how we used Copilot to add a larger font size setting in [Working with Copilot](#working-with-copilot), and follow the same workflow. Below is what our model solution looks like:
-
-    ![Model solution in light mode showing the theme setting applied](images/8/model_solution_theme_mode_light.png)
-
+    Observe how we used Copilot to add a larger font size setting in [Working with Copilot](#working-with-copilot), and follow the same workflow. Below is what our model solution looks like in light mode:
+    ![The Southsea Cinema film page in light mode, with a white app bar and a light background](images/8/model_solution_theme_mode_light.png)
 2. Practise debugging your Southsea Cinema app, following [Debugging](#debugging). Step through a user action, such as booking a ticket or updating settings, and use the Flutter Widget Inspector to examine the widget tree and layout. At Demo 4, the marker may push a defect to your repository, such as a layout overflow, a wrong calculation or a value read incorrectly from the database, JSON or preferences, and ask you to find and fix it live.
 3. Update your cinema `README.md` with Copilot, following [Updating the README](#updating-the-readme). Model it on the README of our Sandwich Shop, which has features, the supported platform, prerequisites, clone, install, run and test instructions, the project structure and screenshots with alt text. Keep it up to date as you complete each exercise.
 4. (Advanced) Following [Order items table](#order-items-table), store the items of each booking as related rows instead of only in its summary. Migrate existing bookings without losing them, and make sure a failed item insert leaves nothing half-saved. Your past bookings should list the items of each booking, as shown below.
