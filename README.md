@@ -29,7 +29,7 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 | 26/10/2026 | 30/10/2026 | Reading week (break) | | |
 | 02/11/2026 | 06/11/2026 | [Worksheet 6](./worksheet-6.md) | [Lecture 6](https://docs.google.com/presentation/d/1TtPcHKtu1JIsxfUacsTPB2cjTj1fNH-kj31uhefD1uo/edit?usp=sharing) | Demo Window 3 |
 | 09/11/2026 | 13/11/2026 | [Worksheet 7](./worksheet-7.md) | [Lecture 7](https://docs.google.com/presentation/d/1s5h6qtZTs2cc03KvQSYmXouqabMxHUszxzuOooYVKqk/edit?usp=sharing) | Demo Window 4 |
-| 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo Window 4 |
+| 16/11/2026 | 20/11/2026 | [Worksheet 8](./worksheet-8.md) | Lecture 8 | Demo Window 4 |
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo Window 5 |
 | 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | Demo Window 5 |
 | 21/12/2026 | 08/01/2027 | Xmas Break | | |
@@ -48,7 +48,7 @@ Each week has a worksheet and a lecture. You should aim to complete the workshee
 - [Worksheet 5: Navigation, State and Forms](https://manighahrmani.github.io/sandwich_shop/worksheet-5.html)
 - [Worksheet 6: JSON Assets and Saved Preferences](./worksheet-6.md)
 - [Worksheet 7: SQLite and Order History](./worksheet-7.md)
-- Worksheet 8: AI-Assisted Development and Test Coverage (under revision)
+- [Worksheet 8: AI-Assisted Development and Test Coverage](./worksheet-8.md)
 - Worksheet 9: Web and Cloud Services (under revision)
 - Worksheet 10: Integration Testing and CI/CD (under revision)
 
@@ -62,9 +62,9 @@ Item 1 is assessed as a portfolio of five live in-person demos of your coursewor
 
 There are five demos across the term, but only your best four demo marks count towards Item 1. Each counted demo is worth 25% of Item 1 (12.5% of the overall module mark). Each demo is assessed on functionality (9% of Item 1), code quality (8%), and your understanding through two questions about your own code (8%).
 
-For Demos 1 to 3, a zero on any required functionality item caps the final demo mark at 23 out of 25. Lower marks remain unchanged. Demo 3 asks one understanding question from Worksheet 5 and one from Worksheet 6, excluding advanced, optional extensions.
+For Demos 1 to 4, a zero on any required functionality item caps the final demo mark at 23 out of 25. Lower marks remain unchanged. Demo 3 asks one understanding question from Worksheet 5 and one from Worksheet 6, excluding advanced, optional extensions.
 
-Demo 3 covers navigation, a ticket basket, profile forms, a JSON film catalogue and saved profile preferences. SQLite booking history and database-backed checkout begin in Worksheet 7 for Demo 4, alongside organised tests and demonstrated editor coverage. Provider and notifiers are not required.
+Demo 3 covers navigation, a ticket basket, profile forms, a JSON film catalogue and saved profile preferences. Demo 4 covers SQLite booking history and database-backed checkout (Worksheet 7), then a light and dark mode switch, debugging, a README, related booking items, organised tests and demonstrated editor coverage (Worksheet 8). It asks one understanding question from Worksheet 7 and one from Worksheet 8. Provider and notifiers are not required.
 
 Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks 3 and 4, Weeks 5 and 6, Weeks 7 and 8, and Weeks 9 and 10). Three rules apply:
 
