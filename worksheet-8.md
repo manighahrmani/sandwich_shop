@@ -515,13 +515,11 @@ Run `flutter test --coverage`, pick a file below 100%, find the lines that did n
 
 ## Exercises
 
-<!-- TODO (Mani): come back on 2026-11-11 to verify the Worksheet 8 changes (test coverage sections, exercises, Demo 4 reliability question in sign-off-app) and take any remaining screenshots. Then delete this comment. -->
-
 The exercises below apply this workflow to your Southsea Cinema coursework. Together with the exercises in [Worksheet 7](worksheet-7.md#exercises), they prepare you for Demo 4. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
 Build on the cinema app from Worksheet 7. For each change, be ready to explain the plan, a decision you reviewed and the evidence that it works, using the [review workflow](#review-the-result).
 
-1. Use test-driven development to add a dark mode setting to your Southsea Cinema app. Implement it using `ThemeMode` and `SharedPreferencesAsync`.
+1. Use test-driven development to add a setting to your Southsea Cinema app that lets the user switch between light and dark mode. The app currently has dark colours, so add the light mode. Implement it using `ThemeMode` and `SharedPreferencesAsync`.
     Observe how we used Copilot to add a larger font size setting in [Working with Copilot](#working-with-copilot), and follow the same workflow.
 2. Practise debugging your Southsea Cinema app, following [Debugging](#debugging). Step through a user action, such as booking a ticket or updating settings, and use the Flutter Widget Inspector to examine the widget tree and layout. At Demo 4, the marker will introduce a defect into your app and ask you to find and fix it live.
 3. Update your cinema `README.md` with Copilot, following [Updating the README](#updating-the-readme). Include screenshots of the main features of your running app, each with a short explanation and descriptive alt text. Keep the README up to date as you complete each exercise.
