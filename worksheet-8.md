@@ -519,9 +519,13 @@ The exercises below apply this workflow to your Southsea Cinema coursework. Toge
 
 Build on the cinema app from Worksheet 7. For each change, be ready to explain the plan, a decision you reviewed and the evidence that it works, using the [review workflow](#review-the-result).
 
-1. Use test-driven development to add a setting to your Southsea Cinema app that lets the user switch between light and dark mode. The app currently has dark colours, so add the light mode. Implement it using `ThemeMode` and `SharedPreferencesAsync`.
-    Observe how we used Copilot to add a larger font size setting in [Working with Copilot](#working-with-copilot), and follow the same workflow.
-2. Practise debugging your Southsea Cinema app, following [Debugging](#debugging). Step through a user action, such as booking a ticket or updating settings, and use the Flutter Widget Inspector to examine the widget tree and layout. At Demo 4, the marker will introduce a defect into your app and ask you to find and fix it live.
+1. Use test-driven development to add a setting to your Southsea Cinema app that lets the user switch between light and dark mode. The app currently has dark colours, so add the light mode. Implement it using [`ThemeMode`](https://api.flutter.dev/flutter/material/MaterialApp/themeMode.html) and `SharedPreferencesAsync`. ([View the Flutter documentation](https://docs.flutter.dev/cookbook/design/themes#apply-a-theme) page for more guidance.)
+
+    For this change, you must follow the example provided in this worksheet. Observe how we used Copilot to add a larger font size setting in [Working with Copilot](#working-with-copilot), and follow the same workflow. Below is what our model solution looks like:
+
+    ![Model solution in light mode showing the theme setting applied](images/8/model_solution_theme_mode_light.png)
+
+2. Practise debugging your Southsea Cinema app, following [Debugging](#debugging). Step through a user action, such as booking a ticket or updating settings, and use the Flutter Widget Inspector to examine the widget tree and layout. At Demo 4, the marker may push a defect to your repository and ask you to find and fix it live.
 3. Update your cinema `README.md` with Copilot, following [Updating the README](#updating-the-readme). Include screenshots of the main features of your running app, each with a short explanation and descriptive alt text. Keep the README up to date as you complete each exercise.
 4. (Advanced) Give bookings related item rows in your SQLite database, modelled on [Order items table](#order-items-table). Create a `booking_items` table linked to `bookings` through a foreign key, migrate existing bookings and make sure no partial booking is saved if an item insert fails.
 5. (Advanced) Measure and raise the test coverage of your cinema app, following [Test coverage](#test-coverage). Record your starting and final percentages, and make sure you can trust the final one. At Demo 4, you can be asked to show the Flutter Coverage tree, explain a test of your choice and show a test failing after the marker changes a line in `lib`.
