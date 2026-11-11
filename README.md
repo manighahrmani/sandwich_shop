@@ -25,11 +25,11 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 | 28/09/2026 | 02/10/2026 | [Worksheet 2](./worksheet-2.md) | [Lecture 2](https://docs.google.com/presentation/d/1HyWI8me8idDz5ixpSXtOs8UvoPlhnZg3Kl6OjnB5_oI/edit?usp=sharing) | Demo Window 1 |
 | 05/10/2026 | 09/10/2026 | [Worksheet 3](./worksheet-3.md) | [Lecture 3](https://docs.google.com/presentation/d/1K2GpWchPcWoec_GMyueHftuglxOU9aHjnAF1eO4Sfys/edit?usp=sharing) | Demo Window 2 |
 | 12/10/2026 | 16/10/2026 | [Worksheet 4](./worksheet-4.md) | [Lecture 4](https://docs.google.com/presentation/d/1ldcbaYmn0MFEeIaLUbZQ2HXiUi45aSVD5z3VxUB7g4k/edit?usp=sharing) | Demo Window 2 |
-| 19/10/2026 | 23/10/2026 | [Worksheet 5](./worksheet-5.md) | [Lecture 5](https://docs.google.com/presentation/d/1O3wcAsfoCyju2lxdG0etLIONCe4E6SR80h-0PeIG6Bs/edit?usp=sharing) | Demo Window 3 |
+| 19/10/2026 | 23/10/2026 | [Worksheet 5](https://manighahrmani.github.io/sandwich_shop/worksheet-5.html) | [Lecture 5](https://docs.google.com/presentation/d/1O3wcAsfoCyju2lxdG0etLIONCe4E6SR80h-0PeIG6Bs/edit?usp=sharing) | Demo Window 3 |
 | 26/10/2026 | 30/10/2026 | Reading week (break) | | |
-| 02/11/2026 | 06/11/2026 | [Worksheet 6](./worksheet-6.md) | Lecture 6 | Demo Window 3 |
-| 09/11/2026 | 13/11/2026 | [Worksheet 7](./worksheet-7.md) | Lecture 7 | Demo Window 4 |
-| 16/11/2026 | 20/11/2026 | Worksheet 8 | Lecture 8 | Demo Window 4 |
+| 02/11/2026 | 06/11/2026 | [Worksheet 6](./worksheet-6.md) | [Lecture 6](https://docs.google.com/presentation/d/1TtPcHKtu1JIsxfUacsTPB2cjTj1fNH-kj31uhefD1uo/edit?usp=sharing) | Demo Window 3 |
+| 09/11/2026 | 13/11/2026 | [Worksheet 7](./worksheet-7.md) | [Lecture 7](https://docs.google.com/presentation/d/1s5h6qtZTs2cc03KvQSYmXouqabMxHUszxzuOooYVKqk/edit?usp=sharing) | Demo Window 4 |
+| 16/11/2026 | 20/11/2026 | [Worksheet 8](./worksheet-8.md) | Lecture 8 | Demo Window 4 |
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo Window 5 |
 | 30/11/2026 | 04/12/2026 | Worksheet 10 | Lecture 10 | Demo Window 5 |
 | 21/12/2026 | 08/01/2027 | Xmas Break | | |
@@ -45,12 +45,12 @@ Each week has a worksheet and a lecture. You should aim to complete the workshee
 - [Worksheet 2: Stateless and Stateful Widgets](./worksheet-2.md)
 - [Worksheet 3: Data Models, Repositories, Assets, and In-Page Navigation](./worksheet-3.md)
 - [Worksheet 4: Unit and Widget Testing](./worksheet-4.md)
-- [Worksheet 5: Navigation, State and Forms](./worksheet-5.md)
+- [Worksheet 5: Navigation, State and Forms](https://manighahrmani.github.io/sandwich_shop/worksheet-5.html)
 - [Worksheet 6: JSON Assets and Saved Preferences](./worksheet-6.md)
 - [Worksheet 7: SQLite and Order History](./worksheet-7.md)
-- [Worksheet 8: AI-Assisted Development and Test Coverage](./worksheet-8.md) (draft)
-- [Worksheet 9: Web and Cloud Services](./worksheet-9.md) (draft)
-- [Worksheet 10: Integration Testing and CI/CD](./worksheet-10.md) (draft)
+- [Worksheet 8: AI-Assisted Development and Test Coverage](./worksheet-8.md)
+- Worksheet 9: Web and Cloud Services (under revision)
+- Worksheet 10: Integration Testing and CI/CD (under revision)
 
 ## **Assessment**
 
@@ -62,9 +62,9 @@ Item 1 is assessed as a portfolio of five live in-person demos of your coursewor
 
 There are five demos across the term, but only your best four demo marks count towards Item 1. Each counted demo is worth 25% of Item 1 (12.5% of the overall module mark). Each demo is assessed on functionality (9% of Item 1), code quality (8%), and your understanding through two questions about your own code (8%).
 
-For Demos 1 to 3, a zero on any required functionality item caps the final demo mark at 23 out of 25. Lower marks remain unchanged. Demo 3 asks one understanding question from Worksheet 5 and one from Worksheet 6, excluding advanced, optional extensions.
+For Demos 1 to 4, a zero on any required functionality item caps the final demo mark at 23 out of 25. Lower marks remain unchanged. Demo 3 asks one understanding question from Worksheet 5 and one from Worksheet 6, excluding advanced, optional extensions.
 
-Demo 3 covers navigation, a ticket basket, profile forms, a JSON film catalogue and saved profile preferences. SQLite booking history and database-backed checkout begin in Worksheet 7 for Demo 4, alongside organised tests and demonstrated editor coverage. Provider and notifiers are not required.
+Demo 3 covers navigation, a ticket basket, profile forms, a JSON film catalogue and saved profile preferences. Demo 4 covers SQLite booking history and database-backed checkout (Worksheet 7), then a light and dark mode switch, debugging, a README, related booking items, organised tests and demonstrated editor coverage (Worksheet 8). It asks one understanding question from Worksheet 7 and one from Worksheet 8. Provider and notifiers are not required.
 
 Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks 3 and 4, Weeks 5 and 6, Weeks 7 and 8, and Weeks 9 and 10). Three rules apply:
 
