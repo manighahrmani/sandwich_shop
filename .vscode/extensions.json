@@ -1,5 +1,6 @@
 {
   "recommendations": [
-    "Flutterando.flutter-coverage"
+    "Flutterando.flutter-coverage",
+    "DavidAnson.vscode-markdownlint"
   ]
 }
