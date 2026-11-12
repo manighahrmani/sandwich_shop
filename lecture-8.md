@@ -10,7 +10,7 @@ Lecture 8:
 
 - AI-assisted development
 - Debugging
-- Related tables and test coverage
+- Test coverage
 
 ---
 
@@ -79,61 +79,38 @@ Got tech news? Share it on Discord.
 
 ---
 
-## Related tables and test coverage — one-to-many relationships
+## Test coverage — measuring automated tests
 
-- A single record in a parent table can link to multiple records in a child table.
-- A foreign key (`REFERENCES`) points from child rows to the parent primary key:
-
-```sql
-CREATE TABLE items (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  parent_id INTEGER NOT NULL REFERENCES parents(id),
-  title TEXT NOT NULL,
-  amount REAL NOT NULL
-);
-```
-
-- SQLite requires foreign-key enforcement to be enabled per connection:
-
-```sql
-PRAGMA foreign_keys = ON;
-```
-
----
-
-## Related tables and test coverage — transactions and schema upgrades
-
-- Group multi-row writes in a transaction so that either all changes succeed or none do:
-
-```dart
-await db.transaction((Transaction txn) async {
-  final int parentId = await txn.insert('parents', parentData);
-  for (final Map<String, Object?> item in itemRows) {
-    await txn.insert('items', <String, Object?>{
-      ...item,
-      'parent_id': parentId,
-    });
-  }
-});
-```
-
-- When modifying an existing database schema, bump `version` in `openDatabase`.
-- Use the `onUpgrade` callback to alter or create tables without deleting existing user data.
-
----
-
-## Related tables and test coverage — measuring test coverage
-
-- Test coverage measures the proportion of code executed by automated tests.
-- Run the test suite and collect an LCOV trace file:
+- Test coverage measures the proportion of code executed while running automated tests.
+- Run tests and export an LCOV trace file:
 
 ```bash
 flutter test --coverage
 ```
 
-- This writes line coverage data to `coverage/lcov.info`.
-- The Flutter Coverage extension in VS Code highlights covered and uncovered lines directly in the editor.
-- High coverage does not guarantee correctness, but low coverage highlights untested edge cases.
+- Line execution data is written to `coverage/lcov.info`.
+- Automated pipelines and teams use coverage metrics to discover untested logic.
+- Learn more in the Flutter guide: [Testing Flutter apps](https://docs.flutter.dev/testing/overview)
+
+---
+
+## Test coverage — visualising coverage in VS Code
+
+- The Flutter Coverage extension parses `coverage/lcov.info` directly inside the editor.
+- The status bar displays overall line coverage and opens the file coverage tree.
+- Gutter indicators highlight covered lines in green and untested branches in red.
+- Focus test effort on models, calculations, database queries and state logic.
+- Extension details: [Flutter Coverage](https://open-vsx.org/vscode/item?itemName=Flutterando.flutter-coverage)
+
+---
+
+## Test coverage — limitations and verification
+
+- High coverage means lines ran; it does not guarantee that tests assert correctness.
+- A test without an `expect` still marks lines green in coverage reports.
+- Verify tests catch bugs: deliberately break a calculation or database query.
+- Running tests against broken code must produce an immediate test failure.
+- Coverage highlights blind spots, but meaningful assertions protect against regressions.
 
 ---
 
