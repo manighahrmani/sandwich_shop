@@ -490,7 +490,7 @@ Once tests pass, launch the app on your emulator without clearing app storage. P
 
 ## Test coverage
 
-Test coverage shows which lines of your app ran while your tests ran. A line that never ran has not been tested. In this section you will use Copilot to write unit tests and widget tests until almost every line in the `lib` folder has run. Copilot writes the tests, but you must read each one and understand what it checks.
+Test coverage shows which lines of your app ran while your tests ran. A line that never ran has not been tested. In this section you will use Copilot to write unit tests and widget tests, aiming for every line in the `lib` folder to have run. Copilot writes the tests, but you must read each one and understand what it checks.
 
 ### Install the extension
 
@@ -544,7 +544,7 @@ Coverage only proves that lines ran, so check that your tests would notice a bug
 
 ### Close the gaps
 
-Run `flutter test --coverage`, pick a file below 100%, find the lines that did not run and ask Copilot for tests of that behaviour. Check what it writes, then run the tests and the coverage again. The last few percent are usually error messages and start-up code. You are finished when `dart analyze` reports no issues, `flutter test` passes, your coverage is close to 100% and you trust it. Write down your final percentage and compare it with your starting point.
+Run `flutter test --coverage`, pick a file below 100%, find the lines that did not run and ask Copilot for tests of that behaviour. Check what it writes, then run the tests and the coverage again. The last few percent are usually error messages and start-up code. You are finished when `dart analyze` reports no issues, `flutter test` passes, you have aimed for 100% coverage and you trust your final percentage. Write down your final percentage and compare it with your starting point.
 
 ## Exercises
 
