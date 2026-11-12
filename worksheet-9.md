@@ -81,7 +81,7 @@ A cloud service is a web service that someone else runs and scales for you, such
 
 ## Exercises
 
-The exercises below apply these concepts to your Southsea Cinema coursework. Together with Worksheet 10, they prepare you for Demo 5. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
+The exercises below apply these concepts to your Southsea Cinema coursework and prepare you for Demo 5. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
 <!-- TODO: write numbered exercises. Suggested outline:
 1. Fetch the cinema films from a web service instead of the JSON asset.

@@ -147,7 +147,7 @@ Pin the action versions as the module repository does, and explain every line.
 
 ## Exercises
 
-The exercises below apply these concepts to your Southsea Cinema coursework. Together with Worksheet 9, they prepare you for Demo 5. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
+The exercises below are optional extension tasks and are not assessed in Demo 5. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
 <!-- TODO: write numbered exercises. Suggested outline:
 1. (Advanced) Add the integration_test package to the cinema app and ask Copilot to develop an end-to-end test for booking a cinema ticket. Run it on the emulator and verify that the booking reaches history and the basket is cleared.
