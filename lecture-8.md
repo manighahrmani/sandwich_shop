@@ -18,16 +18,28 @@ Lecture 8:
 
 Got tech news? Share it on Discord.
 
-- Microsoft Imagine Cup:
-  - Global student technology and startup competition: [imaginecup.microsoft.com](https://imaginecup.microsoft.com)
-  - \$100,000 USD grand prize and direct mentorship from Microsoft leadership.
+- [Microsoft Imagine Cup](https://imaginecup.microsoft.com):
+  - Startup competition: deadline is 28 Feb 2027 to submit a student project pitch.
+  - \$100,000 prize and mentorship from Microsoft.
   - Entrants receive Azure credits, access to AI models and startup incubator support.
-  - Ideal launchpad for turning coursework or final-year projects into real products.
-- Model Context Protocol:
-  - Open standard connecting AI models directly to external tools and data: [modelcontextprotocol.io](https://modelcontextprotocol.io)
-  - How to use it: configure an MCP server so Copilot can query SQLite databases, inspect git history or run CLI tools directly from chat.
-  - Eliminates manual copy-pasting by exposing live schemas, logs and code to the model as structured tools and resources.
-  - Strong architecture pattern for group and final-year projects: build an MCP server that turns an LLM into a specialised domain agent.
+  - Ideal launchpad for turning projects into real products.
+- [Model Context Protocol (MCP)](https://modelcontextprotocol.io):
+  - Standard connecting AI models directly to external tools and data.
+  - E.g. configure an MCP server so Copilot can query SQLite databases, inspect git history or run CLI tools directly from chat.
+  - Eliminates manual copy-pasting, as data and tools are exposed directly to the model.
+
+---
+
+## AI-assisted development — student opportunities and projects
+
+- Summer 2027 Research Internship Scheme:
+  - University research internship scheme for undergraduate and postgraduate students.
+  - Open to current students on any course with relevant skills.
+  - Applications open in March 2027; look out for an email from Research and Innovation.
+- [TreePrep](https://treeprep.com):
+  - Free coding platform built by a student for technical interview preparation.
+  - Learn patterns and concepts for coding problems.
+  - Features in-built code visualisation and interview-style follow-up questions.
 
 ---
 
