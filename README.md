@@ -29,7 +29,7 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 | 26/10/2026 | 30/10/2026 | Reading week (break) | | |
 | 02/11/2026 | 06/11/2026 | [Worksheet 6](./worksheet-6.md) | [Lecture 6](https://docs.google.com/presentation/d/1TtPcHKtu1JIsxfUacsTPB2cjTj1fNH-kj31uhefD1uo/edit?usp=sharing) | Demo Window 3 |
 | 09/11/2026 | 13/11/2026 | [Worksheet 7](./worksheet-7.md) | [Lecture 7](https://docs.google.com/presentation/d/1s5h6qtZTs2cc03KvQSYmXouqabMxHUszxzuOooYVKqk/edit?usp=sharing) | Demo Window 4 |
-| 16/11/2026 | 20/11/2026 | [Worksheet 8](./worksheet-8.md) | Lecture 8 | Demo Window 4 |
+| 16/11/2026 | 20/11/2026 | [Worksheet 8](./worksheet-8.md) | [Lecture 8](https://docs.google.com/presentation/d/16xkLVwdehpiLNL8_CkPoeYchJ9G2vIfkaHa9XU7t4-k/edit?usp=sharing) | Demo Window 4 |
 | 23/11/2026 | 27/11/2026 | Worksheet 9 | Lecture 9 | Demo Window 5 |
 | 30/11/2026 | 04/12/2026 | Worksheet 10 (optional) | Lecture 10 | Demo Window 5 |
 | 21/12/2026 | 08/01/2027 | Xmas Break | | |
