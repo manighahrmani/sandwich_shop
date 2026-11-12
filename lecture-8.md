@@ -22,8 +22,6 @@ Got tech news? Share it on Discord.
   - Global student technology competition for software and AI projects: [imaginecup.microsoft.com](https://imaginecup.microsoft.com)
 - Model Context Protocol:
   - Open standard connecting AI coding assistants directly to development tools and databases: [modelcontextprotocol.io](https://modelcontextprotocol.io)
-- Flutter DevTools extension ecosystem:
-  - Deep dive into companion tooling and package extensions: [docs.flutter.dev/tools/devtools](https://docs.flutter.dev/tools/devtools)
 
 ---
 
