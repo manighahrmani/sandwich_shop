@@ -105,7 +105,19 @@ Keep a few integration tests for important journeys. They are slower than unit a
 
 ### What CI and CD mean
 
-<!-- TODO: explain continuous integration (every push builds and tests the code automatically) and continuous delivery or deployment (every passing change can be released). Use the idea that the checks students run by hand, dart format, dart analyze and flutter test, become an automatic gate. -->
+<!-- TODO: explain continuous integration (every push builds and tests the code automatically) and continuous delivery or deployment (every passing change can be released). Use the idea that the checks students run by hand, dart format, dart analyze and flutter test, become an automatic gate.
+
+Reference material from https://docs.flutter.dev/testing/overview#continuous-integration-services:
+Continuous integration (CI) services allow you to run your tests automatically when pushing new code changes. This provides timely feedback on whether the code changes work as expected and do not introduce bugs.
+For information on running tests on various continuous integration services, see the following:
+- [Continuous delivery using fastlane with Flutter](https://docs.flutter.dev/deployment/cd#fastlane)
+- [Test Flutter apps on Appcircle](https://blog.appcircle.io/article/flutter-ci-cd-github-ios-android-web#)
+- [Test Flutter apps on Travis](https://blog.flutter.dev/test-flutter-apps-on-travis-3fd5142ecd8c)
+- [Test Flutter apps on Cirrus](https://cirrus-ci.org/examples/#flutter)
+- [Codemagic CI/CD for Flutter](https://blog.codemagic.io/getting-started-with-codemagic/)
+- [Codemagic CI/CD for Patrol](https://docs.codemagic.io/integrations/patrol-integration/)
+- [Flutter CI/CD with Bitrise](https://devcenter.bitrise.io/en/getting-started/quick-start-guides/getting-started-with-flutter-apps)
+-->
 
 ### Create a workflow
 
