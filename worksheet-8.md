@@ -23,6 +23,7 @@
 - [Updating the README](#updating-the-readme)
   - [Attach context](#attach-context)
   - [Check the draft](#check-the-draft)
+  - [Markdown basics](#markdown-basics)
 - [Order items table](#order-items-table)
   - [The relationship](#the-relationship)
   - [Plan the upgrade](#plan-the-upgrade)
@@ -349,13 +350,46 @@ Once you approve the outline, ask Copilot to draft the changes to `README.md`. R
 
 Try any instruction you have not already verified. Correct inaccuracies yourself or give Copilot specific feedback. Check the diff in **Source Control**, using the approach from [Review the result](#review-the-result), to confirm that only `README.md` changed.
 
-You can preview the README by clicking the **Open Preview** button in the top right corner of the editor, or by pressing **Ctrl + Shift + V** on Windows or **⌘ + Shift + V** on macOS.
+### Markdown basics
+
+Markdown is a simple way to format plain text files. Here are the common formatting rules:
+
+- Start a line with `#` for heading 1 (biggest heading), `##` for heading 2, or `###` for heading 3.
+- Wrap code snippets in a pair of single backticks (\`). Note that they are different to quotation marks. For example \`main.dart\`.
+- Wrap text in a pair of double asterisks for bold like \*\*Save\*\*, or single asterisks for italics like \*note\*.
+- Wrap multi-line commands or code in three backticks (\`\`\`) with a language name like \`\`\`bash (for commands run in the terminal) or \`\`\`dart, and close them with \`\`\`.
+- Put link text in square brackets (`[]`) and the web address in parentheses (`()`) to create a link, see the example below.
+- Add images the same way as links with an exclamation mark in front, like the one shown at the bottom of the example below. The text inside the brackets describes the image for screen readers and accessibility.
+
+Here is an example of raw Markdown containing headings, a terminal code block, a hyperlink, and an image reference:
+
+````markdown
+# Project title
+
+A short description of your Flutter application.
+
+## Getting started
+
+```bash
+git clone https://github.com/example/cinema.git
+cd cinema
+flutter pub get
+```
+
+For more documentation, visit [Flutter](https://flutter.dev).
+
+![App preview](images/preview.png)
+````
+
+You can preview the rendered output in VS Code by clicking the **Open Preview** button in the top right corner of the editor, or by pressing **Ctrl + Shift + V** on Windows or **⌘ + Shift + V** on macOS, as shown below:
 
 ![The README source beside its rendered preview](images/8/readme_preview.png)
 
-To add images (screenshots) to your README, place them in the `images` folder and reference them using the Markdown syntax `![Alt text](images/filename.png)`. Alt text describes the image for accessibility, in case the image cannot be displayed or the reader uses a screen reader. Take a look at ours:
+Images placed in the `images` directory appear directly in the rendered preview:
 
 ![The README source with image references beside the preview showing the menu screenshot](images/8/readme_images_example.png)
+
+To catch formatting issues early, install the [markdownlint extension](https://open-vsx.org/vscode/item?itemName=DavidAnson.vscode-markdownlint) (`DavidAnson.vscode-markdownlint`). It highlights style warnings in your Markdown documents and helps you maintain clean documentation.
 
 Keep this document updated as you add new features and tests throughout this worksheet and the following worksheets.
 
@@ -522,7 +556,9 @@ Build on the cinema app from Worksheet 7. For each change, be ready to explain t
     Observe how we used Copilot to add a larger font size setting in [Working with Copilot](#working-with-copilot), and follow the same workflow. Below is what our model solution looks like in light mode:
     ![The Southsea Cinema film page in light mode, with a white app bar and a light background](images/8/model_solution_theme_mode_light.png)
 2. Practise debugging your Southsea Cinema app, following [Debugging](#debugging). Step through a user action, such as booking a ticket or updating settings, and use the Flutter Widget Inspector to examine the widget tree and layout. At Demo 4, the marker may push a defect to your repository, such as a layout overflow, a wrong calculation or a value read incorrectly from the database, JSON or preferences, and ask you to find and fix it live.
-3. Update your cinema `README.md` with Copilot, following [Updating the README](#updating-the-readme). Model it on the README of our Sandwich Shop, which has features, the supported platform, prerequisites, clone, install, run and test instructions, the project structure and screenshots with alt text. Keep it up to date as you complete each exercise.
+3. Update your cinema `README.md` with Copilot, following [Updating the README](#updating-the-readme). Model it on the [README of our Sandwich Shop at branch 8](https://github.com/manighahrmani/sandwich_shop/blob/8/README.md).
+
+    Remember to install the [markdownlint extension](https://open-vsx.org/vscode/item?itemName=DavidAnson.vscode-markdownlint) (`DavidAnson.vscode-markdownlint`) in VS Code, and verify that all warnings and errors in your `README.md` are resolved. Keep it up to date as you complete each exercise.
 4. (Advanced) Following [Order items table](#order-items-table), store the items of each booking as related rows instead of only in its summary. Migrate existing bookings without losing them, and make sure a failed item insert leaves nothing half-saved. Your past bookings should list the items of each booking, as shown below.
 
     ![The basket page with an empty basket and four past bookings, where booking 1004 lists each film with its quantity and price and the older bookings show one summary line](images/8/cinema_booking_items.png)
