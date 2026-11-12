@@ -87,11 +87,11 @@ Got tech news? Share it on Discord.
 
 ## Debugging — Flutter DevTools and layout issues
 
-- Open the Flutter DevTools suite from the VS Code status bar or Command Palette.
-- The Flutter Inspector visualises the widget tree in real time.
-- **Select Widget Mode** highlights a widget on the device when selected in the tree.
-- **Layout Explorer** visualises flex containers (`Row`, `Column`) and constraint bounds.
-- Yellow and black hazard stripes indicate a render flex overflow where content exceeds available space.
+- Open Flutter DevTools from the VS Code status bar or Command Palette.
+- The Flutter Inspector visualises the live widget hierarchy.
+- **Select Widget Mode** taps an on-screen element to locate it in the tree.
+- **Layout Explorer** displays constraint bounds and flex sizing for `Row` and `Column`.
+- Yellow and black hazard stripes indicate a `RenderFlex` overflow exceeding screen bounds.
 
 ---
 
