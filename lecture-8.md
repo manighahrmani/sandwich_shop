@@ -19,9 +19,15 @@ Lecture 8:
 Got tech news? Share it on Discord.
 
 - Microsoft Imagine Cup:
-  - Global student technology competition for software and AI projects: [imaginecup.microsoft.com](https://imaginecup.microsoft.com)
+  - Global student technology and startup competition: [imaginecup.microsoft.com](https://imaginecup.microsoft.com)
+  - \$100,000 USD grand prize and direct mentorship from Microsoft leadership.
+  - Entrants receive Azure credits, access to AI models and startup incubator support.
+  - Ideal launchpad for turning coursework or final-year projects into real products.
 - Model Context Protocol:
-  - Open standard connecting AI coding assistants directly to development tools and databases: [modelcontextprotocol.io](https://modelcontextprotocol.io)
+  - Open standard connecting AI models directly to external tools and data: [modelcontextprotocol.io](https://modelcontextprotocol.io)
+  - How to use it: configure an MCP server so Copilot can query SQLite databases, inspect git history or run CLI tools directly from chat.
+  - Eliminates manual copy-pasting by exposing live schemas, logs and code to the model as structured tools and resources.
+  - Strong architecture pattern for group and final-year projects: build an MCP server that turns an LLM into a specialised domain agent.
 
 ---
 
