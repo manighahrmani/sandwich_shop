@@ -26,6 +26,7 @@ The app runs on Android only, because it saves orders in a SQLite database file 
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
 cd sandwich_shop
+git checkout 8
 ```
 
 ### Install dependencies
