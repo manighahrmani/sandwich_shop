@@ -8,12 +8,12 @@
 - [Getting started](#getting-started)
   - [Continue from Worksheet 8](#continue-from-worksheet-8)
   - [Enable Android and web support](#enable-android-and-web-support)
+- [Why apps use the cloud](#why-apps-use-the-cloud)
 - [Choosing cloud services](#choosing-cloud-services)
-  - [Why the Spark plan](#why-the-spark-plan)
-  - [Where app data lives](#where-app-data-lives)
+  - [Billing](#billing)
 - [Setting up Firebase](#setting-up-firebase)
   - [Create a Firebase project](#create-a-firebase-project)
-  - [Enable Email and Password authentication](#enable-email-and-password-authentication)
+  - [Enable sign-in providers](#enable-sign-in-providers)
   - [Create a Cloud Firestore database](#create-a-cloud-firestore-database)
   - [Install the Firebase and FlutterFire tools](#install-the-firebase-and-flutterfire-tools)
   - [Connect the Flutter app](#connect-the-flutter-app)
@@ -59,25 +59,23 @@ If your project does not already contain a `web` folder, generate the web runner
 flutter create --platforms=web .
 ```
 
+## Why apps use the cloud
+
+So far, our app has stored its data locally in JSON or on a SQL database on a single device. If someone switches devices or opens the app in a web browser, that local data is unavailable.
+
+Most real-world apps avoid this by storing data on remote servers over the internet, known as cloud. Keeping the data (as well as other services of the app) on the cloud lets every customer access it from anywhere (and on any device or browser).
+
 ## Choosing cloud services
 
-A cloud service lets your app store data and verify user accounts on remote servers rather than keeping everything on one phone. In this worksheet we connect the Sandwich Shop app to Firebase for user sign-in (`firebase_auth`) and cloud database storage (`cloud_firestore`).
+In this worksheet, we will walk you through provisioning cloud services that let your app store data and verify user accounts. In this worksheet we connect the Sandwich Shop app to Firebase for user sign-in (`firebase_auth`) and cloud database storage (`cloud_firestore`).
 
-### Why the Spark plan
+Firebase is a cloud service provided by Google that provides a variety of services for app development, including user authentication, database storage, and more. We have selected Firebase over the other providers such as Azure or Amazon AWS because it generally has a better integration with Flutter.
 
-Firebase offers two billing tiers on its [Firebase pricing](https://firebase.google.com/pricing) page: the no-cost **Spark plan** and the pay-as-you-go **Blaze plan**. Firebase Authentication and Cloud Firestore both include generous free daily quotas on the **Spark plan** without attaching a payment card.
+### Billing
 
-Enabling Cloud Storage for user-uploaded files requires upgrading a project to the **Blaze plan** and adding a billing card. We keep the entire module strictly on the free **Spark plan** so you never need a payment card, and you can upgrade independently later only if you decide to add cloud file uploads. You can also explore the [Firebase Local Emulator Suite](https://firebase.google.com/docs/emulator-suite) to run offline tests locally without touching live quotas.
+Firebase offers two billing tiers on its [Firebase pricing](https://firebase.google.com/pricing) page: the no-cost Spark plan and the pay-as-you-go Blaze plan. Firebase Authentication and Cloud Firestore both include generous free daily quotas on the Spark plan without attaching a payment card.
 
-### Where app data lives
-
-Moving to Cloud Firestore removes the need to bundle product text or keep local SQLite tables, while avoiding paid Cloud Storage buckets for images. We store two kinds of data in two places:
-
-- Image files remain inside the app bundle under `assets/images/`, just as in earlier worksheets, so they load fast without requiring a storage bucket.
-- Product details such as titles, descriptions, prices, categories and the string path to each bundled asset (for example `assets/images/footlong_cheese.png`) live in a Cloud Firestore collection so you can update menu items or cinema listings from the cloud.
-
-<!-- Capture: Firebase Pricing page highlighting Spark (No-cost) tier vs Blaze plan -->
-![The Firebase pricing page showing the no-cost Spark plan alongside the Blaze plan](images/9/firebase_pricing_spark.png)
+In our case we don't require a cloud storage (e.g., storing user profile pictures or PDF receipts) so we can make do with the Spark plan. Just be aware as the need for your app grows, you may be asked to upgrade to the Blaze plan. Alternatively, you can also explore the [Firebase Local Emulator Suite](https://firebase.google.com/docs/emulator-suite) to simulate Firebase services locally.
 
 ## Setting up Firebase
 
@@ -85,36 +83,40 @@ Before writing any Dart code, create a Firebase project in the web dashboard and
 
 ### Create a Firebase project
 
-Every Firebase project has a globally unique project ID shared across all Firebase users worldwide, similar to a domain name. Common names such as `sandwich-shop` are usually already taken, so Firebase suggests a unique suffix for you (for example `sandwich-shop-12345`) or lets you type your own unique ID such as `sandwich-shop-username`. If you want to keep your coursework separate from a personal Google account, sign into the browser with your preferred Google account first before opening the dashboard.
+Open the [Firebase dashboard](https://console.firebase.google.com/) in your browser and confirm that the profile icon in the top-right corner shows the Google account you want to use.
 
-1. Open the [Firebase dashboard](https://console.firebase.google.com/) in your browser and confirm that the profile icon in the top-right corner shows the Google account you want to use.
-2. Select **Create a project** (or **Add project**), enter a project name such as `Sandwich Shop Demo`, and check the generated project ID underneath.
-3. Disable Google Analytics when prompted if you want a simpler setup, and select **Create project**.
-4. Wait a few seconds until Firebase finishes provisioning, then select **Continue** to open your project overview, as shown below:
+Select **Create a new Firebase project** (or **Create a project**), enter a project name such as `Sandwich Shop`, review the generated project ID underneath, and select **Continue**.
 
-<!-- Capture: Firebase dashboard project overview after creating the project on Spark plan -->
+![Firebase create project page](images/9/firebase_create_project.png)
+
+Disable Google Analytics when prompted if you want a simpler setup, otherwise create an account when prompted and set the analytics location to United Kingdom as shown below, then select **Create project**.
+
+![Firebase analytics setup](images/9/firebase_analytics_setup.png)
+
+Once Firebase finishes provisioning, select **Continue** to open your project overview, as shown below:
+
 ![The Firebase dashboard project overview showing the newly created project on the Spark plan](images/9/firebase_project_overview.png)
 
-### Enable Email and Password authentication
+Notice **Gemini in Firebase** on the right-hand side of the project overview, which is available at no cost on the Spark plan. You can ask it general questions about Firebase services or Firestore queries, though it cannot edit your Flutter project files, so keep using GitHub Copilot in VS Code for code changes.
 
-Next, turn on email and password sign-in so customers can register accounts and sign in before checking out or viewing past orders.
+### Enable sign-in providers
 
-1. In the left navigation menu of the Firebase dashboard, open **Build** and select **Authentication**.
-2. Select **Get started** to initialise Authentication for your project.
-3. Under the **Sign-in method** tab, choose **Email/Password**, toggle **Enable** on for the first switch (leave **Email link (passwordless sign-in)** off), and select **Save**, as shown below:
+Next, turn on authentication so customers can register and sign in before checking out or viewing past orders.
 
-<!-- Capture: Firebase Authentication Sign-in providers list showing Email/Password enabled -->
-![The Firebase Authentication screen with Email/Password listed as Enabled](images/9/firebase_auth_enabled.png)
+In the left navigation menu of the Firebase dashboard under **Product categories**, open **Security** and select **Authentication**, then select **Get started**. Under the **Sign-in method** tab, choose **Email/Password**, toggle both **Enable** and **Email link (passwordless sign-in)** on if you want both password and email-link sign-in, and select **Save**.
+
+To let customers sign in with their Google account too, select **Add new provider**, choose **Google**, toggle **Enable** on, set the public-facing project name and support email, and select **Save**, as shown below:
+
+![The Firebase Authentication screen with Email/Password and Google listed as Enabled](images/9/firebase_auth_enabled.png)
+
+If you use **Google** sign-in on Android later, open **Settings** then **Project settings** and add your computer's debug SHA-1 certificate fingerprint under your Android app so Android allows the Google sign-in token request.
 
 ### Create a Cloud Firestore database
 
 With authentication active, create the Cloud Firestore database that stores your menu items, customer settings and order records.
 
-1. In the left navigation menu, open **Build** and select **Firestore Database**.
-2. Select **Create database**, keep the **Standard edition** default if prompted, choose a nearby location such as `europe-west2` (London), and select **Next**.
-3. Choose **Start in test mode** while building and testing the app during this worksheet, then select **Create**, as shown below:
+In the left navigation menu under **Product categories**, open **Databases and storage** and select **Firestore**, then select **Create database**. Keep **Standard edition** selected and select **Next**, pick a nearby location such as `europe-west2` (London) and select **Next**, choose **Start in test mode** and select **Next**, then leave scheduled backups skipped and select **Create**, as shown below:
 
-<!-- Capture: Cloud Firestore Database dashboard showing an empty database in test mode -->
 ![The Cloud Firestore dashboard showing the new empty database ready for collections](images/9/firebase_firestore_created.png)
 
 Starting in test mode lets your app read and write documents while you test checkout and account creation, though anyone with your project ID could write data while it remains open. We replace those temporary rules with user-scoped security rules later in [Protect user data with security rules](#protect-user-data-with-security-rules).
@@ -158,12 +160,12 @@ Now generate the Firebase configuration for both platforms using FlutterFire. Ru
 flutterfire configure
 ```
 
-When asked which platforms to support, use the arrow keys and space bar to select **android** and **web**, then press **Enter**. FlutterFire updates `android/app/google-services.json` and creates `lib/firebase_options.dart` containing public client keys (`apiKey`, `appId`, `projectId`) that tell the app which Firebase project to talk to, as shown below:
+When asked which platforms to support, use the arrow keys and space bar to select `android` and `web`, then press **Enter**. FlutterFire updates `android/app/google-services.json` and creates `lib/firebase_options.dart` with your project's public client identifiers (`apiKey`, `appId`, `projectId`), as shown below. Unlike server credentials or service account JSON files, these client options are safe to commit to Git because access control relies on Firebase Authentication and Cloud Firestore Security Rules rather than hiding project IDs.
 
 <!-- Capture: Terminal output of flutterfire configure selecting android and web platforms -->
 ![Terminal output showing flutterfire configure registering Android and Web apps](images/9/flutterfire_configure_output.png)
 
-Open `lib/main.dart` and import `package:firebase_core/firebase_core.dart` alongside the generated `firebase_options.dart`. Ensure bindings are initialised and await `Firebase.initializeApp` before `runApp`, then run the app on both Chrome (`flutter run -d chrome`) and your Android emulator to confirm it starts cleanly:
+Open `lib/main.dart`, remove the SQLite-only `isSupportedPlatform()` check and `UnsupportedPlatformApp` widget from Worksheet 7 so the app runs on both web and Android, and import `package:firebase_core/firebase_core.dart` alongside the generated `firebase_options.dart`. Ensure bindings are initialised and await `Firebase.initializeApp` before `runApp`, then run the app on both Chrome (`flutter run -d chrome`) and your Android emulator to confirm it starts cleanly:
 
 ```dart
 import 'package:firebase_core/firebase_core.dart';
@@ -186,7 +188,7 @@ Future<void> main() async {
 
 ### Sign up, sign in and sign out
 
-<!-- TODO: build a dedicated sign-in / registration screen using FirebaseAuth, wrap auth operations in an AuthRepository, show clear validation/error messages, and gate orders/settings behind authenticated users. -->
+<!-- TODO: build a dedicated sign-in / registration screen using FirebaseAuth (Email/Password, optional Email link, and Google Sign-In via google_sign_in), wrap auth operations in an AuthRepository, show clear validation/error messages, and gate orders/settings behind authenticated users. -->
 
 ### Save user settings in the cloud
 
@@ -196,7 +198,7 @@ Future<void> main() async {
 
 ### Read the menu from Firestore
 
-<!-- TODO: replace local JSON asset loading of Sandwich metadata with a Cloud Firestore 'sandwiches' collection (including asset image paths), keeping assets/images/ bundled locally so no paid Storage bucket is required. -->
+<!-- TODO: replace local JSON asset loading of Sandwich metadata with a Cloud Firestore 'sandwiches' collection (including asset image paths), keeping assets/images/ bundled with the app. -->
 
 ### Store and read orders
 
