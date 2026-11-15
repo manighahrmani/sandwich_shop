@@ -131,6 +131,7 @@
     "StatefulWidget",
     "stateless",
     "StatelessWidget",
+    "subcollection",
     "subosito",
     "synchronize",
     "synchronized",
