@@ -128,7 +128,7 @@ Firebase is a cloud service provided by Google that provides a variety of servic
 
 Firebase offers two billing tiers on its [Firebase pricing](https://firebase.google.com/pricing) page: the no-cost Spark plan and the pay-as-you-go Blaze plan. Firebase Authentication and Cloud Firestore both include generous free daily quotas on the Spark plan without attaching a payment card.
 
-In our case we don't require a cloud storage (e.g., storing user profile pictures or PDF receipts) so we can make do with the Spark plan. Just be aware as the need for your app grows, you may be asked to upgrade to the Blaze plan. Alternatively, you can also explore the [Firebase Local Emulator Suite](https://firebase.google.com/docs/emulator-suite) to simulate Firebase services locally.
+In our case we don't require cloud storage (e.g., storing user profile pictures or PDF receipts) so we can make do with the Spark plan. Just be aware as the need for your app grows, you may be asked to upgrade to the Blaze plan. Alternatively, you can also explore the [Firebase Local Emulator Suite](https://firebase.google.com/docs/emulator-suite) to simulate Firebase services locally.
 
 ## Setting up Firebase
 
@@ -164,23 +164,29 @@ To let customers sign in with their Google account too, select **Add new provide
 
 ![The Firebase Authentication screen with Email/Password and Google listed as Enabled](images/9/firebase_auth_enabled.png)
 
-If you use **Google** sign-in on Android later, open **Settings** then **Project settings** and add your computer's debug SHA-1 certificate fingerprint under your Android app so Android allows the Google sign-in token request.
-
 ### Create a Cloud Firestore database
 
-Once user accounts are enabled, the app needs a cloud database where it can store the shared menu alongside each customer's saved settings and order history so data is not trapped on one phone. Cloud Firestore organises this data into collections and documents rather than SQL tables and rows.
+Once user accounts are enabled, the app also needs a cloud database to hold the shared menu alongside each customer's saved settings and order history so nothing stays trapped on one phone.
+
+In this section we will use Firestore which is the cloud-hosted NoSQL (not necessarily relational) database provided by Firebase, designed to store and sync data for client- and server-side development. It allows us to structure our data into collections and documents, making it easy to manage user-specific data such as saved settings and order history while keeping it accessible across devices.
 
 In the left navigation menu under **Product categories**, open **Databases and storage** and select **Firestore**, then select **Create database**. Keep **Standard edition** selected and select **Next**, pick a nearby location such as `europe-west2` (London) and select **Next**, choose **Start in test mode** and select **Next**, then leave scheduled backups skipped and select **Create**, as shown below:
 
 ![The Cloud Firestore dashboard showing the new empty database ready for collections](images/9/firebase_firestore_created.png)
 
-Starting in test mode lets your app read and write documents while you test checkout and account creation, though anyone with your project ID could write data while it remains open. We replace those temporary rules with user-scoped security rules later in [Protect user data with security rules](#protect-user-data-with-security-rules).
+Starting in test mode leaves the database open for 30 days so your app can read and write data freely while you build it. Before finishing, we replace those open rules so each signed-in customer can only access their own orders and settings in [Protect user data with security rules](#protect-user-data-with-security-rules).
 
 ### Install the Firebase and FlutterFire tools
 
-Before connecting our Flutter code, the project needs platform-specific configuration files that point it to your `Sandwich Shop` project. The Firebase CLI lets you manage your cloud project from the terminal, while the FlutterFire CLI generates those configuration files for Android and web automatically instead of requiring manual edits to Gradle and web files.
+Before editing any Dart code, your project needs a few setup files linking it to your `Sandwich Shop` project on Firebase. The Firebase CLI lets you control Firebase from the terminal, and the FlutterFire CLI creates those Android and web setup files automatically so you do not have to configure them by hand.
 
-Install the Firebase CLI following the [Firebase CLI documentation](https://firebase.google.com/docs/cli), or verify it is already installed by running `firebase --version` in your terminal. Next, sign in with the same Google account you used in the Firebase dashboard:
+Install the Firebase CLI following the [Firebase CLI documentation](https://firebase.google.com/docs/cli). Once it is installed, verify that it is correctly installed by running the following command in your terminal:
+
+```bash
+firebase --version
+```
+
+Next, sign in with the same Google account you used in the Firebase dashboard:
 
 ```bash
 firebase login
@@ -192,14 +198,38 @@ If you are already signed into a different Google account in the CLI and want to
 firebase login --reauth
 ```
 
-Once signed in, activate the FlutterFire CLI globally using Dart Pub and confirm it responds:
+Once signed in, install the FlutterFire CLI using Dart Pub:
 
 ```bash
 dart pub global activate flutterfire_cli
+```
+
+Look at the end of the terminal output. If Dart shows a warning that `.pub-cache/bin` (or `Pub\Cache\bin`) is not on your `PATH`, add it before running `flutterfire`, as shown in the screenshot below:
+
+![Terminal output showing the Dart warning that .pub-cache/bin is not on PATH and flutterfire command not found](images/9/flutterfire_path_warning.png)
+
+On macOS, run the command below in your terminal, then close and reopen the terminal (use `~/.bashrc` instead on Linux):
+
+```bash
+echo 'export PATH="$PATH":"$HOME/.pub-cache/bin"' >> ~/.zshrc
+```
+
+On Windows, run these two lines in PowerShell, then close and reopen the terminal (or search the Start menu for **Edit environment variables for your account** and add `%LOCALAPPDATA%\Pub\Cache\bin` to **Path**):
+
+```powershell
+$userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+[Environment]::SetEnvironmentVariable('Path', "$userPath;$env:LOCALAPPDATA\Pub\Cache\bin", 'User')
+```
+
+Finally, open a new terminal and check that the `flutterfire` command responds:
+
+```bash
 flutterfire --version
 ```
 
-If your terminal reports that `flutterfire` cannot be found after activation, add Dart's global `bin` folder (`~/.pub-cache/bin` on macOS or Linux, or `%LOCALAPPDATA%\Pub\Cache\bin` on Windows) to your system `PATH` and open a fresh terminal.
+You should get its version as shown below:
+
+![Flutterfire CLI version output](images/9/flutterfire_version_output.png)
 
 ### Connect the Flutter app
 
@@ -217,10 +247,15 @@ Now generate the Firebase configuration for both platforms using FlutterFire. Ru
 flutterfire configure
 ```
 
-When asked which platforms to support, use the arrow keys and space bar to select at least `android` and `web`, then press **Enter**. FlutterFire updates `android/app/google-services.json` and creates `lib/firebase_options.dart` with your project's public client identifiers (`apiKey`, `appId`, `projectId`), as shown below. Unlike server credentials or service account JSON files, these client options are safe to commit to Git because access control relies on Firebase Authentication and Cloud Firestore Security Rules rather than hiding project IDs.
+When asked which platforms to support, use the arrow keys and space bar to select at least `android` and `web`, then press **Enter**. See below for an example of the selection process:
 
-<!-- Capture: Terminal output of flutterfire configure selecting android and web platforms -->
+![FlutterFire platform selection example](images/9/flutterfire_platform_selection.png)
+
+FlutterFire creates `android/app/google-services.json`, `lib/firebase_options.dart` and `firebase.json` (and updates your Android Gradle files) so your app knows which Firebase project to connect to, as shown below. These files do not contain private admin passwords — customer data is protected later by user sign-in and database security rules — so it is safe to commit them to Git.
+
 ![Terminal output showing flutterfire configure registering Android and Web apps](images/9/flutterfire_configure_output.png)
+
+<!-- TODO: Done till here -->
 
 Open `lib/main.dart` and add two imports at the top of the file so Dart can load the Firebase core package and the generated options:
 
@@ -229,9 +264,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:sandwich_shop/firebase_options.dart';
 ```
 
-Firebase needs to finish initialising before any widget reads authentication state or Firestore data, so `main` must become an asynchronous function that returns `Future<void>`. Inside the supported-platform branch, call `WidgetsFlutterBinding.ensureInitialized()` so Flutter sets up platform channels before `runApp`, then await `Firebase.initializeApp` with `DefaultFirebaseOptions.currentPlatform` to pick the matching Android or web configuration automatically.
+Firebase needs to connect before any screen loads, so change `main` to an `async` function that returns `Future<void>`. Calling `WidgetsFlutterBinding.ensureInitialized()` tells Flutter to prepare before the first screen builds, and `await Firebase.initializeApp(...)` loads the matching Android or web settings from `firebase_options.dart`.
 
-Replace `main()` in `lib/main.dart` with the updated function below. Including an optional `initializeFirebase` parameter defaulting to `true` lets the real app connect to Firebase while allowing widget tests to start `App` offline without calling native plugins:
+Replace `main()` in `lib/main.dart` with the updated function below. Adding an optional `initializeFirebase` parameter (defaulting to `true`) lets the real app connect to Firebase normally while allowing automated tests to start `App` offline:
 
 ```dart
 Future<void> main({bool initializeFirebase = true}) async {
@@ -272,7 +307,7 @@ Before reading or saving any personal data in Cloud Firestore, the app must know
 
 Customers need a simple way to create an account, sign back in on any device, and sign out when someone else shares the browser or phone. Separating authentication logic behind an `AuthRepository` keeps our screens clean and makes testing sign-in flows straightforward.
 
-<!-- TODO: build a dedicated sign-in / registration screen using FirebaseAuth (Email/Password, optional Email link, and Google Sign-In via google_sign_in), wrap auth operations in an AuthRepository, show clear validation/error messages, and react to authStateChanges() across the app. -->
+<!-- TODO: build a dedicated sign-in / registration screen using FirebaseAuth (Email/Password, optional Email link, and Google Sign-In via google_sign_in), wrap auth operations in an AuthRepository, show clear validation/error messages, and react to authStateChanges() across the app. Include an optional Android-only step here (after flutterfire configure has registered the Android app) to get the debug SHA-1 certificate fingerprint from the android/ folder (./gradlew signingReport) and add it in Project settings if testing Google Sign-In on an Android emulator/device (web and Email/Password work without this step). -->
 
 ## Cloud Firestore
 
@@ -292,19 +327,19 @@ In Worksheet 8, settings such as text size were stored locally in `SharedPrefere
 
 ### Store and read orders
 
-Until now, order history lived in a local SQLite database that could not follow a customer to another device or work in a web browser. Storing each customer's orders inside an `orders` subcollection under their `uid` replaces local SQLite while keeping orders scoped to the person who placed them.
+Until now, order history lived in a local SQLite database that could not follow a customer to another device or work in a web browser. Storing each customer's orders in an `orders` list (a subcollection) under their account replaces local SQLite and keeps orders attached to the person who placed them.
 
 <!-- TODO: replace SQLite DatabaseHelper / SqliteOrderRepository with a Cloud Firestore order flow under users/<uid>/orders so orders work cleanly on both Android and web. -->
 
 ### Test with multiple users
 
-To prove that cloud storage and authentication isolate each person's data properly, we need to test the app with more than one account. Signing in as a second customer should show their own saved settings and empty or separate order history without exposing the first customer's records.
+To prove that cloud storage and authentication keep each person's data separate, we need to test the app with more than one account. Signing in as a second customer should show their own saved settings and their own order history without exposing the first customer's records.
 
 <!-- TODO: walk through registering/signing in with two test accounts across Chrome and Android, updating settings and placing orders in each, and inspecting the users/<uid> documents in the Cloud Firestore dashboard to show per-user isolation and cross-device sync. -->
 
 ### Protect user data with security rules
 
-We started Cloud Firestore in test mode so any connected app could read and write documents during initial development, which leaves customer records unprotected. Replacing those temporary rules with Firestore Security Rules guarantees that anyone can read the public menu, while each customer's settings and orders can only be read or modified when signed in as that exact `uid`.
+We started Cloud Firestore in test mode so our app can read and write documents while we build it, which leaves customer records open to anyone. Replacing those temporary rules with Firestore Security Rules lets anyone read the public menu, while each customer can only read or change their own settings and orders once signed in.
 
 <!-- TODO: replace temporary test mode rules with Firestore Security Rules allowing public read on the menu collection and owner-only read/write (request.auth != null && request.auth.uid == userId) on users/<uid> and orders. -->
 
@@ -312,7 +347,7 @@ We started Cloud Firestore in test mode so any connected app could read and writ
 
 ### Fake Firebase in unit tests
 
-Running unit and widget tests against live Firebase servers is slow, requires an internet connection, and writes test records into your production database. Replacing live Firebase instances with fake in-memory packages lets tests verify sign-in, settings and order logic offline in milliseconds.
+Running automated tests against live Firebase servers is slow, needs an internet connection, and writes test records into your real database. Replacing live Firebase connections with fake in-memory versions lets tests check sign-in, settings and orders offline in milliseconds.
 
 <!-- TODO: add firebase_auth_mocks and fake_cloud_firestore as dev dependencies so Auth and Firestore repositories can be tested fast offline without hitting live Firebase servers. -->
 
