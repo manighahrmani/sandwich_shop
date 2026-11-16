@@ -135,6 +135,7 @@
     "StatelessWidget",
     "subcollection",
     "subosito",
+    "Supabase",
     "synchronize",
     "synchronized",
     "TargetPlatform",
