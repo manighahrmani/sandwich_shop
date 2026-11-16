@@ -255,6 +255,8 @@ FlutterFire creates `android/app/google-services.json`, `lib/firebase_options.da
 
 ![Terminal output showing flutterfire configure registering Android and Web apps](images/9/flutterfire_configure_output.png)
 
+If you push `lib/firebase_options.dart` to a public GitHub repository, GitHub may send you a secret-scanning alert for a Google API key. As explained in [Learn about Firebase API keys](https://firebase.google.com/docs/projects/api-keys), Firebase client API keys only identify which project to reach and do not grant admin access on their own, so you can dismiss that alert once you lock down your database rules in [Protect user data with security rules](#protect-user-data-with-security-rules) (just never attach paid Google APIs such as Gemini or Google Maps to those Firebase client keys, and never commit downloaded admin service-account JSON files).
+
 <!-- TODO: Done till here -->
 
 Open `lib/main.dart` and add two imports at the top of the file so Dart can load the Firebase core package and the generated options:
