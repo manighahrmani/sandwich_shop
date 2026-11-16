@@ -6,6 +6,8 @@ import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:sandwich_shop/firebase_options.dart';
 
 bool isSupportedPlatform({bool isWeb = kIsWeb}) {
   if (isWeb) {
@@ -17,8 +19,12 @@ bool isSupportedPlatform({bool isWeb = kIsWeb}) {
   return false;
 }
 
-void main() {
+Future<void> main() async {
   if (isSupportedPlatform()) {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     runApp(const App());
   } else {
     runApp(const UnsupportedPlatformApp());

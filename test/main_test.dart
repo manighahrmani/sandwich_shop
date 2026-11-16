@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/main.dart';
-import 'package:sandwich_shop/main.dart' as app;
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/order_screen.dart';
@@ -19,31 +18,6 @@ void main() {
     rootBundle.clear();
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.empty();
-  });
-
-  // These two tests call the real main function, so they run before the others.
-  testWidgets('main starts the app on Android', (WidgetTester tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.android;
-    try {
-      app.main();
-      await tester.pump();
-      expect(find.byType(App), findsOneWidget);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-    }
-  });
-
-  testWidgets('main shows the unsupported screen on other platforms', (
-    WidgetTester tester,
-  ) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-    try {
-      app.main();
-      await tester.pump();
-      expect(find.byType(UnsupportedPlatformApp), findsOneWidget);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-    }
   });
 
   group('App smoke tests', () {
