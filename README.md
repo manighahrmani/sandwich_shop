@@ -64,15 +64,12 @@ There are five demos across the term, but only your best four demo marks count t
 
 For Demos 1 to 4, a zero on any required functionality item caps the final demo mark at 23 out of 25. Lower marks remain unchanged. Demo 3 asks one understanding question from Worksheet 5 and one from Worksheet 6, excluding advanced, optional extensions.
 
-Demo 3 covers navigation, a ticket basket, profile forms, a JSON film catalogue and saved profile preferences. Demo 4 covers SQLite booking history and database-backed checkout (Worksheet 7), then a light and dark mode switch, debugging, a README, related booking items, organised tests and demonstrated editor coverage (Worksheet 8). It asks one understanding question from Worksheet 7 and one from Worksheet 8. Provider and notifiers are not required. Demo 5 covers cloud services (authentication, database and storage) from Worksheet 9. Worksheet 10 (CI/CD and integration testing) is not assessed in Demo 5.
-
-Assessment takes place across five two-week demo windows (Weeks 1 and 2, Weeks 3 and 4, Weeks 5 and 6, Weeks 7 and 8, and Weeks 9 and 10). Three rules apply:
+Every two weeks, you have a demo window where you can do a demo (see the table in this page outlining the dates). The following rules apply:
 
 - You can perform at most one demo in any demo window.
 - Demos must be completed in order. You cannot skip ahead to a later demo if you have missed an earlier one, because each stage builds on the previous codebase.
 - Missing one demo window carries no mark penalty because only your best four demo marks count. Missing two or more windows reduces the number of demos you can complete.
-
-⚠️ You will only receive marks if you attend your timetabled practical. You cannot get marks in practicals at a different time to what is shown on your timetable.
+- You will only receive marks if you attend your timetabled practical. You cannot get marks in practicals at a different time to what is shown on your timetable.
 
 For the full detailed explanation of the assessment read the [Assessment Guide](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQC9nZoNwb2jT40MnFQPZWVvAVdTK2PGBmZ8jPff30RRyPc).
 
