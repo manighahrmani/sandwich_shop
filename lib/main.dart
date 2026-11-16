@@ -7,9 +7,9 @@ import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-bool isSupportedPlatform() {
-  if (kIsWeb) {
-    return false;
+bool isSupportedPlatform({bool isWeb = kIsWeb}) {
+  if (isWeb) {
+    return true;
   }
   if (defaultTargetPlatform == TargetPlatform.android) {
     return true;
@@ -37,9 +37,8 @@ class UnsupportedPlatformApp extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(24.0),
             child: Text(
-              'This app saves orders with SQLite and is set up to run on '
-              'Android only. Stop the app and run it on an Android emulator '
-              'or device instead.',
+              'This app is configured for Android and web only. Stop the app '
+              'and run it on Chrome or an Android emulator instead.',
               textAlign: TextAlign.center,
             ),
           ),

@@ -219,6 +219,10 @@ void main() {
     });
   }
 
+  test('Web is supported', () {
+    expect(isSupportedPlatform(isWeb: true), isTrue);
+  });
+
   test('Android is supported', () {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
     expect(isSupportedPlatform(), isTrue);
@@ -241,7 +245,7 @@ void main() {
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const UnsupportedPlatformApp());
-    expect(find.textContaining('Android emulator'), findsOneWidget);
+    expect(find.textContaining('Android and web'), findsOneWidget);
   });
 }
 
