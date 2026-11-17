@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
+import 'package:sandwich_shop/screens/auth_screen.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
@@ -133,6 +134,9 @@ class _AppState extends State<App> {
         },
         '/orders': (BuildContext context) {
           return const OrdersScreen();
+        },
+        '/auth': (BuildContext context) {
+          return const AuthScreen();
         },
       },
     );
