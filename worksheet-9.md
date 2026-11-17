@@ -22,6 +22,7 @@
   - [Create the authentication repository](#create-the-authentication-repository)
   - [Test the authentication repository](#test-the-authentication-repository)
   - [Build the sign-in screen](#build-the-sign-in-screen)
+  - [Test the sign-in screen](#test-the-sign-in-screen)
   - [Add the account button and route](#add-the-account-button-and-route)
   - [Test signing up, signing in and signing out](#test-signing-up-signing-in-and-signing-out)
 - [Cloud Firestore](#cloud-firestore)
@@ -378,7 +379,7 @@ Next, add two read helpers inside `AuthRepository` to check who is signed in rig
   }
 ```
 
-Unlike a `Future`, which returns a single value once, a `Stream<User?>` emits a new value every time a user signs in or signs out. When nobody is signed in, the value is `null`. However whenever the authentication state changes, such as when a user signs in or signs out, the stream will emit the updated `User?` value, allowing the app to react in real-time to these changes. We will use this later when building the UI to show different screens based on whether the user is signed in or not. The stream is continuous and can be listened to multiple times, whereas if we were to constantly use `getCurrentUser()`, we would only get the current state at that exact moment and miss any subsequent changes.
+Unlike a `Future`, which returns a single value once, a `Stream<User?>` emits a new value every time a user signs in or signs out. When nobody is signed in, the value is `null`. Whenever the authentication state changes, the stream emits the updated `User?` value so buttons and screens can update automatically instead of polling `getCurrentUser()`.
 
 Now add three methods for creating an account, signing in and signing out:
 
@@ -459,9 +460,7 @@ Open the **Testing** view in VS Code and inspect the **Flutter Coverage** tree (
 
 ### Build the sign-in screen
 
-<!-- TODO: Done till here -->
-
-Now create a screen where customers can switch between signing in and creating a new account, or sign out when already signed in.
+Now create a screen where customers can switch between signing in and creating a new account (sign up), then return to the menu once authentication succeeds.
 
 Create a new file named `lib/screens/auth_screen.dart`. Start with the imports and a `StatefulWidget` whose `build` method throws `UnimplementedError` until we complete it:
 
@@ -489,7 +488,7 @@ class _AuthScreenState extends State<AuthScreen> {
 }
 ```
 
-Inside `_AuthScreenState`, declare the two text controllers and three state variables above `build`:
+Inside `_AuthScreenState`, declare the two text controllers and three state variables above `build`. The `_isRegistering` boolean tracks whether the form creates a new account (`true`) or signs in to an existing one (`false`), `_isSubmitting` becomes `true` while waiting for Firebase to reply so we can display a loading indicator, and `_errorMessage` holds any message shown below the fields:
 
 ```dart
   late TextEditingController _emailController;
@@ -528,7 +527,7 @@ Add `_toggleMode` below `dispose()` so the customer can switch the screen betwee
   }
 ```
 
-Next, create an empty `Future<void> _submitForm() async {}` method below `_toggleMode`. Inside its braces, read both controllers and stop early if either field is empty:
+Next, create an empty `Future<void> _submitForm() async {}` method below `_toggleMode`. Inside its braces, read both controllers—using `.trim()` on the email to strip accidental spaces while keeping the password exact—and `return` early with an error message if either field is blank so we do not send an invalid request to Firebase. When both fields are present, set `_isSubmitting` to `true` and clear any old error before starting the async call:
 
 ```dart
     final String email = _emailController.text.trim();
@@ -547,7 +546,7 @@ Next, create an empty `Future<void> _submitForm() async {}` method below `_toggl
     });
 ```
 
-Below that `setState` block (still inside `_submitForm`), add a `try` block to either register or sign in, followed by `catch` blocks to show friendly errors. Always check `mounted` before calling `setState` after an `await`:
+Below that `setState` block (still inside `_submitForm`), add a `try` block that calls `signUpWithEmail` when `_isRegistering` is `true` or `signInWithEmail` otherwise. Because Firebase signs in newly registered users automatically, both paths finish the same way: reset `_isSubmitting` and check `if (Navigator.canPop(context))` before calling `Navigator.pop(context)` so the app returns to the previous screen (while avoiding an error if a widget test mounts `AuthScreen` on its own). The `on FirebaseAuthException catch` block turns known Firebase error codes into friendly messages via `getErrorMessage`, while the general `catch` block acts as a fallback for any unexpected error. Checking `if (!mounted) { return; }` after each `await` prevents `setState` or `Navigator` from running if the customer leaves the screen before Firebase replies:
 
 ```dart
     try {
@@ -562,6 +561,9 @@ Below that `setState` block (still inside `_submitForm`), add a `try` block to e
       setState(() {
         _isSubmitting = false;
       });
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
     } on FirebaseAuthException catch (error) {
       if (!mounted) {
         return;
@@ -581,48 +583,12 @@ Below that `setState` block (still inside `_submitForm`), add a `try` block to e
     }
 ```
 
-Add a small `_signOut` method below `_submitForm` so the signed-in view has its own named handler:
+Now replace `throw UnimplementedError();` inside `build` so the screen prepares its form labels and widgets directly inside `build`, matching `SettingsScreen`. It picks headings and button captions from `_isRegistering`, swaps `PrimaryButton` for a `CircularProgressIndicator` while `_isSubmitting` is `true` so the user sees progress and cannot submit twice, and uses `SizedBox.shrink()` as an empty zero-size widget for `errorWidget` when `_errorMessage` is empty. Wrapping the `Column` in a `SingleChildScrollView` prevents screen overflow when the keyboard opens, and `obscureText: true` hides password characters as you type:
 
 ```dart
-  Future<void> _signOut() async {
-    await AuthRepository.instance.signOut();
-  }
-```
-
-Now add `_buildSignedInView` to show the customer's email address and a **Sign Out** button when a user is signed in:
-
-```dart
-  Widget _buildSignedInView(User currentUser) {
-    String emailText = 'Signed-in account';
-    final String? userEmail = currentUser.email;
-    if (userEmail != null) {
-      emailText = userEmail;
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text('Account', style: shopSectionTitleStyle),
-          const SizedBox(height: 16),
-          Text('Signed in as $emailText'),
-          const SizedBox(height: 24),
-          PrimaryButton(
-            label: 'Sign Out',
-            onPressed: _signOut,
-          ),
-        ],
-      ),
-    );
-  }
-```
-
-Add `_buildFormView` below `_buildSignedInView` to render the email and password `TextField` widgets, any error message, either a `CircularProgressIndicator` or `PrimaryButton`, and the mode switch `TextButton`. Setting `obscureText: true` hides password characters as the user types:
-
-```dart
-  Widget _buildFormView() {
-    String titleText = 'Sign In';
+  @override
+  Widget build(BuildContext context) {
+    String titleText = 'Customer Sign In';
     String buttonLabel = 'Sign In';
     String toggleLabel = 'Need an account? Register';
     if (_isRegistering) {
@@ -633,7 +599,7 @@ Add `_buildFormView` below `_buildSignedInView` to render the email and password
 
     final Widget actionWidget;
     if (_isSubmitting) {
-      actionWidget = const Center(child: CircularProgressIndicator());
+      actionWidget = const CircularProgressIndicator();
     } else {
       actionWidget = PrimaryButton(
         label: buttonLabel,
@@ -641,118 +607,153 @@ Add `_buildFormView` below `_buildSignedInView` to render the email and password
       );
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(titleText, style: shopSectionTitleStyle),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'Password',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 16),
-          if (_errorMessage.isNotEmpty) ...[
-            Text(
-              _errorMessage,
-              style: const TextStyle(color: Colors.red),
-            ),
-            const SizedBox(height: 16),
-          ],
-          actionWidget,
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: _toggleMode,
-            child: Text(toggleLabel),
-          ),
-        ],
-      ),
-    );
-  }
-```
+    Widget errorWidget = const SizedBox.shrink();
+    if (_errorMessage.isNotEmpty) {
+      errorWidget = Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Text(
+          _errorMessage,
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
+    }
 
-Finally, replace the `throw UnimplementedError();` inside `build` with a `Scaffold` whose body uses a `StreamBuilder<User?>`. A `StreamBuilder` listens to `watchAuthState()` and rebuilds automatically whenever the user signs in or out:
-
-```dart
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account', style: shopHeaderStyle),
+        title: const Text(appTitle, style: shopHeaderStyle),
       ),
-      body: StreamBuilder<User?>(
-        stream: AuthRepository.instance.watchAuthState(),
-        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-          final User? currentUser = snapshot.data;
-          if (currentUser != null) {
-            return _buildSignedInView(currentUser);
-          }
-          return _buildFormView();
-        },
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(titleText, style: shopSectionTitleStyle),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Email',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Password',
+              ),
+            ),
+            const SizedBox(height: 16),
+            errorWidget,
+            actionWidget,
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: _toggleMode,
+              child: Text(toggleLabel),
+            ),
+          ],
+        ),
       ),
     );
   }
 ```
 
-<!-- Capture: Sign-in and registration screen code in VS Code -->
-<!-- ![AuthScreen sign-in form and StreamBuilder in lib/screens/auth_screen.dart](images/9/auth_screen_code.png) -->
+### Test the sign-in screen
+
+Because `AuthScreen` is not linked from `MenuScreen` yet, we cannot open it in the running app until the next section. Run static analysis first to confirm `lib/screens/auth_screen.dart` compiles cleanly:
+
+```bash
+flutter analyze
+```
+
+Next, use GitHub Copilot in **Interactive** mode again with `#lib/screens/auth_screen.dart` and `#test/screens/settings_screen_test.dart` to generate widget tests in `test/screens/auth_screen_test.dart`. Ask Copilot to use `MockFirebaseAuth` (including a small test subclass that overrides `signInWithEmailAndPassword` to throw `FirebaseAuthException` and a general `Exception`) so the suite tests empty-field validation, switching between sign-in and registration modes, registering and returning to the previous route, signing in and returning, and error messages.
+
+Run the new widget tests with coverage, verify all lines in `lib/screens/auth_screen.dart` are covered in the **Testing** view as before, and read through the generated assertions to confirm every flow is checked:
+
+```bash
+flutter test --coverage test/screens/auth_screen_test.dart
+```
+
+![AuthScreen widget tests passing with 100% coverage in VS Code](images/9/auth_screen_tests_coverage.png)
 
 ### Add the account button and route
 
-To open `AuthScreen` from the menu bar without duplicating navigation logic inside `MenuScreen`, create a small reusable `AccountButton` widget matching `SettingsButton` from Worksheet 5.
+To open `AuthScreen` when signed out—and let customers sign out directly from the menu bar once signed in—create an `AccountButton` widget under `lib/widgets/account_button.dart`.
 
-Create a new file named `lib/widgets/account_button.dart` with the code below:
+Add the imports and helpers `_openAuthScreen` and `_signOut` first. Checking `ModalRoute.of(context)` stops `/auth` from being pushed twice when already on it, while `_signOut` calls `AuthRepository.instance.signOut()`:
 
 ```dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/constants.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
 
 class AccountButton extends StatelessWidget {
   const AccountButton({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.account_circle_outlined),
-      tooltip: 'Account',
-      onPressed: () {
-        final ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
-        final String currentRoute;
-        if (modalRoute != null) {
-          final RouteSettings routeSettings = modalRoute.settings;
-          final String? name = routeSettings.name;
-          if (name != null) {
-            currentRoute = name;
-          } else {
-            currentRoute = '';
-          }
-        } else {
-          currentRoute = '';
-        }
+  void _openAuthScreen(BuildContext context) {
+    final ModalRoute<dynamic>? modalRoute = ModalRoute.of(context);
+    final String currentRoute;
+    if (modalRoute != null) {
+      final RouteSettings routeSettings = modalRoute.settings;
+      final String? name = routeSettings.name;
+      if (name != null) {
+        currentRoute = name;
+      } else {
+        currentRoute = '';
+      }
+    } else {
+      currentRoute = '';
+    }
 
-        if (currentRoute != '/auth') {
-          Navigator.pushNamed(context, '/auth');
-        }
-      },
-    );
+    if (currentRoute != '/auth') {
+      Navigator.pushNamed(context, '/auth');
+    }
+  }
+
+  Future<void> _signOut() async {
+    await AuthRepository.instance.signOut();
   }
 }
 ```
 
-Open `lib/main.dart`, import `package:sandwich_shop/screens/auth_screen.dart`, and register the `'/auth'` route inside the `routes` map of `MaterialApp`:
+Next, add `build` inside `AccountButton`. A `StreamBuilder<User?>` subscribes to `watchAuthState()` and reads `snapshot.data`: when signed out (`null`), it shows a **Log In** `ElevatedButton` that opens `/auth`; when signed in, it switches to **Sign Out** and calls `_signOut()` instead:
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: AuthRepository.instance.watchAuthState(),
+      builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+        final User? currentUser = snapshot.data;
+
+        String labelText = 'Log In';
+        if (currentUser != null) {
+          labelText = 'Sign Out';
+        }
+
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: shopWhite,
+            foregroundColor: shopBrand,
+          ),
+          onPressed: () {
+            if (currentUser != null) {
+              _signOut();
+            } else {
+              _openAuthScreen(context);
+            }
+          },
+          child: Text(labelText),
+        );
+      },
+    );
+  }
+```
+
+Open `lib/main.dart`, import `package:sandwich_shop/screens/auth_screen.dart`, and register `'/auth'` inside the `routes` map of `MaterialApp` so `Navigator.pushNamed` knows which screen to build:
 
 ```dart
         '/auth': (BuildContext context) {
@@ -760,7 +761,7 @@ Open `lib/main.dart`, import `package:sandwich_shop/screens/auth_screen.dart`, a
         },
 ```
 
-Now open `lib/screens/menu_screen.dart`, import `package:sandwich_shop/widgets/account_button.dart`, and add `AccountButton()` to the `actions` list in `AppBar` while keeping `SettingsButton()` and `BasketButton()`:
+Now open `lib/screens/menu_screen.dart`, import `package:sandwich_shop/widgets/account_button.dart`, and add `AccountButton()` to the `actions` list in `AppBar` alongside `SettingsButton()` and `BasketButton()`:
 
 ```dart
       appBar: AppBar(
@@ -769,26 +770,35 @@ Now open `lib/screens/menu_screen.dart`, import `package:sandwich_shop/widgets/a
       ),
 ```
 
-Run `flutter test` in the terminal to confirm that all existing tests still pass after these updates.
+Because `MenuScreen` now renders `AccountButton` (`watchAuthState()`), set `AuthRepository.instance.setAuth(MockFirebaseAuth())` in `setUp` (and `null` in `tearDown`) inside both `test/screens/menu_screen_test.dart` and `test/main_test.dart` so widget tests do not touch real Firebase. Ask Copilot to add `test/widgets/account_button_test.dart` (testing **Log In** navigation, duplicate-route checks, unnamed routes, and tapping **Sign Out** when signed in) and update the menu and main tests for **Log In** and `/auth`, then run `flutter test --coverage`:
+
+```bash
+flutter test --coverage
+```
+
+<!-- Capture: MenuScreen app bar showing the Log In button next to Settings and Basket -->
+<!-- ![MenuScreen app bar with the Log In button](images/9/menu_screen_account_button.png) -->
+
+<!-- TODO: Done till here -->
 
 ### Test signing up, signing in and signing out
 
-Launch the app in Chrome (`flutter run -d chrome`) or on your Android emulator and select the **Account** icon in the top-right bar to open `AuthScreen`.
+Launch the app in Chrome (`flutter run -d chrome`) or on your Android emulator and select **Log In** in the top-right bar to open `AuthScreen`.
 
 <!-- Capture: Sign-in screen open in Chrome -->
 <!-- ![The sign-in form displayed on AuthScreen in Chrome](images/9/auth_screen_sign_in.png) -->
 
-Select **Need an account? Register**, enter an email address and a password of at least six characters, and select **Register**. Because `StreamBuilder` listens to `watchAuthState()`, the screen switches straight to your signed-in view showing your email address and the **Sign Out** button.
+Select **Need an account? Register**, enter an email address and a password of at least six characters, and select **Register**. The screen pops back to `MenuScreen`, where `StreamBuilder` inside `AccountButton` updates the top-right button to **Sign Out**.
 
-<!-- Capture: Signed-in view on AuthScreen showing user email and Sign Out button -->
-<!-- ![Signed-in account screen displaying the customer email and Sign Out button](images/9/auth_screen_signed_in.png) -->
+<!-- Capture: MenuScreen showing the Sign Out button in the app bar after registering -->
+<!-- ![MenuScreen app bar showing the Sign Out button after signing in](images/9/menu_screen_sign_out_button.png) -->
 
 Open your [Firebase dashboard](https://console.firebase.google.com/), go to **Authentication** and select the **Users** tab to see your newly created user account and its unique `uid` stored in the cloud, as shown below:
 
 <!-- Capture: Firebase Authentication Users tab listing the newly registered account and UID -->
 <!-- ![Firebase Authentication Users tab showing the registered test account and UID](images/9/firebase_auth_users.png) -->
 
-Return to the app, select **Sign Out**, then try signing back in with a wrong password to verify the red error message appears, before signing in again with the correct password. If you also want to add Google sign-in on Android later, fetch your debug SHA-1 fingerprint from the `android/` folder with `./gradlew signingReport` and add it under **Project settings** in Firebase; email and password sign-in works without it.
+Return to the app and select **Sign Out** in the top bar so the button returns to **Log In**. Select **Log In** again, test a wrong password to verify the red error message appears, then sign back in with the correct password. If you also want to add Google sign-in on Android later, fetch your debug SHA-1 fingerprint from the `android/` folder with `./gradlew signingReport` and add it under **Project settings** in Firebase; email and password sign-in works without it.
 
 ## Cloud Firestore
 
