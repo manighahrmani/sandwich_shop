@@ -21,6 +21,11 @@ void main() {
     rootBundle.clear();
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.empty();
+    AuthRepository.instance.setAuth(MockFirebaseAuth());
+  });
+
+  tearDown(() {
+    AuthRepository.instance.setAuth(null);
   });
 
   group('App smoke tests', () {
@@ -228,15 +233,10 @@ void main() {
   testWidgets('App navigates to AuthScreen from the account button', (
     WidgetTester tester,
   ) async {
-    AuthRepository.instance.setAuth(MockFirebaseAuth());
-    addTearDown(() {
-      AuthRepository.instance.setAuth(null);
-    });
-
     await tester.pumpWidget(const App());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.account_circle_outlined));
+    await tester.tap(find.text('Log In'));
     await tester.pumpAndSettle();
 
     expect(find.byType(AuthScreen), findsOneWidget);

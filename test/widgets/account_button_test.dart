@@ -1,9 +1,19 @@
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
 import 'package:sandwich_shop/widgets/account_button.dart';
 
 void main() {
-  testWidgets('AccountButton navigates to /auth when on another route', (
+  setUp(() {
+    AuthRepository.instance.setAuth(MockFirebaseAuth());
+  });
+
+  tearDown(() {
+    AuthRepository.instance.setAuth(null);
+  });
+
+  testWidgets('AccountButton shows Log In when signed out and opens /auth', (
     WidgetTester tester,
   ) async {
     int authBuildCount = 0;
@@ -22,10 +32,11 @@ void main() {
         },
       ),
     );
+    await tester.pump();
 
-    expect(find.byTooltip('Account'), findsOneWidget);
+    expect(find.text('Log In'), findsOneWidget);
 
-    await tester.tap(find.byIcon(Icons.account_circle_outlined));
+    await tester.tap(find.text('Log In'));
     await tester.pumpAndSettle();
 
     expect(find.text('Auth Page'), findsOneWidget);
@@ -48,14 +59,15 @@ void main() {
         },
       ),
     );
+    await tester.pump();
 
-    await tester.tap(find.byIcon(Icons.account_circle_outlined));
+    await tester.tap(find.text('Log In'));
     await tester.pumpAndSettle();
 
     expect(authBuildCount, 1);
   });
 
-  testWidgets('AccountButton navigates from an unnamed route', (
+  testWidgets('AccountButton navigates from an unnamed route when signed out', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -90,9 +102,35 @@ void main() {
     await tester.tap(find.text('Open Unnamed'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.account_circle_outlined));
+    await tester.tap(find.text('Log In'));
     await tester.pumpAndSettle();
 
     expect(find.text('Auth Page'), findsOneWidget);
+  });
+
+  testWidgets(
+      'AccountButton shows Sign Out when signed in and signs out on tap', (
+    WidgetTester tester,
+  ) async {
+    final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
+      signedIn: true,
+      mockUser: MockUser(email: 'alice@example.com'),
+    );
+    AuthRepository.instance.setAuth(signedInAuth);
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(body: AccountButton()),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Sign Out'), findsOneWidget);
+
+    await tester.tap(find.text('Sign Out'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Log In'), findsOneWidget);
+    expect(AuthRepository.instance.getCurrentUser(), isNull);
   });
 }

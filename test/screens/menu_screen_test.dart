@@ -31,7 +31,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SandwichCard), findsWidgets);
-    expect(find.byIcon(Icons.account_circle_outlined), findsOneWidget);
+    expect(find.text('Log In'), findsOneWidget);
     expect(find.byIcon(Icons.person_outline), findsOneWidget);
     expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
   });
@@ -102,7 +102,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.account_circle_outlined));
+    await tester.tap(find.text('Log In'));
     await tester.pumpAndSettle();
 
     expect(find.byType(AuthScreen), findsOneWidget);
