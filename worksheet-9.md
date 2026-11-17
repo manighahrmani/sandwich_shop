@@ -776,8 +776,7 @@ Because `MenuScreen` now renders `AccountButton` (`watchAuthState()`), set `Auth
 flutter test --coverage
 ```
 
-<!-- Capture: MenuScreen app bar showing the Log In button next to Settings and Basket -->
-<!-- ![MenuScreen app bar with the Log In button](images/9/menu_screen_account_button.png) -->
+![MenuScreen app bar with the Log In button](images/9/menu_screen_account_button.png)
 
 <!-- TODO: Done till here -->
 
@@ -785,18 +784,15 @@ flutter test --coverage
 
 Launch the app in Chrome (`flutter run -d chrome`) or on your Android emulator and select **Log In** in the top-right bar to open `AuthScreen`.
 
-<!-- Capture: Sign-in screen open in Chrome -->
-<!-- ![The sign-in form displayed on AuthScreen in Chrome](images/9/auth_screen_sign_in.png) -->
+![The sign-in form displayed on AuthScreen in Chrome](images/9/auth_screen_sign_in.png)
 
 Select **Need an account? Register**, enter an email address and a password of at least six characters, and select **Register**. The screen pops back to `MenuScreen`, where `StreamBuilder` inside `AccountButton` updates the top-right button to **Sign Out**.
 
-<!-- Capture: MenuScreen showing the Sign Out button in the app bar after registering -->
-<!-- ![MenuScreen app bar showing the Sign Out button after signing in](images/9/menu_screen_sign_out_button.png) -->
+![MenuScreen app bar showing the Sign Out button after signing in](images/9/menu_screen_sign_out_button.png)
 
 Open your [Firebase dashboard](https://console.firebase.google.com/), go to **Authentication** and select the **Users** tab to see your newly created user account and its unique `uid` stored in the cloud, as shown below:
 
-<!-- Capture: Firebase Authentication Users tab listing the newly registered account and UID -->
-<!-- ![Firebase Authentication Users tab showing the registered test account and UID](images/9/firebase_auth_users.png) -->
+![Firebase Authentication Users tab showing the registered test account and UID](images/9/firebase_auth_users.png)
 
 Return to the app and select **Sign Out** in the top bar so the button returns to **Log In**. Select **Log In** again, test a wrong password to verify the red error message appears, then sign back in with the correct password. If you also want to add Google sign-in on Android later, fetch your debug SHA-1 fingerprint from the `android/` folder with `./gradlew signingReport` and add it under **Project settings** in Firebase; email and password sign-in works without it.
 
