@@ -1,6 +1,9 @@
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
+import 'package:sandwich_shop/screens/auth_screen.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
@@ -13,16 +16,22 @@ void main() {
     rootBundle.clear();
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.empty();
+    AuthRepository.instance.setAuth(MockFirebaseAuth());
+  });
+
+  tearDown(() {
+    AuthRepository.instance.setAuth(null);
   });
 
   testWidgets(
-      'MenuScreen shows sandwich list, settings button and basket button', (
+      'MenuScreen shows sandwich list, account, settings and basket buttons', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const MaterialApp(home: MenuScreen()));
     await tester.pumpAndSettle();
 
     expect(find.byType(SandwichCard), findsWidgets);
+    expect(find.byIcon(Icons.account_circle_outlined), findsOneWidget);
     expect(find.byIcon(Icons.person_outline), findsOneWidget);
     expect(find.byIcon(Icons.shopping_basket), findsOneWidget);
   });
@@ -73,6 +82,30 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SettingsScreen), findsOneWidget);
+  });
+
+  testWidgets('Tapping the account button navigates to AuthScreen', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        initialRoute: '/',
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) {
+            return const MenuScreen();
+          },
+          '/auth': (BuildContext context) {
+            return const AuthScreen();
+          },
+        },
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.account_circle_outlined));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AuthScreen), findsOneWidget);
   });
 
   testWidgets('MenuScreen shows a message when the menu cannot be loaded', (

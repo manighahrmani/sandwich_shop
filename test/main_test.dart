@@ -1,10 +1,13 @@
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/main.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
+import 'package:sandwich_shop/main.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
+import 'package:sandwich_shop/screens/auth_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/order_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
@@ -220,6 +223,23 @@ void main() {
   ) async {
     await tester.pumpWidget(const UnsupportedPlatformApp());
     expect(find.textContaining('Android and web'), findsOneWidget);
+  });
+
+  testWidgets('App navigates to AuthScreen from the account button', (
+    WidgetTester tester,
+  ) async {
+    AuthRepository.instance.setAuth(MockFirebaseAuth());
+    addTearDown(() {
+      AuthRepository.instance.setAuth(null);
+    });
+
+    await tester.pumpWidget(const App());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.account_circle_outlined));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AuthScreen), findsOneWidget);
   });
 }
 
