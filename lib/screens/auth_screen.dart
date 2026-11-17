@@ -69,6 +69,9 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isSubmitting = false;
       });
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
     } on FirebaseAuthException catch (error) {
       if (!mounted) {
         return;
@@ -88,43 +91,8 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  Future<void> _signOut() async {
-    await AuthRepository.instance.signOut();
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _isRegistering = false;
-      _errorMessage = '';
-    });
-  }
-
-  Widget _buildSignedInView(User currentUser) {
-    String emailText = 'Signed-in account';
-    final String? userEmail = currentUser.email;
-    if (userEmail != null) {
-      emailText = userEmail;
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Customer Account', style: shopSectionTitleStyle),
-          const SizedBox(height: 16),
-          Text('Signed in as $emailText'),
-          const SizedBox(height: 20),
-          PrimaryButton(
-            label: 'Sign Out',
-            onPressed: _signOut,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFormView() {
+  @override
+  Widget build(BuildContext context) {
     String titleText = 'Customer Sign In';
     String buttonLabel = 'Sign In';
     String toggleLabel = 'Need an account? Register';
@@ -155,57 +123,43 @@ class _AuthScreenState extends State<AuthScreen> {
       );
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(titleText, style: shopSectionTitleStyle),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _emailController,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Email',
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Password',
-            ),
-          ),
-          const SizedBox(height: 16),
-          errorWidget,
-          actionWidget,
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: _toggleMode,
-            child: Text(toggleLabel),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
       ),
-      body: StreamBuilder<User?>(
-        stream: AuthRepository.instance.watchAuthState(),
-        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-          final User? currentUser = snapshot.data;
-          if (currentUser != null) {
-            return _buildSignedInView(currentUser);
-          }
-          return _buildFormView();
-        },
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(titleText, style: shopSectionTitleStyle),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Email',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Password',
+              ),
+            ),
+            const SizedBox(height: 16),
+            errorWidget,
+            actionWidget,
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: _toggleMode,
+              child: Text(toggleLabel),
+            ),
+          ],
+        ),
       ),
     );
   }
