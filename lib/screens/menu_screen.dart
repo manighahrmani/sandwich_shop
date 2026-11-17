@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/sandwich_repository.dart';
+import 'package:sandwich_shop/widgets/account_button.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/sandwich_card.dart';
 import 'package:sandwich_shop/widgets/settings_button.dart';
@@ -68,7 +69,7 @@ class _MenuScreenState extends State<MenuScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
-        actions: const [SettingsButton(), BasketButton()],
+        actions: const [AccountButton(), SettingsButton(), BasketButton()],
       ),
       body: body,
     );
