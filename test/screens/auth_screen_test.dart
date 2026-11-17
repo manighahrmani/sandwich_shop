@@ -34,7 +34,7 @@ void main() {
   testWidgets('AuthScreen displays sign-in form and toggles mode', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: AuthScreen()));
+    await tester.pumpWidget(MaterialApp(home: AuthScreen(key: UniqueKey())));
     await tester.pump();
 
     expect(find.text('Customer Sign In'), findsOneWidget);
@@ -68,11 +68,31 @@ void main() {
     );
   });
 
-  testWidgets('AuthScreen registers, signs out and signs back in', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(const MaterialApp(home: AuthScreen()));
-    await tester.pump();
+  testWidgets('AuthScreen registers a customer and returns to previous screen',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        initialRoute: '/',
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) {
+            return Scaffold(
+              body: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/auth');
+                },
+                child: const Text('Open Auth'),
+              ),
+            );
+          },
+          '/auth': (BuildContext context) {
+            return const AuthScreen();
+          },
+        },
+      ),
+    );
+
+    await tester.tap(find.text('Open Auth'));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('Need an account? Register'));
     await tester.pump();
@@ -82,20 +102,52 @@ void main() {
     await tester.tap(find.text('Register'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Customer Account'), findsOneWidget);
-    expect(find.text('Signed in as alice@example.com'), findsOneWidget);
+    expect(find.text('Open Auth'), findsOneWidget);
+    expect(
+        AuthRepository.instance.getCurrentUser()?.email, 'alice@example.com');
+  });
 
-    await tester.tap(find.text('Sign Out'));
+  testWidgets('AuthScreen signs in an existing customer and returns', (
+    WidgetTester tester,
+  ) async {
+    await mockAuth.createUserWithEmailAndPassword(
+      email: 'alice@example.com',
+      password: 'secret123',
+    );
+    await mockAuth.signOut();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        initialRoute: '/',
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) {
+            return Scaffold(
+              body: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/auth');
+                },
+                child: const Text('Open Auth'),
+              ),
+            );
+          },
+          '/auth': (BuildContext context) {
+            return const AuthScreen();
+          },
+        },
+      ),
+    );
+
+    await tester.tap(find.text('Open Auth'));
     await tester.pumpAndSettle();
-
-    expect(find.text('Customer Sign In'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField).at(0), 'alice@example.com');
     await tester.enterText(find.byType(TextField).at(1), 'secret123');
     await tester.tap(find.text('Sign In'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Signed in as alice@example.com'), findsOneWidget);
+    expect(find.text('Open Auth'), findsOneWidget);
+    expect(
+        AuthRepository.instance.getCurrentUser()?.email, 'alice@example.com');
   });
 
   testWidgets('AuthScreen displays mapped FirebaseAuthException message', (
