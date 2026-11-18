@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -241,6 +242,56 @@ void main() {
 
     expect(find.byType(AuthScreen), findsOneWidget);
   });
+
+  testWidgets('App completes email link sign-in when pending email exists', (
+    WidgetTester tester,
+  ) async {
+    final _EmailLinkAuth linkAuth = _EmailLinkAuth();
+    AuthRepository.instance.setAuth(linkAuth);
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    await prefs.setString(prefPendingEmail, 'alice@example.com');
+
+    await tester.pumpWidget(
+      const App(
+          initialLink:
+              'https://sandwich-shop-59811.firebaseapp.com/?oobCode=abc'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sign Out'), findsOneWidget);
+    expect(await prefs.getString(prefPendingEmail), isNull);
+  });
+
+  testWidgets('App ignores email link sign-in when no saved email exists', (
+    WidgetTester tester,
+  ) async {
+    final _EmailLinkAuth linkAuth = _EmailLinkAuth();
+    AuthRepository.instance.setAuth(linkAuth);
+
+    await tester.pumpWidget(
+      const App(
+          initialLink:
+              'https://sandwich-shop-59811.firebaseapp.com/?oobCode=abc'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Log In'), findsOneWidget);
+  });
+}
+
+class _EmailLinkAuth extends MockFirebaseAuth {
+  @override
+  bool isSignInWithEmailLink(String emailLink) {
+    return emailLink.contains('oobCode=');
+  }
+
+  @override
+  Future<UserCredential> signInWithEmailLink({
+    required String email,
+    required String emailLink,
+  }) {
+    return signInWithEmailAndPassword(email: email, password: 'link-user');
+  }
 }
 
 class _NonlinearTextScaler extends TextScaler {

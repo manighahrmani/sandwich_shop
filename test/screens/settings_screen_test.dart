@@ -1,6 +1,8 @@
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
@@ -10,6 +12,11 @@ void main() {
   setUp(() {
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.empty();
+    AuthRepository.instance.setAuth(MockFirebaseAuth());
+  });
+
+  tearDown(() {
+    AuthRepository.instance.setAuth(null);
   });
 
   testWidgets('SettingsScreen displays form fields and two switches', (
@@ -195,5 +202,35 @@ void main() {
           .value,
       isTrue,
     );
+  });
+
+  testWidgets('SettingsScreen syncs name and email with authenticated user', (
+    WidgetTester tester,
+  ) async {
+    final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
+      signedIn: true,
+      mockUser: MockUser(
+        uid: 'user-9',
+        displayName: 'Alex Smith',
+        email: 'alex@example.com',
+      ),
+    );
+    AuthRepository.instance.setAuth(signedInAuth);
+
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Alex Smith'), findsOneWidget);
+    expect(find.text('alex@example.com'), findsOneWidget);
+
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Full name'),
+      'Alex Rivera',
+    );
+    await tester.tap(find.text('Save Settings'));
+    await tester.pumpAndSettle();
+
+    expect(
+        AuthRepository.instance.getCurrentUser()?.displayName, 'Alex Rivera');
   });
 }
