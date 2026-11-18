@@ -29,9 +29,8 @@ class _MenuScreenState extends State<MenuScreen> {
 
   Future<void> _loadSandwiches() async {
     try {
-      final SandwichRepository repository = SandwichRepository();
       final List<Sandwich> sandwiches =
-          await repository.loadSandwichesFromAsset();
+          await SandwichRepository.instance.loadSandwichesFromFirestore();
       if (!mounted) {
         return;
       }
