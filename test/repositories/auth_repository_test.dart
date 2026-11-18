@@ -5,6 +5,21 @@ import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/repositories/auth_repository.dart';
 
+class _EmailLinkFirebaseAuth extends MockFirebaseAuth {
+  @override
+  bool isSignInWithEmailLink(String emailLink) {
+    return emailLink.contains('oobCode=');
+  }
+
+  @override
+  Future<UserCredential> signInWithEmailLink({
+    required String email,
+    required String emailLink,
+  }) {
+    return signInWithEmailAndPassword(email: email, password: 'link-user');
+  }
+}
+
 void main() {
   late MockFirebaseAuth mockAuth;
 
@@ -142,10 +157,85 @@ void main() {
       );
       expect(
         AuthRepository.instance.getErrorMessage(
+          FirebaseAuthException(code: 'expired-action-code'),
+        ),
+        'This sign-in link has expired or is invalid.',
+      );
+      expect(
+        AuthRepository.instance.getErrorMessage(
+          FirebaseAuthException(code: 'invalid-action-code'),
+        ),
+        'This sign-in link has expired or is invalid.',
+      );
+      expect(
+        AuthRepository.instance.getErrorMessage(
+          FirebaseAuthException(code: 'popup-closed-by-user'),
+        ),
+        'Google sign-in was cancelled.',
+      );
+      expect(
+        AuthRepository.instance.getErrorMessage(
           FirebaseAuthException(code: 'network-request-failed'),
         ),
         'Authentication failed. Please try again.',
       );
+    });
+
+    test('sendSignInLink completes without error', () async {
+      await AuthRepository.instance.sendSignInLink(
+        'alice@example.com',
+        'https://example.com',
+      );
+    });
+
+    test('isSignInWithEmailLink and signInWithEmailLink handle links',
+        () async {
+      expect(
+        AuthRepository.instance.isSignInWithEmailLink('https://example.com'),
+        isFalse,
+      );
+
+      final _EmailLinkFirebaseAuth linkAuth = _EmailLinkFirebaseAuth();
+      AuthRepository.instance.setAuth(linkAuth);
+
+      const String validLink = 'https://example.com/?oobCode=test123';
+      expect(AuthRepository.instance.isSignInWithEmailLink(validLink), isTrue);
+
+      final User? user = await AuthRepository.instance.signInWithEmailLink(
+        'alice@example.com',
+        validLink,
+      );
+      expect(user, isNotNull);
+    });
+
+    test('signInWithGoogle signs in on both web and mobile', () async {
+      final User? webUser = await AuthRepository.instance.signInWithGoogle(
+        isWeb: true,
+      );
+      expect(webUser, isNotNull);
+
+      await AuthRepository.instance.signOut();
+
+      final User? mobileUser = await AuthRepository.instance.signInWithGoogle(
+        isWeb: false,
+      );
+      expect(mobileUser, isNotNull);
+    });
+
+    test('updateDisplayName updates signed-in profile and skips signed out',
+        () async {
+      await AuthRepository.instance.updateDisplayName('Ignored Name');
+      expect(AuthRepository.instance.getCurrentUser(), isNull);
+
+      final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: MockUser(uid: 'user-3', email: 'sam@example.com'),
+      );
+      AuthRepository.instance.setAuth(signedInAuth);
+
+      await AuthRepository.instance.updateDisplayName('Sam Taylor');
+      expect(
+          AuthRepository.instance.getCurrentUser()?.displayName, 'Sam Taylor');
     });
   });
 }
