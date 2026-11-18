@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/user_settings.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,13 +72,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final bool? savedNewsletter = await prefs.getBool(prefNewsletter);
     final bool? savedLargeText = await prefs.getBool(prefLargeText);
 
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    String nameText = savedName ?? '';
+    String emailText = savedEmail ?? '';
+    if (currentUser != null) {
+      final String? authName = currentUser.displayName;
+      if (authName != null && authName.isNotEmpty) {
+        nameText = authName;
+      }
+      final String? authEmail = currentUser.email;
+      if (authEmail != null && authEmail.isNotEmpty) {
+        emailText = authEmail;
+      }
+    }
+
     if (!mounted) {
       return;
     }
     setState(() {
-      _nameController.text = savedName ?? '';
+      _nameController.text = nameText;
       _addressController.text = savedAddress ?? '';
-      _emailController.text = savedEmail ?? '';
+      _emailController.text = emailText;
       _receiveNewsletter = savedNewsletter ?? false;
       if (widget.onLargeTextChanged == null) {
         _largeText = savedLargeText ?? false;
@@ -95,6 +111,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await prefs.setString(prefEmail, email);
     await prefs.setBool(prefNewsletter, _receiveNewsletter);
     await prefs.setBool(prefLargeText, _largeText);
+
+    if (name.isNotEmpty) {
+      await AuthRepository.instance.updateDisplayName(name);
+    }
 
     final UserSettings settings = UserSettings(
       name: name,
