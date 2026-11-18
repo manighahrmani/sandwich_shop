@@ -1,3 +1,4 @@
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/main.dart';
 import 'package:sandwich_shop/repositories/auth_repository.dart';
+import 'package:sandwich_shop/repositories/sandwich_repository.dart';
 import 'package:sandwich_shop/screens/auth_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/order_screen.dart';
@@ -23,10 +25,14 @@ void main() {
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.empty();
     AuthRepository.instance.setAuth(MockFirebaseAuth());
+    SandwichRepository.instance.clearCache();
+    SandwichRepository.instance.setFirestore(FakeFirebaseFirestore());
   });
 
   tearDown(() {
     AuthRepository.instance.setAuth(null);
+    SandwichRepository.instance.clearCache();
+    SandwichRepository.instance.setFirestore(null);
   });
 
   group('App smoke tests', () {
