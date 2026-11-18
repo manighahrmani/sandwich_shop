@@ -25,6 +25,8 @@
   - [Test the sign-in screen](#test-the-sign-in-screen)
   - [Add the account button and route](#add-the-account-button-and-route)
   - [Test signing up, signing in and signing out](#test-signing-up-signing-in-and-signing-out)
+  - [Sign in with an email link or Google](#sign-in-with-an-email-link-or-google)
+  - [Sync settings with the authenticated profile](#sync-settings-with-the-authenticated-profile)
 - [Cloud Firestore](#cloud-firestore)
   - [Read the menu from Firestore](#read-the-menu-from-firestore)
   - [Save user settings in the cloud](#save-user-settings-in-the-cloud)
@@ -125,15 +127,15 @@ Most real-world apps avoid this by storing data on remote servers over the inter
 
 ## Choosing cloud services
 
-In this worksheet, we will walk you through provisioning cloud services that let your app store data and verify user accounts. In this worksheet we connect the Sandwich Shop app to Firebase for user sign-in (`firebase_auth`) and cloud database storage (`cloud_firestore`).
+In this worksheet, we connect the Sandwich Shop app to Firebase for user sign-in (`firebase_auth`) and cloud database storage (`cloud_firestore`).
 
-Firebase is a cloud service provided by Google that provides a variety of services for app development, including user authentication, database storage, and more. We have selected Firebase over the other providers such as Azure or Amazon AWS because it generally has a better integration with Flutter.
+Firebase is a Google platform that provides authentication, cloud databases and hosting, and integrates cleanly with Flutter across Android and web.
 
 ### Billing
 
 Firebase offers two billing tiers on its [Firebase pricing](https://firebase.google.com/pricing) page: the no-cost Spark plan and the pay-as-you-go Blaze plan. Firebase Authentication and Cloud Firestore both include generous free daily quotas on the Spark plan without attaching a payment card.
 
-In our case we don't require cloud storage (e.g., storing user profile pictures or PDF receipts) so we can make do with the Spark plan. Just be aware as the need for your app grows, you may be asked to upgrade to the Blaze plan. Alternatively, you can also explore the [Firebase Local Emulator Suite](https://firebase.google.com/docs/emulator-suite) to simulate Firebase services locally.
+In our case we do not require Cloud Storage for user-uploaded files such as profile pictures or PDF receipts, so the free Spark plan is enough. As an app's usage grows beyond those daily quotas you can upgrade to the Blaze plan, or use the [Firebase Local Emulator Suite](https://firebase.google.com/docs/emulator-suite) to simulate Firebase services locally.
 
 ## Setting up Firebase
 
@@ -161,7 +163,7 @@ Notice **Gemini in Firebase** on the right-hand side of the project overview, wh
 
 ### Set up user authentication
 
-So far our app does not have any authentication mechanism, meaning customers cannot register or sign in yet. Ideally we would like to let users create accounts, sign in securely, and manage their orders and preferences within the app. We would also like their settings and preferences to be tied to their authenticated identity so they can access them across devices.
+So far our app has no user accounts, so customers cannot register, sign in, or carry their saved preferences and order history across devices.
 
 In the left navigation menu of the Firebase dashboard under **Product categories**, open **Security** and select **Authentication**, then select **Get started**. Under the **Sign-in method** tab, choose **Email/Password**, toggle both **Enable** and **Email link (passwordless sign-in)** on if you want both password and email-link sign-in, and select **Save**.
 
@@ -289,7 +291,7 @@ Future<void> main() async {
 }
 ```
 
-Next, open `test/main_test.dart` and remove the startup tests that call `app.main()` directly, along with the unused `import` statement for `'package:sandwich_shop/main.dart'` that should be unused after this change.
+Next, open `test/main_test.dart` and remove the startup tests that call `app.main()` directly, along with the extra `'package:sandwich_shop/main.dart' as app;` import that is no longer used.
 
 Now that `main()` connects to Firebase, calling it in an offline test would fail, while the remaining tests in `test/main_test.dart` still check `App`, `isSupportedPlatform()` and `UnsupportedPlatformApp` without a network connection. Run `flutter test` to confirm all remaining tests pass.
 
@@ -778,27 +780,98 @@ flutter test --coverage
 
 ![MenuScreen app bar with the Log In button](images/9/menu_screen_account_button.png)
 
-<!-- TODO: Done till here -->
-
 ### Test signing up, signing in and signing out
 
-Launch the app in Chrome (`flutter run -d chrome`) or on your Android emulator and select **Log In** in the top-right bar to open `AuthScreen`.
+Launch the app in Chrome (`flutter run -d chrome`) or on your Android emulator and select **Log In** in the top-right bar to open `AuthScreen` in sign-in mode:
 
 ![The sign-in form displayed on AuthScreen in Chrome](images/9/auth_screen_sign_in.png)
 
-Select **Need an account? Register**, enter an email address and a password of at least six characters, and select **Register**. The screen pops back to `MenuScreen`, where `StreamBuilder` inside `AccountButton` updates the top-right button to **Sign Out**.
+Select **Need an account? Register** so the heading changes to **Create Account** and the button changes to **Register**. Enter an email address and a password of at least six characters, then select **Register** to create the account and return to `MenuScreen`, where the top-right button now shows **Sign Out**:
 
 ![MenuScreen app bar showing the Sign Out button after signing in](images/9/menu_screen_sign_out_button.png)
 
-Open your [Firebase dashboard](https://console.firebase.google.com/), go to **Authentication** and select the **Users** tab to see your newly created user account and its unique `uid` stored in the cloud, as shown below:
+Open your [Firebase dashboard](https://console.firebase.google.com/), go to **Authentication** and select the **Users** tab to confirm your registered email address appears under **Identifier** alongside its **User UID**:
 
 ![Firebase Authentication Users tab showing the registered test account and UID](images/9/firebase_auth_users.png)
 
-Return to the app and select **Sign Out** in the top bar so the button returns to **Log In**. Select **Log In** again, test a wrong password to verify the red error message appears, then sign back in with the correct password. If you also want to add Google sign-in on Android later, fetch your debug SHA-1 fingerprint from the `android/` folder with `./gradlew signingReport` and add it under **Project settings** in Firebase; email and password sign-in works without it.
+Return to the app and select **Sign Out** in the top bar so the button switches back to **Log In**. Select **Log In** again, test a wrong password to verify the red error message (`Incorrect email or password.`) appears, then sign in with the correct password to return to `MenuScreen`.
+
+### Sign in with an email link or Google
+
+Instead of typing a password every time, customers can also sign in using a one-time link sent to their inbox. Make sure **Email link (passwordless sign-in)** is toggled on under **Authentication > Sign-in method > Email/Password** in your Firebase dashboard, then read the official guide on [authenticating with email links in Flutter](https://firebase.google.com/docs/auth/flutter/email-link-auth) to see how `sendSignInLinkToEmail()`, `isSignInWithEmailLink()`, and `signInWithEmailLink()` work alongside `ActionCodeSettings`. Note that Firebase Dynamic Links is being retired, so mobile deep linking requires a custom domain while web links work straight away on `localhost` and Firebase Hosting.
+
+Because you already enabled the **Google** provider in Firebase, adding Google sign-in only needs a short method in `lib/repositories/auth_repository.dart` (importing `package:flutter/foundation.dart` for `kIsWeb`):
+
+```dart
+  Future<User?> signInWithGoogle({bool isWeb = kIsWeb}) async {
+    final FirebaseAuth authInstance = auth;
+    final GoogleAuthProvider provider = GoogleAuthProvider();
+    final UserCredential credential;
+    if (isWeb) {
+      credential = await authInstance.signInWithPopup(provider);
+    } else {
+      credential = await authInstance.signInWithProvider(provider);
+    }
+    return credential.user;
+  }
+```
+
+In `lib/screens/auth_screen.dart`, add a `_signInWithGoogle` handler that calls `AuthRepository.instance.signInWithGoogle()` and pops back to `MenuScreen`, then add an `OutlinedButton.icon` below the email form:
+
+```dart
+            OutlinedButton.icon(
+              onPressed: _signInWithGoogle,
+              icon: const Icon(Icons.login),
+              label: const Text('Sign in with Google'),
+            ),
+```
+
+Both email-link sign-in (with link completion in `lib/main.dart`) and Google sign-in—along with their tests—are implemented on branch `9` of the Sandwich Shop repository. Check branch `9` to see how both options fit together on `AuthScreen`:
+
+![Updated AuthScreen with email link and Google sign-in options in Chrome](images/9/auth_screen_providers.png)
+
+### Sync settings with the authenticated profile
+
+When a customer signs in, `SettingsScreen` can fill **Full name** and **Email address** directly from their Firebase `User` profile (`displayName` and `email`), and save any updated name back to Firebase Authentication. Add an `updateDisplayName` helper to `AuthRepository` in `lib/repositories/auth_repository.dart`:
+
+```dart
+  Future<void> updateDisplayName(String displayName) async {
+    final User? currentUser = getCurrentUser();
+    if (currentUser != null) {
+      await currentUser.updateDisplayName(displayName);
+    }
+  }
+```
+
+Next, open `lib/screens/settings_screen.dart`, import `package:firebase_auth/firebase_auth.dart` and `package:sandwich_shop/repositories/auth_repository.dart`, and read `AuthRepository.instance.getCurrentUser()` inside `_loadSettings()` so non-empty `displayName` and `email` values pre-fill the form:
+
+```dart
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    String nameText = savedName ?? '';
+    String emailText = savedEmail ?? '';
+    if (currentUser != null) {
+      final String? authName = currentUser.displayName;
+      if (authName != null && authName.isNotEmpty) {
+        nameText = authName;
+      }
+      final String? authEmail = currentUser.email;
+      if (authEmail != null && authEmail.isNotEmpty) {
+        emailText = authEmail;
+      }
+    }
+```
+
+Assign `_nameController.text = nameText;` and `_emailController.text = emailText;` in `_loadSettings()`, then call `await AuthRepository.instance.updateDisplayName(name);` inside `_saveSettings()` when `name.isNotEmpty`. Update `test/screens/settings_screen_test.dart` to register `MockFirebaseAuth` in `setUp()` (matching `menu_screen_test.dart`).
+
+Add tests for pre-filling and saving a signed-in user's name and email, then run `flutter test --coverage` to inspect test coverage, as shown below:
+
+![SettingsScreen pre-filled with the signed-in user name and email](images/9/settings_synced_profile.png)
 
 ## Cloud Firestore
 
-With authentication in place to identify each customer, we can store both shared shop data and private user data in Cloud Firestore. Rather than SQL tables and joins, Firestore stores data as documents inside collections, which syncs automatically between Android and the web.
+<!-- TODO: Done till here -->
+
+In this section, we will store both shared shop data and private user data in Cloud Firestore. Rather than SQL tables and joins, Firestore stores data as documents inside collections, it is hosted on the servers in the cloud and syncs automatically between Android and the web.
 
 ### Read the menu from Firestore
 
