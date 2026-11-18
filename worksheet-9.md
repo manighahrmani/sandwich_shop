@@ -871,13 +871,101 @@ Add tests for pre-filling and saving a signed-in user's name and email, then run
 
 <!-- TODO: Done till here -->
 
-In this section, we will store both shared shop data and private user data in Cloud Firestore. Rather than SQL tables and joins, Firestore stores data as documents inside collections, it is hosted on the servers in the cloud and syncs automatically between Android and the web.
+With authentication working and your database ready from [Create a Cloud Firestore database](#create-a-cloud-firestore-database), we now store shared menu items in a top-level `sandwiches` collection and move each customer's saved settings and order history under their own `users/<uid>` path instead of local SQLite.
 
 ### Read the menu from Firestore
 
-Keeping the menu in a bundled JSON file meant changing a sandwich name, description or price required releasing an updated app. Moving sandwich details into a shared Firestore collection lets the shop update the live menu for every customer immediately while keeping the bundled asset images fast to load.
+Keeping the menu in a bundled JSON file meant changing a sandwich name, description or price required releasing an updated app. Moving sandwich details into Cloud Firestore lets the shop update the live menu immediately while keeping the local asset images fast to load.
 
-<!-- TODO: seed and read a Cloud Firestore 'sandwiches' collection (including bundled asset image paths) instead of loading menu metadata only from local JSON. -->
+Because `Sandwich` in `lib/models/sandwich.dart` already has `fromJson` and `toJson`, each document in the `sandwiches` collection holds the exact same fields (`id`, `name`, `description`, `price`, and `imagePath`), so the model class needs no edits.
+
+Open `lib/repositories/sandwich_repository.dart`, add the `cloud_firestore` import at the top, and convert `SandwichRepository` into a singleton matching `AuthRepository`:
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+```
+
+Replace the start of `SandwichRepository` (above `getSandwiches`) with the private constructor, shared `instance`, `_firestore` field, `setFirestore`, `clearCache`, and `firestore` getter:
+
+```dart
+  SandwichRepository._internal();
+
+  static final SandwichRepository instance = SandwichRepository._internal();
+
+  FirebaseFirestore? _firestore;
+  List<Sandwich>? _cachedSandwiches;
+
+  void setFirestore(FirebaseFirestore? firestore) {
+    _firestore = firestore;
+  }
+
+  void clearCache() {
+    _cachedSandwiches = null;
+  }
+
+  FirebaseFirestore get firestore {
+    final FirebaseFirestore? existingFirestore = _firestore;
+    if (existingFirestore != null) {
+      return existingFirestore;
+    }
+    return FirebaseFirestore.instance;
+  }
+```
+
+Below `loadSandwichesFromAsset()` (still inside `SandwichRepository`), create an empty `Future<List<Sandwich>> loadSandwichesFromFirestore() async {}` method:
+
+```dart
+  Future<List<Sandwich>> loadSandwichesFromFirestore() async {}
+```
+
+Inside the braces of `loadSandwichesFromFirestore`, fetch the `sandwiches` collection once using `.get()`. If `snapshot.docs.isEmpty` (the very first launch before any documents exist), call `loadSandwichesFromAsset()` and write each sandwich into Firestore using `set(sandwich.toJson())`:
+
+```dart
+    final CollectionReference<Map<String, dynamic>> sandwichesCollection =
+        firestore.collection('sandwiches');
+    final QuerySnapshot<Map<String, dynamic>> snapshot =
+        await sandwichesCollection.get();
+
+    if (snapshot.docs.isEmpty) {
+      final List<Sandwich> seededSandwiches = await loadSandwichesFromAsset();
+      for (final Sandwich sandwich in seededSandwiches) {
+        await sandwichesCollection.doc(sandwich.id).set(sandwich.toJson());
+      }
+      return seededSandwiches;
+    }
+```
+
+Below that `if` block (still inside `loadSandwichesFromFirestore`), loop through `snapshot.docs` to convert each Firestore document with `Sandwich.fromJson(document.data())`, cache the list, and return it:
+
+```dart
+    final List<Sandwich> loadedSandwiches = [];
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+        in snapshot.docs) {
+      final Sandwich sandwich = Sandwich.fromJson(document.data());
+      loadedSandwiches.add(sandwich);
+    }
+
+    _cachedSandwiches = loadedSandwiches;
+    return loadedSandwiches;
+```
+
+Next, open `lib/screens/menu_screen.dart` and update `_loadSandwiches()` to read from `SandwichRepository.instance` instead of constructing a new `SandwichRepository()`:
+
+```dart
+      final List<Sandwich> sandwiches =
+          await SandwichRepository.instance.loadSandwichesFromFirestore();
+```
+
+Install `fake_cloud_firestore` as a development dependency so tests run offline without connecting to Firebase, then update `test/repositories/sandwich_repository_test.dart`, `test/screens/menu_screen_test.dart`, and `test/main_test.dart` to use `SandwichRepository.instance` with `FakeFirebaseFirestore()` and `clearCache()` in `setUp()`. Add unit tests for the `firestore` fallback, seeding an empty collection, and reading existing documents:
+
+```bash
+flutter pub add --dev fake_cloud_firestore
+```
+
+Run the app in Chrome (`flutter run -d chrome`) to seed Firestore automatically on the first load, then open Cloud Firestore in your Firebase dashboard to inspect the new `sandwiches` collection and documents:
+
+<!-- Capture: Firebase Firestore dashboard showing the seeded sandwiches collection and document fields -->
+<!-- ![Cloud Firestore dashboard showing the sandwiches collection seeded from the app](images/9/firestore_sandwiches_collection.png) -->
 
 ### Save user settings in the cloud
 
