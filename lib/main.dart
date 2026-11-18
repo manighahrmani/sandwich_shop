@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
 import 'package:sandwich_shop/screens/auth_screen.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
@@ -56,7 +57,9 @@ class UnsupportedPlatformApp extends StatelessWidget {
 }
 
 class App extends StatefulWidget {
-  const App({super.key});
+  final String? initialLink;
+
+  const App({super.key, this.initialLink});
 
   @override
   State<App> createState() {
@@ -71,6 +74,25 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     _loadTextSize();
+    _completeEmailLinkSignIn();
+  }
+
+  Future<void> _completeEmailLinkSignIn() async {
+    String link = Uri.base.toString();
+    final String? providedLink = widget.initialLink;
+    if (providedLink != null) {
+      link = providedLink;
+    }
+    if (!AuthRepository.instance.isSignInWithEmailLink(link)) {
+      return;
+    }
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    final String? savedEmail = await prefs.getString(prefPendingEmail);
+    if (savedEmail == null || savedEmail.isEmpty) {
+      return;
+    }
+    await AuthRepository.instance.signInWithEmailLink(savedEmail, link);
+    await prefs.remove(prefPendingEmail);
   }
 
   Future<void> _loadTextSize() async {
