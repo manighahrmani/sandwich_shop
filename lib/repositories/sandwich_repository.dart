@@ -1,10 +1,32 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 
 class SandwichRepository {
+  SandwichRepository._internal();
+
+  static final SandwichRepository instance = SandwichRepository._internal();
+
+  FirebaseFirestore? _firestore;
   List<Sandwich>? _cachedSandwiches;
+
+  void setFirestore(FirebaseFirestore? firestore) {
+    _firestore = firestore;
+  }
+
+  void clearCache() {
+    _cachedSandwiches = null;
+  }
+
+  FirebaseFirestore get firestore {
+    final FirebaseFirestore? existingFirestore = _firestore;
+    if (existingFirestore != null) {
+      return existingFirestore;
+    }
+    return FirebaseFirestore.instance;
+  }
 
   List<Sandwich> getSandwiches() {
     final List<Sandwich>? cachedSandwiches = _cachedSandwiches;
@@ -50,6 +72,31 @@ class SandwichRepository {
     for (final dynamic item in jsonList) {
       final Map<String, dynamic> itemMap = item as Map<String, dynamic>;
       final Sandwich sandwich = Sandwich.fromJson(itemMap);
+      loadedSandwiches.add(sandwich);
+    }
+
+    _cachedSandwiches = loadedSandwiches;
+    return loadedSandwiches;
+  }
+
+  Future<List<Sandwich>> loadSandwichesFromFirestore() async {
+    final CollectionReference<Map<String, dynamic>> sandwichesCollection =
+        firestore.collection('sandwiches');
+    final QuerySnapshot<Map<String, dynamic>> snapshot =
+        await sandwichesCollection.get();
+
+    if (snapshot.docs.isEmpty) {
+      final List<Sandwich> seededSandwiches = await loadSandwichesFromAsset();
+      for (final Sandwich sandwich in seededSandwiches) {
+        await sandwichesCollection.doc(sandwich.id).set(sandwich.toJson());
+      }
+      return seededSandwiches;
+    }
+
+    final List<Sandwich> loadedSandwiches = [];
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+        in snapshot.docs) {
+      final Sandwich sandwich = Sandwich.fromJson(document.data());
       loadedSandwiches.add(sandwich);
     }
 
