@@ -8,12 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/main.dart';
+import 'package:sandwich_shop/models/user_settings.dart';
 import 'package:sandwich_shop/repositories/auth_repository.dart';
 import 'package:sandwich_shop/repositories/sandwich_repository.dart';
+import 'package:sandwich_shop/repositories/settings_repository.dart';
 import 'package:sandwich_shop/screens/auth_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/order_screen.dart';
-import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
@@ -27,12 +28,14 @@ void main() {
     AuthRepository.instance.setAuth(MockFirebaseAuth());
     SandwichRepository.instance.clearCache();
     SandwichRepository.instance.setFirestore(FakeFirebaseFirestore());
+    SettingsRepository.instance.setFirestore(FakeFirebaseFirestore());
   });
 
   tearDown(() {
     AuthRepository.instance.setAuth(null);
     SandwichRepository.instance.clearCache();
     SandwichRepository.instance.setFirestore(null);
+    SettingsRepository.instance.setFirestore(null);
   });
 
   group('App smoke tests', () {
@@ -104,6 +107,15 @@ void main() {
       }
 
       try {
+        final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
+          signedIn: true,
+          mockUser: MockUser(
+            uid: 'font-user-1',
+            email: 'font@example.com',
+          ),
+        );
+        AuthRepository.instance.setAuth(signedInAuth);
+
         await tester.pumpWidget(const App());
         await tester.pumpAndSettle();
         expect(scaledFontSize('Footlong Sub', 18), closeTo(27, 0.01));
@@ -117,8 +129,9 @@ void main() {
         await tester.ensureVisible(find.text('Save Settings'));
         await tester.tap(find.text('Save Settings'));
         await tester.pumpAndSettle();
-        final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-        expect(await prefs.getBool(prefLargeText), isTrue);
+        final UserSettings? savedOn =
+            await SettingsRepository.instance.loadSettings('font-user-1');
+        expect(savedOn?.largeText, isTrue);
 
         await tester.pageBack();
         await tester.pumpAndSettle();
@@ -159,7 +172,9 @@ void main() {
         await tester.ensureVisible(find.text('Save Settings'));
         await tester.tap(find.text('Save Settings'));
         await tester.pumpAndSettle();
-        expect(await prefs.getBool(prefLargeText), isFalse);
+        final UserSettings? savedOff =
+            await SettingsRepository.instance.loadSettings('font-user-1');
+        expect(savedOff?.largeText, isFalse);
 
         await tester.pumpWidget(const SizedBox.shrink());
         await tester.pumpWidget(const App());
@@ -176,7 +191,18 @@ void main() {
     testWidgets('Nonlinear system scaling is preserved (bigger: $largeText)', (
       WidgetTester tester,
     ) async {
-      await SharedPreferencesAsync().setBool(prefLargeText, largeText);
+      final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: MockUser(
+          uid: 'nonlinear-user',
+          email: 'scale@example.com',
+        ),
+      );
+      AuthRepository.instance.setAuth(signedInAuth);
+      await SettingsRepository.instance.saveSettings(
+        'nonlinear-user',
+        UserSettings(largeText: largeText),
+      );
       await tester.pumpWidget(const App());
       await tester.pumpAndSettle();
       final TransitionBuilder appBuilder =
@@ -282,6 +308,38 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Log In'), findsOneWidget);
+  });
+
+  testWidgets('App loads cloud largeText setting for signed-in user', (
+    WidgetTester tester,
+  ) async {
+    final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
+      signedIn: true,
+      mockUser: MockUser(uid: 'cloud-text-user', email: 'cloud@example.com'),
+    );
+    AuthRepository.instance.setAuth(signedInAuth);
+    await SettingsRepository.instance.saveSettings(
+      'cloud-text-user',
+      const UserSettings(largeText: true),
+    );
+
+    await tester.pumpWidget(const App());
+    await tester.pumpAndSettle();
+
+    final double scaledSize = tester
+        .renderObject<RenderParagraph>(find.text('Footlong Sub'))
+        .textScaler
+        .scale(18);
+    expect(scaledSize, closeTo(21.6, 0.01));
+
+    await signedInAuth.signOut();
+    await tester.pumpAndSettle();
+
+    final double signedOutSize = tester
+        .renderObject<RenderParagraph>(find.text('Footlong Sub'))
+        .textScaler
+        .scale(18);
+    expect(signedOutSize, closeTo(18.0, 0.01));
   });
 }
 

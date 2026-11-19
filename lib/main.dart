@@ -1,15 +1,20 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
+import 'package:sandwich_shop/firebase_options.dart';
+import 'package:sandwich_shop/models/user_settings.dart';
 import 'package:sandwich_shop/repositories/auth_repository.dart';
+import 'package:sandwich_shop/repositories/settings_repository.dart';
 import 'package:sandwich_shop/screens/auth_screen.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:sandwich_shop/firebase_options.dart';
 
 bool isSupportedPlatform({bool isWeb = kIsWeb}) {
   if (isWeb) {
@@ -69,12 +74,47 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   bool _largeText = false;
+  StreamSubscription<User?>? _authSubscription;
 
   @override
   void initState() {
     super.initState();
-    _loadTextSize();
     _completeEmailLinkSignIn();
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    if (currentUser != null) {
+      _loadCloudTextSize(currentUser.uid);
+    }
+    _authSubscription =
+        AuthRepository.instance.watchAuthState().listen((User? user) {
+      if (user != null) {
+        _loadCloudTextSize(user.uid);
+      } else {
+        setState(() {
+          _largeText = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _authSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadCloudTextSize(String userId) async {
+    final UserSettings? cloudSettings =
+        await SettingsRepository.instance.loadSettings(userId);
+    if (!mounted) {
+      return;
+    }
+    bool nextLargeText = false;
+    if (cloudSettings != null) {
+      nextLargeText = cloudSettings.largeText;
+    }
+    setState(() {
+      _largeText = nextLargeText;
+    });
   }
 
   Future<void> _completeEmailLinkSignIn() async {
@@ -93,17 +133,6 @@ class _AppState extends State<App> {
     }
     await AuthRepository.instance.signInWithEmailLink(savedEmail, link);
     await prefs.remove(prefPendingEmail);
-  }
-
-  Future<void> _loadTextSize() async {
-    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-    final bool? savedLargeText = await prefs.getBool(prefLargeText);
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _largeText = savedLargeText ?? false;
-    });
   }
 
   void _updateTextSize(bool largeText) {

@@ -1,25 +1,25 @@
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/models/user_settings.dart';
 import 'package:sandwich_shop/repositories/auth_repository.dart';
+import 'package:sandwich_shop/repositories/settings_repository.dart';
 import 'package:sandwich_shop/screens/settings_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
-import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 void main() {
   setUp(() {
-    SharedPreferencesAsyncPlatform.instance =
-        InMemorySharedPreferencesAsync.empty();
     AuthRepository.instance.setAuth(MockFirebaseAuth());
+    SettingsRepository.instance.setFirestore(FakeFirebaseFirestore());
   });
 
   tearDown(() {
     AuthRepository.instance.setAuth(null);
+    SettingsRepository.instance.setFirestore(null);
   });
 
-  testWidgets('SettingsScreen displays form fields and two switches', (
+  testWidgets('SettingsScreen displays blank form fields when signed out', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
@@ -32,6 +32,11 @@ void main() {
     expect(find.text('Bigger text'), findsOneWidget);
     expect(find.text('Make text easier to read'), findsOneWidget);
     expect(find.text('Save Settings'), findsOneWidget);
+
+    await tester.tap(find.text('Save Settings'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Please log in to save your settings.'), findsOneWidget);
   });
 
   testWidgets('Bigger text switch defaults off and can be toggled', (
@@ -71,7 +76,6 @@ void main() {
     await tester.pump();
     expect(tester.widget<SwitchListTile>(largeTextSwitch).value, isFalse);
     expect(changes, [false]);
-    expect(await SharedPreferencesAsync().getBool(prefLargeText), isNull);
 
     await tester.pumpWidget(
       MaterialApp(
@@ -107,9 +111,19 @@ void main() {
     }
   });
 
-  testWidgets('Toggling switch and saving settings updates state', (
+  testWidgets('Toggling switch and saving settings persists to Firestore', (
     WidgetTester tester,
   ) async {
+    final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
+      signedIn: true,
+      mockUser: MockUser(
+        uid: 'user-save-1',
+        displayName: 'Alex Smith',
+        email: 'alex@example.com',
+      ),
+    );
+    AuthRepository.instance.setAuth(signedInAuth);
+
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
 
@@ -142,16 +156,18 @@ void main() {
       find.text('Settings saved for Gerald Vernon-Jackson'),
       findsOneWidget,
     );
-
-    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-    expect(await prefs.getString(prefName), 'Gerald Vernon-Jackson');
-    expect(await prefs.getString(prefAddress), 'Guildhall, PO1 2AJ');
     expect(
-      await prefs.getString(prefEmail),
-      'gerald.vernon-jackson@portsmouthcc.gov.uk',
+      AuthRepository.instance.getCurrentUser()?.displayName,
+      'Gerald Vernon-Jackson',
     );
-    expect(await prefs.getBool(prefNewsletter), isTrue);
-    expect(await prefs.getBool(prefLargeText), isTrue);
+
+    final UserSettings? saved =
+        await SettingsRepository.instance.loadSettings('user-save-1');
+    expect(saved?.name, 'Gerald Vernon-Jackson');
+    expect(saved?.address, 'Guildhall, PO1 2AJ');
+    expect(saved?.email, 'gerald.vernon-jackson@portsmouthcc.gov.uk');
+    expect(saved?.receiveNewsletter, isTrue);
+    expect(saved?.largeText, isTrue);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
@@ -162,10 +178,10 @@ void main() {
       find.text('gerald.vernon-jackson@portsmouthcc.gov.uk'),
       findsOneWidget,
     );
-    final Switch reopenedSwitch = tester.widget<Switch>(
-      find.byKey(const Key('newsletterSwitch')),
+    expect(
+      tester.widget<Switch>(find.byKey(const Key('newsletterSwitch'))).value,
+      isTrue,
     );
-    expect(reopenedSwitch.value, isTrue);
     expect(
       tester
           .widget<SwitchListTile>(find.byKey(const Key('largeTextSwitch')))
@@ -174,63 +190,59 @@ void main() {
     );
   });
 
-  testWidgets('SettingsScreen pre-fills saved settings on open', (
-    WidgetTester tester,
-  ) async {
-    SharedPreferencesAsyncPlatform.instance =
-        InMemorySharedPreferencesAsync.withData(<String, Object>{
-      prefName: 'Abdul Kadir',
-      prefAddress: 'Portsmouth Guildhall, PO1 2AJ',
-      prefEmail: 'abdul.kadir@portsmouthcc.gov.uk',
-      prefNewsletter: true,
-      prefLargeText: true,
-    });
-
-    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Abdul Kadir'), findsOneWidget);
-    expect(find.text('Portsmouth Guildhall, PO1 2AJ'), findsOneWidget);
-    expect(find.text('abdul.kadir@portsmouthcc.gov.uk'), findsOneWidget);
-    final Switch switchWidget = tester.widget<Switch>(
-      find.byKey(const Key('newsletterSwitch')),
-    );
-    expect(switchWidget.value, isTrue);
-    expect(
-      tester
-          .widget<SwitchListTile>(find.byKey(const Key('largeTextSwitch')))
-          .value,
-      isTrue,
-    );
-  });
-
-  testWidgets('SettingsScreen syncs name and email with authenticated user', (
+  testWidgets('SettingsScreen loads cloud settings and clears on sign-out', (
     WidgetTester tester,
   ) async {
     final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
       signedIn: true,
       mockUser: MockUser(
-        uid: 'user-9',
+        uid: 'cloud-user-1',
         displayName: 'Alex Smith',
         email: 'alex@example.com',
       ),
     );
     AuthRepository.instance.setAuth(signedInAuth);
 
+    await SettingsRepository.instance.saveSettings(
+      'cloud-user-1',
+      const UserSettings(
+        name: 'Cloud Alex',
+        address: '10 Southsea Parade',
+        email: 'cloud@example.com',
+        receiveNewsletter: true,
+        largeText: true,
+      ),
+    );
+
+    final List<bool> textChanges = [];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SettingsScreen(
+          largeText: false,
+          onLargeTextChanged: textChanges.add,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Cloud Alex'), findsOneWidget);
+    expect(find.text('10 Southsea Parade'), findsOneWidget);
+    expect(find.text('cloud@example.com'), findsOneWidget);
+    expect(textChanges, [true]);
+
+    await signedInAuth.signOut();
+    await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pumpAndSettle();
 
-    expect(find.text('Alex Smith'), findsOneWidget);
-    expect(find.text('alex@example.com'), findsOneWidget);
-
-    await tester.enterText(
-      find.widgetWithText(TextField, 'Full name'),
-      'Alex Rivera',
-    );
-    await tester.tap(find.text('Save Settings'));
-    await tester.pumpAndSettle();
-
+    expect(find.text('Cloud Alex'), findsNothing);
+    expect(find.text('10 Southsea Parade'), findsNothing);
+    expect(find.text('cloud@example.com'), findsNothing);
     expect(
-        AuthRepository.instance.getCurrentUser()?.displayName, 'Alex Rivera');
+      tester
+          .widget<SwitchListTile>(find.byKey(const Key('largeTextSwitch')))
+          .value,
+      isFalse,
+    );
   });
 }

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_shop/repositories/auth_repository.dart';
 import 'package:sandwich_shop/repositories/sandwich_repository.dart';
+import 'package:sandwich_shop/repositories/settings_repository.dart';
 import 'package:sandwich_shop/screens/auth_screen.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/menu_screen.dart';
@@ -21,12 +22,14 @@ void main() {
     AuthRepository.instance.setAuth(MockFirebaseAuth());
     SandwichRepository.instance.clearCache();
     SandwichRepository.instance.setFirestore(FakeFirebaseFirestore());
+    SettingsRepository.instance.setFirestore(FakeFirebaseFirestore());
   });
 
   tearDown(() {
     AuthRepository.instance.setAuth(null);
     SandwichRepository.instance.clearCache();
     SandwichRepository.instance.setFirestore(null);
+    SettingsRepository.instance.setFirestore(null);
   });
 
   testWidgets(

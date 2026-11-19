@@ -3,15 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
 import 'package:sandwich_shop/models/user_settings.dart';
 import 'package:sandwich_shop/repositories/auth_repository.dart';
+import 'package:sandwich_shop/repositories/settings_repository.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-const String prefName = 'user_name';
-const String prefAddress = 'user_address';
-const String prefEmail = 'user_email';
-const String prefNewsletter = 'user_newsletter';
-const String prefLargeText = 'large_text';
 
 class SettingsScreen extends StatefulWidget {
   final bool largeText;
@@ -65,25 +59,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadSettings() async {
-    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-    final String? savedName = await prefs.getString(prefName);
-    final String? savedAddress = await prefs.getString(prefAddress);
-    final String? savedEmail = await prefs.getString(prefEmail);
-    final bool? savedNewsletter = await prefs.getBool(prefNewsletter);
-    final bool? savedLargeText = await prefs.getBool(prefLargeText);
-
     final User? currentUser = AuthRepository.instance.getCurrentUser();
-    String nameText = savedName ?? '';
-    String emailText = savedEmail ?? '';
-    if (currentUser != null) {
-      final String? authName = currentUser.displayName;
-      if (authName != null && authName.isNotEmpty) {
-        nameText = authName;
-      }
-      final String? authEmail = currentUser.email;
-      if (authEmail != null && authEmail.isNotEmpty) {
-        emailText = authEmail;
-      }
+    if (currentUser == null) {
+      setState(() {
+        _nameController.text = '';
+        _addressController.text = '';
+        _emailController.text = '';
+        _receiveNewsletter = false;
+        if (widget.onLargeTextChanged == null) {
+          _largeText = false;
+        }
+      });
+      return;
+    }
+
+    String nameText = '';
+    String addressText = '';
+    String emailText = '';
+    bool newsletterValue = false;
+    bool largeTextValue = false;
+
+    final UserSettings? cloudSettings =
+        await SettingsRepository.instance.loadSettings(currentUser.uid);
+    if (cloudSettings != null) {
+      nameText = cloudSettings.name;
+      addressText = cloudSettings.address;
+      emailText = cloudSettings.email;
+      newsletterValue = cloudSettings.receiveNewsletter;
+      largeTextValue = cloudSettings.largeText;
+    }
+    final String? authName = currentUser.displayName;
+    if (nameText.isEmpty && authName != null && authName.isNotEmpty) {
+      nameText = authName;
+    }
+    final String? authEmail = currentUser.email;
+    if (emailText.isEmpty && authEmail != null && authEmail.isNotEmpty) {
+      emailText = authEmail;
     }
 
     if (!mounted) {
@@ -91,37 +102,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
     setState(() {
       _nameController.text = nameText;
-      _addressController.text = savedAddress ?? '';
+      _addressController.text = addressText;
       _emailController.text = emailText;
-      _receiveNewsletter = savedNewsletter ?? false;
-      if (widget.onLargeTextChanged == null) {
-        _largeText = savedLargeText ?? false;
-      }
+      _receiveNewsletter = newsletterValue;
+      _largeText = largeTextValue;
     });
+    final ValueChanged<bool>? onChanged = widget.onLargeTextChanged;
+    if (onChanged != null) {
+      onChanged(largeTextValue);
+    }
   }
 
   Future<void> _saveSettings() async {
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    if (currentUser == null) {
+      setState(() {
+        _confirmationMessage = 'Please log in to save your settings.';
+      });
+      return;
+    }
+
     final String name = _nameController.text.trim();
     final String address = _addressController.text.trim();
     final String email = _emailController.text.trim();
-
-    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-    await prefs.setString(prefName, name);
-    await prefs.setString(prefAddress, address);
-    await prefs.setString(prefEmail, email);
-    await prefs.setBool(prefNewsletter, _receiveNewsletter);
-    await prefs.setBool(prefLargeText, _largeText);
-
-    if (name.isNotEmpty) {
-      await AuthRepository.instance.updateDisplayName(name);
-    }
 
     final UserSettings settings = UserSettings(
       name: name,
       address: address,
       email: email,
       receiveNewsletter: _receiveNewsletter,
+      largeText: _largeText,
     );
+
+    await SettingsRepository.instance.saveSettings(currentUser.uid, settings);
+    if (name.isNotEmpty) {
+      await AuthRepository.instance.updateDisplayName(name);
+    }
 
     if (!mounted) {
       return;
