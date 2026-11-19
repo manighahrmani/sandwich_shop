@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sandwich_shop/repositories/cart_repository.dart';
 
 class AuthRepository {
   AuthRepository._internal();
@@ -95,6 +96,7 @@ class AuthRepository {
   Future<void> signOut() async {
     final FirebaseAuth authInstance = auth;
     await authInstance.signOut();
+    CartRepository.instance.clear();
   }
 
   Future<void> updateDisplayName(String displayName) async {

@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_shop/models/cart_item.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/repositories/auth_repository.dart';
+import 'package:sandwich_shop/repositories/cart_repository.dart';
 
 class _EmailLinkFirebaseAuth extends MockFirebaseAuth {
   @override
@@ -72,7 +75,7 @@ void main() {
       expect(user.email, 'bob@example.com');
     });
 
-    test('signOut signs out the current user', () async {
+    test('signOut signs out the current user and clears the basket', () async {
       final MockUser existingUser = MockUser(
         uid: 'user-2',
         email: 'claire@example.com',
@@ -82,11 +85,25 @@ void main() {
         signedIn: true,
       );
       AuthRepository.instance.setAuth(signedInAuth);
+      CartRepository.instance.addItem(
+        const CartItem(
+          sandwich: Sandwich(
+            id: 'footlong',
+            name: 'Footlong Sub',
+            description: 'Fresh sub',
+            price: 7.5,
+            imagePath: 'assets/images/footlong.jpeg',
+          ),
+          quantity: 1,
+        ),
+      );
       expect(AuthRepository.instance.getCurrentUser(), isNotNull);
+      expect(CartRepository.instance.getItems(), isNotEmpty);
 
       await AuthRepository.instance.signOut();
 
       expect(AuthRepository.instance.getCurrentUser(), isNull);
+      expect(CartRepository.instance.getItems(), isEmpty);
     });
 
     test('watchAuthState emits sign-in and sign-out updates', () async {
