@@ -1,13 +1,15 @@
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/models/order_record.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/repositories/order_repository.dart';
 import 'package:sandwich_shop/screens/basket_screen.dart';
 import 'package:sandwich_shop/screens/orders_screen.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 const Sandwich testSandwich = Sandwich(
   id: 'footlong',
@@ -18,22 +20,24 @@ const Sandwich testSandwich = Sandwich(
 );
 
 void main() {
-  setUp(() async {
+  late FakeFirebaseFirestore fakeFirestore;
+
+  setUp(() {
     CartRepository.instance.clear();
-    sqfliteFfiInit();
-    final Database database = await databaseFactoryFfiNoIsolate.openDatabase(
-      inMemoryDatabasePath,
-      options: OpenDatabaseOptions(
-        version: 2,
-        onConfigure: SandwichDatabase.instance.configureDatabase,
-        onCreate: SandwichDatabase.instance.createTables,
+    fakeFirestore = FakeFirebaseFirestore();
+    OrderRepository.instance.setFirestore(fakeFirestore);
+    AuthRepository.instance.setAuth(
+      MockFirebaseAuth(
+        signedIn: true,
+        mockUser: MockUser(uid: 'user-1', email: 'alice@example.com'),
       ),
     );
-    SandwichDatabase.instance.setDatabase(database);
   });
 
-  tearDown(() async {
-    await SandwichDatabase.instance.close();
+  tearDown(() {
+    CartRepository.instance.clear();
+    OrderRepository.instance.setFirestore(null);
+    AuthRepository.instance.setAuth(null);
   });
 
   testWidgets('BasketScreen displays empty message when basket has no items', (
@@ -68,9 +72,54 @@ void main() {
     },
   );
 
-  testWidgets('Checkout saves the order, clears the basket and opens orders', (
+  testWidgets('Checkout prompts signed-out users to log in and keeps basket', (
     WidgetTester tester,
   ) async {
+    AuthRepository.instance.setAuth(MockFirebaseAuth());
+    CartRepository.instance.addItem(
+      const CartItem(sandwich: testSandwich, quantity: 2),
+    );
+
+    bool openedAuth = false;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: const BasketScreen(),
+        routes: {
+          '/auth': (BuildContext context) {
+            openedAuth = true;
+            return Scaffold(
+              body: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Done'),
+              ),
+            );
+          },
+        },
+      ),
+    );
+
+    await tester.tap(find.text('Checkout'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Please log in to place an order.'), findsOneWidget);
+    expect(find.text('Log In'), findsOneWidget);
+    expect(CartRepository.instance.getItems().length, 1);
+
+    await tester.tap(find.text('Log In'));
+    await tester.pumpAndSettle();
+    expect(openedAuth, isTrue);
+
+    await tester.tap(find.text('Done'));
+    await tester.pumpAndSettle();
+    expect(find.text('Please log in to place an order.'), findsNothing);
+    expect(CartRepository.instance.getItems().length, 1);
+  });
+
+  testWidgets(
+      'Checkout saves the order to Firestore, clears basket and opens orders',
+      (WidgetTester tester) async {
     CartRepository.instance.addItem(
       const CartItem(sandwich: testSandwich, quantity: 2),
     );
@@ -84,59 +133,46 @@ void main() {
         },
       ),
     );
-    await tester.runAsync(() async {
-      await tester.tap(find.text('Checkout'));
-      await tester.pumpAndSettle();
-    });
+
+    await tester.tap(find.text('Checkout'));
     await tester.pumpAndSettle();
 
-    final List<OrderRecord>? orders = await tester.runAsync(() async {
-      return await SandwichDatabase.instance.getAllOrders();
-    });
-    expect(orders, isNotNull);
-    if (orders != null) {
-      expect(orders.length, 1);
-      expect(orders[0].orderNumber, 1001);
-      expect(orders[0].summary, '2 x Footlong Sub');
-      expect(orders[0].total, 21.50);
-      expect(orders[0].items, hasLength(1));
-      expect(orders[0].items[0].sandwichId, 'footlong');
-      expect(orders[0].items[0].sandwichName, 'Footlong Sub');
-      expect(orders[0].items[0].unitPrice, 10.0);
-      expect(orders[0].items[0].quantity, 2);
-    }
+    final List<OrderRecord> orders =
+        await OrderRepository.instance.getAllOrders('user-1');
+    expect(orders.length, 1);
+    expect(orders[0].orderNumber, 1001);
+    expect(orders[0].summary, '2 x Footlong Sub');
+    expect(orders[0].total, 21.50);
+    expect(orders[0].items, hasLength(1));
+    expect(orders[0].items[0].sandwichId, 'footlong');
+    expect(orders[0].items[0].sandwichName, 'Footlong Sub');
+    expect(orders[0].items[0].unitPrice, 10.0);
+    expect(orders[0].items[0].quantity, 2);
+
     expect(CartRepository.instance.getItems(), isEmpty);
     expect(find.byType(OrdersScreen), findsOneWidget);
     expect(find.text('Order #1001'), findsOneWidget);
     expect(
-        find.text('2 x Footlong Sub at £10.00 each: £20.00'), findsOneWidget);
+      find.text('2 x Footlong Sub at £10.00 each: £20.00'),
+      findsOneWidget,
+    );
     expect(find.text('£21.50'), findsOneWidget);
   });
 
   testWidgets('Checkout keeps the basket when saving fails', (
     WidgetTester tester,
   ) async {
+    OrderRepository.instance.setFirestore(null);
     CartRepository.instance.addItem(
       const CartItem(sandwich: testSandwich, quantity: 2),
     );
-    await tester.runAsync(() async {
-      final Database database = await SandwichDatabase.instance.database;
-      await database.execute('DROP TABLE order_items');
-    });
     await tester.pumpWidget(const MaterialApp(home: BasketScreen()));
-    await tester.runAsync(() async {
-      await tester.tap(find.text('Checkout'));
-      await tester.pumpAndSettle();
-    });
+
+    await tester.tap(find.text('Checkout'));
     await tester.pumpAndSettle();
 
     expect(CartRepository.instance.getItems().length, 1);
     expect(find.text('2 x Footlong Sub'), findsOneWidget);
     expect(find.textContaining('Could not save your order'), findsOneWidget);
-    final List<Map<String, Object?>>? orders = await tester.runAsync(() async {
-      final Database database = await SandwichDatabase.instance.database;
-      return database.query('orders');
-    });
-    expect(orders, isEmpty);
   });
 }

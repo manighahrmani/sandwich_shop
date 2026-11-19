@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/main.dart';
 import 'package:sandwich_shop/models/user_settings.dart';
 import 'package:sandwich_shop/repositories/auth_repository.dart';
+import 'package:sandwich_shop/repositories/order_repository.dart';
 import 'package:sandwich_shop/repositories/sandwich_repository.dart';
 import 'package:sandwich_shop/repositories/settings_repository.dart';
 import 'package:sandwich_shop/screens/auth_screen.dart';
@@ -18,7 +18,6 @@ import 'package:sandwich_shop/screens/order_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   setUp(() {
@@ -29,6 +28,7 @@ void main() {
     SandwichRepository.instance.clearCache();
     SandwichRepository.instance.setFirestore(FakeFirebaseFirestore());
     SettingsRepository.instance.setFirestore(FakeFirebaseFirestore());
+    OrderRepository.instance.setFirestore(FakeFirebaseFirestore());
   });
 
   tearDown(() {
@@ -36,6 +36,7 @@ void main() {
     SandwichRepository.instance.clearCache();
     SandwichRepository.instance.setFirestore(null);
     SettingsRepository.instance.setFirestore(null);
+    OrderRepository.instance.setFirestore(null);
   });
 
   group('App smoke tests', () {
@@ -88,16 +89,6 @@ void main() {
     'Font size applies across pages, keeps system scaling, and persists',
     (WidgetTester tester) async {
       tester.platformDispatcher.textScaleFactorTestValue = 1.5;
-      sqfliteFfiInit();
-      final Database database = await databaseFactoryFfiNoIsolate.openDatabase(
-        inMemoryDatabasePath,
-        options: OpenDatabaseOptions(
-          version: 2,
-          onConfigure: SandwichDatabase.instance.configureDatabase,
-          onCreate: SandwichDatabase.instance.createTables,
-        ),
-      );
-      SandwichDatabase.instance.setDatabase(database);
 
       double scaledFontSize(String text, double fontSize) {
         return tester
@@ -181,7 +172,6 @@ void main() {
         await tester.pumpAndSettle();
         expect(scaledFontSize('Footlong Sub', 18), closeTo(27, 0.01));
       } finally {
-        await SandwichDatabase.instance.close();
         tester.platformDispatcher.clearTextScaleFactorTestValue();
       }
     },

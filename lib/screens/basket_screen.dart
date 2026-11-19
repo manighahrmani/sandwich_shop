@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
-import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/cart_item.dart';
 import 'package:sandwich_shop/models/order_item.dart';
 import 'package:sandwich_shop/models/order_record.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
 import 'package:sandwich_shop/repositories/cart_repository.dart';
+import 'package:sandwich_shop/repositories/order_repository.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/orders_button.dart';
 import 'package:sandwich_shop/widgets/primary_button.dart';
@@ -50,10 +52,18 @@ class _BasketScreenState extends State<BasketScreen> {
   }
 
   Future<void> _checkout(CartRepository cart, List<CartItem> items) async {
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    if (currentUser == null) {
+      setState(() {
+        _confirmationMessage = 'Please log in to place an order.';
+      });
+      return;
+    }
+
     final String summary = _buildSummary(items);
     final double total = cart.getTotalDue();
     final String date = _formatDate(DateTime.now());
-    final List<OrderItem> orderItems = [];
+    final List<OrderItem> orderItems = <OrderItem>[];
     for (final CartItem item in items) {
       orderItems.add(
         OrderItem(
@@ -66,8 +76,9 @@ class _BasketScreenState extends State<BasketScreen> {
     }
 
     try {
-      final SandwichDatabase database = SandwichDatabase.instance;
-      final int orderNumber = await database.getNextOrderNumber();
+      final OrderRepository orderRepository = OrderRepository.instance;
+      final int orderNumber =
+          await orderRepository.getNextOrderNumber(currentUser.uid);
       final OrderRecord record = OrderRecord(
         orderNumber: orderNumber,
         summary: summary,
@@ -75,7 +86,7 @@ class _BasketScreenState extends State<BasketScreen> {
         date: date,
         items: orderItems,
       );
-      await database.insertOrder(record);
+      await orderRepository.insertOrder(currentUser.uid, record);
       cart.clear();
       if (!mounted) {
         return;
@@ -198,6 +209,22 @@ class _BasketScreenState extends State<BasketScreen> {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       );
+      if (AuthRepository.instance.getCurrentUser() == null) {
+        children.add(
+          TextButton(
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/auth');
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                _confirmationMessage = '';
+              });
+            },
+            child: const Text('Log In'),
+          ),
+        );
+      }
     }
 
     return Column(

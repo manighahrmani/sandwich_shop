@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/constants.dart';
-import 'package:sandwich_shop/database/sandwich_db.dart';
 import 'package:sandwich_shop/models/order_item.dart';
 import 'package:sandwich_shop/models/order_record.dart';
+import 'package:sandwich_shop/repositories/auth_repository.dart';
+import 'package:sandwich_shop/repositories/order_repository.dart';
 import 'package:sandwich_shop/widgets/basket_button.dart';
 import 'package:sandwich_shop/widgets/orders_button.dart';
+import 'package:sandwich_shop/widgets/primary_button.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -16,7 +19,8 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  List<OrderRecord> _orders = [];
+  List<OrderRecord> _orders = <OrderRecord>[];
+  bool _signedIn = true;
   bool _loading = true;
   String _errorMessage = '';
 
@@ -27,9 +31,26 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Future<void> _loadOrders() async {
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    if (currentUser == null) {
+      setState(() {
+        _signedIn = false;
+        _orders = <OrderRecord>[];
+        _errorMessage = '';
+        _loading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _signedIn = true;
+      _loading = true;
+      _errorMessage = '';
+    });
+
     try {
       final List<OrderRecord> orders =
-          await SandwichDatabase.instance.getAllOrders();
+          await OrderRepository.instance.getAllOrders(currentUser.uid);
       if (!mounted) {
         return;
       }
@@ -93,11 +114,41 @@ class _OrdersScreenState extends State<OrdersScreen> {
     );
   }
 
+  Widget _buildSignedOutState() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Please log in to view your orders.',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 16),
+            PrimaryButton(
+              label: 'Log In',
+              onPressed: () async {
+                await Navigator.pushNamed(context, '/auth');
+                if (!mounted) {
+                  return;
+                }
+                _loadOrders();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Widget body;
     if (_loading) {
       body = const Center(child: CircularProgressIndicator());
+    } else if (!_signedIn) {
+      body = _buildSignedOutState();
     } else if (_errorMessage.isNotEmpty) {
       body = Center(child: Text(_errorMessage));
     } else if (_orders.isEmpty) {
