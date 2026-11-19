@@ -9,21 +9,20 @@ void main() {
     quantity: 2,
   );
 
-  test('item maps include the order link and purchase snapshot', () {
-    expect(item.toMap(42), <String, Object?>{
-      'order_id': 42,
+  test('item maps store and restore the purchase snapshot', () {
+    expect(item.toMap(), <String, dynamic>{
       'sandwich_id': 'footlong',
       'sandwich_name': 'Footlong Sub',
       'unit_price': 7.50,
       'quantity': 2,
     });
-    final OrderItem restored = OrderItem.fromMap(item.toMap(42));
-    expect(restored.toMap(42), item.toMap(42));
+    final OrderItem restored = OrderItem.fromMap(item.toMap());
+    expect(restored.toMap(), item.toMap());
     expect(restored.lineTotal, 15.0);
   });
 
-  test('whole-number SQLite prices become doubles', () {
-    final Map<String, Object?> row = item.toMap(42);
+  test('whole-number Firestore prices become doubles', () {
+    final Map<String, dynamic> row = item.toMap();
     row['unit_price'] = 7;
     final OrderItem restored = OrderItem.fromMap(row);
     expect(restored.unitPrice, 7.0);
