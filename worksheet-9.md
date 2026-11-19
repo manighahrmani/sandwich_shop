@@ -31,11 +31,8 @@
   - [Read the menu from Firestore](#read-the-menu-from-firestore)
   - [Save user settings in the cloud](#save-user-settings-in-the-cloud)
   - [Store and read orders](#store-and-read-orders)
-  - [Test with multiple users](#test-with-multiple-users)
   - [Protect user data with security rules](#protect-user-data-with-security-rules)
-- [Testing cloud code](#testing-cloud-code)
-  - [Fake Firebase in unit tests](#fake-firebase-in-unit-tests)
-  - [Keep coverage high](#keep-coverage-high)
+- [Publish the web app](#publish-the-web-app)
 - [Exercises](#exercises)
 
 ## Getting help
@@ -1506,31 +1503,57 @@ Run the app, add sandwiches to the basket, and test checking out while signed ou
 
 <!-- TODO: Done till here -->
 
-### Test with multiple users
-
-To prove that cloud storage and authentication keep each person's data separate, we need to test the app with more than one account. Signing in as a second customer should show their own saved settings and their own order history without exposing the first customer's records.
-
-<!-- TODO: walk through registering/signing in with two test accounts across Chrome and Android, updating settings and placing orders in each, and inspecting the users/<uid> documents in the Cloud Firestore dashboard to show per-user isolation and cross-device sync. -->
-
 ### Protect user data with security rules
 
-We started Cloud Firestore in test mode so our app can read and write documents while we build it, which leaves customer records open to anyone. Replacing those temporary rules with Firestore Security Rules lets anyone read the public menu, while each customer can only read or change their own settings and orders once signed in.
+Inside the Flutter interface, one customer cannot open another customer's profile or orders because every query uses `currentUser.uid`. Outside the app, however, `firebase_options.dart` is bundled into the browser code, so while Cloud Firestore stays in test mode anyone with your project details can read, overwrite, or delete documents in `users/` directly through the Firestore API. Test mode also expires automatically after 30 days, after which Firestore rejects every read and write and breaks the live app.
 
-<!-- TODO: replace temporary test mode rules with Firestore Security Rules allowing public read on the menu collection and owner-only read/write (request.auth != null && request.auth.uid == userId) on users/<uid> and orders. -->
+Before publishing the app online, open your Firebase dashboard, go to **Cloud Firestore > Rules**, replace the temporary test-mode rules with the rules below, and select **Publish**:
 
-## Testing cloud code
+```text
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /sandwiches/{sandwichId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      match /orders/{orderId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+  }
+}
+```
 
-### Fake Firebase in unit tests
+These rules let any visitor read the public `sandwiches` menu while blocking writes from the app (now that the menu is already seeded), and restrict both `users/<uid>` and `users/<uid>/orders` so only a signed-in user whose `uid` matches `userId` can read or change their own data.
 
-Running automated tests against live Firebase servers is slow, needs an internet connection, and writes test records into your real database. Replacing live Firebase connections with fake in-memory versions lets tests check sign-in, settings and orders offline in milliseconds.
+## Publish the web app
 
-<!-- TODO: add firebase_auth_mocks and fake_cloud_firestore as dev dependencies so Auth and Firestore repositories can be tested fast offline without hitting live Firebase servers. -->
+So far you have tested the web build locally on `localhost`. Publishing it with Firebase Hosting (included on the free Spark plan) serves the app over HTTPS at a public URL anyone can open in a browser, while your Android build continues running unchanged against the same Firebase project.
 
-### Keep coverage high
+First, build the release web bundle from the project root:
 
-Every new repository method, error branch and authentication state introduces paths that could silently break checkout or lock users out if untested. Checking coverage ensures our new cloud code stays just as reliable as the local code from Worksheet 8.
+```bash
+flutter build web
+```
 
-<!-- TODO: run flutter test --coverage and check the new Auth, Firestore repository, and error states with the Flutter Coverage extension, mirroring lib/ inside test/. -->
+This compiles your Flutter app into static HTML, JavaScript, and asset files inside `build/web`. Next, initialise Firebase Hosting using the Firebase CLI you installed earlier:
+
+```bash
+firebase init hosting
+```
+
+When prompted, choose **Use an existing project** and pick your Sandwich Shop project, enter `build/web` as the public directory, answer **Yes** to configure as a single-page app so routes work on page refresh, answer **No** to automatic GitHub deploys, and answer **No** if asked to overwrite `build/web/index.html`. This adds a `hosting` block to `firebase.json` alongside the existing `flutter` configuration.
+
+Deploy the built web app to Firebase Hosting:
+
+```bash
+firebase deploy --only hosting
+```
+
+When the command finishes, the terminal prints your live **Hosting URL** (`https://<project-id>.web.app`). Open it in Chrome (or on another device), sign in, and confirm that your saved settings and orders stay in sync when you also run the app on your Android emulator (`flutter run`). Firebase automatically includes `*.web.app` under **Authentication > Settings > Authorised domains**, so email-link and Google sign-in work on the live URL without extra setup. Whenever you update the app later, run `flutter build web` followed by `firebase deploy --only hosting` to publish the changes.
 
 ## Exercises
 
