@@ -88,7 +88,10 @@ class SandwichRepository {
     if (snapshot.docs.isEmpty) {
       final List<Sandwich> seededSandwiches = await loadSandwichesFromAsset();
       for (final Sandwich sandwich in seededSandwiches) {
-        await sandwichesCollection.doc(sandwich.id).set(sandwich.toJson());
+        final DocumentReference<Map<String, dynamic>> sandwichDocument =
+            sandwichesCollection.doc(sandwich.id);
+        final Map<String, dynamic> sandwichData = sandwich.toJson();
+        await sandwichDocument.set(sandwichData);
       }
       return seededSandwiches;
     }
@@ -96,7 +99,8 @@ class SandwichRepository {
     final List<Sandwich> loadedSandwiches = [];
     for (final QueryDocumentSnapshot<Map<String, dynamic>> document
         in snapshot.docs) {
-      final Sandwich sandwich = Sandwich.fromJson(document.data());
+      final Map<String, dynamic> documentData = document.data();
+      final Sandwich sandwich = Sandwich.fromJson(documentData);
       loadedSandwiches.add(sandwich);
     }
 
