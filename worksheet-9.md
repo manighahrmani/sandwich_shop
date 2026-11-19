@@ -1235,13 +1235,276 @@ Open `SettingsScreen` again to confirm that your saved details and **Bigger text
 
 ![Settings screen after signing in showing saved details and Bigger text pulled from Cloud Firestore](images/9/settings_signed_in_synced.png)
 
-<!-- TODO: Done till here -->
-
 ### Store and read orders
 
-Until now, order history lived in a local SQLite database that could not follow a customer to another device or work in a web browser. Storing each customer's orders in an `orders` list (a subcollection) under their account replaces local SQLite and keeps orders attached to the person who placed them.
+Until now, order history lived in a local SQLite database that could not follow a customer to another device or work in a web browser. Storing each customer's orders in an `orders` subcollection under `users/<uid>/orders` replaces SQLite and keeps past purchases tied to the signed-in account.
 
-<!-- TODO: replace SQLite DatabaseHelper / SqliteOrderRepository with a Cloud Firestore order flow under users/<uid>/orders so orders work cleanly on both Android and web. -->
+Visitors can still browse the public menu on `MenuScreen` and add sandwiches to the temporary in-memory basket (`CartRepository`) from `OrderScreen` without signing in. However, `BasketScreen` should block **Checkout** while signed out (preserving the basket and offering a **Log In** button), `OrdersScreen` should require signing in before loading past purchases, and signing out should clear the in-memory basket so leftover items never appear for the next person on the same device.
+
+Instead of SQLite's separate `order_items` table with foreign keys, each Firestore order document embeds its line items directly in an `items` list so one write saves the whole order and one query reads it back. Open `lib/models/order_item.dart`, update `fromMap` to accept `Map<String, dynamic>`, and replace `toMap(int orderId)` with a parameterless `toMap()` that omits SQLite's `order_id`:
+
+```dart
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'sandwich_id': sandwichId,
+      'sandwich_name': sandwichName,
+      'unit_price': unitPrice,
+      'quantity': quantity,
+    };
+    return data;
+  }
+```
+
+Next, open `lib/models/order_record.dart` and change `id` from `int?` to `String?` because Firestore document IDs are strings. Update `toMap()` to convert each `OrderItem` into a map and store the list under `'items'`:
+
+```dart
+  Map<String, dynamic> toMap() {
+    final List<Map<String, dynamic>> itemMaps = <Map<String, dynamic>>[];
+    for (final OrderItem item in items) {
+      itemMaps.add(item.toMap());
+    }
+
+    final Map<String, dynamic> data = <String, dynamic>{
+      'order_number': orderNumber,
+      'summary': summary,
+      'total': total,
+      'date': date,
+      'items': itemMaps,
+    };
+    return data;
+  }
+```
+
+In `OrderRecord.fromMap(Map<String, dynamic> map, {String? id})`, replace the `items` parameter with the optional document `id` and read `'items'` from the Firestore map. Checking `rawItem is Map` and copying with `Map<String, dynamic>.from(rawItem)` avoids type mismatches on both Android and Flutter Web:
+
+```dart
+    final List<OrderItem> parsedItems = <OrderItem>[];
+    final dynamic rawItems = map['items'];
+    if (rawItems is List<dynamic>) {
+      for (final dynamic rawItem in rawItems) {
+        if (rawItem is Map) {
+          final Map<String, dynamic> itemMap =
+              Map<String, dynamic>.from(rawItem);
+          parsedItems.add(OrderItem.fromMap(itemMap));
+        }
+      }
+    }
+```
+
+Create a new file named `lib/repositories/order_repository.dart` with the imports and an empty `OrderRepository` class shell, then add the same singleton and `_firestore` test hook you used in `SettingsRepository`:
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sandwich_shop/models/order_record.dart';
+
+class OrderRepository {}
+```
+
+Calling `.collection('orders')` on a `DocumentReference` (`users/<userId>`) opens a subcollection nested inside that user's document. Inside `OrderRepository`, add a private `_ordersCollection` helper to return that subcollection:
+
+```dart
+  CollectionReference<Map<String, dynamic>> _ordersCollection(String userId) {
+    final CollectionReference<Map<String, dynamic>> usersCollection =
+        firestore.collection('users');
+    final DocumentReference<Map<String, dynamic>> userDocument =
+        usersCollection.doc(userId);
+    return userDocument.collection('orders');
+  }
+```
+
+Because each customer places many orders, `insertOrder` calls `.add(orderData)` instead of `.doc(...).set(...)` so Firestore generates a unique document ID automatically and returns its `DocumentReference`. Add `insertOrder` below `_ordersCollection`:
+
+```dart
+  Future<String> insertOrder(String userId, OrderRecord order) async {
+    final CollectionReference<Map<String, dynamic>> ordersCollection =
+        _ordersCollection(userId);
+    final Map<String, dynamic> orderData = order.toMap();
+    final DocumentReference<Map<String, dynamic>> docRef =
+        await ordersCollection.add(orderData);
+    return docRef.id;
+  }
+```
+
+Calling `orderBy('order_number', descending: true)` on a collection returns a `Query<Map<String, dynamic>>` that sorts matching documents newest-first before `.get()` runs. Add `getAllOrders` inside `OrderRepository`:
+
+```dart
+  Future<List<OrderRecord>> getAllOrders(String userId) async {
+    final CollectionReference<Map<String, dynamic>> ordersCollection =
+        _ordersCollection(userId);
+    final Query<Map<String, dynamic>> sortedQuery = ordersCollection.orderBy(
+      'order_number',
+      descending: true,
+    );
+    final QuerySnapshot<Map<String, dynamic>> snapshot =
+        await sortedQuery.get();
+
+    final List<OrderRecord> orders = <OrderRecord>[];
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> doc
+        in snapshot.docs) {
+      final Map<String, dynamic> data = doc.data();
+      orders.add(OrderRecord.fromMap(data, id: doc.id));
+    }
+    return orders;
+  }
+```
+
+Add `getNextOrderNumber`, calling `limit(1)` on the sorted `Query` so Firestore returns only the single highest order number rather than downloading every past order. Accounts with no orders yet start at `1001`:
+
+```dart
+  Future<int> getNextOrderNumber(String userId) async {
+    final CollectionReference<Map<String, dynamic>> ordersCollection =
+        _ordersCollection(userId);
+    final Query<Map<String, dynamic>> sortedQuery = ordersCollection.orderBy(
+      'order_number',
+      descending: true,
+    );
+    final Query<Map<String, dynamic>> latestOrderQuery = sortedQuery.limit(1);
+    final QuerySnapshot<Map<String, dynamic>> snapshot =
+        await latestOrderQuery.get();
+
+    if (snapshot.docs.isEmpty) {
+      return 1001;
+    }
+    final QueryDocumentSnapshot<Map<String, dynamic>> latestDocument =
+        snapshot.docs.first;
+    final Map<String, dynamic> latestData = latestDocument.data();
+    final int currentMax = latestData['order_number'] as int;
+    return currentMax + 1;
+  }
+```
+
+Open `lib/repositories/auth_repository.dart`, import `package:sandwich_shop/repositories/cart_repository.dart`, and clear the in-memory basket inside `signOut()`:
+
+```dart
+  Future<void> signOut() async {
+    final FirebaseAuth authInstance = auth;
+    await authInstance.signOut();
+    CartRepository.instance.clear();
+  }
+```
+
+Now open `lib/screens/basket_screen.dart` and replace the `sandwich_db.dart` import with `firebase_auth.dart`, `auth_repository.dart`, and `order_repository.dart`. At the top of `_checkout()`, stop when nobody is signed in so the basket stays intact:
+
+```dart
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    if (currentUser == null) {
+      setState(() {
+        _confirmationMessage = 'Please log in to place an order.';
+      });
+      return;
+    }
+```
+
+Inside the `try` block of `_checkout()`, swap `SandwichDatabase.instance` for `OrderRepository.instance` and pass `currentUser.uid`:
+
+```dart
+      final OrderRepository orderRepository = OrderRepository.instance;
+      final int orderNumber =
+          await orderRepository.getNextOrderNumber(currentUser.uid);
+      final OrderRecord record = OrderRecord(
+        orderNumber: orderNumber,
+        summary: summary,
+        total: total,
+        date: date,
+        items: orderItems,
+      );
+      await orderRepository.insertOrder(currentUser.uid, record);
+```
+
+Inside `_buildBasketList()`, directly below the `_confirmationMessage` `Text` widget, add a **Log In** button when nobody is signed in so the visitor can sign in and return with their basket preserved:
+
+```dart
+      if (AuthRepository.instance.getCurrentUser() == null) {
+        children.add(
+          TextButton(
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/auth');
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                _confirmationMessage = '';
+              });
+            },
+            child: const Text('Log In'),
+          ),
+        );
+      }
+```
+
+Next, open `lib/screens/orders_screen.dart`, replace the `sandwich_db.dart` import with `firebase_auth.dart`, `auth_repository.dart`, `order_repository.dart`, and `primary_button.dart`, and add `bool _signedIn = true;` to `_OrdersScreenState`. At the start of `_loadOrders()`, check whether anyone is signed in before querying Firestore:
+
+```dart
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    if (currentUser == null) {
+      setState(() {
+        _signedIn = false;
+        _orders = <OrderRecord>[];
+        _errorMessage = '';
+        _loading = false;
+      });
+      return;
+    }
+```
+
+Directly below that `if` block, reset the loading state and read the signed-in customer's orders from `OrderRepository.instance` inside the `try` block:
+
+```dart
+    setState(() {
+      _signedIn = true;
+      _loading = true;
+      _errorMessage = '';
+    });
+```
+
+```dart
+      final List<OrderRecord> orders =
+          await OrderRepository.instance.getAllOrders(currentUser.uid);
+```
+
+Add a `_buildSignedOutState()` helper in `_OrdersScreenState` that prompts the visitor to log in and reloads orders when they return from `/auth`, then handle `else if (!_signedIn)` right after `if (_loading)` in `build()` by setting `body = _buildSignedOutState();`:
+
+```dart
+  Widget _buildSignedOutState() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Please log in to view your orders.',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 16),
+            PrimaryButton(
+              label: 'Log In',
+              onPressed: () async {
+                await Navigator.pushNamed(context, '/auth');
+                if (!mounted) {
+                  return;
+                }
+                _loadOrders();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+```
+
+Because SQLite is no longer used anywhere in the app, delete `lib/database/sandwich_db.dart` and `test/database/sandwich_db_test.dart`, and remove the SQLite packages from `pubspec.yaml`:
+
+```bash
+flutter pub remove sqflite path sqflite_common_ffi
+```
+
+Update `test/models/order_item_test.dart`, `test/models/order_record_test.dart`, `test/repositories/auth_repository_test.dart`, `test/screens/basket_screen_test.dart`, `test/screens/orders_screen_test.dart`, and `test/main_test.dart` to use `FakeFirebaseFirestore()` and `MockFirebaseAuth` in place of SQLite, and add `test/repositories/order_repository_test.dart` covering per-user order numbering, newest-first sorting, and signed-out guards.
+
+Run the app, add sandwiches to the basket, and test checking out while signed out (confirming the login prompt keeps your basket intact) and while signed in (confirming the saved order appears on `OrdersScreen` and under `users/<uid>/orders` in Cloud Firestore).
+
+<!-- TODO: Done till here -->
 
 ### Test with multiple users
 
