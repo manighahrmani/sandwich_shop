@@ -965,9 +965,277 @@ Run the app to seed Firestore automatically on the first load, then open Cloud F
 
 ### Save user settings in the cloud
 
-In Worksheet 8, settings such as text size were stored locally in `SharedPreferences`, so changing phones or switching to Chrome reset the customer's choices. Saving settings inside a Firestore document under each user's `uid` ties preferences to the account rather than the device.
+In Worksheet 8, settings such as text size were stored locally in `SharedPreferences`, so changing phones or switching to Chrome reset the customer's choices. Replacing `SharedPreferences` with a Firestore document under each user's `uid` ties preferences to the signed-in account and keeps the form blank whenever nobody is signed in.
 
-<!-- TODO: persist user settings (font size, default bread, etc.) per UID under users/<uid> in Cloud Firestore rather than local-only SharedPreferences, syncing settings when the user signs in on Android or web. -->
+First, open `lib/models/user_settings.dart` and add `largeText` (defaulting to `false`) alongside `fromMap` and `toMap` helpers so `UserSettings` converts cleanly to and from Firestore maps, matching `Sandwich`:
+
+```dart
+class UserSettings {
+  final String name;
+  final String address;
+  final String email;
+  final bool receiveNewsletter;
+  final bool largeText;
+
+  const UserSettings({
+    this.name = '',
+    this.address = '',
+    this.email = '',
+    this.receiveNewsletter = false,
+    this.largeText = false,
+  });
+
+  factory UserSettings.fromMap(Map<String, dynamic> map) {
+    final String name = (map['name'] as String?) ?? '';
+    final String address = (map['address'] as String?) ?? '';
+    final String email = (map['email'] as String?) ?? '';
+    final bool receiveNewsletter =
+        (map['receiveNewsletter'] as bool?) ?? false;
+    final bool largeText = (map['largeText'] as bool?) ?? false;
+
+    return UserSettings(
+      name: name,
+      address: address,
+      email: email,
+      receiveNewsletter: receiveNewsletter,
+      largeText: largeText,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'name': name,
+      'address': address,
+      'email': email,
+      'receiveNewsletter': receiveNewsletter,
+      'largeText': largeText,
+    };
+    return data;
+  }
+}
+```
+
+Create a new file named `lib/repositories/settings_repository.dart` with the imports and an empty `SettingsRepository` class shell:
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sandwich_shop/models/user_settings.dart';
+
+class SettingsRepository {}
+```
+
+Inside the braces of `SettingsRepository`, add the same singleton and configurable `_firestore` test hook we used in `SandwichRepository`:
+
+```dart
+  SettingsRepository._internal();
+
+  static final SettingsRepository instance = SettingsRepository._internal();
+
+  FirebaseFirestore? _firestore;
+
+  void setFirestore(FirebaseFirestore? firestore) {
+    _firestore = firestore;
+  }
+
+  FirebaseFirestore get firestore {
+    final FirebaseFirestore? existingFirestore = _firestore;
+    if (existingFirestore != null) {
+      return existingFirestore;
+    }
+    return FirebaseFirestore.instance;
+  }
+```
+
+Below the `firestore` getter, add an empty `loadSettings` method and an empty `saveSettings` method:
+
+```dart
+  Future<UserSettings?> loadSettings(String userId) async {}
+
+  Future<void> saveSettings(String userId, UserSettings settings) async {}
+```
+
+Calling `.get()` on a single `DocumentReference` returns a `DocumentSnapshot<Map<String, dynamic>>`. Its `exists` property is `false` until the customer saves settings for the first time, and `snapshot.data()` returns `Map<String, dynamic>?` (`null` when the document does not exist yet). Fill in `loadSettings` to read the document at `users/<uid>`:
+
+```dart
+    final CollectionReference<Map<String, dynamic>> usersCollection =
+        firestore.collection('users');
+    final DocumentReference<Map<String, dynamic>> userDocument =
+        usersCollection.doc(userId);
+    final DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await userDocument.get();
+
+    final Map<String, dynamic>? documentData = snapshot.data();
+    if (!snapshot.exists || documentData == null) {
+      return null;
+    }
+    return UserSettings.fromMap(documentData);
+```
+
+Inside the braces of `saveSettings`, write the settings map to `users/<uid>` using `set`:
+
+```dart
+    final CollectionReference<Map<String, dynamic>> usersCollection =
+        firestore.collection('users');
+    final DocumentReference<Map<String, dynamic>> userDocument =
+        usersCollection.doc(userId);
+    final Map<String, dynamic> settingsData = settings.toMap();
+    await userDocument.set(settingsData);
+```
+
+Now open `lib/screens/settings_screen.dart`, remove the `shared_preferences` import and `pref*` key constants, and import `package:sandwich_shop/repositories/settings_repository.dart`. Replace `_loadSettings()` so the form stays blank when nobody is signed in (`currentUser == null`) and loads `users/<uid>` from Firestore (falling back to `currentUser.displayName` and `currentUser.email` if empty) when a customer is signed in:
+
+```dart
+  Future<void> _loadSettings() async {
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    if (currentUser == null) {
+      setState(() {
+        _nameController.text = '';
+        _addressController.text = '';
+        _emailController.text = '';
+        _receiveNewsletter = false;
+        if (widget.onLargeTextChanged == null) {
+          _largeText = false;
+        }
+      });
+      return;
+    }
+
+    String nameText = '';
+    String addressText = '';
+    String emailText = '';
+    bool newsletterValue = false;
+    bool largeTextValue = false;
+
+    final UserSettings? cloudSettings =
+        await SettingsRepository.instance.loadSettings(currentUser.uid);
+    if (cloudSettings != null) {
+      nameText = cloudSettings.name;
+      addressText = cloudSettings.address;
+      emailText = cloudSettings.email;
+      newsletterValue = cloudSettings.receiveNewsletter;
+      largeTextValue = cloudSettings.largeText;
+    }
+    final String? authName = currentUser.displayName;
+    if (nameText.isEmpty && authName != null && authName.isNotEmpty) {
+      nameText = authName;
+    }
+    final String? authEmail = currentUser.email;
+    if (emailText.isEmpty && authEmail != null && authEmail.isNotEmpty) {
+      emailText = authEmail;
+    }
+
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _nameController.text = nameText;
+      _addressController.text = addressText;
+      _emailController.text = emailText;
+      _receiveNewsletter = newsletterValue;
+      _largeText = largeTextValue;
+    });
+    final ValueChanged<bool>? onChanged = widget.onLargeTextChanged;
+    if (onChanged != null) {
+      onChanged(largeTextValue);
+    }
+  }
+```
+
+Replace `_saveSettings()` so signed-out visitors are prompted to log in while signed-in customers save their `UserSettings` (including `largeText`) directly to Firestore and update `displayName`:
+
+```dart
+  Future<void> _saveSettings() async {
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    if (currentUser == null) {
+      setState(() {
+        _confirmationMessage = 'Please log in to save your settings.';
+      });
+      return;
+    }
+
+    final String name = _nameController.text.trim();
+    final String address = _addressController.text.trim();
+    final String email = _emailController.text.trim();
+
+    final UserSettings settings = UserSettings(
+      name: name,
+      address: address,
+      email: email,
+      receiveNewsletter: _receiveNewsletter,
+      largeText: _largeText,
+    );
+
+    await SettingsRepository.instance.saveSettings(currentUser.uid, settings);
+    if (name.isNotEmpty) {
+      await AuthRepository.instance.updateDisplayName(name);
+    }
+
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _confirmationMessage = 'Settings saved for ${settings.name}';
+    });
+  }
+```
+
+Finally, open `lib/main.dart` so signing in loads the customer's saved `largeText` preference across the app and signing out resets `_largeText` to `false`. Remove `_loadTextSize()`, import `dart:async`, `package:firebase_auth/firebase_auth.dart`, `package:sandwich_shop/models/user_settings.dart`, and `package:sandwich_shop/repositories/settings_repository.dart`, declare `StreamSubscription<User?>? _authSubscription;` (a listener handle returned by `.listen(...)`) in `_AppState`, subscribe to `AuthRepository.instance.watchAuthState()` inside `initState()`, and cancel `_authSubscription` inside `dispose()`:
+
+```dart
+    final User? currentUser = AuthRepository.instance.getCurrentUser();
+    if (currentUser != null) {
+      _loadCloudTextSize(currentUser.uid);
+    }
+    _authSubscription =
+        AuthRepository.instance.watchAuthState().listen((User? user) {
+      if (user != null) {
+        _loadCloudTextSize(user.uid);
+      } else {
+        setState(() {
+          _largeText = false;
+        });
+      }
+    });
+```
+
+Add `_loadCloudTextSize(String userId)` to `_AppState` so accounts without a saved document yet default `_largeText` to `false`:
+
+```dart
+  Future<void> _loadCloudTextSize(String userId) async {
+    final UserSettings? cloudSettings =
+        await SettingsRepository.instance.loadSettings(userId);
+    if (!mounted) {
+      return;
+    }
+    bool nextLargeText = false;
+    if (cloudSettings != null) {
+      nextLargeText = cloudSettings.largeText;
+    }
+    setState(() {
+      _largeText = nextLargeText;
+    });
+  }
+```
+
+Add unit tests for `UserSettings.fromMap`/`toMap` and `SettingsRepository` (`test/repositories/settings_repository_test.dart`), register `FakeFirebaseFirestore()` on `SettingsRepository.instance` in `test/screens/settings_screen_test.dart`, `test/screens/menu_screen_test.dart`, and `test/main_test.dart`, and test that signed-out forms stay blank while signed-in settings persist per user in Firestore.
+
+Run the app, sign in, save your details and **Bigger text** setting on `SettingsScreen`, and inspect the new `users` collection and your `<uid>` document in Cloud Firestore, as shown below:
+
+![Cloud Firestore dashboard showing saved user settings under users/<uid>](images/9/firestore_user_settings.png)
+
+Sign out and open `SettingsScreen` to verify that the form resets to blank fields and normal text size, as shown below:
+
+![Settings screen while signed out showing blank fields and switches turned off](images/9/settings_signed_out.png)
+
+Sign back in with the same account and verify that your saved **Bigger text** preference immediately enlarges text across the menu, as shown below:
+
+![Menu screen after signing in showing enlarged text loaded from Cloud Firestore](images/9/menu_signed_in_large_text.png)
+
+Open `SettingsScreen` again to confirm that your saved details and **Bigger text** toggle are pulled back from Cloud Firestore, as shown below:
+
+![Settings screen after signing in showing saved details and Bigger text pulled from Cloud Firestore](images/9/settings_signed_in_synced.png)
+
+<!-- TODO: Done till here -->
 
 ### Store and read orders
 
