@@ -1,6 +1,6 @@
 # Worksheet 9 — Cloud services
 
-<!-- DRAFT: walkthrough completed up to Protect user data with security rules; Publish the web app and Exercises remain pending review. -->
+<!-- DRAFT: walkthrough completed up to Publish the app on the web; Exercises remain pending. -->
 
 ## Table of contents
 
@@ -32,7 +32,7 @@
   - [Save user settings in the cloud](#save-user-settings-in-the-cloud)
   - [Store and read orders](#store-and-read-orders)
   - [Protect user data with security rules](#protect-user-data-with-security-rules)
-- [Publish the web app](#publish-the-web-app)
+- [Publish the app on the web](#publish-the-app-on-the-web)
 - [Exercises](#exercises)
 
 ## Getting help
@@ -666,7 +666,7 @@ Directly below that setup inside `build`, return the `Scaffold` wrapped in a `Si
 
 Because `AuthScreen` is not linked from `MenuScreen` yet, we cannot open it in the running app until the next section. Run `dart analyze` (following [Running test suites and static analysis](worksheet-4.md#running-test-suites-and-static-analysis)) first to confirm `lib/screens/auth_screen.dart` has no static errors.
 
-Next, use GitHub Copilot in **Interactive** mode with `#lib/screens/auth_screen.dart` and `#test/screens/settings_screen_test.dart` to create widget tests in `test/screens/auth_screen_test.dart`, following [Write widget tests](worksheet-8.md#write-widget-tests) and [Test the authentication repository](#test-the-authentication-repository). Ask Copilot to use `MockFirebaseAuth` (with a small test subclass overriding `signInWithEmailAndPassword` to throw `FirebaseAuthException` and a general `Exception`) covering empty-field validation, mode toggling, registering and returning, signing in and returning, and error messages. Run your tests, review the generated assertions, and confirm coverage on `lib/screens/auth_screen.dart`, as shown below:
+Next, attach `#lib/screens/auth_screen.dart` and `#test/screens/settings_screen_test.dart` and ask Copilot to create widget tests in `test/screens/auth_screen_test.dart`, following [Write widget tests](worksheet-8.md#write-widget-tests) and [Test the authentication repository](#test-the-authentication-repository). Ask Copilot to use `MockFirebaseAuth` (with a small test subclass overriding `signInWithEmailAndPassword` to throw `FirebaseAuthException` and a general `Exception`) covering empty-field validation, mode toggling, registering and returning, signing in and returning, and error messages. Run your tests, review the generated assertions, and confirm coverage on `lib/screens/auth_screen.dart`, as shown below:
 
 ![AuthScreen widget tests passing with 100% coverage in VS Code](images/9/auth_screen_tests_coverage.png)
 
@@ -773,7 +773,7 @@ Because `MenuScreen` now renders `AccountButton` (`watchAuthState()`), set `Auth
 
 ### Test signing up, signing in and signing out
 
-With the app running in Chrome (`flutter run -d chrome`) or on your Android emulator, select **Log In** in the top-right bar to open `AuthScreen` in sign-in mode, as shown below:
+Select **Log In** in the top-right bar to open `AuthScreen` in sign-in mode, as shown below:
 
 ![The sign-in form displayed on AuthScreen in Chrome](images/9/auth_screen_sign_in.png)
 
@@ -781,7 +781,7 @@ Select **Need an account? Register** so the heading changes to **Create Account*
 
 ![MenuScreen app bar showing the Sign Out button after signing in](images/9/menu_screen_sign_out_button.png)
 
-Open your [Firebase dashboard](https://console.firebase.google.com/), go to **Authentication** and select the **Users** tab to confirm your registered email address appears under **Identifier** alongside its **User UID**, as shown below:
+Open your Firebase dashboard, go to **Authentication** and select the **Users** tab to confirm your registered email address appears under **Identifier** alongside its **User UID**, as shown below:
 
 ![Firebase Authentication Users tab showing the registered test account and UID](images/9/firebase_auth_users.png)
 
@@ -1547,7 +1547,7 @@ Sign in, complete checkout, and verify that the saved order appears on `OrdersSc
 
 Inside the Flutter interface, one customer cannot open another customer's profile or orders because every query uses `currentUser.uid`. However, as noted in [Connect the Flutter app](#connect-the-flutter-app) and [Create a Cloud Firestore database](#create-a-cloud-firestore-database), `firebase_options.dart` is visible in the web bundle and test mode expires after 30 days, so leaving open rules lets anyone call the Firestore API directly until the database locks down.
 
-Before publishing the app online, open your Firebase dashboard, select **Firestore** in the left sidebar (under **Project shortcuts** or **Databases and storage**), open the **Rules** tab, replace the temporary test-mode rules with the rules below, and select **Publish**:
+Before publishing the app online, open your Firebase dashboard, go to **Firestore**, select the **Rules** tab, replace the temporary test-mode rules with the rules below, and select **Publish**:
 
 ```text
 rules_version = '2';
@@ -1573,11 +1573,9 @@ Your rules editor should look like this before you select **Publish**:
 
 Here `request.auth` holds the signed-in user's details (or `null` when signed out). These rules let any visitor read the public `sandwiches` menu while blocking writes from the app (now that the menu is already seeded), and restrict both `users/<uid>` and `users/<uid>/orders` so only a signed-in user whose `uid` matches `userId` can read or change their own data.
 
-<!-- TODO: Done till here -->
+## Publish the app on the web
 
-## Publish the web app
-
-So far you have tested the web build locally on `localhost`. Publishing it with Firebase Hosting (included on the free Spark plan) serves the app over HTTPS at a public URL anyone can open in a browser, while your Android build continues running unchanged against the same Firebase project.
+So far you have tested the web build locally on `localhost`. Publishing it with Firebase Hosting (included on the free Spark plan, with no extra dashboard setup required) serves the app over HTTPS at a public URL anyone can open in a browser, while your Android build continues running unchanged against the same Firebase project. You can try the completed Sandwich Shop app live at [sandwich-shop-59811.web.app](https://sandwich-shop-59811.web.app).
 
 First, build the release web bundle from the project root:
 
@@ -1591,7 +1589,9 @@ This compiles your Flutter app into static HTML, JavaScript, and asset files ins
 firebase init hosting
 ```
 
-When prompted, choose **Use an existing project** and pick your Sandwich Shop project, enter `build/web` as the public directory, answer **Yes** to configure as a single-page app so routes work on page refresh, answer **No** to automatic GitHub deploys, and answer **No** if asked to overwrite `build/web/index.html`. This adds a `hosting` block to `firebase.json` alongside the existing `flutter` configuration.
+When prompted, choose **Use an existing project** and pick your Sandwich Shop project, enter `build/web` as the public directory, answer **Yes** to configure as a single-page app so routes work on page refresh, answer **No** to automatic GitHub deploys, and answer **No** if asked to overwrite `build/web/index.html`. This creates `.firebaserc` and adds a `hosting` block to `firebase.json` alongside the existing `flutter` configuration. Add `.firebase/` to `.gitignore` so the local hosting deploy cache is not committed to Git.
+
+<!-- TODO: add terminal screenshot of firebase init hosting prompts if desired -->
 
 Deploy the built web app to Firebase Hosting:
 
@@ -1599,7 +1599,13 @@ Deploy the built web app to Firebase Hosting:
 firebase deploy --only hosting
 ```
 
-When the command finishes, the terminal prints your live **Hosting URL** (`https://<project-id>.web.app`). Open it in Chrome (or on another device), sign in, and confirm that your saved settings and orders stay in sync when you also run the app on your Android emulator (`flutter run`). Firebase automatically includes `*.web.app` under **Authentication > Settings > Authorised domains**, so email-link and Google sign-in work on the live URL without extra setup. Whenever you update the app later, run `flutter build web` followed by `firebase deploy --only hosting` to publish the changes.
+<!-- TODO: add terminal screenshot of firebase deploy --only hosting output if desired -->
+
+When the command finishes, the terminal prints your live **Hosting URL** (`https://<project-id>.web.app`). Open your Firebase dashboard under **Hosting and serverless > Hosting** to view your live release and default domains, as shown below:
+
+![Firebase Hosting dashboard showing the live release and default web.app domain](images/9/firebase_hosting_dashboard.png)
+
+Open your live URL in Chrome (or on another device), sign in, and confirm that your saved settings and orders stay in sync when you also open the app on your Android emulator. Firebase automatically includes `*.web.app` under **Authentication > Settings > Authorised domains**, so email-link and Google sign-in work on the live URL without extra setup. Whenever you update the app later, run `flutter build web` followed by `firebase deploy --only hosting` to publish the changes.
 
 ## Exercises
 
