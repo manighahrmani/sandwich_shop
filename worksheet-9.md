@@ -1,7 +1,5 @@
 # Worksheet 9 — Cloud services
 
-<!-- DRAFT: walkthrough completed up to Publish the app on the web; Exercises remain pending. -->
-
 ## Table of contents
 
 - [Getting help](#getting-help)
@@ -1589,9 +1587,11 @@ This compiles your Flutter app into static HTML, JavaScript, and asset files ins
 firebase init hosting
 ```
 
-When prompted, choose **Use an existing project** and pick your Sandwich Shop project, enter `build/web` as the public directory, answer **Yes** to configure as a single-page app so routes work on page refresh, answer **No** to automatic GitHub deploys, and answer **No** if asked to overwrite `build/web/index.html`. This creates `.firebaserc` and adds a `hosting` block to `firebase.json` alongside the existing `flutter` configuration. Add `.firebase/` to `.gitignore` so the local hosting deploy cache is not committed to Git.
+When prompted, choose **Use an existing project** and pick your Sandwich Shop project, enter `build/web` as the public directory, answer **Yes** to configure as a single-page app so routes work on page refresh, answer **No** to automatic GitHub deploys, and answer **No** when asked to overwrite `build/web/index.html`, as shown below:
 
-<!-- TODO: add terminal screenshot of firebase init hosting prompts if desired -->
+![Terminal output showing firebase init hosting configured for build/web as a single-page app](images/9/firebase_init_hosting.png)
+
+This creates `.firebaserc` and adds a `hosting` block to `firebase.json` alongside the existing `flutter` configuration. Add `.firebase/` to `.gitignore` so the local hosting deploy cache is not committed to Git.
 
 Deploy the built web app to Firebase Hosting:
 
@@ -1599,9 +1599,11 @@ Deploy the built web app to Firebase Hosting:
 firebase deploy --only hosting
 ```
 
-<!-- TODO: add terminal screenshot of firebase deploy --only hosting output if desired -->
+When the command finishes, the terminal prints your live **Hosting URL** (`https://<project-id>.web.app`), as shown below:
 
-When the command finishes, the terminal prints your live **Hosting URL** (`https://<project-id>.web.app`). Open your Firebase dashboard under **Hosting and serverless > Hosting** to view your live release and default domains, as shown below:
+![Terminal output showing firebase deploy uploading build/web and printing the live Hosting URL](images/9/firebase_deploy_hosting.png)
+
+Open your Firebase dashboard under **Hosting and serverless > Hosting** to view your live release and default domains, as shown below:
 
 ![Firebase Hosting dashboard showing the live release and default web.app domain](images/9/firebase_hosting_dashboard.png)
 
@@ -1609,12 +1611,60 @@ Open your live URL in Chrome (or on another device), sign in, and confirm that y
 
 ## Exercises
 
-The exercises below apply these concepts to your Southsea Cinema coursework and prepare you for Demo 5. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
+The exercises below apply these concepts to your Southsea Cinema coursework and prepare you for Demo 5. Unlike earlier demos, 100% of the Demo 5 marks come from this worksheet; Worksheet 10 is optional and is not assessed. For the full coursework specification and grading criteria, see the [Southsea Cinema coursework brief](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/IQDtIJB3bM7gQ4p03eLUngyyAd7JuhjhHuNA1l0H-qCy3Jw).
 
-<!-- TODO: write numbered exercises:
-1. Create a Firebase project on the free Spark plan, enable Email/Password Authentication and Cloud Firestore, and connect Southsea Cinema for Android and web with flutterfire configure.
-2. Store the cinema film catalogue details (title, synopsis, ticket price, rating, screening times, and local poster asset path) in a Cloud Firestore collection while keeping poster image files in assets/images/.
-3. Add user registration, sign-in and sign-out so customers view only their own bookings and saved cinema preferences in the cloud.
-4. Implement transactional Cloud Firestore booking creation and saved booking history replacing SQLite.
-5. Add unit and widget tests using fake_cloud_firestore and firebase_auth_mocks and maintain test coverage matching lib/ inside test/.
--->
+Build on your cinema app from [Worksheet 8](worksheet-8.md). Keep your squared buttons, drawer navigation, mirrored `test/` folders, and test coverage of 80% or more as you complete each exercise. Keep your `README.md` up to date throughout so it documents your Firebase configuration, security rules, and live web URL if you complete the hosting exercise.
+
+1. Enable Android and web support in your Southsea Cinema project first (see [Enable Android and web support](#enable-android-and-web-support)).
+
+    Then create a free Firebase project, enable Firebase Authentication and Cloud Firestore, and connect your Flutter app as shown in [Setting up Firebase](#setting-up-firebase) and [Connect the Flutter app](#connect-the-flutter-app).
+
+2. Build a login and sign-up page on a `'/auth'` route. Add an account header above the links in `NavDrawer` as shown below.
+
+    In our model solution, the login and account-creation modes look like this:
+
+    ![Southsea Cinema login screen with Email Address and Password fields, Create an Account link, email-link option, LOG IN button and Google sign-in button](images/9/cinema_auth_login.png)
+
+    ![Southsea Cinema create-account screen with Log In toggle link, Email Address and Password fields and CREATE ACCOUNT button](images/9/cinema_auth_signup.png)
+
+    The navigation drawer header switches between the signed-out and signed-in states as shown below:
+
+    ![Southsea Cinema navigation drawer while signed out showing a squared LOG IN button above Home, My Basket and My Settings](images/9/cinema_drawer_signed_out.png)
+
+    ![Southsea Cinema navigation drawer while signed in showing the customer icon, name and squared LOG OUT button above the navigation links](images/9/cinema_drawer_signed_in.png)
+
+3. Connect your login screen and navigation drawer to Firebase Authentication. You should allow signing in with email and password (or passwordless email link).
+
+    See the examples in [Create the authentication repository](#create-the-authentication-repository), [Test signing up, signing in and signing out](#test-signing-up-signing-in-and-signing-out) and [Sign in with an email link or Google](#sign-in-with-an-email-link-or-google). Make sure to write unit and widget tests using `firebase_auth_mocks` following [Test the authentication repository](#test-the-authentication-repository) and [Test the sign-in screen](#test-the-sign-in-screen).
+
+4. (Advanced) Add Google sign-in to your app. Follow our example in [Sign in with an email link or Google](#sign-in-with-an-email-link-or-google).
+
+5. Move your film catalogue from `assets/data/movies.json` into a `movies` collection in Cloud Firestore while keeping the poster images in `assets/images/`.
+
+    You have an example to go by in [Read the menu from Firestore](#read-the-menu-from-firestore). Remember to write unit and widget tests using `fake_cloud_firestore`.
+
+6. Store the customer profile and theme preference from your settings page in Cloud Firestore instead of `SharedPreferencesAsync`.
+
+    Follow our example in [Sync settings with the authenticated profile](#sync-settings-with-the-authenticated-profile) and [Save user settings in the cloud](#save-user-settings-in-the-cloud). Saving settings to Cloud Firestore has side effects across the app, so think carefully about how the app should behave when a customer logs in, updates preferences, visits other pages or logs out.
+
+    The screenshots below show the expected behaviour across those states:
+
+    ![Southsea Cinema settings page in edit mode showing Full Name, Address, Email Address, Patron Number, email-news and dark-mode switches, CANCEL and SAVE SETTINGS](images/9/cinema_settings_edit.png)
+
+    ![Southsea Cinema settings page displaying saved cloud profile details with Receive news by email set to Yes and Dark mode set to Off](images/9/cinema_settings_saved.png)
+
+    ![Southsea Cinema home page displayed in light mode after saving the dark-mode preference to Cloud Firestore](images/9/cinema_home_light.png)
+
+    ![Southsea Cinema settings page after logging out showing dark mode restored, user details cleared and a squared LOG IN button](images/9/cinema_settings_signed_out.png)
+
+7. Replace your local SQLite booking database with Cloud Firestore and remove the SQLite packages, following [Store and read orders](#store-and-read-orders). Keep the basket in memory, require sign-in to buy tickets or view past bookings, and think about what should happen to the basket and past bookings when the customer logs out.
+
+    In our model solution, the basket page behaves like this when signed out and when signed in:
+
+    ![Southsea Cinema basket page while signed out showing the login prompt after tapping BUY TICKETS and the login button under PAST ORDERS](images/9/cinema_basket_signed_out.png)
+
+    ![Southsea Cinema basket page while signed in showing past bookings loaded from Cloud Firestore with itemised ticket totals](images/9/cinema_basket_past_orders.png)
+
+    Before finishing, replace the temporary test-mode rules under **Firestore > Rules** with published security rules (see [Protect user data with security rules](#protect-user-data-with-security-rules)).
+
+8. (Advanced) Publish your Southsea Cinema app on the web following [Publish the app on the web](#publish-the-app-on-the-web). Make sure to update your `README.md` too and include your live URL.
