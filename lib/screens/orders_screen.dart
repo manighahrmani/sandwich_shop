@@ -49,8 +49,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
     });
 
     try {
+      final OrderRepository orderRepository = OrderRepository.instance;
       final List<OrderRecord> orders =
-          await OrderRepository.instance.getAllOrders(currentUser.uid);
+          await orderRepository.getAllOrders(currentUser.uid);
       if (!mounted) {
         return;
       }

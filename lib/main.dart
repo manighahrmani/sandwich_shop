@@ -84,8 +84,8 @@ class _AppState extends State<App> {
     if (currentUser != null) {
       _loadCloudTextSize(currentUser.uid);
     }
-    _authSubscription =
-        AuthRepository.instance.watchAuthState().listen((User? user) {
+    final Stream<User?> authStream = AuthRepository.instance.watchAuthState();
+    _authSubscription = authStream.listen((User? user) {
       if (user != null) {
         _loadCloudTextSize(user.uid);
       } else {
@@ -98,7 +98,10 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    _authSubscription?.cancel();
+    final StreamSubscription<User?>? subscription = _authSubscription;
+    if (subscription != null) {
+      subscription.cancel();
+    }
     super.dispose();
   }
 

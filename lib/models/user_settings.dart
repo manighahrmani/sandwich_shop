@@ -14,11 +14,31 @@ class UserSettings {
   });
 
   factory UserSettings.fromMap(Map<String, dynamic> map) {
-    final String name = (map['name'] as String?) ?? '';
-    final String address = (map['address'] as String?) ?? '';
-    final String email = (map['email'] as String?) ?? '';
-    final bool receiveNewsletter = (map['receiveNewsletter'] as bool?) ?? false;
-    final bool largeText = (map['largeText'] as bool?) ?? false;
+    String name = '';
+    final Object? rawName = map['name'];
+    if (rawName is String) {
+      name = rawName;
+    }
+    String address = '';
+    final Object? rawAddress = map['address'];
+    if (rawAddress is String) {
+      address = rawAddress;
+    }
+    String email = '';
+    final Object? rawEmail = map['email'];
+    if (rawEmail is String) {
+      email = rawEmail;
+    }
+    bool receiveNewsletter = false;
+    final Object? rawNewsletter = map['receiveNewsletter'];
+    if (rawNewsletter is bool) {
+      receiveNewsletter = rawNewsletter;
+    }
+    bool largeText = false;
+    final Object? rawLargeText = map['largeText'];
+    if (rawLargeText is bool) {
+      largeText = rawLargeText;
+    }
 
     return UserSettings(
       name: name,
