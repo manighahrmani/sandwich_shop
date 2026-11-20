@@ -1,6 +1,6 @@
 # Worksheet 9 — Cloud services
 
-<!-- DRAFT: setup instructions written for walkthrough and screenshot capture; code implementation, Firestore data flow and testing sections remain outlined as TODO comments pending branch 9 completion. -->
+<!-- DRAFT: walkthrough completed up to Protect user data with security rules; Publish the web app and Exercises remain pending review. -->
 
 ## Table of contents
 
@@ -57,7 +57,7 @@ Do not switch branches over unfinished work. Branch `9` contains the completed S
 
 ### Enable Android and web support
 
-Up to [Worksheet 7](worksheet-7.md), the app stored orders in a local SQLite database that could not run in a browser, so we removed the `web` folder and blocked web builds in `lib/main.dart`. Replacing local SQLite with Cloud Firestore means customers will be able to use the shop in Chrome or Edge as well as on Android.
+In [Worksheet 7](worksheet-7.md) and [Worksheet 8](worksheet-8.md), the app stored orders in a local SQLite database that could not run in a browser, so we removed the `web` folder and blocked web builds in `lib/main.dart`. Replacing local SQLite with Cloud Firestore means customers will be able to use the shop in Chrome or Edge as well as on Android.
 
 Check that your Flutter installation lists Chrome or Edge alongside your Android emulator by opening the terminal and running:
 
@@ -65,13 +65,13 @@ Check that your Flutter installation lists Chrome or Edge alongside your Android
 flutter devices
 ```
 
-If your project does not already contain a `web` folder, generate the web runner files in the root of your repository:
+If your project does not already contain a `web` folder, generate the web runner files in the root of your repository, matching [Add Android support to the project](worksheet-7.md#add-android-support-to-the-project):
 
 ```bash
 flutter create --platforms=web .
 ```
 
-The `.` targets the current project folder without touching your `lib`, `assets` or existing test files. If `flutter create` adds a starter `test/widget_test.dart` template, delete that template file and keep your existing mirrored `test/` files.
+If `flutter create` adds a starter `test/widget_test.dart` template, delete it and keep your existing mirrored `test/` files.
 
 Even with the `web` folder restored, running the app in Chrome still shows the fallback screen from [Prevent running on unsupported platforms](worksheet-7.md#prevent-running-on-unsupported-platforms) because `isSupportedPlatform()` returns `false` when `kIsWeb` is `true`. In this worksheet, we enable Android and web as a minimum while keeping that guard for other desktop targets. If you want to add iOS or desktop platforms later, see the optional [Support more platforms](#support-more-platforms) section.
 
@@ -118,7 +118,7 @@ Run `flutter test` to confirm all tests still pass. You can also run `flutter ru
 
 ## Why apps use the cloud
 
-So far, our app has stored its data locally in JSON or on a SQL database on a single device. If someone switches devices or opens the app in a web browser, that local data is unavailable.
+So far, our app has stored its data locally in JSON, shared preferences, or an SQLite database on a single device. If someone switches devices or opens the app in a web browser, that local data is unavailable.
 
 Most real-world apps avoid this by storing data on remote servers over the internet, known as the cloud. Keeping data and services in the cloud lets customers access them from any device or browser.
 
@@ -144,19 +144,19 @@ Before the app can use any cloud features, we need a project on Firebase to hold
 
 Open the [Firebase dashboard](https://console.firebase.google.com/) in your browser and confirm that the profile icon in the top-right corner shows the Google account you want to use.
 
-Select **Create a new Firebase project** (or **Create a project**), enter a project name such as `Sandwich Shop`, review the generated project ID underneath, and select **Continue**.
+Select **Create a new Firebase project** (or **Create a project**), enter a project name such as `Sandwich Shop`, review the generated project ID underneath, and select **Continue**, as shown below:
 
-![Firebase create project page](images/9/firebase_create_project.png)
+![The Firebase create project form showing Sandwich Shop entered with its generated project ID](images/9/firebase_create_project.png)
 
-Disable Google Analytics when prompted if you want a simpler setup, otherwise create an account when prompted and set the analytics location to United Kingdom as shown below, then select **Create project**.
+Disable Google Analytics when prompted if you want a simpler setup, otherwise create an account when prompted and set the analytics location to **United Kingdom** as shown below, then select **Create project**:
 
-![Firebase analytics setup](images/9/firebase_analytics_setup.png)
+![The Firebase Analytics setup screen showing the toggle and United Kingdom location option](images/9/firebase_analytics_setup.png)
 
 Once Firebase finishes provisioning, select **Continue** to open your project overview, as shown below:
 
 ![The Firebase dashboard project overview showing the newly created project on the Spark plan](images/9/firebase_project_overview.png)
 
-Notice **Gemini in Firebase** on the right-hand side of the project overview, which is available at no cost on the Spark plan. You can ask it general questions about Firebase services or Firestore queries, though it cannot edit your Flutter project files, so keep using GitHub Copilot in VS Code if you need an AI agent that can access your codebase.
+Notice **Gemini in Firebase** on the right-hand side of the project overview, which is available at no cost on the Spark plan. You can ask it general questions about Firebase services or Firestore queries, though it cannot edit your Flutter project files, so keep using GitHub Copilot in VS Code (as in [Working with Copilot](worksheet-8.md#working-with-copilot)) if you need an AI agent that can access your codebase.
 
 ### Set up user authentication
 
@@ -233,7 +233,7 @@ flutterfire --version
 
 You should get its version as shown below:
 
-![Flutterfire CLI version output](images/9/flutterfire_version_output.png)
+![Terminal output showing the installed FlutterFire CLI version number](images/9/flutterfire_version_output.png)
 
 ### Connect the Flutter app
 
@@ -251,13 +251,15 @@ Now generate the Firebase configuration for both platforms using FlutterFire. Ru
 flutterfire configure
 ```
 
-When asked which platforms to support, use the arrow keys and space bar to select at least `android` and `web`, then press **Enter**. See below for an example of the selection process:
+When asked which platforms to support, use the arrow keys and **Space** to select at least `android` and `web`, then press **Enter**, as shown below:
 
-![FlutterFire platform selection example](images/9/flutterfire_platform_selection.png)
+![Terminal prompt showing android and web selected in flutterfire configure](images/9/flutterfire_platform_selection.png)
 
-FlutterFire creates `android/app/google-services.json`, `lib/firebase_options.dart` and `firebase.json` (and updates your Android Gradle files) so your app knows which Firebase project to connect to, as shown below. Because these files do not contain private admin credentials (customer data is protected later by sign-in and security rules), they are safe to commit to Git.
+FlutterFire creates `android/app/google-services.json`, `lib/firebase_options.dart` and `firebase.json` (and updates your Android Gradle files) so your app knows which Firebase project to connect to, as shown below:
 
 ![Terminal output showing flutterfire configure registering Android and Web apps](images/9/flutterfire_configure_output.png)
+
+Because these files do not contain private admin credentials (customer data is protected later by sign-in and security rules), they are safe to commit to Git.
 
 If you push `lib/firebase_options.dart` to a public GitHub repository, GitHub may send you a secret-scanning alert for a Google API key. As explained in [Learn about Firebase API keys](https://firebase.google.com/docs/projects/api-keys), Firebase client API keys only identify which project to reach and do not grant admin access on their own, so you can dismiss that alert once you lock down your database rules in [Protect user data with security rules](#protect-user-data-with-security-rules) (just never attach paid Google APIs such as Gemini or Google Maps to those Firebase client keys, and never commit downloaded admin service-account JSON files).
 
@@ -304,7 +306,7 @@ This section is optional. Configuring Android and web already gives you a mobile
 
 First, make sure you have the required platform tools installed on your computer, such as Xcode for iOS and macOS or the C++ desktop workload for Windows (see [Run on other platforms](worksheet-7.md#run-on-other-platforms)). Only if you build a native macOS desktop app, you will also need to enable the **Keychain Sharing** capability in Xcode (and select a signing team) so Firebase Authentication can save sign-in sessions.
 
-Next, generate the runner folders for the extra platforms you want, keeping only the platform names you need and deleting `test/widget_test.dart` if Flutter creates one:
+Next, generate the runner folders for the extra platforms you want, keeping only the platform names you need (as in [Enable Android and web support](#enable-android-and-web-support)):
 
 ```bash
 flutter create --platforms=ios,macos,windows,linux .
@@ -312,7 +314,7 @@ flutter create --platforms=ios,macos,windows,linux .
 
 Re-run `flutterfire configure` in the root of your project and select those new platforms alongside `android` and `web`. FlutterFire updates `lib/firebase_options.dart` with their settings and generates any platform files such as `GoogleService-Info.plist` for Apple targets.
 
-Finally, open `lib/main.dart` and add an `if` check inside `isSupportedPlatform()` for each platform you added (and update `test/main_test.dart` so those targets expect `isTrue`):
+Finally, open `lib/main.dart` and add an `if` check inside `isSupportedPlatform()` for each platform you added, then update `test/main_test.dart` so those targets expect `isTrue` (following [Test supported platforms and run the complete suite](worksheet-7.md#test-supported-platforms-and-run-the-complete-suite)):
 
 ```dart
   if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -441,7 +443,7 @@ Before we move on, we need to write unit tests for `AuthRepository` so every sig
 flutter pub add --dev firebase_auth_mocks
 ```
 
-Open GitHub Copilot in **Interactive** mode and attach `#lib/repositories/auth_repository.dart` and `#test/repositories/sandwich_repository_test.dart` as context. Ask Copilot to create `test/repositories/auth_repository_test.dart` (matching the mirrored `test/repositories/` folder from [Worksheet 7](worksheet-7.md#organising-tests)) using `MockFirebaseAuth` and `MockUser` from `firebase_auth_mocks`.
+Open GitHub Copilot in **Interactive** mode (as in [Make a small change](worksheet-8.md#make-a-small-change)) and attach `#lib/repositories/auth_repository.dart` and `#test/repositories/sandwich_repository_test.dart` as context (following [Attach context](worksheet-8.md#attach-context) and [Write unit tests](worksheet-8.md#write-unit-tests)). Ask Copilot to create `test/repositories/auth_repository_test.dart` (matching the mirrored `test/repositories/` folder from [Worksheet 7](worksheet-7.md#organising-tests)) using `MockFirebaseAuth` and `MockUser` from `firebase_auth_mocks`.
 
 Make sure your prompt asks Copilot to test every function and branch in `AuthRepository`: `getCurrentUser()` when signed out, `signUpWithEmail()`, `signInWithEmail()`, `signOut()`, `watchAuthState()` emitting sign-in and sign-out updates, `auth` falling back to `FirebaseAuth.instance` when `_auth` is `null`, and every code mapped in `getErrorMessage()` (plus its default fallback message).
 
@@ -451,7 +453,7 @@ Run the tests with coverage enabled in the terminal:
 flutter test --coverage test/repositories/auth_repository_test.dart
 ```
 
-Open the **Testing** view in VS Code and inspect the **Flutter Coverage** tree (as set up in [Measure coverage](worksheet-8.md#measure-coverage)) to confirm `lib/repositories/auth_repository.dart` reports near-100% coverage. Read through each generated test in `test/repositories/auth_repository_test.dart` manually to verify every method in `AuthRepository` is exercised and checked with specific `expect` assertions (not just smoke calls), then run the full test suite to make sure all existing tests still pass.
+Open the **Testing** view in VS Code and inspect the **Flutter Coverage** tree (as set up in [Measure coverage](worksheet-8.md#measure-coverage)) to confirm `lib/repositories/auth_repository.dart` reports near-100% coverage. Review the generated tests following [Check the tests](worksheet-8.md#check-the-tests), then run the full test suite to make sure all existing tests still pass, as shown below:
 
 ![AuthRepository unit tests passing with 100% coverage in VS Code](images/9/auth_repository_tests_coverage.png)
 
@@ -513,7 +515,7 @@ Override `initState()` and `dispose()` to create and release the controllers, fo
   }
 ```
 
-Add `_toggleMode` below `dispose()` so the customer can switch the screen between Sign In mode and Create Account mode while clearing any old error message:
+Add `_toggleMode` below `dispose()` so the customer can switch the screen between sign-in mode and account-creation mode while clearing any old error message:
 
 ```dart
   void _toggleMode() {
@@ -582,11 +584,9 @@ Unlike earlier `try`/`catch` blocks, we write `on FirebaseAuthException catch (e
     }
 ```
 
-Now replace `throw UnimplementedError();` inside `build` so the screen prepares its form labels and widgets directly inside `build`, using `SingleChildScrollView` as in [Worksheet 5](worksheet-5.md#wrap-the-form-in-a-scroll-view). It picks headings and captions from `_isRegistering`, swaps `PrimaryButton` for a `CircularProgressIndicator` while `_isSubmitting` is `true` to prevent double submissions, and uses `SizedBox.shrink()` as a zero-size empty widget for `errorWidget` when `_errorMessage` is empty. Setting `obscureText: true` on the password `TextField` masks typed characters on screen:
+Now replace `throw UnimplementedError();` inside `build` in two short steps. First, prepare the headings and captions from `_isRegistering`, swap `PrimaryButton` for a `CircularProgressIndicator` while `_isSubmitting` is `true` to prevent double submissions, and build `errorWidget` using `SizedBox.shrink()` as a zero-size placeholder when `_errorMessage` is empty:
 
 ```dart
-  @override
-  Widget build(BuildContext context) {
     String titleText = 'Customer Sign In';
     String buttonLabel = 'Sign In';
     String toggleLabel = 'Need an account? Register';
@@ -616,7 +616,11 @@ Now replace `throw UnimplementedError();` inside `build` so the screen prepares 
         ),
       );
     }
+```
 
+Directly below that setup inside `build`, return the `Scaffold` wrapped in a `SingleChildScrollView` (as in [Worksheet 5](worksheet-5.md#wrap-the-form-in-a-scroll-view)). Setting `obscureText: true` on the password `TextField` masks typed characters, and a `TextButton` below `actionWidget` displays a flat clickable link to toggle modes:
+
+```dart
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: shopHeaderStyle),
@@ -656,14 +660,13 @@ Now replace `throw UnimplementedError();` inside `build` so the screen prepares 
         ),
       ),
     );
-  }
 ```
 
 ### Test the sign-in screen
 
-Because `AuthScreen` is not linked from `MenuScreen` yet, we cannot open it in the running app until the next section. Run `flutter analyze` first to confirm `lib/screens/auth_screen.dart` has no static errors.
+Because `AuthScreen` is not linked from `MenuScreen` yet, we cannot open it in the running app until the next section. Run `dart analyze` (following [Running test suites and static analysis](worksheet-4.md#running-test-suites-and-static-analysis)) first to confirm `lib/screens/auth_screen.dart` has no static errors.
 
-Next, use GitHub Copilot in **Interactive** mode with `#lib/screens/auth_screen.dart` and `#test/screens/settings_screen_test.dart` to create widget tests in `test/screens/auth_screen_test.dart`, following the same workflow as [Test the authentication repository](#test-the-authentication-repository). Ask Copilot to use `MockFirebaseAuth` (with a small test subclass overriding `signInWithEmailAndPassword` to throw `FirebaseAuthException` and a general `Exception`) covering empty-field validation, mode toggling, registering and returning, signing in and returning, and error messages. Run your tests, review the generated assertions, and confirm coverage on `lib/screens/auth_screen.dart`:
+Next, use GitHub Copilot in **Interactive** mode with `#lib/screens/auth_screen.dart` and `#test/screens/settings_screen_test.dart` to create widget tests in `test/screens/auth_screen_test.dart`, following [Write widget tests](worksheet-8.md#write-widget-tests) and [Test the authentication repository](#test-the-authentication-repository). Ask Copilot to use `MockFirebaseAuth` (with a small test subclass overriding `signInWithEmailAndPassword` to throw `FirebaseAuthException` and a general `Exception`) covering empty-field validation, mode toggling, registering and returning, signing in and returning, and error messages. Run your tests, review the generated assertions, and confirm coverage on `lib/screens/auth_screen.dart`, as shown below:
 
 ![AuthScreen widget tests passing with 100% coverage in VS Code](images/9/auth_screen_tests_coverage.png)
 
@@ -764,21 +767,21 @@ In `lib/screens/menu_screen.dart`, import `package:sandwich_shop/widgets/account
       ),
 ```
 
-Because `MenuScreen` now renders `AccountButton` (`watchAuthState()`), set `AuthRepository.instance.setAuth(MockFirebaseAuth())` in `setUp` (and `null` in `tearDown`) inside both `test/screens/menu_screen_test.dart` and `test/main_test.dart` so widget tests stay offline. Ask Copilot to add `test/widgets/account_button_test.dart` (covering **Log In** navigation, duplicate-route guards, unnamed routes, and tapping **Sign Out** when signed in) and update the menu and main tests for **Log In** and `/auth`, then run your tests and check coverage. Your app bar should now look like this:
+Because `MenuScreen` now renders `AccountButton` (`watchAuthState()`), set `AuthRepository.instance.setAuth(MockFirebaseAuth())` in `setUp` (and `null` in `tearDown`) inside both `test/screens/menu_screen_test.dart` and `test/main_test.dart` so widget tests stay offline. Ask Copilot to add `test/widgets/account_button_test.dart` (covering **Log In** navigation, duplicate-route guards, unnamed routes, and tapping **Sign Out** when signed in) and update the menu and main tests for **Log In** and `/auth`, then run your tests and check coverage. Launch the app and your app bar should look like this:
 
 ![MenuScreen app bar with the Log In button](images/9/menu_screen_account_button.png)
 
 ### Test signing up, signing in and signing out
 
-Launch the app in Chrome (`flutter run -d chrome`) or on your Android emulator and select **Log In** in the top-right bar to open `AuthScreen` in sign-in mode:
+With the app running in Chrome (`flutter run -d chrome`) or on your Android emulator, select **Log In** in the top-right bar to open `AuthScreen` in sign-in mode, as shown below:
 
 ![The sign-in form displayed on AuthScreen in Chrome](images/9/auth_screen_sign_in.png)
 
-Select **Need an account? Register** so the heading changes to **Create Account** and the button changes to **Register**. Enter an email address and a password of at least six characters, then select **Register** to create the account and return to `MenuScreen`, where the top-right button now shows **Sign Out**:
+Select **Need an account? Register** so the heading changes to **Create Account** and the button changes to **Register**. Enter an email address and a password of at least six characters, then select **Register** to create the account and return to `MenuScreen`, where the top-right button now shows **Sign Out**, as shown below:
 
 ![MenuScreen app bar showing the Sign Out button after signing in](images/9/menu_screen_sign_out_button.png)
 
-Open your [Firebase dashboard](https://console.firebase.google.com/), go to **Authentication** and select the **Users** tab to confirm your registered email address appears under **Identifier** alongside its **User UID**:
+Open your [Firebase dashboard](https://console.firebase.google.com/), go to **Authentication** and select the **Users** tab to confirm your registered email address appears under **Identifier** alongside its **User UID**, as shown below:
 
 ![Firebase Authentication Users tab showing the registered test account and UID](images/9/firebase_auth_users.png)
 
@@ -786,9 +789,9 @@ Return to the app and select **Sign Out** in the top bar so the button switches 
 
 ### Sign in with an email link or Google
 
-Instead of typing a password every time, customers can also sign in using a one-time link sent to their inbox. Make sure **Email link (passwordless sign-in)** is toggled on under **Authentication > Sign-in method > Email/Password** in your Firebase dashboard, then read the official guide on [authenticating with email links in Flutter](https://firebase.google.com/docs/auth/flutter/email-link-auth) to see how `sendSignInLinkToEmail()`, `isSignInWithEmailLink()`, and `signInWithEmailLink()` work alongside `ActionCodeSettings`. Note that Firebase Dynamic Links is being retired, so mobile deep linking requires a custom domain while web links work straight away on `localhost` and Firebase Hosting.
+Instead of typing a password every time, customers can also sign in using a one-time link sent to their inbox. Make sure **Email link (passwordless sign-in)** is enabled from [Set up user authentication](#set-up-user-authentication), then read the official guide on [authenticating with email links in Flutter](https://firebase.google.com/docs/auth/flutter/email-link-auth) to see how `sendSignInLinkToEmail()`, `isSignInWithEmailLink()`, and `signInWithEmailLink()` work alongside `ActionCodeSettings`. Note that Firebase Dynamic Links is being retired, so mobile deep linking requires a custom domain while web links work straight away on `localhost` and Firebase Hosting.
 
-Because you already enabled the **Google** provider in Firebase, adding Google sign-in only needs a short method in `lib/repositories/auth_repository.dart` (importing `package:flutter/foundation.dart` for `kIsWeb`):
+Because you already enabled the **Google** provider in Firebase, adding Google sign-in only needs a `GoogleAuthProvider` and a short method in `lib/repositories/auth_repository.dart` (importing `package:flutter/foundation.dart` for `kIsWeb`). On web, `signInWithPopup(provider)` opens a Google pop-up window; on Android, `signInWithProvider(provider)` launches the native sign-in flow:
 
 ```dart
   Future<User?> signInWithGoogle({bool isWeb = kIsWeb}) async {
@@ -804,7 +807,7 @@ Because you already enabled the **Google** provider in Firebase, adding Google s
   }
 ```
 
-In `lib/screens/auth_screen.dart`, add a `_signInWithGoogle` handler that calls `AuthRepository.instance.signInWithGoogle()` and pops back to `MenuScreen`, then add an `OutlinedButton.icon` below the email form:
+In `lib/screens/auth_screen.dart`, add a `_signInWithGoogle` handler that calls `AuthRepository.instance.signInWithGoogle()` and pops back to `MenuScreen`, then add an `OutlinedButton.icon` (a bordered button displaying an icon beside its text label) below the email form:
 
 ```dart
             OutlinedButton.icon(
@@ -814,13 +817,13 @@ In `lib/screens/auth_screen.dart`, add a `_signInWithGoogle` handler that calls 
             ),
 ```
 
-Both email-link sign-in (with link completion in `lib/main.dart`) and Google sign-in, along with their tests, are implemented on branch `9` of the Sandwich Shop repository. Check branch `9` to see how both options fit together on `AuthScreen`:
+Both email-link sign-in (with link completion in `lib/main.dart`) and Google sign-in, along with their tests, are implemented on branch `9` of the Sandwich Shop repository. Check branch `9` to see how both options fit together on `AuthScreen`, as shown below:
 
 ![Updated AuthScreen with email link and Google sign-in options in Chrome](images/9/auth_screen_providers.png)
 
 ### Sync settings with the authenticated profile
 
-When a customer signs in, `SettingsScreen` can fill **Full name** and **Email address** directly from their Firebase `User` profile (`displayName` and `email`), and save any updated name back to Firebase Authentication. Add an `updateDisplayName` helper to `AuthRepository` in `lib/repositories/auth_repository.dart`:
+When a customer signs in, `SettingsScreen` (built in [Remembering the customer profile with shared preferences](worksheet-6.md#remembering-the-customer-profile-with-shared-preferences)) can fill **Full name** and **Email address** directly from their Firebase `User` profile (`displayName` and `email`), and save any updated name back to Firebase Authentication. Add an `updateDisplayName` helper to `AuthRepository` in `lib/repositories/auth_repository.dart`:
 
 ```dart
   Future<void> updateDisplayName(String displayName) async {
@@ -835,8 +838,14 @@ Next, open `lib/screens/settings_screen.dart`, import `package:firebase_auth/fir
 
 ```dart
     final User? currentUser = AuthRepository.instance.getCurrentUser();
-    String nameText = savedName ?? '';
-    String emailText = savedEmail ?? '';
+    String nameText = '';
+    if (savedName != null) {
+      nameText = savedName;
+    }
+    String emailText = '';
+    if (savedEmail != null) {
+      emailText = savedEmail;
+    }
     if (currentUser != null) {
       final String? authName = currentUser.displayName;
       if (authName != null && authName.isNotEmpty) {
@@ -849,7 +858,7 @@ Next, open `lib/screens/settings_screen.dart`, import `package:firebase_auth/fir
     }
 ```
 
-Assign `_nameController.text = nameText;` and `_emailController.text = emailText;` in `_loadSettings()`, then call `await AuthRepository.instance.updateDisplayName(name);` inside `_saveSettings()` when `name.isNotEmpty`. Update `test/screens/settings_screen_test.dart` to register `MockFirebaseAuth` in `setUp()` (matching `menu_screen_test.dart`).
+Assign `_nameController.text = nameText;` and `_emailController.text = emailText;` in `_loadSettings()`, then call `await AuthRepository.instance.updateDisplayName(name);` inside `_saveSettings()` when `name.isNotEmpty`. Update `test/screens/settings_screen_test.dart` to register `MockFirebaseAuth` in `setUp()` and `null` in `tearDown()` (matching `menu_screen_test.dart`).
 
 Add tests for pre-filling and saving a signed-in user's name and email, then verify your tests pass and coverage remains high. An example of the settings screen with the signed-in user's details pre-filled is shown below:
 
@@ -861,17 +870,17 @@ With your database ready from [Create a Cloud Firestore database](#create-a-clou
 
 ### Read the menu from Firestore
 
-Keeping the menu in a bundled JSON file meant changing a sandwich name, description or price required releasing an updated app. Moving sandwich details into Cloud Firestore lets the shop update the live menu immediately while keeping the local asset images fast to load.
+Keeping the menu in a bundled JSON file (from [Why we use a bundled asset](worksheet-6.md#why-we-use-a-bundled-asset)) meant changing a sandwich name, description or price required releasing an updated app. Moving sandwich details into Cloud Firestore lets the shop update the live menu immediately while keeping the local asset images fast to load.
 
-Because `Sandwich` in `lib/models/sandwich.dart` already has `fromJson` and `toJson`, each document in the `sandwiches` collection holds the exact same fields (`id`, `name`, `description`, `price`, and `imagePath`), so the model class needs no edits.
+Because `Sandwich` in `lib/models/sandwich.dart` already has `fromJson` and `toJson` (from [Convert a JSON map into a sandwich](worksheet-6.md#convert-a-json-map-into-a-sandwich)), each document in the `sandwiches` collection holds the exact same fields (`id`, `name`, `description`, `price`, and `imagePath`), so the model class needs no edits.
 
-Open `lib/repositories/sandwich_repository.dart`, add the `cloud_firestore` import at the top, and convert `SandwichRepository` into a singleton matching `AuthRepository`:
+Open `lib/repositories/sandwich_repository.dart`, add the `cloud_firestore` import at the top, and convert `SandwichRepository` into a singleton matching [Create the authentication repository](#create-the-authentication-repository):
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 ```
 
-Replace the start of `SandwichRepository` (above `getSandwiches`) with the private constructor, shared `instance`, `_firestore` field, `setFirestore`, `clearCache`, and `firestore` getter:
+Replace the start of `SandwichRepository` (above `getSandwiches`) with the private constructor, shared `instance`, `_firestore` field, `setFirestore`, `clearCache` (to reset `_cachedSandwiches` between tests), and `firestore` getter:
 
 ```dart
   SandwichRepository._internal();
@@ -904,7 +913,7 @@ Below `loadSandwichesFromAsset()` (still inside `SandwichRepository`), create an
   Future<List<Sandwich>> loadSandwichesFromFirestore() async {}
 ```
 
-Before writing the body, it helps to know the three Cloud Firestore types we use here. A `CollectionReference<Map<String, dynamic>>` points to a named collection (such as `'sandwiches'`) whose documents each store key-value pairs (`Map<String, dynamic>`). Calling `.get()` fetches a `QuerySnapshot<Map<String, dynamic>>` containing the list of documents in `snapshot.docs`.
+Before writing the body, it helps to know the two Cloud Firestore types we use here. A `CollectionReference<Map<String, dynamic>>` points to a named collection (such as `'sandwiches'`) whose documents each store key-value pairs (`Map<String, dynamic>`). Calling `.get()` fetches a `QuerySnapshot<Map<String, dynamic>>` containing the list of documents in `snapshot.docs`.
 
 Inside the braces of `loadSandwichesFromFirestore`, get a reference to the `sandwiches` collection and fetch its current documents:
 
@@ -915,7 +924,7 @@ Inside the braces of `loadSandwichesFromFirestore`, get a reference to the `sand
         await sandwichesCollection.get();
 ```
 
-Because the Firestore database we created earlier starts completely empty, `snapshot.docs` will have zero items on the very first run. Below the lines above, add an `if` block that loads the existing menu from `assets/data/sandwiches.json` and writes each item into Firestore once (known as seeding). Calling `sandwichesCollection.doc(sandwich.id)` returns a `DocumentReference<Map<String, dynamic>>` pointing to one document with that ID, and `await sandwichDocument.set(sandwichData)` saves the sandwich's fields there:
+Because the Firestore database we created earlier starts completely empty, `snapshot.docs` will have zero items on the very first run. Below the lines above, add an `if` block that loads the existing menu from `assets/data/sandwiches.json` and seeds Firestore once (similar to [Seed past orders only when creating the database](worksheet-7.md#seed-past-orders-only-when-creating-the-database)). Calling `sandwichesCollection.doc(sandwich.id)` returns a `DocumentReference<Map<String, dynamic>>` pointing to one document with that ID, and `await sandwichDocument.set(sandwichData)` saves the sandwich's fields there:
 
 ```dart
     if (snapshot.docs.isEmpty) {
@@ -945,33 +954,32 @@ On every launch after that, `snapshot.docs` already holds the saved sandwiches. 
     return loadedSandwiches;
 ```
 
-Next, open `lib/screens/menu_screen.dart` and update `_loadSandwiches()` to read from `SandwichRepository.instance` instead of constructing a new `SandwichRepository()`:
+Next, open `lib/screens/menu_screen.dart` and update `_loadSandwiches()` to call `loadSandwichesFromFirestore()` on `SandwichRepository.instance` instead of constructing a new `SandwichRepository()` and calling `loadSandwichesFromAsset()`:
 
 ```dart
       final List<Sandwich> sandwiches =
           await SandwichRepository.instance.loadSandwichesFromFirestore();
 ```
 
-When it comes to testing, using `FakeFirebaseFirestore` allows you to simulate Firestore behaviour without connecting to the real backend. This ensures tests run quickly and consistently, and you can verify that your repository correctly handles seeding, reading, and caching sandwiches.
+To keep Firestore tests fast and offline, install `fake_cloud_firestore` as a development dependency:
 
-Install `fake_cloud_firestore` as a development dependency, then update `test/repositories/sandwich_repository_test.dart`, `test/screens/menu_screen_test.dart`, and `test/main_test.dart` to use `SandwichRepository.instance` with `FakeFirebaseFirestore()` and `clearCache()` in `setUp()`. Remember to add unit tests for the `firestore` fallback, seeding an empty collection, and reading existing documents too.
+```bash
+flutter pub add --dev fake_cloud_firestore
+```
 
-Run the app to seed Firestore automatically on the first load, then open Cloud Firestore in your Firebase dashboard to inspect the new `sandwiches` collection and documents:
+Update `test/repositories/sandwich_repository_test.dart`, `test/screens/menu_screen_test.dart`, and `test/main_test.dart` to use `SandwichRepository.instance` with `FakeFirebaseFirestore()` and `clearCache()` in `setUp()` (resetting to `null` in `tearDown()`), and add unit tests for the `firestore` fallback, seeding an empty collection, and reading existing documents.
+
+Run the app to seed Firestore automatically on the first load, then open **Firestore** in your Firebase dashboard to inspect the new `sandwiches` collection and documents, as shown below:
 
 ![Cloud Firestore dashboard showing the sandwiches collection seeded from the app](images/9/firestore_sandwiches_collection.png)
 
 ### Save user settings in the cloud
 
-In Worksheet 8, settings such as text size were stored locally in `SharedPreferences`, so changing phones or switching to Chrome reset the customer's choices. Replacing `SharedPreferences` with a Firestore document under each user's `uid` ties preferences to the signed-in account and keeps the form blank whenever nobody is signed in.
+In [Adding shared preferences](worksheet-6.md#adding-shared-preferences) and [Working with Copilot](worksheet-8.md#working-with-copilot), profile fields and text size were stored locally in `SharedPreferences`, so changing phones or switching to Chrome reset the customer's choices. Replacing `SharedPreferences` with a Firestore document under each user's `uid` ties preferences to the signed-in account and keeps the form blank whenever nobody is signed in.
 
-First, open `lib/models/user_settings.dart` and add `largeText` (defaulting to `false`) alongside `fromMap` and `toMap` helpers so `UserSettings` converts cleanly to and from Firestore maps, matching `Sandwich`:
+First, open `lib/models/user_settings.dart` (created in [Define the user settings model](worksheet-5.md#define-the-user-settings-model)) and add a `final bool largeText;` field with `this.largeText = false` in the constructor:
 
 ```dart
-class UserSettings {
-  final String name;
-  final String address;
-  final String email;
-  final bool receiveNewsletter;
   final bool largeText;
 
   const UserSettings({
@@ -981,14 +989,37 @@ class UserSettings {
     this.receiveNewsletter = false,
     this.largeText = false,
   });
+```
 
+Add `fromMap` and `toMap` helpers to `UserSettings` (matching `OrderRecord` in [Convert an order into a database row](worksheet-7.md#convert-an-order-into-a-database-row)). Checking each value with Dart's `is` type-test operator (for example `rawName is String`) safely falls back to a default if a field is missing:
+
+```dart
   factory UserSettings.fromMap(Map<String, dynamic> map) {
-    final String name = (map['name'] as String?) ?? '';
-    final String address = (map['address'] as String?) ?? '';
-    final String email = (map['email'] as String?) ?? '';
-    final bool receiveNewsletter =
-        (map['receiveNewsletter'] as bool?) ?? false;
-    final bool largeText = (map['largeText'] as bool?) ?? false;
+    String name = '';
+    final Object? rawName = map['name'];
+    if (rawName is String) {
+      name = rawName;
+    }
+    String address = '';
+    final Object? rawAddress = map['address'];
+    if (rawAddress is String) {
+      address = rawAddress;
+    }
+    String email = '';
+    final Object? rawEmail = map['email'];
+    if (rawEmail is String) {
+      email = rawEmail;
+    }
+    bool receiveNewsletter = false;
+    final Object? rawNewsletter = map['receiveNewsletter'];
+    if (rawNewsletter is bool) {
+      receiveNewsletter = rawNewsletter;
+    }
+    bool largeText = false;
+    final Object? rawLargeText = map['largeText'];
+    if (rawLargeText is bool) {
+      largeText = rawLargeText;
+    }
 
     return UserSettings(
       name: name,
@@ -998,7 +1029,11 @@ class UserSettings {
       largeText: largeText,
     );
   }
+```
 
+Below `fromMap`, add `toMap()` to convert a `UserSettings` object into a Firestore map:
+
+```dart
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{
       'name': name,
@@ -1009,10 +1044,9 @@ class UserSettings {
     };
     return data;
   }
-}
 ```
 
-Create a new file named `lib/repositories/settings_repository.dart` with the imports and an empty `SettingsRepository` class shell:
+Create a new file named `lib/repositories/settings_repository.dart` with the imports and an empty `SettingsRepository` class shell, then add the same singleton and `_firestore` test hook you used in [Read the menu from Firestore](#read-the-menu-from-firestore):
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -1021,29 +1055,7 @@ import 'package:sandwich_shop/models/user_settings.dart';
 class SettingsRepository {}
 ```
 
-Inside the braces of `SettingsRepository`, add the same singleton and configurable `_firestore` test hook we used in `SandwichRepository`:
-
-```dart
-  SettingsRepository._internal();
-
-  static final SettingsRepository instance = SettingsRepository._internal();
-
-  FirebaseFirestore? _firestore;
-
-  void setFirestore(FirebaseFirestore? firestore) {
-    _firestore = firestore;
-  }
-
-  FirebaseFirestore get firestore {
-    final FirebaseFirestore? existingFirestore = _firestore;
-    if (existingFirestore != null) {
-      return existingFirestore;
-    }
-    return FirebaseFirestore.instance;
-  }
-```
-
-Below the `firestore` getter, add an empty `loadSettings` method and an empty `saveSettings` method:
+Below the `firestore` getter, add empty `loadSettings` and `saveSettings` methods:
 
 ```dart
   Future<UserSettings?> loadSettings(String userId) async {}
@@ -1079,10 +1091,11 @@ Inside the braces of `saveSettings`, write the settings map to `users/<uid>` usi
     await userDocument.set(settingsData);
 ```
 
-Now open `lib/screens/settings_screen.dart`, remove the `shared_preferences` import and `pref*` key constants, and import `package:sandwich_shop/repositories/settings_repository.dart`. Replace `_loadSettings()` so the form stays blank when nobody is signed in (`currentUser == null`) and loads `users/<uid>` from Firestore (falling back to `currentUser.displayName` and `currentUser.email` if empty) when a customer is signed in:
+Now open `lib/screens/settings_screen.dart`, remove the `shared_preferences` import and `pref*` key constants, and import `package:sandwich_shop/repositories/settings_repository.dart`. If you built your own text-size toggle in [Worksheet 8](worksheet-8.md#working-with-copilot), adapt the names of `_largeText` and the `onLargeTextChanged` (`ValueChanged<bool>?`) callback below to match your project.
+
+Replace `_loadSettings()` in two steps. First, when nobody is signed in (`currentUser == null`), clear every field to blank and return early:
 
 ```dart
-  Future<void> _loadSettings() async {
     final User? currentUser = AuthRepository.instance.getCurrentUser();
     if (currentUser == null) {
       setState(() {
@@ -1096,7 +1109,11 @@ Now open `lib/screens/settings_screen.dart`, remove the `shared_preferences` imp
       });
       return;
     }
+```
 
+Directly below that `if` block (still inside `_loadSettings`), load `users/<uid>` from Firestore, fall back to `currentUser.displayName` and `currentUser.email` if those fields are empty, update the form inside `setState`, and notify `widget.onLargeTextChanged`:
+
+```dart
     String nameText = '';
     String addressText = '';
     String emailText = '';
@@ -1135,7 +1152,6 @@ Now open `lib/screens/settings_screen.dart`, remove the `shared_preferences` imp
     if (onChanged != null) {
       onChanged(largeTextValue);
     }
-  }
 ```
 
 Replace `_saveSettings()` so signed-out visitors are prompted to log in while signed-in customers save their `UserSettings` (including `largeText`) directly to Firestore and update `displayName`:
@@ -1176,15 +1192,17 @@ Replace `_saveSettings()` so signed-out visitors are prompted to log in while si
   }
 ```
 
-Finally, open `lib/main.dart` so signing in loads the customer's saved `largeText` preference across the app and signing out resets `_largeText` to `false`. Remove `_loadTextSize()`, import `dart:async`, `package:firebase_auth/firebase_auth.dart`, `package:sandwich_shop/models/user_settings.dart`, and `package:sandwich_shop/repositories/settings_repository.dart`, declare `StreamSubscription<User?>? _authSubscription;` (a listener handle returned by `.listen(...)`) in `_AppState`, subscribe to `AuthRepository.instance.watchAuthState()` inside `initState()`, and cancel `_authSubscription` inside `dispose()`:
+Finally, open `lib/main.dart` so signing in loads the customer's saved `largeText` preference across the app and signing out resets `_largeText` to `false`. Import `dart:async`, `package:firebase_auth/firebase_auth.dart`, `package:sandwich_shop/models/user_settings.dart`, and `package:sandwich_shop/repositories/settings_repository.dart`, and remove your local `_loadTextSize()` method from Worksheet 8.
+
+In `_AppState`, declare `StreamSubscription<User?>? _authSubscription;` (the listener handle returned when you subscribe to a `Stream`). Inside `initState()`, check `getCurrentUser()` immediately and subscribe to `watchAuthState()`:
 
 ```dart
     final User? currentUser = AuthRepository.instance.getCurrentUser();
     if (currentUser != null) {
       _loadCloudTextSize(currentUser.uid);
     }
-    _authSubscription =
-        AuthRepository.instance.watchAuthState().listen((User? user) {
+    final Stream<User?> authStream = AuthRepository.instance.watchAuthState();
+    _authSubscription = authStream.listen((User? user) {
       if (user != null) {
         _loadCloudTextSize(user.uid);
       } else {
@@ -1193,6 +1211,19 @@ Finally, open `lib/main.dart` so signing in loads the customer's saved `largeTex
         });
       }
     });
+```
+
+Override `dispose()` in `_AppState` so the subscription closes cleanly when the widget is removed:
+
+```dart
+  @override
+  void dispose() {
+    final StreamSubscription<User?>? subscription = _authSubscription;
+    if (subscription != null) {
+      subscription.cancel();
+    }
+    super.dispose();
+  }
 ```
 
 Add `_loadCloudTextSize(String userId)` to `_AppState` so accounts without a saved document yet default `_largeText` to `false`:
@@ -1234,11 +1265,11 @@ Open `SettingsScreen` again to confirm that your saved details and **Bigger text
 
 ### Store and read orders
 
-Until now, order history lived in a local SQLite database that could not follow a customer to another device or work in a web browser. Storing each customer's orders in an `orders` subcollection under `users/<uid>/orders` replaces SQLite and keeps past purchases tied to the signed-in account.
+Moving order history into an `orders` subcollection under `users/<uid>/orders` replaces local SQLite (addressing the browser and device limits from [Why apps use the cloud](#why-apps-use-the-cloud)) and keeps past purchases tied to the signed-in account.
 
 Visitors can still browse the public menu on `MenuScreen` and add sandwiches to the temporary in-memory basket (`CartRepository`) from `OrderScreen` without signing in. However, `BasketScreen` should block **Checkout** while signed out (preserving the basket and offering a **Log In** button), `OrdersScreen` should require signing in before loading past purchases, and signing out should clear the in-memory basket so leftover items never appear for the next person on the same device.
 
-Instead of SQLite's separate `order_items` table with foreign keys, each Firestore order document embeds its line items directly in an `items` list so one write saves the whole order and one query reads it back. Open `lib/models/order_item.dart`, update `fromMap` to accept `Map<String, dynamic>`, and replace `toMap(int orderId)` with a parameterless `toMap()` that omits SQLite's `order_id`:
+Instead of SQLite's separate `order_items` table with foreign keys (from [Order items table](worksheet-8.md#order-items-table)), each Firestore order document embeds its line items directly in an `items` list so one write saves the whole order and one query reads it back. Open `lib/models/order_item.dart`, update `fromMap` to accept `Map<String, dynamic>`, and replace `toMap(int orderId)` with a parameterless `toMap()` that omits SQLite's `order_id`:
 
 ```dart
   Map<String, dynamic> toMap() {
@@ -1252,7 +1283,7 @@ Instead of SQLite's separate `order_items` table with foreign keys, each Firesto
   }
 ```
 
-Next, open `lib/models/order_record.dart` and change `id` from `int?` to `String?` because Firestore document IDs are strings. Update `toMap()` to convert each `OrderItem` into a map and store the list under `'items'`:
+Next, open `lib/models/order_record.dart` (created in [Representing a saved order](worksheet-7.md#representing-a-saved-order)) and change `id` from `int?` to `String?` because Firestore document IDs are strings. Update `toMap()` to convert each `OrderItem` into a map and store the list under `'items'`:
 
 ```dart
   Map<String, dynamic> toMap() {
@@ -1272,7 +1303,7 @@ Next, open `lib/models/order_record.dart` and change `id` from `int?` to `String
   }
 ```
 
-In `OrderRecord.fromMap(Map<String, dynamic> map, {String? id})`, replace the `items` parameter with the optional document `id` and read `'items'` from the Firestore map. Checking `rawItem is Map` and copying with `Map<String, dynamic>.from(rawItem)` avoids type mismatches on both Android and Flutter Web:
+In `OrderRecord.fromMap(Map<String, dynamic> map, {String? id})`, replace the `items` parameter with the optional document `id` and read `'items'` from the Firestore map. Using `Map<String, dynamic>.from(rawItem)` creates a typed copy of each map entry, avoiding type mismatches between Android and Flutter Web:
 
 ```dart
     final List<OrderItem> parsedItems = <OrderItem>[];
@@ -1288,7 +1319,7 @@ In `OrderRecord.fromMap(Map<String, dynamic> map, {String? id})`, replace the `i
     }
 ```
 
-Create a new file named `lib/repositories/order_repository.dart` with the imports and an empty `OrderRepository` class shell, then add the same singleton and `_firestore` test hook you used in `SettingsRepository`:
+Create a new file named `lib/repositories/order_repository.dart` with the imports and an empty `OrderRepository` class shell, then add the same singleton and `_firestore` test hook you used in [Read the menu from Firestore](#read-the-menu-from-firestore):
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -1309,7 +1340,7 @@ Calling `.collection('orders')` on a `DocumentReference` (`users/<userId>`) open
   }
 ```
 
-Because each customer places many orders, `insertOrder` calls `.add(orderData)` instead of `.doc(...).set(...)` so Firestore generates a unique document ID automatically and returns its `DocumentReference`. Add `insertOrder` below `_ordersCollection`:
+Because each customer places many orders, `insertOrder` calls `.add(orderData)` instead of `.doc(...).set(...)` so Firestore generates a unique document ID automatically and returns its `DocumentReference` (replacing SQLite's `insertOrder` from [Insert an order and read saved orders](worksheet-7.md#insert-an-order-and-read-saved-orders)). Add `insertOrder` below `_ordersCollection`:
 
 ```dart
   Future<String> insertOrder(String userId, OrderRecord order) async {
@@ -1345,7 +1376,7 @@ Calling `orderBy('order_number', descending: true)` on a collection returns a `Q
   }
 ```
 
-Add `getNextOrderNumber`, calling `limit(1)` on the sorted `Query` so Firestore returns only the single highest order number rather than downloading every past order. Accounts with no orders yet start at `1001`:
+Add `getNextOrderNumber` (replacing the SQLite version in [Find the next order number and close the connection](worksheet-7.md#find-the-next-order-number-and-close-the-connection)), calling `limit(1)` on the sorted `Query` so Firestore returns only the single highest order number rather than downloading every past order. Accounts with no orders yet start at `1001`:
 
 ```dart
   Future<int> getNextOrderNumber(String userId) async {
@@ -1380,7 +1411,7 @@ Open `lib/repositories/auth_repository.dart`, import `package:sandwich_shop/repo
   }
 ```
 
-Now open `lib/screens/basket_screen.dart` and replace the `sandwich_db.dart` import with `firebase_auth.dart`, `auth_repository.dart`, and `order_repository.dart`. At the top of `_checkout()`, stop when nobody is signed in so the basket stays intact:
+Now open `lib/screens/basket_screen.dart` (from [Saving the basket at checkout](worksheet-7.md#saving-the-basket-at-checkout)) and replace the `sandwich_db.dart` import with `firebase_auth.dart`, `auth_repository.dart`, and `order_repository.dart`. At the top of `_checkout()`, stop when nobody is signed in so the basket stays intact:
 
 ```dart
     final User? currentUser = AuthRepository.instance.getCurrentUser();
@@ -1408,7 +1439,7 @@ Inside the `try` block of `_checkout()`, swap `SandwichDatabase.instance` for `O
       await orderRepository.insertOrder(currentUser.uid, record);
 ```
 
-Inside `_buildBasketList()`, directly below the `_confirmationMessage` `Text` widget, add a **Log In** button when nobody is signed in so the visitor can sign in and return with their basket preserved:
+Inside `_buildBasketList()`, directly below the `_confirmationMessage` `Text` widget, add a **Log In** button when nobody is signed in so the visitor can sign in and return with their basket preserved. Using `await Navigator.pushNamed(context, '/auth')` pauses until `AuthScreen` calls `Navigator.pop(context)`, then clears the warning message:
 
 ```dart
       if (AuthRepository.instance.getCurrentUser() == null) {
@@ -1429,7 +1460,7 @@ Inside `_buildBasketList()`, directly below the `_confirmationMessage` `Text` wi
       }
 ```
 
-Next, open `lib/screens/orders_screen.dart`, replace the `sandwich_db.dart` import with `firebase_auth.dart`, `auth_repository.dart`, `order_repository.dart`, and `primary_button.dart`, and add `bool _signedIn = true;` to `_OrdersScreenState`. At the start of `_loadOrders()`, check whether anyone is signed in before querying Firestore:
+Next, open `lib/screens/orders_screen.dart` (from [Displaying saved orders](worksheet-7.md#displaying-saved-orders)), replace the `sandwich_db.dart` import with `firebase_auth.dart`, `auth_repository.dart`, `order_repository.dart`, and `primary_button.dart`, and add `bool _signedIn = true;` to `_OrdersScreenState`. At the start of `_loadOrders()`, check whether anyone is signed in before querying Firestore:
 
 ```dart
     final User? currentUser = AuthRepository.instance.getCurrentUser();
@@ -1444,7 +1475,7 @@ Next, open `lib/screens/orders_screen.dart`, replace the `sandwich_db.dart` impo
     }
 ```
 
-Directly below that `if` block, reset the loading state and read the signed-in customer's orders from `OrderRepository.instance` inside the `try` block:
+Directly below that `if` block, reset the loading state before the `try` block:
 
 ```dart
     setState(() {
@@ -1454,12 +1485,15 @@ Directly below that `if` block, reset the loading state and read the signed-in c
     });
 ```
 
+Inside the `try` block of `_loadOrders()`, replace `SandwichDatabase.instance.getAllOrders()` with `OrderRepository.instance`:
+
 ```dart
+      final OrderRepository orderRepository = OrderRepository.instance;
       final List<OrderRecord> orders =
-          await OrderRepository.instance.getAllOrders(currentUser.uid);
+          await orderRepository.getAllOrders(currentUser.uid);
 ```
 
-Add a `_buildSignedOutState()` helper in `_OrdersScreenState` that prompts the visitor to log in and reloads orders when they return from `/auth`, then handle `else if (!_signedIn)` right after `if (_loading)` in `build()` by setting `body = _buildSignedOutState();`:
+Add a `_buildSignedOutState()` helper in `_OrdersScreenState` that prompts the visitor to log in and reloads orders once `AuthScreen` pops, then handle `else if (!_signedIn)` right after `if (_loading)` in `build()` by setting `body` to `_buildSignedOutState()`:
 
 ```dart
   Widget _buildSignedOutState() {
@@ -1497,17 +1531,23 @@ Because SQLite is no longer used anywhere in the app, delete `lib/database/sandw
 flutter pub remove sqflite path sqflite_common_ffi
 ```
 
-Update `test/models/order_item_test.dart`, `test/models/order_record_test.dart`, `test/repositories/auth_repository_test.dart`, `test/screens/basket_screen_test.dart`, `test/screens/orders_screen_test.dart`, and `test/main_test.dart` to use `FakeFirebaseFirestore()` and `MockFirebaseAuth` in place of SQLite, and add `test/repositories/order_repository_test.dart` covering per-user order numbering, newest-first sorting, and signed-out guards.
+Update `test/models/order_item_test.dart`, `test/models/order_record_test.dart`, `test/repositories/auth_repository_test.dart`, `test/screens/basket_screen_test.dart`, `test/screens/orders_screen_test.dart`, and `test/main_test.dart` to use `FakeFirebaseFirestore()` and `MockFirebaseAuth` in place of SQLite. Then add `test/repositories/order_repository_test.dart` covering per-user order numbering, newest-first sorting, and signed-out guards.
 
-Run the app, add sandwiches to the basket, and test checking out while signed out (confirming the login prompt keeps your basket intact) and while signed in (confirming the saved order appears on `OrdersScreen` and under `users/<uid>/orders` in Cloud Firestore).
+Run the app, add sandwiches to the basket, and test checking out while signed out so `BasketScreen` keeps your basket intact and displays the login prompt, as shown below:
 
-<!-- TODO: Done till here -->
+![Basket screen while signed out showing the login prompt below the Checkout button](images/9/basket_signed_out_checkout.png)
+
+Open `OrdersScreen` while signed out to confirm that it prompts you to sign in instead of querying Cloud Firestore, as shown below:
+
+![Orders screen while signed out showing the login prompt and Log In button](images/9/orders_signed_out.png)
+
+Sign in, complete checkout, and verify that the saved order appears on `OrdersScreen` and under `users/<uid>/orders` in Cloud Firestore.
 
 ### Protect user data with security rules
 
-Inside the Flutter interface, one customer cannot open another customer's profile or orders because every query uses `currentUser.uid`. Outside the app, however, `firebase_options.dart` is bundled into the browser code, so while Cloud Firestore stays in test mode anyone with your project details can read, overwrite, or delete documents in `users/` directly through the Firestore API. Test mode also expires automatically after 30 days, after which Firestore rejects every read and write and breaks the live app.
+Inside the Flutter interface, one customer cannot open another customer's profile or orders because every query uses `currentUser.uid`. However, as noted in [Connect the Flutter app](#connect-the-flutter-app) and [Create a Cloud Firestore database](#create-a-cloud-firestore-database), `firebase_options.dart` is visible in the web bundle and test mode expires after 30 days, so leaving open rules lets anyone call the Firestore API directly until the database locks down.
 
-Before publishing the app online, open your Firebase dashboard, go to **Cloud Firestore > Rules**, replace the temporary test-mode rules with the rules below, and select **Publish**:
+Before publishing the app online, open your Firebase dashboard, select **Firestore** in the left sidebar (under **Project shortcuts** or **Databases and storage**), open the **Rules** tab, replace the temporary test-mode rules with the rules below, and select **Publish**:
 
 ```text
 rules_version = '2';
@@ -1527,7 +1567,13 @@ service cloud.firestore {
 }
 ```
 
-These rules let any visitor read the public `sandwiches` menu while blocking writes from the app (now that the menu is already seeded), and restrict both `users/<uid>` and `users/<uid>/orders` so only a signed-in user whose `uid` matches `userId` can read or change their own data.
+Your rules editor should look like this before you select **Publish**:
+
+![Cloud Firestore Rules tab showing the updated security rules ready to publish](images/9/updated_firestore_rules.png)
+
+Here `request.auth` holds the signed-in user's details (or `null` when signed out). These rules let any visitor read the public `sandwiches` menu while blocking writes from the app (now that the menu is already seeded), and restrict both `users/<uid>` and `users/<uid>/orders` so only a signed-in user whose `uid` matches `userId` can read or change their own data.
+
+<!-- TODO: Done till here -->
 
 ## Publish the web app
 
