@@ -1,24 +1,25 @@
 # Sandwich Shop
 
-A Flutter app for browsing a small menu, adding items to a basket, and saving completed orders. The app is set up for Android only.
+A Flutter app for browsing a cloud-backed menu, signing in with Firebase Authentication, adding items to a basket, and saving settings and completed orders in Cloud Firestore. The app is set up for Android and web, and is hosted live at [sandwich-shop-59811.web.app](https://sandwich-shop-59811.web.app).
 
 ## Features
 
-- Browse sandwiches and loaded nachos from the bundled menu.
-- Adjust quantities, review the basket total, and check out.
-- View saved orders. Orders are stored locally in SQLite; the basket is held in memory.
-- Save customer profile details and preferences on the device, including a bigger-text setting.
+- Browse sandwiches and loaded nachos loaded from Cloud Firestore (`sandwiches`).
+- Register, sign in, and sign out with Email/Password, email links, or Google via Firebase Authentication.
+- Adjust quantities, review the basket total, and check out when signed in (the basket is held in memory and cleared on sign-out).
+- View saved orders stored per user in Cloud Firestore (`users/<uid>/orders`).
+- Save customer profile details and preferences per user in Cloud Firestore (`users/<uid>`), including a bigger-text setting that syncs across devices.
 
 ## Platform
 
-The app runs on Android only, because it saves orders in a SQLite database file on the device. Use an Android emulator or a physical Android device. Running it in a browser or on a desktop is not supported.
+The app runs on Android and web (Chrome or Edge). Other desktop or Apple targets require adding platform runners and re-running `flutterfire configure`.
 
 ## Getting started
 
 ### Prerequisites
 
-- [Flutter](https://docs.flutter.dev/get-started/install) with the Android toolchain set up.
-- An Android emulator or device.
+- [Flutter](https://docs.flutter.dev/get-started/install) with Chrome/Edge and/or the Android toolchain set up.
+- [Firebase CLI](https://firebase.google.com/docs/cli) and FlutterFire CLI (`flutterfire`) if connecting your own Firebase project.
 - Git.
 
 ### Clone
@@ -26,7 +27,7 @@ The app runs on Android only, because it saves orders in a SQLite database file 
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
 cd sandwich_shop
-git checkout 8
+git switch 9
 ```
 
 ### Install dependencies
@@ -37,10 +38,19 @@ flutter pub get
 
 ### Run
 
-Start an Android emulator or connect a device, then run:
+Start Chrome or an Android emulator, then run:
 
 ```bash
-flutter run
+flutter run -d chrome
+```
+
+Or run `flutter run` with an Android emulator selected.
+
+### Deploy to Firebase Hosting
+
+```bash
+flutter build web
+firebase deploy --only hosting
 ```
 
 ## Tests
@@ -51,17 +61,16 @@ Run the automated unit and widget tests with:
 flutter test
 ```
 
-These tests use in-memory and temporary file-backed SQLite databases and do not require an Android emulator. Running the app itself does require an Android emulator or device.
+These tests use `MockFirebaseAuth` and `FakeFirebaseFirestore` so they run offline without connecting to live Firebase servers.
 
 To measure test coverage, run `flutter test --coverage`. The report is written to `coverage/lcov.info`.
 
 ## Project structure
 
-- `lib/models/` holds the data classes, such as `Sandwich`, `OrderRecord` and `UserSettings`.
-- `lib/repositories/` holds the menu and the in-memory basket.
-- `lib/database/` holds the SQLite database for saved orders.
-- `lib/screens/` holds the menu, basket, orders and settings screens.
-- `lib/widgets/` holds the reusable buttons and the sandwich card.
+- `lib/models/` holds the data classes: `Sandwich`, `CartItem`, `OrderItem`, `OrderRecord` and `UserSettings`.
+- `lib/repositories/` holds `AuthRepository`, `CartRepository`, `OrderRepository`, `SandwichRepository` and `SettingsRepository`.
+- `lib/screens/` holds `MenuScreen`, `OrderScreen`, `BasketScreen`, `OrdersScreen`, `SettingsScreen` and `AuthScreen`.
+- `lib/widgets/` holds reusable buttons (`AccountButton`, `BasketButton`, `OrdersButton`, `SettingsButton`, `PrimaryButton`) and `SandwichCard`.
 - `test/` mirrors the folders in `lib/`.
 
 ## Screenshots
