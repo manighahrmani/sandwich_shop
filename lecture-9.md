@@ -18,14 +18,14 @@ Lecture 9:
 
 Got tech news? Share it on Discord.
 
-- Set up UK job alerts on [Gradcracker](https://www.gradcracker.com), [RateMyPlacement](https://www.ratemyplacement.co.uk), [LinkedIn Jobs](https://www.linkedin.com/jobs) and [MyCareer](https://mycareer.port.ac.uk).
-- Filter with terms such as `placement`, `industrial year` or `graduate` and route alerts into one folder or label.
-- Browse curated UK and European student openings on [EarlyCareersEU](https://github.com/LorenzoLaCorte/european-tech-internships-2026).
+- Set up free UK job alerts on [Gradcracker](https://www.gradcracker.com), [Higherin](https://higherin.com), [LinkedIn Jobs](https://www.linkedin.com/jobs) and [MyCareer](https://mycareer.port.ac.uk).
+- Filter by role type (placement, industrial year or graduate) or follow target employers, and route alert emails into one folder or label.
 
 ### Speaker notes
 
-- EarlyCareersEU (915 stars, maintained since 2023) is a community list of internships and graduate schemes with no sign-in or account required.
-- Putting all job alerts into one email label now prepares for the cloud automation workflow on the next slides.
+- Higherin is the rebranded name for RateMyPlacement (links to `ratemyplacement.co.uk` redirect there).
+- Alert styles differ by site: Gradcracker notifies you when employers you follow open roles (filtered by discipline and role type) alongside a weekly digest, while Higherin, LinkedIn Jobs (up to 20 active alerts on a free account) and MyCareer support saved-search email alerts.
+- Register external job boards with your personal Gmail so alerts land in one label ready for the cloud automation workflow on the next slides; MyCareer alerts go to your `@myport.ac.uk` inbox unless forwarded.
 
 ---
 
@@ -111,30 +111,21 @@ Start with a personal account so university IT restrictions do not block your sc
 
 - Local JSON files and SQLite stay trapped on one phone or browser.
 - Cloud services store shared data and user accounts on remote servers.
-- Live catalogue updates reach every user without shipping a new app release.
-- Customers keep their settings and booking history across Android and the web.
+- Servers (which are computers hosting your app) serve live data that updates and reaches every user without shipping a new app release.
+- Users keep their data on the server and consume it across their client applications.
 - Managed cloud services remove the need to buy, patch or maintain servers yourself.
-
-### Speaker notes
-
-- Bridge from personal job-hunt scripts to multi-user apps: our Sandwich Shop and Southsea Cinema apps have multiple customers, so data must move off a single device onto a shared cloud backend.
 
 ---
 
 ## Cloud providers and services — choosing a provider
 
-- [Firebase](https://firebase.google.com/pricing) (Google): fastest Flutter setup; free Spark plan (no card) covers auth, database and web hosting.
-- [Microsoft Azure](https://azure.microsoft.com/free/students): strong for web APIs, `.NET` and AI; [Azure for Students](https://azure.microsoft.com/free/students) gives $100/year free credit with no card.
+- [Firebase](https://firebase.google.com/pricing) (Google): fastest Flutter setup; the free Spark plan (no card) covers Authentication, Cloud Firestore and Hosting (Cloud Functions requires pay-as-you-go Blaze).
+- [Microsoft Azure](https://azure.microsoft.com/free/students): strong for web APIs, `.NET` and AI; [Azure for Students](https://azure.microsoft.com/free/students) verifies with a `.ac.uk` email and gives $100/year free credit with no card (services stop if credit runs out).
 - [Amazon AWS](https://aws.amazon.com/free): broadest enterprise cloud platform; free tier available (card required).
 - [Supabase](https://supabase.com): open-source PostgreSQL backend with a free tier; suits relational SQL apps.
+- Students can also claim partner cloud credits and free tools through the [GitHub Student Developer Pack](https://education.github.com/pack).
 
 Match the provider to the project: Flutter mobile and web suits Firebase; relational SQL suits Supabase; Microsoft and AI stacks suit Azure.
-
-### Speaker notes
-
-- Firebase Spark needs no credit card for Authentication, Cloud Firestore and Hosting (Cloud Functions requires upgrading to pay-as-you-go Blaze, so Worksheet 9 stays strictly on Spark).
-- Azure for Students verifies with a `.ac.uk` email, needs no card, renews each year, and stops services if the $100 credit runs out so you never get a surprise bill.
-- Remind students about the [GitHub Student Developer Pack](https://education.github.com/pack) for free GitHub Copilot Student access and partner cloud credits.
 
 ---
 
@@ -142,79 +133,120 @@ Match the provider to the project: Flutter mobile and web suits Firebase; relati
 
 Every cloud provider offers the same core services under different names:
 
-| What your app needs | Firebase | Azure | AWS | Supabase |
-| --- | --- | --- | --- | --- |
-| User sign-in | Authentication | Microsoft Entra | Cognito | Auth |
-| Database | Cloud Firestore | Cosmos DB / SQL | DynamoDB / RDS | PostgreSQL |
-| Web hosting | Hosting | Static Web Apps | Amplify / S3 | External host |
-| File storage | Cloud Storage | Blob Storage | S3 | Storage |
-| Serverless code | Cloud Functions | Azure Functions | Lambda | Edge Functions |
+| What your app needs | Firebase        | Azure           | AWS            | Supabase       |
+| ------------------- | --------------- | --------------- | -------------- | -------------- |
+| User sign-in        | Authentication  | Microsoft Entra | Cognito        | Auth           |
+| Database            | Cloud Firestore | Cosmos DB / SQL | DynamoDB / RDS | PostgreSQL     |
+| Web hosting         | Hosting         | Static Web Apps | Amplify / S3   | External host  |
+| File storage        | Cloud Storage   | Blob Storage    | S3             | Storage        |
+| Serverless code     | Cloud Functions | Azure Functions | Lambda         | Edge Functions |
 
-### Speaker notes
-
-- Point out that moving between providers mostly changes names and SDK syntax, not the underlying ideas of auth, databases, object storage and hosting.
+Moving between providers mostly changes service names and SDK syntax, not the underlying ideas of sign-in, databases, storage and hosting.
 
 ---
 
-## Firebase in Flutter — setup and authentication
+## Firebase in Flutter — setup
 
-- Re-enable web alongside Android (`flutter create --platforms=web .`) and link the project with `flutterfire configure`.
+- Install the Firebase packages:
+
+```bash
+flutter pub add firebase_core firebase_auth cloud_firestore
+```
+
+- Link your Flutter project to a Firebase project with `flutterfire configure` (this generates `lib/firebase_options.dart`).
 - Initialise Firebase before `runApp` in `lib/main.dart`:
 
 ```dart
-WidgetsFlutterBinding.ensureInitialized();
-await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
 ```
 
-- Firebase Authentication gives every signed-in customer a unique `uid` (email/password, email link or Google).
-- A `StreamBuilder` listening to `authStateChanges()` updates the UI immediately on login or logout.
-
-### Speaker notes
-
-- Emphasise calling `WidgetsFlutterBinding.ensureInitialized()` before `await Firebase.initializeApp(...)` so Flutter platform channels are ready before `runApp`.
-- Explain why `StreamBuilder` over `authStateChanges()` is cleaner than checking `currentUser` once: sign-in, sign-out and session persistence trigger UI rebuilds automatically.
+- `WidgetsFlutterBinding.ensureInitialized()` prepares Flutter's platform bindings before calling async native code.
+- More detail: [Get started with Firebase in your Flutter project](https://firebase.google.com/docs/flutter/setup)
 
 ---
 
-## Firebase in Flutter — Cloud Firestore and security rules
+## Firebase in Flutter — authentication
 
-- Cloud Firestore stores data as collections (like tables) of JSON-like documents (like rows).
-- Public items live in a shared collection; private settings and orders live under `users/<uid>`.
-- Replace temporary test-mode rules with server-side security rules before publishing:
+- Firebase Authentication manages user accounts and gives every signed-in user a unique `uid`.
+- Common sign-in options include email and password, email link and Google sign-in.
+- Sign in asynchronously through `FirebaseAuth.instance`:
+
+```dart
+await FirebaseAuth.instance.signInWithEmailAndPassword(
+  email: email,
+  password: password,
+);
+```
+
+- A `StreamBuilder<User?>` listening to `FirebaseAuth.instance.authStateChanges()` rebuilds automatically whenever a user signs in or signs out.
+- Show a sign-in screen when `snapshot.data == null`, and the home screen when a `User` is present.
+- More detail: [Get started with Firebase Authentication on Flutter](https://firebase.google.com/docs/auth/flutter/start)
+
+---
+
+## Firebase in Flutter — Cloud Firestore
+
+- Cloud Firestore is a NoSQL document database: data is organised into collections (like tables) of JSON-like documents (like rows).
+- Shared public data lives in a top-level collection (such as `announcements`); private per-user data lives under `users/<uid>` (such as `users/<uid>/notes`).
+- Store and read documents as `Map<String, Object?>` (much like JSON maps):
+
+```dart
+final FirebaseFirestore db = FirebaseFirestore.instance;
+await db.collection('users').doc(uid).collection('notes').add(
+  <String, Object?>{'title': 'First note', 'done': false},
+);
+```
+
+- Calling `.snapshots()` instead of `.get()` returns a stream that updates the UI live whenever data changes on the server.
+- More detail: [Get started with Cloud Firestore](https://firebase.google.com/docs/firestore/quickstart)
+
+---
+
+## Firebase in Flutter — security rules
+
+- Client API keys in `firebase_options.dart` only identify your Firebase project; they are public by design.
+- Access control lives on the server in Firestore Security Rules; replace temporary test-mode rules before publishing:
 
 ```text
-match /users/{userId} {
+match /announcements/{docId} {
+  allow read: if true;
+  allow write: if false;
+}
+match /users/{userId}/{document=**} {
   allow read, write: if request.auth != null && request.auth.uid == userId;
 }
 ```
 
-- Client API keys in `firebase_options.dart` identify your project; authentication and security rules protect user data.
-
-### Speaker notes
-
-- Remind students that client-side Firebase keys in `firebase_options.dart` are public by design so the app knows which project to call; access control lives strictly in Firestore Security Rules on the server.
-- Show how `users/<uid>/bookings` replaces local SQLite while public items stay read-only (`allow write: if false;`) and editable live from the Firebase web UI.
+- Anyone can read `announcements`, while edits happen only from the Firebase web dashboard.
+- Only a signed-in user whose `request.auth.uid` matches `{userId}` can read or write documents under `users/<uid>`.
+- More detail: [Get started with Cloud Firestore Security Rules](https://firebase.google.com/docs/firestore/security/get-started)
 
 ---
 
 ## Firebase in Flutter — offline testing and hosting
 
-- Automated tests never contact live Firebase servers:
-  - `firebase_auth_mocks` simulates sign-in, sign-out and auth streams in memory.
-  - `fake_cloud_firestore` simulates collections, documents and queries offline.
-- Publish the web app free on the Spark plan:
+- Automated tests should stay fast, repeatable and offline, without contacting live Firebase servers.
+- Install mock packages as dev dependencies:
+
+```bash
+flutter pub add --dev firebase_auth_mocks fake_cloud_firestore
+```
+
+- `MockFirebaseAuth` simulates sign-in, sign-out and auth streams in memory; `FakeFirebaseFirestore` simulates collections, documents and queries in memory.
+- Publish a static web build for free on Firebase Hosting (Spark plan) to get a live `.web.app` URL:
 
 ```bash
 flutter build web
 firebase deploy --only hosting
 ```
 
-- Learn more: [Firebase for Flutter documentation](https://firebase.flutter.dev/)
-
-### Speaker notes
-
-- Connect back to Lecture 7 and 8: just as `sqflite_common_ffi` keeps SQLite tests fast and offline, `firebase_auth_mocks` and `fake_cloud_firestore` run every test in milliseconds with zero network calls.
-- Remind students that `flutter build web` produces static files uploaded by `firebase deploy --only hosting`, giving a live `.web.app` link for their portfolio and Demo 5.
+- More detail: [Firebase for Flutter documentation](https://firebase.flutter.dev/)
 
 ---
 
@@ -238,34 +270,36 @@ Give us your feedback, comments, criticisms, or insults by filling out the follo
 
 ## Live demo guide (for the lecturer)
 
-Run this live during the lecture using the Sandwich Shop repository starting from branch `8`.
+Run this live during the lecture using a self-contained minimal `cloud_notes` Flutter app created from scratch.
 
 ### Setup
 
-1. Open VS Code on branch `8`:
+1. Create a fresh Flutter app and add the Firebase packages:
 
     ```bash
-    git checkout 8
-    flutter pub get
-    flutter test
+    flutter create cloud_notes
+    cd cloud_notes
+    flutter pub add firebase_core firebase_auth cloud_firestore
+    flutter pub add --dev firebase_auth_mocks fake_cloud_firestore
     ```
 
-2. Sign in to the Firebase web dashboard with the `Sandwich Shop` Spark project open.
+2. Open a `Cloud Notes` Spark project in the Firebase web dashboard with Authentication (email and password enabled) and Cloud Firestore enabled, and add one document to a shared `announcements` collection (for example a `title` field).
 
-### Part 1 — Web support and connecting Firebase
+### Part 1 — Connecting Firebase and authentication
 
-1. Run `flutter create --platforms=web .` and delete the generated `test/widget_test.dart`.
-2. Update `isSupportedPlatform()` in `lib/main.dart` to allow web alongside Android.
-3. Add `firebase_core`, `firebase_auth` and `cloud_firestore`, run `flutterfire configure`, and initialise Firebase in `main()`.
+1. Run `flutterfire configure` to generate `lib/firebase_options.dart`.
+2. Initialise Firebase in `main()` after `WidgetsFlutterBinding.ensureInitialized()`.
+3. Wire a `StreamBuilder<User?>` on `FirebaseAuth.instance.authStateChanges()` that renders a minimal sign-in form when signed out and a notes screen when signed in.
 
-### Part 2 — Live auth, Firestore and testing
+### Part 2 — Shared vs private Firestore data, security rules and testing
 
-1. Run the app in Chrome and sign in with a test account.
-2. Update settings and place an order, showing the live updates appear under `users/<uid>` in Firestore.
-3. Run `flutter test` with mocked Firebase packages to show fast offline unit and widget tests.
-4. Optionally run `flutter build web` and `firebase deploy --only hosting` to show the live `.web.app` URL.
+1. Display the shared `announcements` collection at the top of the screen, then edit its document in the Firebase web dashboard to show live updates appearing without rebuilding the app.
+2. Run the app in Chrome, sign in with a test account and save a short note under `users/<uid>/notes`, showing the document appear under that user's `uid` in Firestore.
+3. Publish the Firestore Security Rules (`announcements` read-only and `users/<uid>/{document=**}` restricted to the matching `uid`) and verify that unauthenticated writes are rejected.
+4. Run `flutter test` with a small test using `MockFirebaseAuth` and `FakeFirebaseFirestore` to show fast offline testing with zero network calls.
+5. Optionally run `flutter build web` and `firebase deploy --only hosting` to open the live `.web.app` URL in a second browser window and show the same user data synced across clients.
 
 ### Wrap-up notes for the lecturer
 
 - Highlight how Firebase concepts translate directly to Azure, AWS and Supabase using the service synonyms slide.
-- Remind students about building their own job-hunt assistant with personal Gmail filters, Google Apps Script and Google AI Studio free tier, and using Azure for Students for wider module projects.
+- Remind students about building their own job-hunt assistant with personal Gmail filters, Google Apps Script and Google AI Studio free tier, and using Azure for Students for wider personal or university projects.
