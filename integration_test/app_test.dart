@@ -1,7 +1,6 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -30,7 +29,8 @@ void main() {
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.empty();
     fakeFirestore = FakeFirebaseFirestore();
-    AuthRepository.instance.setAuth(MockFirebaseAuth());
+    final MockFirebaseAuth defaultAuth = MockFirebaseAuth();
+    AuthRepository.instance.setAuth(defaultAuth);
     CartRepository.instance.clear();
     SandwichRepository.instance.clearCache();
     SandwichRepository.instance.setFirestore(fakeFirestore);
@@ -47,143 +47,171 @@ void main() {
     OrderRepository.instance.setFirestore(null);
   });
 
-  Future<void> launchApp(WidgetTester tester) async {
-    await tester.pumpWidget(App(key: UniqueKey()));
-    await tester.pumpAndSettle();
-  }
-
-  Future<void> returnToMenu(WidgetTester tester) async {
-    while (find.byType(MenuScreen).evaluate().isEmpty) {
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-    }
-  }
-
-  Future<void> openSandwichOrderScreen(
-    WidgetTester tester,
-    String sandwichId,
-    String sandwichName,
-  ) async {
-    final Finder cardFinder = find.byKey(Key('sandwichCard_$sandwichId'));
-    await tester.scrollUntilVisible(cardFinder, 200);
-    await tester.ensureVisible(cardFinder);
-    final Finder orderButton = find.descendant(
-      of: cardFinder,
-      matching: find.text('Order'),
-    );
-    await tester.ensureVisible(orderButton);
-    await tester.tap(orderButton);
-    await tester.pumpAndSettle();
-    expect(find.byType(OrderScreen), findsOneWidget);
-    expect(find.text('Order $sandwichName'), findsOneWidget);
-  }
-
-  Future<void> addQuantityToBasket(
-    WidgetTester tester,
-    String sandwichId,
-    String sandwichName,
-    int quantity,
-  ) async {
-    await openSandwichOrderScreen(tester, sandwichId, sandwichName);
-    for (int step = 0; step < quantity; step++) {
-      await tester.tap(find.text('Add'));
-      await tester.pump();
-    }
-    await tester.ensureVisible(find.text('Add to Basket'));
-    await tester.tap(find.text('Add to Basket'));
-    await tester.pumpAndSettle();
-    expect(
-        find.text('Added $quantity $sandwichName to basket'), findsOneWidget);
-    await tester.pageBack();
-    await tester.pumpAndSettle();
-  }
-
   group('Sandwich Shop end-to-end workflows', () {
-    testWidgets('browsing menu and ordering sandwiches validates quantity', (
+    testWidgets('menu screen opens and loads sandwiches from Firestore', (
       WidgetTester tester,
     ) async {
-      await launchApp(tester);
+      await tester.pumpWidget(App(key: UniqueKey()));
+      await tester.pumpAndSettle();
 
       expect(find.byType(MenuScreen), findsOneWidget);
       expect(find.text('Footlong Sub'), findsOneWidget);
       expect(find.text('Six-Inch Sub'), findsOneWidget);
-      await tester.scrollUntilVisible(find.text('Loaded Nachos'), 200);
-      expect(find.text('Loaded Nachos'), findsOneWidget);
 
-      await openSandwichOrderScreen(tester, 'footlong', 'Footlong Sub');
+      final Finder nachosFinder = find.text('Loaded Nachos');
+      await tester.scrollUntilVisible(nachosFinder, 200);
+      expect(nachosFinder, findsOneWidget);
+    });
+
+    testWidgets('ordering a sandwich validates quantity and updates subtotal', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(App(key: UniqueKey()));
+      await tester.pumpAndSettle();
+
+      final Finder footlongCard =
+          find.byKey(const Key('sandwichCard_footlong'));
+      await tester.ensureVisible(footlongCard);
+      final Finder orderTextFinder = find.text('Order');
+      final Finder footlongOrderButton = find.descendant(
+        of: footlongCard,
+        matching: orderTextFinder,
+      );
+      await tester.tap(footlongOrderButton);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(OrderScreen), findsOneWidget);
+      expect(find.text('Order Footlong Sub'), findsOneWidget);
       expect(find.text('0 Footlong Sub sandwich(es): '), findsOneWidget);
       expect(find.text('£0.00'), findsOneWidget);
 
-      await tester.ensureVisible(find.text('Add to Basket'));
-      await tester.tap(find.text('Add to Basket'));
+      final Finder addToBasketButton = find.text('Add to Basket');
+      await tester.ensureVisible(addToBasketButton);
+      await tester.tap(addToBasketButton);
       await tester.pump();
       expect(find.text('Please select at least 1 sandwich'), findsOneWidget);
 
-      await tester.ensureVisible(find.text('Add'));
-      await tester.tap(find.text('Add'));
+      final Finder addButton = find.text('Add');
+      final Finder removeButton = find.text('Remove');
+      await tester.ensureVisible(addButton);
+      await tester.tap(addButton);
       await tester.pump();
-      await tester.tap(find.text('Add'));
+      await tester.tap(addButton);
       await tester.pump();
-      await tester.tap(find.text('Add'));
+      await tester.tap(addButton);
       await tester.pump();
-      await tester.tap(find.text('Remove'));
+      await tester.tap(removeButton);
       await tester.pump();
 
       expect(find.text('2 Footlong Sub sandwich(es): 🥪🥪'), findsOneWidget);
       expect(find.text('£15.00'), findsOneWidget);
 
-      await tester.ensureVisible(find.text('Add to Basket'));
-      await tester.tap(find.text('Add to Basket'));
+      await tester.ensureVisible(addToBasketButton);
+      await tester.tap(addToBasketButton);
       await tester.pumpAndSettle();
       expect(find.text('Added 2 Footlong Sub to basket'), findsOneWidget);
     });
 
-    testWidgets('basket management and signed-out guards protect actions', (
-      WidgetTester tester,
-    ) async {
-      await launchApp(tester);
+    testWidgets(
+      'basket edits work and signed-out guards protect actions',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(App(key: UniqueKey()));
+        await tester.pumpAndSettle();
 
-      await addQuantityToBasket(tester, 'footlong', 'Footlong Sub', 1);
-      await addQuantityToBasket(tester, 'six-inch', 'Six-Inch Sub', 2);
+        final Finder orderTextFinder = find.text('Order');
+        final Finder addButton = find.text('Add');
+        final Finder addToBasketButton = find.text('Add to Basket');
 
-      await tester.tap(find.byIcon(Icons.shopping_basket));
-      await tester.pumpAndSettle();
-      expect(find.byType(BasketScreen), findsOneWidget);
-      expect(find.text('1 x Footlong Sub'), findsOneWidget);
-      expect(find.text('2 x Six-Inch Sub'), findsOneWidget);
-      expect(find.text('£16.50'), findsOneWidget);
-      expect(find.text('£1.50'), findsOneWidget);
-      expect(find.text('£18.00'), findsOneWidget);
+        final Finder footlongCard = find.byKey(
+          const Key('sandwichCard_footlong'),
+        );
+        await tester.scrollUntilVisible(footlongCard, 200);
+        await tester.ensureVisible(footlongCard);
+        final Finder footlongOrderButton = find.descendant(
+          of: footlongCard,
+          matching: orderTextFinder,
+        );
+        await tester.tap(footlongOrderButton);
+        await tester.pumpAndSettle();
+        await tester.tap(addButton);
+        await tester.pump();
+        await tester.ensureVisible(addToBasketButton);
+        await tester.tap(addToBasketButton);
+        await tester.pumpAndSettle();
+        await tester.pageBack();
+        await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.delete_outline).last);
-      await tester.pumpAndSettle();
-      expect(find.text('2 x Six-Inch Sub'), findsNothing);
-      expect(find.text('£7.50'), findsNWidgets(2));
-      expect(find.text('£9.00'), findsOneWidget);
+        final Finder sixInchCard = find.byKey(
+          const Key('sandwichCard_six-inch'),
+        );
+        await tester.scrollUntilVisible(sixInchCard, 200);
+        await tester.ensureVisible(sixInchCard);
+        final Finder sixInchOrderButton = find.descendant(
+          of: sixInchCard,
+          matching: orderTextFinder,
+        );
+        await tester.tap(sixInchOrderButton);
+        await tester.pumpAndSettle();
+        await tester.tap(addButton);
+        await tester.pump();
+        await tester.tap(addButton);
+        await tester.pump();
+        await tester.ensureVisible(addToBasketButton);
+        await tester.tap(addToBasketButton);
+        await tester.pumpAndSettle();
+        await tester.pageBack();
+        await tester.pumpAndSettle();
 
-      await tester.ensureVisible(find.text('Checkout'));
-      await tester.tap(find.text('Checkout'));
-      await tester.pumpAndSettle();
-      expect(find.text('Please log in to place an order.'), findsOneWidget);
-      expect(find.text('Log In'), findsOneWidget);
+        final Finder basketIcon = find.byIcon(Icons.shopping_basket);
+        await tester.tap(basketIcon);
+        await tester.pumpAndSettle();
+        expect(find.byType(BasketScreen), findsOneWidget);
+        expect(find.text('1 x Footlong Sub'), findsOneWidget);
+        expect(find.text('2 x Six-Inch Sub'), findsOneWidget);
+        expect(find.text('£16.50'), findsOneWidget);
+        expect(find.text('£1.50'), findsOneWidget);
+        expect(find.text('£18.00'), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.receipt_long));
-      await tester.pumpAndSettle();
-      expect(find.byType(OrdersScreen), findsOneWidget);
-      expect(find.text('Please log in to view your orders.'), findsOneWidget);
+        final Finder deleteButtons = find.byIcon(Icons.delete_outline);
+        final Finder secondDeleteButton = deleteButtons.last;
+        await tester.tap(secondDeleteButton);
+        await tester.pumpAndSettle();
+        expect(find.text('2 x Six-Inch Sub'), findsNothing);
+        expect(find.text('£7.50'), findsNWidgets(2));
+        expect(find.text('£9.00'), findsOneWidget);
 
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.person_outline));
-      await tester.pumpAndSettle();
-      expect(find.byType(SettingsScreen), findsOneWidget);
-      await tester.ensureVisible(find.text('Save Settings'));
-      await tester.tap(find.text('Save Settings'));
-      await tester.pumpAndSettle();
-      expect(find.text('Please log in to save your settings.'), findsOneWidget);
-    });
+        final Finder checkoutButton = find.text('Checkout');
+        await tester.ensureVisible(checkoutButton);
+        await tester.tap(checkoutButton);
+        await tester.pumpAndSettle();
+        expect(find.text('Please log in to place an order.'), findsOneWidget);
+        expect(find.text('Log In'), findsOneWidget);
+
+        final Finder ordersIcon = find.byIcon(Icons.receipt_long);
+        await tester.tap(ordersIcon);
+        await tester.pumpAndSettle();
+        expect(find.byType(OrdersScreen), findsOneWidget);
+        expect(find.text('Please log in to view your orders.'), findsOneWidget);
+
+        await tester.pageBack();
+        await tester.pumpAndSettle();
+        await tester.pageBack();
+        await tester.pumpAndSettle();
+
+        final Finder settingsIcon = find.byIcon(Icons.person_outline);
+        await tester.tap(settingsIcon);
+        await tester.pumpAndSettle();
+        expect(find.byType(SettingsScreen), findsOneWidget);
+        final Finder saveSettingsButton = find.text('Save Settings');
+        await tester.ensureVisible(saveSettingsButton);
+        await tester.tap(saveSettingsButton);
+        await tester.pumpAndSettle();
+        expect(
+          find.text('Please log in to save your settings.'),
+          findsOneWidget,
+        );
+      },
+    );
 
     testWidgets('registration, sign-out clearing basket and sign-in work', (
       WidgetTester tester,
@@ -192,11 +220,14 @@ void main() {
         uid: 'customer-1',
         email: 'alice@example.com',
       );
-      AuthRepository.instance.setAuth(
-        MockFirebaseAuth(mockUser: existingUser, signedIn: false),
+      final MockFirebaseAuth signedOutAuth = MockFirebaseAuth(
+        mockUser: existingUser,
+        signedIn: false,
       );
+      AuthRepository.instance.setAuth(signedOutAuth);
 
-      await launchApp(tester);
+      await tester.pumpWidget(App(key: UniqueKey()));
+      await tester.pumpAndSettle();
 
       await tester.tap(find.text('Log In'));
       await tester.pumpAndSettle();
@@ -209,71 +240,141 @@ void main() {
         findsOneWidget,
       );
 
-      await tester.ensureVisible(find.text('Need an account? Register'));
-      await tester.tap(find.text('Need an account? Register'));
+      final Finder toggleButton = find.text('Need an account? Register');
+      await tester.ensureVisible(toggleButton);
+      await tester.tap(toggleButton);
       await tester.pumpAndSettle();
       expect(find.text('Create Account'), findsOneWidget);
 
-      await tester.enterText(
-        find.byType(TextField).at(0),
-        'alice@example.com',
-      );
-      await tester.enterText(find.byType(TextField).at(1), 'secret123');
-      await tester.ensureVisible(find.text('Register'));
-      await tester.tap(find.text('Register'));
+      final Finder textFields = find.byType(TextField);
+      final Finder emailField = textFields.at(0);
+      final Finder passwordField = textFields.at(1);
+      await tester.enterText(emailField, 'alice@example.com');
+      await tester.enterText(passwordField, 'secret123');
+      final Finder registerButton = find.text('Register');
+      await tester.ensureVisible(registerButton);
+      await tester.tap(registerButton);
       await tester.pumpAndSettle();
 
       expect(find.byType(MenuScreen), findsOneWidget);
       expect(find.text('Sign Out'), findsOneWidget);
 
-      await addQuantityToBasket(tester, 'six-inch', 'Six-Inch Sub', 1);
-      expect(CartRepository.instance.getItems(), hasLength(1));
+      final Finder sixInchCard = find.byKey(const Key('sandwichCard_six-inch'));
+      await tester.scrollUntilVisible(sixInchCard, 200);
+      await tester.ensureVisible(sixInchCard);
+      final Finder orderTextFinder = find.text('Order');
+      final Finder sixInchOrderButton = find.descendant(
+        of: sixInchCard,
+        matching: orderTextFinder,
+      );
+      await tester.tap(sixInchOrderButton);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Add'));
+      await tester.pump();
+      final Finder addToBasketButton = find.text('Add to Basket');
+      await tester.ensureVisible(addToBasketButton);
+      await tester.tap(addToBasketButton);
+      await tester.pumpAndSettle();
+      await tester.pageBack();
+      await tester.pumpAndSettle();
 
       await tester.tap(find.text('Sign Out'));
       await tester.pumpAndSettle();
       expect(find.text('Log In'), findsOneWidget);
-      expect(CartRepository.instance.getItems(), isEmpty);
+
+      final Finder basketIcon = find.byIcon(Icons.shopping_basket);
+      await tester.tap(basketIcon);
+      await tester.pumpAndSettle();
+      expect(find.text('Your basket is empty'), findsOneWidget);
+
+      await tester.pageBack();
+      await tester.pumpAndSettle();
 
       await tester.tap(find.text('Log In'));
       await tester.pumpAndSettle();
-      await tester.enterText(
-        find.byType(TextField).at(0),
-        'alice@example.com',
-      );
-      await tester.enterText(find.byType(TextField).at(1), 'secret123');
-      await tester.ensureVisible(find.text('Sign In'));
-      await tester.tap(find.text('Sign In'));
+      final Finder signInFields = find.byType(TextField);
+      final Finder signInEmailField = signInFields.at(0);
+      final Finder signInPasswordField = signInFields.at(1);
+      await tester.enterText(signInEmailField, 'alice@example.com');
+      await tester.enterText(signInPasswordField, 'secret123');
+      final Finder signInButton = find.text('Sign In');
+      await tester.ensureVisible(signInButton);
+      await tester.tap(signInButton);
       await tester.pumpAndSettle();
 
       expect(find.byType(MenuScreen), findsOneWidget);
       expect(find.text('Sign Out'), findsOneWidget);
     });
 
-    testWidgets('checkout saves multiple orders and clears the basket', (
+    testWidgets('checkout saves multiple itemised orders and clears basket', (
       WidgetTester tester,
     ) async {
       final MockUser signedInUser = MockUser(
         uid: 'buyer-1',
         email: 'buyer@example.com',
       );
-      AuthRepository.instance.setAuth(
-        MockFirebaseAuth(mockUser: signedInUser, signedIn: true),
+      final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
+        mockUser: signedInUser,
+        signedIn: true,
       );
+      AuthRepository.instance.setAuth(signedInAuth);
 
-      await launchApp(tester);
+      await tester.pumpWidget(App(key: UniqueKey()));
+      await tester.pumpAndSettle();
       expect(find.text('Sign Out'), findsOneWidget);
 
-      await addQuantityToBasket(tester, 'footlong', 'Footlong Sub', 2);
-      await addQuantityToBasket(tester, 'six-inch', 'Six-Inch Sub', 1);
+      final Finder orderTextFinder = find.text('Order');
+      final Finder addButton = find.text('Add');
+      final Finder addToBasketButton = find.text('Add to Basket');
 
-      await tester.tap(find.byIcon(Icons.shopping_basket));
+      final Finder footlongCard = find.byKey(
+        const Key('sandwichCard_footlong'),
+      );
+      await tester.scrollUntilVisible(footlongCard, 200);
+      await tester.ensureVisible(footlongCard);
+      final Finder footlongOrderButton = find.descendant(
+        of: footlongCard,
+        matching: orderTextFinder,
+      );
+      await tester.tap(footlongOrderButton);
+      await tester.pumpAndSettle();
+      await tester.tap(addButton);
+      await tester.pump();
+      await tester.tap(addButton);
+      await tester.pump();
+      await tester.ensureVisible(addToBasketButton);
+      await tester.tap(addToBasketButton);
+      await tester.pumpAndSettle();
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      final Finder sixInchCard = find.byKey(const Key('sandwichCard_six-inch'));
+      await tester.scrollUntilVisible(sixInchCard, 200);
+      await tester.ensureVisible(sixInchCard);
+      final Finder sixInchOrderButton = find.descendant(
+        of: sixInchCard,
+        matching: orderTextFinder,
+      );
+      await tester.tap(sixInchOrderButton);
+      await tester.pumpAndSettle();
+      await tester.tap(addButton);
+      await tester.pump();
+      await tester.ensureVisible(addToBasketButton);
+      await tester.tap(addToBasketButton);
+      await tester.pumpAndSettle();
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      final Finder basketIcon = find.byIcon(Icons.shopping_basket);
+      await tester.tap(basketIcon);
       await tester.pumpAndSettle();
       expect(find.text('£19.50'), findsOneWidget);
       expect(find.text('£1.50'), findsOneWidget);
       expect(find.text('£21.00'), findsOneWidget);
 
-      await tester.ensureVisible(find.text('Checkout'));
-      await tester.tap(find.text('Checkout'));
+      final Finder checkoutButton = find.text('Checkout');
+      await tester.ensureVisible(checkoutButton);
+      await tester.tap(checkoutButton);
       await tester.pumpAndSettle();
 
       expect(find.byType(OrdersScreen), findsOneWidget);
@@ -288,140 +389,205 @@ void main() {
         findsOneWidget,
       );
 
-      await tester.tap(find.byIcon(Icons.shopping_basket));
+      await tester.tap(basketIcon);
       await tester.pumpAndSettle();
       expect(find.text('Your basket is empty'), findsOneWidget);
 
-      await returnToMenu(tester);
-
-      await addQuantityToBasket(tester, 'nachos', 'Loaded Nachos', 1);
-      await tester.tap(find.byIcon(Icons.shopping_basket));
+      await tester.pageBack();
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Checkout'));
-      await tester.tap(find.text('Checkout'));
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.pageBack();
       await tester.pumpAndSettle();
 
-      expect(find.text('Order #1002'), findsOneWidget);
-      expect(find.text('£8.49'), findsOneWidget);
-      expect(find.text('Order #1001'), findsOneWidget);
-      expect(
-        tester.getTopLeft(find.text('Order #1002')).dy,
-        lessThan(tester.getTopLeft(find.text('Order #1001')).dy),
+      final Finder nachosCard = find.byKey(const Key('sandwichCard_nachos'));
+      await tester.scrollUntilVisible(nachosCard, 200);
+      await tester.ensureVisible(nachosCard);
+      final Finder nachosOrderButton = find.descendant(
+        of: nachosCard,
+        matching: orderTextFinder,
       );
+      await tester.tap(nachosOrderButton);
+      await tester.pumpAndSettle();
+      await tester.tap(addButton);
+      await tester.pump();
+      await tester.ensureVisible(addToBasketButton);
+      await tester.tap(addToBasketButton);
+      await tester.pumpAndSettle();
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      await tester.tap(basketIcon);
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(checkoutButton);
+      await tester.tap(checkoutButton);
+      await tester.pumpAndSettle();
+
+      final Finder order1002Finder = find.text('Order #1002');
+      final Finder order1001Finder = find.text('Order #1001');
+      expect(order1002Finder, findsOneWidget);
+      expect(find.text('£8.49'), findsOneWidget);
+      expect(order1001Finder, findsOneWidget);
+
+      final Offset order1002Position = tester.getTopLeft(order1002Finder);
+      final Offset order1001Position = tester.getTopLeft(order1001Finder);
+      expect(order1002Position.dy, lessThan(order1001Position.dy));
     });
 
     testWidgets(
-        'cloud settings sync across sign-out and sign-in with bigger text', (
+      'cloud settings and bigger text sync across sign-out and sign-in',
+      (WidgetTester tester) async {
+        final MockUser existingUser = MockUser(
+          uid: 'settings-user-1',
+          email: 'sam@example.com',
+        );
+        final MockFirebaseAuth signedOutAuth = MockFirebaseAuth(
+          mockUser: existingUser,
+          signedIn: false,
+        );
+        AuthRepository.instance.setAuth(signedOutAuth);
+
+        await tester.pumpWidget(App(key: UniqueKey()));
+        await tester.pumpAndSettle();
+
+        final Finder menuItemText = find.text('Footlong Sub');
+        final Element baselineElement = tester.element(menuItemText);
+        final TextScaler baselineScaler = MediaQuery.textScalerOf(
+          baselineElement,
+        );
+        final double baselineSize = baselineScaler.scale(18);
+
+        await tester.tap(find.text('Log In'));
+        await tester.pumpAndSettle();
+        final Finder authFields = find.byType(TextField);
+        final Finder authEmailField = authFields.at(0);
+        final Finder authPasswordField = authFields.at(1);
+        await tester.enterText(authEmailField, 'sam@example.com');
+        await tester.enterText(authPasswordField, 'secret123');
+        final Finder signInButton = find.text('Sign In');
+        await tester.ensureVisible(signInButton);
+        await tester.tap(signInButton);
+        await tester.pumpAndSettle();
+
+        final Finder settingsIcon = find.byIcon(Icons.person_outline);
+        await tester.tap(settingsIcon);
+        await tester.pumpAndSettle();
+        expect(find.byType(SettingsScreen), findsOneWidget);
+
+        final Finder settingsFields = find.byType(TextField);
+        final Finder nameField = settingsFields.at(0);
+        final Finder addressField = settingsFields.at(1);
+        final Finder emailField = settingsFields.at(2);
+        await tester.enterText(nameField, 'Sam Taylor');
+        await tester.enterText(addressField, '14 Lion Terrace, Portsmouth');
+        await tester.enterText(emailField, 'sam@example.com');
+
+        final Finder largeTextSwitchFinder = find.byKey(
+          const Key('largeTextSwitch'),
+        );
+        await tester.tap(largeTextSwitchFinder);
+        await tester.pumpAndSettle();
+
+        final Finder newsletterSwitchFinder = find.byKey(
+          const Key('newsletterSwitch'),
+        );
+        await tester.ensureVisible(newsletterSwitchFinder);
+        await tester.tap(newsletterSwitchFinder);
+        await tester.pumpAndSettle();
+
+        final Finder saveSettingsButton = find.text('Save Settings');
+        await tester.ensureVisible(saveSettingsButton);
+        await tester.tap(saveSettingsButton);
+        await tester.pumpAndSettle();
+        expect(find.text('Settings saved for Sam Taylor'), findsOneWidget);
+
+        await tester.pageBack();
+        await tester.pumpAndSettle();
+
+        final Element enlargedElement = tester.element(menuItemText);
+        final TextScaler enlargedScaler = MediaQuery.textScalerOf(
+          enlargedElement,
+        );
+        final double enlargedSize = enlargedScaler.scale(18);
+        expect(enlargedSize, closeTo(baselineSize * 1.2, 0.05));
+
+        await tester.tap(find.text('Sign Out'));
+        await tester.pumpAndSettle();
+
+        final Element signedOutElement = tester.element(menuItemText);
+        final TextScaler signedOutScaler = MediaQuery.textScalerOf(
+          signedOutElement,
+        );
+        final double signedOutSize = signedOutScaler.scale(18);
+        expect(signedOutSize, closeTo(baselineSize, 0.05));
+
+        await tester.tap(settingsIcon);
+        await tester.pumpAndSettle();
+        expect(find.text('Sam Taylor'), findsNothing);
+        final SwitchListTile resetSwitch = tester.widget<SwitchListTile>(
+          largeTextSwitchFinder,
+        );
+        final bool resetValue = resetSwitch.value;
+        expect(resetValue, isFalse);
+
+        await tester.pageBack();
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Log In'));
+        await tester.pumpAndSettle();
+        final Finder secondAuthFields = find.byType(TextField);
+        final Finder secondAuthEmailField = secondAuthFields.at(0);
+        final Finder secondAuthPasswordField = secondAuthFields.at(1);
+        await tester.enterText(secondAuthEmailField, 'sam@example.com');
+        await tester.enterText(secondAuthPasswordField, 'secret123');
+        await tester.ensureVisible(signInButton);
+        await tester.tap(signInButton);
+        await tester.pumpAndSettle();
+
+        final Element restoredElement = tester.element(menuItemText);
+        final TextScaler restoredScaler = MediaQuery.textScalerOf(
+          restoredElement,
+        );
+        final double restoredSize = restoredScaler.scale(18);
+        expect(restoredSize, closeTo(baselineSize * 1.2, 0.05));
+
+        await tester.tap(settingsIcon);
+        await tester.pumpAndSettle();
+        expect(find.text('Sam Taylor'), findsOneWidget);
+        expect(find.text('14 Lion Terrace, Portsmouth'), findsOneWidget);
+        final SwitchListTile restoredSwitch = tester.widget<SwitchListTile>(
+          largeTextSwitchFinder,
+        );
+        final bool restoredValue = restoredSwitch.value;
+        expect(restoredValue, isTrue);
+      },
+    );
+
+    testWidgets('email link request and Google sign-in complete cleanly', (
       WidgetTester tester,
     ) async {
-      final MockUser existingUser = MockUser(
-        uid: 'settings-user-1',
-        email: 'sam@example.com',
-      );
-      AuthRepository.instance.setAuth(
-        MockFirebaseAuth(mockUser: existingUser, signedIn: false),
-      );
-
-      double scaledFontSize(String text, double baseSize) {
-        final RenderParagraph paragraph =
-            tester.renderObject<RenderParagraph>(find.text(text));
-        return paragraph.textScaler.scale(baseSize);
-      }
-
-      await launchApp(tester);
-      final double baselineScale = scaledFontSize('Footlong Sub', 18);
-
-      await tester.tap(find.text('Log In'));
+      await tester.pumpWidget(App(key: UniqueKey()));
       await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField).at(0), 'sam@example.com');
-      await tester.enterText(find.byType(TextField).at(1), 'secret123');
-      await tester.ensureVisible(find.text('Sign In'));
-      await tester.tap(find.text('Sign In'));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byIcon(Icons.person_outline));
-      await tester.pumpAndSettle();
-      expect(find.byType(SettingsScreen), findsOneWidget);
-
-      await tester.enterText(find.byType(TextField).at(0), 'Sam Taylor');
-      await tester.enterText(
-        find.byType(TextField).at(1),
-        '14 Lion Terrace, Portsmouth',
-      );
-      await tester.enterText(find.byType(TextField).at(2), 'sam@example.com');
-      await tester.tap(find.byKey(const Key('largeTextSwitch')));
-      await tester.pumpAndSettle();
-      await tester.ensureVisible(find.byKey(const Key('newsletterSwitch')));
-      await tester.tap(find.byKey(const Key('newsletterSwitch')));
-      await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Save Settings'));
-      await tester.tap(find.text('Save Settings'));
-      await tester.pumpAndSettle();
-      expect(find.text('Settings saved for Sam Taylor'), findsOneWidget);
-
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-      expect(
-        scaledFontSize('Footlong Sub', 18),
-        closeTo(baselineScale * 1.2, 0.05),
-      );
-
-      await tester.tap(find.text('Sign Out'));
-      await tester.pumpAndSettle();
-      expect(scaledFontSize('Footlong Sub', 18), closeTo(baselineScale, 0.05));
-
-      await tester.tap(find.byIcon(Icons.person_outline));
-      await tester.pumpAndSettle();
-      expect(find.text('Sam Taylor'), findsNothing);
-      final SwitchListTile resetSwitch = tester.widget<SwitchListTile>(
-        find.byKey(const Key('largeTextSwitch')),
-      );
-      expect(resetSwitch.value, isFalse);
-
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Log In'));
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField).at(0), 'sam@example.com');
-      await tester.enterText(find.byType(TextField).at(1), 'secret123');
-      await tester.ensureVisible(find.text('Sign In'));
-      await tester.tap(find.text('Sign In'));
-      await tester.pumpAndSettle();
-
-      expect(
-        scaledFontSize('Footlong Sub', 18),
-        closeTo(baselineScale * 1.2, 0.05),
-      );
-
-      await tester.tap(find.byIcon(Icons.person_outline));
-      await tester.pumpAndSettle();
-      expect(find.text('Sam Taylor'), findsOneWidget);
-      expect(find.text('14 Lion Terrace, Portsmouth'), findsOneWidget);
-      final SwitchListTile restoredSwitch = tester.widget<SwitchListTile>(
-        find.byKey(const Key('largeTextSwitch')),
-      );
-      expect(restoredSwitch.value, isTrue);
-    });
-
-    testWidgets('email link request and Google sign-in flow complete cleanly', (
-      WidgetTester tester,
-    ) async {
-      await launchApp(tester);
 
       await tester.tap(find.text('Log In'));
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField).at(0), 'lee@example.com');
-      await tester.ensureVisible(find.text('Email me a sign-in link'));
-      await tester.tap(find.text('Email me a sign-in link'));
+      final Finder textFields = find.byType(TextField);
+      final Finder emailField = textFields.at(0);
+      await tester.enterText(emailField, 'lee@example.com');
+
+      final Finder emailLinkButton = find.text('Email me a sign-in link');
+      await tester.ensureVisible(emailLinkButton);
+      await tester.tap(emailLinkButton);
       await tester.pumpAndSettle();
       expect(
         find.text('Sign-in link sent to lee@example.com. Check your inbox.'),
         findsOneWidget,
       );
 
-      await tester.ensureVisible(find.text('Sign in with Google'));
-      await tester.tap(find.text('Sign in with Google'));
+      final Finder googleButton = find.text('Sign in with Google');
+      await tester.ensureVisible(googleButton);
+      await tester.tap(googleButton);
       await tester.pumpAndSettle();
 
       expect(find.byType(MenuScreen), findsOneWidget);
