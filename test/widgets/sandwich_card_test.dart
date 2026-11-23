@@ -22,6 +22,7 @@ void main() {
     expect(find.text('Test Sub'), findsOneWidget);
     expect(find.text('A sandwich used in a test.'), findsOneWidget);
     expect(find.text('£5.00'), findsOneWidget);
+    expect(find.byKey(const Key('sandwichCard_test')), findsOneWidget);
   });
 
   testWidgets('SandwichCard shows a message when the image is missing', (

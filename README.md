@@ -27,7 +27,7 @@ The app runs on Android and web (Chrome or Edge). Other desktop or Apple targets
 ```bash
 git clone https://github.com/manighahrmani/sandwich_shop.git
 cd sandwich_shop
-git switch 9
+git switch 10
 ```
 
 ### Install dependencies
@@ -65,6 +65,20 @@ These tests use `MockFirebaseAuth` and `FakeFirebaseFirestore` so they run offli
 
 To measure test coverage, run `flutter test --coverage`. The report is written to `coverage/lcov.info`.
 
+Run the end-to-end integration tests on an Android emulator with:
+
+```bash
+flutter test integration_test/app_test.dart -d <device-id>
+```
+
+Replace `<device-id>` with the ID reported by `flutter devices`, for example `emulator-5554`. These integration tests also use `MockFirebaseAuth` and `FakeFirebaseFirestore`.
+
+To run the integration tests in Chrome, start `chromedriver --port=4444` in one terminal and run `flutter drive` in another:
+
+```bash
+flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
+```
+
 ## Project structure
 
 - `lib/models/` holds the data classes: `Sandwich`, `CartItem`, `OrderItem`, `OrderRecord` and `UserSettings`.
@@ -72,6 +86,8 @@ To measure test coverage, run `flutter test --coverage`. The report is written t
 - `lib/screens/` holds `MenuScreen`, `OrderScreen`, `BasketScreen`, `OrdersScreen`, `SettingsScreen` and `AuthScreen`.
 - `lib/widgets/` holds reusable buttons (`AccountButton`, `BasketButton`, `OrdersButton`, `SettingsButton`, `PrimaryButton`) and `SandwichCard`.
 - `test/` mirrors the folders in `lib/`.
+- `integration_test/` holds the end-to-end integration tests (`app_test.dart`).
+- `test_driver/` holds the web driver entrypoint (`integration_test.dart`) used with `flutter drive`.
 
 ## Screenshots
 
