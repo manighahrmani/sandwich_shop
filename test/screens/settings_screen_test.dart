@@ -190,7 +190,7 @@ void main() {
     );
   });
 
-  testWidgets('SettingsScreen loads cloud settings and clears on sign-out', (
+  testWidgets('SettingsScreen loads user settings and clears on sign-out', (
     WidgetTester tester,
   ) async {
     final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
