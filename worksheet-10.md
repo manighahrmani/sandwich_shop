@@ -301,9 +301,9 @@ Fourth, test user settings and **Bigger text** sync by recording the baseline te
 
 ![The Android emulator running the user settings and bigger text sync integration test](images/10/integration_test_settings_sync.gif)
 
-Fifth, if you implemented passwordless links in Worksheet 9, test **Email me a sign-in link** and **Sign in with Google** on `AuthScreen` to confirm the confirmation banner appears and Google sign-in returns cleanly to `MenuScreen`.
+Fifth, test **Email me a sign-in link** and **Sign in with Google** from [Sign in with an email link or Google](worksheet-9.md#sign-in-with-an-email-link-or-google) on `AuthScreen` to confirm the confirmation banner appears and Google sign-in returns cleanly to `MenuScreen`.
 
-Review the assertions following [Check the tests](worksheet-8.md#check-the-tests), run `dart analyze`, and rerun the integration test file on your chosen device after each journey. You should have seven tests, or six if you skipped the optional fifth journey. Compare the behaviour with our model solution in [`integration_test/app_test.dart` on branch `10`](https://github.com/manighahrmani/sandwich_shop/blob/10/integration_test/app_test.dart); your test data and wording may differ.
+Review the assertions following [Check the tests](worksheet-8.md#check-the-tests), run `dart analyze`, and rerun the integration test file on your chosen device after each journey. You should have seven tests. Compare the behaviour with our model solution in [`integration_test/app_test.dart` on branch `10`](https://github.com/manighahrmani/sandwich_shop/blob/10/integration_test/app_test.dart); your test data and wording may differ.
 
 ### Run integration tests in Chrome
 
@@ -505,11 +505,7 @@ The `needs: test` line prevents builds when formatting, analysis or tests fail. 
 
 Each runner starts clean, so the build job must check out the code and install Flutter again. Android also needs Java to run Gradle. There are now three job runs, with both builds depending on the checks, as shown below. GitHub may group the matrix entries; expand the build job to inspect each platform.
 
-```mermaid
-flowchart LR
-    test["Format, analyse and test"] --> web["Build web"]
-    test --> android["Build android"]
-```
+![Workflow graph where the Format, analyse and test job leads to the Build web and Build android jobs](images/10/ci_workflow_job_graph.png)
 
 Run the updated workflow and inspect both build jobs and their `app-web` and `app-android` artifacts. The web artifact contains files for a web server, not a page to open directly from disk. The debug APK can be installed on your own Android device for testing; it is not a signed store release. These jobs build packages but do not deploy them.
 
@@ -600,7 +596,7 @@ In this file, `${{ secrets.NAME }}` reads an encrypted secret from GitHub Settin
 
 Pull requests targeting your live branch now get temporary preview URLs, which expire after seven days by default. A preview still connects to your real Firebase backend, so avoid using real customer data. Live deployment runs on any push to the configured branch, not only a pull-request merge; the ruleset above controls how changes reach it.
 
-Once both workflow files are on GitHub, open **Actions** to confirm **Deploy to Firebase Hosting on merge** succeeds, as shown below:
+Once both workflow files are on GitHub, open **Actions** to confirm **Deploy to Firebase Hosting on merge** succeeds. This is a separate workflow with a single `build_and_deploy` job, so its graph shows one box, as shown below:
 
 ![GitHub Actions summary showing a green Deploy to Firebase Hosting on merge workflow run](images/10/github_hosting_deploy_run.png)
 
