@@ -44,7 +44,7 @@ flutter pub get
 flutter test
 ```
 
-Branch `10` contains the reference app and integration tests for this worksheet; use it to compare your finished work, not as your starting point. The CI extensions below build on its initial workflows.
+Branch `10` contains the reference app and integration tests for this worksheet; use it to compare your finished work, not as your starting point. Its `.github/workflows/` folder also contains the finished workflows from the CI/CD sections.
 
 Use your own GitHub repository for the CI/CD sections. Its default branch must contain your Flutter app, not the worksheets-only `main` branch from the teaching repository.
 
