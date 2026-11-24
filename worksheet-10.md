@@ -9,12 +9,16 @@
   - [Add keys to sandwich cards](#add-keys-to-sandwich-cards)
   - [Create the test file](#create-the-test-file)
   - [Run the test on an emulator](#run-the-test-on-an-emulator)
+  - [Try a physical device](#try-a-physical-device)
   - [Test ordering and validation](#test-ordering-and-validation)
   - [Add the remaining workflow tests with Copilot](#add-the-remaining-workflow-tests-with-copilot)
   - [Run integration tests in Chrome](#run-integration-tests-in-chrome)
+  - [Try Firebase Test Lab](#try-firebase-test-lab)
 - [Continuous integration](#continuous-integration)
   - [Create a CI workflow on GitHub](#create-a-ci-workflow-on-github)
   - [Read workflow runs and logs](#read-workflow-runs-and-logs)
+  - [Build for more than one platform](#build-for-more-than-one-platform)
+  - [Require checks before merging](#require-checks-before-merging)
   - [Integration tests in CI](#integration-tests-in-ci)
 - [Deployment](#deployment)
   - [Automate Firebase Hosting deployment](#automate-firebase-hosting-deployment)
@@ -40,15 +44,19 @@ flutter pub get
 flutter test
 ```
 
-Branch `10` contains the completed Sandwich Shop app for this worksheet; use it to compare your finished work, not as your starting point.
+Branch `10` contains the reference app and integration tests for this worksheet; use it to compare your finished work, not as your starting point. The CI extensions below build on its initial workflows.
+
+Use your own GitHub repository for the CI/CD sections. Its default branch must contain your Flutter app, not the worksheets-only `main` branch from the teaching repository.
 
 ## Integration testing
 
 Back in [Why automated testing matters](worksheet-4.md#why-automated-testing-matters), we saw that unit tests check individual functions and widget tests check isolated screens. Integration tests go one step further by running the complete app on an Android emulator, phone or web browser to verify that screens, navigation and shared state work together end to end. See the [Flutter integration testing guide](https://docs.flutter.dev/testing/integration-tests) for the full overview.
 
-Integration tests live in a top-level `integration_test/` directory rather than `test/`, so an ordinary `flutter test` run stays fast. Unlike unit and widget tests, every `testWidgets` block in an integration test file runs inside the same running app instance, so data left behind by one test can affect the next.
+Integration tests live in a top-level `integration_test/` directory rather than `test/`, so an ordinary `flutter test` run stays fast. Tests in an integration test file share a process and repository singletons, so data left behind by one test can affect the next.
 
 To keep every test fast, repeatable and offline without touching your live Firebase project, we reuse `MockFirebaseAuth` from [Create the authentication repository](worksheet-9.md#create-the-authentication-repository) and `FakeFirebaseFirestore` from [Read the menu from Firestore](worksheet-9.md#read-the-menu-from-firestore). Passing `UniqueKey()` to `App` tells Flutter to build a fresh `_AppState` for each test so no auth subscription or **Bigger text** setting leaks between runs.
+
+These tests exercise complete user journeys through our app, but replace Firebase with test doubles. They do not check live security rules, email delivery or Google's sign-in service. Keep the manual checks from [Test signing up, signing in and signing out](worksheet-9.md#test-signing-up-signing-in-and-signing-out) for your real Firebase connection.
 
 ### Install the integration test package
 
@@ -72,7 +80,7 @@ Because `integration_test` is a development dependency, Flutter excludes it from
 
 ### Add keys to sandwich cards
 
-Each card on `MenuScreen` renders its own **Order** button, so calling `find.text('Order')` matches three buttons at once. Giving each `Card` a `Key` built from `sandwich.id` lets tests target a single sandwich card reliably, matching [Write widget tests](worksheet-8.md#write-widget-tests).
+Each card on `MenuScreen` renders its own **Order** button, so calling `find.text('Order')` can match more than one button. Giving each `Card` a `Key` built from `sandwich.id` lets tests target a single sandwich card reliably, matching [Write widget tests](worksheet-8.md#write-widget-tests).
 
 Open `lib/widgets/sandwich_card.dart` and add the `key` line inside `build`:
 
@@ -174,19 +182,19 @@ As seen in [Simulating user interaction and navigation](worksheet-4.md#simulatin
 
 ### Run the test on an emulator
 
-Start your Android emulator following [Select the device and run the app](worksheet-7.md#select-the-device-and-run-the-app) and check its device ID:
-
-```bash
-flutter devices
-```
-
-Look for your emulator ID, such as `emulator-5554`, and run `integration_test/app_test.dart`:
+Start your Android emulator and find its device ID following [Preparing an Android emulator or device](worksheet-7.md#preparing-an-android-emulator-or-device). Run the test with your emulator ID in place of `emulator-5554`:
 
 ```bash
 flutter test integration_test/app_test.dart -d emulator-5554
 ```
 
 Flutter builds and installs the app on the emulator, drives the UI inside the real Android app and reports the result in your terminal. Integration tests take much longer than unit tests, and `flutter test --coverage` excludes `integration_test/`, so keep tracking line coverage with `test/` from [Test coverage](worksheet-8.md#test-coverage).
+
+### Try a physical device
+
+If you have not run your app on a real phone or tablet yet, try it now. For Android, follow [Use a physical Android device](worksheet-7.md#use-a-physical-android-device). For iOS, you need a Mac with Xcode and a signed app; complete [Support more platforms](worksheet-9.md#support-more-platforms) first, because our starting project supports only Android and web.
+
+Run the app normally on your device and check the journeys from Worksheet 9 before running the automated tests. Then follow Flutter's [Test on an Android device](https://docs.flutter.dev/testing/integration-tests#test-on-an-android-device) or [Test on an iOS device](https://docs.flutter.dev/testing/integration-tests#test-on-an-ios-device), using `flutter test integration_test/app_test.dart -d DEVICE_ID` with your phone's ID. Use the same device to rerun the tests as you add journeys below; if you do not have a suitable device, continue with the emulator.
 
 ### Test ordering and validation
 
@@ -196,7 +204,7 @@ Add the `OrderScreen` import at the top of `integration_test/app_test.dart`:
 import 'package:sandwich_shop/screens/order_screen.dart';
 ```
 
-Inside `group(...)`, right before its closing `});`, add a second test that opens `Footlong Sub` and checks empty-quantity validation. We use `find.descendant` to search strictly inside `footlongCard` with explicitly typed `Finder` variables, and `tester.ensureVisible` to scroll a widget onto the screen before `tap`:
+Inside `group(...)`, right before its closing `});`, add a second test that opens `Footlong Sub` and checks zero-quantity validation. We use `find.descendant` to search strictly inside `footlongCard` with explicitly typed `Finder` variables, and `tester.ensureVisible` to scroll a widget onto the screen before `tap`:
 
 ```dart
     testWidgets('ordering a sandwich validates quantity and updates subtotal', (
@@ -257,20 +265,25 @@ Run `flutter test integration_test/app_test.dart -d emulator-5554` to verify bot
 
 ### Add the remaining workflow tests with Copilot
 
-Now that you have written the first two tests manually, use GitHub Copilot to plan and add tests for the remaining user journeys. Two short new helpers are useful here alongside `findsNWidgets` from Worksheet 4, `tester.widget<...>` from [Test loading and saving preferences](worksheet-6.md#test-loading-and-saving-preferences), `tester.getTopLeft` from [Test the orders list and its empty state](worksheet-7.md#test-the-orders-list-and-its-empty-state) and `MockFirebaseAuth` from [Create the authentication repository](worksheet-9.md#create-the-authentication-repository).
+Now that you have written the first two tests manually, use the [plan, implement and review workflow from Worksheet 8](worksheet-8.md#working-with-copilot) to add the remaining journeys below. Include your integration test file and the relevant app files as context, and use `name@example.com` for test email addresses.
 
-First, calling `await tester.pageBack()` simulates selecting the app bar back button to return to the previous screen. Second, to verify **Bigger text** scaling on a widget, read its active `TextScaler` via `MediaQuery.textScalerOf(...)` and compare the scaled font size with `closeTo` (which allows tiny decimal rounding differences):
+Calling `await tester.pageBack()` simulates selecting the app bar back button. To check **Bigger text**, capture the baseline before signing in:
 
 ```dart
-final Element menuElement = tester.element(menuItemText);
-final TextScaler activeScaler = MediaQuery.textScalerOf(menuElement);
-final double scaledSize = activeScaler.scale(18);
-expect(scaledSize, closeTo(baselineSize * 1.2, 0.05));
+final Finder menuItemText = find.text('Footlong Sub');
+final Element baselineElement = tester.element(menuItemText);
+final TextScaler baselineScaler = MediaQuery.textScalerOf(baselineElement);
+final double baselineSize = baselineScaler.scale(18);
 ```
 
-Switch Copilot to **Plan** mode following [Plan first](worksheet-8.md#plan-first), and attach `#integration_test/app_test.dart`, `#lib/main.dart`, `#lib/constants.dart`, `#assets/data/sandwiches.json`, `#lib/screens/`, `#lib/repositories/` and `#lib/widgets/` following [Attach context](worksheet-8.md#attach-context). Plan tests for the five remaining user journeys below, asking Copilot to keep explicit typed variables, avoid chained expressions and import each screen only when its test uses it.
+After signing in and enabling **Bigger text**, read the widget's current `TextScaler` again. The `closeTo` matcher allows tiny decimal rounding differences:
 
-Switch to **Interactive** mode as in [Make a small change](worksheet-8.md#make-a-small-change) to add the five journeys one by one.
+```dart
+final Element enlargedElement = tester.element(menuItemText);
+final TextScaler enlargedScaler = MediaQuery.textScalerOf(enlargedElement);
+final double enlargedSize = enlargedScaler.scale(18);
+expect(enlargedSize, closeTo(baselineSize * 1.2, 0.05));
+```
 
 First, test basket editing and signed-out guards by adding two different sandwiches, removing one on `BasketScreen`, checking the updated totals, and confirming **Checkout**, `OrdersScreen` and `SettingsScreen` prompt a signed-out visitor to log in, as shown below:
 
@@ -280,23 +293,23 @@ Second, test registration, sign-out and sign-in by checking empty-field validati
 
 ![The Android emulator running the registration, sign-out and sign-in integration test](images/10/integration_test_auth.gif)
 
-Third, test multi-order checkout and order history from a signed-in account by placing a multi-item order, checking the itemised summary and emptied basket, placing a second order, and asserting with `tester.getTopLeft` that the newer order renders above the older one, as shown below:
+Third, test multi-order checkout and order history from a signed-in account by placing a multi-item order, checking the itemised summary and emptied basket, placing a second order, and comparing vertical positions with `tester.getTopLeft` as in [Test the orders list and its empty state](worksheet-7.md#test-the-orders-list-and-its-empty-state). The newer order should render above the older one, as shown below:
 
 ![The Android emulator running the multi-order checkout and order history integration test](images/10/integration_test_checkout.gif)
 
-Fourth, test cloud settings and **Bigger text** sync by recording the baseline text size before sign-in, saving profile fields and **Bigger text** on `SettingsScreen` (add a `Key` such as `Key('largeTextSwitch')` if your switches do not have one yet, or find them by label), checking the `1.2x` scale on `MenuScreen`, signing out to verify the scale and **Bigger text** switch reset, and signing back in to verify both reload from Firestore, as shown below:
+Fourth, test user settings and **Bigger text** sync by recording the baseline text size before sign-in, saving profile fields and **Bigger text** on `SettingsScreen` (add a `Key` such as `Key('largeTextSwitch')` if your switches do not have one yet, or find them by label), checking the `1.2x` scale on `MenuScreen`, signing out to verify the scale and **Bigger text** switch reset, and signing back in to verify both reload from Firestore, as shown below:
 
-![The Android emulator running the cloud settings and bigger text sync integration test](images/10/integration_test_settings_sync.gif)
+![The Android emulator running the user settings and bigger text sync integration test](images/10/integration_test_settings_sync.gif)
 
 Fifth, if you implemented passwordless links in Worksheet 9, test **Email me a sign-in link** and **Sign in with Google** on `AuthScreen` to confirm the confirmation banner appears and Google sign-in returns cleanly to `MenuScreen`.
 
-After adding each journey, inspect the diff in **Source Control** ([Review the result](worksheet-8.md#review-the-result)), verify the assertions follow [Check the tests](worksheet-8.md#check-the-tests), run `dart analyze`, and run `flutter test integration_test/app_test.dart -d emulator-5554`. When all seven tests pass, compare your file with our model solution in [`integration_test/app_test.dart` on branch `10`](https://github.com/manighahrmani/sandwich_shop/blob/10/integration_test/app_test.dart).
+Review the assertions following [Check the tests](worksheet-8.md#check-the-tests), run `dart analyze`, and rerun the integration test file on your chosen device after each journey. You should have seven tests, or six if you skipped the optional fifth journey. Compare the behaviour with our model solution in [`integration_test/app_test.dart` on branch `10`](https://github.com/manighahrmani/sandwich_shop/blob/10/integration_test/app_test.dart); your test data and wording may differ.
 
 ### Run integration tests in Chrome
 
-The `flutter test` command cannot run integration tests directly in Chrome, so Flutter uses `flutter drive` with a short driver file and ChromeDriver (a small bridge program that controls Google Chrome; Android emulator tests do not need it).
+The `flutter test` command cannot run integration tests directly in Chrome, so Flutter uses `flutter drive` with a short driver file and ChromeDriver (a small bridge program that controls Google Chrome; Android emulator tests do not need it). This follows Flutter's [Test in a web browser](https://docs.flutter.dev/testing/integration-tests#test-in-a-web-browser) guide.
 
-Create `test_driver/integration_test.dart` with the code below so `integrationDriver()` connects `flutter drive` to ChromeDriver on port `4444`:
+Create `test_driver/integration_test.dart` with the code below so `integrationDriver()` collects the results from the app:
 
 ```dart
 import 'package:integration_test/integration_test_driver.dart';
@@ -326,17 +339,23 @@ Leave ChromeDriver running, open a second terminal in your Sandwich Shop project
 flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
 ```
 
-When the browser tests finish, return to the first terminal and press **Ctrl + C** on Windows or **Control + C** on macOS to stop ChromeDriver.
+When the browser tests finish, stop ChromeDriver in the first terminal with **Ctrl + C** on Windows or **⌃ + C** on macOS.
+
+### Try Firebase Test Lab
+
+If you want to check more devices than you own, Firebase Test Lab runs your tests on hosted devices and provides logs, screenshots and recordings. Follow Flutter's [Test in Firebase Test Lab for Android](https://docs.flutter.dev/testing/integration-tests#test-in-firebase-test-lab-android) to prepare the app and instrumentation test APKs, or [Test in Firebase Test Lab for iOS](https://docs.flutter.dev/testing/integration-tests#test-in-firebase-test-lab-ios) to prepare the signed iOS test bundle on a Mac.
+
+Use your `integration_test/app_test.dart` as the test target rather than the guide's sample app. These tests still use our Firebase test doubles; Test Lab supplies devices, not a replacement backend. This is an optional extension: check the [Test Lab quotas and pricing](https://firebase.google.com/docs/test-lab/usage-quotas-pricing) before starting runs.
 
 ## Continuous integration
 
 Running formatting, `dart analyze` and `flutter test` locally (as in [Running test suites and static analysis](worksheet-4.md#running-test-suites-and-static-analysis) and [Measure coverage](worksheet-8.md#measure-coverage)) is easy to forget before pushing. Continuous integration (CI) automates those checks on a clean cloud computer every time you push commits or open a pull request (a request to merge a branch on GitHub), while continuous deployment (CD) publishes passing builds live automatically.
 
-GitHub provides this service built into every repository through [GitHub Actions](https://docs.github.com/en/actions), with unlimited minutes for public repositories and a free monthly allowance for private ones. Remember from `pubspec.yaml` that YAML uses two spaces per level and never tab characters. GitHub Actions uses three main building blocks:
+GitHub provides this service built into every repository through [GitHub Actions](https://docs.github.com/en/actions), with free standard hosted runners for public repositories and a monthly allowance for private ones. Use two spaces per indentation level, as in `pubspec.yaml`, and no tab characters.
 
-- Workflow: a `.yml` file inside `.github/workflows/` that defines automated checks for your repository.
-- Trigger (`on:`): the event that starts the workflow, such as `push`, `pull_request` or `workflow_dispatch` (which adds a manual **Run workflow** button on GitHub).
-- Job and steps (`jobs:` and `steps:`): a list of tasks running on a fresh cloud machine called a runner (`runs-on: ubuntu-latest`), where each step either calls a reusable action (`uses:`) or runs a command (`run:`).
+A workflow is a `.yml` file inside `.github/workflows/`. Its `on:` section selects the events that start it, such as `push`, `pull_request` or `workflow_dispatch`, which adds a manual **Run workflow** button when the workflow is on your default branch.
+
+The `jobs:` section defines work for fresh cloud machines called runners. Each job chooses its runner with `runs-on:` and lists its `steps:`, which either call a reusable action with `uses:` or execute a command with `run:`.
 
 ### Create a CI workflow on GitHub
 
@@ -410,9 +429,9 @@ Finally, append the coverage summary and artifact upload steps at the bottom of 
           path: coverage/lcov.info
 ```
 
-Because `if: always()` runs even when tests fail, GitHub still reports what happened. On the Linux runner, the `Write coverage summary` script reads total (`LF:`) and hit (`LH:`) line counts from `coverage/lcov.info` into `$GITHUB_STEP_SUMMARY` so your percentage appears directly on the run page (copy this reporting snippet as-is; you do not need to learn `awk`), and `actions/upload-artifact@v7` attaches `coverage/lcov.info` as a downloadable zip.
+The `if: always()` condition attempts reporting even after a failed check; a coverage file is only available if the test runner produced one. On the Linux runner, the `Write coverage summary` script reads total (`LF:`) and hit (`LH:`) line counts from `coverage/lcov.info` into `$GITHUB_STEP_SUMMARY` so your percentage appears directly on the run page. Copy this reporting snippet as-is; you do not need to learn `awk`. The `actions/upload-artifact@v7` action attaches the report as a downloadable zip, or warns if the file is missing.
 
-Select **Commit changes...** to commit `.github/workflows/tests.yml` to your default branch, then pull the new file to your computer:
+Select **Commit changes...** to save `.github/workflows/tests.yml` on your app's default branch, then pull the new file to your computer:
 
 ```bash
 git pull
@@ -430,7 +449,7 @@ Select **Format, analyse and test** on the left to inspect each step, and select
 
 ![GitHub Actions job view showing all passing CI steps with unit and widget test output expanded](images/10/github_actions_step_logs.png)
 
-If a step turns red, open that step to find the failing file or test, fix it locally in VS Code, verify `dart format --output=none --set-exit-if-changed lib test`, `dart analyze` and `flutter test`, and push again. After learning the browser flow, you can also install the [GitHub CLI](https://cli.github.com/), sign in once with `gh auth login`, and inspect runs from your terminal:
+If a step turns red, open that step to find the failing file or test, fix it locally in VS Code, and rerun the same checks, including all four folders in the formatting command. After learning the browser flow, you can also install the [GitHub CLI](https://cli.github.com/), sign in once with `gh auth login`, and inspect runs from your terminal:
 
 ```bash
 gh run list --limit 5
@@ -438,11 +457,82 @@ gh run watch
 gh run view --log-failed
 ```
 
+### Build for more than one platform
+
+The first workflow has one job, so its graph shows only one box even though it runs several steps. Add a second job named `build` under `jobs:`, aligned with `test:`, to build the web app and an Android debug APK after the checks pass:
+
+```yaml
+  build:
+    name: Build ${{ matrix.platform }}
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: web
+            command: flutter build web
+            output: build/web
+          - platform: android
+            command: flutter build apk --debug
+            output: build/app/outputs/flutter-apk/app-debug.apk
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build app
+        run: ${{ matrix.command }}
+      - name: Upload build
+        uses: actions/upload-artifact@v7
+        with:
+          name: app-${{ matrix.platform }}
+          path: ${{ matrix.output }}
+          if-no-files-found: error
+```
+
+The `needs: test` line prevents builds when formatting, analysis or tests fail. A `matrix` repeats a job with different values, so the two builds can run in parallel on separate runners. The `${{ matrix.platform }}`, `${{ matrix.command }}` and `${{ matrix.output }}` expressions select the name, command and output path for each build. Setting `fail-fast: false` lets one build finish even if the other fails.
+
+Each runner starts clean, so the build job must check out the code and install Flutter again. Android also needs Java to run Gradle. There are now three job runs, with both builds depending on the checks, as shown below. GitHub may group the matrix entries; expand the build job to inspect each platform.
+
+```mermaid
+flowchart LR
+    test["Format, analyse and test"] --> web["Build web"]
+    test --> android["Build android"]
+```
+
+Run the updated workflow and inspect both build jobs and their `app-web` and `app-android` artifacts. The web artifact contains files for a web server, not a page to open directly from disk. The debug APK can be installed on your own Android device for testing; it is not a signed store release. These jobs build packages but do not deploy them.
+
+### Require checks before merging
+
+A red workflow does not stop someone merging a pull request by itself. On GitHub, open **Settings > Rules > Rulesets**, create a branch ruleset targeting your app's default branch, and enable **Require a pull request before merging** and **Require status checks to pass**. Select the check names from your successful run, including **Format, analyse and test**, **Build web** and **Build android**, then set the ruleset to **Active**.
+
+This makes the graph useful as a gate: a change must pass the selected checks before it reaches that branch. Availability depends on your repository visibility and GitHub plan; see [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). The coverage summary reports a percentage but does not enforce a minimum.
+
 ### Integration tests in CI
 
-Notice `.github/workflows/tests.yml` runs `flutter test --coverage` rather than `integration_test/`. Unit and widget tests finish in around a minute on GitHub, whereas booting an Android emulator or ChromeDriver takes several minutes per push and consumes private repository minutes quickly.
+Notice `.github/workflows/tests.yml` runs `flutter test --coverage`, not the integration tests. Building an APK also does not run its user journeys. Integration tests need a running emulator or browser, which adds setup time and uses more runner minutes.
 
-In practice, teams run fast unit and widget checks on every push and pull request, while running integration tests locally before merging or on a nightly schedule.
+Keep running integration tests locally before merging. As an extension, use the [Android Emulator Runner action](https://github.com/ReactiveCircus/android-emulator-runner#usage--examples) to start an emulator in a separate workflow and run `flutter test integration_test/app_test.dart -d emulator-5554`. That workflow needs the same Flutter and Java setup as the build job, plus the action's Linux acceleration setup.
+
+Start with `workflow_dispatch` so you can run this slower workflow manually. You can later add a `schedule` trigger, such as the example below, to run it daily at 03:00 UTC. Scheduled workflows must exist on the default branch and run that branch; they can be delayed, so they are not a substitute for required pull-request checks.
+
+```yaml
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
+```
 
 ## Deployment
 
@@ -450,7 +540,7 @@ In [Publish the app on the web](worksheet-9.md#publish-the-app-on-the-web), you 
 
 ### Automate Firebase Hosting deployment
 
-Before automating deployment, make sure `.firebaserc` points to your own Firebase project (if you cloned branch `9`, run `flutterfire configure` and `firebase init hosting` first), and never commit Firebase keys to Git as noted in [Connect the Flutter app](worksheet-9.md#connect-the-flutter-app).
+Before automating deployment, make sure `.firebaserc` points to your own Firebase project, following [Connect the Flutter app](worksheet-9.md#connect-the-flutter-app) and [Publish the app on the web](worksheet-9.md#publish-the-app-on-the-web). Keep service account private keys out of Git.
 
 Follow the [Firebase Hosting GitHub guide](https://firebase.google.com/docs/hosting/github-integration) by running this command from your project root:
 
@@ -458,13 +548,13 @@ Follow the [Firebase Hosting GitHub guide](https://firebase.google.com/docs/host
 firebase init hosting:github
 ```
 
-When prompted, approve the sign-in request in your browser, enter `<your-github-username>/<your-repo-name>`, answer **No** when asked to set up a build script, answer **Yes** to automatic deploy when a PR is merged, and enter `main` as your live branch.
+When prompted, approve the sign-in request in your browser, enter `<your-github-username>/<your-repo-name>`, answer **No** when asked to set up a build script, and answer **Yes** to automatic deploy when a PR is merged. Choose the branch containing your finished app as the live branch. The examples below use `main`; if you work on `9` or another branch, use that name in both generated workflows and when creating a release.
 
 This creates a Firebase service account (a dedicated account with Hosting permissions), uploads its encrypted key to GitHub as `FIREBASE_SERVICE_ACCOUNT_<PROJECT>`, and writes `.github/workflows/firebase-hosting-merge.yml` and `.github/workflows/firebase-hosting-pull-request.yml`. Open **Settings > Secrets and variables > Actions** on GitHub to see the encrypted secret listed with its value hidden, as shown below:
 
 ![GitHub repository Actions secrets page listing FIREBASE_SERVICE_ACCOUNT_SANDWICH_SHOP_59811](images/10/github_actions_secrets.png)
 
-Next, open `.github/workflows/firebase-hosting-merge.yml` because GitHub must compile `build/web` before deploying it. Add `workflow_dispatch:` under `on:`, set `permissions: contents: read`, update `actions/checkout` to `@v7`, and insert the four Flutter build steps before `FirebaseExtended/action-hosting-deploy@v0`, keeping your own generated `firebaseServiceAccount` and `projectId` lines intact:
+Next, open `.github/workflows/firebase-hosting-merge.yml` because GitHub must compile `build/web` before deploying it. Add `workflow_dispatch:` under `on:`, set `permissions: contents: read`, update `actions/checkout` to `@v7`, and add Flutter setup, checks and a web build before `FirebaseExtended/action-hosting-deploy@v0`. The job's `if:` condition also limits manual deployments to the live branch; replace `main` there too if your branch has another name. Keep your own generated `firebaseServiceAccount` and `projectId` values rather than copying the example project's values below:
 
 ```yaml
 name: Deploy to Firebase Hosting on merge
@@ -480,6 +570,7 @@ permissions:
 
 jobs:
   build_and_deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -489,6 +580,10 @@ jobs:
           cache: true
       - name: Install dependencies
         run: flutter pub get
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver
+      - name: Analyse code
+        run: dart analyze
       - name: Run unit and widget tests
         run: flutter test
       - name: Build web app
@@ -501,9 +596,11 @@ jobs:
           projectId: sandwich-shop-59811
 ```
 
-In this file, `${{ secrets.NAME }}` reads an encrypted secret from GitHub Settings without exposing it in logs, while `GITHUB_TOKEN` is a temporary token GitHub creates automatically for each run. Open `.github/workflows/firebase-hosting-pull-request.yml` and insert the same `subosito/flutter-action@v2`, `flutter pub get`, `flutter test` and `flutter build web` steps (plus `actions/checkout@v7`) before `FirebaseExtended/action-hosting-deploy@v0`, keeping its generated `permissions:` block and `if:` condition untouched so pull requests publish temporary seven-day preview URLs.
+In this file, `${{ secrets.NAME }}` reads an encrypted secret from GitHub Settings, while `GITHUB_TOKEN` is a temporary token GitHub creates automatically for each run. Never print secret values. Open `.github/workflows/firebase-hosting-pull-request.yml` and use the same checkout, Flutter setup, dependency, check and build steps before `FirebaseExtended/action-hosting-deploy@v0`. Keep its generated `permissions:` block and same-repository `if:` condition untouched; pull requests from forks do not receive the deployment secret.
 
-Commit and push both workflow files, then open **Actions** to confirm **Deploy to Firebase Hosting on merge** succeeds, as shown below:
+Pull requests targeting your live branch now get temporary preview URLs, which expire after seven days by default. A preview still connects to your real Firebase backend, so avoid using real customer data. Live deployment runs on any push to the configured branch, not only a pull-request merge; the ruleset above controls how changes reach it.
+
+Once both workflow files are on GitHub, open **Actions** to confirm **Deploy to Firebase Hosting on merge** succeeds, as shown below:
 
 ![GitHub Actions summary showing a green Deploy to Firebase Hosting on merge workflow run](images/10/github_hosting_deploy_run.png)
 
@@ -522,8 +619,10 @@ Select **Tag: Select tag** to create `v1.0.0` on `main`, enter a **Release title
 You can also create the same release from your terminal with the GitHub CLI:
 
 ```bash
-gh release create v1.0.0 --title "Sandwich Shop v1.0.0" --generate-notes
+gh release create v1.0.0 --target main --title "Sandwich Shop v1.0.0" --generate-notes
 ```
+
+A GitHub Release records a version and its notes; it does not deploy your site or create mobile binaries automatically. You can attach the debug APK downloaded from the CI run for that same commit if you want to share a test build.
 
 ### Mobile app stores
 
@@ -535,8 +634,8 @@ The exercises below apply these concepts to your Southsea Cinema coursework. The
 
 Build on your cinema app from Worksheet 9, keeping your mirrored `test/` folder structure and `README.md` up to date.
 
-1. Add full integration testing to your Southsea Cinema app following [Integration testing](#integration-testing). Add `integration_test`, give cards stable keys, write the first one or two end-to-end tests yourself, and use Copilot in **Plan** and **Interactive** modes to test the remaining core workflows on your Android emulator (and optionally Chrome).
+1. Add integration tests for your Southsea Cinema app following [Integration testing](#integration-testing). Write the first one or two journeys yourself, then use the Worksheet 8 workflow for the remaining journeys, including sign-in, booking, booking history and user settings. If you have not used a real Android or iOS device yet, run the app on one and then run your tests following [Try a physical device](#try-a-physical-device). Also try [Chrome](#run-integration-tests-in-chrome), and optionally explore [Firebase Test Lab](#try-firebase-test-lab) for devices you do not own. Keep the emulator as your alternative when a physical device is unavailable.
 
-2. Set up continuous integration and deployment on your Southsea Cinema repository following [Create a CI workflow on GitHub](#create-a-ci-workflow-on-github) and [Automate Firebase Hosting deployment](#automate-firebase-hosting-deployment). Add `.github/workflows/tests.yml` to check formatting, static analysis and test coverage, and connect Firebase Hosting for automated live and pull-request deployments (plus an optional `v1.0.0` release on GitHub).
+2. Set up continuous integration and deployment on your Southsea Cinema repository following [Create a CI workflow on GitHub](#create-a-ci-workflow-on-github) and [Automate Firebase Hosting deployment](#automate-firebase-hosting-deployment). Include formatting, analysis, test coverage and the [web and Android build jobs](#build-for-more-than-one-platform), then inspect the graph and download the artifacts. Require the checks before merging where your GitHub plan allows it, and verify both a pull-request preview and a live deployment. Optionally add scheduled integration tests or publish a versioned GitHub Release.
 
 3. (Advanced) If you want to distribute your app beyond the web, follow Flutter's [Android deployment guide](https://docs.flutter.dev/deployment/android), [iOS deployment guide](https://docs.flutter.dev/deployment/ios) or desktop documentation to package and release your app on Google Play, the App Store or another platform of your choice.
