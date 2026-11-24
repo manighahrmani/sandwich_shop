@@ -85,3 +85,24 @@ jobs:
           name: app-${{ matrix.platform }}
           path: ${{ matrix.output }}
           if-no-files-found: error
+
+  deploy:
+    name: Deploy to Firebase Hosting
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/10'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Download web build
+        uses: actions/download-artifact@v8
+        with:
+          name: app-web
+          path: build/web
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SANDWICH_SHOP_59811 }}
+          channelId: live
+          projectId: sandwich-shop-59811
