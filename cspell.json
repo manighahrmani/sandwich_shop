@@ -175,6 +175,7 @@
     "worksheets",
     "worktrees",
     "writable",
+    "xattr",
     "Xcode"
   ],
   "ignorePaths": [
