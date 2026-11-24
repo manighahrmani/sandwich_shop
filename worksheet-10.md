@@ -507,7 +507,7 @@ Each runner starts clean, so the build job must check out the code and install F
 
 ![Workflow graph where the Format, analyse and test job leads to the Build web and Build android jobs](images/10/ci_workflow_job_graph.png)
 
-Run the updated workflow and inspect both build jobs and their `app-web` and `app-android` artifacts. The web artifact contains files for a web server, not a page to open directly from disk. The debug APK can be installed on your own Android device for testing; it is not a signed store release. These jobs build packages but do not deploy them.
+Run the updated workflow and inspect both build jobs and their `app-web` and `app-android` artifacts. The web artifact contains files for a web server, not a page to open directly from disk. The debug APK can be installed on your own Android device for testing; it is not a signed store release. These jobs build packages but do not deploy them; we add a deployment job in [Automate Firebase Hosting deployment](#automate-firebase-hosting-deployment).
 
 ### Require checks before merging
 
@@ -544,47 +544,30 @@ Follow the [Firebase Hosting GitHub guide](https://firebase.google.com/docs/host
 firebase init hosting:github
 ```
 
-When prompted, approve the sign-in request in your browser, enter `<your-github-username>/<your-repo-name>`, answer **No** when asked to set up a build script, and answer **Yes** to automatic deploy when a PR is merged. Choose the branch containing your finished app as the live branch. The examples below use `main`; if you work on `9` or another branch, use that name in both generated workflows and when creating a release.
+When prompted, approve the sign-in request in your browser, enter `<your-github-username>/<your-repo-name>`, answer **No** when asked to set up a build script, and answer **No** to automatic deploy when a PR is merged. We deploy from our existing CI workflow instead, so the live site only updates after the checks and builds pass. Choose the branch containing your finished app as the live branch. The examples below use `main`; if you work on `9` or another branch, use that name in the workflows and when creating a release.
 
-This creates a Firebase service account (a dedicated account with Hosting permissions), uploads its encrypted key to GitHub as `FIREBASE_SERVICE_ACCOUNT_<PROJECT>`, and writes `.github/workflows/firebase-hosting-merge.yml` and `.github/workflows/firebase-hosting-pull-request.yml`. Open **Settings > Secrets and variables > Actions** on GitHub to see the encrypted secret listed with its value hidden, as shown below:
+This creates a Firebase service account (a dedicated account with Hosting permissions), uploads its encrypted key to GitHub as `FIREBASE_SERVICE_ACCOUNT_<PROJECT>`, and writes `.github/workflows/firebase-hosting-pull-request.yml`. Open **Settings > Secrets and variables > Actions** on GitHub to see the encrypted secret listed with its value hidden, as shown below:
 
 ![GitHub repository Actions secrets page listing FIREBASE_SERVICE_ACCOUNT_SANDWICH_SHOP_59811](images/10/github_actions_secrets.png)
 
-Next, open `.github/workflows/firebase-hosting-merge.yml` because GitHub must compile `build/web` before deploying it. Add `workflow_dispatch:` under `on:`, set `permissions: contents: read`, update `actions/checkout` to `@v7`, and add Flutter setup, checks and a web build before `FirebaseExtended/action-hosting-deploy@v0`. The job's `if:` condition also limits manual deployments to the live branch; replace `main` there too if your branch has another name. Keep your own generated `firebaseServiceAccount` and `projectId` values rather than copying the example project's values below:
+Open `.github/workflows/tests.yml` and add a third job named `deploy` under `jobs:`, aligned with `test:` and `build:`. Keep your own secret name and `projectId` rather than copying the example project's values below:
 
 ```yaml
-name: Deploy to Firebase Hosting on merge
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-permissions:
-  contents: read
-
-jobs:
-  build_and_deploy:
-    if: github.ref == 'refs/heads/main'
+  deploy:
+    name: Deploy to Firebase Hosting
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: subosito/flutter-action@v2
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Download web build
+        uses: actions/download-artifact@v8
         with:
-          channel: stable
-          cache: true
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Check formatting
-        run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver
-      - name: Analyse code
-        run: dart analyze
-      - name: Run unit and widget tests
-        run: flutter test
-      - name: Build web app
-        run: flutter build web
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+          name: app-web
+          path: build/web
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SANDWICH_SHOP_59811 }}
@@ -592,13 +575,17 @@ jobs:
           projectId: sandwich-shop-59811
 ```
 
-In this file, `${{ secrets.NAME }}` reads an encrypted secret from GitHub Settings, while `GITHUB_TOKEN` is a temporary token GitHub creates automatically for each run. Never print secret values. Open `.github/workflows/firebase-hosting-pull-request.yml` and use the same checkout, Flutter setup, dependency, check and build steps before `FirebaseExtended/action-hosting-deploy@v0`. Keep its generated `permissions:` block and same-repository `if:` condition untouched; pull requests from forks do not receive the deployment secret.
+The `needs: build` line queues this job until both builds succeed, so the workflow now runs as a chain: the tests with coverage first, then the two builds, then the deployment. If any earlier job fails, the later jobs never start and your live site keeps its last working version.
+
+The `if:` condition deploys only after a push to `main`; on pull requests and other branches, GitHub shows the job as skipped. Instead of building the app again, `actions/download-artifact@v8` downloads the `app-web` artifact from the build job into `build/web`, the folder `firebase.json` publishes. In this file, `${{ secrets.NAME }}` reads an encrypted secret from GitHub Settings, while `GITHUB_TOKEN` is a temporary token GitHub creates automatically for each run. Never print secret values.
+
+Open `.github/workflows/firebase-hosting-pull-request.yml` next, because GitHub must compile `build/web` before it can publish a preview. Update `actions/checkout` to `@v7`, then add the `subosito/flutter-action@v2` setup, `flutter pub get` and `flutter build web` steps before `FirebaseExtended/action-hosting-deploy@v0`. Keep its generated `permissions:` block and same-repository `if:` condition untouched; pull requests from forks do not receive the deployment secret.
 
 Pull requests targeting your live branch now get temporary preview URLs, which expire after seven days by default. A preview still connects to your real Firebase backend, so avoid using real customer data. Live deployment runs on any push to the configured branch, not only a pull-request merge; the ruleset above controls how changes reach it.
 
-Once both workflow files are on GitHub, open **Actions** to confirm **Deploy to Firebase Hosting on merge** succeeds. This is a separate workflow with a single `build_and_deploy` job, so its graph shows one box, as shown below:
+Push both workflow files, open **Actions** and select the newest **Flutter CI** run. The graph shows each job waiting for the one before it, from the tests through the builds to the deployment, as shown below:
 
-![GitHub Actions summary showing a green Deploy to Firebase Hosting on merge workflow run](images/10/github_hosting_deploy_run.png)
+![Workflow graph where Format, analyse and test leads to Build web and Build android, which both lead to Deploy to Firebase Hosting](images/10/ci_workflow_deploy_graph.png)
 
 Open your `.web.app` link to confirm your live site updated automatically. If you use the GitHub CLI, you can also verify your secrets and deployment runs with `gh secret list` and `gh run list --limit 5`.
 
