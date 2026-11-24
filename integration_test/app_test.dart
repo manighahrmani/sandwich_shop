@@ -218,7 +218,7 @@ void main() {
     ) async {
       final MockUser existingUser = MockUser(
         uid: 'customer-1',
-        email: 'alice@example.com',
+        email: 'name@example.com',
       );
       final MockFirebaseAuth signedOutAuth = MockFirebaseAuth(
         mockUser: existingUser,
@@ -249,7 +249,7 @@ void main() {
       final Finder textFields = find.byType(TextField);
       final Finder emailField = textFields.at(0);
       final Finder passwordField = textFields.at(1);
-      await tester.enterText(emailField, 'alice@example.com');
+      await tester.enterText(emailField, 'name@example.com');
       await tester.enterText(passwordField, 'secret123');
       final Finder registerButton = find.text('Register');
       await tester.ensureVisible(registerButton);
@@ -295,7 +295,7 @@ void main() {
       final Finder signInFields = find.byType(TextField);
       final Finder signInEmailField = signInFields.at(0);
       final Finder signInPasswordField = signInFields.at(1);
-      await tester.enterText(signInEmailField, 'alice@example.com');
+      await tester.enterText(signInEmailField, 'name@example.com');
       await tester.enterText(signInPasswordField, 'secret123');
       final Finder signInButton = find.text('Sign In');
       await tester.ensureVisible(signInButton);
@@ -311,7 +311,7 @@ void main() {
     ) async {
       final MockUser signedInUser = MockUser(
         uid: 'buyer-1',
-        email: 'buyer@example.com',
+        email: 'name@example.com',
       );
       final MockFirebaseAuth signedInAuth = MockFirebaseAuth(
         mockUser: signedInUser,
@@ -435,11 +435,11 @@ void main() {
     });
 
     testWidgets(
-      'cloud settings and bigger text sync across sign-out and sign-in',
+      'user settings and bigger text sync across sign-out and sign-in',
       (WidgetTester tester) async {
         final MockUser existingUser = MockUser(
           uid: 'settings-user-1',
-          email: 'sam@example.com',
+          email: 'name@example.com',
         );
         final MockFirebaseAuth signedOutAuth = MockFirebaseAuth(
           mockUser: existingUser,
@@ -462,7 +462,7 @@ void main() {
         final Finder authFields = find.byType(TextField);
         final Finder authEmailField = authFields.at(0);
         final Finder authPasswordField = authFields.at(1);
-        await tester.enterText(authEmailField, 'sam@example.com');
+        await tester.enterText(authEmailField, 'name@example.com');
         await tester.enterText(authPasswordField, 'secret123');
         final Finder signInButton = find.text('Sign In');
         await tester.ensureVisible(signInButton);
@@ -480,7 +480,7 @@ void main() {
         final Finder emailField = settingsFields.at(2);
         await tester.enterText(nameField, 'Sam Taylor');
         await tester.enterText(addressField, '14 Lion Terrace, Portsmouth');
-        await tester.enterText(emailField, 'sam@example.com');
+        await tester.enterText(emailField, 'name@example.com');
 
         final Finder largeTextSwitchFinder = find.byKey(
           const Key('largeTextSwitch'),
@@ -538,7 +538,7 @@ void main() {
         final Finder secondAuthFields = find.byType(TextField);
         final Finder secondAuthEmailField = secondAuthFields.at(0);
         final Finder secondAuthPasswordField = secondAuthFields.at(1);
-        await tester.enterText(secondAuthEmailField, 'sam@example.com');
+        await tester.enterText(secondAuthEmailField, 'name@example.com');
         await tester.enterText(secondAuthPasswordField, 'secret123');
         await tester.ensureVisible(signInButton);
         await tester.tap(signInButton);
@@ -574,14 +574,14 @@ void main() {
 
       final Finder textFields = find.byType(TextField);
       final Finder emailField = textFields.at(0);
-      await tester.enterText(emailField, 'lee@example.com');
+      await tester.enterText(emailField, 'name@example.com');
 
       final Finder emailLinkButton = find.text('Email me a sign-in link');
       await tester.ensureVisible(emailLinkButton);
       await tester.tap(emailLinkButton);
       await tester.pumpAndSettle();
       expect(
-        find.text('Sign-in link sent to lee@example.com. Check your inbox.'),
+        find.text('Sign-in link sent to name@example.com. Check your inbox.'),
         findsOneWidget,
       );
 
