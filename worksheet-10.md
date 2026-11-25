@@ -50,13 +50,13 @@ Use your own GitHub repository for the CI/CD sections. Its default branch must c
 
 ## Integration testing
 
-Back in [Why automated testing matters](worksheet-4.md#why-automated-testing-matters), we saw that unit tests check individual functions and widget tests check isolated screens. Integration tests go one step further by running the complete app on an Android emulator, phone or web browser to verify that screens, navigation and shared state work together end to end. See the [Flutter integration testing guide](https://docs.flutter.dev/testing/integration-tests) for the full overview.
+Back in [Worksheet 4's introduction to automated testing](worksheet-4.md#why-automated-testing-matters), we saw that unit tests check individual functions and widget tests check isolated screens. Integration tests go one step further by running the complete app on an Android emulator, phone or web browser to verify that screens, navigation and shared state work together end to end. See the [Flutter integration testing guide](https://docs.flutter.dev/testing/integration-tests) for the full overview.
 
 Integration tests live in a top-level `integration_test/` directory rather than `test/`, so an ordinary `flutter test` run stays fast. Tests in an integration test file share a process and repository singletons, so data left behind by one test can affect the next.
 
-To keep every test fast, repeatable and offline without touching your live Firebase project, we reuse `MockFirebaseAuth` from [Create the authentication repository](worksheet-9.md#create-the-authentication-repository) and `FakeFirebaseFirestore` from [Read the menu from Firestore](worksheet-9.md#read-the-menu-from-firestore). Passing `UniqueKey()` to `App` tells Flutter to build a fresh `_AppState` for each test so no auth subscription or **Bigger text** setting leaks between runs.
+To keep every test fast, repeatable and offline without touching your live Firebase project, we reuse `MockFirebaseAuth` from [Worksheet 9's authentication repository](worksheet-9.md#create-the-authentication-repository) and `FakeFirebaseFirestore` from [the Firestore menu setup in Worksheet 9](worksheet-9.md#read-the-menu-from-firestore). Passing `UniqueKey()` to `App` tells Flutter to build a fresh `_AppState` for each test so no auth subscription or **Bigger text** setting leaks between runs.
 
-These tests exercise complete user journeys through our app, but replace Firebase with test doubles. They do not check live security rules, email delivery or Google's sign-in service. Keep the manual checks from [Test signing up, signing in and signing out](worksheet-9.md#test-signing-up-signing-in-and-signing-out) for your real Firebase connection.
+These tests exercise complete user journeys through our app, but replace Firebase with test doubles. They do not check live security rules, email delivery or Google's sign-in service. Keep the manual checks from [Worksheet 9's sign-in verification steps](worksheet-9.md#test-signing-up-signing-in-and-signing-out) for your real Firebase connection.
 
 ### Install the integration test package
 
@@ -80,7 +80,7 @@ Because `integration_test` is a development dependency, Flutter excludes it from
 
 ### Add keys to sandwich cards
 
-Each card on `MenuScreen` renders its own **Order** button, so calling `find.text('Order')` can match more than one button. Giving each `Card` a `Key` built from `sandwich.id` lets tests target a single sandwich card reliably, matching [Write widget tests](worksheet-8.md#write-widget-tests).
+Each card on `MenuScreen` renders its own **Order** button, so calling `find.text('Order')` can match more than one button. Giving each `Card` a `Key` built from `sandwich.id` lets tests target a single sandwich card reliably, matching [Worksheet 8's widget testing guidance](worksheet-8.md#write-widget-tests).
 
 Open `lib/widgets/sandwich_card.dart` and add the `key` line inside `build`:
 
@@ -102,7 +102,7 @@ Save both files and run `flutter test` to confirm all existing unit and widget t
 
 ### Create the test file
 
-Create a top-level `integration_test/` folder and add a new file named `integration_test/app_test.dart`. Start with the imports for our test packages, repositories and `MenuScreen`, then call `IntegrationTestWidgetsFlutterBinding.ensureInitialized()` (like `TestWidgetsFlutterBinding.ensureInitialized()` in [Test the asset loader](worksheet-6.md#test-the-asset-loader)) to connect the test runner to the emulator or browser:
+Create a top-level `integration_test/` folder and add a new file named `integration_test/app_test.dart`. Start with the imports for our test packages, repositories and `MenuScreen`, then call `IntegrationTestWidgetsFlutterBinding.ensureInitialized()` (like `TestWidgetsFlutterBinding.ensureInitialized()` in [Worksheet 6's asset loader tests](worksheet-6.md#test-the-asset-loader)) to connect the test runner to the emulator or browser:
 
 ```dart
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -155,7 +155,7 @@ Inside `main()`, below `IntegrationTestWidgetsFlutterBinding.ensureInitialized()
   });
 ```
 
-Calling `rootBundle.clear()` resets cached bundled assets as in [Update the menu and app tests](worksheet-6.md#update-the-menu-and-app-tests), and `SharedPreferencesAsyncPlatform.instance` installs clean in-memory preferences (which still store any pending email-link sign-in from Worksheet 9), matching [Test loading and saving preferences](worksheet-6.md#test-loading-and-saving-preferences). Calling `clearCache()` on `SandwichRepository` ensures `MenuScreen` reads the menu cleanly on every test run.
+Calling `rootBundle.clear()` resets cached bundled assets as covered in [Worksheet 6's menu tests](worksheet-6.md#update-the-menu-and-app-tests), and `SharedPreferencesAsyncPlatform.instance` installs clean in-memory preferences (which still store any pending email-link sign-in from Worksheet 9), matching [Worksheet 6's preference tests](worksheet-6.md#test-loading-and-saving-preferences). Calling `clearCache()` on `SandwichRepository` ensures `MenuScreen` reads the menu cleanly on every test run.
 
 Below `tearDown()`, add a `group` with your first test checking that `App` opens on `MenuScreen`, loads `Footlong Sub` and `Six-Inch Sub`, and scrolls down to `Loaded Nachos`:
 
@@ -178,21 +178,21 @@ Below `tearDown()`, add a `group` with your first test checking that `App` opens
   });
 ```
 
-As seen in [Simulating user interaction and navigation](worksheet-4.md#simulating-user-interaction-and-navigation) and [Update the menu and app tests](worksheet-6.md#update-the-menu-and-app-tests), `pumpAndSettle()` waits for animations to finish (avoid using it while an endless loading spinner is on screen), and `scrollUntilVisible` scrolls in 200-pixel steps until `Loaded Nachos` appears.
+Just as you did in [Worksheet 4's navigation tests](worksheet-4.md#simulating-user-interaction-and-navigation) and [Worksheet 6's menu tests](worksheet-6.md#update-the-menu-and-app-tests), `pumpAndSettle()` waits for animations to finish (avoid using it while an endless loading spinner is on screen), and `scrollUntilVisible` scrolls in 200-pixel steps until `Loaded Nachos` appears.
 
 ### Run the test on an emulator
 
-Start your Android emulator and find its device ID following [Preparing an Android emulator or device](worksheet-7.md#preparing-an-android-emulator-or-device). Run the test with your emulator ID in place of `emulator-5554`:
+Start your Android emulator and find its device ID using [Worksheet 7's emulator setup](worksheet-7.md#preparing-an-android-emulator-or-device). Run the test with your emulator ID in place of `emulator-5554`:
 
 ```bash
 flutter test integration_test/app_test.dart -d emulator-5554
 ```
 
-Flutter builds and installs the app on the emulator, drives the UI inside the real Android app and reports the result in your terminal. Integration tests take much longer than unit tests, and `flutter test --coverage` excludes `integration_test/`, so keep tracking line coverage with `test/` from [Test coverage](worksheet-8.md#test-coverage).
+Flutter builds and installs the app on the emulator, drives the UI inside the real Android app and reports the result in your terminal. Integration tests take much longer than unit tests, and `flutter test --coverage` excludes `integration_test/`, so keep tracking line coverage with `test/` using [Worksheet 8's coverage workflow](worksheet-8.md#test-coverage).
 
 ### Try a physical device
 
-If you have not run your app on a real phone or tablet yet, try it now. For Android, follow [Use a physical Android device](worksheet-7.md#use-a-physical-android-device). For iOS, you need a Mac with Xcode and a signed app; complete [Support more platforms](worksheet-9.md#support-more-platforms) first, because our starting project supports only Android and web.
+If you have not run your app on a real phone or tablet yet, try it now. For Android, use [Worksheet 7's physical device guide](worksheet-7.md#use-a-physical-android-device). For iOS, you need a Mac with Xcode and a signed app; complete [Worksheet 9's platform support section](worksheet-9.md#support-more-platforms) first, because our starting project supports only Android and web.
 
 Run the app normally on your device and check the journeys from Worksheet 9 before running the automated tests. Then follow Flutter's [Test on an Android device](https://docs.flutter.dev/testing/integration-tests#test-on-an-android-device) or [Test on an iOS device](https://docs.flutter.dev/testing/integration-tests#test-on-an-ios-device), using `flutter test integration_test/app_test.dart -d DEVICE_ID` with your phone's ID. Use the same device to rerun the tests as you add journeys below; if you do not have a suitable device, continue with the emulator.
 
@@ -265,7 +265,7 @@ Run `flutter test integration_test/app_test.dart -d emulator-5554` to verify bot
 
 ### Add the remaining workflow tests with Copilot
 
-Now that you have written the first two tests manually, use the [plan, implement and review workflow from Worksheet 8](worksheet-8.md#working-with-copilot) to add the remaining journeys below. Include your integration test file and the relevant app files as context, and use `name@example.com` for test email addresses.
+Now that you have written the first two tests manually, use [Worksheet 8's Copilot workflow](worksheet-8.md#working-with-copilot) to add the remaining journeys below. Include your integration test file and the relevant app files as context, and use `name@example.com` for test email addresses.
 
 Calling `await tester.pageBack()` simulates selecting the app bar back button. To check **Bigger text**, capture the baseline before signing in:
 
@@ -293,7 +293,7 @@ Second, test registration, sign-out and sign-in by checking empty-field validati
 
 ![The Android emulator running the registration, sign-out and sign-in integration test](images/10/integration_test_auth.gif)
 
-Third, test multi-order checkout and order history from a signed-in account by placing a multi-item order, checking the itemised summary and emptied basket, placing a second order, and comparing vertical positions with `tester.getTopLeft` as in [Test the orders list and its empty state](worksheet-7.md#test-the-orders-list-and-its-empty-state). The newer order should render above the older one, as shown below:
+Third, test multi-order checkout and order history from a signed-in account by placing a multi-item order, checking the itemised summary and emptied basket, placing a second order, and comparing vertical positions with `tester.getTopLeft`, just as you did in [Worksheet 7's order list tests](worksheet-7.md#test-the-orders-list-and-its-empty-state). The newer order should render above the older one, as shown below:
 
 ![The Android emulator running the multi-order checkout and order history integration test](images/10/integration_test_checkout.gif)
 
@@ -301,9 +301,9 @@ Fourth, test user settings and **Bigger text** sync by recording the baseline te
 
 ![The Android emulator running the user settings and bigger text sync integration test](images/10/integration_test_settings_sync.gif)
 
-Fifth, test **Email me a sign-in link** and **Sign in with Google** from [Sign in with an email link or Google](worksheet-9.md#sign-in-with-an-email-link-or-google) on `AuthScreen` to confirm the confirmation banner appears and Google sign-in returns cleanly to `MenuScreen`.
+Fifth, test **Email me a sign-in link** and **Sign in with Google** from [Worksheet 9's email-link and Google sign-in section](worksheet-9.md#sign-in-with-an-email-link-or-google) on `AuthScreen` to confirm the confirmation banner appears and Google sign-in returns cleanly to `MenuScreen`.
 
-Review the assertions following [Check the tests](worksheet-8.md#check-the-tests), run `dart analyze`, and rerun the integration test file on your chosen device after each journey. You should have seven tests. Compare the behaviour with our model solution in [`integration_test/app_test.dart` on branch `10`](https://github.com/manighahrmani/sandwich_shop/blob/10/integration_test/app_test.dart); your test data and wording may differ.
+Review the assertions against [Worksheet 8's test-checking guide](worksheet-8.md#check-the-tests), run `dart analyze`, and rerun the integration test file on your chosen device after each journey. You should have seven tests. Compare the behaviour with our model solution in [`integration_test/app_test.dart` on branch `10`](https://github.com/manighahrmani/sandwich_shop/blob/10/integration_test/app_test.dart); your test data and wording may differ.
 
 ### Run integration tests in Chrome
 
@@ -349,7 +349,7 @@ Use your `integration_test/app_test.dart` as the test target rather than the gui
 
 ## Continuous integration
 
-Running formatting, `dart analyze` and `flutter test` locally (as in [Running test suites and static analysis](worksheet-4.md#running-test-suites-and-static-analysis) and [Measure coverage](worksheet-8.md#measure-coverage)) is easy to forget before pushing. Continuous integration (CI) automates those checks on a clean cloud computer every time you push commits or open a pull request (a request to merge a branch on GitHub), while continuous deployment (CD) publishes passing builds live automatically.
+Running formatting, `dart analyze` and `flutter test` locally (covered in [Worksheet 4's static analysis section](worksheet-4.md#running-test-suites-and-static-analysis) and [Worksheet 8's coverage section](worksheet-8.md#measure-coverage)) is easy to forget before pushing. Continuous integration (CI) automates those checks on a clean cloud computer every time you push commits or open a pull request (a request to merge a branch on GitHub), while continuous deployment (CD) publishes passing builds live automatically.
 
 GitHub provides this service built into every repository through [GitHub Actions](https://docs.github.com/en/actions), with free standard hosted runners for public repositories and a monthly allowance for private ones. Use two spaces per indentation level, as in `pubspec.yaml`, and no tab characters.
 
@@ -449,13 +449,7 @@ Select **Format, analyse and test** on the left to inspect each step, and select
 
 ![GitHub Actions job view showing all passing CI steps with unit and widget test output expanded](images/10/github_actions_step_logs.png)
 
-If a step turns red, open that step to find the failing file or test, fix it locally in VS Code, and rerun the same checks, including all four folders in the formatting command. After learning the browser flow, you can also install the [GitHub CLI](https://cli.github.com/), sign in once with `gh auth login`, and inspect runs from your terminal:
-
-```bash
-gh run list --limit 5
-gh run watch
-gh run view --log-failed
-```
+If a step turns red, open that step to find the failing file or test, fix it locally in VS Code, and rerun the same checks, including all four folders in the formatting command.
 
 ### Build for more than one platform
 
@@ -503,17 +497,21 @@ The first workflow has one job, so its graph shows only one box even though it r
 
 The `needs: test` line prevents builds when formatting, analysis or tests fail. A `matrix` repeats a job with different values, so the two builds can run in parallel on separate runners. The `${{ matrix.platform }}`, `${{ matrix.command }}` and `${{ matrix.output }}` expressions select the name, command and output path for each build. Setting `fail-fast: false` lets one build finish even if the other fails.
 
-Each runner starts clean, so the build job must check out the code and install Flutter again. Android also needs Java to run Gradle. There are now three job runs, with both builds depending on the checks, as shown below. GitHub may group the matrix entries; expand the build job to inspect each platform.
+Each runner starts clean, so the build job must check out the code and install Flutter again. Android also needs Java to run Gradle. On the workflow summary page, **Format, analyse and test** now connects into **Matrix: build**, showing both **Build android** and **Build web**, with `app-android`, `app-web` and `coverage-report` listed under **Artifacts**, as shown below:
 
-![Workflow graph where the Format, analyse and test job leads to the Build web and Build android jobs](images/10/ci_workflow_job_graph.png)
+![GitHub Actions run summary showing Format, analyse and test leading to the expanded Build android and Build web matrix jobs and downloadable artifacts](images/10/ci_workflow_job_graph.png)
 
-Run the updated workflow and inspect both build jobs and their `app-web` and `app-android` artifacts. The web artifact contains files for a web server, not a page to open directly from disk. The debug APK can be installed on your own Android device for testing; it is not a signed store release. These jobs build packages but do not deploy them; we add a deployment job in [Automate Firebase Hosting deployment](#automate-firebase-hosting-deployment).
+Run the updated workflow and inspect both build jobs and their **Artifacts** downloads. The `app-web` archive contains files for a web server, not a page to open directly from disk. Selecting **app-android** downloads a zip containing `app-debug.apk`, which you can extract and install on an Android device for testing (it is not a signed store release). These jobs build packages but do not deploy them; we add a deployment job in [Automate Firebase Hosting deployment](#automate-firebase-hosting-deployment).
 
 ### Require checks before merging
 
-A red workflow does not stop someone merging a pull request by itself. On GitHub, open **Settings > Rules > Rulesets**, create a branch ruleset targeting your app's default branch, and enable **Require a pull request before merging** and **Require status checks to pass**. Select the check names from your successful run, including **Format, analyse and test**, **Build web** and **Build android**, then set the ruleset to **Active**.
+A red workflow does not stop someone merging a pull request by itself. On GitHub, open **Settings > Rules > Rulesets**, select **New ruleset > New branch ruleset**, give it a name such as `Require CI checks before merging`, set **Enforcement status** to **Active**, and add your default branch under **Target branches**.
 
-This makes the graph useful as a gate: a change must pass the selected checks before it reaches that branch. Availability depends on your repository visibility and GitHub plan; see [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). The coverage summary reports a percentage but does not enforce a minimum.
+Next, tick **Require a pull request before merging** and **Require status checks to pass**, select **Add checks** to add **Format, analyse and test**, **Build web** and **Build android**, and select **Create**, as shown below:
+
+![GitHub New branch ruleset page with Enforcement status set to Active, target branch main, pull-request protection enabled and the three CI checks selected](images/10/github_branch_ruleset.png)
+
+This makes the CI graph act as a gate: a change must pass the selected checks before it reaches that branch. Availability depends on your repository visibility and GitHub plan; see [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). The coverage summary reports a percentage but does not enforce a minimum.
 
 ### Integration tests in CI
 
@@ -532,11 +530,11 @@ on:
 
 ## Deployment
 
-In [Publish the app on the web](worksheet-9.md#publish-the-app-on-the-web), you ran `flutter build web` and `firebase deploy --only hosting` manually. You can automate web deployment and snapshot versioned milestones directly on GitHub.
+In [Worksheet 9's web publishing section](worksheet-9.md#publish-the-app-on-the-web), you ran `flutter build web` and `firebase deploy --only hosting` manually. You can automate web deployment and snapshot versioned milestones directly on GitHub.
 
 ### Automate Firebase Hosting deployment
 
-Before automating deployment, make sure `.firebaserc` points to your own Firebase project, following [Connect the Flutter app](worksheet-9.md#connect-the-flutter-app) and [Publish the app on the web](worksheet-9.md#publish-the-app-on-the-web). Keep service account private keys out of Git.
+Before automating deployment, make sure `.firebaserc` points to your own Firebase project, using [Worksheet 9's Firebase connection steps](worksheet-9.md#connect-the-flutter-app) and [web publishing section](worksheet-9.md#publish-the-app-on-the-web). Keep service account private keys out of Git.
 
 Follow the [Firebase Hosting GitHub guide](https://firebase.google.com/docs/hosting/github-integration) by running this command from your project root:
 
@@ -583,29 +581,29 @@ Open `.github/workflows/firebase-hosting-pull-request.yml` next, because GitHub 
 
 Pull requests targeting your live branch now get temporary preview URLs, which expire after seven days by default. A preview still connects to your real Firebase backend, so avoid using real customer data. Live deployment runs on any push to the configured branch, not only a pull-request merge; the ruleset above controls how changes reach it.
 
-Push both workflow files, open **Actions** and select the newest **Flutter CI** run. The graph shows each job waiting for the one before it, from the tests through the builds to the deployment, as shown below:
+Push both workflow files, open **Actions** and select the newest **Flutter CI** run. The workflow graph now shows **Format, analyse and test** feeding into **Build android** and **Build web**, which then connect to **Deploy to Firebase Hosting**, as shown below:
 
-![Workflow graph where Format, analyse and test leads to Build web and Build android, which both lead to Deploy to Firebase Hosting](images/10/ci_workflow_deploy_graph.png)
+![GitHub Actions run summary showing Format, analyse and test leading to Build android and Build web and then Deploy to Firebase Hosting](images/10/ci_workflow_deploy_graph.png)
 
-Open your `.web.app` link to confirm your live site updated automatically. If you use the GitHub CLI, you can also verify your secrets and deployment runs with `gh secret list` and `gh run list --limit 5`.
+Open your `.web.app` link to confirm your live site updated automatically. You can also revisit **Settings > Secrets and variables > Actions** at any time to confirm your deployment secret is listed cleanly.
 
 ### Publish a release on GitHub
 
-When your app reaches a milestone, create a GitHub Release attached to a version tag such as `v1.0.0`. The three numbers track major versions, new features and small fixes.
+When your app reaches a milestone, create a GitHub Release attached to a version tag such as `v1.0.0`. The three numbers track major versions, new features and small fixes. Before creating the release, download the `app-android` zip from the **Artifacts** section of your latest green **Flutter CI** run and extract `app-debug.apk`.
 
 Open **Releases** from your repository's right sidebar and select **Create a new release** (or **Draft a new release**), which opens the form shown below:
 
 ![GitHub New release form showing Tag, Target, Release title, Generate release notes and Publish release controls](images/10/github_release_new.png)
 
-Select **Tag: Select tag** to create `v1.0.0` on `main`, enter a **Release title** such as `Sandwich Shop v1.0.0`, select **Generate release notes** (or write a short summary) and select **Publish release**.
+Select **Tag: Select tag** to create `v1.0.0` on your app branch, enter a **Release title** such as `Sandwich Shop v1.0.0`, and select **Generate release notes** (or write a short list of changes). Drag `app-debug.apk` onto **Attach binaries by dropping them here or selecting them.**, wait for the upload to finish, and select **Publish release**.
 
-You can also create the same release from your terminal with the GitHub CLI:
+Your published release now stores the tagged source snapshot alongside the downloadable `app-debug.apk` file under **Assets**, as shown below:
 
-```bash
-gh release create v1.0.0 --target main --title "Sandwich Shop v1.0.0" --generate-notes
-```
+![Published Sandwich Shop v1.0.0 release on GitHub showing the tag, release notes and downloadable app-debug.apk asset](images/10/github_release_published.png)
 
-A GitHub Release records a version and its notes; it does not deploy your site or create mobile binaries automatically. You can attach the debug APK downloaded from the CI run for that same commit if you want to share a test build.
+To install and test the exported APK on a real Android phone or tablet, open the GitHub Release page in your mobile browser (or copy `app-debug.apk` over USB) and tap `app-debug.apk`. If Android prompts for permission, allow **Install unknown apps** for your browser or file manager, then select **Install**.
+
+You can also drag the downloaded `app-debug.apk` straight onto a running Android emulator window, or install it from a terminal with `adb install app-debug.apk`. Remember that `app-debug.apk` is an un-signed debug test build; public store submissions require a release signing key.
 
 ### Mobile app stores
 
@@ -617,8 +615,8 @@ The exercises below apply these concepts to your Southsea Cinema coursework. The
 
 Build on your cinema app from Worksheet 9, keeping your mirrored `test/` folder structure and `README.md` up to date.
 
-1. Add integration tests for your Southsea Cinema app following [Integration testing](#integration-testing). Write the first one or two journeys yourself, then use the Worksheet 8 workflow for the remaining journeys, including sign-in, booking, booking history and user settings. If you have not used a real Android or iOS device yet, run the app on one and then run your tests following [Try a physical device](#try-a-physical-device). Also try [Chrome](#run-integration-tests-in-chrome), and optionally explore [Firebase Test Lab](#try-firebase-test-lab) for devices you do not own. Keep the emulator as your alternative when a physical device is unavailable.
+1. Add integration tests for your Southsea Cinema app following [Integration testing](#integration-testing). Write the first one or two journeys yourself, then use Worksheet 8's Copilot workflow for the remaining journeys, including sign-in, booking, booking history and user settings. If you have not used a real Android or iOS device yet, run the app on one and then run your tests following [Try a physical device](#try-a-physical-device). Also try [Chrome](#run-integration-tests-in-chrome), and optionally explore [Firebase Test Lab](#try-firebase-test-lab) for devices you do not own. Keep the emulator as your alternative when a physical device is unavailable.
 
-2. Set up continuous integration and deployment on your Southsea Cinema repository following [Create a CI workflow on GitHub](#create-a-ci-workflow-on-github) and [Automate Firebase Hosting deployment](#automate-firebase-hosting-deployment). Include formatting, analysis, test coverage and the [web and Android build jobs](#build-for-more-than-one-platform), then inspect the graph and download the artifacts. Require the checks before merging where your GitHub plan allows it, and verify both a pull-request preview and a live deployment. Optionally add scheduled integration tests or publish a versioned GitHub Release.
+2. Set up continuous integration and deployment on your Southsea Cinema repository following [Create a CI workflow on GitHub](#create-a-ci-workflow-on-github) and [Automate Firebase Hosting deployment](#automate-firebase-hosting-deployment). Include formatting, analysis, test coverage and the [web and Android build jobs](#build-for-more-than-one-platform), then inspect the graph and download the artifacts. Require the checks before merging where your GitHub plan allows it, and verify both a pull-request preview and a live deployment. Optionally add scheduled integration tests or publish a tagged GitHub Release with `app-debug.apk` attached.
 
 3. (Advanced) If you want to distribute your app beyond the web, follow Flutter's [Android deployment guide](https://docs.flutter.dev/deployment/android), [iOS deployment guide](https://docs.flutter.dev/deployment/ios) or desktop documentation to package and release your app on Google Play, the App Store or another platform of your choice.
