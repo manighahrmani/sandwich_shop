@@ -31,7 +31,7 @@ The schedule is also available as the [module schedule Excel sheet](https://port
 | 09/11/2026 | 13/11/2026 | [Worksheet 7](./worksheet-7.md) | [Lecture 7](https://docs.google.com/presentation/d/1s5h6qtZTs2cc03KvQSYmXouqabMxHUszxzuOooYVKqk/edit?usp=sharing) | Demo Window 4 |
 | 16/11/2026 | 20/11/2026 | [Worksheet 8](./worksheet-8.md) | [Lecture 8](https://docs.google.com/presentation/d/16xkLVwdehpiLNL8_CkPoeYchJ9G2vIfkaHa9XU7t4-k/edit?usp=sharing) | Demo Window 4 |
 | 23/11/2026 | 27/11/2026 | [Worksheet 9](./worksheet-9.md) | [Lecture 9](https://docs.google.com/presentation/d/15hnql-AVKPOSMbrE6zzYdG7myLkOkrgWNoHeX5lLEMM/edit?usp=sharing) | Demo Window 5 |
-| 30/11/2026 | 04/12/2026 | [Worksheet 10](./worksheet-10.md) (not assessed) | Lecture 10 | Demo Window 5 |
+| 30/11/2026 | 04/12/2026 | [Worksheet 10](./worksheet-10.md) (not assessed) | [Lecture 10](https://docs.google.com/presentation/d/1xChQOr0VkGym9qYxj2IhDkIaJCxGp9U7yICrfYgrrd4/edit?usp=sharing) | Demo Window 5 |
 | 21/12/2026 | 08/01/2027 | Xmas Break | | |
 | 11/01/2027 | 15/01/2027 | Marking week | | |
 | 18/01/2027 | 19/02/2027 | Term 2 | | |
