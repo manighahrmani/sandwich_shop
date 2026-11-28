@@ -17,17 +17,51 @@ Lecture 10:
 ## Integration testing — beyond unit and widget tests
 
 - In Lecture 4 we saw the testing pyramid: many fast unit tests, focused widget tests, fewer integration tests.
-- Integration tests run the full app on an emulator, physical phone or browser to check screens, routes and shared state together.
-- Keep automated tests fast, repeatable and offline with test doubles such as `MockFirebaseAuth` and `FakeFirebaseFirestore`.
-- Pass `UniqueKey()` to your root widget so each test starts cleanly without leftover state.
+- Integration tests run the full app on a phone, emulator or browser to check that screens, navigation and shared state work together.
 - Documentation: [Integration testing](https://docs.flutter.dev/testing/integration-tests)
+
+---
+
+## Integration testing — mocks and fakes
+
+- Testing against live servers or cloud databases is slow, unreliable when the network drops, and can clutter real data.
+- Instead, swap them out in tests for in-memory mocks and fakes such as `MockFirebaseAuth` and `FakeFirebaseFirestore` so tests stay fast, offline and repeatable.
+- Documentation: [Mock dependencies](https://docs.flutter.dev/cookbook/testing/unit/mocking)
+
+---
+
+## Integration testing — resetting state with UniqueKey
+
+- When two tests run back to back, Flutter may reuse the previous root widget and keep old state from the first test.
+- Passing `UniqueKey()` to the root widget inside each test tells Flutter it is a brand-new widget, forcing a fresh widget tree.
+- Your app in `lib/` only needs the standard `super.key` parameter; `UniqueKey()` lives in the test file.
+- Documentation: [UniqueKey](https://api.flutter.dev/flutter/foundation/UniqueKey-class.html)
+
+```dart
+// lib/main.dart — accept a key on the root widget
+class CounterApp extends StatefulWidget {
+  const CounterApp({super.key});
+  // ...
+}
+```
+
+```dart
+// integration_test/app_test.dart — fresh key per test
+testWidgets('first test', (WidgetTester tester) async {
+  await tester.pumpWidget(CounterApp(key: UniqueKey()));
+});
+
+testWidgets('second test', (WidgetTester tester) async {
+  await tester.pumpWidget(CounterApp(key: UniqueKey()));
+});
+```
 
 ---
 
 ## Integration testing — how Flutter runs them
 
-- Add `integration_test` under `dev_dependencies` and put test files inside a top-level `integration_test/` folder so `flutter test` stays fast.
-- Initialise `IntegrationTestWidgetsFlutterBinding.ensureInitialized()`, label shared widgets with `Key` and reset dependencies in `setUp()` and `tearDown()`.
+- Add `integration_test` to `dev_dependencies` and place your tests in an `integration_test/` folder so normal `flutter test` runs stay fast.
+- Initialise the integration test binding at the top of the file, find widgets by `Key`, and check the screen just like a widget test.
 
 ```dart
 IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -45,55 +79,54 @@ testWidgets('tapping add increments the counter', (
 
 ---
 
-## Integration testing — devices, browsers and test labs
+## Integration testing — where tests can run
 
-- Emulators and physical Android or iOS devices: run `flutter test integration_test/app_test.dart -d <device-id>`.
-- Web browsers: `flutter drive` pairs with `test_driver/integration_test.dart` (`integrationDriver()`) and ChromeDriver on port `4444`.
-- Hosted device clouds: [Firebase Test Lab](https://docs.flutter.dev/testing/integration-tests#test-in-firebase-test-lab-android) runs Android or iOS tests on remote devices.
-- Keep line coverage (`flutter test --coverage`) measured from `test/`, because integration tests do not record coverage.
+- On a phone or emulator, run your integration test with `flutter test` and pass the device with `-d`.
+- In a web browser, Flutter uses `flutter drive` with ChromeDriver to click through the app automatically.
+- You can also run tests on real remote phones in the cloud using [Firebase Test Lab](https://docs.flutter.dev/testing/integration-tests#test-in-firebase-test-lab-android).
+- Integration tests do not measure code coverage, so keep tracking coverage with your unit and widget tests.
 
 ---
 
 ## Continuous integration — automating checks
 
-- Running `dart format`, `dart analyze` and `flutter test` manually is easy to forget before pushing commits.
-- Continuous integration (CI) runs those checks automatically on a clean cloud machine whenever you push code or open a pull request.
-- Continuous deployment (CD) takes the next step and publishes every passing build automatically.
-- [GitHub Actions](https://docs.github.com/en/actions) gives public repositories free runners and private repositories a free monthly allowance.
+- It is easy to forget to format, analyse and test your code before pushing.
+- Continuous integration (CI) runs those checks automatically on a clean cloud machine whenever you push or open a pull request.
+- Continuous deployment (CD) goes one step further and publishes every passing build automatically.
+- [GitHub Actions](https://docs.github.com/en/actions) runs these checks for free on public repositories and includes a free monthly allowance for private ones.
 
 ---
 
 ## Continuous integration — workflows, jobs and steps
 
-- Workflows live as `.yml` files inside `.github/workflows/` using two-space YAML indentation (no tabs), just like `pubspec.yaml`.
-- Triggers (`on:`): events that start the workflow, such as `push`, `pull_request`, `workflow_dispatch` (manual **Run workflow** button) or `schedule`.
-- Jobs (`jobs:`): tasks executed on clean virtual machines (`runs-on: ubuntu-latest`), ordered with `needs:` when one job depends on another.
-- Steps (`steps:`): actions called via `uses:` (such as `actions/checkout@v7` or `subosito/flutter-action@v2`) or shell commands run via `run:`.
+- Workflows are YAML files saved in `.github/workflows/` that tell GitHub what to run.
+- Triggers (`on`) decide when a workflow starts, such as on a `push`, a `pull_request` or a manual button click.
+- Jobs (`jobs`) are groups of tasks that run on a fresh cloud machine, one after another or in parallel.
+- Steps (`steps`) are the individual commands or reusable actions inside each job.
 
 ---
 
-## Continuous integration — pipelines, matrices and rulesets
+## Continuous integration — pipelines and branch rules
 
-- Chain jobs into a clear pipeline: run checks first (`test`), build targets in parallel with a `matrix` (`Build web` and `Build android` with `needs: test`), then deploy.
-- Write test metrics to `$GITHUB_STEP_SUMMARY`, attach outputs (`coverage-report`, `app-web`, `app-android`) with `actions/upload-artifact@v7`, and run slow emulator tests locally or on a nightly schedule.
-- Protect default branches under **Settings > Rules > Rulesets** by requiring a pull request and passing status checks before merging.
+- Chain jobs into stages: check and test the code first, then build for web and Android in parallel, then deploy.
+- Save build outputs (such as test coverage or a web bundle) as workflow artifacts so later jobs or teammates can download them.
+- Use GitHub branch rulesets to block pull requests from merging until all required checks pass.
 
 ---
 
 ## Deployment and releases — automated hosting and secrets
 
-- Never commit API keys or service accounts to Git; store encrypted keys under **Settings > Secrets and variables > Actions** and read them with `${{ secrets.NAME }}`.
-- Connect Firebase Hosting with `firebase init hosting:github` to create a service account secret and pull-request preview workflow.
-- Add a `deploy` job (`needs: build`) gated to pushes on `main` that downloads `app-web` (`actions/download-artifact@v8`) and deploys live.
-- Pull requests receive temporary seven-day preview URLs before anything reaches users on `main`.
+- Never commit API keys or passwords to Git; store them in GitHub repository secrets so workflows can read them safely.
+- Firebase can connect directly to GitHub Actions to deploy your web app automatically whenever `main` is updated.
+- Pull requests can also get temporary preview links so you can test changes live before merging.
 
 ---
 
 ## Deployment and releases — GitHub Releases and mobile stores
 
-- Tag milestones under **Releases** with semantic versions such as `v1.0.0` (major release, new features, small fixes) and generated release notes.
-- Download `app-debug.apk` from CI **Artifacts**, attach it to the release and install it on Android phones or emulators (`adb install app-debug.apk`) for testing.
-- Store publishing requires release builds and signing keys: see [Android deployment](https://docs.flutter.dev/deployment/android), [iOS deployment](https://docs.flutter.dev/deployment/ios) and [Firebase App Distribution](https://firebase.google.com/docs/app-distribution).
+- Use GitHub **Releases** to tag milestones with version numbers such as `v1.0.0` and share release notes.
+- You can attach a built Android APK to a release so testers can download and install it directly on a phone or emulator.
+- Publishing to the Play Store or App Store needs signed release builds: see [Android deployment](https://docs.flutter.dev/deployment/android), [iOS deployment](https://docs.flutter.dev/deployment/ios) and [Firebase App Distribution](https://firebase.google.com/docs/app-distribution).
 
 ---
 
@@ -162,8 +195,6 @@ testWidgets('tapping add increments the counter', (
     flutter test integration_test/app_test.dart -d <device-id>
     ```
 
-3. Push `counter_demo` to a new GitHub repository, connect a throwaway Spark Hosting site with `firebase init hosting:github` (answering **No** to the build script and **No** to automatic merge deploy), and add `.github/workflows/ci.yml` with three chained jobs:
-   - `test`: `actions/checkout@v7`, `subosito/flutter-action@v2`, `flutter pub get`, `dart format --output=none --set-exit-if-changed lib test integration_test`, `dart analyze`, `flutter test --coverage`, and `actions/upload-artifact@v7` (`coverage/lcov.info`).
-   - `build` (`needs: test`, `matrix` for `web` and `android` debug APK using `actions/setup-java@v6` and `actions/upload-artifact@v7`).
-   - `deploy` (`needs: build`, gated with `if: github.event_name == 'push' && github.ref == 'refs/heads/main'`, using `actions/download-artifact@v8` for `app-web` and `FirebaseExtended/action-hosting-deploy@v0`).
+3. Push `counter_demo` to a new GitHub repository, connect a throwaway Spark Hosting site with `firebase init hosting:github` (answering **No** to the build script and **No** to automatic merge deploy), and save the [Flutter CI/CD workflow gist](https://gist.github.com/manighahrmani/0ae8219aca8315f1380b952683e878c4) as `.github/workflows/ci.yml` (replacing the Firebase secret name and project ID with yours).
+
 4. Show the green three-stage pipeline graph in **Actions**, walk through **Settings > Rules > Rulesets** to require those checks on `main`, download `app-debug.apk` from **Artifacts**, publish a `v1.0.0` release under **Releases** with `app-debug.apk` attached, and drag the APK onto a running emulator (or install via `adb install app-debug.apk`).
